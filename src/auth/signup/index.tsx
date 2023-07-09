@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Logo from "../../assets/img/logo-arsonex.png";
 const SignupPage: React.FC = () => {
-  const navigate = useNavigate();
   return (
     <div className="auth-wrapper" id="root">
     <main className="auth-main">

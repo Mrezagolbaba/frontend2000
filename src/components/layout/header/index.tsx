@@ -1,5 +1,4 @@
 import Wallet from '../../../assets/img/logo-wallex.png'
-import Burger from '../../../assets/img/icons/menu-burger.svg'
 import Notifications from '../../../assets/img/icons/notification.svg';
 const DashboardHeader: React.FC = () => {
   return (
