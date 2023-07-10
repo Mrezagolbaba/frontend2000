@@ -9,7 +9,14 @@ import AddFriend from "../../../assets/img/icons/add-user.svg";
 import Logout from "../../../assets/img/icons/logout.svg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-const Sidebar = () => {
+
+
+interface SidebarProps {
+  isOpen: boolean;
+  onSidebarToggle: () => void;
+}
+
+const Sidebar = ({isOpen,onSidebarToggle}:SidebarProps) => {
   const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState(0);
 
@@ -20,10 +27,10 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="sidebar" id="respMenu">
+    <aside className={`sidebar ${isOpen ? 'expanded' : ''}`} id="respMenu">
       <button
         className="sidebar__close"
-        //   onclick="respMenu.dismiss()"
+          onClick={()=>onSidebarToggle()}
       >
         <span className="icon">
           <svg

@@ -1,6 +1,11 @@
-import Wallet from '../../../assets/img/logo-wallex.png'
-import Notifications from '../../../assets/img/icons/notification.svg';
-const DashboardHeader: React.FC = () => {
+import Wallet from "../../../assets/img/logo-wallex.png";
+import Notifications from "../../../assets/img/icons/notification.svg";
+
+interface Props {
+  onSidebarToggle: () => void;
+}
+
+const DashboardHeader = ({onSidebarToggle}:Props) => {
   return (
     <header className="header">
       <div className="card">
@@ -71,24 +76,44 @@ const DashboardHeader: React.FC = () => {
           <div className="header__subheader">
             <button
               className="header__hamburger-btn"
-              //   onclick="respMenu.open()"
+              onClick={()=>onSidebarToggle()}
             >
               <span className="icon">
-                {/* <img src={Burger} alt="menu" /> */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  id="Outline"
+                  viewBox="0 0 24 24"
+                  width="512"
+                  height="512"
+                >
+                  <rect y="11" width="24" height="2" rx="1" />
+                  <rect y="4" width="24" height="2" rx="1" />
+                  <rect y="18" width="24" height="2" rx="1" />
+                </svg>
               </span>
             </button>
             <button
               className="header__hamburger-btn"
-              //    onclick="headerNavbar.open()"
+              onClick={()=>onSidebarToggle()}
             >
               <span className="icon">
-              {/* <img src={Burger} alt="menu" /> */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  id="Outline"
+                  viewBox="0 0 24 24"
+                  width="512"
+                  height="512"
+                >
+                  <rect y="11" width="24" height="2" rx="1" />
+                  <rect y="4" width="24" height="2" rx="1" />
+                  <rect y="18" width="24" height="2" rx="1" />
+                </svg>
               </span>
             </button>
             <ul className="header-navbar" id="headerNavbar">
               <li className="header-navbar__close">
                 <button
-                //   onclick="headerNavbar.dismiss()"
+                // onclick="headerNavbar.dismiss()"
                 >
                   <span className="icon">
                     <svg
@@ -101,21 +126,21 @@ const DashboardHeader: React.FC = () => {
                       <path
                         d="M13 1L1 13"
                         stroke="#03041B"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
                       />
                       <path
                         d="M13 13L1 0.999999"
                         stroke="#03041B"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
                       />
                     </svg>
                   </span>
                 </button>
               </li>
               <li>
-                <a href="">بازارها</a>
+                <a href="#">بازارها</a>
               </li>
               <li>
                 <a href="#">خرید و فروش پیشرفته</a>
