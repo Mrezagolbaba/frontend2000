@@ -1,16 +1,21 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import DashboardHeader from "../header";
 // import LogoArsonex from '../../assets/img/logo-arsonex.png';
 
 import Sidebar from "../sidebar";
 
 const Layout = ({ children }: { children: ReactNode }) => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const handleSidebarToggle = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
   return (
     <div className="wrapper" id="root">
       <div id="menuOverlay" className="menu-overlay"></div>
-      <Sidebar />
+      <Sidebar isOpen={isSidebarOpen} onSidebarToggle={handleSidebarToggle} />
       <main className="main-wrapper">
-        <DashboardHeader />
+        <DashboardHeader onSidebarToggle={handleSidebarToggle} />
         {children}
       </main>
     </div>
