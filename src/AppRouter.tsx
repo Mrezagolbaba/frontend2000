@@ -18,6 +18,7 @@ import AddFriends from './add-friends';
 import Invoices from './invoices';
 import Profile from './profile';
 import Support from './support';
+import BuySell from './buySell';
 
 const AppRouter: React.FC = () => {
   return (
@@ -36,9 +37,11 @@ const AppRouter: React.FC = () => {
         <Route path="/notification" element={<Notifications />} />
         <Route path="/history" element={<History />} />
         <Route path="/add-friends" element={<AddFriends />} />
-        <Route path="/invoices" element={<Invoices />} />
+        <Route path="/transactions-invoice" element={<Invoices />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/support" element={<Support />} />
+        <Route path="/fast-buy-sell" element={<BuySell />} />
+
 
         {/* Add a 404 route for pages that don't exist */}
         {/* <Route path="*" element={<NotFoundPage />} /> */}
