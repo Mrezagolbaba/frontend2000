@@ -21,7 +21,7 @@ const DashboardHeader = ({onSidebarToggle}:Props) => {
             </li>
 
             <li>
-              <a href="#">خرید و فروش سریع</a>
+              <a href="/fast-buy-sell">خرید و فروش سریع</a>
             </li>
           </ul>
           <div className="header__support">
