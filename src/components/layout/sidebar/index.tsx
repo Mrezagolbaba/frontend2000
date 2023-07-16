@@ -7,8 +7,8 @@ import Order from "../../../assets/img/icons/paper.svg";
 import History from "../../../assets/img/icons/time-circle.svg";
 import AddFriend from "../../../assets/img/icons/add-user.svg";
 import Logout from "../../../assets/img/icons/logout.svg";
-import { MouseEventHandler, useCallback, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -157,14 +157,9 @@ interface SidebarProps {
 // export default Sidebar2;
 import React from "react";
 import { Menu } from "antd";
-import {
-  MailOutlined,
-  AppstoreOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
+
 import { Link } from "react-router-dom";
 
-const { SubMenu } = Menu;
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onSidebarToggle }) => {
   const [activeItem, setActiveItem] = useState('');
