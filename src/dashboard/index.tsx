@@ -9,8 +9,35 @@ import Gold from "../assets/img/user/level-gold.png";
 import Edit from "../assets/img/icons/edit.svg";
 import Calendar from "../assets/img/icons/calendar2.svg";
 import Slider from "react-slick";
-import T from '../assets/img/coins/tether.png'
-import Turkey from '../assets/img/icons/flag-turkey.png'
+import T from "../assets/img/coins/tether.png";
+import Turkey from "../assets/img/icons/flag-turkey.png";
+import CurrencyInput from "../components/CurrencyInput";
+const dataArray = [
+  { value: "0.00256", number: "45،154", time: "11:30" },
+  { value: "0.00256", number: "45،154", time: "11:30" },
+  { value: "0.00256", number: "45،154", time: "11:30" },
+  { value: "0.00256", number: "45،154", time: "11:30" },
+  { value: "0.00256", number: "45،154", time: "11:30" },
+  { value: "0.00256", number: "45،154", time: "11:30" },
+  { value: "0.00256", number: "45،154", time: "11:30" },
+];
+const dataArray2 = [
+  {
+    type: "خرید",
+    currency: "بیتکوین - ریال",
+    value: "0.004524567",
+    number: "32,322,345",
+    time: "01/06/08 - 11:34",
+  },
+  {
+    type: "فروش",
+    currency: "بیتکوین - ریال",
+    value: "0.004524567",
+    number: "32,322,345",
+    time: "01/06/08 - 11:34",
+  },
+  // Add more data objects as needed
+];
 
 const Dashboard: React.FC = () => {
   const settings = {
@@ -265,35 +292,12 @@ const Dashboard: React.FC = () => {
                     <div className="currency-exchange__control-group">
                       <label className="form-label">پرداخت می‌کنید:</label>
                       <div className="">
-                        <input
-                          type="text"
-                          id="inputPay"
-                          className="form-control d-ltr"
-                          placeholder="مبلغ به تومان"
+                        <CurrencyInput
+                          value={""}
+                          onChange={(value) => {
+                            console.log(value);
+                          }}
                         />
-                        <select
-                          name=""
-                          className="form-control bs-select-control"
-                        >
-                          <option
-                            data-content='<img src="assets/img/icons/flag-iran.png" alt="" className="bs-icon" /> ریال'
-                            value="1"
-                          >
-                            ریال
-                          </option>
-                          <option
-                            data-content='<img src="assets/img/icons/flag-turkey.png" alt="" className="bs-icon" />  لیر'
-                            value="2"
-                          >
-                            بیت کوین
-                          </option>
-                          <option
-                            data-content='<img src="assets/img/coins/tether.png" alt="" className="bs-icon" /> تتر'
-                            value="3"
-                          >
-                            اتریوم
-                          </option>
-                        </select>
                       </div>
                     </div>
                     <div className="currency-exchange__divider">
@@ -325,36 +329,12 @@ const Dashboard: React.FC = () => {
                     <div className="currency-exchange__control-group">
                       <label className="form-label">دریافت می‌کنید:</label>
                       <div className="">
-                        <input
-                          type="text"
-                          id="inputReceive"
-                          className="form-control d-ltr"
-                          placeholder="مبلغ به لیر"
+                        <CurrencyInput
+                          value={""}
+                          onChange={(value) => {
+                            console.log(value);
+                          }}
                         />
-                        <select
-                          name=""
-                          className="form-control bs-select-control"
-                        >
-                          <option
-                            data-content='<img src="assets/img/icons/flag-turkey.png" alt="" className="bs-icon" /> لیر'
-                            value="1"
-                            selected
-                          >
-                            لیر
-                          </option>
-                          <option
-                            data-content='<img src="assets/img/icons/flag-iran.png" alt="" className="bs-icon" /> ریال '
-                            value="2"
-                          >
-                            ریال
-                          </option>
-                          <option
-                            data-content='<img src="assets/img/coins/tether.png" alt="" className="bs-icon" /> تتر'
-                            value="3"
-                          >
-                            تتر
-                          </option>
-                        </select>
                       </div>
                     </div>
                   </div>
@@ -391,6 +371,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </section>
+
       <section className="">
         <div className="card currencies-online-rates card-secondary">
           <div className="card-header">
@@ -420,11 +401,7 @@ const Dashboard: React.FC = () => {
                   <tr>
                     <td>
                       <div>
-                        <img
-                          src={T}
-                          alt=""
-                          className="tm__crypto-img"
-                        />
+                        <img src={T} alt="" className="tm__crypto-img" />
                         <span className="text-50">تتر</span>
                       </div>
                     </td>
@@ -471,11 +448,7 @@ const Dashboard: React.FC = () => {
                   <tr>
                     <td>
                       <div>
-                        <img
-                          src={Turkey}
-                          alt=""
-                          className="tm__crypto-img"
-                        />
+                        <img src={Turkey} alt="" className="tm__crypto-img" />
                         <span className="text-50">لیر</span>
                       </div>
                     </td>
@@ -531,11 +504,14 @@ const Dashboard: React.FC = () => {
           <div className="">
             <Slider {...settings}>
               <div className="slide-item features-slider-item--blue">
-                <div className="features-slider-caption" style={{
-                  justifyContent: "center",
-                  display: "fle",
-                  flexDirection: "column",
-                }}>
+                <div
+                  className="features-slider-caption"
+                  style={{
+                    justifyContent: "center",
+                    display: "fle",
+                    flexDirection: "column",
+                  }}
+                >
                   <h4 className="features-slider-title">
                     تضمین بهترین نرخ لیر{" "}
                   </h4>
@@ -554,27 +530,31 @@ const Dashboard: React.FC = () => {
                     پول خود را به راحتی به ارز دیجیتال تبدیل کنید
                   </h5>
                 </div>
-          
               </div>
               <div className="slide-item features-slider-item--blue">
-                <div className="features-slider-caption" style={{
-                  justifyContent: "center",
-                  display: "fle",
-                  flexDirection: "column",
-                }}>
+                <div
+                  className="features-slider-caption"
+                  style={{
+                    justifyContent: "center",
+                    display: "fle",
+                    flexDirection: "column",
+                  }}
+                >
                   <h4 className="features-slider-title"> به لیر یا ریال</h4>
                   <h5 className="features-slider-subtitle">
                     شروع به معامله کنید
                   </h5>
                 </div>
-          
               </div>
               <div className="slide-item features-slider-item--gold">
-                <div className="features-slider-caption" style={{
-                  justifyContent: "center",
-                  display: "fle",
-                  flexDirection: "column",
-                }}>
+                <div
+                  className="features-slider-caption"
+                  style={{
+                    justifyContent: "center",
+                    display: "fle",
+                    flexDirection: "column",
+                  }}
+                >
                   <h4 className="features-slider-title">
                     ریال بدون محدودیت تبدیل کن
                   </h4>
@@ -582,7 +562,6 @@ const Dashboard: React.FC = () => {
                     لیر یا تتر شما آماده استفاده هست!
                   </h5>
                 </div>
-              
               </div>
             </Slider>
           </div>
@@ -697,94 +676,37 @@ const Dashboard: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td className="text-center">
-                          <span className="text-success">0.00256</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-success">45،154</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-success">11:30</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="text-center">
-                          <span className="text-danger">0.00256</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-danger">45،154</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-danger">11:30</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="text-center">
-                          <span className="text-success">0.00256</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-success">45،154</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-success">11:30</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="text-center">
-                          <span className="text-danger">0.00256</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-danger">45،154</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-danger">11:30</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="text-center">
-                          <span className="text-success">0.00256</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-success">45،154</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-success">11:30</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="text-center">
-                          <span className="text-danger">0.00256</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-danger">45،154</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-danger">11:30</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="text-center">
-                          <span className="text-success">0.00256</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-success">45،154</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-success">11:30</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="text-center">
-                          <span className="text-danger">0.00256</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-danger">45،154</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-danger">11:30</span>
-                        </td>
-                      </tr>
+                      {dataArray.map((data, index) => (
+                        <tr key={index}>
+                          <td className="text-center">
+                            <span
+                              className={
+                                index % 2 === 0 ? "text-success" : "text-danger"
+                              }
+                            >
+                              {data.value}
+                            </span>
+                          </td>
+                          <td className="text-center">
+                            <span
+                              className={
+                                index % 2 === 0 ? "text-success" : "text-danger"
+                              }
+                            >
+                              {data.number}
+                            </span>
+                          </td>
+                          <td className="text-center">
+                            <span
+                              className={
+                                index % 2 === 0 ? "text-success" : "text-danger"
+                              }
+                            >
+                              {data.time}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
@@ -822,58 +744,27 @@ const Dashboard: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                          <span className="text-success">خرید</span>
-                        </td>
-                        <td className="text-center">بیتکوین - ریال</td>
-                        <td className="text-center">0.004524567</td>
-                        <td className="text-center">32,322,345</td>
-                        <td className="text-start">
-                          <span className="d-ltr d-block">
-                            01/06/08 - 11:34
-                          </span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <span className="text-danger">فروش</span>
-                        </td>
-                        <td className="text-center">بیتکوین - ریال</td>
-                        <td className="text-center">0.004524567</td>
-                        <td className="text-center">32,322,345</td>
-                        <td className="text-start">
-                          <span className="d-ltr d-block">
-                            01/06/08 - 11:34
-                          </span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <span className="text-danger">فروش</span>
-                        </td>
-                        <td className="text-center">بیتکوین - ریال</td>
-                        <td className="text-center">0.004524567</td>
-                        <td className="text-center">32,322,345</td>
-                        <td className="text-start">
-                          <span className="d-ltr d-block">
-                            01/06/08 - 11:34
-                          </span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <span className="text-success">خرید</span>
-                        </td>
-                        <td className="text-center">بیتکوین - ریال</td>
-                        <td className="text-center">0.004524567</td>
-                        <td className="text-center">32,322,345</td>
-                        <td className="text-start">
-                          <span className="d-ltr d-block">
-                            01/06/08 - 11:34
-                          </span>
-                        </td>
-                      </tr>
+                      {dataArray2.map((data, index) => (
+                        <tr key={index}>
+                          <td>
+                            <span
+                              className={
+                                data.type === "خرید"
+                                  ? "text-success"
+                                  : "text-danger"
+                              }
+                            >
+                              {data.type}
+                            </span>
+                          </td>
+                          <td className="text-center">{data.currency}</td>
+                          <td className="text-center">{data.value}</td>
+                          <td className="text-center">{data.number}</td>
+                          <td className="text-start">
+                            <span className="d-ltr d-block">{data.time}</span>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
