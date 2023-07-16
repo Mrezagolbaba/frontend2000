@@ -12547,11 +12547,21 @@ span.count {
   top: 50%;
   transform: translateY(-50%);
 }
-.navbar .navbar__item.navbar__item--active {
+.navbar .navbar__item.navbar__item--active.ant-menu-title-content {
   background-color: rgba(17, 27, 255, 0.1);
   border-radius: 10px;
 }
-.navbar .navbar__item.navbar__item--active a {
+[class~='ant-menu-title-content'] span {
+  /* color: #111BFF; */
+  font-weight: 500;
+  font-family:IRANYekanX;
+  margin-right: 10px;
+}
+[class~='ant-menu-title-content'] .icon {
+  fill: #111BFF;
+  stroke: #111BFF;
+}
+.navbar .navbar__item.navbar__item--active [class~='ant-menu-title-content'] span {
   color: #111BFF;
   font-weight: 500;
 }
