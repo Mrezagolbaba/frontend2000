@@ -8,6 +8,9 @@ import './assets/vendor/owlcarousel/owl.theme.default.min.css'
 import './assets/vendor/bootstrap-select/bootstrap-select.min.css'
 import "./../node_modules/slick-carousel/slick/slick.css"; 
 import "./../node_modules/slick-carousel/slick/slick-theme.css";
+import 'react-spring-bottom-sheet/dist/style.css'
+import * as serviceWorkerRegistration from './serviceWorkerRegistration.tsx';
+
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
@@ -15,3 +18,4 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <AppRouter />
   </React.StrictMode>,
 )
+serviceWorkerRegistration.register();
