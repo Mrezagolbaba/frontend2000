@@ -9,7 +9,7 @@ import './assets/vendor/bootstrap-select/bootstrap-select.min.css'
 import "./../node_modules/slick-carousel/slick/slick.css"; 
 import "./../node_modules/slick-carousel/slick/slick-theme.css";
 import 'react-spring-bottom-sheet/dist/style.css'
-import * as serviceWorkerRegistration from './serviceWorkerRegistration.tsx';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 
 
