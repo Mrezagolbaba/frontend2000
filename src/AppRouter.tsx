@@ -1,4 +1,6 @@
-import React from 'react';
+import React
+//  { useState }
+  from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
@@ -19,8 +21,14 @@ import Invoices from './invoices';
 import Profile from './profile';
 import Support from './support';
 import BuySell from './buySell';
-
+// import AddToHomeBottomSheet from './components/AddToHomeBottomSheet';
+// import { isMobile } from 'react-device-detect';
 const AppRouter: React.FC = () => {
+  // const [showAddToHomeSheet, setShowAddToHomeSheet] = useState(isMobile && !window.matchMedia('(display-mode: standalone)').matches);
+
+  // const handleCloseAddToHomeSheet = () => {
+  //   setShowAddToHomeSheet(false);
+  // };
   return (
     <Router>
       <Routes>
@@ -45,6 +53,7 @@ const AppRouter: React.FC = () => {
 
         {/* Add a 404 route for pages that don't exist */}
         {/* <Route path="*" element={<NotFoundPage />} /> */}
+        {/* {showAddToHomeSheet && <AddToHomeBottomSheet isOpen={true} onClose={handleCloseAddToHomeSheet} />} */}
       </Routes>
     </Router>
   );
