@@ -1,26 +1,25 @@
-import React
-//  { useState }
-  from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
+import React from "react"; //  { useState }
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // import NotFoundPage from './components/NotFoundPage';
-import LoginPage from './auth/signin';
-import SignupPage from './auth/signup';
-import OtpEmail from './auth/otp/OtpEmail';
-import OtpMobile from './auth/otp/OtpMobile';
-import Dashboard from './dashboard';
-import Wallet from './wallet';
-import Transactions from './transactions';
-import Setting from './setting';
-import Orders from './orders';
-import Notifications from './notifications';
-import History from './history';
-import AddFriends from './add-friends';
-import Invoices from './invoices';
-import Profile from './profile';
-import Support from './support';
-import BuySell from './buySell';
+import LoginPage from "./auth/signin";
+import SignupPage from "./auth/signup";
+import OtpEmail from "./auth/otp/OtpEmail";
+import OtpMobile from "./auth/otp/OtpMobile";
+import Dashboard from "./dashboard";
+import Wallet from "./wallet";
+import Transactions from "./transactions";
+import Setting from "./setting";
+import Orders from "./orders";
+import Notifications from "./notifications";
+import History from "./history";
+import AddFriends from "./add-friends";
+import Invoices from "./invoices";
+import Profile from "./profile";
+import Support from "./support";
+import BuySell from "./buySell";
+import Information from "./auth/information";
+import Forget from "./auth/forget";
 // import AddToHomeBottomSheet from './components/AddToHomeBottomSheet';
 // import { isMobile } from 'react-device-detect';
 const AppRouter: React.FC = () => {
@@ -49,7 +48,8 @@ const AppRouter: React.FC = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/support" element={<Support />} />
         <Route path="/fast-buy-sell" element={<BuySell />} />
-
+        <Route path="/information" element={<Information />} />
+        <Route path="/forget" element={<Forget />} />
 
         {/* Add a 404 route for pages that don't exist */}
         {/* <Route path="*" element={<NotFoundPage />} /> */}
