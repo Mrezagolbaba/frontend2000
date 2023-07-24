@@ -1,4 +1,4 @@
-import Layout from "../components/layout/dashboard";
+import Layout from "../../components/layout/dashboard";
 
 const Invoices = () => {
   return (
@@ -38,7 +38,9 @@ const Invoices = () => {
                   <div className="col-sm-12 col-md-4">
                     <div className="invoice-date text-md-start text-center">
                       تاریخ معامله:
-                      <time className="d-inline-block d-ltr">01/06/08 - 11:43</time>
+                      <time className="d-inline-block d-ltr">
+                        01/06/08 - 11:43
+                      </time>
                     </div>
                   </div>
                 </div>
@@ -105,7 +107,7 @@ const Invoices = () => {
                         <td className="text-center">۲۵ لیر</td>
                       </tr>
                       <tr className="invoice-summary">
-                        <td 
+                        <td
                         // colspan="6"
                         >
                           <strong> مبلغ کل معامله:</strong>943,920 تومان معادل
@@ -113,7 +115,7 @@ const Invoices = () => {
                         </td>
                       </tr>
                       <tr className="invoice-summary">
-                        <td 
+                        <td
                         // colspan="5"
                         >
                           <strong>دریافتی شما:</strong>453 لیر

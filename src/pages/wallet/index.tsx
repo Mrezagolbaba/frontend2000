@@ -1,6 +1,6 @@
-import Layout from "../components/layout/dashboard";
+import Layout from "../../components/layout/dashboard";
 
-const Transactions = () => {
+const Wallet: React.FC = () => {
   return (
     <Layout>
       <section className="page page-wallet">
@@ -1043,4 +1043,4 @@ const Transactions = () => {
     </Layout>
   );
 };
-export default Transactions;
+export default Wallet;

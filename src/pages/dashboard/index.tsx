@@ -1,4 +1,4 @@
-import Layout from "../components/layout/dashboard";
+import Layout from "../../components/layout/dashboard";
 import User from "../assets/img/icons/user.png";
 import Level from "../assets/img/user/level-gold.png";
 import Bronz from "../assets/img/user/level-bronze.png";
@@ -11,7 +11,7 @@ import Calendar from "../assets/img/icons/calendar2.svg";
 import Slider from "react-slick";
 import T from "../assets/img/coins/tether.png";
 import Turkey from "../assets/img/icons/flag-turkey.png";
-import CurrencyInput from "../components/CurrencyInput";
+import CurrencyInput from "../../components/CurrencyInput";
 const dataArray = [
   { value: "0.00256", number: "45،154", time: "11:30" },
   { value: "0.00256", number: "45،154", time: "11:30" },

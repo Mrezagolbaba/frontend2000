@@ -1,5 +1,5 @@
-import Layout from "../components/layout/dashboard";
-import { Switch } from 'antd';
+import Layout from "../../components/layout/dashboard";
+import { Switch } from "antd";
 
 const Setting = () => {
   const handleChange = (checked: boolean) => {
@@ -178,7 +178,7 @@ const Setting = () => {
                         </td>
                         <td className="text-center">
                           <div className="notice__toggle">
-                          <Switch
+                            <Switch
                               // className="switch-toggle"
                               id="cb1"
                               onChange={handleChange}
@@ -196,7 +196,7 @@ const Setting = () => {
 
                         <td className="text-center">
                           <div className="notice__toggle">
-                          <Switch
+                            <Switch
                               // className="switch-toggle"
                               id="cb1"
                               onChange={handleChange}
@@ -206,7 +206,7 @@ const Setting = () => {
                         </td>
                         <td className="text-center">
                           <div className="notice__toggle">
-                          <Switch
+                            <Switch
                               // className="switch-toggle"
                               id="cb1"
                               onChange={handleChange}
@@ -224,7 +224,7 @@ const Setting = () => {
 
                         <td className="text-center">
                           <div className="notice__toggle">
-                          <Switch
+                            <Switch
                               // className="switch-toggle"
                               id="cb1"
                               onChange={handleChange}
@@ -234,7 +234,7 @@ const Setting = () => {
                         </td>
                         <td className="text-center">
                           <div className="notice__toggle">
-                          <Switch
+                            <Switch
                               // className="switch-toggle"
                               id="cb1"
                               onChange={handleChange}
@@ -252,7 +252,7 @@ const Setting = () => {
 
                         <td className="text-center">
                           <div className="notice__toggle">
-                          <Switch
+                            <Switch
                               // className="switch-toggle"
                               id="cb1"
                               onChange={handleChange}
@@ -262,7 +262,7 @@ const Setting = () => {
                         </td>
                         <td className="text-center">
                           <div className="notice__toggle">
-                          <Switch
+                            <Switch
                               // className="switch-toggle"
                               id="cb1"
                               onChange={handleChange}
@@ -280,7 +280,7 @@ const Setting = () => {
 
                         <td className="text-center">
                           <div className="notice__toggle">
-                          <Switch
+                            <Switch
                               // className="switch-toggle"
                               id="cb1"
                               onChange={handleChange}
@@ -290,7 +290,7 @@ const Setting = () => {
                         </td>
                         <td className="text-center">
                           <div className="notice__toggle">
-                          <Switch
+                            <Switch
                               // className="switch-toggle"
                               id="cb1"
                               onChange={handleChange}
@@ -310,7 +310,7 @@ const Setting = () => {
 
                         <td className="text-center">
                           <div className="notice__toggle">
-                          <Switch
+                            <Switch
                               // className="switch-toggle"
                               id="cb1"
                               onChange={handleChange}
@@ -320,7 +320,7 @@ const Setting = () => {
                         </td>
                         <td className="text-center">
                           <div className="notice__toggle">
-                          <Switch
+                            <Switch
                               // className="switch-toggle"
                               id="cb1"
                               onChange={handleChange}
