@@ -416,7 +416,8 @@ const Forget: React.FC = () => {
                       </button>
                     </div>
                     <div className="auth-already">
-                      فراموش نکرده&zwnj;اید: <a href="#">ورود به حساب کاربری</a>
+                      فراموش نکرده&zwnj;اید:{" "}
+                      <a href="/login">ورود به حساب کاربری</a>
                     </div>
                   </div>
                 </div>
