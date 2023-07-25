@@ -1,5 +1,5 @@
 import Layout from "../../components/layout/dashboard";
-import ImageFrame from "../assets/img/image-frame.png";
+import ImageFrame from "../../assets/img/image-frame.png";
 
 const Profile = () => {
   return (
