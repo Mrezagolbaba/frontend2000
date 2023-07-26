@@ -1,4 +1,31 @@
+import { useState } from "react";
+
 const Information: React.FC = () => {
+  const [fullName, setFullName] = useState("");
+  const [nationalCode, setNationalCode] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [year, setYear] = useState("");
+  const [month, setMonth] = useState("");
+  const [day, setDay] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle form submission logic here using the state values
+    const formData = {
+      fullName,
+      nationalCode,
+      birthDate,
+      year,
+      month,
+      day,
+      phone,
+      email,
+    };
+    console.log(formData);
+  };
+
   return (
     <div className="auth-wrapper" id="root">
       <main className="auth-main">
@@ -37,7 +64,7 @@ const Information: React.FC = () => {
             <div className="card-body">
               <h4 className="auth-title">اطلاعات هویتی</h4>
               <p className="auth-text">اطلاعات هویتی خود را تکمیل کنید</p>
-              <form action="" className="auth-form">
+              <form action="" className="auth-form" onSubmit={handleSubmit}>
                 <div className="mb-2">
                   <div className="float-control float-control-icon">
                     <input
@@ -45,6 +72,8 @@ const Information: React.FC = () => {
                       className="form-control"
                       id="input1"
                       placeholder="نام و نام خانوادگی"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
                     />
                     <label className="float-control-label">
                       نام و نام خانوادگی
@@ -89,6 +118,8 @@ const Information: React.FC = () => {
                       className="form-control"
                       id="input1"
                       placeholder="کدملی"
+                      value={nationalCode}
+                      onChange={(e) => setNationalCode(e.target.value)}
                     />
                     <label className="float-control-label">کدملی</label>
                     <span className="icon">
@@ -124,6 +155,8 @@ const Information: React.FC = () => {
                         className="form-control"
                         id="input1"
                         placeholder="تاریخ تولد"
+                        value={birthDate}
+                        onChange={(e) => setBirthDate(e.target.value)}
                       />
                       <label className="float-control-label">تاریخ تولد</label>
                       <span className="icon">
@@ -455,6 +488,8 @@ const Information: React.FC = () => {
                       className="form-control"
                       id="input1"
                       placeholder="شماره تلفن ایران"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
                     />
                     <label className="float-control-label">
                       تلفن همراه ایران (اختیاری)
@@ -500,6 +535,8 @@ const Information: React.FC = () => {
                       className="form-control"
                       id="input1"
                       placeholder="ایمیل"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                     <label className="float-control-label">ایمیل</label>
                     <span className="icon">
