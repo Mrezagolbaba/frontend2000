@@ -17,7 +17,7 @@ const DashboardHeader = ({onSidebarToggle}:Props) => {
           </div>
           <ul className="header-navbar">
             <li>
-              <a href="#">بازارها</a>
+              <a href="/market">بازارها</a>
             </li>
 
             <li>
