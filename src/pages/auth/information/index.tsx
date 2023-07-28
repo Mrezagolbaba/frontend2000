@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { Input } from "antd";
+import user from "../../../assets/img/icons/user.svg";
+import card from "../../../assets/img/icons/card.svg";
 
 const Information: React.FC = () => {
   const [fullName, setFullName] = useState("");
@@ -67,89 +70,42 @@ const Information: React.FC = () => {
               <form action="" className="auth-form" onSubmit={handleSubmit}>
                 <div className="mb-2">
                   <div className="float-control float-control-icon">
-                    <input
+                    <Input
                       type="email"
-                      className="form-control"
                       id="input1"
                       placeholder="نام و نام خانوادگی"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
+                      size="large"
+                      prefix={<img src={user} alt="user" />}
                     />
-                    <label className="float-control-label">
-                      نام و نام خانوادگی
-                    </label>
-                    <span className="icon">
-                      <svg
-                        width="15"
-                        height="18"
-                        viewBox="0 0 15 18"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <ellipse
-                          cx="7.64917"
-                          cy="5.06568"
-                          rx="3.98169"
-                          ry="3.98169"
-                          stroke="#03041B"
-                          stroke-opacity="0.4"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        ></ellipse>
-                        <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                          d="M1.33339 14.5856C1.33232 14.3057 1.39492 14.0292 1.51645 13.7771C1.89784 13.0143 2.97336 12.61 3.86581 12.4269C4.50944 12.2896 5.16196 12.1978 5.81851 12.1523C7.03407 12.0456 8.25665 12.0456 9.47221 12.1523C10.1287 12.1984 10.7812 12.2901 11.4249 12.4269C12.3174 12.61 13.3929 12.9761 13.7743 13.7771C14.0187 14.2911 14.0187 14.8878 13.7743 15.4018C13.3929 16.2027 12.3174 16.5688 11.4249 16.7443C10.782 16.8873 10.1293 16.9816 9.47221 17.0265C8.48285 17.1104 7.48886 17.1257 6.49739 17.0723C6.26855 17.0723 6.04735 17.0723 5.81851 17.0265C5.1639 16.9822 4.51364 16.8878 3.87343 16.7443C2.97336 16.5688 1.90547 16.2027 1.51645 15.4018C1.39554 15.1467 1.333 14.8679 1.33339 14.5856Z"
-                          stroke="#03041B"
-                          stroke-opacity="0.4"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        ></path>
-                      </svg>
-                    </span>
                   </div>
                 </div>
                 <div className="mb-2">
                   <div className="float-control float-control-icon">
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="input1"
-                      placeholder="کدملی"
+                  <Input
+                      type="text"
+                      id="input2"
+                      placeholder=" کدملی  "
                       value={nationalCode}
                       onChange={(e) => setNationalCode(e.target.value)}
+                      size="large"
+                      prefix={<img src={card} alt="card" />}
                     />
-                    <label className="float-control-label">کدملی</label>
-                    <span className="icon">
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                        <g
-                          id="SVGRepo_tracerCarrier"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        ></g>
-                        <g id="SVGRepo_iconCarrier">
-                          {" "}
-                          <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
-                            d="M3 5C2.44772 5 2 5.44771 2 6V18C2 18.5523 2.44772 19 3 19H21C21.5523 19 22 18.5523 22 18V6C22 5.44772 21.5523 5 21 5H3ZM0 6C0 4.34315 1.34314 3 3 3H21C22.6569 3 24 4.34315 24 6V18C24 19.6569 22.6569 21 21 21H3C1.34315 21 0 19.6569 0 18V6ZM6 10.5C6 9.67157 6.67157 9 7.5 9C8.32843 9 9 9.67157 9 10.5C9 11.3284 8.32843 12 7.5 12C6.67157 12 6 11.3284 6 10.5ZM10.1756 12.7565C10.69 12.1472 11 11.3598 11 10.5C11 8.567 9.433 7 7.5 7C5.567 7 4 8.567 4 10.5C4 11.3598 4.31002 12.1472 4.82438 12.7565C3.68235 13.4994 3 14.7069 3 16C3 16.5523 3.44772 17 4 17C4.55228 17 5 16.5523 5 16C5 15.1145 5.80048 14 7.5 14C9.19952 14 10 15.1145 10 16C10 16.5523 10.4477 17 11 17C11.5523 17 12 16.5523 12 16C12 14.7069 11.3177 13.4994 10.1756 12.7565ZM13 8C12.4477 8 12 8.44772 12 9C12 9.55228 12.4477 10 13 10H19C19.5523 10 20 9.55228 20 9C20 8.44772 19.5523 8 19 8H13ZM14 12C13.4477 12 13 12.4477 13 13C13 13.5523 13.4477 14 14 14H18C18.5523 14 19 13.5523 19 13C19 12.4477 18.5523 12 18 12H14Z"
-                            fill="#bababa"
-                          ></path>{" "}
-                        </g>
-                      </svg>
-                    </span>
                   </div>
                 </div>
                 <div className="mb-2">
                   <fieldset>
                     <div className="float-control float-control-icon">
+                    {/* <Input
+                      type="text"
+                      id="input2"
+                      placeholder="تاریخ تولد"
+                      value={birthDate}
+                      onChange={(e) => setBirthDate(e.target.value)}
+                      size="large"
+                      prefix={<img src={card} alt="card" />}
+                    />
                       <input
                         type="email"
                         className="form-control"
@@ -157,35 +113,11 @@ const Information: React.FC = () => {
                         placeholder="تاریخ تولد"
                         value={birthDate}
                         onChange={(e) => setBirthDate(e.target.value)}
-                      />
-                      <label className="float-control-label">تاریخ تولد</label>
-                      <span className="icon">
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                          <g
-                            id="SVGRepo_tracerCarrier"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          ></g>
-                          <g id="SVGRepo_iconCarrier">
-                            {" "}
-                            <path
-                              d="M21 10H3M16 2V6M8 2V6M10.5 14L12 13V18M10.75 18H13.25M7.8 22H16.2C17.8802 22 18.7202 22 19.362 21.673C19.9265 21.3854 20.3854 20.9265 20.673 20.362C21 19.7202 21 18.8802 21 17.2V8.8C21 7.11984 21 6.27976 20.673 5.63803C20.3854 5.07354 19.9265 4.6146 19.362 4.32698C18.7202 4 17.8802 4 16.2 4H7.8C6.11984 4 5.27976 4 4.63803 4.32698C4.07354 4.6146 3.6146 5.07354 3.32698 5.63803C3 6.27976 3 7.11984 3 8.8V17.2C3 18.8802 3 19.7202 3.32698 20.362C3.6146 20.9265 4.07354 21.3854 4.63803 21.673C5.27976 22 6.11984 22 7.8 22Z"
-                              stroke="#b0b0b0"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            ></path>{" "}
-                          </g>
-                        </svg>
-                      </span>
+                      /> */}
                     </div>
                   </fieldset>
                 </div>
+                <label>تاریخ تولد</label>
                 <div className="mb-2">
                   <div className="row">
                     <div
@@ -247,8 +179,8 @@ const Information: React.FC = () => {
                                     className="dropdown-item disabled selected active"
                                     id="bs-select-1-0"
                                     aria-disabled="true"
-                                    aria-setsize="4"
-                                    aria-posinset="undefined"
+                                    // aria-setsize="4"
+                                    // aria-posinset="undefined"
                                     aria-selected="true"
                                   >
                                     <span className="text">انتخاب کنید</span>
@@ -259,8 +191,8 @@ const Information: React.FC = () => {
                                     role="option"
                                     className="dropdown-item"
                                     id="bs-select-1-1"
-                                    aria-setsize="4"
-                                    aria-posinset="1"
+                                    // aria-setsize="4"
+                                    // aria-posinset="1"
                                   >
                                     <span className="text">1402</span>
                                   </a>
@@ -268,8 +200,8 @@ const Information: React.FC = () => {
                                     role="option"
                                     className="dropdown-item"
                                     id="bs-select-1-1"
-                                    aria-setsize="4"
-                                    aria-posinset="1"
+                                    // aria-setsize="4"
+                                    // aria-posinset="1"
                                   >
                                     <span className="text">1401</span>
                                   </a>
@@ -277,8 +209,8 @@ const Information: React.FC = () => {
                                     role="option"
                                     className="dropdown-item"
                                     id="bs-select-1-1"
-                                    aria-setsize="4"
-                                    aria-posinset="1"
+                                    // aria-setsize="4"
+                                    // aria-posinset="1"
                                   >
                                     <span className="text">1400</span>
                                   </a>
@@ -342,9 +274,9 @@ const Information: React.FC = () => {
                                     className="dropdown-item disabled selected active"
                                     id="bs-select-1-0"
                                     aria-disabled="true"
-                                    aria-setsize="4"
-                                    aria-posinset="undefined"
-                                    aria-selected="true"
+                                    // aria-setsize="4"
+                                    // aria-posinset="undefined"
+                                    // aria-selected="true"
                                   >
                                     <span className="text">انتخاب کنید</span>
                                   </a>
@@ -354,8 +286,8 @@ const Information: React.FC = () => {
                                     role="option"
                                     className="dropdown-item"
                                     id="bs-select-1-1"
-                                    aria-setsize="4"
-                                    aria-posinset="1"
+                                    // aria-setsize="4"
+                                    // aria-posinset="1"
                                   >
                                     <span className="text">فروردین</span>
                                   </a>
@@ -437,9 +369,9 @@ const Information: React.FC = () => {
                                     className="dropdown-item disabled selected active"
                                     id="bs-select-1-0"
                                     aria-disabled="true"
-                                    aria-setsize="4"
-                                    aria-posinset="undefined"
-                                    aria-selected="true"
+                                    // aria-setsize="4"
+                                    // aria-posinset="undefined"
+                                    // aria-selected="true"
                                   >
                                     <span className="text">انتخاب کنید</span>
                                   </a>
@@ -449,8 +381,8 @@ const Information: React.FC = () => {
                                     role="option"
                                     className="dropdown-item"
                                     id="bs-select-1-1"
-                                    aria-setsize="4"
-                                    aria-posinset="1"
+                                    // aria-setsize="4"
+                                    // aria-posinset="1"
                                   >
                                     <span className="text">01</span>
                                   </a>

@@ -244,8 +244,8 @@ const Forget: React.FC = () => {
                                     role="option"
                                     className="dropdown-item"
                                     id="bs-select-1-1"
-                                    aria-setsize="4"
-                                    aria-posinset="1"
+                                    // aria-setsize="4"
+                                    // aria-posinset="1"
                                   >
                                     90+
                                     <span className="icon country-icon">
@@ -281,8 +281,8 @@ const Forget: React.FC = () => {
                                     role="option"
                                     className="dropdown-item"
                                     id="bs-select-1-1"
-                                    aria-setsize="4"
-                                    aria-posinset="1"
+                                    // aria-setsize="4"
+                                    // aria-posinset="1"
                                   >
                                     44+
                                     <span className="icon country-icon">
@@ -355,8 +355,8 @@ const Forget: React.FC = () => {
                                     role="option"
                                     className="dropdown-item"
                                     id="bs-select-1-1"
-                                    aria-setsize="4"
-                                    aria-posinset="1"
+                                    // aria-setsize="4"
+                                    // aria-posinset="1"
                                   >
                                     33+{" "}
                                     <span className="icon country-icon">
