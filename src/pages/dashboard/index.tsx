@@ -8,7 +8,6 @@ import Uranium from "../../assets/img/user/level-uranium.png";
 import Gold from "../../assets/img/user/level-gold.png";
 import Edit from "../../assets/img/icons/edit.svg";
 import Calendar from "../../assets/img/icons/calendar2.svg";
-import Slider from "react-slick";
 import T from "../../assets/img/coins/tether.png";
 import Turkey from "../../assets/img/icons/flag-turkey.png";
 import CurrencyInput from "../../components/CurrencyInput";
@@ -502,7 +501,7 @@ const Dashboard: React.FC = () => {
       <section className="mb-4 mt-4">
         <div className="slide features-slider">
           <div className="">
-            <Slider {...settings}>
+            {/* <Slider {...settings}>
               <div className="slide-item features-slider-item--blue">
                 <div
                   className="features-slider-caption"
@@ -563,7 +562,7 @@ const Dashboard: React.FC = () => {
                   </h5>
                 </div>
               </div>
-            </Slider>
+            </Slider> */}
           </div>
         </div>
       </section>
