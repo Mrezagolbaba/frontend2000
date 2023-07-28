@@ -1,6 +1,5 @@
 // AddToHomeBottomSheet.tsx
 import React from 'react';
-import { BottomSheet } from 'react-spring-bottom-sheet';
 
 
 interface BeforeInstallPromptEvent extends Event {
@@ -20,13 +19,13 @@ const AddToHomeBottomSheet: React.FC<{ isOpen: boolean; onClose: () => void }> =
     };
 
   return (
-    <BottomSheet open={isOpen}>
+    // <BottomSheet open={isOpen}>
       <div>
         <h3>Do you want to add this app to your home screen?</h3>
         <button onClick={onClose}>Close</button>
         <button onClick={handleAddToHomeScreen}>Add to Home Screen</button>
       </div>
-    </BottomSheet>
+    // </BottomSheet>
   );
 };
 
