@@ -12364,7 +12364,7 @@ span.icon {
   display: inline-block;
   vertical-align: middle;
 }
-span.icon svg {
+span.icon img {
   width: 1rem;
   height: 1rem;
   display: block;
@@ -12502,7 +12502,7 @@ span.count {
   }
 }
 .navbar {
-  padding: 60px 0 0;
+  padding: 60px 0 0 !important;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
@@ -12513,19 +12513,38 @@ span.count {
   display: block;
   width: 100%;
 }
-.navbar .navbar__item a {
-  display: block;
-  height: 62px;
-  line-height: 62px;
+.navbar .navbar__item.navbar__item--active a span{
+  color: #111BFF !important;
+  font-weight: 500;
+  font-family:IRANYekanX;
+}
+.navbar .navbar__item.navbar__item--active {
+ background-color: rgba(17, 27, 255, 0.1);
+ border-radius: 10px;
+}
+.navbar .navbar__item.navbar__item a span{
   color: #03041B;
-  padding: 0 25px;
+  font-weight: 500;
+  font-family:IRANYekanX;
+  font-size: 1rem;
+}
+.navbar .navbar__item a {
+  display: block !important;
+  height: 62px !important;
+  line-height: 62px !important;
+  color: #03041B !important;
+  padding: 0 25px !important;
 }
 .navbar .navbar__item .icon {
   margin-left: 10px;
 }
-.navbar .navbar__item .icon svg {
+.navbar .navbar__item:last-child {
+  margin-top: auto;
+}
+.navbar .navbar__item .icon img {
   width: 20px;
   height: 20px;
+  margin-left: 10px;
 }
 .navbar .navbar__item:hover a {
   color: #111BFF;
@@ -12533,8 +12552,8 @@ span.count {
 .navbar .navbar__item:hover:before {
   content: "";
 }
-.navbar .navbar__item:hover .icon svg path {
-  stroke: #111BFF;
+.navbar .navbar__item:hover .icon img {
+  color: #111BFF;
 }
 .navbar .navbar__item:before {
   display: block;
