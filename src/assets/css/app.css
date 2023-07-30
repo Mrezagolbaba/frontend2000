@@ -12154,7 +12154,7 @@ textarea.form-control {
   font-size: 0.875em;
   color: #03041B;
   padding: 6px 12px 6px 64px;
-  background-image: url("../img/icons/btn-search-primary.svg");
+  /* background-image: url("../img/icons/btn-search-primary.svg"); */
   background-size: 52px 52px;
   background-repeat: no-repeat;
   background-position: 0 0;
