@@ -6,13 +6,14 @@ import './assets/vendor/owlcarousel/owl.carousel.min.css'
 import './assets/vendor/owlcarousel/owl.theme.default.min.css'
 import './assets/vendor/bootstrap-select/bootstrap-select.min.css'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import App from './App.tsx';
+// import App from './App.tsx';
+import AppRouter from './router/AppRouter.tsx';
 
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <App />
+    <AppRouter />
   </React.StrictMode>,
 )
 serviceWorkerRegistration.register();
