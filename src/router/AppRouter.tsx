@@ -85,7 +85,7 @@ const AppRouter: React.FC = () => {
           element={<ProtectedRoute children={<Support />} user={user} />}
         />
         <Route
-          path="/buy-sell"
+          path="/fast-buy-sell"
           element={<ProtectedRoute children={<BuySell />} user={user} />}
         />
         <Route
