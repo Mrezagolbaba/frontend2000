@@ -6,7 +6,6 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ user, children }:ProtectedRouteProps) => {
-  console.log(user);
   if (!user) {
     return <Navigate to="/login" replace />;
   }
