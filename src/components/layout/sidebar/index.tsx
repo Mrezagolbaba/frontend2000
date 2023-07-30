@@ -84,7 +84,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onSidebarToggle }) => {
       defaultSelectedKeys={["0"]}
       defaultOpenKeys={["sub1"]}
       mode="inline"
-      style={{ width: 256, position: "sticky", top: 0 }}
+      //@ts-ignore
+      style={window.screen.width < 768 ? { width: 256, position: "sticky", top: 0 } :{ width: 256, top: 0 }}
       selectedKeys={[activeItem]}
     >
       <div className="sidebar__header">
