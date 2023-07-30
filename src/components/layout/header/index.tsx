@@ -2,7 +2,7 @@ import Wallet from "../../../assets/img/logo-wallex.png";
 import Notifications from "../../../assets/img/icons/notification.svg";
 import Support from "../../../assets/img/icons/support.svg";
 import Setting from "../../../assets/img/icons/setting.svg";
-
+import {GiHamburgerMenu} from "react-icons/gi";
 interface Props {
   onSidebarToggle: () => void;
 }
@@ -55,17 +55,7 @@ const DashboardHeader = ({onSidebarToggle}:Props) => {
               onClick={()=>onSidebarToggle()}
             >
               <span className="icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  id="Outline"
-                  viewBox="0 0 24 24"
-                  width="512"
-                  height="512"
-                >
-                  <rect y="11" width="24" height="2" rx="1" />
-                  <rect y="4" width="24" height="2" rx="1" />
-                  <rect y="18" width="24" height="2" rx="1" />
-                </svg>
+                <GiHamburgerMenu/>
               </span>
               <ul className="header-navbar">
               <li className="header-navbar__close">
