@@ -20,7 +20,10 @@
     "noUnusedParameters": false,
     
   },
-  "include": ["src"],
+  "baseUrl": ".",
+  "paths": {
+    "@/*": ["src/*"]
+  },
   "path": {
     "@components/*": ["./components"],
     "@services/*": ["./services"],
