@@ -1,6 +1,6 @@
+//@ts-ignore
 import Layout from "../../components/layout/dashboard";
-import User from "../../assets/img/icons/user.png";
-import Level from "../../assets/img/user/level-gold.png";
+import User from "../../assets/img/user/level-gold.png";
 import Bronz from "../../assets/img/user/level-bronze.png";
 import Silver from "../../assets/img/user/level-silver.png";
 import Platinum from "../../assets/img/user/level-platinum.png";
@@ -10,7 +10,11 @@ import Edit from "../../assets/img/icons/edit.svg";
 import Calendar from "../../assets/img/icons/calendar2.svg";
 import T from "../../assets/img/coins/tether.png";
 import Turkey from "../../assets/img/icons/flag-turkey.png";
-import CurrencyInput from "../../components/CurrencyInput";
+//@ts-ignore
+import CurrencyInput from "../../components/currencyInput";
+import { useEffect, useState } from "react";
+import { toast } from 'react-hot-toast';
+import {BsCheck2} from 'react-icons/bs'
 const dataArray = [
   { value: "0.00256", number: "45،154", time: "11:30" },
   { value: "0.00256", number: "45،154", time: "11:30" },
@@ -116,18 +120,7 @@ const Dashboard: React.FC = () => {
                   </li>
                   <li>
                     <span className="icon">
-                      <svg
-                        width="12"
-                        height="10"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4.00006 7.80007L1.20006 5.00006L0.266724 5.9334L4.00006 9.66673L12.0001 1.66673L11.0667 0.733398L4.00006 7.80007Z"
-                          fill="#0ED039"
-                        ></path>
-                      </svg>
+                      <BsCheck2 size={50} color={'#55cd51'} />
                     </span>
                     ﻭﺍﺭﯾﺰ و برداشت تومانی ﺭﻭﺯﺍﻧﻪ:
                     <strong>۱ میلیون تومان</strong>
@@ -293,7 +286,7 @@ const Dashboard: React.FC = () => {
                       <div className="">
                         <CurrencyInput
                           value={""}
-                          onChange={(value) => {
+                          onChange={(value:string) => {
                             console.log(value);
                           }}
                         />
@@ -330,7 +323,7 @@ const Dashboard: React.FC = () => {
                       <div className="">
                         <CurrencyInput
                           value={""}
-                          onChange={(value) => {
+                          onChange={(value:string) => {
                             console.log(value);
                           }}
                         />
@@ -788,7 +781,7 @@ const Dashboard: React.FC = () => {
                   <li className="progress-cup progress-cup--gold progress-cup--current">
                     <div className="progress-cup-img">
                       <span>برنزی</span>
-                      <img src={Level} alt="" />
+                      {/* <img src={Level} alt="" /> */}
                     </div>
                     <div className="progress-cup-wage"> </div>
                   </li>
