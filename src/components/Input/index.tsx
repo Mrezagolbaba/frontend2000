@@ -21,6 +21,7 @@ const InputComponent: React.FC<InputProps> = ({
   size,
   prefix,
   className,
+  style,
 }) => {
   return (
     <Input
@@ -31,7 +32,8 @@ const InputComponent: React.FC<InputProps> = ({
       onChange={onChange}
       size={size}
       prefix={prefix}
-    //   className={className}
+      style={style}
+      className={`input-style ${className}`}
     />
   );
 };
