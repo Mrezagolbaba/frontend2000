@@ -9,6 +9,8 @@ interface SelectProps {
     disabled?: boolean;
     id: string;
     size?: "large" | "middle" | "small";
+    style?: React.CSSProperties;
+    className?: string;
 }
 const SelectComponent: React.FC<SelectProps> = ({ options,
     handleChange,
@@ -16,30 +18,31 @@ const SelectComponent: React.FC<SelectProps> = ({ options,
     placeholder,
     disabled,
     id,
-    size
+    size,
+    style
+    ,className
  }) => {
-  const onChange = (value: string) => {
-    console.log(`selected ${value}`);
-  };
+ 
 
   const onSearch = (value: string) => {
     console.log("search:", value);
   };
   return (
       <Select
-        className="dropdown bootstrap-select bs-select-control bs-form-select"
+        className={`dropdown bootstrap-select bs-select-control bs-form-select ${className}`}
         size={size}
         disabled={disabled}
         id={id}
         value={value}
-        // showSearch
-        placeholder="Se"
-        onChange={onChange}
+        style={style}
+        placeholder={placeholder}
+        onChange={handleChange}
         onSearch={onSearch}
         filterOption={(input, option) =>
           (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
         }
         options={options}
+
       />
   );
 };
