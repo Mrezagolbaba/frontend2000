@@ -3,16 +3,28 @@ import { CiMail, CiMobile2 } from "react-icons/ci";
 import InputComponent from "../../../components/Input";
 import HeadAuth from "../../../components/layout/headAuth";
 import SelectComponent from "../../../components/Select";
-
+import { useForgetPassword } from "../../../services/auth";
+import './styles.css'
+import { countries } from "../../../helpers";
 const Forget: React.FC = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [countryCode, setCountryCode] = useState<string>('')
+  const forgetPasswordMutation = useForgetPassword();
 
-  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-  const handlePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPhone(e.target.value);
+  const [formData, setFormData] = useState({
+    email: "",
+    phone: "",
+    type: "",
+  });
+
+  const handleForgetPassword = async () => {
+    try {
+      await forgetPasswordMutation.mutateAsync(formData);
+      // Forget password request successful, you can show a success message or redirect to the login page
+    } catch (error) {
+      // Forget password request failed, the error will be handled by the useForgetPassword hook and toast the error message
+    }
   };
 
   return (
@@ -27,51 +39,57 @@ const Forget: React.FC = () => {
                 {" "}
                 شماره تلفن همراه یا ایمیل خود را وارد کنید
               </p>
-              <form action="" className="auth-form" >
+              <form action="" className="auth-form" onSubmit={
+                (e) => {
+                  e.preventDefault();
+                  handleForgetPassword();
+                }
+              }>
                 <div className="mb-2">
                   <InputComponent
                     type="email"
                     id="input1"
                     placeholder="ایمیل "
                     value=""
-                    onChange={(e) => handleEmail(e)}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value,type: "email" })
+                    }
                     size="large"
                     prefix={<CiMail />}
-                    className="form-control"
                   />
                 </div>
                 <div className="mb-2">
                   <div className="row">
-                    <div
-                      className="btn-group"
-                      role="group"
-                      aria-label="Button group with nested dropdown"
-                    >
-                      <div className="col-lg-8">
+                      <div className="col-12 col-md-8" style={{ paddingLeft: '0' }}>
                         <InputComponent
                           type="phone"
                           id="input1"
                           placeholder="شماره همراه "
                           value=""
-                          onChange={(e) => handleEmail(e)}
+                          onChange={(e) =>
+                            setFormData({ ...formData, phone: e.target.value,type: "phone" })
+                          }
                           size="large"
                           prefix={<CiMobile2 />}
-                          className="form-control"
                         />
                       </div>
-                      <div className="col-lg-4">
-                        <SelectComponent
-                          id="inputTopic"
-                          placeholder="کد کشور"
-                          value=""
-                          handleChange={(e) => console.log(e)}
-                          size="large"
-                          options={[]}
-                        />
-                      </div>
-                    </div>{" "}
+                      <div className="col-12 col-md-4" style={{ paddingRight: '0' }}>
+                      <SelectComponent
+                        style={{
+                          borderTopRightRadius: 0,
+                          borderBottomRightRadius: 0,
+                        }}
+                        id="select1"
+                        placeholder="کد"
+                        options={countries}
+                        size={"large"}
+                        handleChange={(val: string) => {
+                          setCountryCode(val)
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>{" "}
+                </div>
                 <div className="mb-2">
                   <div className="auth-footer">
                     <div className="mb-3">
