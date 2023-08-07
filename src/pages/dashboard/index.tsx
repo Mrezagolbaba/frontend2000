@@ -10,11 +10,10 @@ import Edit from "../../assets/img/icons/edit.svg";
 import Calendar from "../../assets/img/icons/calendar2.svg";
 import T from "../../assets/img/coins/tether.png";
 import Turkey from "../../assets/img/icons/flag-turkey.png";
-//@ts-ignore
-import CurrencyInput from "../../components/currencyInput";
 import { useEffect, useState } from "react";
 import { toast } from 'react-hot-toast';
 import {BsCheck2} from 'react-icons/bs'
+import CurrencyInput from "../../components/currencyInput";
 const dataArray = [
   { value: "0.00256", number: "45،154", time: "11:30" },
   { value: "0.00256", number: "45،154", time: "11:30" },
