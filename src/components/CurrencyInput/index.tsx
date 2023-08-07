@@ -138,6 +138,7 @@ const CurrencyInput: React.FC<NumericInputProps> = (props) => {
       onBlur={handleBlur}
       placeholder="مبلغ را وارد کنید"
       maxLength={16}
+      size="large"
     />
   );
 };
