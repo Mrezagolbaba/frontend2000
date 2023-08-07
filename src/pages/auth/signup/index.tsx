@@ -36,7 +36,11 @@ const SignupPage: React.FC = () => {
       };
       await createUserMutation.mutateAsync(userData);
       setLoading(false)
-      router('/')
+      router('/otpMobile',{
+        state: {
+          phoneNumber: userData.phoneNumber
+        }
+      })
     } catch (error: any) {
       console.error('Signup error:', error.message);
       setLoading(false)
