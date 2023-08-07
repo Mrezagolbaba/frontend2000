@@ -53,3 +53,20 @@ export const countries = [
   }
   // Add more countries as needed
 ];
+interface PhoneNumberMaskProps {
+  phoneNumber: string;
+}
+export const PhoneNumberMask: React.FC<PhoneNumberMaskProps> = ({ phoneNumber }) => {
+  console.log(phoneNumber);
+  if (!phoneNumber) return null;
+
+  // Extracting the prefix, masking, and suffix
+  const prefix = phoneNumber.slice(0, 4);
+  const masking = '****';
+  const suffix = phoneNumber.slice(-3);
+
+  // Formatted masked phone number
+  const maskedPhoneNumber = `${prefix}${masking}${suffix}`;
+  console.log(maskedPhoneNumber);
+  return maskedPhoneNumber;
+};
