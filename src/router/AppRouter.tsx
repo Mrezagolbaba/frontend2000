@@ -22,8 +22,6 @@ import Information from "../pages/auth/information";
 import Forget from "../pages/auth/forget";
 import ProtectedRoute from "./ProtectedRoute";
 import Market from "../pages/market";
-// import AddToHomeBottomSheet from './components/AddToHomeBottomSheet';
-// import { isMobile } from 'react-device-detect';
 const AppRouter: React.FC = () => {
   // const [showAddToHomeSheet, setShowAddToHomeSheet] = useState(isMobile && !window.matchMedia('(display-mode: standalone)').matches);
 
