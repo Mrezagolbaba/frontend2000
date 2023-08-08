@@ -8,10 +8,6 @@ import Logout from "../../../assets/img/icons/logout.svg";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
-interface SidebarProps {
-  isOpen: boolean;
-  onSidebarToggle: () => void;
-}
 import React from "react";
 import { Menu } from "antd";
 
@@ -85,7 +81,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onSidebarToggle }) => {
       defaultOpenKeys={["sub1"]}
       mode="inline"
       //@ts-ignore
-      style={window.screen.width < 768 ? { width: 256, position: "sticky", top: 0 } :{ width: 256, top: 0 }}
+      style={
+        window.screen.width < 768
+          ? { width: 256, position: "sticky", top: 0 }
+          : { width: 256, top: 0 }
+      }
       selectedKeys={[activeItem]}
     >
       <div className="sidebar__header">
@@ -120,9 +120,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onSidebarToggle }) => {
           </a>
         </div>
       </div>
-      <ul className="navbar">
-      {items.map(renderItem)}
-      </ul>
+      <ul className="navbar">{items.map(renderItem)}</ul>
     </Menu>
   );
 };

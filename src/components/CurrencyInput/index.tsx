@@ -1,5 +1,5 @@
 import React from "react";
-import { Cascader, Input} from "antd";
+import { Cascader, Input } from "antd";
 import Rial from "../../assets/img/icons/flag-iran.png";
 import Lira from "../../assets/img/icons/flag-turkey.png";
 import tetter from "../../assets/img/coins/tether.svg";
@@ -92,7 +92,7 @@ const options = [
           {" "}
           تتر
         </span>
-        
+
         <img
           src={tetter}
           alt=""
@@ -104,13 +104,8 @@ const options = [
   },
 ];
 
-interface NumericInputProps {
-  style?: React.CSSProperties;
-  value: string;
-  onChange: (value: string) => void;
-}
 const CurrencyInput: React.FC<NumericInputProps> = (props) => {
-//   const formatNumber = (value: number) => new Intl.NumberFormat().format(value);
+  //   const formatNumber = (value: number) => new Intl.NumberFormat().format(value);
   const { value, onChange } = props;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

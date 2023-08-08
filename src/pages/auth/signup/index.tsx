@@ -8,11 +8,9 @@ import { useCreateUser } from "../../../services/auth";
 import SelectComponent from "../../../components/Select";
 import { countries } from "../../../helpers";
 import { toast } from "react-hot-toast";
-import { Spin } from 'antd'
+import { Spin } from "antd";
 import { useNavigate } from "react-router-dom";
-import './styles.css'
-
-
+import "./styles.css";
 
 const SignupPage: React.FC = () => {
   const createUserMutation = useCreateUser();
@@ -21,29 +19,30 @@ const SignupPage: React.FC = () => {
     phoneNumber: "",
     password: "",
   });
-  const [countryCode, setCountryCode] = useState<string>('')
+  const [countryCode, setCountryCode] = useState<string>("");
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSignup = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (checked === false) return toast.error('لطفا قوانین را مطالعه کنید و تایید کنید')
-    setLoading(true)
+    if (checked === false)
+      return toast.error("لطفا قوانین را مطالعه کنید و تایید کنید");
+    setLoading(true);
     try {
       const userData = {
         phoneNumber: countryCode + formData.phoneNumber,
         password: formData.password,
       };
       await createUserMutation.mutateAsync(userData);
-      setLoading(false)
-      router('/otpMobile',{
+      setLoading(false);
+      router("/otpMobile", {
         state: {
-          phoneNumber: userData.phoneNumber
-        }
-      })
+          phoneNumber: userData.phoneNumber,
+        },
+      });
     } catch (error: any) {
-      console.error('Signup error:', error.message);
-      setLoading(false)
+      console.error("Signup error:", error.message);
+      setLoading(false);
     }
   };
 
@@ -55,12 +54,15 @@ const SignupPage: React.FC = () => {
           <div className="card auth-card auth-card--bordered">
             <div className="card-body">
               <h4 className="auth-title">ثبت نام</h4>
-              <p className="auth-text">  شماره تلفن خود را وارد کنید.</p>
+              <p className="auth-text"> شماره تلفن خود را وارد کنید.</p>
 
               <form action="" className="auth-form" onSubmit={handleSignup}>
                 <div className="mb-2">
                   <div className="row">
-                    <div className="col-12 col-md-8" style={{ paddingLeft: '0' }}>
+                    <div
+                      className="col-12 col-md-8"
+                      style={{ paddingLeft: "0" }}
+                    >
                       <InputComponent
                         type="phone"
                         id="input1"
@@ -80,14 +82,17 @@ const SignupPage: React.FC = () => {
                         prefix={<CiUser />}
                       />
                     </div>
-                    <div className="col-12 col-md-4" style={{ paddingRight: '0' }}>
+                    <div
+                      className="col-12 col-md-4"
+                      style={{ paddingRight: "0" }}
+                    >
                       <SelectComponent
                         id="select1"
                         placeholder="کد"
                         options={countries}
                         size={"large"}
                         handleChange={(val: string) => {
-                          setCountryCode(val)
+                          setCountryCode(val);
                         }}
                         className="select-component"
                       />
@@ -236,13 +241,11 @@ const SignupPage: React.FC = () => {
                         className="form-check-input"
                         type="checkbox"
                         id="ch1"
-                        onChange={
-                          (e) => setChecked(e.target.checked)
-                        }
+                        onChange={(e) => setChecked(e.target.checked)}
                       />
                       <label className="form-check-label">
-                        <a href="#"> مقررات آرسونیکس</a>{" "}
-                        را خوانده‌ام و با آن موافقم.
+                        <a href="#"> مقررات آرسونیکس</a> را خوانده‌ام و با آن
+                        موافقم.
                       </label>
                     </div>
                   </div>
@@ -251,8 +254,11 @@ const SignupPage: React.FC = () => {
                       type="submit"
                       className="btn btn-primary auth-submit"
                     >
-                      {loading ? <Spin style={{ color: "white" }} /> : 'ثبت نام'}
-
+                      {loading ? (
+                        <Spin style={{ color: "white" }} />
+                      ) : (
+                        "ثبت نام"
+                      )}
                     </button>
                   </div>
                   <div className="auth-already">

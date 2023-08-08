@@ -4,12 +4,12 @@ import InputComponent from "../../../components/Input";
 import HeadAuth from "../../../components/layout/headAuth";
 import SelectComponent from "../../../components/Select";
 import { useForgetPassword } from "../../../services/auth";
-import './styles.css'
+import "./styles.css";
 import { countries } from "../../../helpers";
 const Forget: React.FC = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [countryCode, setCountryCode] = useState<string>('')
+  const [countryCode, setCountryCode] = useState<string>("");
   const forgetPasswordMutation = useForgetPassword();
 
   const [formData, setFormData] = useState({
@@ -39,12 +39,14 @@ const Forget: React.FC = () => {
                 {" "}
                 شماره تلفن همراه یا ایمیل خود را وارد کنید
               </p>
-              <form action="" className="auth-form" onSubmit={
-                (e) => {
+              <form
+                action=""
+                className="auth-form"
+                onSubmit={(e) => {
                   e.preventDefault();
                   handleForgetPassword();
-                }
-              }>
+                }}
+              >
                 <div className="mb-2">
                   <InputComponent
                     type="email"
@@ -52,7 +54,11 @@ const Forget: React.FC = () => {
                     placeholder="ایمیل "
                     value=""
                     onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value,type: "email" })
+                      setFormData({
+                        ...formData,
+                        email: e.target.value,
+                        type: "email",
+                      })
                     }
                     size="large"
                     prefix={<CiMail />}
@@ -60,20 +66,30 @@ const Forget: React.FC = () => {
                 </div>
                 <div className="mb-2">
                   <div className="row">
-                      <div className="col-12 col-md-8" style={{ paddingLeft: '0' }}>
-                        <InputComponent
-                          type="phone"
-                          id="input1"
-                          placeholder="شماره همراه "
-                          value=""
-                          onChange={(e) =>
-                            setFormData({ ...formData, phone: e.target.value,type: "phone" })
-                          }
-                          size="large"
-                          prefix={<CiMobile2 />}
-                        />
-                      </div>
-                      <div className="col-12 col-md-4" style={{ paddingRight: '0' }}>
+                    <div
+                      className="col-12 col-md-8"
+                      style={{ paddingLeft: "0" }}
+                    >
+                      <InputComponent
+                        type="phone"
+                        id="input1"
+                        placeholder="شماره همراه "
+                        value=""
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            phone: e.target.value,
+                            type: "phone",
+                          })
+                        }
+                        size="large"
+                        prefix={<CiMobile2 />}
+                      />
+                    </div>
+                    <div
+                      className="col-12 col-md-4"
+                      style={{ paddingRight: "0" }}
+                    >
                       <SelectComponent
                         style={{
                           borderTopRightRadius: 0,
@@ -84,7 +100,7 @@ const Forget: React.FC = () => {
                         options={countries}
                         size={"large"}
                         handleChange={(val: string) => {
-                          setCountryCode(val)
+                          setCountryCode(val);
                         }}
                       />
                     </div>

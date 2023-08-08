@@ -1,17 +1,5 @@
 import { Input } from "antd";
 
-interface InputProps {
-  type: string;
-  id: string;
-  placeholder: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  size: "large" | "middle" | "small";
-  prefix: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-}
-
 const InputComponent: React.FC<InputProps> = ({
   type,
   id,

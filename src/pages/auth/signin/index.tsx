@@ -23,25 +23,26 @@ const LoginPage: React.FC = () => {
     phoneNumber: "",
     password: "",
   });
-  const [countryCode, setCountryCode] = useState<string>('')
+  const [countryCode, setCountryCode] = useState<string>("");
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (checked === false) return toast.error('لطفا قوانین را مطالعه کنید و تایید کنید')
-    setLoading(true)
+    if (checked === false)
+      return toast.error("لطفا قوانین را مطالعه کنید و تایید کنید");
+    setLoading(true);
     try {
       const userData = {
         phoneNumber: countryCode + formData.phoneNumber,
         password: formData.password,
       };
       await loginMutation.mutateAsync(userData);
-      setLoading(false)
-      router('/information')
+      setLoading(false);
+      router("/information");
     } catch (error: any) {
-      console.error('Signup error:', error.message);
-      setLoading(false)
+      console.error("Signup error:", error.message);
+      setLoading(false);
     }
   };
   return (
@@ -86,7 +87,10 @@ const LoginPage: React.FC = () => {
               <form action="" className="auth-form" onSubmit={handleLogin}>
                 <div className="mb-2">
                   <div className="row">
-                    <div className="col-12 col-md-8" style={{ paddingLeft: '0' }}>
+                    <div
+                      className="col-12 col-md-8"
+                      style={{ paddingLeft: "0" }}
+                    >
                       <InputComponent
                         type="phone"
                         id="input1"
@@ -106,7 +110,10 @@ const LoginPage: React.FC = () => {
                         prefix={<CiUser />}
                       />
                     </div>
-                    <div className="col-12 col-md-4" style={{ paddingRight: '0' }}>
+                    <div
+                      className="col-12 col-md-4"
+                      style={{ paddingRight: "0" }}
+                    >
                       <SelectComponent
                         style={{
                           borderTopRightRadius: 0,
@@ -117,7 +124,7 @@ const LoginPage: React.FC = () => {
                         options={countries}
                         size={"large"}
                         handleChange={(val: string) => {
-                          setCountryCode(val)
+                          setCountryCode(val);
                         }}
                       />
                     </div>

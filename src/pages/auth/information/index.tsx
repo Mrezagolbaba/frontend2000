@@ -83,38 +83,38 @@ const Information: React.FC = () => {
                   />
                 </div>
                 <div className="mb-2">
-                    <div className="row">
-                      <div className="col-lg-4">
-                        <SelectComponent
-                          id="inputYear"
-                          placeholder="سال"
-                          value={year}
-                          handleChange={(val) => setYear(val)}
-                          size="large"
-                          options={generateLabelValueArray(1302, 1402)}
-                        />
-                      </div>
-                      <div className="col-lg-4">
-                        <SelectComponent
-                          id="inputYear"
-                          placeholder="ماه"
-                          value={month}
-                          handleChange={(val) => setMonth(val)}
-                          size="large"
-                          options={generatePersianMonths()}
-                        />
-                      </div>
-                      <div className="col-lg-4">
-                        <SelectComponent
-                          id="inputYear"
-                          placeholder="روز"
-                          value={day}
-                          handleChange={(val) => setDay(val)}
-                          size="large"
-                          options={generateLabelValueArray(1, 31)}
-                        />
-                      </div>
+                  <div className="row">
+                    <div className="col-lg-4">
+                      <SelectComponent
+                        id="inputYear"
+                        placeholder="سال"
+                        value={year}
+                        handleChange={(val) => setYear(val)}
+                        size="large"
+                        options={generateLabelValueArray(1302, 1402)}
+                      />
                     </div>
+                    <div className="col-lg-4">
+                      <SelectComponent
+                        id="inputYear"
+                        placeholder="ماه"
+                        value={month}
+                        handleChange={(val) => setMonth(val)}
+                        size="large"
+                        options={generatePersianMonths()}
+                      />
+                    </div>
+                    <div className="col-lg-4">
+                      <SelectComponent
+                        id="inputYear"
+                        placeholder="روز"
+                        value={day}
+                        handleChange={(val) => setDay(val)}
+                        size="large"
+                        options={generateLabelValueArray(1, 31)}
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div className="mb-2">
                   <Input

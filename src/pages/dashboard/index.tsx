@@ -11,9 +11,9 @@ import Calendar from "../../assets/img/icons/calendar2.svg";
 import T from "../../assets/img/coins/tether.png";
 import Turkey from "../../assets/img/icons/flag-turkey.png";
 import { useEffect, useState } from "react";
-import { toast } from 'react-hot-toast';
-import {BsCheck2} from 'react-icons/bs'
-// import CurrencyInput from "../../components/currencyInput";
+import { toast } from "react-hot-toast";
+import { BsCheck2 } from "react-icons/bs";
+import CurrencyInput from "../../components/currencyInput";
 const dataArray = [
   { value: "0.00256", number: "45،154", time: "11:30" },
   { value: "0.00256", number: "45،154", time: "11:30" },
@@ -119,7 +119,7 @@ const Dashboard: React.FC = () => {
                   </li>
                   <li>
                     <span className="icon">
-                      <BsCheck2 size={50} color={'#55cd51'} />
+                      <BsCheck2 size={50} color={"#55cd51"} />
                     </span>
                     ﻭﺍﺭﯾﺰ و برداشت تومانی ﺭﻭﺯﺍﻧﻪ:
                     <strong>۱ میلیون تومان</strong>
@@ -283,12 +283,12 @@ const Dashboard: React.FC = () => {
                     <div className="currency-exchange__control-group">
                       <label className="form-label">پرداخت می‌کنید:</label>
                       <div className="">
-                        {/* <CurrencyInput
+                        <CurrencyInput
                           value={""}
-                          onChange={(value:string) => {
+                          onChange={(value: string) => {
                             console.log(value);
                           }}
-                        /> */}
+                        />
                       </div>
                     </div>
                     <div className="currency-exchange__divider">
@@ -320,12 +320,12 @@ const Dashboard: React.FC = () => {
                     <div className="currency-exchange__control-group">
                       <label className="form-label">دریافت می‌کنید:</label>
                       <div className="">
-                        {/* <CurrencyInput
+                        <CurrencyInput
                           value={""}
-                          onChange={(value:string) => {
+                          onChange={(value: string) => {
                             console.log(value);
                           }}
-                        /> */}
+                        />
                       </div>
                     </div>
                   </div>

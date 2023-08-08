@@ -2,11 +2,11 @@ import { Modal } from "antd";
 const ModalTeter = (props: any) => {
   return (
     <Modal
-        title={null}
-        open={props.visible}
-        onCancel={props.onCancel}
-        footer={null}
-        width={800}
+      title={null}
+      open={props.visible}
+      onCancel={props.onCancel}
+      footer={null}
+      width={800}
     >
       <div className="modal-dialog modal-lg">
         <div className="modal-content">

@@ -1,10 +1,10 @@
-import React from 'react'
-import ReactDOM, { createRoot } from 'react-dom/client'
-import './assets/css/app.css';
-import './assets/css/custom.css';
-import './assets/vendor/bootstrap-select/bootstrap-select.min.css'
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import App from './App.tsx';
+import React from "react";
+import ReactDOM, { createRoot } from "react-dom/client";
+import "./assets/css/app.css";
+import "./assets/css/custom.css";
+import "./assets/vendor/bootstrap-select/bootstrap-select.min.css";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import App from "./App.tsx";
 import * as Sentry from "@sentry/react";
 Sentry.init({
   dsn: "https://471c3edaafc4ceda011aec9a5263fc88@o208701.ingest.sentry.io/4505642858119168",
@@ -24,10 +24,10 @@ Sentry.init({
 
 const container = document.getElementById("root");
 const root = createRoot(container as any);
-root.render(<App />)
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+root.render(<App />);
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-)
+);
 serviceWorkerRegistration.register();

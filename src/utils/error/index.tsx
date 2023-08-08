@@ -1,9 +1,5 @@
-import React, { useEffect } from 'react';
-import { Toaster } from 'react-hot-toast';
-
-interface ErrorBoundaryProps {
-  children: React.ReactNode;
-}
+import React, { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 
 const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
   useEffect(() => {
@@ -12,13 +8,13 @@ const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
       console.error(error);
 
       // You can also log the errorInfo to get more details about the error.
-      console.error('Error Info:', errorInfo);
+      console.error("Error Info:", errorInfo);
     };
 
-    window.addEventListener('error', errorHandler as any);
+    window.addEventListener("error", errorHandler as any);
 
     return () => {
-      window.removeEventListener('error', errorHandler as any);
+      window.removeEventListener("error", errorHandler as any);
     };
   }, []);
 

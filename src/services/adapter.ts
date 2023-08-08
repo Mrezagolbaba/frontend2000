@@ -1,8 +1,8 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 
 // Replace with your base API URL
-const API_BASE_URL = 'https://dev-api.arsonex.market/v1/';
-const API_BASE_DEV_URL = 'http://localhost:3000/v1/';
+const API_BASE_URL = "https://dev-api.arsonex.market/v1/";
+const API_BASE_DEV_URL = "http://localhost:3000/v1/";
 
 // Create and configure the Axios instance
 const request = axios.create({
@@ -19,7 +19,7 @@ request.interceptors.request.use(
   (error: AxiosError) => {
     // Handle request errors
     return Promise.reject(error);
-  }
+  },
 );
 
 request.interceptors.response.use(
@@ -30,7 +30,7 @@ request.interceptors.response.use(
   (error: AxiosError) => {
     // Handle response errors, e.g., displaying a notification for specific error status codes
     return Promise.reject(error);
-  }
+  },
 );
 
 export default request;

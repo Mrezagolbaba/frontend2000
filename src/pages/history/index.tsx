@@ -1,11 +1,7 @@
 import { useState } from "react";
 import Layout from "../../components/layout/dashboard";
 import { Tabs } from "antd";
-interface TabOptionProps {
-  label: React.ReactElement | string;
-  key: string;
-  children: React.ReactElement;
-}
+
 const History = () => {
   const [activeTab, setActiveTab] = useState<string>("1");
 
