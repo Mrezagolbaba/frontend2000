@@ -27,6 +27,7 @@ const OtpMobile: React.FC = () => {
       method: "PHONE",
     };
     const response = await sendOtp(data);
+    console.log(response)
     if (response.status === 200) {
       router("/");
     }
@@ -37,14 +38,10 @@ const OtpMobile: React.FC = () => {
   ) => {
     e.preventDefault();
     const data: OtpData = {
-      code: otpCode,
       type: "AUTH",
       method: "PHONE",
     };
-    const response = await resendOtp(data);
-    if (response.status === 200) {
-      router("/");
-    }
+   await resendOtp(data);
   };
 
   return (
