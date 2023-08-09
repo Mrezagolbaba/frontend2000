@@ -14,6 +14,10 @@ const request = axios.create({
 request.interceptors.request.use(
   (config: any) => {
     // Add your logic for request interception, e.g., adding authentication tokens
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
     return config;
   },
   (error: AxiosError) => {
