@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 export const sendOtp = async (data: any) => {
   try {
     const response = await request.post("auth/verify-2fa", data);
-    return response.data;
+    return response;
   } catch (error: any) {
     toast.error(error.response.data.message);
   }
@@ -25,7 +25,7 @@ export const useSendOtp = (
 export const resendOtp = async (data: any) => {
   try {
     const response = await request.post("auth/resend-2fa", data);
-    return response.data;
+    return response;
   } catch (error: any) {
     toast.error(error.response.data.message);
   }

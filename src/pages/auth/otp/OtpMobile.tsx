@@ -27,8 +27,7 @@ const OtpMobile: React.FC = () => {
       method: "PHONE",
     };
     const response = await sendOtp(data);
-    console.log(response)
-    if (response.status === 200) {
+    if (response?.status===200) {
       router("/");
     }
   };
