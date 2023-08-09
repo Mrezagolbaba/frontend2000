@@ -1,5 +1,5 @@
 interface OtpData {
-  code: string;
+  code?: string;
   type: string;
   method: string;
 }
