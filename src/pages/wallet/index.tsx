@@ -1,4 +1,4 @@
-import Layout from "../../components/layout/dashboard";
+import Layout from "layouts/dashboard";
 
 const Wallet: React.FC = () => {
   return (

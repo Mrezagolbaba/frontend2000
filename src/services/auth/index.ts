@@ -5,7 +5,7 @@ import useLogin from "./signin";
 import useForgetPassword from "./forgot";
 import forgetPassword from "./forgot";
 import { resendOtp, sendOtp, useResendOtp, useSendOtp } from "./otp";
-
+import useSubmitInformation from "./information";
 export {
   login,
   useCreateUser,
@@ -17,4 +17,5 @@ export {
   useSendOtp,
   resendOtp,
   useResendOtp,
+  useSubmitInformation,
 };

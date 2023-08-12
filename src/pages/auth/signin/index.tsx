@@ -1,180 +1,176 @@
-import React, { FormEvent, useState } from "react";
-import IrFlag from "../../../assets/img/icons/flag-iran.svg";
-import TrFlag from "../../../assets/img/icons/flag-turkey.png";
-import InputComponent from "../../../components/Input";
+import React from "react";
+import { isEmpty } from "lodash";
 import { CiLock, CiUser } from "react-icons/ci";
-import SelectComponent from "../../../components/Select";
-import { countries } from "../../../helpers";
-import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
-import { useLogin } from "../../../services/auth";
+import { Link, useNavigate } from "react-router-dom";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Alert, Input, Select, Spin } from "antd";
 
-const optionsArray = [
-  { value: "90+", label: "90+", flagIcon: TrFlag },
-  { value: "44+", label: "44+", flagIcon: "URL_TO_FLAG_ICON" },
-  { value: "33+", label: "33+", flagIcon: "URL_TO_FLAG_ICON" },
-  { value: "98+", label: "98+", flagIcon: IrFlag },
-];
+import { countries } from "helpers";
+import { useLogin } from "services/auth";
+import AuthLayout from "layouts/Authentication";
+import { loginSchema } from "pages/auth/validationForms";
+import { LoginFormData } from "pages/auth/types";
+
+import "pages/auth/style.scss";
+import { toast } from "react-hot-toast";
 
 const LoginPage: React.FC = () => {
   const router = useNavigate();
   const loginMutation = useLogin();
-  const [formData, setFormData] = useState({
-    phoneNumber: "",
-    password: "",
-  });
-  const [countryCode, setCountryCode] = useState<string>("");
-  const [checked, setChecked] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (checked === false)
-      return toast.error("لطفا قوانین را مطالعه کنید و تایید کنید");
-    setLoading(true);
+  const resolver = yupResolver(loginSchema);
+  const {
+    handleSubmit,
+    control,
+    formState: { errors, isLoading, isSubmitting },
+  } = useForm<LoginFormData>({
+    mode: "onChange",
+    defaultValues: {
+      phoneNumber: "",
+      password: "",
+      selectedCountry: "",
+    },
+    resolver,
+  });
+
+  const handleLogin = async (data: LoginFormData) => {
     try {
       const userData = {
-        phoneNumber: countryCode + formData.phoneNumber,
-        password: formData.password,
+        phoneNumber: data.selectedCountry + data.phoneNumber,
+        password: data.password,
+        type: "PHONE",
       };
       await loginMutation.mutateAsync(userData);
-      setLoading(false);
       router("/information");
     } catch (error: any) {
-      console.error("Signup error:", error.message);
-      setLoading(false);
+      console.error("Sign-in error:", error?.message);
     }
   };
+
+  const handleErrors = (errors: any) =>
+    Object.entries(errors).map(([fieldName, error]: any) =>
+      toast.error(error?.message, {
+        position: "bottom-left",
+      })
+    );
+
   return (
-    <div className="auth-wrapper" id="root">
-      <main className="auth-main">
-        <header className="auth-header auth-header--bg">
-          <div className="auth-logo">
-            <a href="#">
-              <img src="assets/img/logo-arsonex.png" alt="" />
-            </a>
-          </div>
-          <div className="auth-gain-confidence">
-            <p>از یکسان بودن آدرس صفحه با آدرس زیر مطمئن شوید.</p>
-            <div className="d-ltr">
-              <span className="icon">
-                <svg
-                  width="12"
-                  height="16"
-                  viewBox="0 0 12 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M6 0.666656L0 3.33332V7.33332C0 11.0333 2.56 14.4933 6 15.3333C9.44 14.4933 12 11.0333 12 7.33332V3.33332L6 0.666656ZM6 7.99332H10.6667C10.3133 10.74 8.48 13.1867 6 13.9533V7.99999H1.33333V4.19999L6 2.12666V7.99332Z"
-                    fill="#39D98A"
-                  />
-                </svg>
-              </span>
-              <label>
-                <span>https://</span>arsonex.com
-              </label>
-            </div>
-          </div>
-        </header>
+    <AuthLayout>
+      <section className="auth auth-signin">
+        <div className="card auth-card">
+          <div className="card-body">
+            <h4 className="auth-title">ورود به حساب کاربری</h4>
+            <p className="auth-text"> شماره تلفن خود را وارد کنید</p>
 
-        <section className="auth auth-signin">
-          <div className="card auth-card">
-            <div className="card-body">
-              <h4 className="auth-title">ورود به حساب کاربری</h4>
-              <p className="auth-text"> شماره تلفن خود را وارد کنید</p>
-
-              <form action="" className="auth-form" onSubmit={handleLogin}>
-                <div className="mb-2">
-                  <div className="row">
-                    <div
-                      className="col-12 col-md-8"
-                      style={{ paddingLeft: "0" }}
-                    >
-                      <InputComponent
-                        type="phone"
-                        id="input1"
-                        style={{
-                          borderTopLeftRadius: 0,
-                          borderBottomLeftRadius: 0,
-                        }}
-                        placeholder="شماره همراه"
-                        value={formData.phoneNumber}
-                        onChange={(e) => {
-                          setFormData({
-                            ...formData,
-                            phoneNumber: e.target.value,
-                          });
-                        }}
-                        size={"large"}
-                        prefix={<CiUser />}
-                      />
-                    </div>
-                    <div
-                      className="col-12 col-md-4"
-                      style={{ paddingRight: "0" }}
-                    >
-                      <SelectComponent
-                        style={{
-                          borderTopRightRadius: 0,
-                          borderBottomRightRadius: 0,
-                        }}
-                        id="select1"
-                        placeholder="کد"
-                        options={countries}
-                        size={"large"}
-                        handleChange={(val: string) => {
-                          setCountryCode(val);
-                        }}
-                      />
-                    </div>
+            <form
+              className="auth-form"
+              onSubmit={handleSubmit(handleLogin, handleErrors)}
+            >
+              <div className="mb-2">
+                <div className="row">
+                  <div className="col-12 col-md-8" style={{ paddingLeft: 0 }}>
+                    <Controller
+                      name="phoneNumber"
+                      control={control}
+                      render={({ field: { name, value, onChange, ref } }) => (
+                        <Input
+                          className="phone-number-input"
+                          type="phone"
+                          id={name}
+                          name={name}
+                          value={value}
+                          placeholder="شماره همراه"
+                          ref={ref}
+                          onChange={onChange}
+                          size={"large"}
+                          prefix={<CiUser />}
+                          status={errors?.[name]?.message ? "error" : undefined}
+                        />
+                      )}
+                    />
+                  </div>
+                  <div
+                    className="col-12 col-md-4"
+                    style={{ paddingRight: "0" }}
+                  >
+                    <Controller
+                      name="selectedCountry"
+                      control={control}
+                      render={({ field: { name, value, onChange, ref } }) => (
+                        <Select
+                          className="dropdown bootstrap-select bs-select-control bs-form-select select-country-input"
+                          id={name}
+                          ref={ref}
+                          value={value}
+                          onChange={onChange}
+                          options={countries}
+                          placeholder="کد"
+                          size="large"
+                          filterOption={(input, option) =>
+                            (option?.label ?? "")
+                              .toLowerCase()
+                              .includes(input.toLowerCase())
+                          }
+                          status={errors?.[name]?.message ? "error" : undefined}
+                        />
+                      )}
+                    />
                   </div>
                 </div>
-                <div className="mb-2">
-                  <InputComponent
-                    type="password"
-                    id="input2"
-                    placeholder="رمز عبور"
-                    value={formData.password}
-                    onChange={(e) => {
-                      setFormData({
-                        ...formData,
-                        password: e.target.value,
-                      });
-                    }}
-                    size={"large"}
-                    prefix={<CiLock />}
-                  />
-                  <div className="auth-forgot mb-4">
-                    <a href="/forget">رمز عبور را فراموش کرده&zwnj;ام!</a>
+              </div>
+              <div className="mb-2">
+                <Controller
+                  name="password"
+                  control={control}
+                  render={({ field: { name, value, onChange, ref } }) => (
+                    <Input
+                      type="password"
+                      id={name}
+                      name={name}
+                      value={value}
+                      placeholder="رمز عبور"
+                      ref={ref}
+                      onChange={onChange}
+                      size={"large"}
+                      prefix={<CiLock />}
+                      status={errors?.[name]?.message ? "error" : undefined}
+                    />
+                  )}
+                />
+                <div className="auth-forgot mb-4">
+                  <Link to="/forget">رمز عبور را فراموش کرده&zwnj;ام!</Link>
+                </div>
+                <div className="auth-footer">
+                  <div className="mb-3">
+                    <button
+                      type="submit"
+                      className="btn btn-primary auth-submit"
+                    >
+                      {isLoading || isSubmitting ? (
+                        <Spin style={{ color: "white" }} />
+                      ) : (
+                        "ورود به حساب"
+                      )}
+                    </button>
+                    <button
+                      type="submit"
+                      className="btn btn-outline-primary auth-submit mt-3"
+                    >
+                      ورود با استفاده از ایمیل
+                    </button>
                   </div>
-                  <div className="auth-footer">
-                    <div className="mb-3">
-                      <button
-                        type="submit"
-                        className="btn btn-primary auth-submit"
-                      >
-                        ورود به حساب
-                      </button>
-                      <button
-                        type="submit"
-                        className="btn btn-outline-primary auth-submit mt-3"
-                      >
-                        ورود با استفاده از ایمیل
-                      </button>
-                    </div>
-                    <div className="auth-already">
-                      عضو نیستم:
-                      <a href="/register">ثبت نام</a>
-                    </div>
+                  <div className="auth-already">
+                    عضو نیستم:
+                    <a href="/register">ثبت نام</a>
                   </div>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
-        </section>
-      </main>
-    </div>
+        </div>
+      </section>
+    </AuthLayout>
   );
 };
 

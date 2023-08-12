@@ -1,4 +1,5 @@
-import Layout from "../../components/layout/dashboard";
+import Layout from "layouts/dashboard";
+
 
 const AddFriends = () => {
   return (

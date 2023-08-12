@@ -1,172 +1,193 @@
-import { useState } from "react";
-import { Input } from "antd";
-import SelectComponent from "../../../components/Select";
-import {
-  generateLabelValueArray,
-  generatePersianMonths,
-} from "../../../helpers";
-import { CiMobile2, CiUser, CiMail } from "react-icons/ci";
+import { Input, Spin } from "antd";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { LiaIdCardSolid } from "react-icons/lia";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { CiMobile2, CiUser, CiMail } from "react-icons/ci";
+
 import "./styles.css";
-import HeadAuth from "../../../components/layout/headAuth";
+import AuthLayout from "layouts/Authentication";
+import { InformationFormData } from "../types";
+import { InformationSchema } from "../validationForms";
+import DatePicker from "components/DatePicker";
+import { useSubmitInformation } from "services/auth";
 
 const Information: React.FC = () => {
-  const [fullName, setFullName] = useState("");
-  const [nationalCode, setNationalCode] = useState("");
-  const [birthDate, setBirthDate] = useState("");
-  const [year, setYear] = useState("");
-  const [month, setMonth] = useState("");
-  const [day, setDay] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+  const submitInformation = useSubmitInformation();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission logic here using the state values
-    const formData = {
-      fullName,
-      nationalCode,
-      birthDate,
-      year,
-      month,
-      day,
-      phone,
-      email,
-    };
-    console.log(formData);
-  };
+  const resolver = yupResolver(InformationSchema);
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors, isLoading, isSubmitting },
+  } = useForm<InformationFormData>({
+    mode: "onChange",
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      nationalCode: "",
+      birthDate: "",
+      phone: "",
+      email: "",
+    },
+    resolver,
+  });
+
+  const handleInfo = async (data: InformationFormData) =>
+    await submitInformation.mutateAsync(data).then((res) => {
+      res && navigate("/");
+    });
+
+  const handleErrors = (errors: any) =>
+    Object.entries(errors).map(([fieldName, error]: any) =>
+      toast.error(error?.message, {
+        position: "bottom-left",
+      })
+    );
 
   return (
-    <div className="auth-wrapper" id="root">
-      <main className="auth-main">
-        <HeadAuth />
-        <section className="auth auth-signup">
-          <div className="card auth-card auth-card--bordered">
-            <div className="card-body">
-              <h4 className="auth-title">اطلاعات هویتی</h4>
-              <p className="auth-text">اطلاعات هویتی خود را تکمیل کنید</p>
-              <form action="" className="auth-form" onSubmit={handleSubmit}>
-                <div className="mb-2">
-                  <Input
-                    type="email"
-                    id="input1"
-                    placeholder="نام "
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    size="large"
-                    prefix={<CiUser size={20} />}
-                    style={{ padding: "10px", height: "50px" }}
-                  />
-                </div>
-                <div className="mb-2">
-                  <Input
-                    type="email"
-                    id="input1"
-                    placeholder=" نام خانوادگی"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    size="large"
-                    prefix={<CiUser size={20} />}
-                    style={{ padding: "10px", height: "50px" }}
-                  />
-                </div>
-                <div className="mb-2">
-                  <Input
-                    type="text"
-                    id="input2"
-                    placeholder=" کدملی  "
-                    value={nationalCode}
-                    onChange={(e) => setNationalCode(e.target.value)}
-                    size="large"
-                    prefix={<LiaIdCardSolid size={20} />}
-                    style={{ padding: "10px", height: "50px" }}
-                  />
-                </div>
-                <div className="mb-2">
-                  <div className="row">
-                    <div className="col-lg-4">
-                      <SelectComponent
-                        id="inputYear"
-                        placeholder="سال"
-                        value={year}
-                        handleChange={(val) => setYear(val)}
-                        size="large"
-                        options={generateLabelValueArray(1302, 1402)}
-                      />
-                    </div>
-                    <div className="col-lg-4">
-                      <SelectComponent
-                        id="inputYear"
-                        placeholder="ماه"
-                        value={month}
-                        handleChange={(val) => setMonth(val)}
-                        size="large"
-                        options={generatePersianMonths()}
-                      />
-                    </div>
-                    <div className="col-lg-4">
-                      <SelectComponent
-                        id="inputYear"
-                        placeholder="روز"
-                        value={day}
-                        handleChange={(val) => setDay(val)}
-                        size="large"
-                        options={generateLabelValueArray(1, 31)}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-2">
-                  <Input
-                    type="text"
-                    id="input4"
-                    placeholder="شماره تلفن ایران"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    size="large"
-                    prefix={<CiMobile2 size={20} />}
-                    style={{
-                      padding: "10px",
-                      height: "50px",
-                      color: "#000",
-                      fontFamily: " IRANYekanX",
-                    }}
-                  />
-                </div>
-                <div className="mb-2">
-                  <Input
-                    style={{
-                      padding: "10px",
-                      height: "50px",
-                      color: "#000",
-                      fontFamily: " IRANYekanX",
-                    }}
-                    type="email"
-                    id="input1"
-                    placeholder="ایمیل"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    size="large"
-                    prefix={<CiMail size={20} />}
-                  />
-                </div>
+    <AuthLayout>
+      <section className="auth auth-information">
+        <div className="card auth-card auth-card--bordered">
+          <div className="card-body">
+            <h4 className="auth-title">اطلاعات هویتی</h4>
+            <p className="auth-text">اطلاعات هویتی خود را تکمیل کنید</p>
+            <form
+              className="auth-information-form"
+              onSubmit={handleSubmit(handleInfo, handleErrors)}
+            >
+              <div className="mb-2">
+                <Controller
+                  name="firstName"
+                  control={control}
+                  render={({ field: { name, value, onChange, ref } }) => (
+                    <Input
+                      type="text"
+                      id={name}
+                      name={name}
+                      placeholder="نام"
+                      value={value}
+                      ref={ref}
+                      onChange={onChange}
+                      size="large"
+                      prefix={<CiUser size={20} />}
+                      status={errors?.[name]?.message ? "error" : undefined}
+                    />
+                  )}
+                />
+              </div>
+              <div className="mb-2">
+                <Controller
+                  name="lastName"
+                  control={control}
+                  render={({ field: { name, value, onChange, ref } }) => (
+                    <Input
+                      type="text"
+                      id={name}
+                      placeholder=" نام خانوادگی"
+                      value={value}
+                      ref={ref}
+                      onChange={onChange}
+                      size="large"
+                      prefix={<CiUser size={20} />}
+                      status={errors?.[name]?.message ? "error" : undefined}
+                    />
+                  )}
+                />
+              </div>
+              <div className="mb-2">
+                <Controller
+                  name="nationalCode"
+                  control={control}
+                  render={({ field: { name, value, onChange, ref } }) => (
+                    <Input
+                      type="text"
+                      id={name}
+                      name={name}
+                      placeholder="کدملی"
+                      value={value}
+                      ref={ref}
+                      onChange={onChange}
+                      size="large"
+                      prefix={<LiaIdCardSolid size={20} />}
+                      status={errors?.[name]?.message ? "error" : undefined}
+                    />
+                  )}
+                />
+              </div>
+              <div className="mb-2">
+                <Controller
+                  name="birthDate"
+                  control={control}
+                  render={({ field: { name } }) => (
+                    <DatePicker
+                      label="تاریخ تولد"
+                      onChange={(date) => setValue("birthDate", date)}
+                      error={errors?.[name]?.message}
+                    />
+                  )}
+                />
+              </div>
+              <div className="mb-2">
+                <Controller
+                  name="phone"
+                  control={control}
+                  render={({ field: { name, value, onChange, ref } }) => (
+                    <Input
+                      type="text"
+                      id={name}
+                      name={name}
+                      placeholder="شماره تلفن ایران"
+                      value={value}
+                      ref={ref}
+                      onChange={onChange}
+                      size="large"
+                      prefix={<CiMobile2 size={20} />}
+                      status={errors?.[name]?.message ? "error" : undefined}
+                    />
+                  )}
+                />
+              </div>
+              <div className="mb-2">
+                <Controller
+                  name="email"
+                  control={control}
+                  render={({ field: { name, value, onChange, ref } }) => (
+                    <Input
+                      type="email"
+                      id={name}
+                      name={name}
+                      placeholder="ایمیل"
+                      value={value}
+                      ref={ref}
+                      onChange={onChange}
+                      size="large"
+                      prefix={<CiMail size={20} />}
+                      status={errors?.[name]?.message ? "error" : undefined}
+                    />
+                  )}
+                />
+              </div>
 
-                <div className="auth-footer">
-                  <div className="mb-3">
-                    <button
-                      type="submit"
-                      className="btn btn-primary auth-submit"
-                    >
-                      ثبت اطلاعات
-                    </button>
-                  </div>
+              <div className="auth-footer">
+                <div className="mb-3">
+                  <button type="submit" className="btn btn-primary auth-submit">
+                    {isLoading || isSubmitting ? (
+                      <Spin style={{ color: "white" }} />
+                    ) : (
+                      "ثبت اطلاعات"
+                    )}
+                  </button>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
-        </section>
-      </main>
-    </div>
+        </div>
+      </section>
+    </AuthLayout>
   );
 };
 export default Information;

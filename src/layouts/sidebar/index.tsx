@@ -1,17 +1,14 @@
-import LogoArsonex from "../../../assets/img/logo-arsonex.png";
-import Home from "../../../assets/img/icons/home.svg";
-import Wallet from "../../../assets/img/icons/wallet.svg";
-import Order from "../../../assets/img/icons/paper.svg";
-import History from "../../../assets/img/icons/time-circle.svg";
-import AddFriend from "../../../assets/img/icons/add-user.svg";
-import Logout from "../../../assets/img/icons/logout.svg";
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
-
-import React from "react";
+import LogoArsonex from "assets/img/logo-arsonex.png";
+import Home from "assets/img/icons/home.svg";
+import Wallet from "assets/img/icons/wallet.svg";
+import Order from "assets/img/icons/paper.svg";
+import History from "assets/img/icons/time-circle.svg";
+import AddFriend from "assets/img/icons/add-user.svg";
+import Logout from "assets/img/icons/logout.svg";
+import React, { useState } from "react";
+import { useLocation, Link } from "react-router-dom";
 import { Menu } from "antd";
 
-import { Link } from "react-router-dom";
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onSidebarToggle }) => {
   const [activeItem, setActiveItem] = useState("");
@@ -61,9 +58,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onSidebarToggle }) => {
   const renderItem = (item: any) => (
     <div
       key={item.path}
-      className={`navbar__item ${
-        activeItem === item.path ? "navbar__item--active" : ""
-      }`}
+      className={`navbar__item ${activeItem === item.path ? "navbar__item--active" : ""
+        }`}
     >
       <Link to={item.path}>
         <span className="icon">{item.icon}</span>
@@ -76,11 +72,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onSidebarToggle }) => {
     <Menu
       onClick={handleClick}
       className={`sidebar ${isOpen ? "expanded" : ""}`}
-      // style={{ width: 256 }}
       defaultSelectedKeys={["0"]}
       defaultOpenKeys={["sub1"]}
       mode="inline"
-      //@ts-ignore
       style={
         window.screen.width < 768
           ? { width: 256, position: "sticky", top: 0 }
@@ -115,9 +109,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onSidebarToggle }) => {
         </button>
 
         <div className="sidebar-logo">
-          <a>
+          <Link to="/">
             <img src={LogoArsonex} alt="" className="" />
-          </a>
+          </Link>
         </div>
       </div>
       <ul className="navbar">{items.map(renderItem)}</ul>

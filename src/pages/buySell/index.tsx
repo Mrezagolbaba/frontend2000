@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Layout from "../../components/layout/dashboard";
+import Layout from "layouts/dashboard";
 import ModalTeter from "./modal";
 
 const BuySell = () => {

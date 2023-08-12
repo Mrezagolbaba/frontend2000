@@ -12,11 +12,11 @@ export const signup = async (userData: any) => {
     localStorage.setItem("token", response.data.accessToken);
     return response.data;
   } catch (error: any) {
-    toast.error(error.response.data.message);
+    toast.error(error.response.data.message, { position: "bottom-left" });
   }
 };
 const useCreateUser = (
-  options?: UseMutationOptions<any, Error, any, any>,
+  options?: UseMutationOptions<any, Error, any, any>
 ): UseMutationResult<any, Error, any, any> => {
   return useMutation(signup, options);
 };

@@ -1,15 +1,15 @@
 //@ts-ignore
-import Layout from "../../components/layout/dashboard";
-import User from "../../assets/img/user/level-gold.png";
-import Bronz from "../../assets/img/user/level-bronze.png";
-import Silver from "../../assets/img/user/level-silver.png";
-import Platinum from "../../assets/img/user/level-platinum.png";
-import Uranium from "../../assets/img/user/level-uranium.png";
-import Gold from "../../assets/img/user/level-gold.png";
-import Edit from "../../assets/img/icons/edit.svg";
-import Calendar from "../../assets/img/icons/calendar2.svg";
-import T from "../../assets/img/coins/tether.png";
-import Turkey from "../../assets/img/icons/flag-turkey.png";
+import Layout from "layouts/dashboard";
+import User from "assets/img/user/level-gold.png";
+import Bronz from "assets/img/user/level-bronze.png";
+import Silver from "assets/img/user/level-silver.png";
+import Platinum from "assets/img/user/level-platinum.png";
+import Uranium from "assets/img/user/level-uranium.png";
+import Gold from "assets/img/user/level-gold.png";
+import Edit from "assets/img/icons/edit.svg";
+import Calendar from "assets/img/icons/calendar2.svg";
+import T from "assets/img/coins/tether.png";
+import Turkey from "assets/img/icons/flag-turkey.png";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BsCheck2 } from "react-icons/bs";

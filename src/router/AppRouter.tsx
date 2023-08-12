@@ -1,27 +1,30 @@
-import React from "react"; //  { useState }
+import React, { lazy } from "react"; //  { useState }
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-// import NotFoundPage from './components/NotFoundPage';
-import LoginPage from "../pages/auth/signin";
-import SignupPage from "../pages/auth/signup";
-import OtpEmail from "../pages/auth/otp/OtpEmail";
-import OtpMobile from "../pages/auth/otp/OtpMobile";
-import Dashboard from "../pages/dashboard";
-import Wallet from "../pages/wallet";
-import Transactions from "../pages/transactions";
-import Setting from "../pages/setting";
-import Orders from "../pages/orders";
-import Notifications from "../pages/notifications";
-import History from "../pages/history";
-import AddFriends from "../pages/add-friends";
-import Invoices from "../pages/invoices";
-import Profile from "../pages/profile";
-import Support from "../pages/support";
-import BuySell from "../pages/buySell";
-import Information from "../pages/auth/information";
-import Forget from "../pages/auth/forget";
 import ProtectedRoute from "./ProtectedRoute";
-import Market from "../pages/market";
+
+// Authentication
+const LoginPage = lazy(() => import("pages/auth/signin"));
+const SignupPage = lazy(() => import("pages/auth/signup"));
+const OtpEmail = lazy(() => import("pages/auth/otp/OtpEmail"));
+const OtpMobile = lazy(() => import("pages/auth/otp/OtpMobile"));
+const Information = lazy(() => import("pages/auth/information"));
+const Forget = lazy(() => import("pages/auth/forget"));
+
+//dashboard
+const Dashboard = lazy(() => import("pages/dashboard"));
+
+const Wallet = lazy(() => import("pages/wallet"));
+const Transactions = lazy(() => import("pages/transactions"));
+const Setting = lazy(() => import("pages/setting"));
+const Orders = lazy(() => import("pages/orders"));
+const Notifications = lazy(() => import("pages/notifications"));
+const History = lazy(() => import("pages/history"));
+const AddFriends = lazy(() => import("pages/add-friends"));
+const Invoices = lazy(() => import("pages/invoices"));
+const Profile = lazy(() => import("pages/profile"));
+const Support = lazy(() => import("pages/support"));
+const BuySell = lazy(() => import("pages/buySell"));
+const Market = lazy(() => import("pages/market"));
 const AppRouter: React.FC = () => {
   // const [showAddToHomeSheet, setShowAddToHomeSheet] = useState(isMobile && !window.matchMedia('(display-mode: standalone)').matches);
 

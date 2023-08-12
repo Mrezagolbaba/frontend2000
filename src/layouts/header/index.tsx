@@ -1,7 +1,7 @@
-import Wallet from "../../../assets/img/logo-wallex.png";
-import Notifications from "../../../assets/img/icons/notification.svg";
-import Support from "../../../assets/img/icons/support.svg";
-import Setting from "../../../assets/img/icons/setting.svg";
+import Wallet from "assets/img/logo-wallex.png";
+import Notifications from "assets/img/icons/notification.svg";
+import Support from "assets/img/icons/support.svg";
+import Setting from "assets/img/icons/setting.svg";
 import { GiHamburgerMenu } from "react-icons/gi";
 interface Props {
   onSidebarToggle: () => void;
