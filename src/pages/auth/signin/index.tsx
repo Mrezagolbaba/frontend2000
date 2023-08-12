@@ -16,7 +16,7 @@ import "pages/auth/style.scss";
 import { toast } from "react-hot-toast";
 
 const LoginPage: React.FC = () => {
-  const router = useNavigate();
+  const navigate = useNavigate();
   const loginMutation = useLogin();
 
   const resolver = yupResolver(loginSchema);
@@ -35,17 +35,14 @@ const LoginPage: React.FC = () => {
   });
 
   const handleLogin = async (data: LoginFormData) => {
-    try {
-      const userData = {
-        phoneNumber: data.selectedCountry + data.phoneNumber,
-        password: data.password,
-        type: "PHONE",
-      };
-      await loginMutation.mutateAsync(userData);
-      router("/information");
-    } catch (error: any) {
-      console.error("Sign-in error:", error?.message);
-    }
+    const userData = {
+      phoneNumber: data.selectedCountry + data.phoneNumber,
+      password: data.password,
+      type: "PHONE",
+    };
+    await loginMutation
+      .mutateAsync(userData)
+      .then((res) => res && navigate("/otpMobile"));
   };
 
   const handleErrors = (errors: any) =>
@@ -75,6 +72,8 @@ const LoginPage: React.FC = () => {
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
                         <Input
+                          tabIndex={0}
+                          autoFocus
                           className="phone-number-input"
                           type="phone"
                           id={name}
@@ -99,6 +98,7 @@ const LoginPage: React.FC = () => {
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
                         <Select
+                          tabIndex={1}
                           className="dropdown bootstrap-select bs-select-control bs-form-select select-country-input"
                           id={name}
                           ref={ref}
@@ -125,6 +125,7 @@ const LoginPage: React.FC = () => {
                   control={control}
                   render={({ field: { name, value, onChange, ref } }) => (
                     <Input
+                      tabIndex={2}
                       type="password"
                       id={name}
                       name={name}
@@ -139,11 +140,14 @@ const LoginPage: React.FC = () => {
                   )}
                 />
                 <div className="auth-forgot mb-4">
-                  <Link to="/forget">رمز عبور را فراموش کرده&zwnj;ام!</Link>
+                  <Link to="/forget" tabIndex={3}>
+                    رمز عبور را فراموش کرده&zwnj;ام!
+                  </Link>
                 </div>
                 <div className="auth-footer">
                   <div className="mb-3">
                     <button
+                      tabIndex={4}
                       type="submit"
                       className="btn btn-primary auth-submit"
                     >
@@ -154,6 +158,7 @@ const LoginPage: React.FC = () => {
                       )}
                     </button>
                     <button
+                      tabIndex={5}
                       type="submit"
                       className="btn btn-outline-primary auth-submit mt-3"
                     >
@@ -162,7 +167,9 @@ const LoginPage: React.FC = () => {
                   </div>
                   <div className="auth-already">
                     عضو نیستم:
-                    <a href="/register">ثبت نام</a>
+                    <Link to="/register" tabIndex={6}>
+                      ثبت نام
+                    </Link>
                   </div>
                 </div>
               </div>
