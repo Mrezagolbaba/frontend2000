@@ -71,3 +71,21 @@ export const PhoneNumberMask: React.FC<PhoneNumberMaskProps> = ({
   console.log(maskedPhoneNumber);
   return maskedPhoneNumber;
 };
+
+export const formatPhoneNumber = (phoneNumber: string,code:string)=> {
+  // Remove leading zero if it exists
+  const numericPhoneNumber = phoneNumber.replace(/\D/g, '');
+
+  // Check if the phone number already starts with +code (+98)
+  if (numericPhoneNumber.startsWith(code)) {
+    return numericPhoneNumber; // Return as is
+  }
+
+  // Remove leading zero if it exists
+  const phoneNumberWithoutZero = numericPhoneNumber.replace(/^0+/, '');
+
+  // Add the country code +code (+98)
+  const formattedPhoneNumber = `+${code}${phoneNumberWithoutZero}`;
+
+  return formattedPhoneNumber;
+}
