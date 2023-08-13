@@ -1,10 +1,9 @@
 import React from "react";
-import { isEmpty } from "lodash";
 import { CiLock, CiUser } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Alert, Input, Select, Spin } from "antd";
+import { Input, Select, Spin } from "antd";
 
 import { countries } from "helpers";
 import { useLogin } from "services/auth";
@@ -40,9 +39,15 @@ const LoginPage: React.FC = () => {
       password: data.password,
       type: "PHONE",
     };
-    await loginMutation
-      .mutateAsync(userData)
-      .then((res) => res && navigate("/otpMobile"));
+    await loginMutation.mutateAsync(userData).then(
+      (res) =>
+        res &&
+        navigate("/otpMobile", {
+          state: {
+            phoneNumber: userData.phoneNumber,
+          },
+        })
+    );
   };
 
   const handleErrors = (errors: any) =>
