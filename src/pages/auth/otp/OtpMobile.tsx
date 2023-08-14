@@ -1,9 +1,6 @@
-import { send } from "vite";
-import { useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 
 import { PhoneNumberMask } from "helpers";
-import HeadAuth from "layouts/Authentication";
 import OtpInput from "components/OTP";
 import { resendOtp, sendOtp } from "services/auth";
 import AuthLayout from "layouts/Authentication";

@@ -11,7 +11,7 @@ import AuthLayout from "layouts/Authentication";
 import { registerSchema } from "pages/auth/validationForms";
 import { RegisterFormData } from "pages/auth/types";
 
-import "pages/auth/style.scss";
+import "pages/auth/style.sass";
 import toast from "react-hot-toast";
 import { useCreateUser } from "services/auth";
 

@@ -52,7 +52,7 @@ const OtpEmail: React.FC = () => {
             <div className="auth-summary">
               <p className="auth-text text-end">
                 کد تایید ارسال شده به
-                <span className="d-ltr d-inline-block">ex***le@email.com</span>
+                <span className="d-ltr d-inline-block">{email}</span>
                 را وارد کنید.
               </p>
               <span className="auth-counter text-start d-ltr">1:48</span>

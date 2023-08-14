@@ -9,7 +9,7 @@ import {
   BsStop,
   BsTrash,
 } from "react-icons/bs";
-import "./style.sass";
+// import "./style.sass";
 type Props = {
   title: string;
   isOpen: boolean;
