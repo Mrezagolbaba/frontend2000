@@ -42,7 +42,7 @@ const SignupPage: React.FC = () => {
     };
     await registerRequest.mutateAsync(userData).then((res) => {
       res &&
-        navigate("/otpMobile", {
+        navigate("/mobile-otp", {
           state: {
             phoneNumber: userData.phoneNumber,
           },

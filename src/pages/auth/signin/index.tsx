@@ -42,7 +42,7 @@ const LoginPage: React.FC = () => {
     await loginMutation.mutateAsync(userData).then(
       (res) =>
         res &&
-        navigate("/otpMobile", {
+        navigate("/mobile-otp", {
           state: {
             phoneNumber: userData.phoneNumber,
           },

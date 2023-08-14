@@ -12,11 +12,14 @@ import { Controller, useForm } from "react-hook-form";
 import { OtpSchema } from "pages/auth/validationForms";
 import { Spin } from "antd";
 import { toast } from "react-hot-toast";
+import { useGetMe } from "services/users";
 
 const OtpMobile: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const phoneNumber = location.state.phoneNumber;
+
+  const { data: MeData } = useGetMe();
 
   const resolver = yupResolver(OtpSchema);
   const {
@@ -49,9 +52,14 @@ const OtpMobile: React.FC = () => {
       type: "AUTH",
       method: "PHONE",
     };
-    await sendOtp(formData).then((res) => res && navigate("/information"));
+    await sendOtp(formData).then((res) => {
+      if (res) {
+        if (MeData?.firstTierVerified) navigate("/");
+        else navigate("/information");
+      }
+    });
   };
-  
+
   const handleErrors = (errors: any) => {
     toast.error(errors?.code?.message, {
       position: "bottom-left",
