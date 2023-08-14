@@ -47,9 +47,8 @@ const Information: React.FC = () => {
       .mutateAsync({ ...data, phoneNumber })
       .then((res) => {
         setIsLoading(false);
-        res && navigate("/");
+        res && navigate("/otp-email", { state: { email: data.email } });
       });
-      
   };
 
   const handleErrors = (errors: any) =>
