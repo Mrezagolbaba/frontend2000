@@ -15,6 +15,6 @@ export interface LoginFormData {
     lastName: string;
     nationalCode: string;
     birthDate: string;
-    phone: string;
+    phoneNumber: string;
     email: string;
   }

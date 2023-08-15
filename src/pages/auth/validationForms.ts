@@ -36,6 +36,6 @@ export const InformationSchema = Yup.object().shape({
   lastName: Yup.string().required("درج نام خانوادگی الزامی است."),
   nationalCode: Yup.string().required("کد ملی الزامی می باشد."),
   birthDate: Yup.string().required("تاریخ تولد الزامی می باشد."),
-  phone: Yup.string().required("شماره تماس الزامی می باشد."),
+  phoneNumber: Yup.string().required("شماره تماس الزامی می باشد."),
   email: Yup.string().email().required("درج ایمیل الزامی می باشد."),
 });

@@ -1,14 +1,19 @@
 import { Card, Select } from "antd";
 import { useEffect, useState } from "react";
-
 import { generateLabelValueArray, generatePersianMonths } from "helpers";
 import { isEmpty } from "lodash";
+import jalaliMoment from "jalali-moment";
 
 type Props = {
   onChange: (date: string) => void;
   label: string;
   error?: string;
 };
+function convertPersianToGregorian(persianDate: string) {
+
+  const gregorianDate = jalaliMoment.from(persianDate, 'fa', 'YYYY/MM/DD');
+  return gregorianDate.locale('en').format('YYYY-MM-DD');
+}
 
 const DatePicker = ({ onChange, label, error }: Props) => {
   const [year, setYear] = useState<string | null>(null);
@@ -16,8 +21,9 @@ const DatePicker = ({ onChange, label, error }: Props) => {
   const [day, setDay] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isEmpty(year) || !isEmpty(month) || !isEmpty(day))
-      onChange?.(`${year}-${month}-${day}`);
+    if (!isEmpty(year) || !isEmpty(month) || !isEmpty(day)) {
+      onChange?.(convertPersianToGregorian(`${year}-${month}-${day}`));
+    }
   }, [year, month, day, onChange]);
 
   return (

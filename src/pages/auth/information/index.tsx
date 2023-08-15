@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Input, Spin } from "antd";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -12,17 +13,20 @@ import { InformationFormData } from "../types";
 import { InformationSchema } from "../validationForms";
 import DatePicker from "components/DatePicker";
 import { useSubmitInformation } from "services/auth";
+import { formatPhoneNumber } from "helpers";
 
 const Information: React.FC = () => {
   const navigate = useNavigate();
   const submitInformation = useSubmitInformation();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const resolver = yupResolver(InformationSchema);
   const {
     handleSubmit,
     control,
     setValue,
-    formState: { errors, isLoading, isSubmitting },
+    formState: { errors },
   } = useForm<InformationFormData>({
     mode: "onChange",
     defaultValues: {
@@ -30,16 +34,22 @@ const Information: React.FC = () => {
       lastName: "",
       nationalCode: "",
       birthDate: "",
-      phone: "",
+      phoneNumber: "",
       email: "",
     },
     resolver,
   });
 
-  const handleInfo = async (data: InformationFormData) =>
-    await submitInformation.mutateAsync(data).then((res) => {
-      res && navigate("/");
-    });
+  const handleInfo = async (data: InformationFormData) => {
+    setIsLoading(true);
+    const phoneNumber = formatPhoneNumber(data.phoneNumber, "98");
+    await submitInformation
+      .mutateAsync({ ...data, phoneNumber })
+      .then((res) => {
+        setIsLoading(false);
+        res && navigate("/otp-email", { state: { email: data.email } });
+      });
+  };
 
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>
@@ -133,7 +143,7 @@ const Information: React.FC = () => {
               </div>
               <div className="mb-2">
                 <Controller
-                  name="phone"
+                  name="phoneNumber"
                   control={control}
                   render={({ field: { name, value, onChange, ref } }) => (
                     <Input
@@ -174,8 +184,12 @@ const Information: React.FC = () => {
 
               <div className="auth-footer">
                 <div className="mb-3">
-                  <button type="submit" className="btn btn-primary auth-submit">
-                    {isLoading || isSubmitting ? (
+                  <button
+                    type="submit"
+                    className="btn btn-primary auth-submit"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
                       <Spin style={{ color: "white" }} />
                     ) : (
                       "ثبت اطلاعات"
