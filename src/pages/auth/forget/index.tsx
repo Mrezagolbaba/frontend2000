@@ -8,7 +8,6 @@ import SelectComponent from "components/Select";
 import { useForgetPassword } from "services/auth";
 import AuthLayout from "layouts/Authentication";
 
-import "./styles.css";
 const Forget: React.FC = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
