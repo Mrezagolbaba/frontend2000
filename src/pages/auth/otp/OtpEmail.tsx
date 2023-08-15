@@ -1,106 +1,95 @@
+import { yupResolver } from "@hookform/resolvers/yup";
+import AuthLayout from "layouts/Authentication";
+import { Controller, useForm } from "react-hook-form";
+import { OtpSchema } from "../validationForms";
+import { toast } from "react-hot-toast";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { sendOtp } from "services/auth";
+import OtpInput from "components/OTP";
+import { Spin } from "antd";
+
 const OtpEmail: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const email = location.state.email;
+
+  const resolver = yupResolver(OtpSchema);
+  const {
+    handleSubmit,
+    setValue,
+    control,
+    formState: { isLoading, isSubmitting },
+  } = useForm<{ code: string }>({
+    mode: "onChange",
+    defaultValues: {
+      code: "",
+    },
+    resolver,
+  });
+
+  const handleOTP = async (data: { code: string }) => {
+    const formData = {
+      code: data.code,
+      type: "AUTH",
+      method: "EMAIL",
+    };
+    await sendOtp(formData).then((res) => {
+      res && navigate("/information");
+    });
+  };
+
+  const handleErrors = (errors: any) => {
+    toast.error(errors?.code?.message, {
+      position: "bottom-left",
+    });
+  };
   return (
-    <div className="auth-wrapper" id="root">
-      <main className="auth-main">
-        <header className="auth-header auth-header--bg">
-          <div className="auth-logo">
-            <a href="#">
-              <img src="assets/img/logo-arsonex.png" alt="" />
-            </a>
-          </div>
-          <div className="auth-gain-confidence">
-            <p>از یکسان بودن آدرس صفحه با آدرس زیر مطمئن شوید.</p>
-            <div className="d-ltr">
-              <span className="icon">
-                <svg
-                  width="12"
-                  height="16"
-                  viewBox="0 0 12 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M6 0.666656L0 3.33332V7.33332C0 11.0333 2.56 14.4933 6 15.3333C9.44 14.4933 12 11.0333 12 7.33332V3.33332L6 0.666656ZM6 7.99332H10.6667C10.3133 10.74 8.48 13.1867 6 13.9533V7.99999H1.33333V4.19999L6 2.12666V7.99332Z"
-                    fill="#39D98A"
-                  />
-                </svg>
-              </span>
-              <label>
-                <span>https://</span>arsonex.com
-              </label>
+    <AuthLayout>
+      <section className="auth auth-confirmation">
+        <div className="card auth-card auth-card--bordered">
+          <div className="card-body">
+            <h4 className="auth-title">تایید ایمیل</h4>
+            <div className="auth-summary">
+              <p className="auth-text text-end">
+                کد تایید ارسال شده به
+                <span className="d-ltr d-inline-block">{email}</span>
+                را وارد کنید.
+              </p>
+              <span className="auth-counter text-start d-ltr">1:48</span>
             </div>
-          </div>
-        </header>
 
-        <section className="auth auth-confirmation">
-          <div className="card auth-card auth-card--bordered">
-            <div className="card-body">
-              <h4 className="auth-title">تایید ایمیل</h4>
-              <div className="auth-summary">
-                <p className="auth-text text-end">
-                  کد تایید ارسال شده به
-                  <span className="d-ltr d-inline-block">
-                    ex***le@email.com
-                  </span>
-                  را وارد کنید.
-                </p>
-                <span className="auth-counter text-start d-ltr">1:48</span>
+            <form
+              className="auth-form"
+              onSubmit={handleSubmit(handleOTP, handleErrors)}
+            >
+              <div className="mb-4">
+                <Controller
+                  name="code"
+                  control={control}
+                  render={() => (
+                    <OtpInput onChange={(code) => setValue("code", code)} />
+                  )}
+                />
               </div>
-
-              <form action="" className="auth-form">
-                <div className="mb-4">
-                  <div className="code-input-control">
-                    <input
-                      type="number"
-                      className="form-control d-ltr control-auto-focus"
-                      placeholder="-"
-                    />
-                    <input
-                      type="number"
-                      className="form-control d-ltr control-auto-focus"
-                      placeholder="-"
-                    />
-                    <input
-                      type="number"
-                      className="form-control d-ltr control-auto-focus"
-                      placeholder="-"
-                    />
-                    <input
-                      type="number"
-                      className="form-control d-ltr control-auto-focus"
-                      placeholder="-"
-                    />
-                    <input
-                      type="number"
-                      className="form-control d-ltr control-auto-focus"
-                      placeholder="-"
-                    />
-                    <input
-                      type="number"
-                      className="form-control d-ltr control-auto-focus"
-                      placeholder="-"
-                    />
-                  </div>
+              <div className="auth-footer">
+                <div className="mb-3">
+                  <button type="submit" className="btn btn-primary auth-submit">
+                    {isLoading || isSubmitting ? (
+                      <Spin style={{ color: "white" }} />
+                    ) : (
+                      "ارسال"
+                    )}
+                  </button>
                 </div>
-                <div className="auth-footer">
-                  <div className="mb-3">
-                    <button
-                      type="submit"
-                      className="btn btn-primary auth-submit"
-                    >
-                      ورود
-                    </button>
-                  </div>
-                  <div className="auth-edit-mobile text-center">
-                    <a href="#">ویرایش ایمیل</a>
-                  </div>
+                <div className="auth-edit-mobile text-center">
+                  <Link to="/information">ویرایش ایمیل</Link>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
-        </section>
-      </main>
-    </div>
+        </div>
+      </section>
+    </AuthLayout>
   );
 };
 export default OtpEmail;

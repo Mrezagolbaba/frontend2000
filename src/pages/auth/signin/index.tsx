@@ -11,7 +11,7 @@ import AuthLayout from "layouts/Authentication";
 import { loginSchema } from "pages/auth/validationForms";
 import { LoginFormData } from "pages/auth/types";
 
-import "pages/auth/style.scss";
+import "pages/auth/style.sass";
 import { toast } from "react-hot-toast";
 
 const LoginPage: React.FC = () => {
@@ -42,7 +42,7 @@ const LoginPage: React.FC = () => {
     await loginMutation.mutateAsync(userData).then(
       (res) =>
         res &&
-        navigate("/otpMobile", {
+        navigate("/mobile-otp", {
           state: {
             phoneNumber: userData.phoneNumber,
           },
