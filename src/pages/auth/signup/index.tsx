@@ -1,5 +1,4 @@
 import { Input, Select, Spin } from "antd";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { CiUser, CiLock } from "react-icons/ci";
@@ -68,9 +67,9 @@ const SignupPage: React.FC = () => {
               className="auth-form"
               onSubmit={handleSubmit(handleRegister, handleErrors)}
             >
-              <div className="mb-2">
-                <div className="row">
-                  <div className="col-12 col-md-8" style={{ paddingLeft: 0 }}>
+              <div className="container">
+                <div className="row gy-2 gx-0">
+                  <div className="col-12 col-md-8">
                     <Controller
                       name="phoneNumber"
                       control={control}
@@ -91,10 +90,7 @@ const SignupPage: React.FC = () => {
                       )}
                     />
                   </div>
-                  <div
-                    className="col-12 col-md-4"
-                    style={{ paddingRight: "0" }}
-                  >
+                  <div className="col-12 col-md-4">
                     <Controller
                       name="selectedCountry"
                       control={control}
@@ -118,65 +114,75 @@ const SignupPage: React.FC = () => {
                       )}
                     />
                   </div>
-                </div>
-              </div>
-              <div className="mb-2">
-                <Controller
-                  name="password"
-                  control={control}
-                  render={({ field: { name, value, onChange, ref } }) => (
-                    <Input
-                      type="password"
-                      id={name}
-                      name={name}
-                      value={value}
-                      placeholder="رمز عبور"
-                      ref={ref}
-                      onChange={onChange}
-                      size={"large"}
-                      prefix={<CiLock />}
-                      status={errors?.[name]?.message ? "error" : undefined}
-                    />
-                  )}
-                />
-              </div>
-              <div className="auth-footer">
-                <div className="auth-terms mb-3">
-                  <Controller
-                    name="terms"
-                    control={control}
-                    render={({ field: { name, value, onChange, ref } }) => (
-                      <div className="form-check form-check--lg auth-terms">
-                        <label htmlFor={name} className="form-check-label">
-                          <Link to="#"> مقررات آرسونیکس</Link> را خوانده‌ام و با
-                          آن موافقم.
-                        </label>
+                  <div className="col-12">
+                    <Controller
+                      name="password"
+                      control={control}
+                      render={({ field: { name, value, onChange, ref } }) => (
                         <Input
-                          checked={value}
-                          className="form-check-input"
-                          type="checkbox"
-                          name={name}
+                          type="password"
                           id={name}
+                          name={name}
+                          value={value}
+                          placeholder="رمز عبور"
                           ref={ref}
                           onChange={onChange}
+                          size={"large"}
+                          prefix={<CiLock />}
                           status={errors?.[name]?.message ? "error" : undefined}
                         />
+                      )}
+                    />
+                  </div>
+                  <div className="col-12 auth-terms">
+                    <Controller
+                      name="terms"
+                      control={control}
+                      render={({ field: { name, value, onChange, ref } }) => (
+                        <div className="form-check form-check--lg auth-terms">
+                          <label htmlFor={name} className="form-check-label">
+                            <Link to="#"> مقررات آرسونیکس</Link> را خوانده‌ام و
+                            با آن موافقم.
+                          </label>
+                          <Input
+                            checked={value}
+                            className="form-check-input"
+                            type="checkbox"
+                            name={name}
+                            id={name}
+                            ref={ref}
+                            onChange={onChange}
+                            status={
+                              errors?.[name]?.message ? "error" : undefined
+                            }
+                          />
+                        </div>
+                      )}
+                    />
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-12">
+                    <div className="auth-footer">
+                      <div className="auth-terms mb-3"></div>
+                      <div className="mb-3">
+                        <button
+                          type="submit"
+                          className="btn btn-primary auth-submit"
+                        >
+                          {isLoading || isSubmitting ? (
+                            <Spin style={{ color: "white" }} />
+                          ) : (
+                            "ثبت نام"
+                          )}
+                        </button>
                       </div>
-                    )}
-                  />
-                </div>
-                <div className="mb-3">
-                  <button type="submit" className="btn btn-primary auth-submit">
-                    {isLoading || isSubmitting ? (
-                      <Spin style={{ color: "white" }} />
-                    ) : (
-                      "ثبت نام"
-                    )}
-                  </button>
-                </div>
-                <div className="auth-already">
-                  عضو هستم:
-                  <Link to="/login">ورود</Link>
+                      <div className="auth-already">
+                        عضو هستم:
+                        <Link to="/login">ورود</Link>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </form>

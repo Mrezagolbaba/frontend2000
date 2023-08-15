@@ -28,7 +28,7 @@ const LoginPage: React.FC = () => {
     defaultValues: {
       phoneNumber: "",
       password: "",
-      selectedCountry: "",
+      selectedCountry: "+98",
     },
     resolver,
   });
@@ -69,9 +69,9 @@ const LoginPage: React.FC = () => {
               className="auth-form"
               onSubmit={handleSubmit(handleLogin, handleErrors)}
             >
-              <div className="mb-2">
-                <div className="row">
-                  <div className="col-12 col-md-8" style={{ paddingLeft: 0 }}>
+              <div className="container">
+                <div className="row gy-2 gx-0">
+                  <div className="col-12 col-md-8">
                     <Controller
                       name="phoneNumber"
                       control={control}
@@ -94,10 +94,7 @@ const LoginPage: React.FC = () => {
                       )}
                     />
                   </div>
-                  <div
-                    className="col-12 col-md-4"
-                    style={{ paddingRight: "0" }}
-                  >
+                  <div className="col-12 col-md-4">
                     <Controller
                       name="selectedCountry"
                       control={control}
@@ -110,7 +107,6 @@ const LoginPage: React.FC = () => {
                           value={value}
                           onChange={onChange}
                           options={countries}
-                          placeholder="کد"
                           size="large"
                           filterOption={(input, option) =>
                             (option?.label ?? "")
@@ -122,59 +118,58 @@ const LoginPage: React.FC = () => {
                       )}
                     />
                   </div>
-                </div>
-              </div>
-              <div className="mb-2">
-                <Controller
-                  name="password"
-                  control={control}
-                  render={({ field: { name, value, onChange, ref } }) => (
-                    <Input
-                      tabIndex={2}
-                      type="password"
-                      id={name}
-                      name={name}
-                      value={value}
-                      placeholder="رمز عبور"
-                      ref={ref}
-                      onChange={onChange}
-                      size={"large"}
-                      prefix={<CiLock />}
-                      status={errors?.[name]?.message ? "error" : undefined}
-                    />
-                  )}
-                />
-                <div className="auth-forgot mb-4">
-                  <Link to="/forget" tabIndex={3}>
-                    رمز عبور را فراموش کرده&zwnj;ام!
-                  </Link>
-                </div>
-                <div className="auth-footer">
-                  <div className="mb-3">
-                    <button
-                      tabIndex={4}
-                      type="submit"
-                      className="btn btn-primary auth-submit"
-                    >
-                      {isLoading || isSubmitting ? (
-                        <Spin style={{ color: "white" }} />
-                      ) : (
-                        "ورود به حساب"
+                  <div className="col-12">
+                    <Controller
+                      name="password"
+                      control={control}
+                      render={({ field: { name, value, onChange, ref } }) => (
+                        <Input
+                          type="password"
+                          id={name}
+                          name={name}
+                          value={value}
+                          placeholder="رمز عبور"
+                          ref={ref}
+                          onChange={onChange}
+                          size={"large"}
+                          prefix={<CiLock />}
+                          status={errors?.[name]?.message ? "error" : undefined}
+                        />
                       )}
-                    </button>
-                    <button
-                      tabIndex={5}
-                      type="submit"
-                      className="btn btn-outline-primary auth-submit mt-3"
-                    >
-                      ورود با استفاده از ایمیل
-                    </button>
+                    />
                   </div>
-                  <div className="auth-already">
-                    عضو نیستم:
-                    <Link to="/register" tabIndex={6}>
-                      ثبت نام
-                    </Link>
+                  <div className="col-12">
+                    <div className="auth-forgot mb-4">
+                      <Link to="/forget">رمز عبور را فراموش کرده&zwnj;ام!</Link>
+                    </div>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-12">
+                    <div className="auth-footer">
+                      <div className="mb-3">
+                        <button
+                          type="submit"
+                          className="btn btn-primary auth-submit"
+                        >
+                          {isLoading || isSubmitting ? (
+                            <Spin style={{ color: "white" }} />
+                          ) : (
+                            "ورود به حساب"
+                          )}
+                        </button>
+                        <button
+                          type="submit"
+                          className="btn btn-outline-primary auth-submit mt-3"
+                        >
+                          ورود با استفاده از ایمیل
+                        </button>
+                      </div>
+                      <div className="auth-already">
+                        عضو نیستم:
+                        <a href="/register">ثبت نام</a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

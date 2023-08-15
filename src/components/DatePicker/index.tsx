@@ -37,7 +37,7 @@ const DatePicker = ({ onChange, label, error }: Props) => {
         fontSize: "0.75rem",
       }}
     >
-      <div className="row">
+      <div className="row gy-2">
         <div className="col-lg-4 col-sm-12">
           <Select
             className="dropdown bootstrap-select bs-select-control bs-form-select"
