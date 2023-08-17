@@ -3,20 +3,30 @@ import * as Yup from "yup";
 export const loginSchema = Yup.object().shape({
   phoneNumber: Yup.string().required("شماره همراه الزامی می باشد."),
   password: Yup.string()
-    .required("رمز عبور الزامی می باشد.")
-    .min(6)
-    .max(30)
-    .trim(),
+    .min(8, "رمز عبور باید حداقل شامل 8 کاراکتر باشد.")
+    .matches(/[a-z]/, "رمز عبور حداقل باید شامل یک حرف کوچک انگلیسی باشد.")
+    .matches(/[A-Z]/, "رمز عبور باید حداقل شامل یک حرف بزرگ انگلیسی باشد.")
+    .matches(/[0-9]/, "رمز عبور حداقل باید شامل یک عدد باشد.")
+    .matches(
+      /[!@#$%^&*()\-_=+[\]{}|;:',.<>/?\\]/,
+      "رمز عبور باید حداقل شامل یک کاراکتر ویژه باشد (!@#$%^&*()-+)."
+    )
+    .required("رمز عبور الزامی است."),
   selectedCountry: Yup.string().required("کد کشور الزامی می باشد."),
 });
 
 export const registerSchema = Yup.object().shape({
   phoneNumber: Yup.string().required("شماره همراه الزامی می باشد."),
   password: Yup.string()
-    .required("رمز عبور الزامی می باشد.")
-    .min(8)
-    .max(30)
-    .trim(),
+    .min(8, "رمز عبور باید حداقل شامل 8 کاراکتر باشد.")
+    .matches(/[a-z]/, "رمز عبور حداقل باید شامل یک حرف کوچک انگلیسی باشد.")
+    .matches(/[A-Z]/, "رمز عبور باید حداقل شامل یک حرف بزرگ انگلیسی باشد.")
+    .matches(/[0-9]/, "رمز عبور حداقل باید شامل یک عدد باشد.")
+    .matches(
+      /[!@#$%^&*()\-_=+[\]{}|;:',.<>/?\\]/,
+      "رمز عبور باید حداقل شامل یک کاراکتر ویژه باشد (!@#$%^&*()-+)."
+    )
+    .required("رمز عبور الزامی است."),
   selectedCountry: Yup.string().required("کد کشور الزامی می باشد."),
   terms: Yup.boolean()
     .test(
