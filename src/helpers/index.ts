@@ -24,34 +24,6 @@ export function generatePersianMonths() {
   return persianMonths;
 }
 
-export const countries = [
-  // {
-  //   label: '🇺🇸 +1',
-  //   value: '+1',
-  // },
-  {
-    // code: 'United Kingdom',
-    label: `🇬🇧        +44`,
-    value: "+44",
-  },
-  {
-    value: "+61",
-    label: `🇦🇺      +61`,
-  },
-  {
-    value: "+1",
-    label: "🇨🇦 +1",
-  },
-  {
-    value: "+98",
-    label: "🇮🇷 +98",
-  },
-  {
-    value: "+90",
-    label: "🇹🇷 +90",
-  },
-  // Add more countries as needed
-];
 interface PhoneNumberMaskProps {
   phoneNumber: string;
 }
@@ -72,9 +44,9 @@ export const PhoneNumberMask: React.FC<PhoneNumberMaskProps> = ({
   return maskedPhoneNumber;
 };
 
-export const formatPhoneNumber = (phoneNumber: string,code:string)=> {
+export const formatPhoneNumber = (phoneNumber: string, code: string) => {
   // Remove leading zero if it exists
-  const numericPhoneNumber = phoneNumber.replace(/\D/g, '');
+  const numericPhoneNumber = phoneNumber.replace(/\D/g, "");
 
   // Check if the phone number already starts with +code (+98)
   if (numericPhoneNumber.startsWith(code)) {
@@ -82,10 +54,35 @@ export const formatPhoneNumber = (phoneNumber: string,code:string)=> {
   }
 
   // Remove leading zero if it exists
-  const phoneNumberWithoutZero = numericPhoneNumber.replace(/^0+/, '');
+  const phoneNumberWithoutZero = numericPhoneNumber.replace(/^0+/, "");
 
   // Add the country code +code (+98)
   const formattedPhoneNumber = `+${code}${phoneNumberWithoutZero}`;
 
   return formattedPhoneNumber;
-}
+};
+
+export const persianToEnglishNumbers = (persianNumber: string) => {
+  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+  const englishDigits = "0123456789";
+
+  // Check if the input string contains any Persian digits
+  const containsPersianDigits = persianNumber
+    .split("")
+    .some((char) => persianDigits.includes(char));
+
+  if (!containsPersianDigits) {
+    return persianNumber; // Return the original string if no Persian digits are found
+  }
+
+  const englishNumber = persianNumber
+    .split("")
+    .map((char) =>
+      persianDigits.includes(char)
+        ? englishDigits[persianDigits.indexOf(char)]
+        : char
+    )
+    .join("");
+
+  return englishNumber;
+};
