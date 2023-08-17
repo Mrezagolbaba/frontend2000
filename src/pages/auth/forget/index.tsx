@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { CiMail, CiMobile2 } from "react-icons/ci";
-
-import { countries } from "helpers";
 import InputComponent from "components/Input";
 import HeadAuth from "layouts/Authentication";
 import SelectComponent from "components/Select";
@@ -94,7 +92,7 @@ const Forget: React.FC = () => {
                       }}
                       id="select1"
                       placeholder="کد"
-                      options={countries}
+                      options={[]}
                       size={"large"}
                       handleChange={(val: string) => {
                         setCountryCode(val);

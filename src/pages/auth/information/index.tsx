@@ -10,10 +10,10 @@ import { CiMobile2, CiUser, CiMail } from "react-icons/ci";
 import "./styles.css";
 import AuthLayout from "layouts/Authentication";
 import { InformationFormData } from "../types";
-import { InformationSchema } from "../validationForms";
+import { InformationSchema } from "pages/auth/validationForms";
 import DatePicker from "components/DatePicker";
 import { useSubmitInformation } from "services/auth";
-import { formatPhoneNumber } from "helpers";
+import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
 
 const Information: React.FC = () => {
   const navigate = useNavigate();
@@ -42,7 +42,10 @@ const Information: React.FC = () => {
 
   const handleInfo = async (data: InformationFormData) => {
     setIsLoading(true);
-    const phoneNumber = formatPhoneNumber(data.phoneNumber, "98");
+    const phoneNumber = formatPhoneNumber(
+      persianToEnglishNumbers(data.phoneNumber),
+      "98"
+    );
     await submitInformation
       .mutateAsync({ ...data, phoneNumber })
       .then((res) => {

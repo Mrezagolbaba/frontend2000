@@ -1,53 +1,68 @@
-import React from "react";
-import { CiLock, CiUser } from "react-icons/ci";
+import React, { useState } from "react";
+import { CiMobile2 } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Input, Select, Spin } from "antd";
+import {  Spin } from "antd";
+import { toast } from "react-hot-toast";
 
-import { countries } from "helpers";
+import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
 import { useLogin } from "services/auth";
 import AuthLayout from "layouts/Authentication";
 import { loginSchema } from "pages/auth/validationForms";
 import { LoginFormData } from "pages/auth/types";
-
-import "pages/auth/style.sass";
-import { toast } from "react-hot-toast";
+import FloatInput from "components/Input/FloatInput";
+import PasswordInput from "components/PasswordInput";
+import SelectCountry from "components/SelectCountry";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const loginMutation = useLogin();
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const resolver = yupResolver(loginSchema);
   const {
     handleSubmit,
     control,
-    formState: { errors, isLoading, isSubmitting },
+    formState: { errors },
   } = useForm<LoginFormData>({
     mode: "onChange",
     defaultValues: {
       phoneNumber: "",
       password: "",
-      selectedCountry: "+98",
+      selectedCountry: "98",
     },
     resolver,
   });
 
   const handleLogin = async (data: LoginFormData) => {
+    setIsLoading(true);
+    const phoneNumber = formatPhoneNumber(
+      persianToEnglishNumbers(data.phoneNumber),
+      data.selectedCountry
+    );
     const userData = {
-      phoneNumber: data.selectedCountry + data.phoneNumber,
+      phoneNumber,
       password: data.password,
       type: "PHONE",
     };
-    await loginMutation.mutateAsync(userData).then(
-      (res) =>
-        res &&
-        navigate("/mobile-otp", {
-          state: {
-            phoneNumber: userData.phoneNumber,
-          },
-        })
-    );
+
+    await loginMutation
+      .mutateAsync(userData)
+      .then((res) => {
+        if (res) {
+          setIsLoading(false);
+          navigate("/mobile-otp", {
+            state: {
+              phoneNumber: userData.phoneNumber,
+            },
+          });
+        }
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
 
   const handleErrors = (errors: any) =>
@@ -76,20 +91,22 @@ const LoginPage: React.FC = () => {
                       name="phoneNumber"
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
-                        <Input
-                          tabIndex={0}
-                          autoFocus
-                          className="phone-number-input"
-                          type="phone"
-                          id={name}
+                        <FloatInput
+                          type="text"
                           name={name}
                           value={value}
-                          placeholder="شماره همراه"
-                          ref={ref}
+                          label="شماره همراه"
                           onChange={onChange}
-                          size={"large"}
-                          prefix={<CiUser />}
-                          status={errors?.[name]?.message ? "error" : undefined}
+                          inputProps={{
+                            ref: ref,
+                            size: "large",
+                            prefix: <CiMobile2 />,
+                            status: errors?.[name]?.message
+                              ? "error"
+                              : undefined,
+                            autoFocus: true,
+                            className: "phone-number-input",
+                          }}
                         />
                       )}
                     />
@@ -98,44 +115,14 @@ const LoginPage: React.FC = () => {
                     <Controller
                       name="selectedCountry"
                       control={control}
-                      render={({ field: { name, value, onChange, ref } }) => (
-                        <Select
-                          tabIndex={1}
-                          className="dropdown bootstrap-select bs-select-control bs-form-select select-country-input"
-                          id={name}
-                          ref={ref}
-                          value={value}
-                          onChange={onChange}
-                          options={countries}
-                          size="large"
-                          filterOption={(input, option) =>
-                            (option?.label ?? "")
-                              .toLowerCase()
-                              .includes(input.toLowerCase())
-                          }
-                          status={errors?.[name]?.message ? "error" : undefined}
-                        />
-                      )}
+                      render={({ field }) => <SelectCountry {...field} />}
                     />
                   </div>
                   <div className="col-12">
                     <Controller
                       name="password"
                       control={control}
-                      render={({ field: { name, value, onChange, ref } }) => (
-                        <Input
-                          type="password"
-                          id={name}
-                          name={name}
-                          value={value}
-                          placeholder="رمز عبور"
-                          ref={ref}
-                          onChange={onChange}
-                          size={"large"}
-                          prefix={<CiLock />}
-                          status={errors?.[name]?.message ? "error" : undefined}
-                        />
-                      )}
+                      render={({ field }) => <PasswordInput {...field} />}
                     />
                   </div>
                   <div className="col-12">
@@ -152,7 +139,7 @@ const LoginPage: React.FC = () => {
                           type="submit"
                           className="btn btn-primary auth-submit"
                         >
-                          {isLoading || isSubmitting ? (
+                          {isLoading ? (
                             <Spin style={{ color: "white" }} />
                           ) : (
                             "ورود به حساب"
@@ -165,9 +152,11 @@ const LoginPage: React.FC = () => {
                           ورود با استفاده از ایمیل
                         </button>
                       </div>
-                      <div className="auth-already">
-                        عضو نیستم:
-                        <a href="/register">ثبت نام</a>
+                      <div
+                        className="auth-already"
+                        style={{ wordSpacing: "1px" }}
+                      >
+                        عضو نیستم: <Link to="/register">ثبت نام</Link>
                       </div>
                     </div>
                   </div>

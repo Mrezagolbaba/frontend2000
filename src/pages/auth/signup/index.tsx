@@ -1,52 +1,69 @@
-import { Input, Select, Spin } from "antd";
+import { Input, Spin } from "antd";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { CiUser, CiLock } from "react-icons/ci";
+import { CiMobile2 } from "react-icons/ci";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import toast from "react-hot-toast";
 
-import { countries } from "helpers";
 import AuthLayout from "layouts/Authentication";
 import { registerSchema } from "pages/auth/validationForms";
 import { RegisterFormData } from "pages/auth/types";
-
-import "pages/auth/style.sass";
-import toast from "react-hot-toast";
 import { useCreateUser } from "services/auth";
+import SelectCountry from "components/SelectCountry";
+import PasswordInput from "components/PasswordInput";
+import FloatInput from "components/Input/FloatInput";
+import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
+import { useState } from "react";
 
 const SignupPage: React.FC = () => {
   const navigate = useNavigate();
   const registerRequest = useCreateUser();
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const resolver = yupResolver(registerSchema);
   const {
     handleSubmit,
     control,
-    formState: { errors, isLoading, isSubmitting },
+    formState: { errors },
   } = useForm<RegisterFormData>({
     mode: "onChange",
     defaultValues: {
       phoneNumber: "",
       password: "",
-      selectedCountry: "",
+      selectedCountry: "98",
       terms: false,
     },
     resolver,
   });
 
   const handleRegister = async (data: RegisterFormData) => {
+    setIsLoading(true);
+
+    const phoneNumber = formatPhoneNumber(
+      persianToEnglishNumbers(data.phoneNumber),
+      data.selectedCountry
+    );
     const userData = {
-      phoneNumber: data.selectedCountry + data.phoneNumber,
+      phoneNumber,
       password: data.password,
     };
-    await registerRequest.mutateAsync(userData).then((res) => {
-      res &&
-        navigate("/mobile-otp", {
-          state: {
-            phoneNumber: userData.phoneNumber,
-          },
-        });
-    });
+    await registerRequest
+      .mutateAsync(userData)
+      .then((res) => {
+        if (res) {
+          navigate("/mobile-otp", {
+            state: {
+              phoneNumber: userData.phoneNumber,
+            },
+          });
+          setIsLoading(false);
+        }
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>
@@ -74,18 +91,22 @@ const SignupPage: React.FC = () => {
                       name="phoneNumber"
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
-                        <Input
-                          className="phone-number-input"
-                          type="phone"
-                          id={name}
+                        <FloatInput
+                          type="text"
                           name={name}
                           value={value}
-                          placeholder="شماره همراه"
-                          ref={ref}
+                          label="شماره همراه"
                           onChange={onChange}
-                          size={"large"}
-                          prefix={<CiUser />}
-                          status={errors?.[name]?.message ? "error" : undefined}
+                          inputProps={{
+                            ref: ref,
+                            size: "large",
+                            prefix: <CiMobile2 />,
+                            status: errors?.[name]?.message
+                              ? "error"
+                              : undefined,
+                            autoFocus: true,
+                            className: "phone-number-input",
+                          }}
                         />
                       )}
                     />
@@ -94,43 +115,15 @@ const SignupPage: React.FC = () => {
                     <Controller
                       name="selectedCountry"
                       control={control}
-                      render={({ field: { name, value, onChange, ref } }) => (
-                        <Select
-                          className="dropdown bootstrap-select bs-select-control bs-form-select select-country-input"
-                          id={name}
-                          ref={ref}
-                          value={value}
-                          onChange={onChange}
-                          options={countries}
-                          placeholder="کد"
-                          size="large"
-                          filterOption={(input, option) =>
-                            (option?.label ?? "")
-                              .toLowerCase()
-                              .includes(input.toLowerCase())
-                          }
-                          status={errors?.[name]?.message ? "error" : undefined}
-                        />
-                      )}
+                      render={({ field }) => <SelectCountry {...field} />}
                     />
                   </div>
                   <div className="col-12">
                     <Controller
                       name="password"
                       control={control}
-                      render={({ field: { name, value, onChange, ref } }) => (
-                        <Input
-                          type="password"
-                          id={name}
-                          name={name}
-                          value={value}
-                          placeholder="رمز عبور"
-                          ref={ref}
-                          onChange={onChange}
-                          size={"large"}
-                          prefix={<CiLock />}
-                          status={errors?.[name]?.message ? "error" : undefined}
-                        />
+                      render={({ field }) => (
+                        <PasswordInput hasShowHint={true} {...field} />
                       )}
                     />
                   </div>
@@ -170,7 +163,7 @@ const SignupPage: React.FC = () => {
                           type="submit"
                           className="btn btn-primary auth-submit"
                         >
-                          {isLoading || isSubmitting ? (
+                          {isLoading ? (
                             <Spin style={{ color: "white" }} />
                           ) : (
                             "ثبت نام"
