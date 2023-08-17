@@ -11,7 +11,7 @@ Sentry.init({
   integrations: [
     new Sentry.BrowserTracing({
       // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-      tracePropagationTargets: ["localhost","https://dev.arsonex.market","https://staging.arsonex.market","https://arsonex.com"],
+      tracePropagationTargets: ["localhost",/^https:\/\/dev-api\.arsonex\.market\//,/^https:\/\/staging-api\.arsonex\.market\//,/^https:\/\/api\.arsonex\.com\//],
     }),
     new Sentry.Replay(),
   ],
