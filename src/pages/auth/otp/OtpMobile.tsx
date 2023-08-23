@@ -1,22 +1,23 @@
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { PhoneNumberMask } from "helpers";
 import OtpInput from "components/OTP";
-import { resendOtp, sendOtp } from "services/auth";
+import { resendOtp } from "services/auth";
 import AuthLayout from "layouts/Authentication";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { OtpSchema } from "pages/auth/validationForms";
-import { Spin } from "antd";
+import { Button, Spin } from "antd";
 import { toast } from "react-hot-toast";
-import { useGetMe } from "services/users";
+import React from "react";
+import { useSendLoginOtp } from "services/auth/otp";
 
 const OtpMobile: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const phoneNumber = location.state.phoneNumber;
 
-  const { data: MeData } = useGetMe();
+  const sendOtp = useSendLoginOtp();
 
   const resolver = yupResolver(OtpSchema);
   const {
@@ -36,7 +37,7 @@ const OtpMobile: React.FC = () => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
-    const data: OtpData = {
+    const data = {
       type: "AUTH",
       method: "PHONE",
     };
@@ -49,9 +50,9 @@ const OtpMobile: React.FC = () => {
       type: "AUTH",
       method: "PHONE",
     };
-    await sendOtp(formData).then((res) => {
+    await sendOtp.mutateAsync(formData).then((res: any) => {
       if (res) {
-        if (MeData?.firstTierVerified) navigate("/");
+        if (res.data?.firstTierVerified) navigate("/");
         else navigate("/information");
       }
     });
@@ -108,7 +109,9 @@ const OtpMobile: React.FC = () => {
                   </button>
                 </div>
                 <div className="auth-edit-mobile text-center">
-                  <Link to="/register">ویرایش شماره همراه</Link>
+                  <Button type="link" onClick={() => navigate(-1)}>
+                    ویرایش شماره همراه
+                  </Button>
                 </div>
               </div>
             </form>
