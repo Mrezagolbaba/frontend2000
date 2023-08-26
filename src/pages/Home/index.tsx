@@ -1,8 +1,12 @@
 import LandingLayout from "layouts/Landing";
 import Slider from "react-slick";
+import request from "services/adapter";
 
 import USDT from "assets/img/coins/USDT.png";
 import lira from "assets/img/coins/lira.png";
+import CAD from "assets/img/coins/CAD.svg";
+import EUR from "assets/img/coins/Euro.png";
+import GBP from "assets/img/coins/GBP.png";
 import BTC from "assets/img/coins/BTC.png";
 import ETH from "assets/img/coins/ETH.png";
 import LTC from "assets/img/coins/LTC.png";
@@ -21,9 +25,19 @@ import face003 from "assets/img/people/face003.jpg";
 import face002 from "assets/img/people/face002.jpg";
 
 import "./style.scss";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+interface ExchangeRateData {
+  expiresAt: string;
+  pair: string;
+  rate: string;
+}
 
 export default function HomePage() {
+  const [exchangeRates, setExchangeRates] = useState<{
+    [key: string]: { IRR: number | string; USD: number | string };
+  }>({});
+
   const commentSettings = {
     dots: false,
     infinite: true,
@@ -41,24 +55,42 @@ export default function HomePage() {
     rtl: false,
   };
 
+  const currencyPairs = [
+    { code: "USDT", name: "تتر", imgSrc: USDT },
+    { code: "EUR", name: "یورو", imgSrc: EUR },
+    { code: "CAD", name: "دلار کانادا", imgSrc: CAD },
+    { code: "GBP", name: "پوند", imgSrc: GBP },
+    { code: "TRY", name: "لیر", imgSrc: lira },
+    // Add more currency pairs as needed
+  ];
+
   useEffect(() => {
-    fetch("https://dev-api.arsonex.market/v1/rates/USD-IRR")
-      .then((response) => {
-        // Check if the response status is OK (status code 200)
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+    const fetchExchangeRates = async () => {
+      const rates: {
+        [key: string]: { IRR: number | string; USD: number | string };
+      } = {};
+
+      for (const currencyPair of currencyPairs) {
+        try {
+          const response1 = await request.get<ExchangeRateData>(
+            `rates/${currencyPair.code}-IRR`
+          );
+          const response2 = await request.get<ExchangeRateData>(
+            `rates/${currencyPair.code}-USD`
+          );
+          const data1 = response1.data;
+          const data2 = response2.data;
+          rates[currencyPair.code] = { IRR: data1.rate, USD: data2.rate };
+        } catch (error: any) {
+          console.error(`Error fetching ${currencyPair}: ${error.message}`);
+          rates[currencyPair.code] = { IRR: "-", USD: "-" };
         }
-        // Parse the JSON response
-        return response.json();
-      })
-      .then((data) => {
-        // Handle the JSON data
-        console.log("Data:", data);
-      })
-      .catch((error) => {
-        // Handle errors
-        console.error("Fetch error:", error);
-      });
+      }
+
+      setExchangeRates(rates);
+    };
+
+    fetchExchangeRates();
   }, []);
 
   return (
@@ -151,7 +183,50 @@ export default function HomePage() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
+                      {currencyPairs.map((currencyPair: any, index: number) => (
+                        <tr key={index}>
+                          <td>
+                            <div className="table-crypto-title">
+                              <img
+                                src={currencyPair.imgSrc}
+                                alt={currencyPair.code}
+                              />
+                              <h6>{currencyPair.name}</h6>
+                              <span>{currencyPair.code}</span>
+                            </div>
+                          </td>
+                          <td className="text-center">
+                            <span className="d-inline-block d-ltr">
+                              {`${Number(
+                                exchangeRates[currencyPair.code]?.USD
+                              ).toLocaleString()} $`}
+                            </span>
+                          </td>
+                          <td className="text-center">
+                            <span className="fs-md">
+                              {`${Number(
+                                exchangeRates[currencyPair.code]?.IRR
+                              ).toLocaleString("IRR")} ﷼`}
+                            </span>
+                          </td>
+                          <td className="text-center">
+                            <div className="table-crypto-changes">
+                              <span className="text-success fw-medium d-inline-block d-ltr">
+                                +2.5%
+                              </span>
+                              <img src={graphG} alt="graph" />
+                            </div>
+                          </td>
+                          <td className="text-start">
+                            <div className="table-crypto-actions">
+                              <a href="#" className="btn btn-outline-primary">
+                                معامله
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                      {/* <tr>
                         <td>
                           <div className="table-crypto-title">
                             <img src={USDT} alt="USDT" />
@@ -160,7 +235,9 @@ export default function HomePage() {
                           </div>
                         </td>
                         <td className="text-center">
-                          <span className="d-inline-block d-ltr">$1</span>
+                          <span className="d-inline-block d-ltr">
+                            
+                          </span>
                         </td>
                         <td className="text-center">
                           <span className="fs-md">50,950 تومان</span>
@@ -311,7 +388,7 @@ export default function HomePage() {
                             <img src={graphG} />
                           </div>
                         </td>
-                      </tr>
+                      </tr> */}
                     </tbody>
                   </table>
                 </div>

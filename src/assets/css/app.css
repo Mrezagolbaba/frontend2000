@@ -11778,6 +11778,7 @@ textarea.form-control {
   width: 42px;
   height: 42px;
   margin-left: 16px;
+  border-radius: 50%;
 }
 .table-crypto-title h6, .table-crypto-title .h6 {
   margin: 0 0 0 8px;
