@@ -3,7 +3,7 @@ import { CiMobile2 } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {  Spin } from "antd";
+import { Col, Row, Spin } from "antd";
 import { toast } from "react-hot-toast";
 
 import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
@@ -14,6 +14,8 @@ import { LoginFormData } from "pages/auth/types";
 import FloatInput from "components/Input/FloatInput";
 import PasswordInput from "components/PasswordInput";
 import SelectCountry from "components/SelectCountry";
+
+import "pages/auth/style.scss";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -81,83 +83,79 @@ const LoginPage: React.FC = () => {
             <p className="auth-text"> شماره تلفن خود را وارد کنید</p>
 
             <form
-              className="auth-form"
+              className="auth-form container"
               onSubmit={handleSubmit(handleLogin, handleErrors)}
             >
-              <div className="container">
-                <div className="row gy-2 gx-0">
-                  <div className="col-12 col-md-8">
-                    <Controller
-                      name="phoneNumber"
-                      control={control}
-                      render={({ field: { name, value, onChange, ref } }) => (
-                        <FloatInput
-                          type="text"
-                          name={name}
-                          value={value}
-                          label="شماره همراه"
-                          onChange={onChange}
-                          inputProps={{
-                            ref: ref,
-                            size: "large",
-                            prefix: <CiMobile2 />,
-                            status: errors?.[name]?.message
-                              ? "error"
-                              : undefined,
-                            autoFocus: true,
-                            className: "phone-number-input",
-                          }}
-                        />
-                      )}
-                    />
-                  </div>
-                  <div className="col-12 col-md-4">
-                    <Controller
-                      name="selectedCountry"
-                      control={control}
-                      render={({ field }) => <SelectCountry {...field} />}
-                    />
-                  </div>
-                  <div className="col-12">
-                    <Controller
-                      name="password"
-                      control={control}
-                      render={({ field }) => <PasswordInput {...field} />}
-                    />
-                  </div>
-                  <div className="col-12">
-                    <div className="auth-forgot mb-4">
-                      <Link to="/forget">رمز عبور را فراموش کرده&zwnj;ام!</Link>
-                    </div>
+              <div className="row gy-2 gx-0">
+                <div className="col-8">
+                  <Controller
+                    name="phoneNumber"
+                    control={control}
+                    render={({ field: { name, value, onChange, ref } }) => (
+                      <FloatInput
+                        type="text"
+                        name={name}
+                        value={value}
+                        label="شماره همراه"
+                        onChange={onChange}
+                        inputProps={{
+                          ref: ref,
+                          size: "large",
+                          prefix: <CiMobile2 />,
+                          status: errors?.[name]?.message ? "error" : undefined,
+                          autoFocus: true,
+                          className: "phone-number-input",
+                        }}
+                      />
+                    )}
+                  />
+                </div>
+                <div className="col-4">
+                  <Controller
+                    name="selectedCountry"
+                    control={control}
+                    render={({ field }) => <SelectCountry {...field} />}
+                  />
+                </div>
+                <div className="col-12">
+                  <Controller
+                    name="password"
+                    control={control}
+                    render={({ field }) => <PasswordInput {...field} />}
+                  />
+                </div>
+                <div className="col-12">
+                  <div className="auth-forgot mb-4">
+                    <Link to="/forget">رمز عبور را فراموش کرده&zwnj;ام!</Link>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-12">
-                    <div className="auth-footer">
-                      <div className="mb-3">
-                        <button
-                          type="submit"
-                          className="btn btn-primary auth-submit"
-                        >
-                          {isLoading ? (
-                            <Spin style={{ color: "white" }} />
-                          ) : (
-                            "ورود به حساب"
-                          )}
-                        </button>
-                        <button
-                          type="submit"
-                          className="btn btn-outline-primary auth-submit mt-3"
-                        >
-                          ورود با استفاده از ایمیل
-                        </button>
-                      </div>
-                      <div
-                        className="auth-already"
-                        style={{ wordSpacing: "1px" }}
+              </div>
+              <div className="row">
+                <div className="col-12">
+                  <div className="auth-footer">
+                    <div className="mb-3">
+                      <button
+                        type="submit"
+                        className="btn btn-primary auth-submit"
                       >
-                        عضو نیستم: <Link to="/register">ثبت نام</Link>
-                      </div>
+                        {isLoading ? (
+                          <Spin style={{ color: "white" }} />
+                        ) : (
+                          "ورود به حساب"
+                        )}
+                      </button>
+                      <button
+                        type="submit"
+                        className="btn btn-outline-primary auth-submit mt-3"
+                      >
+                        ورود با استفاده از ایمیل
+                      </button>
+                    </div>
+                    <div
+                      className="auth-already"
+                      style={{ wordSpacing: "1px" }}
+                    >
+                      عضو نیستم: <Link to="/register">ثبت نام</Link>
                     </div>
                   </div>
                 </div>

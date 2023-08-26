@@ -6,6 +6,8 @@ import SignupPage from "pages/auth/signup";
 import OtpEmail from "pages/auth/otp/OtpEmail";
 import OtpMobile from "pages/auth/otp/OtpMobile";
 import Forget from "pages/auth/forget";
+
+import HomePage from "pages/Home";
 import Dashboard from "pages/dashboard";
 import Wallet from "pages/wallet";
 import Transactions from "pages/transactions";
@@ -20,7 +22,6 @@ import Support from "pages/support";
 import BuySell from "pages/buySell";
 import Information from "pages/auth/information";
 import Market from "pages/market";
-
 
 const AppRouter: React.FC = () => {
   // const [showAddToHomeSheet, setShowAddToHomeSheet] = useState(isMobile && !window.matchMedia('(display-mode: standalone)').matches);
@@ -38,8 +39,9 @@ const AppRouter: React.FC = () => {
         <Route path="/email-otp" element={<OtpEmail />} />
         <Route path="/mobile-otp" element={<OtpMobile />} />
         <Route path="/forget" element={<Forget />} />
+        <Route path="/" element={<HomePage />} />
         <Route
-          path="/"
+          path="/dashboard"
           element={<ProtectedRoute children={<Dashboard />} user={user} />}
         />
         <Route

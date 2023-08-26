@@ -1,6 +1,8 @@
 import { ReactNode, useState } from "react";
 import DashboardHeader from "../header";
 // import LogoArsonex from '../../assets/img/logo-arsonex.png';
+import "assets/css/app.css";
+import "assets/css/custom.css";
 
 import Sidebar from "../sidebar";
 
