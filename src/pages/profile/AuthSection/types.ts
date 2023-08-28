@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
 
 export interface AuthenticationLevel2Props {
-  onClick: Dispatch<SetStateAction<1 | 2 | 3>>;
+  onClick: Dispatch<SetStateAction<1 | 2 | 3 | 4 | 5 | 6>>;
 }
