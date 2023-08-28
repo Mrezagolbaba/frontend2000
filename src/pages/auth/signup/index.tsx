@@ -14,7 +14,7 @@ import SelectCountry from "components/SelectCountry";
 import PasswordInput from "components/PasswordInput";
 import FloatInput from "components/Input/FloatInput";
 import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
-import { useState } from "react";
+import React, { useState } from "react";
 
 const SignupPage: React.FC = () => {
   const navigate = useNavigate();
@@ -86,7 +86,7 @@ const SignupPage: React.FC = () => {
             >
               <div className="container">
                 <div className="row gy-2 gx-0">
-                  <div className="col-12 col-md-8">
+                  <div className="col-8">
                     <Controller
                       name="phoneNumber"
                       control={control}
@@ -111,7 +111,7 @@ const SignupPage: React.FC = () => {
                       )}
                     />
                   </div>
-                  <div className="col-12 col-md-4">
+                  <div className="col-4">
                     <Controller
                       name="selectedCountry"
                       control={control}
