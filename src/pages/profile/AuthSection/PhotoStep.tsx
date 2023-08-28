@@ -20,7 +20,11 @@ export default function PhotoStep({
   const uploadFile = async () => {
     setIsLoading(true);
     await uploadDoc
-      .mutateAsync({ docType: "COMMITMENT_LETTER", file: file })
+      .mutateAsync({
+        docType: "COMMITMENT_LETTER",
+        file: file,
+        fileName: "photo",
+      })
       .then((res) => {
         setIsLoading(false);
         console.log(res);
@@ -29,6 +33,7 @@ export default function PhotoStep({
         setIsLoading(false);
         console.error(err);
       });
+    onClick?.(4);
   };
 
   return (

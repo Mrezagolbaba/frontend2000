@@ -9,12 +9,13 @@ import request from "../adapter";
 type RequestType = {
   docType: string;
   file: File;
+  fileName: string
 };
 
-export const uploadDoc = async ({ docType, file }: RequestType) => {
+export const uploadDoc = async ({ docType, file,fileName }: RequestType) => {
   try {
     const formData = new FormData();
-    formData.append("File", file);
+    formData.append(fileName, file);
     const response = await request.post(
       `verifications/documents/upload/${docType}`,
       formData,
