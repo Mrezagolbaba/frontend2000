@@ -23,7 +23,7 @@ export default function PhotoStep({
       .mutateAsync({
         docType: "COMMITMENT_LETTER",
         file: file,
-        fileName: "photo",
+        fileName: "file",
       })
       .then((res) => {
         setIsLoading(false);
