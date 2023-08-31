@@ -14,15 +14,16 @@ export const login = async (userData: any) => {
   } catch (error: any) {
     toast.error(
       error.response?.data?.message || "Login failed. Please try again.",
+      { position: "bottom-left" }
     );
     throw new Error(
-      error.response?.data?.message || "Login failed. Please try again.",
+      error.response?.data?.message || "Login failed. Please try again."
     );
   }
 };
 
 const useLogin = (
-  options?: UseMutationOptions<any, Error, any, any>,
+  options?: UseMutationOptions<any, Error, any, any>
 ): UseMutationResult<any, Error, any, any> => {
   return useMutation(login, options);
 };

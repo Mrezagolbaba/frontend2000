@@ -8,9 +8,15 @@ import request from "../adapter";
 
 export const information = async (formData: any) => {
   try {
+    const token = localStorage.getItem("token");
     const response = await request.post(
       "verifications/verify-first-tier",
-      formData
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     return response.data;
   } catch (error: any) {

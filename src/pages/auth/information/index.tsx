@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Input, Spin } from "antd";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -9,20 +10,23 @@ import { CiMobile2, CiUser, CiMail } from "react-icons/ci";
 import "./styles.css";
 import AuthLayout from "layouts/Authentication";
 import { InformationFormData } from "../types";
-import { InformationSchema } from "../validationForms";
+import { InformationSchema } from "pages/auth/validationForms";
 import DatePicker from "components/DatePicker";
 import { useSubmitInformation } from "services/auth";
+import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
 
 const Information: React.FC = () => {
   const navigate = useNavigate();
   const submitInformation = useSubmitInformation();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const resolver = yupResolver(InformationSchema);
   const {
     handleSubmit,
     control,
     setValue,
-    formState: { errors, isLoading, isSubmitting },
+    formState: { errors },
   } = useForm<InformationFormData>({
     mode: "onChange",
     defaultValues: {
@@ -30,16 +34,25 @@ const Information: React.FC = () => {
       lastName: "",
       nationalCode: "",
       birthDate: "",
-      phone: "",
+      phoneNumber: "",
       email: "",
     },
     resolver,
   });
 
-  const handleInfo = async (data: InformationFormData) =>
-    await submitInformation.mutateAsync(data).then((res) => {
-      res && navigate("/");
-    });
+  const handleInfo = async (data: InformationFormData) => {
+    setIsLoading(true);
+    const phoneNumber = formatPhoneNumber(
+      persianToEnglishNumbers(data.phoneNumber),
+      "98"
+    );
+    await submitInformation
+      .mutateAsync({ ...data, phoneNumber })
+      .then((res) => {
+        setIsLoading(false);
+        res && navigate("/otp-email", { state: { email: data.email } });
+      });
+  };
 
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>
@@ -59,128 +72,133 @@ const Information: React.FC = () => {
               className="auth-information-form"
               onSubmit={handleSubmit(handleInfo, handleErrors)}
             >
-              <div className="mb-2">
-                <Controller
-                  name="firstName"
-                  control={control}
-                  render={({ field: { name, value, onChange, ref } }) => (
-                    <Input
-                      type="text"
-                      id={name}
-                      name={name}
-                      placeholder="نام"
-                      value={value}
-                      ref={ref}
-                      onChange={onChange}
-                      size="large"
-                      prefix={<CiUser size={20} />}
-                      status={errors?.[name]?.message ? "error" : undefined}
+              <div className="container">
+                <div className="row gy-2">
+                  <div className="col-12">
+                    <Controller
+                      name="firstName"
+                      control={control}
+                      render={({ field: { name, value, onChange, ref } }) => (
+                        <Input
+                          type="text"
+                          id={name}
+                          name={name}
+                          placeholder="نام"
+                          value={value}
+                          ref={ref}
+                          onChange={onChange}
+                          size="large"
+                          prefix={<CiUser size={20} />}
+                          status={errors?.[name]?.message ? "error" : undefined}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </div>
-              <div className="mb-2">
-                <Controller
-                  name="lastName"
-                  control={control}
-                  render={({ field: { name, value, onChange, ref } }) => (
-                    <Input
-                      type="text"
-                      id={name}
-                      placeholder=" نام خانوادگی"
-                      value={value}
-                      ref={ref}
-                      onChange={onChange}
-                      size="large"
-                      prefix={<CiUser size={20} />}
-                      status={errors?.[name]?.message ? "error" : undefined}
+                  </div>
+                  <div className="col-12">
+                    <Controller
+                      name="lastName"
+                      control={control}
+                      render={({ field: { name, value, onChange, ref } }) => (
+                        <Input
+                          type="text"
+                          id={name}
+                          placeholder=" نام خانوادگی"
+                          value={value}
+                          ref={ref}
+                          onChange={onChange}
+                          size="large"
+                          prefix={<CiUser size={20} />}
+                          status={errors?.[name]?.message ? "error" : undefined}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </div>
-              <div className="mb-2">
-                <Controller
-                  name="nationalCode"
-                  control={control}
-                  render={({ field: { name, value, onChange, ref } }) => (
-                    <Input
-                      type="text"
-                      id={name}
-                      name={name}
-                      placeholder="کدملی"
-                      value={value}
-                      ref={ref}
-                      onChange={onChange}
-                      size="large"
-                      prefix={<LiaIdCardSolid size={20} />}
-                      status={errors?.[name]?.message ? "error" : undefined}
+                  </div>
+                  <div className="col-12">
+                    <Controller
+                      name="nationalCode"
+                      control={control}
+                      render={({ field: { name, value, onChange, ref } }) => (
+                        <Input
+                          type="text"
+                          id={name}
+                          name={name}
+                          placeholder="کدملی"
+                          value={value}
+                          ref={ref}
+                          onChange={onChange}
+                          size="large"
+                          prefix={<LiaIdCardSolid size={20} />}
+                          status={errors?.[name]?.message ? "error" : undefined}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </div>
-              <div className="mb-2">
-                <Controller
-                  name="birthDate"
-                  control={control}
-                  render={({ field: { name } }) => (
-                    <DatePicker
-                      label="تاریخ تولد"
-                      onChange={(date) => setValue("birthDate", date)}
-                      error={errors?.[name]?.message}
+                  </div>
+                  <div className="col-12">
+                    <Controller
+                      name="birthDate"
+                      control={control}
+                      render={({ field: { name } }) => (
+                        <DatePicker
+                          label="تاریخ تولد"
+                          onChange={(date) => setValue("birthDate", date)}
+                          error={errors?.[name]?.message}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </div>
-              <div className="mb-2">
-                <Controller
-                  name="phone"
-                  control={control}
-                  render={({ field: { name, value, onChange, ref } }) => (
-                    <Input
-                      type="text"
-                      id={name}
-                      name={name}
-                      placeholder="شماره تلفن ایران"
-                      value={value}
-                      ref={ref}
-                      onChange={onChange}
-                      size="large"
-                      prefix={<CiMobile2 size={20} />}
-                      status={errors?.[name]?.message ? "error" : undefined}
+                  </div>
+                  <div className="col-12">
+                    <Controller
+                      name="phoneNumber"
+                      control={control}
+                      render={({ field: { name, value, onChange, ref } }) => (
+                        <Input
+                          type="text"
+                          id={name}
+                          name={name}
+                          placeholder="شماره تلفن ایران"
+                          value={value}
+                          ref={ref}
+                          onChange={onChange}
+                          size="large"
+                          prefix={<CiMobile2 size={20} />}
+                          status={errors?.[name]?.message ? "error" : undefined}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </div>
-              <div className="mb-2">
-                <Controller
-                  name="email"
-                  control={control}
-                  render={({ field: { name, value, onChange, ref } }) => (
-                    <Input
-                      type="email"
-                      id={name}
-                      name={name}
-                      placeholder="ایمیل"
-                      value={value}
-                      ref={ref}
-                      onChange={onChange}
-                      size="large"
-                      prefix={<CiMail size={20} />}
-                      status={errors?.[name]?.message ? "error" : undefined}
+                  </div>
+                  <div className="col-12">
+                    <Controller
+                      name="email"
+                      control={control}
+                      render={({ field: { name, value, onChange, ref } }) => (
+                        <Input
+                          type="email"
+                          id={name}
+                          name={name}
+                          placeholder="ایمیل"
+                          value={value}
+                          ref={ref}
+                          onChange={onChange}
+                          size="large"
+                          prefix={<CiMail size={20} />}
+                          status={errors?.[name]?.message ? "error" : undefined}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </div>
-
-              <div className="auth-footer">
-                <div className="mb-3">
-                  <button type="submit" className="btn btn-primary auth-submit">
-                    {isLoading || isSubmitting ? (
-                      <Spin style={{ color: "white" }} />
-                    ) : (
-                      "ثبت اطلاعات"
-                    )}
-                  </button>
+                  </div>
+                  <div className="col-12 auth-footer">
+                    <button
+                      type="submit"
+                      className="btn btn-primary auth-submit"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <Spin style={{ color: "white" }} />
+                      ) : (
+                        "ثبت اطلاعات"
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
             </form>

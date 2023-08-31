@@ -12,7 +12,13 @@ export const signup = async (userData: any) => {
     localStorage.setItem("token", response.data.accessToken);
     return response.data;
   } catch (error: any) {
-    toast.error(error.response.data.message, { position: "bottom-left" });
+    toast.error(
+      error.response.data.message || "Register failed. Please try again.",
+      { position: "bottom-left" }
+    );
+    throw new Error(
+      error.response?.data?.message || "Register failed. Please try again."
+    );
   }
 };
 const useCreateUser = (

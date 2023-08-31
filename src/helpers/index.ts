@@ -24,34 +24,6 @@ export function generatePersianMonths() {
   return persianMonths;
 }
 
-export const countries = [
-  // {
-  //   label: '🇺🇸 +1',
-  //   value: '+1',
-  // },
-  {
-    // code: 'United Kingdom',
-    label: `🇬🇧        +44`,
-    value: "+44",
-  },
-  {
-    value: "+61",
-    label: `🇦🇺      +61`,
-  },
-  {
-    value: "+1",
-    label: "🇨🇦 +1",
-  },
-  {
-    value: "+98",
-    label: "🇮🇷 +98",
-  },
-  {
-    value: "+90",
-    label: "🇹🇷 +90",
-  },
-  // Add more countries as needed
-];
 interface PhoneNumberMaskProps {
   phoneNumber: string;
 }
@@ -70,4 +42,96 @@ export const PhoneNumberMask: React.FC<PhoneNumberMaskProps> = ({
   const maskedPhoneNumber = `${prefix}${masking}${suffix}`;
   console.log(maskedPhoneNumber);
   return maskedPhoneNumber;
+};
+
+export const formatPhoneNumber = (phoneNumber: string, code: string) => {
+  // Remove leading zero if it exists
+  const numericPhoneNumber = phoneNumber.replace(/\D/g, "");
+
+  // Check if the phone number already starts with +code (+98)
+  if (numericPhoneNumber.startsWith(code)) {
+    return numericPhoneNumber; // Return as is
+  }
+
+  // Remove leading zero if it exists
+  const phoneNumberWithoutZero = numericPhoneNumber.replace(/^0+/, "");
+
+  // Add the country code +code (+98)
+  const formattedPhoneNumber = `+${code}${phoneNumberWithoutZero}`;
+
+  return formattedPhoneNumber;
+};
+
+export const persianToEnglishNumbers = (persianNumber: string) => {
+  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+  const englishDigits = "0123456789";
+
+  // Check if the input string contains any Persian digits
+  const containsPersianDigits = persianNumber
+    .split("")
+    .some((char) => persianDigits.includes(char));
+
+  if (!containsPersianDigits) {
+    return persianNumber; // Return the original string if no Persian digits are found
+  }
+
+  const englishNumber = persianNumber
+    .split("")
+    .map((char) =>
+      persianDigits.includes(char)
+        ? englishDigits[persianDigits.indexOf(char)]
+        : char
+    )
+    .join("");
+
+  return englishNumber;
+};
+
+export const passwordListValidation = [
+  {
+    title: "حداقل 8 کاراکتر",
+    isCheck: true,
+  },
+  {
+    title: "حداقل یک کاراکتر با حرف کوچک",
+    isCheck: true,
+  },
+  {
+    title: "حداقل یک کاراکتر با حرف بزرگ",
+    isCheck: false,
+  },
+  {
+    title: "حداقل یک عدد",
+    isCheck: true,
+  },
+  {
+    title: "حداقل یک کاراکتر ویژه از قبیل: !@#$%^&*()-+",
+    isCheck: false,
+  },
+];
+
+export const isPasswordValid = (password: string) => {
+  const minLength = 8;
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecialChar = /[!@#$%^&*()\-_=+[\]{}|;:',.<>/?\\]/.test(password);
+
+  const isValid: boolean[] = [];
+  if (password.length < minLength) isValid[0] = false;
+  else isValid[0] = true;
+
+  if (!hasLowerCase) isValid[1] = false;
+  else isValid[1] = true;
+
+  if (!hasUpperCase) isValid[2] = false;
+  else isValid[2] = true;
+
+  if (!hasNumber) isValid[3] = false;
+  else isValid[3] = true;
+
+  if (!hasSpecialChar) isValid[4] = false;
+  else isValid[4] = true;
+
+  return isValid;
 };
