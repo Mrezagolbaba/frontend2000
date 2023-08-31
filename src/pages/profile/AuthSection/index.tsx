@@ -14,8 +14,11 @@ import {
 import FirstStep from "./FirstStep";
 import VideoStep from "./VideoStep";
 import PhotoStep from "./PhotoStep";
+import ConfirmInternationalService from "./ConfirmInternationalService";
 
 import "./style.sass";
+import ResidencyCardStep from "./ResidencyCardStep";
+import FinalStep from "./FinalStep";
 
 const { Title } = Typography;
 
@@ -58,14 +61,20 @@ const dataLevel2 = [
 
 const AuthSection = () => {
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
-  const [activeState, setActiveState] = useState<1 | 2 | 3>(1);
+  const [activeState, setActiveState] = useState<1 | 2 | 3 | 4 | 5 | 6>(1);
 
   const renderSteps = () => {
     switch (activeState) {
+      case 6:
+        return <FinalStep onClick={setActiveState} />;
+      case 5:
+        return <ResidencyCardStep onClick={setActiveState} />;
+      case 4:
+        return <ConfirmInternationalService onClick={setActiveState} />;
       case 3:
-        return <PhotoStep onClick={setActiveState}/>;
+        return <PhotoStep onClick={setActiveState} />;
       case 2:
-        return <VideoStep onClick={setActiveState}/>;
+        return <VideoStep onClick={setActiveState} />;
       case 1:
       default:
         return <FirstStep onClick={setActiveState} />;

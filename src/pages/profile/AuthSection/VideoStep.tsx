@@ -56,7 +56,7 @@ export default function VideoStep({
     const response = await fetch(mediaBlobUrl as string);
     const blob = await response.blob();
     await uploadDoc
-      .mutateAsync({ docType: "mp4", file: blob })
+      .mutateAsync({ docType: "SELFIE_VIDEO", file: blob, fileName: "file" })
       .then((res) => {
         setIsLoading(false);
         console.log(res);
@@ -65,6 +65,7 @@ export default function VideoStep({
         setIsLoading(false);
         console.error(err);
       });
+      onClick?.(4);
   };
 
   //life-cycles

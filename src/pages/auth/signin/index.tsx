@@ -3,7 +3,7 @@ import { CiMobile2 } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {  Spin } from "antd";
+import { Spin } from "antd";
 import { toast } from "react-hot-toast";
 
 import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
@@ -86,7 +86,7 @@ const LoginPage: React.FC = () => {
             >
               <div className="container">
                 <div className="row gy-2 gx-0">
-                  <div className="col-12 col-md-8">
+                  <div className="col-8">
                     <Controller
                       name="phoneNumber"
                       control={control}
@@ -111,7 +111,7 @@ const LoginPage: React.FC = () => {
                       )}
                     />
                   </div>
-                  <div className="col-12 col-md-4">
+                  <div className="col-4">
                     <Controller
                       name="selectedCountry"
                       control={control}

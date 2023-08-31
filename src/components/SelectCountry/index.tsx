@@ -75,7 +75,9 @@ const SelectCountry = ({ name, ref, value, onChange, errors }: Props) => {
       value={value}
       options={options}
       labelInValue
-      onChange={onChange}
+      onChange={(e: any) => {
+        onChange(e.value);
+      }}
       size="large"
       placeholder="Select one country"
       optionLabelProp="label"
