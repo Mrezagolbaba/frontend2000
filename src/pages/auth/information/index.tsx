@@ -14,6 +14,7 @@ import { InformationSchema } from "pages/auth/validationForms";
 import DatePicker from "components/DatePicker";
 import { useSubmitInformation } from "services/auth";
 import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
+import FloatInput from "components/Input/FloatInput";
 
 const Information: React.FC = () => {
   const navigate = useNavigate();
@@ -49,8 +50,15 @@ const Information: React.FC = () => {
     await submitInformation
       .mutateAsync({ ...data, phoneNumber })
       .then((res) => {
+        if (res) {
+          console.log(res);
+
+          navigate("/email-otp", { state: { email: data.email } });
+        }
         setIsLoading(false);
-        res && navigate("/otp-email", { state: { email: data.email } });
+      })
+      .catch(() => {
+        setIsLoading(false);
       });
   };
 
@@ -79,17 +87,20 @@ const Information: React.FC = () => {
                       name="firstName"
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
-                        <Input
+                        <FloatInput
                           type="text"
-                          id={name}
                           name={name}
-                          placeholder="نام"
+                          label="نام"
                           value={value}
-                          ref={ref}
                           onChange={onChange}
-                          size="large"
-                          prefix={<CiUser size={20} />}
-                          status={errors?.[name]?.message ? "error" : undefined}
+                          inputProps={{
+                            ref: ref,
+                            size: "large",
+                            prefix: <CiUser size={20} />,
+                            status: errors?.[name]?.message
+                              ? "error"
+                              : undefined,
+                          }}
                         />
                       )}
                     />
@@ -99,16 +110,20 @@ const Information: React.FC = () => {
                       name="lastName"
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
-                        <Input
+                        <FloatInput
                           type="text"
-                          id={name}
-                          placeholder=" نام خانوادگی"
+                          label=" نام خانوادگی"
+                          name={name}
                           value={value}
-                          ref={ref}
                           onChange={onChange}
-                          size="large"
-                          prefix={<CiUser size={20} />}
-                          status={errors?.[name]?.message ? "error" : undefined}
+                          inputProps={{
+                            ref: ref,
+                            size: "large",
+                            prefix: <CiUser size={20} />,
+                            status: errors?.[name]?.message
+                              ? "error"
+                              : undefined,
+                          }}
                         />
                       )}
                     />
@@ -118,17 +133,20 @@ const Information: React.FC = () => {
                       name="nationalCode"
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
-                        <Input
+                        <FloatInput
                           type="text"
-                          id={name}
                           name={name}
-                          placeholder="کدملی"
+                          label="کدملی"
                           value={value}
-                          ref={ref}
                           onChange={onChange}
-                          size="large"
-                          prefix={<LiaIdCardSolid size={20} />}
-                          status={errors?.[name]?.message ? "error" : undefined}
+                          inputProps={{
+                            ref: ref,
+                            size: "large",
+                            prefix: <LiaIdCardSolid size={20} />,
+                            status: errors?.[name]?.message
+                              ? "error"
+                              : undefined,
+                          }}
                         />
                       )}
                     />
@@ -151,17 +169,20 @@ const Information: React.FC = () => {
                       name="phoneNumber"
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
-                        <Input
+                        <FloatInput
                           type="text"
-                          id={name}
                           name={name}
-                          placeholder="شماره تلفن ایران"
+                          label="شماره تلفن ایران"
                           value={value}
-                          ref={ref}
                           onChange={onChange}
-                          size="large"
-                          prefix={<CiMobile2 size={20} />}
-                          status={errors?.[name]?.message ? "error" : undefined}
+                          inputProps={{
+                            ref: ref,
+                            size: "large",
+                            prefix: <CiMobile2 size={20} />,
+                            status: errors?.[name]?.message
+                              ? "error"
+                              : undefined,
+                          }}
                         />
                       )}
                     />
@@ -171,17 +192,20 @@ const Information: React.FC = () => {
                       name="email"
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
-                        <Input
+                        <FloatInput
                           type="email"
-                          id={name}
                           name={name}
-                          placeholder="ایمیل"
+                          label="ایمیل"
                           value={value}
-                          ref={ref}
                           onChange={onChange}
-                          size="large"
-                          prefix={<CiMail size={20} />}
-                          status={errors?.[name]?.message ? "error" : undefined}
+                          inputProps={{
+                            ref: ref,
+                            size: "large",
+                            prefix: <CiMail size={20} />,
+                            status: errors?.[name]?.message
+                              ? "error"
+                              : undefined,
+                          }}
                         />
                       )}
                     />

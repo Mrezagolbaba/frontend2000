@@ -1,5 +1,26 @@
 @import "../../../assets/scss/_variables";
 
+.landing-wrapper {
+  .menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    background-color: transparent;
+    transition: all 0.4s ease-out 0.1s;
+
+    &.show {
+      opacity: 1;
+      visibility: visible;
+      background-color: rgba(0 0 0 / 0.2);
+    }
+  }
+}
+
 .landing-header {
   position: relative;
   padding-top: 40px;
@@ -101,33 +122,91 @@
   &:not(.header--landing) {
     margin-bottom: 135px;
   }
-}
 
-.header-hamburger {
-  display: none;
+  .header-hamburger {
+    display: none;
 
-  button {
-    border: none;
-    padding: 0;
-    background-color: transparent;
-    outline: none;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    line-height: 48px;
-
-    .icon svg {
+    button {
+      border: none;
+      padding: 0;
+      background-color: transparent;
+      outline: none;
       width: 48px;
       height: 48px;
+      border-radius: 50%;
+      line-height: 48px;
 
-      path,
-      circle {
-        stroke: $text-100;
-      }
+      .icon svg {
+        width: 48px;
+        height: 48px;
 
-      circle {
-        stroke-opacity: 0.1;
+        path,
+        circle {
+          stroke: $text-100;
+        }
+
+        circle {
+          stroke-opacity: 0.1;
+        }
       }
     }
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .landing-header {
+    padding-top: 24px;
+    .header__top {
+      padding-right: 24px;
+      padding-left: 24px;
+    }
+    .header__auth {
+      display: none;
+    }
+    &.header--landing {
+      background-position:
+        calc(100% - 30px) 525px,
+        30px 326px,
+        233.5px 527px,
+        calc(100% - 130px) 317px,
+        0 263px,
+        0 0;
+    }
+    &:not(.header--landing) {
+      margin-bottom: 50px;
+    }
+    .header-hamburger {
+      display: block;
+    }
+  }
+
+  .navbar:not(.navbar--simple) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    flex-direction: column;
+    padding: 40px 20px 20px;
+    z-index: 999;
+    transform: translateY(-100%);
+    transition: all 0.4s ease-out 0.1s;
+  }
+
+  .navbar:not(.navbar--simple) > .navbar__item:not(.navbar__item--active) a {
+    color: rgba(4, 15, 74, 0.6);
+  }
+
+  .navbar:not(.navbar--simple) > .navbar__item + .navbar__item {
+    margin-top: 12px;
+  }
+
+  .navbar:not(.navbar--simple).expanded {
+    transform: translateY(0);
+  }
+
+  .navbar .header__auth,
+  .navbar .navbar-close {
+    display: block;
   }
 }

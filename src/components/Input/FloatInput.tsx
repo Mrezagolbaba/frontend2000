@@ -1,7 +1,7 @@
 import { Input } from "antd";
 import React, { useState } from "react";
 
-import "./style.sass";
+import "./style.scss";
 
 interface Props {
   name: string;

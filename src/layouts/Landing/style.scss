@@ -3,7 +3,7 @@
 body {
   direction: rtl;
   text-align: right;
-  font-family: $font-family-base;
+  font-family: IRANYekanX;
   font-size: 1rem;
   font-weight: 400;
   color: $text-100;
@@ -39,7 +39,7 @@ h5,
 .h5,
 h6,
 .h6 {
-  font-family: $font-family-secondary;
+  font-family: inherit;
   color: $text-100;
 }
 
@@ -173,26 +173,7 @@ iframe {
   .section-gap {
     margin-bottom: $section-gap;
   }
-
-  .menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 998;
-    opacity: 0;
-    visibility: hidden;
-    background-color: transparent;
-    transition: all 0.4s ease-out 0.1s;
-
-    &.show {
-      opacity: 1;
-      visibility: visible;
-      background-color: rgba(0 0 0 / 0.2);
-    }
-  }
-
+  
   img.avatar {
     width: 80px;
     height: 80px;
@@ -254,5 +235,213 @@ iframe {
         fill: $primary;
       }
     }
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .section-title .section-title__title {
+    font-size: 2rem;
+  }
+
+  .table-crypto thead th {
+    font-size: 1em;
+  }
+
+  .table-crypto tbody td {
+    font-size: 0.875em;
+  }
+
+  .table-crypto-title h6,
+  .table-crypto-title .h6,
+  .table-crypto-title span {
+    font-size: 1em;
+  }
+
+  .table-crypto-title img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .table-crypto-actions .btn {
+    height: 36px;
+    line-height: 32px;
+    min-width: 100px;
+    padding: 0 12px;
+  }
+
+  .landing-currency-rates .section-title .section-title__title:after {
+    background-position-x: 37%;
+  }
+
+  .landing-features {
+    padding-bottom: 120px;
+    background-image: url(../img/coins/btccash.png),
+      url(../img/lay/dot-primary-33x33.png);
+    background-position:
+      calc(100% - 40px) 100%,
+      70px calc(100% - 82px);
+  }
+
+  .landing-features .landing-features__slide .features-slider {
+    max-width: 720px;
+  }
+
+  .feature-banner {
+    padding-top: 70px;
+  }
+
+  .feature-banner p {
+    max-width: unset;
+    padding: 0 24px;
+  }
+
+  .crypto-banner {
+    padding: 60px;
+  }
+
+  .crypto-banner-title {
+    font-size: 1.5em;
+    line-height: 1.6;
+  }
+
+  .newsletter {
+    text-align: center;
+    margin-bottom: 55px;
+  }
+
+  .newsletter .footer-widget-title {
+    margin-bottom: 20px;
+  }
+
+  .newsletter-form {
+    margin: 0 auto;
+  }
+
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .page-header.page-header--flex .page-title {
+    margin: 0 0 20px;
+    flex: 0 0 100%;
+  }
+
+  .page-header.page-header--flex .page-title + .page-text {
+    margin-top: 0;
+  }
+
+  .modern-search {
+    max-width: unset;
+    width: 100%;
+  }
+
+  .rules-summary.rules-summary--mb200 {
+    margin-bottom: 0;
+  }
+
+  .rules-summary .rules-text {
+    margin-top: 30px;
+  }
+
+  .rules-text {
+    font-size: 1em;
+  }
+
+  .blog-overlay.blog-overlay--inline {
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: unset;
+  }
+
+  .blog-overlay.blog-overlay--inline .blog-title {
+    margin-bottom: 8px;
+  }
+
+  .blog-title {
+    font-size: 1.375em;
+  }
+
+  .blog-date {
+    font-size: 0.875em;
+  }
+
+  .blog-text {
+    font-size: 1em;
+  }
+
+  .blog-tiles {
+    margin-bottom: 24px;
+  }
+
+  .blog-summary .blog-text {
+    margin-top: 30px;
+  }
+
+  .related-articles.related-articles--mt250 {
+    margin-top: 80px;
+  }
+
+  .related-articles.related-articles--mb150 {
+    margin-bottom: 0;
+  }
+
+  .about-summary .card .card-body {
+    padding: 40px;
+  }
+
+  .about-summary.about-summary--mt155 {
+    margin-top: 100px;
+  }
+
+  .counter-list.counter-list--mt250 {
+    margin-top: 80px;
+  }
+
+  .counter-list.counter-list--mb150 {
+    margin-bottom: 0;
+  }
+
+  .social-tiles.social-tiles--mt250 {
+    margin-top: 76px;
+  }
+
+  .social-tiles.social-tiles--mb150 {
+    margin-bottom: 0;
+  }
+
+  .page-contact .section-title {
+    margin-bottom: 65px;
+  }
+
+  .coin-actions {
+    flex: 0 0 100%;
+    margin-top: 16px;
+  }
+
+  .page-coin .coin-chart .select-custom {
+    display: inline-block;
+    margin-left: 20px;
+  }
+
+  .page-coin .coin-chart .select-custom + .radio-tabs {
+    display: none;
+  }
+
+  .footer .social-media {
+    margin: 0 auto 30px;
+  }
+
+  .footer-widget {
+    margin-bottom: 30px;
+  }
+
+  .footer-bottom {
+    margin-top: 30px;
+  }
+
+  .footer-copyright {
+    flex: 0 0 100%;
+    order: 1;
+    text-align: center;
   }
 }

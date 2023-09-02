@@ -10,14 +10,16 @@ import { OtpSchema } from "pages/auth/validationForms";
 import { Button, Spin } from "antd";
 import { toast } from "react-hot-toast";
 import React from "react";
-import { useSendLoginOtp } from "services/auth/otp";
+import { useSendOtp } from "services/auth/otp";
+import { useGetMe } from "services/auth/user";
 
 const OtpMobile: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const phoneNumber = location.state.phoneNumber;
 
-  const sendOtp = useSendLoginOtp();
+  const sendOtp = useSendOtp();
+  const getMe = useGetMe();
 
   const resolver = yupResolver(OtpSchema);
   const {
@@ -52,8 +54,15 @@ const OtpMobile: React.FC = () => {
     };
     await sendOtp.mutateAsync(formData).then((res: any) => {
       if (res) {
-        if (res.data?.firstTierVerified) navigate("/");
-        else navigate("/information");
+        getMe
+          .mutateAsync(null)
+          .then((res: any) => {
+            if (res?.firstTierVerified) navigate("/");
+            else navigate("/information");
+          })
+          .catch(() => {
+            navigate("/information");
+          });
       }
     });
   };

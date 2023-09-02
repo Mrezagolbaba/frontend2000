@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import Header from "./Header";
 import "./style.scss";
 import Footer from "./Footer";
@@ -10,7 +10,6 @@ type Props = {
 const LandingLayout = ({ children }: Props) => {
   return (
     <div className="landing-wrapper">
-      <div id="menuOverlay" className="menu-overlay"></div>
       <Header />
       {children}
       <Footer />

@@ -11940,7 +11940,7 @@ textarea.form-control {
   background-color: #335FFC !important;
 }
 
-.header {
+/* .header {
   position: relative;
   padding-top: 40px;
 }
@@ -12026,7 +12026,7 @@ textarea.form-control {
 }
 .header-hamburger button .icon svg circle {
   stroke-opacity: 0.1;
-}
+} */
 
 .footer {
   background-color: #050625;
@@ -12954,7 +12954,7 @@ span.pagination-link {
   }
 }
 @media screen and (max-width: 991px) {
-  .header {
+  /* .header {
     padding-top: 24px;
   }
   .header .header__top {
@@ -12999,7 +12999,7 @@ span.pagination-link {
   .navbar .header__auth,
 .navbar .navbar-close {
     display: block;
-  }
+  } */
 
   .section-title .section-title__title {
     font-size: 2rem;
@@ -13190,7 +13190,7 @@ span.pagination-link {
   }
 }
 @media screen and (max-width: 767px) {
-  .header .header-intro {
+  /* .header .header-intro {
     margin-top: 100px;
   }
   .header .header-intro h1, .header .header-intro .h1 {
@@ -13203,7 +13203,7 @@ span.pagination-link {
     height: 675px;
     background-size: 139px 133px, 146px 140px, 89px 86px, 71px 67px, 1093px 440px, 100% 862px;
     background-position: calc(100% - 30px) 435px, 30px 286px, 205px 510px, calc(100% - 130px) 285px, -110px 160px, 0px 100%;
-  }
+  } */
 
   .feature {
     flex-wrap: wrap;
@@ -13302,7 +13302,7 @@ span.pagination-link {
   }
 }
 @media screen and (max-width: 575px) {
-  .header .header-intro h1, .header .header-intro .h1, .header .header-intro p {
+  /* .header .header-intro h1, .header .header-intro .h1, .header .header-intro p {
     text-align: right;
   }
   .header.header--landing {
@@ -13310,7 +13310,7 @@ span.pagination-link {
     background-image: url("../img/lay/header-pattern.png"), url("../img/lay/header-bg-2.png");
     background-size: 953px 300px, 991px 862px;
     background-position: -240px 155px, 50% 100%;
-  }
+  } */
 
   .feature-banner p {
     font-size: 1em;
