@@ -51,7 +51,7 @@ const Header = () => {
                 <a href="#">قوانین</a>
               </li>
               <li className="navbar__item">
-                <a href="#">بلاگ</a>
+                <a href="https://www.arsonex.com/blog" target="_blank">بلاگ</a>
               </li>
               <li className="navbar__item">
                 <a href="#">درباره ما</a>
