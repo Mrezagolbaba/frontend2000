@@ -29,6 +29,17 @@
     "baseUrl": "src",
     "downlevelIteration": true
   },
+  // "baseUrl": ".",
+  // "paths": {
+  //   "@/*": ["src/*"]
+  // },
+  // "path": {
+  //   "@components/*": ["src/components/*"],
+  //   "@services/*": ["src/services/*"],
+  //   "@pages/*": ["src/pages/*"],
+  //   "@assets/*": ["src/assets/*"],
+  //   "@utils/*": ["src/utils/*"]
+  // },
   "references": [{ "path": "./tsconfig.node.json" }],
   "include": [
     "src"

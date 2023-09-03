@@ -1,8 +1,11 @@
 import React from "react";
 import ReactDOM, { createRoot } from "react-dom/client";
-import "./assets/css/app.css";
-import "./assets/css/custom.css";
+
+import "assets/css/app.css";
+import "assets/css/custom.css";
 import "./assets/vendor/bootstrap-select/bootstrap-select.min.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import App from "./App.tsx";
 import * as Sentry from "@sentry/react";
@@ -11,7 +14,12 @@ Sentry.init({
   integrations: [
     new Sentry.BrowserTracing({
       // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-      tracePropagationTargets: ["localhost",/^https:\/\/dev-api\.arsonex\.market\//,/^https:\/\/staging-api\.arsonex\.market\//,/^https:\/\/api\.arsonex\.com\//],
+      tracePropagationTargets: [
+        "localhost",
+        /^https:\/\/dev-api\.arsonex\.market\//,
+        /^https:\/\/staging-api\.arsonex\.market\//,
+        /^https:\/\/api\.arsonex\.com\//,
+      ],
     }),
     new Sentry.Replay(),
   ],
@@ -29,6 +37,6 @@ root.render(<App />);
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
+  </React.StrictMode>
 );
 serviceWorkerRegistration.register();

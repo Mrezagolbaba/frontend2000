@@ -1,0 +1,447 @@
+@import "../../assets/scss/_variables";
+
+body {
+  direction: rtl;
+  text-align: right;
+  font-family: IRANYekanX;
+  font-size: 1rem;
+  font-weight: 400;
+  color: $text-100;
+  background-color: $body-bg;
+  line-height: 1.6;
+  padding: 0;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background-color: $primary;
+  color: #fff;
+}
+
+::-moz-selection {
+  background-color: $primary;
+  color: #fff;
+}
+
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+  font-family: inherit;
+  color: $text-100;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+p,
+label {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.8;
+  color: $text-100;
+}
+
+a {
+  color: $primary;
+  text-decoration: none;
+}
+
+strong {
+  font-weight: bold;
+}
+
+video {
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+}
+
+time {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+figure {
+  figcaption {
+    font-size: 0.75rem;
+    font-weight: 400;
+    margin: 3px 0 5px;
+  }
+}
+
+blockquote {
+  padding: 20px;
+  border: 2px solid #ebebeb;
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 20px;
+  color: $text-100;
+}
+
+iframe {
+  display: block;
+  width: 100%;
+}
+
+.d-ltr {
+  direction: ltr;
+}
+
+.d-rtl {
+  direction: rtl;
+}
+
+.landing-wrapper {
+  position: relative;
+
+  .main-wrapper {
+    background-color: $body-bg;
+  }
+
+  .section-title {
+    max-width: 640px;
+    margin: 0 auto 65px;
+    text-align: center;
+
+    .section-title__title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 26px;
+      color: $text-100;
+
+      &:after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 17px;
+        margin-top: 8px;
+        background: {
+          image: url("src/assets/img/lay/title-border.png");
+          repeat: no-repeat;
+          position: 45% 0;
+          size: 230px 17px;
+        }
+      }
+    }
+
+    .section-title__subtitle {
+      font-size: 1.25em;
+      font-weight: 500;
+      color: $text-100;
+      margin: 0 auto;
+      max-width: 84%;
+    }
+  }
+
+  .section-more {
+    text-align: center;
+    margin-top: 65px;
+
+    a:not(.btn) {
+      font-size: 1.125rem;
+      font-weight: 400;
+      color: $primary;
+
+      .icon {
+        margin-right: 12px;
+
+        svg {
+          width: 12px;
+          height: 12px;
+        }
+      }
+    }
+  }
+
+  .section-gap {
+    margin-bottom: $section-gap;
+  }
+  
+  img.avatar {
+    width: 80px;
+    height: 80px;
+    padding: 5px;
+    border: 1px solid #ebebeb;
+    border-radius: 50%;
+  }
+
+  span.icon {
+    display: inline-block;
+    vertical-align: middle;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+      display: block;
+    }
+  }
+
+  span.count {
+    font-style: italic;
+    font-size: 0.75rem;
+  }
+
+  .user-pill {
+    display: inline-block;
+    text-align: center;
+    border: none;
+    outline: none;
+    height: 56px;
+    line-height: 56px;
+    padding: 0 18px;
+    border-radius: 28px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    background-color: rgba(#fff, 20%);
+    transition: all 150ms ease-in-out;
+
+    .icon {
+      margin-right: 20px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    &:hover {
+      background-color: rgba(#fff, 22%);
+      color: #fff;
+    }
+
+    &.user-pill--primary {
+      background-color: $primary-10;
+      color: $primary;
+
+      .icon svg path {
+        fill: $primary;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .section-title .section-title__title {
+    font-size: 2rem;
+  }
+
+  .table-crypto thead th {
+    font-size: 1em;
+  }
+
+  .table-crypto tbody td {
+    font-size: 0.875em;
+  }
+
+  .table-crypto-title h6,
+  .table-crypto-title .h6,
+  .table-crypto-title span {
+    font-size: 1em;
+  }
+
+  .table-crypto-title img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .table-crypto-actions .btn {
+    height: 36px;
+    line-height: 32px;
+    min-width: 100px;
+    padding: 0 12px;
+  }
+
+  .landing-currency-rates .section-title .section-title__title:after {
+    background-position-x: 37%;
+  }
+
+  .landing-features {
+    padding-bottom: 120px;
+    background-image: url(../img/coins/btccash.png),
+      url(../img/lay/dot-primary-33x33.png);
+    background-position:
+      calc(100% - 40px) 100%,
+      70px calc(100% - 82px);
+  }
+
+  .landing-features .landing-features__slide .features-slider {
+    max-width: 720px;
+  }
+
+  .feature-banner {
+    padding-top: 70px;
+  }
+
+  .feature-banner p {
+    max-width: unset;
+    padding: 0 24px;
+  }
+
+  .crypto-banner {
+    padding: 60px;
+  }
+
+  .crypto-banner-title {
+    font-size: 1.5em;
+    line-height: 1.6;
+  }
+
+  .newsletter {
+    text-align: center;
+    margin-bottom: 55px;
+  }
+
+  .newsletter .footer-widget-title {
+    margin-bottom: 20px;
+  }
+
+  .newsletter-form {
+    margin: 0 auto;
+  }
+
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .page-header.page-header--flex .page-title {
+    margin: 0 0 20px;
+    flex: 0 0 100%;
+  }
+
+  .page-header.page-header--flex .page-title + .page-text {
+    margin-top: 0;
+  }
+
+  .modern-search {
+    max-width: unset;
+    width: 100%;
+  }
+
+  .rules-summary.rules-summary--mb200 {
+    margin-bottom: 0;
+  }
+
+  .rules-summary .rules-text {
+    margin-top: 30px;
+  }
+
+  .rules-text {
+    font-size: 1em;
+  }
+
+  .blog-overlay.blog-overlay--inline {
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: unset;
+  }
+
+  .blog-overlay.blog-overlay--inline .blog-title {
+    margin-bottom: 8px;
+  }
+
+  .blog-title {
+    font-size: 1.375em;
+  }
+
+  .blog-date {
+    font-size: 0.875em;
+  }
+
+  .blog-text {
+    font-size: 1em;
+  }
+
+  .blog-tiles {
+    margin-bottom: 24px;
+  }
+
+  .blog-summary .blog-text {
+    margin-top: 30px;
+  }
+
+  .related-articles.related-articles--mt250 {
+    margin-top: 80px;
+  }
+
+  .related-articles.related-articles--mb150 {
+    margin-bottom: 0;
+  }
+
+  .about-summary .card .card-body {
+    padding: 40px;
+  }
+
+  .about-summary.about-summary--mt155 {
+    margin-top: 100px;
+  }
+
+  .counter-list.counter-list--mt250 {
+    margin-top: 80px;
+  }
+
+  .counter-list.counter-list--mb150 {
+    margin-bottom: 0;
+  }
+
+  .social-tiles.social-tiles--mt250 {
+    margin-top: 76px;
+  }
+
+  .social-tiles.social-tiles--mb150 {
+    margin-bottom: 0;
+  }
+
+  .page-contact .section-title {
+    margin-bottom: 65px;
+  }
+
+  .coin-actions {
+    flex: 0 0 100%;
+    margin-top: 16px;
+  }
+
+  .page-coin .coin-chart .select-custom {
+    display: inline-block;
+    margin-left: 20px;
+  }
+
+  .page-coin .coin-chart .select-custom + .radio-tabs {
+    display: none;
+  }
+
+  .footer .social-media {
+    margin: 0 auto 30px;
+  }
+
+  .footer-widget {
+    margin-bottom: 30px;
+  }
+
+  .footer-bottom {
+    margin-top: 30px;
+  }
+
+  .footer-copyright {
+    flex: 0 0 100%;
+    order: 1;
+    text-align: center;
+  }
+}
