@@ -11638,7 +11638,7 @@ textarea.form-control {
   background-position: 20px 50%;
 }
 
-.btn {
+/* .btn {
   font-size: 1rem;
   font-weight: 500;
   padding: 0px 30px;
@@ -11646,7 +11646,7 @@ textarea.form-control {
   line-height: 52px;
   border-radius: 28px;
   border-width: 2px;
-}
+} */
 .btn:active, .btn:focus, .btn:active:focus {
   box-shadow: none;
 }

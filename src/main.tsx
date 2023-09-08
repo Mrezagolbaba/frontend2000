@@ -6,6 +6,8 @@ import "assets/css/custom.css";
 import "./assets/vendor/bootstrap-select/bootstrap-select.min.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import App from "./App.tsx";
 import * as Sentry from "@sentry/react";
