@@ -3,6 +3,14 @@
   box-shadow: 0px 4px 64px rgba(0, 0, 0, 0.03);
   border-radius: 10px;
   border: none;
+  &.card--h100pc {
+    height: 100%;
+  }
+  &.card-secondary {
+    .card-header {
+      padding-bottom: 15px;
+    }
+  }
   .card-header {
     background-color: #fff;
     border-radius: 20px 20px 0 0;
@@ -10,6 +18,21 @@
     margin-right: 25px;
     margin-left: 25px;
     border-bottom: 1px solid rgba(3, 4, 27, 0.03);
+    &.card-header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-action .btn {
+      border: none;
+      background-color: transparent;
+      outline: none;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #111bff;
+      padding: 0;
+      text-decoration: none;
+    }
   }
   .card-body {
     padding: 25px;
@@ -112,4 +135,90 @@
       }
     }
   }
+}
+
+.box-wallet {
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  &.usdt-box {
+    border: 1px solid rgb(36 166 127/34%);
+  }
+  &.tl-box {
+    border: 1px solid #e30c186b;
+  }
+  &.aed-box {
+    border: 1px solid #296c404a;
+  }
+  &.usd-box {
+    border: 1px solid #2e65404f;
+  }
+  &.gbp-box {
+    border: solid 1px #81808047;
+  }
+  &.eur-box {
+    border: 1px solid #10146f3d;
+  }
+
+  .dot-wallet {
+    border-radius: 25px;
+    margin-right: 12px;
+    margin-left: 4px;
+    height: 9px;
+    width: 22px;
+    &.usdt-show {
+      background: rgb(36 166 127);
+    }
+    &.tl-show {
+      background: #e30c18ab;
+    }
+    &.aed-show {
+      background-color: #296c40c2;
+    }
+    &.usd-show {
+      background-color: #2e6540de;
+    }
+    &.gbp-show {
+      background-color: #818080c9;
+    }
+    &.eur-show {
+      background-color: #10146fc2;
+    }
+  }
+
+  .name-currency-wallet {
+    color: rgb(2.877604588866234, 3.8727723760530353, 26.56249936670065);
+    opacity: 0.5;
+    text-align: right;
+    font-size: 12px;
+    width: 100%;
+  }
+
+  .now-wallet-show {
+    color: rgb(2.877604588866234, 3.8727723760530353, 26.56249936670065);
+    text-align: left;
+    font-size: 11px;
+    margin-left: 10px;
+    width: 100%;
+  }
+}
+
+.full-toman {
+  width: 280px;
+  background-color: rgb(
+    247.56250709295273,
+    247.56250709295273,
+    247.56250709295273
+  );
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 10px;
+}
+
+.wallet-img-chart {
+  width: 90px;
 }

@@ -1,18 +1,12 @@
-//@ts-ignore
 import Layout from "layouts/dashboard";
 import User from "assets/img/icons/user.png";
-import Bronz from "assets/img/user/level-bronze.png";
-import Silver from "assets/img/user/level-silver.png";
-import Platinum from "assets/img/user/level-platinum.png";
-import Uranium from "assets/img/user/level-uranium.png";
-import Gold from "assets/img/user/level-gold.png";
-import Edit from "assets/img/icons/edit.svg";
-import Calendar from "assets/img/icons/calendar2.svg";
+
+import chart from "assets/img/chart-img.png";
+
 import T from "assets/img/coins/tether.png";
 import Turkey from "assets/img/icons/flag-turkey.png";
-import { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
-import { BsCalendar, BsCalendar2Event, BsCheck2 } from "react-icons/bs";
+
+import { BsCalendar2Event, BsCheck2 } from "react-icons/bs";
 // import CurrencyInput from "../../components/currencyInput";
 import {
   Button,
@@ -21,10 +15,9 @@ import {
   CardHeader,
   CardTitle,
   Col,
-  Container,
   Row,
 } from "reactstrap";
-import { CiCalendar, CiCalendarDate, CiEdit } from "react-icons/ci";
+import { CiEdit } from "react-icons/ci";
 
 import "./style.scss";
 const dataArray = [
@@ -195,30 +188,14 @@ const Dashboard: React.FC = () => {
         </Card>
       </section>
 
-      {/* <section className="mb-4">
-        <div className="card auth-jumbotron">
-          <div className="card-header">
-            <h5 className="card-title">احراز هویت</h5>
-          </div>
-          <div className="card-body">
-            <div className="row g-4">
-              <div className="col-xxl-6"></div>
-              <div className="col-xxl-3 col-md-6"></div>
-              <div className="col-xxl-3 col-md-6"></div>
-              <div className="col-12"></div>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
       <section className="mb-4">
-        <div className="row g-4">
-          <div className="col-xxl-7 col-xl-6">
-            <div className="card currency-exchange card--h100pc card-secondary">
-              <div className="card-header">
-                <h5 className="card-title">خرید و فروش</h5>
-              </div>
-              <div className="card-body">
+        <Row className="g-4">
+          <Col xxl={7} xl={6}>
+            <Card className="custom-card currency-exchange card--h100pc card-secondary">
+              <CardHeader>
+                <CardTitle tag="h5">خرید و فروش</CardTitle>
+              </CardHeader>
+              <CardBody>
                 <form action="">
                   <div className="currency-exchange__controls">
                     <div className="currency-exchange__control-group">
@@ -276,40 +253,106 @@ const Dashboard: React.FC = () => {
                     </button>
                   </div>
                 </form>
-              </div>
-            </div>
-          </div>
-          <div className="col-xxl-5 col-xl-6">
-            <div className="card wallet-card card--h100pc card-secondary">
-              <div className="card-header">
-                <h5 className="card-title">کیف پول</h5>
-              </div>
-              <div className="card-body">
-                <div className="wallet">
-                  <div className="wallet-value">
-                    ارزش کل کیف پول
-                    <strong className="d-inline-block d-ltr">
-                      893,548,200
-                      <small>IRT</small>
-                    </strong>
-                  </div>
-                  <div className="wallet-chart">
-                    <ul className="wallet-chart-legends"></ul>
-                    <div id="walletChart"></div>
-                  </div>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col xxl={5} xl={6}>
+            <Card className="custom-card wallet-card card--h100pc card-secondary">
+              <CardHeader className="card-header-flex">
+                <CardTitle tag="h5">کیف پول</CardTitle>
+                <div className="card-action">
+                  <Button href="#">مشاهده کیف پول</Button>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
+              </CardHeader>
+              <CardBody>
+                <Row className="g-4">
+                  <Col xxl={9} md={6}>
+                    <Row className="g-2 mb-2">
+                      <Col sm={3} xxl={6} className="col-6">
+                        <div className="box-wallet usdt-box">
+                          <div className="dot-wallet usdt-show"></div>
+                          <span className="name-currency-wallet">تتر</span>
+                          <span className="now-wallet-show">USDT 1,244</span>
+                        </div>
+                      </Col>
+                      <Col sm={3} xxl={6} className="col-6">
+                        <div className="box-wallet tl-box">
+                          <div className="dot-wallet tl-show"></div>
+                          <span className="name-currency-wallet">لیر</span>
+                          <span className="now-wallet-show">TL 2,656,01</span>
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row className="g-2 mb-2">
+                      <Col sm={3} xxl={6} className="col-6">
+                        <div className="box-wallet aed-box">
+                          <div className="dot-wallet aed-show"></div>
+                          <span className="name-currency-wallet">درهم</span>
+                          <span className="now-wallet-show">AED 1,345,07</span>
+                        </div>
+                      </Col>
+                      <Col sm={3} xxl={6} className="col-6">
+                        <div className="box-wallet usd-box">
+                          <div className="dot-wallet usd-show"></div>
+                          <span className="name-currency-wallet">دلار</span>
+                          <span className="now-wallet-show">USD 243</span>
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row className="g-2 mb-2">
+                      <Col sm={3} xxl={6} className="col-6">
+                        <div className="box-wallet gbp-box">
+                          <div className="dot-wallet gbp-show"></div>
+                          <span className="name-currency-wallet">پوند</span>
+                          <span className="now-wallet-show">GBP 3,421</span>
+                        </div>
+                      </Col>
+                      <Col sm={3} xxl={6} className="col-6">
+                        <div className="box-wallet eur-box">
+                          <div className="dot-wallet eur-show"></div>
+                          <span className="name-currency-wallet">یورو </span>
+                          <span className="now-wallet-show">EUR 789</span>
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row className="g-2 mt-2">
+                      <Col sm={6} className="mx-auto">
+                        <div className="full-toman">
+                          <span className="toman-text">
+                            دارایی شما به تومان:
+                          </span>
+                          <span className="toman-number">۱،۵۴۳،۰۶۹،۳۲۱</span>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col xxl={3} md={6}>
+                    <Row className="g-2 mb-2">
+                      <Col sm={3} xxl={6} className="col-6">
+                        <img
+                          src={chart}
+                          alt=""
+                          className="wallet-img-chart mt-4"
+                        />
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
       </section>
 
-      <section className="">
-        <div className="card currencies-online-rates card-secondary">
-          <div className="card-header">
-            <h5 className="card-title">بازارهای معاملاتی</h5>
-          </div>
-          <div className="card-body">
+      <section className="mb-4">
+        <Card className="custom-card currencies-online-rates card-secondary">
+          <CardHeader className="card-header-flex">
+            <CardTitle tag="h5">بازارهای معاملاتی</CardTitle>
+            <div className="card-action">
+              <Button href="#">مشاهده تمام بازارها</Button>
+            </div>
+          </CardHeader>
+          <CardBody>
             <div className="table-responsive">
               <table className="table-modern">
                 <thead>
@@ -427,11 +470,11 @@ const Dashboard: React.FC = () => {
                 </tbody>
               </table>{" "}
             </div>
-          </div>
-        </div>
+          </CardBody>
+        </Card>
       </section>
 
-      <section className="mb-4 mt-4">
+      {/* <section className="mb-4 mt-4">
         <div className="slide features-slider">
           <div className="">
             {/* <Slider {...settings}>
@@ -495,19 +538,19 @@ const Dashboard: React.FC = () => {
                   </h5>
                 </div>
               </div>
-            </Slider> */}
+            </Slider>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      <section className="mb-4">
-        <div className="row g-4">
-          <div className="col-xxl-7 col-xl-6">
-            <div className="card market-transactions card--h100pc card-secondary coming">
-              <div className="card-header soon">
-                <h5 className="card-title">معاملات در بازار</h5>
-              </div>
-              <div className="card-body">
+      {/* <section className="mb-4">
+        <Row className="g-4">
+          <Col xxl={7} xl={6}>
+            <Card className="custom-card market-transactions card--h100pc card-secondary coming">
+              <CardHeader className="soon">
+                <CardTitle tag="h5">معاملات در بازار</CardTitle>
+              </CardHeader>
+              <CardBody>
                 <div className="slide crypto-slider">
                   <div className="owl-carousel owl-theme">
                     <div data-dot="<button>1</button>" className="crypto-item">
@@ -576,13 +619,13 @@ const Dashboard: React.FC = () => {
                     <div className="crypto-slider-dots"></div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-xxl-5 col-xl-6">
-            <div className="card card--h100pc card-secondary">
-              <div className="card-header card-header-flex">
-                <h5 className="card-title"> تراکنش‌های اخیر</h5>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col xxl={5} xl={6}>
+            <Card className="custom-card card--h100pc card-secondary">
+              <CardHeader className="card-header-flex">
+                <CardTitle tag="h5"> تراکنش‌های اخیر</CardTitle>
                 <select
                   name=""
                   className="bs-select-control bs-select-dropdown"
@@ -590,8 +633,8 @@ const Dashboard: React.FC = () => {
                   <option value="3">لیر به ریال</option>
                   <option value="1">تتر به لیر</option>
                 </select>
-              </div>
-              <div className="card-body">
+              </CardHeader>
+              <CardBody>
                 <div className="table-responsive">
                   <table className="table-modern table-modern--compact">
                     <thead>
@@ -642,10 +685,10 @@ const Dashboard: React.FC = () => {
                     </tbody>
                   </table>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
       </section>
 
       <section className="mb-4">
@@ -721,7 +764,7 @@ const Dashboard: React.FC = () => {
                   <li className="progress-cup progress-cup--gold progress-cup--current">
                     <div className="progress-cup-img">
                       <span>برنزی</span>
-                      {/* <img src={Level} alt="" /> */}
+                      {/* <img src={Level} alt="" /> 
                     </div>
                     <div className="progress-cup-wage"> </div>
                   </li>
@@ -774,7 +817,7 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </Layout>
   );
 };
