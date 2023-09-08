@@ -1,6 +1,6 @@
 //@ts-ignore
 import Layout from "layouts/dashboard";
-import User from "assets/img/user/level-gold.png";
+import User from "assets/img/icons/user.png";
 import Bronz from "assets/img/user/level-bronze.png";
 import Silver from "assets/img/user/level-silver.png";
 import Platinum from "assets/img/user/level-platinum.png";
@@ -12,8 +12,21 @@ import T from "assets/img/coins/tether.png";
 import Turkey from "assets/img/icons/flag-turkey.png";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { BsCheck2 } from "react-icons/bs";
+import { BsCalendar, BsCalendar2Event, BsCheck2 } from "react-icons/bs";
 // import CurrencyInput from "../../components/currencyInput";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Col,
+  Container,
+  Row,
+} from "reactstrap";
+import { CiCalendar, CiCalendarDate, CiEdit } from "react-icons/ci";
+
+import "./style.scss";
 const dataArray = [
   { value: "0.00256", number: "45،154", time: "11:30" },
   { value: "0.00256", number: "45،154", time: "11:30" },
@@ -55,220 +68,148 @@ const Dashboard: React.FC = () => {
   };
   return (
     <Layout>
-      <section className="mb-4">
-        <div className="card user-summary">
-          <div className="card-body">
-            <ul>
-              <li className="user-summary-avatar">
+      <section className="mb-3">
+        <Card className="custom-card user-summary">
+          <CardBody>
+            <Row className="align-items-start">
+              <Col
+                xs={12}
+                sm={1}
+                className="user-summary__section user-summary-avatar"
+              >
                 <img src={User} alt="" className="avatar" />
-              </li>
-              <li className="user-summary-edit">
+              </Col>
+              <Col
+                xs={12}
+                sm={2}
+                className="user-summary__section user-summary-edit"
+              >
                 <h6> بهزاد بابایی</h6>
-                <a href="/profile" className="btn btn-transparent">
-                  <span className="icon">
-                    <img src={Edit} alt="" />
-                  </span>
+                <Button
+                  className="profile-btn"
+                  outline
+                  color="secondary"
+                  href="/profile"
+                >
+                  <CiEdit />
                   پروفایل کاربری
-                </a>
-              </li>
-              <li className="user-summary-lastseen">
+                </Button>
+              </Col>
+              <Col
+                xs={12}
+                sm={2}
+                className="user-summary__section user-summary-lastseen"
+              >
                 <h6>آخرین ورود</h6>
                 <div className="user-summary-date">
-                  <span className="icon">
-                    <img src={Calendar} alt="" />
-                  </span>
+                  <BsCalendar2Event />
                   دوشنبه، 22 آبان 1401
                 </div>
-              </li>
-              <li className="user-summary-level">
-                <h6>سطح کاربری شما</h6>
-                <div>
-                  <img src={Gold} alt="" />
-                  <span>برنزی</span>
-                  <a href="#">ارتقا سطح</a>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+              </Col>
+            </Row>
+          </CardBody>
+        </Card>
       </section>
 
       <section className="mb-4">
+        <Card className="custom-card  auth-jumbotron">
+          <CardHeader>
+            <CardTitle tag="h5">احراز هویت</CardTitle>
+          </CardHeader>
+          <CardBody>
+            <Row className="g-4">
+              <Col xxl={6}>
+                <div className="auth-jumbotron__summary">
+                  <p>
+                    برای استفاده کامل و بدون محدودیت از آرسونیکس باید فرایند
+                    احراز هویت را تکمیل کنید، زمان بررسی و تایید اطلاعات ۱ ساعت
+                    &zwnj;می&zwnj;باشد.{" "}
+                  </p>
+                  <Button outline color="primary">
+                    شروع احراز هویت
+                  </Button>
+                </div>
+              </Col>
+              <Col xxl={3} md={6}>
+                <ul className="auth-jumbotron__advantages">
+                  <li>
+                    <h5>احراز هویت سطح یک</h5>
+                  </li>
+                  <li>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    ﻭﺍﺭﯾﺰ و برداشت تومانی ﺭﻭﺯﺍﻧﻪ:
+                    <strong>۱ میلیون تومان</strong>
+                  </li>
+                  <li>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    واریز و برداشت فیات روزانه: <strong>معادل ۵۰۰ دلار</strong>
+                  </li>
+                  <li>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    واریز رمزارز ﺭﻭﺯﺍﻧﻪ:
+                    <strong>نامحدود</strong>
+                  </li>
+                  <li>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    برداشت رمزارز ﺭﻭﺯﺍﻧﻪ:
+                    <strong>نامحدود</strong>
+                  </li>
+                </ul>
+              </Col>
+              <Col xxl={3} md={6}>
+                <ul className="auth-jumbotron__advantages">
+                  <li>
+                    <h5>احراز هویت سطح دو</h5>
+                  </li>
+                  <li>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    ﻭﺍﺭﯾﺰ و برداشت ﺗﻮﻣﺎنی ﺭﻭﺯﺍﻧﻪ:
+                    <strong>۱۰۰ میلیون تومان - ۱ میلیارد تومان</strong>
+                  </li>
+                  <li>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    ﻭﺍﺭﯾﺰ و برداشت فیات ﺭﻭﺯﺍﻧﻪ:
+                    <strong>معادل ۳۵ هزار دلار </strong>
+                  </li>
+                  <li>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    واریز رمزارز ﺭﻭﺯﺍﻧﻪ:
+                    <strong>نامحدود</strong>
+                  </li>
+                  <li>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    برداشت رمزارز ﺭﻭﺯﺍﻧﻪ:
+                    <strong>نامحدود</strong>
+                  </li>
+                </ul>
+              </Col>
+              <Col xl={12} className="d-none">
+                <div className="auth-jumbotron__summary">
+                  <a href="#" className="btn btn-outline-primary">
+                    شروع احراز هویت
+                  </a>
+                </div>
+              </Col>
+            </Row>
+          </CardBody>
+        </Card>
+      </section>
+
+      {/* <section className="mb-4">
         <div className="card auth-jumbotron">
           <div className="card-header">
             <h5 className="card-title">احراز هویت</h5>
           </div>
           <div className="card-body">
             <div className="row g-4">
-              <div className="col-xxl-6">
-                <div className="auth-jumbotron-summary auth-jumbotron-summary--first">
-                  <p>
-                    برای استفاده کامل و بدون محدودیت از آرسونیکس باید فرایند
-                    احراز هویت را تکمیل کنید، زمان بررسی و تایید اطلاعات ۱ ساعت
-                    &zwnj;می&zwnj;باشد.{" "}
-                  </p>
-                  <a href="#" className="btn btn-outline-primary">
-                    شروع احراز هویت
-                  </a>
-                </div>
-              </div>
-              <div className="col-xxl-3 col-md-6">
-                <ul className="auth-jumbotron-advantages">
-                  <li>
-                    <h5 className="">احراز هویت سطح یک</h5>
-                  </li>
-                  <li>
-                    <span className="icon">
-                      <BsCheck2 size={50} color={"#55cd51"} />
-                    </span>
-                    ﻭﺍﺭﯾﺰ و برداشت تومانی ﺭﻭﺯﺍﻧﻪ:
-                    <strong>۱ میلیون تومان</strong>
-                  </li>
-                  <li>
-                    <span className="icon">
-                      <svg
-                        width="12"
-                        height="10"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4.00006 7.80007L1.20006 5.00006L0.266724 5.9334L4.00006 9.66673L12.0001 1.66673L11.0667 0.733398L4.00006 7.80007Z"
-                          fill="#0ED039"
-                        ></path>
-                      </svg>
-                    </span>
-                    واریز و برداشت فیات روزانه: <strong>معادل ۵۰۰ دلار</strong>
-                  </li>
-                  <li>
-                    <span className="icon">
-                      <svg
-                        width="12"
-                        height="10"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4.00006 7.80007L1.20006 5.00006L0.266724 5.9334L4.00006 9.66673L12.0001 1.66673L11.0667 0.733398L4.00006 7.80007Z"
-                          fill="#0ED039"
-                        ></path>
-                      </svg>
-                    </span>
-                    واریز رمزارز ﺭﻭﺯﺍﻧﻪ:
-                    <strong>نامحدود</strong>
-                  </li>
-                  <li>
-                    <span className="icon">
-                      <svg
-                        width="12"
-                        height="10"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4.00006 7.80007L1.20006 5.00006L0.266724 5.9334L4.00006 9.66673L12.0001 1.66673L11.0667 0.733398L4.00006 7.80007Z"
-                          fill="#0ED039"
-                        ></path>
-                      </svg>
-                    </span>
-                    برداشت رمزارز ﺭﻭﺯﺍﻧﻪ:
-                    <strong>نامحدود</strong>
-                  </li>
-                </ul>
-              </div>
-              <div className="col-xxl-3 col-md-6">
-                <ul className="auth-jumbotron-advantages">
-                  <li>
-                    <h5>احراز هویت سطح دو</h5>
-                  </li>
-                  <li>
-                    <span className="icon">
-                      <svg
-                        width="12"
-                        height="10"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4.00006 7.80007L1.20006 5.00006L0.266724 5.9334L4.00006 9.66673L12.0001 1.66673L11.0667 0.733398L4.00006 7.80007Z"
-                          fill="#0ED039"
-                        ></path>
-                      </svg>
-                    </span>
-                    ﻭﺍﺭﯾﺰ و برداشت ﺗﻮﻣﺎنی ﺭﻭﺯﺍﻧﻪ:
-                    <strong>۱۰۰ میلیون تومان - ۱ میلیارد تومان</strong>
-                  </li>
-                  <li>
-                    <span className="icon">
-                      <svg
-                        width="12"
-                        height="10"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4.00006 7.80007L1.20006 5.00006L0.266724 5.9334L4.00006 9.66673L12.0001 1.66673L11.0667 0.733398L4.00006 7.80007Z"
-                          fill="#0ED039"
-                        ></path>
-                      </svg>
-                    </span>
-                    ﻭﺍﺭﯾﺰ و برداشت فیات ﺭﻭﺯﺍﻧﻪ:
-                    <strong>معادل ۳۵ هزار دلار </strong>
-                  </li>
-                  <li>
-                    <span className="icon">
-                      <svg
-                        width="12"
-                        height="10"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4.00006 7.80007L1.20006 5.00006L0.266724 5.9334L4.00006 9.66673L12.0001 1.66673L11.0667 0.733398L4.00006 7.80007Z"
-                          fill="#0ED039"
-                        ></path>
-                      </svg>
-                    </span>
-                    واریز رمزارز ﺭﻭﺯﺍﻧﻪ:
-                    <strong>نامحدود</strong>
-                  </li>
-                  <li>
-                    <span className="icon">
-                      <svg
-                        width="12"
-                        height="10"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4.00006 7.80007L1.20006 5.00006L0.266724 5.9334L4.00006 9.66673L12.0001 1.66673L11.0667 0.733398L4.00006 7.80007Z"
-                          fill="#0ED039"
-                        ></path>
-                      </svg>
-                    </span>
-                    برداشت رمزارز ﺭﻭﺯﺍﻧﻪ:
-                    <strong>نامحدود</strong>
-                  </li>
-                </ul>
-              </div>
-              <div className="col-12">
-                <div className="auth-jumbotron-summary">
-                  <a href="#" className="btn btn-outline-primary">
-                    شروع احراز هویت
-                  </a>
-                </div>
-              </div>
+              <div className="col-xxl-6"></div>
+              <div className="col-xxl-3 col-md-6"></div>
+              <div className="col-xxl-3 col-md-6"></div>
+              <div className="col-12"></div>
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="mb-4">
         <div className="row g-4">
