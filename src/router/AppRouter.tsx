@@ -1,4 +1,9 @@
 import React, { lazy } from "react"; //  { useState }
+
+import { Refine } from "@refinedev/core";
+import dataProvider from "@refinedev/simple-rest";
+import routerProvider from "@refinedev/react-router-v6";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import LoginPage from "pages/auth/signin";
@@ -9,7 +14,7 @@ import Forget from "pages/auth/forget";
 
 import HomePage from "pages/Home";
 import Dashboard from "pages/dashboard";
-import Wallet from "pages/wallet";
+import { WalletList } from "pages/wallet";
 import Transactions from "pages/transactions";
 import Setting from "pages/setting";
 import Orders from "pages/orders";
@@ -33,6 +38,34 @@ const AppRouter: React.FC = () => {
   const user = true;
   return (
     <Router>
+      <Refine
+        //TODO [@mrezagolbaba]: please check this type
+        dataProvider={dataProvider as any}
+        routerProvider={routerProvider}
+        resources={[
+          {
+            name: "wallets",
+            list: "/wallet",
+            // create: "/wallet/create",
+          },
+          // {
+          //   name: "transactions",
+          //   list: "/transactions",
+          //   show: "/transactions/show/:id",
+          // },
+        ]}
+      >
+        <Routes>
+          <Route path="posts">
+            <Route index element={<WalletList />} />
+            {/* <Route path="create" element={<Wallet />} /> */}
+          </Route>
+          {/* <Route path="categories">
+            <Route index element={<Transactions />} />
+            <Route path="show/:id" element={<Transactions />} />
+          </Route> */}
+        </Routes>
+      </Refine>
       <Routes>
         {/* Define your routes */}
         <Route path="/login" element={<LoginPage />} />
@@ -46,14 +79,14 @@ const AppRouter: React.FC = () => {
           path="/dashboard"
           element={<ProtectedRoute children={<Dashboard />} user={user} />}
         />
-        <Route
+        {/* <Route
           path="/wallet"
           element={<ProtectedRoute children={<Wallet />} user={user} />}
         />
         <Route
           path="/transactions/:id"
           element={<ProtectedRoute children={<Transactions />} user={user} />}
-        />
+        /> */}
         <Route
           path="/setting"
           element={<ProtectedRoute children={<Setting />} user={user} />}
