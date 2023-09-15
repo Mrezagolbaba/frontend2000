@@ -45,18 +45,13 @@ const AppRouter: React.FC = () => {
         resources={[
           {
             name: "wallets",
-            list: "/wallet",
-            // create: "/wallet/create",
+            list: "/wallets",
+            create: "/wallets/create",
           },
-          // {
-          //   name: "transactions",
-          //   list: "/transactions",
-          //   show: "/transactions/show/:id",
-          // },
         ]}
       >
         <Routes>
-          <Route path="posts">
+          <Route path="wallets">
             <Route index element={<WalletList />} />
             {/* <Route path="create" element={<Wallet />} /> */}
           </Route>
