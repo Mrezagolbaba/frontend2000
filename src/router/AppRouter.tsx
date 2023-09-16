@@ -15,7 +15,7 @@ import Forget from "pages/auth/forget";
 import HomePage from "pages/Home";
 import Dashboard from "pages/dashboard";
 import { WalletList } from "pages/wallet";
-import Transactions from "pages/transactions";
+import { TransactionList } from "pages/transactions";
 import Setting from "pages/setting";
 import Orders from "pages/orders";
 import Notifications from "pages/notifications";
@@ -28,6 +28,7 @@ import BuySell from "pages/buySell";
 import Information from "pages/auth/information";
 import Market from "pages/market";
 import CoinPage from "pages/coins";
+import request from "services/adapter";
 
 const AppRouter: React.FC = () => {
   // const [showAddToHomeSheet, setShowAddToHomeSheet] = useState(isMobile && !window.matchMedia('(display-mode: standalone)').matches);
@@ -36,16 +37,25 @@ const AppRouter: React.FC = () => {
   //   setShowAddToHomeSheet(false);
   // };
   const user = true;
+  console.log(process.env);
+
   return (
     <Router>
       <Refine
-        //TODO [@mrezagolbaba]: please check this type
-        dataProvider={dataProvider as any}
+        dataProvider={dataProvider(
+          process.env.REACT_APP_BASE_URL as string,
+          request as any
+        )}
         routerProvider={routerProvider}
         resources={[
           {
             name: "wallets",
             list: "/wallets",
+            create: "/wallets/create",
+          },
+          {
+            name: "transactions",
+            list: "/transactions",
             create: "/wallets/create",
           },
         ]}
@@ -54,6 +64,9 @@ const AppRouter: React.FC = () => {
           <Route path="wallets">
             <Route index element={<WalletList />} />
             {/* <Route path="create" element={<Wallet />} /> */}
+          </Route>
+          <Route path="transactions">
+            <Route index element={<TransactionList />} />
           </Route>
           {/* <Route path="categories">
             <Route index element={<Transactions />} />
