@@ -2,11 +2,16 @@ import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
-import sassDts from 'vite-plugin-sass-dts'
+import sassDts from "vite-plugin-sass-dts";
 import * as path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  define: {
+    "process.env.REACT_APP_BASE_URL": JSON.stringify(
+      "https://dev-api.arsonex.market/v1"
+    ),
+  },
   plugins: [
     react(),
     tsconfigPaths(),
