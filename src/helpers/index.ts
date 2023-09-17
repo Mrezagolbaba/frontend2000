@@ -1,5 +1,5 @@
 export function generateLabelValueArray(start: number, end: number) {
-  const resultArray = [];
+  const resultArray: { label: string; value: string }[] = [];
   for (let i = start; i <= end; i++) {
     const label = i.toString();
     resultArray.push({ label: label, value: label });
