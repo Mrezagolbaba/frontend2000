@@ -1,0 +1,33 @@
+.rtl-button-group {
+    direction: initial;
+    text-align: right;
+  }
+  
+  .rtl-button-group .btn {
+    margin-left: 0.25rem; /* Adjust the spacing as needed */
+    margin-right: 0;
+  }
+.activeButton{
+    background-color: #2853c4;
+    color: #fff;
+    border-color: #2853c4;
+    outline: none;
+}
+.diactiveButton{
+    background-color: #fff;
+    color: #2853c4;
+    border-color: #2853c4;
+    outline: none;
+}
+.activeButton:hover{
+    background-color: #2853c4;
+    color: #fff;
+    border-color: #2853c4;
+    outline: none;
+}
+.diactiveButton:hover{
+    background-color: #fff;
+    color: #2853c4;
+    border-color: #2853c4;
+    outline: none;
+}
