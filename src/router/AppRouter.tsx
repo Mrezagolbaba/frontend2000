@@ -22,6 +22,7 @@ import Support from "pages/support";
 import BuySell from "pages/buySell";
 import Information from "pages/auth/information";
 import Market from "pages/market";
+import CoinPage from "pages/coins";
 
 const AppRouter: React.FC = () => {
   // const [showAddToHomeSheet, setShowAddToHomeSheet] = useState(isMobile && !window.matchMedia('(display-mode: standalone)').matches);
@@ -40,6 +41,7 @@ const AppRouter: React.FC = () => {
         <Route path="/mobile-otp" element={<OtpMobile />} />
         <Route path="/forget" element={<Forget />} />
         <Route path="/" element={<HomePage />} />
+        <Route path="/coins" element={<CoinPage />} />
         <Route
           path="/dashboard"
           element={<ProtectedRoute children={<Dashboard />} user={user} />}
