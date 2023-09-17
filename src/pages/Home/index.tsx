@@ -26,6 +26,7 @@ import face002 from "assets/img/people/face002.jpg";
 
 import "./style.scss";
 import { useEffect, useState } from "react";
+import { FilterNavCoin } from "components/FilterNavCoin";
 
 interface ExchangeRateData {
   expiresAt: string;
@@ -37,6 +38,12 @@ export default function HomePage() {
   const [exchangeRates, setExchangeRates] = useState<{
     [key: string]: { IRR: number | string; USD: number | string };
   }>({});
+  const [activeTab, setActiveTab] = useState('tab1');
+
+  const handleTabClick = (e:any,tabId:string) => {
+    e.preventDefault();
+    setActiveTab(tabId); 
+  };
 
   const commentSettings = {
     dots: false,
@@ -105,64 +112,7 @@ export default function HomePage() {
               </h3>
             </div>
             <div className="nav-tabs-wrapper">
-              <ul className="nav nav-tabs" id="myTab" role="tablist">
-                <li className="nav-item" role="presentation">
-                  <button
-                    className="nav-link active"
-                    id="tab1"
-                    data-bs-toggle="tab"
-                    data-bs-target="#tab-1"
-                    type="button"
-                    role="tab"
-                    aria-controls="tab-1"
-                    aria-selected="true"
-                  >
-                    همه ارزها
-                  </button>
-                </li>
-                <li className="nav-item" role="presentation">
-                  <button
-                    className="nav-link"
-                    id="tab2"
-                    data-bs-toggle="tab"
-                    data-bs-target="#tab-2"
-                    type="button"
-                    role="tab"
-                    aria-controls="tab-2"
-                    aria-selected="false"
-                  >
-                    داغ ترین ها
-                  </button>
-                </li>
-                <li className="nav-item" role="presentation">
-                  <button
-                    className="nav-link"
-                    id="tab3"
-                    data-bs-toggle="tab"
-                    data-bs-target="#tab-3"
-                    type="button"
-                    role="tab"
-                    aria-controls="tab-3"
-                    aria-selected="false"
-                  >
-                    بیشترین سود
-                  </button>
-                </li>
-                <li className="nav-item" role="presentation">
-                  <button
-                    className="nav-link"
-                    id="tab4"
-                    data-bs-toggle="tab"
-                    data-bs-target="#tab-4"
-                    type="button"
-                    role="tab"
-                    aria-controls="tab-4"
-                    aria-selected="false"
-                  >
-                    کمترین سود
-                  </button>
-                </li>
-              </ul>
+              <FilterNavCoin activeTab={activeTab} handleTabClick={handleTabClick} />
             </div>
             <div className="tab-content" id="myTabContent">
               <div
@@ -218,177 +168,14 @@ export default function HomePage() {
                             </div>
                           </td>
                           <td className="text-start">
-                            <div className="table-crypto-actions">
-                              <a href="#" className="btn btn-outline-primary">
-                                معامله
+                            <div className="table-crypto-actions text-center">
+                              <a href="#" className="btn btn-outline-success ">
+                                خرید و فروش
                               </a>
                             </div>
                           </td>
                         </tr>
                       ))}
-                      {/* <tr>
-                        <td>
-                          <div className="table-crypto-title">
-                            <img src={USDT} alt="USDT" />
-                            <h6>تتر</h6>
-                            <span>USDT</span>
-                          </div>
-                        </td>
-                        <td className="text-center">
-                          <span className="d-inline-block d-ltr">
-                            
-                          </span>
-                        </td>
-                        <td className="text-center">
-                          <span className="fs-md">50,950 تومان</span>
-                        </td>
-                        <td className="text-center">
-                          <div className="table-crypto-changes">
-                            <span className="text-success fw-medium d-inline-block d-ltr">
-                              +2.5%
-                            </span>
-                            <img src={graphG} alt="graph" />
-                          </div>
-                        </td>
-                        <td className="text-start">
-                          <div className="table-crypto-actions">
-                            <a href="#" className="btn btn-outline-primary">
-                              معامله
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div className="table-crypto-title">
-                            <img src={lira} alt="Lira" />
-                            <h6>لیر</h6>
-                            <span>TL</span>
-                          </div>
-                        </td>
-                        <td className="text-center">
-                          <span className="d-inline-block d-ltr">$0.03</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="fs-md">1,950 تومان</span>
-                        </td>
-                        <td className="text-center">
-                          <div className="table-crypto-changes">
-                            <span className="text-danger fw-medium d-inline-block d-ltr">
-                              -2.3%
-                            </span>
-                            <img src={graphR} alt="graph" />
-                          </div>
-                        </td>
-                        <td className="text-start">
-                          <div className="table-crypto-actions">
-                            <a href="#" className="btn btn-outline-primary">
-                              معامله
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div className="table-crypto-title">
-                            <img src={BTC} alt="BTC" />
-                            <h6>بیت کوین</h6>
-                            <span>BTC</span>
-                          </div>
-                        </td>
-                        <td className="text-center">
-                          <span className="d-inline-block d-ltr">
-                            $17,232.32
-                          </span>
-                        </td>
-                        <td className="text-center">
-                          <span className="fs-md">430,807.5 تومان</span>
-                        </td>
-                        <td className="text-center">
-                          <div className="table-crypto-changes">
-                            <span className="text-success fw-medium d-inline-block d-ltr">
-                              +2.5%
-                            </span>
-                            <img src={graphG} />
-                          </div>
-                        </td>
-                        <td className="text-start"></td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div className="table-crypto-title">
-                            <img src={ETH} alt="ETH" />
-                            <h6>اتریوم</h6>
-                            <span>ETH</span>
-                          </div>
-                        </td>
-                        <td className="text-center">
-                          <span className="d-inline-block d-ltr">
-                            $17,232.32
-                          </span>
-                        </td>
-                        <td className="text-center">
-                          <span className="fs-md">430,807.5 تومان</span>
-                        </td>
-                        <td className="text-center">
-                          <div className="table-crypto-changes">
-                            <span className="text-danger fw-medium d-inline-block d-ltr">
-                              -2.3%
-                            </span>
-                            <img src={graphR} />
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div className="table-crypto-title">
-                            <img src={LTC} alt="LTC" />
-                            <h6>لایت کوین</h6>
-                            <span>LTC</span>
-                          </div>
-                        </td>
-                        <td className="text-center">
-                          <span className="d-inline-block d-ltr">
-                            $17,232.32
-                          </span>
-                        </td>
-                        <td className="text-center">
-                          <span className="fs-md">430,807.5 تومان</span>
-                        </td>
-                        <td className="text-center">
-                          <div className="table-crypto-changes">
-                            <span className="text-danger fw-medium d-inline-block d-ltr">
-                              -2.3%
-                            </span>
-                            <img src={graphR} />
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div className="table-crypto-title">
-                            <img src={shib} alt="Shib" />
-                            <h6>شیبا</h6>
-                            <span>SHIB</span>
-                          </div>
-                        </td>
-                        <td className="text-center">
-                          <span className="d-inline-block d-ltr">
-                            $17,232.32
-                          </span>
-                        </td>
-                        <td className="text-center">
-                          <span className="fs-md">430,807.5 تومان</span>
-                        </td>
-                        <td className="text-center">
-                          <div className="table-crypto-changes">
-                            <span className="text-success fw-medium d-inline-block d-ltr">
-                              +2.5%
-                            </span>
-                            <img src={graphG} />
-                          </div>
-                        </td>
-                      </tr> */}
                     </tbody>
                   </table>
                 </div>
@@ -1037,7 +824,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="section-more">
-              <a href="#">
+              <a href="/coins">
                 دیدن همه
                 <span className="icon">
                   <svg
