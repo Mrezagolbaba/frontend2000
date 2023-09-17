@@ -112,7 +112,30 @@
         0 263px,
         0 0;
     }
+    .header-hamburger button .icon svg {
+      path,
+      circle {
+        stroke: #fff;
+      }
 
+      circle {
+        stroke-opacity: 0.4;
+      }
+    }
+  }
+  &.header--landing--mobile {
+    height: 862px;
+    background: {
+      image:url("../../../assets/img/lay/header-pattern.png"),
+        url("../../../assets/img/lay/header-bg-2.png");
+      repeat: no-repeat;
+      size:
+        1173px 520px,
+        100% 862px;
+      position:
+        0 263px,
+        0 0;
+    }
     .header-hamburger button .icon svg {
       path,
       circle {
