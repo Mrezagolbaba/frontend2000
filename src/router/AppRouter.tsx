@@ -29,6 +29,7 @@ import Information from "pages/auth/information";
 import Market from "pages/market";
 import CoinPage from "pages/coins";
 import request from "services/adapter";
+import CoinPage from "pages/coins";
 
 const AppRouter: React.FC = () => {
   // const [showAddToHomeSheet, setShowAddToHomeSheet] = useState(isMobile && !window.matchMedia('(display-mode: standalone)').matches);
