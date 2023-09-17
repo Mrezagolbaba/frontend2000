@@ -1,0 +1,22 @@
+.auth-card {
+  width: 100%;
+  max-width: 517px;
+  min-height: 670px;
+  margin: 0 auto;
+  box-shadow: 0 4px 34px rgba(0, 0, 0, 0.04);
+  .card-body {
+    padding: 25px 100px;
+  }
+}
+
+.phone-number-input {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.select-country-input.dropdown.bootstrap-select.bs-select-control
+  > .ant-select-selector {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 0;
+}

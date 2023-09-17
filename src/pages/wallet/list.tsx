@@ -1,6 +1,10 @@
+import { IResourceComponentsProps } from "@refinedev/core";
+import { MuiListInferencer } from "@refinedev/inferencer/mui";
 import Layout from "layouts/dashboard";
+import React from 'react';
+import { useEffect, useState } from 'react';
 
-const Wallet: React.FC = () => {
+export const WalletList: React.FC = () => {
   return (
     <Layout>
       <section className="page page-wallet">
@@ -1043,4 +1047,3 @@ const Wallet: React.FC = () => {
     </Layout>
   );
 };
-export default Wallet;

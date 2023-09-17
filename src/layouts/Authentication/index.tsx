@@ -3,6 +3,8 @@ import { ReactNode } from "react";
 import logo from "assets/img/logo-arsonex.png";
 import { Link } from "react-router-dom";
 
+import "./style.scss"
+
 type Props = {
   children: ReactNode;
 };

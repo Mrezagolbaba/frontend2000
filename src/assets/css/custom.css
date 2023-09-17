@@ -4,10 +4,10 @@
     background-repeat: no-repeat;
     background-position: center;
 }
-.soon
+/* .soon
 {
 background-color: #cccccc !important;
-}
+} */
 
 #copyTarget1 {font-size: 13px;}
 
@@ -259,17 +259,17 @@ a.list-group-item, .list-group-item-action {
 
 
 
-.comment {
+/* .comment {
     display: block;
     position: relative;
     margin-bottom: 30px;
     padding-left: 66px
-}
+} */
 
 
 
 
-.comment .comment-body {
+/* .comment .comment-body {
     position: relative;
     padding: 24px;
     border: 1px solid #e1e7ec;
@@ -300,7 +300,7 @@ a.list-group-item, .list-group-item-action {
     border-width: 10px;
     border-color: transparent;
     border-right-color: #e1e7ec
-}
+} */
 
 .comment .comment-title {
     margin-bottom: 8px;

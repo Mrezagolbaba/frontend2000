@@ -1,4 +1,9 @@
 import React, { lazy } from "react"; //  { useState }
+
+import { Refine } from "@refinedev/core";
+import dataProvider from "@refinedev/simple-rest";
+import routerProvider from "@refinedev/react-router-v6";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import LoginPage from "pages/auth/signin";
@@ -6,9 +11,11 @@ import SignupPage from "pages/auth/signup";
 import OtpEmail from "pages/auth/otp/OtpEmail";
 import OtpMobile from "pages/auth/otp/OtpMobile";
 import Forget from "pages/auth/forget";
+
+import HomePage from "pages/Home";
 import Dashboard from "pages/dashboard";
-import Wallet from "pages/wallet";
-import Transactions from "pages/transactions";
+import { WalletList } from "pages/wallet";
+import { TransactionList } from "pages/transactions";
 import Setting from "pages/setting";
 import Orders from "pages/orders";
 import Notifications from "pages/notifications";
@@ -20,7 +27,7 @@ import Support from "pages/support";
 import BuySell from "pages/buySell";
 import Information from "pages/auth/information";
 import Market from "pages/market";
-
+import request from "services/adapter";
 
 const AppRouter: React.FC = () => {
   // const [showAddToHomeSheet, setShowAddToHomeSheet] = useState(isMobile && !window.matchMedia('(display-mode: standalone)').matches);
@@ -29,8 +36,42 @@ const AppRouter: React.FC = () => {
   //   setShowAddToHomeSheet(false);
   // };
   const user = true;
+
   return (
     <Router>
+      <Refine
+        dataProvider={dataProvider(
+          process.env.REACT_APP_BASE_URL as string,
+          request as any
+        )}
+        routerProvider={routerProvider}
+        resources={[
+          {
+            name: "wallets",
+            list: "/wallets",
+            create: "/wallets/create",
+          },
+          {
+            name: "transactions",
+            list: "/transactions",
+            create: "/wallets/create",
+          },
+        ]}
+      >
+        <Routes>
+          <Route path="wallets">
+            <Route index element={<WalletList />} />
+            {/* <Route path="create" element={<Wallet />} /> */}
+          </Route>
+          <Route path="transactions">
+            <Route index element={<TransactionList />} />
+          </Route>
+          {/* <Route path="categories">
+            <Route index element={<Transactions />} />
+            <Route path="show/:id" element={<Transactions />} />
+          </Route> */}
+        </Routes>
+      </Refine>
       <Routes>
         {/* Define your routes */}
         <Route path="/login" element={<LoginPage />} />
@@ -38,18 +79,19 @@ const AppRouter: React.FC = () => {
         <Route path="/email-otp" element={<OtpEmail />} />
         <Route path="/mobile-otp" element={<OtpMobile />} />
         <Route path="/forget" element={<Forget />} />
+        <Route path="/" element={<HomePage />} />
         <Route
-          path="/"
+          path="/dashboard"
           element={<ProtectedRoute children={<Dashboard />} user={user} />}
         />
-        <Route
+        {/* <Route
           path="/wallet"
           element={<ProtectedRoute children={<Wallet />} user={user} />}
         />
         <Route
           path="/transactions/:id"
           element={<ProtectedRoute children={<Transactions />} user={user} />}
-        />
+        /> */}
         <Route
           path="/setting"
           element={<ProtectedRoute children={<Setting />} user={user} />}

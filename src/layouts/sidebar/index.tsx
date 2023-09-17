@@ -9,7 +9,6 @@ import React, { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { Menu } from "antd";
 
-
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onSidebarToggle }) => {
   const [activeItem, setActiveItem] = useState("");
 
@@ -58,8 +57,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onSidebarToggle }) => {
   const renderItem = (item: any) => (
     <div
       key={item.path}
-      className={`navbar__item ${activeItem === item.path ? "navbar__item--active" : ""
-        }`}
+      className={`navbar__item ${
+        activeItem === item.path ? "navbar__item--active" : ""
+      }`}
     >
       <Link to={item.path}>
         <span className="icon">{item.icon}</span>
@@ -75,11 +75,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onSidebarToggle }) => {
       defaultSelectedKeys={["0"]}
       defaultOpenKeys={["sub1"]}
       mode="inline"
-      style={
-        window.screen.width < 768
-          ? { width: 256, position: "sticky", top: 0 }
-          : { width: 256, top: 0 }
-      }
+      style={{ width: 256, top: 0 }}
       selectedKeys={[activeItem]}
     >
       <div className="sidebar__header">

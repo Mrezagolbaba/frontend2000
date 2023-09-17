@@ -1,14 +1,19 @@
 import Layout from "layouts/dashboard";
+import { useList } from "@refinedev/core";
+import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 
-const Transactions = () => {
+export const TransactionList = () => {
+  const { data, isSuccess, isError, isLoading } = useList({
+    resource: "transactions",
+  });
   return (
     <Layout>
       <section className="page page-wallet">
-        <div className="card card-secondary mb-4">
-          <div className="card-header">
-            <h5 className="card-title">موجودی تومانی</h5>
-          </div>
-          <div className="card-body">
+        <Card className="card-secondary mb-4">
+          <CardHeader>
+            <CardTitle tag="h5">موجودی تومانی</CardTitle>
+          </CardHeader>
+          <CardBody>
             <div className="wallet-balance">
               <div className="wallet-balance__value">
                 <strong className="d-inline-block d-ltr">
@@ -35,14 +40,14 @@ const Transactions = () => {
                 </a>
               </div>
             </div>
-          </div>
-        </div>
+          </CardBody>
+        </Card>
 
-        <div className="card card-secondary mb-4">
-          <div className="card-header">
-            <h5 className="card-title">موجودی رمز ارز و فیات</h5>
-          </div>
-          <div className="card-body">
+        <Card className="card-secondary mb-4">
+          <CardHeader>
+            <CardTitle tag="h5">موجودی رمز ارز و فیات</CardTitle>
+          </CardHeader>
+          <CardBody>
             <div className="table-responsive">
               <table className="table-modern crypto-balance-table">
                 <thead>
@@ -127,11 +132,11 @@ const Transactions = () => {
                 </tbody>
               </table>
             </div>
-          </div>
-        </div>
+          </CardBody>
+        </Card>
 
-        <div className="card">
-          <div className="card-body">
+        <Card>
+          <CardBody>
             <div className="nav-tabs-wrapper">
               <ul className="nav nav-tabs" id="myTab" role="tablist">
                 <li className="nav-item" role="presentation">
@@ -658,8 +663,8 @@ const Transactions = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </CardBody>
+        </Card>
 
         <div
           className="modal fade"
@@ -1043,4 +1048,3 @@ const Transactions = () => {
     </Layout>
   );
 };
-export default Transactions;

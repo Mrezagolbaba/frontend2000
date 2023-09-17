@@ -1,0 +1,51 @@
+.video-auth
+    margin: 10px 0
+
+    &>.timer
+        direction: ltr
+        margin-top: 10px
+        display: flex
+
+.video-container
+    display: flex
+    border-radius: 50%
+    width: 350px
+    height: 350px
+    overflow: hidden
+    margin: 20px auto
+    video
+        transform: scale(1.4)
+
+    .empty-video
+        background-color: #bae7ff
+        width: 350px
+        height: 350px
+        display: flex
+        align-items: center
+        justify-content: center
+        font-size: 5.5rem
+        color: #ffffff
+
+.action-bar
+    display: flex
+    flex-direction: row
+    justify-content: center
+
+    button
+        margin: auto 4px
+
+    &>.record-button
+        color: #389e0d
+        border-color: #389e0d
+
+        &:hover
+            color: #52c41a !important
+            border-color: #52c41a !important
+
+    &>.delete-button
+        color: #f5222d
+        border-color: #f5222d
+
+        &:hover
+            color: #ff4d4f !important
+            border-color: #ff4d4f !important

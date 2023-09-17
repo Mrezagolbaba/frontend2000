@@ -1,19 +1,25 @@
-//@ts-ignore
 import Layout from "layouts/dashboard";
-import User from "assets/img/user/level-gold.png";
-import Bronz from "assets/img/user/level-bronze.png";
-import Silver from "assets/img/user/level-silver.png";
-import Platinum from "assets/img/user/level-platinum.png";
-import Uranium from "assets/img/user/level-uranium.png";
-import Gold from "assets/img/user/level-gold.png";
-import Edit from "assets/img/icons/edit.svg";
-import Calendar from "assets/img/icons/calendar2.svg";
+import User from "assets/img/icons/user.png";
+
+import chart from "assets/img/chart-img.png";
+
 import T from "assets/img/coins/tether.png";
 import Turkey from "assets/img/icons/flag-turkey.png";
-import { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
-import { BsCheck2 } from "react-icons/bs";
+
+import { BsCalendar2Event, BsCheck2 } from "react-icons/bs";
 // import CurrencyInput from "../../components/currencyInput";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Col,
+  Row,
+} from "reactstrap";
+import { CiEdit } from "react-icons/ci";
+
+import "./style.scss";
 const dataArray = [
   { value: "0.00256", number: "45،154", time: "11:30" },
   { value: "0.00256", number: "45،154", time: "11:30" },
@@ -55,229 +61,141 @@ const Dashboard: React.FC = () => {
   };
   return (
     <Layout>
-      <section className="mb-4">
-        <div className="card user-summary">
-          <div className="card-body">
-            <ul>
-              <li className="user-summary-avatar">
+      <section className="mb-3">
+        <Card className="custom-card user-summary">
+          <CardBody>
+            <Row className="align-items-start">
+              <Col
+                xs={12}
+                sm={1}
+                className="user-summary__section user-summary-avatar"
+              >
                 <img src={User} alt="" className="avatar" />
-              </li>
-              <li className="user-summary-edit">
+              </Col>
+              <Col
+                xs={12}
+                sm={2}
+                className="user-summary__section user-summary-edit"
+              >
                 <h6> بهزاد بابایی</h6>
-                <a href="/profile" className="btn btn-transparent">
-                  <span className="icon">
-                    <img src={Edit} alt="" />
-                  </span>
+                <Button
+                  className="profile-btn"
+                  outline
+                  color="secondary"
+                  href="/profile"
+                >
+                  <CiEdit />
                   پروفایل کاربری
-                </a>
-              </li>
-              <li className="user-summary-lastseen">
+                </Button>
+              </Col>
+              <Col
+                xs={12}
+                sm={2}
+                className="user-summary__section user-summary-lastseen"
+              >
                 <h6>آخرین ورود</h6>
                 <div className="user-summary-date">
-                  <span className="icon">
-                    <img src={Calendar} alt="" />
-                  </span>
+                  <BsCalendar2Event />
                   دوشنبه، 22 آبان 1401
                 </div>
-              </li>
-              <li className="user-summary-level">
-                <h6>سطح کاربری شما</h6>
-                <div>
-                  <img src={Gold} alt="" />
-                  <span>برنزی</span>
-                  <a href="#">ارتقا سطح</a>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+              </Col>
+            </Row>
+          </CardBody>
+        </Card>
       </section>
 
       <section className="mb-4">
-        <div className="card auth-jumbotron">
-          <div className="card-header">
-            <h5 className="card-title">احراز هویت</h5>
-          </div>
-          <div className="card-body">
-            <div className="row g-4">
-              <div className="col-xxl-6">
-                <div className="auth-jumbotron-summary auth-jumbotron-summary--first">
+        <Card className="custom-card  auth-jumbotron">
+          <CardHeader>
+            <CardTitle tag="h5">احراز هویت</CardTitle>
+          </CardHeader>
+          <CardBody>
+            <Row className="g-4">
+              <Col xxl={6}>
+                <div className="auth-jumbotron__summary">
                   <p>
                     برای استفاده کامل و بدون محدودیت از آرسونیکس باید فرایند
                     احراز هویت را تکمیل کنید، زمان بررسی و تایید اطلاعات ۱ ساعت
                     &zwnj;می&zwnj;باشد.{" "}
                   </p>
-                  <a href="#" className="btn btn-outline-primary">
+                  <Button outline color="primary">
                     شروع احراز هویت
-                  </a>
+                  </Button>
                 </div>
-              </div>
-              <div className="col-xxl-3 col-md-6">
-                <ul className="auth-jumbotron-advantages">
+              </Col>
+              <Col xxl={3} md={6}>
+                <ul className="auth-jumbotron__advantages">
                   <li>
-                    <h5 className="">احراز هویت سطح یک</h5>
+                    <h5>احراز هویت سطح یک</h5>
                   </li>
                   <li>
-                    <span className="icon">
-                      <BsCheck2 size={50} color={"#55cd51"} />
-                    </span>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
                     ﻭﺍﺭﯾﺰ و برداشت تومانی ﺭﻭﺯﺍﻧﻪ:
                     <strong>۱ میلیون تومان</strong>
                   </li>
                   <li>
-                    <span className="icon">
-                      <svg
-                        width="12"
-                        height="10"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4.00006 7.80007L1.20006 5.00006L0.266724 5.9334L4.00006 9.66673L12.0001 1.66673L11.0667 0.733398L4.00006 7.80007Z"
-                          fill="#0ED039"
-                        ></path>
-                      </svg>
-                    </span>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
                     واریز و برداشت فیات روزانه: <strong>معادل ۵۰۰ دلار</strong>
                   </li>
                   <li>
-                    <span className="icon">
-                      <svg
-                        width="12"
-                        height="10"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4.00006 7.80007L1.20006 5.00006L0.266724 5.9334L4.00006 9.66673L12.0001 1.66673L11.0667 0.733398L4.00006 7.80007Z"
-                          fill="#0ED039"
-                        ></path>
-                      </svg>
-                    </span>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
                     واریز رمزارز ﺭﻭﺯﺍﻧﻪ:
                     <strong>نامحدود</strong>
                   </li>
                   <li>
-                    <span className="icon">
-                      <svg
-                        width="12"
-                        height="10"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4.00006 7.80007L1.20006 5.00006L0.266724 5.9334L4.00006 9.66673L12.0001 1.66673L11.0667 0.733398L4.00006 7.80007Z"
-                          fill="#0ED039"
-                        ></path>
-                      </svg>
-                    </span>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
                     برداشت رمزارز ﺭﻭﺯﺍﻧﻪ:
                     <strong>نامحدود</strong>
                   </li>
                 </ul>
-              </div>
-              <div className="col-xxl-3 col-md-6">
-                <ul className="auth-jumbotron-advantages">
+              </Col>
+              <Col xxl={3} md={6}>
+                <ul className="auth-jumbotron__advantages">
                   <li>
                     <h5>احراز هویت سطح دو</h5>
                   </li>
                   <li>
-                    <span className="icon">
-                      <svg
-                        width="12"
-                        height="10"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4.00006 7.80007L1.20006 5.00006L0.266724 5.9334L4.00006 9.66673L12.0001 1.66673L11.0667 0.733398L4.00006 7.80007Z"
-                          fill="#0ED039"
-                        ></path>
-                      </svg>
-                    </span>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
                     ﻭﺍﺭﯾﺰ و برداشت ﺗﻮﻣﺎنی ﺭﻭﺯﺍﻧﻪ:
                     <strong>۱۰۰ میلیون تومان - ۱ میلیارد تومان</strong>
                   </li>
                   <li>
-                    <span className="icon">
-                      <svg
-                        width="12"
-                        height="10"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4.00006 7.80007L1.20006 5.00006L0.266724 5.9334L4.00006 9.66673L12.0001 1.66673L11.0667 0.733398L4.00006 7.80007Z"
-                          fill="#0ED039"
-                        ></path>
-                      </svg>
-                    </span>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
                     ﻭﺍﺭﯾﺰ و برداشت فیات ﺭﻭﺯﺍﻧﻪ:
                     <strong>معادل ۳۵ هزار دلار </strong>
                   </li>
                   <li>
-                    <span className="icon">
-                      <svg
-                        width="12"
-                        height="10"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4.00006 7.80007L1.20006 5.00006L0.266724 5.9334L4.00006 9.66673L12.0001 1.66673L11.0667 0.733398L4.00006 7.80007Z"
-                          fill="#0ED039"
-                        ></path>
-                      </svg>
-                    </span>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
                     واریز رمزارز ﺭﻭﺯﺍﻧﻪ:
                     <strong>نامحدود</strong>
                   </li>
                   <li>
-                    <span className="icon">
-                      <svg
-                        width="12"
-                        height="10"
-                        viewBox="0 0 12 10"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4.00006 7.80007L1.20006 5.00006L0.266724 5.9334L4.00006 9.66673L12.0001 1.66673L11.0667 0.733398L4.00006 7.80007Z"
-                          fill="#0ED039"
-                        ></path>
-                      </svg>
-                    </span>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
                     برداشت رمزارز ﺭﻭﺯﺍﻧﻪ:
                     <strong>نامحدود</strong>
                   </li>
                 </ul>
-              </div>
-              <div className="col-12">
-                <div className="auth-jumbotron-summary">
+              </Col>
+              <Col xl={12} className="d-none">
+                <div className="auth-jumbotron__summary">
                   <a href="#" className="btn btn-outline-primary">
                     شروع احراز هویت
                   </a>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
+              </Col>
+            </Row>
+          </CardBody>
+        </Card>
       </section>
 
       <section className="mb-4">
-        <div className="row g-4">
-          <div className="col-xxl-7 col-xl-6">
-            <div className="card currency-exchange card--h100pc card-secondary">
-              <div className="card-header">
-                <h5 className="card-title">خرید و فروش</h5>
-              </div>
-              <div className="card-body">
+        <Row className="g-4">
+          <Col xxl={7} xl={6}>
+            <Card className="custom-card currency-exchange card--h100pc card-secondary">
+              <CardHeader>
+                <CardTitle tag="h5">خرید و فروش</CardTitle>
+              </CardHeader>
+              <CardBody>
                 <form action="">
                   <div className="currency-exchange__controls">
                     <div className="currency-exchange__control-group">
@@ -335,40 +253,106 @@ const Dashboard: React.FC = () => {
                     </button>
                   </div>
                 </form>
-              </div>
-            </div>
-          </div>
-          <div className="col-xxl-5 col-xl-6">
-            <div className="card wallet-card card--h100pc card-secondary">
-              <div className="card-header">
-                <h5 className="card-title">کیف پول</h5>
-              </div>
-              <div className="card-body">
-                <div className="wallet">
-                  <div className="wallet-value">
-                    ارزش کل کیف پول
-                    <strong className="d-inline-block d-ltr">
-                      893,548,200
-                      <small>IRT</small>
-                    </strong>
-                  </div>
-                  <div className="wallet-chart">
-                    <ul className="wallet-chart-legends"></ul>
-                    <div id="walletChart"></div>
-                  </div>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col xxl={5} xl={6}>
+            <Card className="custom-card wallet-card card--h100pc card-secondary">
+              <CardHeader className="card-header-flex">
+                <CardTitle tag="h5">کیف پول</CardTitle>
+                <div className="card-action">
+                  <Button href="#">مشاهده کیف پول</Button>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
+              </CardHeader>
+              <CardBody>
+                <Row className="g-4">
+                  <Col xxl={9} md={6}>
+                    <Row className="g-2 mb-2">
+                      <Col sm={3} xxl={6} className="col-6">
+                        <div className="box-wallet usdt-box">
+                          <div className="dot-wallet usdt-show"></div>
+                          <span className="name-currency-wallet">تتر</span>
+                          <span className="now-wallet-show">USDT 1,244</span>
+                        </div>
+                      </Col>
+                      <Col sm={3} xxl={6} className="col-6">
+                        <div className="box-wallet tl-box">
+                          <div className="dot-wallet tl-show"></div>
+                          <span className="name-currency-wallet">لیر</span>
+                          <span className="now-wallet-show">TL 2,656,01</span>
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row className="g-2 mb-2">
+                      <Col sm={3} xxl={6} className="col-6">
+                        <div className="box-wallet aed-box">
+                          <div className="dot-wallet aed-show"></div>
+                          <span className="name-currency-wallet">درهم</span>
+                          <span className="now-wallet-show">AED 1,345,07</span>
+                        </div>
+                      </Col>
+                      <Col sm={3} xxl={6} className="col-6">
+                        <div className="box-wallet usd-box">
+                          <div className="dot-wallet usd-show"></div>
+                          <span className="name-currency-wallet">دلار</span>
+                          <span className="now-wallet-show">USD 243</span>
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row className="g-2 mb-2">
+                      <Col sm={3} xxl={6} className="col-6">
+                        <div className="box-wallet gbp-box">
+                          <div className="dot-wallet gbp-show"></div>
+                          <span className="name-currency-wallet">پوند</span>
+                          <span className="now-wallet-show">GBP 3,421</span>
+                        </div>
+                      </Col>
+                      <Col sm={3} xxl={6} className="col-6">
+                        <div className="box-wallet eur-box">
+                          <div className="dot-wallet eur-show"></div>
+                          <span className="name-currency-wallet">یورو </span>
+                          <span className="now-wallet-show">EUR 789</span>
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row className="g-2 mt-2">
+                      <Col sm={6} className="mx-auto">
+                        <div className="full-toman">
+                          <span className="toman-text">
+                            دارایی شما به تومان:
+                          </span>
+                          <span className="toman-number">۱،۵۴۳،۰۶۹،۳۲۱</span>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col xxl={3} md={6}>
+                    <Row className="g-2 mb-2">
+                      <Col sm={3} xxl={6} className="col-6">
+                        <img
+                          src={chart}
+                          alt=""
+                          className="wallet-img-chart mt-4"
+                        />
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
       </section>
 
-      <section className="">
-        <div className="card currencies-online-rates card-secondary">
-          <div className="card-header">
-            <h5 className="card-title">بازارهای معاملاتی</h5>
-          </div>
-          <div className="card-body">
+      <section className="mb-4">
+        <Card className="custom-card currencies-online-rates card-secondary">
+          <CardHeader className="card-header-flex">
+            <CardTitle tag="h5">بازارهای معاملاتی</CardTitle>
+            <div className="card-action">
+              <Button href="#">مشاهده تمام بازارها</Button>
+            </div>
+          </CardHeader>
+          <CardBody>
             <div className="table-responsive">
               <table className="table-modern">
                 <thead>
@@ -486,11 +470,11 @@ const Dashboard: React.FC = () => {
                 </tbody>
               </table>{" "}
             </div>
-          </div>
-        </div>
+          </CardBody>
+        </Card>
       </section>
 
-      <section className="mb-4 mt-4">
+      {/* <section className="mb-4 mt-4">
         <div className="slide features-slider">
           <div className="">
             {/* <Slider {...settings}>
@@ -554,19 +538,19 @@ const Dashboard: React.FC = () => {
                   </h5>
                 </div>
               </div>
-            </Slider> */}
+            </Slider>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      <section className="mb-4">
-        <div className="row g-4">
-          <div className="col-xxl-7 col-xl-6">
-            <div className="card market-transactions card--h100pc card-secondary coming">
-              <div className="card-header soon">
-                <h5 className="card-title">معاملات در بازار</h5>
-              </div>
-              <div className="card-body">
+      {/* <section className="mb-4">
+        <Row className="g-4">
+          <Col xxl={7} xl={6}>
+            <Card className="custom-card market-transactions card--h100pc card-secondary coming">
+              <CardHeader className="soon">
+                <CardTitle tag="h5">معاملات در بازار</CardTitle>
+              </CardHeader>
+              <CardBody>
                 <div className="slide crypto-slider">
                   <div className="owl-carousel owl-theme">
                     <div data-dot="<button>1</button>" className="crypto-item">
@@ -635,13 +619,13 @@ const Dashboard: React.FC = () => {
                     <div className="crypto-slider-dots"></div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-xxl-5 col-xl-6">
-            <div className="card card--h100pc card-secondary">
-              <div className="card-header card-header-flex">
-                <h5 className="card-title"> تراکنش‌های اخیر</h5>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col xxl={5} xl={6}>
+            <Card className="custom-card card--h100pc card-secondary">
+              <CardHeader className="card-header-flex">
+                <CardTitle tag="h5"> تراکنش‌های اخیر</CardTitle>
                 <select
                   name=""
                   className="bs-select-control bs-select-dropdown"
@@ -649,8 +633,8 @@ const Dashboard: React.FC = () => {
                   <option value="3">لیر به ریال</option>
                   <option value="1">تتر به لیر</option>
                 </select>
-              </div>
-              <div className="card-body">
+              </CardHeader>
+              <CardBody>
                 <div className="table-responsive">
                   <table className="table-modern table-modern--compact">
                     <thead>
@@ -701,10 +685,10 @@ const Dashboard: React.FC = () => {
                     </tbody>
                   </table>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
       </section>
 
       <section className="mb-4">
@@ -780,7 +764,7 @@ const Dashboard: React.FC = () => {
                   <li className="progress-cup progress-cup--gold progress-cup--current">
                     <div className="progress-cup-img">
                       <span>برنزی</span>
-                      {/* <img src={Level} alt="" /> */}
+                      {/* <img src={Level} alt="" /> 
                     </div>
                     <div className="progress-cup-wage"> </div>
                   </li>
@@ -833,7 +817,7 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </Layout>
   );
 };

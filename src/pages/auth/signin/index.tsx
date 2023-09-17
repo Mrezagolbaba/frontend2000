@@ -15,6 +15,8 @@ import FloatInput from "components/Input/FloatInput";
 import PasswordInput from "components/PasswordInput";
 import SelectCountry from "components/SelectCountry";
 
+import "pages/auth/style.scss";
+
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const loginMutation = useLogin();
@@ -81,7 +83,7 @@ const LoginPage: React.FC = () => {
             <p className="auth-text"> شماره تلفن خود را وارد کنید</p>
 
             <form
-              className="auth-form"
+              className="auth-form container"
               onSubmit={handleSubmit(handleLogin, handleErrors)}
             >
               <div className="container">
@@ -131,33 +133,33 @@ const LoginPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-12">
-                    <div className="auth-footer">
-                      <div className="mb-3">
-                        <button
-                          type="submit"
-                          className="btn btn-primary auth-submit"
-                        >
-                          {isLoading ? (
-                            <Spin style={{ color: "white" }} />
-                          ) : (
-                            "ورود به حساب"
-                          )}
-                        </button>
-                        <button
-                          type="submit"
-                          className="btn btn-outline-primary auth-submit mt-3"
-                        >
-                          ورود با استفاده از ایمیل
-                        </button>
-                      </div>
-                      <div
-                        className="auth-already"
-                        style={{ wordSpacing: "1px" }}
+              </div>
+              <div className="row">
+                <div className="col-12">
+                  <div className="auth-footer">
+                    <div className="mb-3">
+                      <button
+                        type="submit"
+                        className="btn btn-primary auth-submit"
                       >
-                        عضو نیستم: <Link to="/register">ثبت نام</Link>
-                      </div>
+                        {isLoading ? (
+                          <Spin style={{ color: "white" }} />
+                        ) : (
+                          "ورود به حساب"
+                        )}
+                      </button>
+                      <button
+                        type="submit"
+                        className="btn btn-outline-primary auth-submit mt-3"
+                      >
+                        ورود با استفاده از ایمیل
+                      </button>
+                    </div>
+                    <div
+                      className="auth-already"
+                      style={{ wordSpacing: "1px" }}
+                    >
+                      عضو نیستم: <Link to="/register">ثبت نام</Link>
                     </div>
                   </div>
                 </div>
