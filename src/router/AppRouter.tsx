@@ -37,7 +37,6 @@ const AppRouter: React.FC = () => {
   //   setShowAddToHomeSheet(false);
   // };
   const user = true;
-  console.log(process.env);
 
   return (
     <Router>
