@@ -10,7 +10,9 @@ import "slick-carousel/slick/slick-theme.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import App from "./App.tsx";
+import { Provider } from 'react-redux'
 import * as Sentry from "@sentry/react";
+import { store } from "redux/store.ts";
 Sentry.init({
   dsn: "https://471c3edaafc4ceda011aec9a5263fc88@o208701.ingest.sentry.io/4505642858119168",
   integrations: [
@@ -33,8 +35,12 @@ Sentry.init({
   autoSessionTracking: true,
 });
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
+
   </React.StrictMode>
 );
 serviceWorkerRegistration.register();
