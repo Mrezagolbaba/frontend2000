@@ -1,8 +1,12 @@
 import Layout from "layouts/dashboard";
 import ImageFrame from "assets/img/image-frame.png";
 import AuthSection from "./AuthSection";
-
+import { useAppSelector } from "redux/hooks";
+import { Button, Col, FormGroup, Input, InputGroup, Label, Row } from 'reactstrap'
+import { AiOutlineEdit } from "react-icons/ai";
 const Profile = () => {
+  const user = useAppSelector(state => state.user)
+  const { firstName, lastName, nationalId, birthDate } = user;
   return (
     <Layout>
       <section className="page page-profile">
@@ -34,361 +38,82 @@ const Profile = () => {
 
             <form action="" className="">
               <div className="row justify-content-center">
-                <div className="col-lg-6 col-xl-5">
-                  <div className="row mb-2">
-                    <label className="col-lg-4 col-form-label text-end text-lg-start">
-                      نام:
-                    </label>
-                    <div className="col-lg-8">
-                      <div className="self-edit self-edit--editing">
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="input1"
-                          placeholder="نام را وارد کنید"
-                        />
-                        <div className="self-edit-actions">
-                          <button type="button" className="self-edit-cancel">
-                            <span className="icon">
-                              <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 14 14"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M13 1L1 13"
-                                  stroke="#03041B"
-                                  strokeWidth="1.5"
-                                  strokeOpacity=".4"
-                                  strokeLinecap="round"
-                                ></path>
-                                <path
-                                  d="M13 13L1 0.999999"
-                                  stroke="#03041B"
-                                  strokeWidth="1.5"
-                                  strokeOpacity=".4"
-                                  strokeLinecap="round"
-                                ></path>
-                              </svg>
-                            </span>
-                          </button>
-                          <button type="button" className="self-edit-confirm">
-                            <span className="icon">
-                              <svg
-                                width="12"
-                                height="10"
-                                viewBox="0 0 12 10"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M4.00006 7.80007L1.20006 5.00006L0.266724 5.9334L4.00006 9.66673L12.0001 1.66673L11.0667 0.733398L4.00006 7.80007Z"
-                                  fill="#0ED039"
-                                ></path>
-                              </svg>
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-6 col-xl-5">
-                  <div className="row mb-2">
-                    <label className="col-lg-4 col-form-label text-end text-lg-start">
-                      نام خانوادگی:
-                    </label>
-                    <div className="col-lg-8">
-                      <div className="self-edit">
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="input2"
-                          placeholder="نام خانوادگی را وارد کنید"
-                        />
-                        <div className="self-edit-actions">
-                          <button type="button" className="self-edit-pen">
-                            <span className="icon">
-                              <svg
-                                width="13"
-                                height="14"
-                                viewBox="0 0 13 14"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  clipRule="evenodd"
-                                  d="M7.64116 1.7167C8.19391 1.01245 9.08716 1.0492 9.79216 1.60195L10.8347 2.41945C11.5397 2.9722 11.7894 3.82945 11.2367 4.5352L5.01991 12.4665C4.81216 12.732 4.49491 12.8887 4.15741 12.8925L1.75966 12.9232L1.21666 10.587C1.14016 10.2592 1.21666 9.9142 1.42441 9.64795L7.64116 1.7167Z"
-                                  stroke="#03041B"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeOpacity=".4"
-                                  strokeLinejoin="round"
-                                ></path>
-                                <path
-                                  d="M6.47693 3.20215L10.0724 6.02065"
-                                  stroke="#03041B"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeOpacity=".4"
-                                  strokeLinejoin="round"
-                                ></path>
-                              </svg>
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-6 col-xl-5">
-                  <div className="row mb-2">
-                    <label className="col-lg-4 col-form-label text-end text-lg-start">
-                      کدملی:
-                    </label>
-                    <div className="col-lg-8">
-                      <div className="self-edit">
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="input3"
-                          placeholder="کدملی را وارد کنید"
-                        />
-                        <div className="self-edit-actions">
-                          <button type="button" className="self-edit-pen">
-                            <span className="icon">
-                              <svg
-                                width="13"
-                                height="14"
-                                viewBox="0 0 13 14"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  clipRule="evenodd"
-                                  d="M7.64116 1.7167C8.19391 1.01245 9.08716 1.0492 9.79216 1.60195L10.8347 2.41945C11.5397 2.9722 11.7894 3.82945 11.2367 4.5352L5.01991 12.4665C4.81216 12.732 4.49491 12.8887 4.15741 12.8925L1.75966 12.9232L1.21666 10.587C1.14016 10.2592 1.21666 9.9142 1.42441 9.64795L7.64116 1.7167Z"
-                                  stroke="#03041B"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeOpacity=".4"
-                                  strokeLinejoin="round"
-                                ></path>
-                                <path
-                                  d="M6.47693 3.20215L10.0724 6.02065"
-                                  stroke="#03041B"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeOpacity=".4"
-                                  strokeLinejoin="round"
-                                ></path>
-                              </svg>
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-6 col-xl-5">
-                  <div className="row mb-2">
-                    <label className="col-lg-4 col-form-label text-end text-lg-start">
-                      شماره ثابت:
-                    </label>
-                    <div className="col-lg-8">
-                      <div className="self-edit">
-                        <input
+                <Col lg={6} xl={5}>
+                  <Row className="mb-2">
+                    <Col lg={2} className="col-form-label text-end text-lg-end">
+                      <Label for="input1">نام:</Label>
+                    </Col>
+                    <Col lg={8} className=" bg-light bg-gradient">
+                      <span >{firstName}</span>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col lg={6} xl={5}>
+                  <Row className="mb-2">
+                    <Col lg={3} className="col-form-label text-end text-lg-end">
+                      <Label for="input2">نام خانوادگی:</Label>
+                    </Col>
+                    <Col lg={8} className=" bg-light bg-gradient">
+                      <span >{lastName}</span>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col lg={6} xl={5}>
+                  <Row className="mb-2">
+                    <Col lg={2} className="col-form-label text-end text-lg-end">
+                      <Label for="input1"> کدملی:</Label>
+                    </Col>
+                    <Col lg={8} className=" bg-light bg-gradient">
+                      <span >{nationalId}</span>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col lg={6} xl={5}>
+                  <Row className="mb-2">
+                    <Col lg={3} className="col-form-label text-end text-lg-end">
+                      <Label for="input1"> تاریخ تولد:</Label>
+                    </Col>
+                    <Col lg={8} className=" bg-light bg-gradient">
+                      <span >{birthDate}</span>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col lg={6} xl={5}>
+                  <Row className="mb-2">
+                    <Col lg={3} className="col-form-label text-end text-lg-end">
+                      <Label for="input2"> شماره ثابت:</Label>
+                    </Col>
+                    <Col lg={8}>
+                      <FormGroup className="d-flex align-items-center">
+                        <Input
                           type="text"
                           className="form-control"
                           id="input4"
                           placeholder="شماره ثابت را وارد کنید"
                         />
-                        <div className="self-edit-actions">
-                          <button type="button" className="self-edit-pen">
-                            <span className="icon">
-                              <svg
-                                width="13"
-                                height="14"
-                                viewBox="0 0 13 14"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  clipRule="evenodd"
-                                  d="M7.64116 1.7167C8.19391 1.01245 9.08716 1.0492 9.79216 1.60195L10.8347 2.41945C11.5397 2.9722 11.7894 3.82945 11.2367 4.5352L5.01991 12.4665C4.81216 12.732 4.49491 12.8887 4.15741 12.8925L1.75966 12.9232L1.21666 10.587C1.14016 10.2592 1.21666 9.9142 1.42441 9.64795L7.64116 1.7167Z"
-                                  stroke="#03041B"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeOpacity=".4"
-                                  strokeLinejoin="round"
-                                ></path>
-                                <path
-                                  d="M6.47693 3.20215L10.0724 6.02065"
-                                  stroke="#03041B"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeOpacity=".4"
-                                  strokeLinejoin="round"
-                                ></path>
-                              </svg>
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-6 col-xl-5">
-                  <div className="row mb-2">
-                    <label className="col-lg-4 col-form-label text-end text-lg-start">
-                      شماره موبایل:
-                    </label>
-                    <div className="col-lg-8">
-                      <div className="self-edit">
-                        <input
+                        <AiOutlineEdit size={20} />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col lg={6} xl={5}>
+                  <Row className="mb-2">
+                    <Col lg={4} className="col-form-label text-end text-lg-end">
+                      <Label for="input1">    شماره موبایل:</Label>
+                    </Col>
+                    <Col lg={8}>
+                      <FormGroup className="d-flex align-items-center">
+                        <Input
                           type="text"
                           className="form-control"
-                          id="input5"
+                          id="input4"
                           placeholder="شماره موبایل را وارد کنید"
                         />
-                        <div className="self-edit-actions">
-                          <button type="button" className="self-edit-pen">
-                            <span className="icon">
-                              <svg
-                                width="13"
-                                height="14"
-                                viewBox="0 0 13 14"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  clipRule="evenodd"
-                                  d="M7.64116 1.7167C8.19391 1.01245 9.08716 1.0492 9.79216 1.60195L10.8347 2.41945C11.5397 2.9722 11.7894 3.82945 11.2367 4.5352L5.01991 12.4665C4.81216 12.732 4.49491 12.8887 4.15741 12.8925L1.75966 12.9232L1.21666 10.587C1.14016 10.2592 1.21666 9.9142 1.42441 9.64795L7.64116 1.7167Z"
-                                  stroke="#03041B"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeOpacity=".4"
-                                  strokeLinejoin="round"
-                                ></path>
-                                <path
-                                  d="M6.47693 3.20215L10.0724 6.02065"
-                                  stroke="#03041B"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeOpacity=".4"
-                                  strokeLinejoin="round"
-                                ></path>
-                              </svg>
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-6 col-xl-5">
-                  <div className="row mb-2">
-                    <label className="col-lg-4 col-form-label text-end text-lg-start">
-                      تاریخ تولد:
-                    </label>
-                    <div className="col-lg-8">
-                      <div className="self-edit">
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="input6"
-                          placeholder="تاریخ تولد را وارد کنید"
-                        />
-                        <div className="self-edit-actions">
-                          <button type="button" className="self-edit-pen">
-                            <span className="icon">
-                              <svg
-                                width="13"
-                                height="14"
-                                viewBox="0 0 13 14"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  clipRule="evenodd"
-                                  d="M7.64116 1.7167C8.19391 1.01245 9.08716 1.0492 9.79216 1.60195L10.8347 2.41945C11.5397 2.9722 11.7894 3.82945 11.2367 4.5352L5.01991 12.4665C4.81216 12.732 4.49491 12.8887 4.15741 12.8925L1.75966 12.9232L1.21666 10.587C1.14016 10.2592 1.21666 9.9142 1.42441 9.64795L7.64116 1.7167Z"
-                                  stroke="#03041B"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeOpacity=".4"
-                                  strokeLinejoin="round"
-                                ></path>
-                                <path
-                                  d="M6.47693 3.20215L10.0724 6.02065"
-                                  stroke="#03041B"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeOpacity=".4"
-                                  strokeLinejoin="round"
-                                ></path>
-                              </svg>
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-12 col-xl-10">
-                  <div className="row">
-                    <label className="col-lg-2 col-form-label text-end text-lg-start">
-                      آدرس منزل:
-                    </label>
-                    <div className="col-lg-10">
-                      <div className="self-edit">
-                        <textarea
-                          name=""
-                          id="input7"
-                          className="form-control"
-                          placeholder="آدرس منزل را وارد کنید"
-                        ></textarea>
-                        <div className="self-edit-actions">
-                          <button type="button" className="self-edit-pen">
-                            <span className="icon">
-                              <svg
-                                width="13"
-                                height="14"
-                                viewBox="0 0 13 14"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  clipRule="evenodd"
-                                  d="M7.64116 1.7167C8.19391 1.01245 9.08716 1.0492 9.79216 1.60195L10.8347 2.41945C11.5397 2.9722 11.7894 3.82945 11.2367 4.5352L5.01991 12.4665C4.81216 12.732 4.49491 12.8887 4.15741 12.8925L1.75966 12.9232L1.21666 10.587C1.14016 10.2592 1.21666 9.9142 1.42441 9.64795L7.64116 1.7167Z"
-                                  stroke="#03041B"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeOpacity=".4"
-                                  strokeLinejoin="round"
-                                ></path>
-                                <path
-                                  d="M6.47693 3.20215L10.0724 6.02065"
-                                  stroke="#03041B"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeOpacity=".4"
-                                  strokeLinejoin="round"
-                                ></path>
-                              </svg>
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                        <AiOutlineEdit size={20} />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </Col>
               </div>
             </form>
           </div>
