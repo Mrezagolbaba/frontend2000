@@ -27,7 +27,6 @@ import Support from "pages/support";
 import BuySell from "pages/buySell";
 import Information from "pages/auth/information";
 import Market from "pages/market";
-import CoinPage from "pages/coins";
 import request from "services/adapter";
 import CoinPage from "pages/coins";
 
