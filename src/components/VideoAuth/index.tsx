@@ -37,7 +37,7 @@ const VideoAuth = ({
   const [isPlayVideo, setIsPlayVideo] = useState<boolean>(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const maxRecordingDuration = 600; // Maximum recording duration in seconds (10 minutes)
-  const recordingTimerRef = useRef<any>(null);
+  const recordingTimerRef = useRef<NodeJS.Timer | null>(null);
 
   const remainingTime = maxRecordingDuration - recordingTime;
   const minutes = Math.floor(remainingTime / 60);
