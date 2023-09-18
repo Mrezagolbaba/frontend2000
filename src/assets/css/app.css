@@ -11801,7 +11801,6 @@ textarea.form-control {
 }
 
 .table-crypto-actions .btn {
-  height: 40px;
   line-height: 36px;
   border-radius: 8px;
   min-width: 120px;
@@ -13021,7 +13020,6 @@ span.pagination-link {
   }
 
   .table-crypto-actions .btn {
-    height: 36px;
     line-height: 32px;
     min-width: 100px;
     padding: 0px 12px;

@@ -1,5 +1,5 @@
 import { ReactNode, useState } from "react";
-import DashboardHeader from "../header";
+import Header from "./Header";
 // import LogoArsonex from '../../assets/img/logo-arsonex.png';
 
 
@@ -7,11 +7,11 @@ import "./style.scss";
 
 // import "assets/css/app.css"
 
-import Sidebar from "../sidebar";
+import Sidebar from "./sidebar";
 import { Container } from "reactstrap";
 
 const Layout = ({ children }: { children: ReactNode }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -21,7 +21,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
       <div id="menuOverlay" className="menu-overlay"></div>
       <Sidebar isOpen={isSidebarOpen} onSidebarToggle={handleSidebarToggle} />
       <Container fluid className="main-wrapper">
-        <DashboardHeader onSidebarToggle={handleSidebarToggle} />
+        <Header onSidebarToggle={handleSidebarToggle} />
         {children}
       </Container>
     </div>

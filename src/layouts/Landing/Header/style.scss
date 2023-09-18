@@ -112,7 +112,30 @@
         0 263px,
         0 0;
     }
+    .header-hamburger button .icon svg {
+      path,
+      circle {
+        stroke: #fff;
+      }
 
+      circle {
+        stroke-opacity: 0.4;
+      }
+    }
+  }
+  &.header--landing--mobile {
+    height: 862px;
+    background: {
+      image: url("../../../assets/img/lay/header-pattern.png"),
+        url("../../../assets/img/lay/header-bg-2.png");
+      repeat: no-repeat;
+      size:
+        1173px 520px,
+        100% 862px;
+      position:
+        0 263px,
+        0 0;
+    }
     .header-hamburger button .icon svg {
       path,
       circle {
@@ -184,35 +207,35 @@
     .header-hamburger {
       display: block;
     }
-  }
 
-  .navbar:not(.navbar--simple) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #fff;
-    flex-direction: column;
-    padding: 40px 20px 20px;
-    z-index: 999;
-    transform: translateY(-100%);
-    transition: all 0.4s ease-out 0.1s;
-  }
+    .navbar:not(.navbar--simple) {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #fff;
+      flex-direction: column;
+      padding: 40px 20px 20px;
+      z-index: 999;
+      transform: translateY(-100%);
+      transition: all 0.4s ease-out 0.1s;
+    }
 
-  .navbar:not(.navbar--simple) > .navbar__item:not(.navbar__item--active) a {
-    color: rgba(4, 15, 74, 0.6);
-  }
+    .navbar:not(.navbar--simple) > .navbar__item:not(.navbar__item--active) a {
+      color: rgba(4, 15, 74, 0.6);
+    }
 
-  .navbar:not(.navbar--simple) > .navbar__item + .navbar__item {
-    margin-top: 12px;
-  }
+    .navbar:not(.navbar--simple) > .navbar__item + .navbar__item {
+      margin-top: 12px;
+    }
 
-  .navbar:not(.navbar--simple).expanded {
-    transform: translateY(0);
-  }
+    .navbar:not(.navbar--simple).expanded {
+      transform: translateY(0);
+    }
 
-  .navbar .header__auth,
-  .navbar .navbar-close {
-    display: block;
+    .navbar .header__auth,
+    .navbar .navbar-close {
+      display: block;
+    }
   }
 }

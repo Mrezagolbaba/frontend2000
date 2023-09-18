@@ -16,7 +16,7 @@ export default function VideoStep({
   onClick,
 }: AuthenticationLevel2Props): React.JSX.Element {
   //hooks
-  const recordingTimerRef = useRef<NodeJS.Timer | null>(null);
+  const recordingTimerRef = useRef<any>(null);
   const videoPlayRef = useRef<HTMLVideoElement>(null);
   const uploadDoc = useUploadDoc();
   const {
