@@ -19,6 +19,7 @@ export default defineConfig({
       org: "arsonex",
       project: "frontend",
       telemetry: false,
+      authToken:""
     }),
     sassDts(), // Add the SASS plugin to the plugins array
   ],
