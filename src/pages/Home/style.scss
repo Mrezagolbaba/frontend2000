@@ -9,10 +9,10 @@
 .landing-features {
   padding-bottom: 140px;
   background: {
-    image: url("src/assets/img/coins/btccash.png"),
-      url("src/assets/img/lay/dot-primary-33x33.png"),
-      url("src/assets/img/lay/dot-primary-33x33.png"),
-      url("src/assets/img/lay/dot-warning-33x33.png");
+    image: url("../../..//assets/img/coins/btccash.png"),
+      url("../../../assets/img/lay/dot-primary-33x33.png"),
+      url("../../../assets/img/lay/dot-primary-33x33.png"),
+      url("../../../assets/img/lay/dot-warning-33x33.png");
     repeat: no-repeat;
     position:
       calc(100% - 185px) 100%,
@@ -125,12 +125,12 @@
 
   .feature-slide--blue {
     background-color: #2853c4;
-    background-image: url("src/assets/img/slides/slide-011.png");
+    background-image: url("../../../assets/img/slides/slide-011.png");
   }
 
   .feature-slide--darkblue {
     background-color: #002954;
-    background-image: url("src/assets/img/slides/slide-022.png");
+    background-image: url("../../../assets/img/slides/slide-022.png");
   }
   .feature {
     display: flex;
@@ -160,7 +160,7 @@
     text-align: center;
     padding-top: 90px;
     background: {
-      image: url("src/assets/img/lay/feature-mask.png");
+      image: url("../../../assets/img/lay/feature-mask.png");
       repeat: no-repeat;
       position: 50% 0;
       size: 946px 642px;
@@ -206,7 +206,7 @@
   padding-top: 182px;
   margin-top: -80px;
   background: {
-    image: url("src/assets/img/lay/currency-rates-pattern.png");
+    image: url("../../../assets/img/lay/currency-rates-pattern.png");
     repeat: no-repeat;
     position: 46% 40px;
   }
@@ -220,8 +220,8 @@
   padding-top: 10px;
   padding-bottom: 275px;
   background: {
-    image: url("src/assets/img/coins/eth-2.png"),
-      url("src/assets/img/lay/dot-danger-18x18.png");
+    image: url("../../../assets/img/coins/eth-2.png"),
+      url("../../../assets/img/lay/dot-danger-18x18.png");
     repeat: no-repeat;
     position:
       60px 95%,
