@@ -18,6 +18,7 @@ export default defineConfig({
     sentryVitePlugin({
       org: "arsonex",
       project: "frontend",
+      telemetry: false,
     }),
     sassDts(), // Add the SASS plugin to the plugins array
   ],
