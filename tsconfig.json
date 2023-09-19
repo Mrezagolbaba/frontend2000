@@ -27,7 +27,6 @@
     "noImplicitAny": false,
     "noImplicitThis": true,
     "strictNullChecks": true,
-    "baseUrl": "src",
     "downlevelIteration": true
   },
   // "baseUrl": ".",
