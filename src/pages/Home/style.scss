@@ -184,6 +184,18 @@
 .landing-crypto-banner {
   transform: translateY(105px);
   margin-top: -105px;
+  .btn-white {
+    background-color: #fff;
+    border-color: #fff;
+    color: #040f4a;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0 30px;
+    height: 56px;
+    line-height: 52px;
+    border-radius: 28px;
+    border-width: 2px;
+  }
 }
 
 .landing-articles .container {
@@ -221,6 +233,7 @@
   margin-bottom: 100px;
   .article {
     direction: rtl;
+    padding: 0 10px;
   }
 
   .section-title {
@@ -272,4 +285,12 @@
     font-weight: 500;
     margin: 0;
   }
+}
+.activeFilterItem {
+  color: blue;
+  border: 1px solid blue;
+  border-radius: 8px;
+}
+.diActiveFilterItem {
+  color: black;
 }

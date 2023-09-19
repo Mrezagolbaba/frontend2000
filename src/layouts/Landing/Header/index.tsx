@@ -1,18 +1,37 @@
 import { Link } from "react-router-dom";
 import Logo from "assets/img/logo-light.png";
-
+import classNames from "classnames";
 import "./style.scss";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Header = () => {
   const [openOverlayMenu, setOpenOverlayMenu] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState(true);
+  //how to find user agant
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const headerClassNames = classNames('landing-header', {
+    'header--landing--mobile': isMobile,
+    'header--landing': !isMobile,
+  });
+
   return (
     <>
       <div
         id="menuOverlay"
         className={`menu-overlay ${openOverlayMenu ? "show" : ""}`}
       ></div>
-      <header className="landing-header header--landing">
+      <header className={headerClassNames}>
         <div className="header__top">
           <div className="header__logo">
             <Link to="/">
@@ -31,10 +50,10 @@ const Header = () => {
                 <div className="header__auth">
                   <ul className="navbar navbar--simple">
                     <li className="navbar__item header__auth--login">
-                      <a href="#">ورود</a>
+                      <a href="/login">ورود</a>
                     </li>
                     <li className="header__auth--register">
-                      <a href="#" className="btn btn-primary">
+                      <a href="/register" className="btn btn-primary">
                         ثبت نام
                       </a>
                     </li>
@@ -42,22 +61,22 @@ const Header = () => {
                 </div>
               </li>
               <li className="navbar__item navbar__item--active">
-                <a href="#">صفحه اصلی</a>
+                <a href="/">صفحه اصلی</a>
               </li>
               <li className="navbar__item">
-                <a href="#">بازارها</a>
+                <a href="/market">بازارها</a>
               </li>
               <li className="navbar__item">
-                <a href="#">قوانین</a>
+                <a href="/terms">قوانین</a>
               </li>
               <li className="navbar__item">
                 <a href="https://www.arsonex.com/blog" target="_blank">بلاگ</a>
               </li>
               <li className="navbar__item">
-                <a href="#">درباره ما</a>
+                <a href="/aboutUs">درباره ما</a>
               </li>
               <li className="navbar__item">
-                <a href="#">تماس با ما</a>
+                <a href="/contact">تماس با ما</a>
               </li>
               <li>
                 <div className="navbar-close">
@@ -105,10 +124,10 @@ const Header = () => {
           <div className="header__auth">
             <ul className="navbar navbar--simple">
               <li className="navbar__item header__auth--login">
-                <a href="#">ورود</a>
+                <a href="/login">ورود</a>
               </li>
               <li className="header__auth--register">
-                <a href="#" className="btn btn-primary">
+                <a href="/register" className="btn btn-primary">
                   ثبت نام
                 </a>
               </li>
@@ -157,7 +176,7 @@ const Header = () => {
               مهم نیست ارز دیجیتال نیاز داشته باشی یا واحد پول یه کشور دیگه،
               آرسونیکس برات به آسانی تبدیل می&zwnj;کنه.
             </p>
-            <a href="#" className="btn btn-primary">
+            <a href="/register" className="btn btn-primary">
               با آرسونیکس شروع کنید
             </a>
           </div>

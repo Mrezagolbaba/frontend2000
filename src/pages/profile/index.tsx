@@ -1,8 +1,7 @@
 import Layout from "layouts/dashboard";
-import ImageFrame from "assets/img/image-frame.png";
 import AuthSection from "./AuthSection";
 import { useAppSelector } from "redux/hooks";
-import { Button, Col, FormGroup, Input, InputGroup, Label, Row } from 'reactstrap'
+import { Col, FormGroup, Input, Label, Row } from 'reactstrap'
 import { AiOutlineEdit } from "react-icons/ai";
 const Profile = () => {
   const user = useAppSelector(state => state.user)
