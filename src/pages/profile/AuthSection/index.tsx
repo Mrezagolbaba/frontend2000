@@ -19,6 +19,7 @@ import ConfirmInternationalService from "./ConfirmInternationalService";
 import "./style.sass";
 import ResidencyCardStep from "./ResidencyCardStep";
 import FinalStep from "./FinalStep";
+import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 
 const { Title } = Typography;
 
@@ -81,13 +82,13 @@ const AuthSection = () => {
     }
   };
   return (
-    <div className="card card-secondary authentication-card mb-4">
-      <div className="card-header">
-        <Title level={5} className="card-title">
+    <Card className="custom-card card-secondary authentication-card mb-4">
+      <CardHeader>
+        <CardTitle tag="h5">
           احراز هویت
-        </Title>
-      </div>
-      <div className="card-body">
+        </CardTitle>
+      </CardHeader>
+      <CardBody>
         <Row gutter={16}>
           <Col xs={24} sm={12} className="gutter-row">
             <List
@@ -142,7 +143,7 @@ const AuthSection = () => {
             </Button>
           </Col>
         </Row>
-      </div>
+      </CardBody>
       <Modal
         className="modal-container"
         open={isOpenDialog}
@@ -154,7 +155,7 @@ const AuthSection = () => {
         <Divider />
         {renderSteps()}
       </Modal>
-    </div>
+    </Card>
   );
 };
 
