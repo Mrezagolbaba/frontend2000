@@ -1,7 +1,0 @@
-{
-    "framework": "vite",
-    "alias": {
-        "src": "/src"
-    }
-
-}
