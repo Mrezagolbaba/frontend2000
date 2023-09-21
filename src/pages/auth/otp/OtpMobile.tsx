@@ -12,10 +12,13 @@ import { toast } from "react-hot-toast";
 import React from "react";
 import { useSendOtp } from "services/auth/otp";
 import { useGetMe } from "services/auth/user";
+import { useAppDispatch } from "redux/hooks";
+import { setUser } from "redux/features/user/userSlice";
 
 const OtpMobile: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useAppDispatch();
   const phoneNumber = location.state.phoneNumber;
 
   const sendOtp = useSendOtp();
@@ -57,7 +60,9 @@ const OtpMobile: React.FC = () => {
         getMe
           .mutateAsync(null)
           .then((res: any) => {
-            if (res?.firstTierVerified) navigate("/");
+            console.log(res);
+            dispatch(setUser(res));
+            if (res?.firstTierVerified) navigate("/dashboard");
             else navigate("/information");
           })
           .catch(() => {
