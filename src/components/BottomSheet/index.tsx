@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { BottomSheet } from 'react-spring-bottom-sheet'
+// import { BottomSheet } from 'react-spring-bottom-sheet'
 
 // if setting up the CSS is tricky, you can add this to your page somewhere:
 // <link rel="stylesheet" href="https://unpkg.com/react-spring-bottom-sheet/dist/style.css" crossorigin="anonymous">
-import 'react-spring-bottom-sheet/dist/style.css'
+// import 'react-spring-bottom-sheet/dist/style.css'
 interface Props {
     isOpen: boolean;
     onClose: () => void;
@@ -17,6 +17,7 @@ export default function BootomView({
 }: Props) {
 
   return (
-      <BottomSheet open={isOpen}>My awesome content here</BottomSheet>
+    //   <BottomSheet open={isOpen}>My awesome content here</BottomSheet>
+    <div>My awesome content here</div>
   )
 }

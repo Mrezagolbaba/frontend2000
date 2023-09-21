@@ -20,6 +20,11 @@ import {
 import { CiEdit } from "react-icons/ci";
 
 import "./style.scss";
+import { useAppDispatch, useAppSelector } from "redux/hooks";
+import { useGetMe } from "services/auth/user";
+import { useEffect } from "react";
+import { setUser } from "redux/features/user/userSlice";
+
 const dataArray = [
   { value: "0.00256", number: "45،154", time: "11:30" },
   { value: "0.00256", number: "45،154", time: "11:30" },
@@ -48,6 +53,7 @@ const dataArray2 = [
 ];
 
 const Dashboard: React.FC = () => {
+  const user = useAppSelector((state) => state.user);
   const settings = {
     dots: true,
     infinite: true,
@@ -59,6 +65,9 @@ const Dashboard: React.FC = () => {
     cssEase: "linear",
     loop: true,
   };
+
+  const { firstName, lastName } = user;
+
   return (
     <Layout>
       <section className="mb-3">
@@ -77,7 +86,7 @@ const Dashboard: React.FC = () => {
                 sm={2}
                 className="user-summary__section user-summary-edit"
               >
-                <h6> بهزاد بابایی</h6>
+                <h6>{firstName + " " + lastName}</h6>
                 <Button
                   className="profile-btn"
                   outline

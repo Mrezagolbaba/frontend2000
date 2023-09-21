@@ -27,8 +27,9 @@
     "noImplicitAny": false,
     "noImplicitThis": true,
     "strictNullChecks": true,
-    "baseUrl": "src",
-    "downlevelIteration": true
+    "downlevelIteration": true,
+  "baseUrl": "src",
+
   },
   // "baseUrl": ".",
   // "paths": {
@@ -42,9 +43,7 @@
   //   "@utils/*": ["src/utils/*"]
   // },
   "references": [{ "path": "./tsconfig.node.json" }],
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "exclude": ["node_modules"],
   "rules": {
     "no-unused-vars": "off",
