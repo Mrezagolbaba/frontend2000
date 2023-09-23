@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { AiOutlineEdit } from "react-icons/ai";
 import {
@@ -82,8 +82,9 @@ export default function PersonalInformation() {
           نخواهید داشت
         </div>
         <div className="alert alert-warning">
-          در صورت تغییر شماره موبایل توجه داشته باشید باید خط به نام شخص بهزاد
-          بابایی باشد در غیر اینصورت شماره موبایل تغییر نمی&zwnj;کند.
+          در صورت تغییر شماره موبایل توجه داشته باشید باید خط به نام شخص
+           {`${firstName} ${lastName}`}
+           باشد در غیر اینصورت شماره موبایل تغییر نمی&zwnj;کند.
         </div>
 
         <Form action="" className="">
