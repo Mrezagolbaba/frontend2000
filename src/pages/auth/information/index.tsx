@@ -59,11 +59,9 @@ const Information = () => {
     await submitInformation
       .mutateAsync({ ...data, phoneNumber })
       .then((res) => {
-        navigate("/email-otp", {
-          state: {
-            phoneNumber: data.email,
-          },
-        });
+        navigate("/email-otp",{state: {
+          email: data.email,
+        },});
         setIsLoading(false);
       })
       .catch(() => {
