@@ -50,11 +50,9 @@ const Information: React.FC = () => {
     await submitInformation
       .mutateAsync({ ...data, phoneNumber })
       .then((res) => {
-        if (res) {
-          console.log(res);
-
-          navigate("/email-otp", { state: { email: data.email } });
-        }
+        navigate("/email-otp",{state: {
+          phoneNumber: data.email,
+        },});
         setIsLoading(false);
       })
       .catch(() => {
