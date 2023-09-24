@@ -95,10 +95,10 @@ export default function PersonalInformation() {
                 control={control}
                 render={({ field: { name, value, onChange, ref } }) => (
                   <FormGroup row>
-                    <Label sm={2} htmlFor={name}>
+                    <Label sm={3} htmlFor={name}>
                       نام:
                     </Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <Input
                         disabled
                         id={name}
@@ -119,10 +119,10 @@ export default function PersonalInformation() {
                 control={control}
                 render={({ field: { name, value, onChange, ref } }) => (
                   <FormGroup row>
-                    <Label sm={2} htmlFor={name}>
+                    <Label sm={3} htmlFor={name}>
                       نام خانوادگی:
                     </Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <Input
                         disabled
                         id={name}
@@ -143,10 +143,10 @@ export default function PersonalInformation() {
                 control={control}
                 render={({ field: { name, value, onChange, ref } }) => (
                   <FormGroup row>
-                    <Label sm={2} htmlFor={name}>
+                    <Label sm={3} htmlFor={name}>
                       کدملی:
                     </Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <Input
                         disabled
                         id={name}
@@ -167,10 +167,10 @@ export default function PersonalInformation() {
                 control={control}
                 render={({ field: { name, value, onChange, ref } }) => (
                   <FormGroup row>
-                    <Label sm={2} htmlFor={name}>
+                    <Label sm={3} htmlFor={name}>
                       تاریخ تولد:
                     </Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <Input
                         disabled
                         id={name}
@@ -191,10 +191,10 @@ export default function PersonalInformation() {
                 control={control}
                 render={({ field: { name, value, onChange, ref } }) => (
                   <FormGroup row>
-                    <Label sm={2} for="input1">
+                    <Label sm={3} for="input1">
                       شماره ثابت:
                     </Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <Input
                         invalid={Boolean(errors?.[name])}
                         disabled
@@ -221,10 +221,10 @@ export default function PersonalInformation() {
                 control={control}
                 render={({ field: { name, value, onChange, ref } }) => (
                   <FormGroup row>
-                    <Label sm={2} for="input1">
+                    <Label sm={3} for="input1">
                       شماره موبایل:
                     </Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <Input
                         invalid={Boolean(errors?.[name])}
                         disabled
