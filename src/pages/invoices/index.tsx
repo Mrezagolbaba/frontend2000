@@ -1,6 +1,9 @@
 import Layout from "layouts/dashboard";
+import { useAppSelector } from "redux/hooks";
 
 const Invoices = () => {
+  const user = useAppSelector((state) => state.user);
+  const { firstName, lastName, email, phoneNumber } = user;
   return (
     <Layout>
       <section className="page page-wallet mt-4">
@@ -66,9 +69,9 @@ const Invoices = () => {
                     </thead>
                     <tbody>
                       <tr>
-                        <td className="text-center">بهزاد بابایی</td>
-                        <td className="text-center">bbabaei1998@gmail.com</td>
-                        <td className="text-center">0123456789</td>
+                        <td className="text-center">{`${firstName} ${lastName}`}</td>
+                        <td className="text-center">{email}</td>
+                        <td className="text-center">{phoneNumber}</td>
                       </tr>
                     </tbody>
                   </table>

@@ -9,6 +9,7 @@ import {
 import { useReactMediaRecorder } from "react-media-recorder";
 import useUploadDoc from "services/verification";
 import { AuthenticationLevel2Props } from "./types";
+import { useAppSelector } from "redux/hooks";
 
 const { Title, Paragraph } = Typography;
 
@@ -16,6 +17,8 @@ export default function VideoStep({
   onClick,
 }: AuthenticationLevel2Props): React.JSX.Element {
   //hooks
+  const user = useAppSelector((state) => state.user);
+  const { firstName, lastName, nationalId } = user;
   const recordingTimerRef = useRef<any>(null);
   const videoPlayRef = useRef<HTMLVideoElement>(null);
   const uploadDoc = useUploadDoc();
@@ -65,7 +68,7 @@ export default function VideoStep({
         setIsLoading(false);
         console.error(err);
       });
-      onClick?.(4);
+    onClick?.(4);
   };
 
   //life-cycles
@@ -153,12 +156,15 @@ export default function VideoStep({
             نهایتا .در ۶۰ ثانیه بخوانید
           </Paragraph>
           <Paragraph className="auth-sample-text mb-4 mt-2">
-            اینجانب بهزاد بابائی به کد ملی 002043434 متعهد می&zwnj;شوم که حساب
-            کاربری و مدارک خود را جهت خرید و فروش ارزهای دیجیتال در اختیار
-            دیگران قرار ندهم و به کلیه&zwnj;ی قوانین و مقررات درج شده در قوانین
-            سایت متعهد و پایبند باشم و در صورت هر گونه تخلف، کلیه&zwnj;ی
-            مسئولیت&zwnj;های حقوقی و کیفری آن را در قبال آرسونیکس و اشخاص ثالث،
-            به عهده می گیرم.
+            اینجانب
+            {` ${firstName} ${lastName} `}
+            به کد ملی
+            {` ${nationalId} `}
+            متعهد می&zwnj;شوم که حساب کاربری و مدارک خود را جهت خرید و فروش
+            ارزهای دیجیتال در اختیار دیگران قرار ندهم و به کلیه&zwnj;ی قوانین و
+            مقررات درج شده در قوانین سایت متعهد و پایبند باشم و در صورت هر گونه
+            تخلف، کلیه&zwnj;ی مسئولیت&zwnj;های حقوقی و کیفری آن را در قبال
+            آرسونیکس و اشخاص ثالث، به عهده می گیرم.
           </Paragraph>
         </Row>
         <Row className="justify-content-center">

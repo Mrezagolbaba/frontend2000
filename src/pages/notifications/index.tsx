@@ -1,6 +1,5 @@
 import Layout from "layouts/dashboard";
 import { Button, Card, CardBody, CardHeader, CardTitle,Table } from "reactstrap";
-import {  } from '@tanstack/react-table'
 import { useTable, HttpError } from "@refinedev/core";
 
 

@@ -1,6 +1,9 @@
 import Layout from "layouts/dashboard";
+import { useAppSelector } from "redux/hooks";
 
 const Support_details = () => {
+  const user = useAppSelector((state) => state.user);
+  const { firstName, lastName } = user;
   return (
     <Layout>
       <section className="page page-support">
@@ -53,7 +56,7 @@ const Support_details = () => {
                         ولی تکمیل نشده
                       </p>
                       <div className="comment-footer">
-                        <span className="comment-meta">بهزاد بابایی</span>
+                        <span className="comment-meta">{`${firstName} ${lastName}`}</span>
                       </div>
                     </div>
                   </div>

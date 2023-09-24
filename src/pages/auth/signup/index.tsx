@@ -138,6 +138,7 @@ const SignupPage: React.FC = () => {
                             با آن موافقم.
                           </label>
                           <Input
+                          style={{marginRight:"8px"}}
                             checked={value}
                             className="form-check-input"
                             type="checkbox"

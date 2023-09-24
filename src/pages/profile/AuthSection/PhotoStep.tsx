@@ -5,11 +5,14 @@ import { Button, Row, Spin, Typography } from "antd";
 import defaultImage from "assets/img/profile/auth.png";
 import { BsTrash3, BsUpload } from "react-icons/bs";
 import useUploadDoc from "services/verification";
+import { useAppSelector } from "redux/hooks";
 
 const { Title, Paragraph } = Typography;
 export default function PhotoStep({
   onClick,
 }: AuthenticationLevel2Props): React.JSX.Element {
+  const user = useAppSelector((state) => state.user);
+  const { firstName, lastName,nationalId } = user;
   const inputRef = useRef<HTMLInputElement>(null);
   const uploadDoc = useUploadDoc();
 
@@ -73,7 +76,9 @@ export default function PhotoStep({
           متن زیر را همراه با یک مدرک معتبر هویتی مانند تصویر بالا آپلود نمایید.
         </Paragraph>
         <Paragraph className="auth-sample-text mb-4 mt-2">
-          اینجانب بهزاد بابائی به کد ملی 002043434 متعهد می&zwnj;شوم که حساب
+          اینجانب 
+          {` ${firstName} ${lastName} `}
+           به کد ملی {` ${nationalId} `} متعهد می&zwnj;شوم که حساب
           کاربری و مدارک خود را جهت خرید و فروش ارزهای دیجیتال در اختیار دیگران
           قرار ندهم و به کلیه&zwnj;ی قوانین و مقررات درج شده در قوانین سایت
           متعهد و پایبند باشم و در صورت هر گونه تخلف، کلیه&zwnj;ی

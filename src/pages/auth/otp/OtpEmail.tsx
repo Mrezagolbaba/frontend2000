@@ -30,11 +30,14 @@ const OtpEmail: React.FC = () => {
   const handleOTP = async (data: { code: string }) => {
     const formData = {
       code: data.code,
-      type: "AUTH",
+      type: "VERIFY_EMAIL",
       method: "EMAIL",
     };
     await sendOtp(formData).then((res) => {
-      res && navigate("/information");
+      toast.error("ایمیل شما با موفقیت تایید شد.", {
+        position: "bottom-left",
+      });
+      res && navigate("/login");
     });
   };
 
