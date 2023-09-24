@@ -11,28 +11,31 @@ import {
   CardTitle,
   Col,
   Form,
-  FormFeedback,
   FormGroup,
   Input,
   InputGroup,
   InputGroupText,
   Label,
   Row,
+  
 } from "reactstrap";
-import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import { CiTrash } from "react-icons/ci";
 import { useAppSelector } from "redux/hooks";
 import { useState } from "react";
-
+import ReactFlagsSelect from "react-flags-select";
 export default function BankInformation() {
   const [localRows, setLocalRows] = useState([{ id: 0 }]);
   const [intRows, setIntRows] = useState([{ id: 0 }]);
+  const [selectedCountryCode, setSelectedCountryCode] = useState('TR');
   const user = useAppSelector((state) => state.user);
   const { firstName, lastName } = user;
   const resolver = yupResolver(
     Yup.object().shape({
       sheba: Yup.string(),
       cardNumber: Yup.string(),
+      country: Yup.string(),
+      IBAN: Yup.string(),
+      AccountHolder: Yup.string(),
     })
   );
 
@@ -45,6 +48,9 @@ export default function BankInformation() {
     defaultValues: {
       sheba: "",
       cardNumber: "",
+      country: "",
+      IBAN: "",
+      AccountHolder: "",
     },
     resolver,
   });
@@ -60,7 +66,6 @@ export default function BankInformation() {
   const removeIntRow = (id) => {
     setIntRows(intRows.filter((row) => row.id !== id));
   };
-
   return (
     <>
       <Card className="custom-card card-secondary banking-info-card mb-4">
@@ -178,55 +183,73 @@ export default function BankInformation() {
               <Row key={row.id} style={{
                 justifyContent: 'center',
                 alignItems: 'center',
+                width: '100%'
               }}>
-                <Col sm={{ offset: 1, size: 11 }} lg={{ offset: 1, size: 5 }}>
+                <Col>
                   <Controller
-                    name="sheba"
+                    name="AccountHolder"
                     control={control}
                     render={({ field: { name, value, onChange, ref } }) => (
                       <FormGroup row>
-                        <Label sm={3}>شماره شبا:</Label>
-                        <Col sm={9}>
-                          <InputGroup dir="ltr">
-                            <InputGroupText id={`sheba_${row.id}`}>IR</InputGroupText>
-                            <Input
-                              value={value}
-                              ref={ref}
-                              onChange={onChange}
-                              name={name}
-                              type="text"
-                              className="form-control d-ltr"
-                              id={`input23_${row.id}`}
-                              placeholder=""
-                            />
-                          </InputGroup>
-                        </Col>
-                      </FormGroup>
-                    )}
-                  />
-                </Col>
-                <Col sm={{ size: 12 }} lg={{ size: 5 }}>
-                  <Controller
-                    name="cardNumber"
-                    control={control}
-                    render={({ field: { name, value, onChange, ref } }) => (
-                      <FormGroup row>
-                        <Label sm={3}>شماره کارت:</Label>
-                        <Col sm={9}>
+                        <Col >
                           <Input
+                            value={value}
+                            ref={ref}
+                            onChange={onChange}
+                            name={name}
                             type="text"
-                            className="form-control d-ltr"
-                            id={`input24_${row.id}`}
-                            placeholder=""
+                            className="form-control d-rtl"
+                            id={`input23_${row.id}`}
+                            placeholder="نام صاحب حساب "
                           />
                         </Col>
                       </FormGroup>
                     )}
                   />
                 </Col>
-                <Col sm={{ size: 1 }}>
+                <Col >
+                  <Controller
+                    name="country"
+                    control={control}
+                    render={({ field: { name, value, onChange, ref } }) => (
+                      <FormGroup row>
+                        <Col >
+                          <ReactFlagsSelect
+                            searchable  
+                            selected={value!!}
+                            onSelect={(code) => {
+                              onChange(code)
+                              setSelectedCountryCode(code);
+                            }}
+                          />
+                        </Col>
+                      </FormGroup>
+                    )}
+                  />
+                </Col>
+                <Col >
+                  <Controller
+                    name="IBAN"
+                    control={control}
+                    render={({ field: { name, value, onChange, ref } }) => (
+                      <FormGroup row>
+                        <Col >
+                        <InputGroup dir="ltr">
+                            <InputGroupText>{selectedCountryCode}</InputGroupText>
+                          <Input
+                            type="text"
+                            className="form-control d-rtl"
+                            id={`input24_${row.id}`}
+                            placeholder="شماره IBAN"
+                          />
+                          </InputGroup>
+                        </Col>
+                      </FormGroup>
+                    )}
+                  />
+                </Col>
+                <Col sm={{ size: 1 }} lg={{ size: 1 }}>
                   {index !== 0 &&
-
                     <span style={{
                       color: "red",
                       cursor: "pointer",
