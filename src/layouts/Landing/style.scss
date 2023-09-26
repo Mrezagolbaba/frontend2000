@@ -108,6 +108,18 @@ iframe {
   direction: rtl;
 }
 
+.badge-custom {
+  padding: 0 8px;
+  font-size: 0.625rem;
+  font-weight: 500;
+  border-radius: 0;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: #335ffc !important;
+  background-color: transparent !important;
+  border: 1px solid #335ffc;
+}
+
 .landing-wrapper {
   position: relative;
 
@@ -173,7 +185,7 @@ iframe {
   .section-gap {
     margin-bottom: $section-gap;
   }
-  
+
   img.avatar {
     width: 80px;
     height: 80px;
@@ -274,8 +286,8 @@ iframe {
 
   .landing-features {
     padding-bottom: 120px;
-    background-image: url('../../assets/img/coins/btccash.png'),
-      url('../../assets/img/lay/dot-primary-33x33.png');
+    background-image: url("../../assets/img/coins/btccash.png"),
+      url("../../assets/img/lay/dot-primary-33x33.png");
     background-position:
       calc(100% - 40px) 100%,
       70px calc(100% - 82px);

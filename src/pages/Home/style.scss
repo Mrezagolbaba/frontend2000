@@ -184,17 +184,34 @@
 .landing-crypto-banner {
   transform: translateY(105px);
   margin-top: -105px;
-  .btn-white {
-    background-color: #fff;
-    border-color: #fff;
-    color: #040f4a;
-    font-weight: 700;
-    font-size: 1rem;
-    padding: 0 30px;
-    height: 56px;
-    line-height: 52px;
-    border-radius: 28px;
-    border-width: 2px;
+  .crypto-banner {
+    background-color: #335ffc;
+    text-align: center;
+    padding: 80px;
+    border-radius: 40px;
+    max-width: 1140px;
+    margin: 0 auto;
+    &__title {
+      font-size: 2.5em;
+      font-weight: 700;
+      color: #fff;
+    }
+    &__desc {
+      color: #fff;
+      font-size: 18px;
+    }
+    .btn {
+      background-color: #fff;
+      border-color: #fff;
+      color: #040f4a;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0 30px;
+      height: 56px;
+      line-height: 52px;
+      border-radius: 28px;
+      border-width: 2px;
+    }
   }
 }
 

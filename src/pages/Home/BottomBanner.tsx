@@ -1,19 +1,22 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { Button, Container } from "reactstrap";
 
 const BottomBanner = () => {
   return (
     <section className="landing-crypto-banner">
-      <div className="container">
+      <Container>
         <div className="crypto-banner">
-          <h2 className="crypto-banner-title">
-            هر جای دنیا هستی ریال برات تبدیل به ارز دلخواهت می&zwnj;کنیم
+          <h2 className="crypto-banner__title">
+            آرسونیکس یعنی؛ بهترین نرخ و کمترین کارمزد
           </h2>
-          <Link to="#" className="btn btn-white">
-           شروع کنید
-          </Link>
+          <p className="crypto-banner__desc">
+            در کمتر از 2 دقیقه بدون ارسال هیچ مدرکی اولین معامله را انجام خواهید
+            داد
+          </p>
+          <Button href="/register" tag="a" color="light">
+            شروع کنید
+          </Button>
         </div>
-      </div>
+      </Container>
     </section>
   );
 };
