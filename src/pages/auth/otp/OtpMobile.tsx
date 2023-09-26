@@ -62,7 +62,8 @@ const OtpMobile: React.FC = () => {
           .then((res: any) => {
             console.log(res);
             dispatch(setUser(res));
-            if (res?.firstTierVerified) navigate("/dashboard");
+            // if (res?.firstTierVerified) navigate("/dashboard");
+            if (res?.firstTierVerified) navigate("/coming-soon");
             else navigate("/information");
           })
           .catch(() => {

@@ -29,6 +29,7 @@ import Information from "pages/auth/information";
 import Market from "pages/market";
 import request from "services/adapter";
 import CoinPage from "pages/coins";
+import ComingSoon from "pages/ComingSoon";
 
 const AppRouter: React.FC = () => {
   // const [showAddToHomeSheet, setShowAddToHomeSheet] = useState(isMobile && !window.matchMedia('(display-mode: standalone)').matches);
@@ -82,6 +83,7 @@ const AppRouter: React.FC = () => {
         <Route path="/forget" element={<Forget />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/coins" element={<CoinPage />} />
+        <Route path="/coming-soon" element={<ComingSoon />} />
         <Route
           path="/dashboard"
           element={<ProtectedRoute children={<Dashboard />} user={user} />}
