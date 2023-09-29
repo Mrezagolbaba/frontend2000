@@ -46,7 +46,6 @@ interface TabOptionProps {
 }
 
 interface ProtectedRouteProps {
-  user: boolean;
   children: any;
 }
 interface ErrorBoundaryProps {

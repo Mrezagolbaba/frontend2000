@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -15,11 +16,10 @@ import pasargad from "assets/img/bank/Pasargad.svg";
 import saman from "assets/img/bank/Saman.svg";
 
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
-
-import wallet from "pages/wallet/style.module.scss";
 import Currency from "components/Input/CurrencyInput";
-import { useState } from "react";
 import { AlertInfo } from "components/AlertWidget";
+
+import wallet from "../../style.module.scss";
 
 type CreditCardForm = {
   accountNumber: string;

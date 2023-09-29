@@ -1,5 +1,6 @@
 import AppRouter from "./router/AppRouter";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { BrowserRouter } from "react-router-dom";
 import ErrorBoundary from "./utils/error";
 
 function App() {
@@ -7,7 +8,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary>
-        <AppRouter />
+        <BrowserRouter>
+          <AppRouter />
+        </BrowserRouter>
       </ErrorBoundary>
     </QueryClientProvider>
   );
