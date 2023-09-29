@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -12,11 +13,11 @@ import {
   Row,
 } from "reactstrap";
 import CopyInput from "components/Input/CopyInput";
+import { AlertInfo } from "components/AlertWidget";
+
 import saman from "assets/img/bank/Saman.svg";
 
-import wallet from "pages/wallet/style.module.scss";
-import { useState } from "react";
-import { AlertInfo } from "components/AlertWidget";
+import wallet from "../../style.module.scss";
 
 type ShebaFormType = {
   accountName: string;

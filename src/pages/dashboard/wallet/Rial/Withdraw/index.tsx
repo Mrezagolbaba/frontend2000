@@ -13,12 +13,12 @@ import {
   Row,
 } from "reactstrap";
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import Currency from "components/Input/CurrencyInput";
 
 import pasargad from "assets/img/bank/Pasargad.svg";
 import saman from "assets/img/bank/Saman.svg";
 
-import wallet from "pages/wallet/style.module.scss";
-import Currency from "components/Input/CurrencyInput";
+import wallet from "../../style.module.scss";
 
 type WithdrawType = {
   sheba: string;

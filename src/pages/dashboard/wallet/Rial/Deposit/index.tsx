@@ -1,17 +1,16 @@
 import { useState } from "react";
 import {
-  Col,
   Nav,
   NavItem,
   NavLink,
-  Row,
   TabContent,
   TabPane,
 } from "reactstrap";
 
-import wallet from "pages/wallet/style.module.scss";
 import CreditCardForm from "./CreditCardForm";
 import ShebaForm from "./ShebaForm";
+
+import wallet from "../../style.module.scss";
 
 export default function Deposit() {
   const [activeTab, setActiveTab] = useState("1");

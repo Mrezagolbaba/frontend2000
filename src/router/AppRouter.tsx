@@ -4,7 +4,12 @@ import { Refine } from "@refinedev/core";
 import dataProvider from "@refinedev/simple-rest";
 import routerProvider from "@refinedev/react-router-v6";
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useRoutes,
+} from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import LoginPage from "pages/auth/signin";
 import LoginEmailPage from "pages/auth/signin/EmailSignin";
@@ -17,7 +22,7 @@ import ResetPassword from "pages/auth/reset-password/ResetPassword";
 
 import HomePage from "pages/Home";
 import Dashboard from "pages/dashboard";
-import { WalletList } from "pages/wallet";
+import { WalletList } from "pages/dashboard/wallet";
 import { TransactionList } from "pages/transactions";
 import Setting from "pages/setting";
 import Orders from "pages/orders";
@@ -33,13 +38,9 @@ import Market from "pages/market";
 import request from "services/adapter";
 import CoinPage from "pages/coins";
 import ComingSoon from "pages/ComingSoon";
+import DashboardRouter from "./DashboardRouter";
 
-const AppRouter: React.FC = () => {
-  // const [showAddToHomeSheet, setShowAddToHomeSheet] = useState(isMobile && !window.matchMedia('(display-mode: standalone)').matches);
-
-  // const handleCloseAddToHomeSheet = () => {
-  //   setShowAddToHomeSheet(false);
-  // };
+export default function AppRouter() {
   const user = true;
 
   return (
@@ -95,67 +96,66 @@ const AppRouter: React.FC = () => {
         <Route path="/coming-soon" element={<ComingSoon />} />
         <Route
           path="/dashboard"
-          element={<ProtectedRoute children={<Dashboard />} user={user} />}
+          element={<ProtectedRoute children={<Dashboard />} />}
         />
         {/* <Route
           path="/wallet"
-          element={<ProtectedRoute children={<Wallet />} user={user} />}
+          element={<ProtectedRoute children={<Wallet />} />}
         />
         <Route
           path="/transactions/:id"
-          element={<ProtectedRoute children={<Transactions />} user={user} />}
+          element={<ProtectedRoute children={<Transactions />} />}
         /> */}
         <Route
           path="/setting"
-          element={<ProtectedRoute children={<Setting />} user={user} />}
+          element={<ProtectedRoute children={<Setting />} />}
         />
         <Route
           path="/orders"
-          element={<ProtectedRoute children={<Orders />} user={user} />}
+          element={<ProtectedRoute children={<Orders />} />}
         />
         <Route
           path="/notification"
-          element={<ProtectedRoute children={<Notifications />} user={user} />}
+          element={<ProtectedRoute children={<Notifications />} />}
         />
         <Route
           path="/history"
-          element={<ProtectedRoute children={<History />} user={user} />}
+          element={<ProtectedRoute children={<History />} />}
         />
         <Route
           path="/add-friends"
-          element={<ProtectedRoute children={<AddFriends />} user={user} />}
+          element={<ProtectedRoute children={<AddFriends />} />}
         />
         <Route
           path="/transactions-invoice"
-          element={<ProtectedRoute children={<Invoices />} user={user} />}
+          element={<ProtectedRoute children={<Invoices />} />}
         />
         <Route
           path="/profile"
-          element={<ProtectedRoute children={<Profile />} user={user} />}
+          element={<ProtectedRoute children={<Profile />} />}
         />
         <Route
           path="/support"
-          element={<ProtectedRoute children={<Support />} user={user} />}
+          element={<ProtectedRoute children={<Support />} />}
         />
         <Route
           path="/fast-buy-sell"
-          element={<ProtectedRoute children={<BuySell />} user={user} />}
+          element={<ProtectedRoute children={<BuySell />} />}
         />
         <Route
           path="/information"
-          element={<ProtectedRoute children={<Information />} user={user} />}
+          element={<ProtectedRoute children={<Information />} />}
         />
         <Route
           path="/market"
-          element={<ProtectedRoute children={<Market />} user={user} />}
+          element={<ProtectedRoute children={<Market />} />}
         />
-
-        {/* Add a 404 route for pages that don't exist */}
-        {/* <Route path="*" element={<NotFoundPage />} /> */}
+        // {/* Add a 404 route for pages that don't exist */}
+        // {/* <Route path="*" element={<NotFoundPage />} /> */}
+        //{" "}
         {/* {showAddToHomeSheet && <AddToHomeBottomSheet isOpen={true} onClose={handleCloseAddToHomeSheet} />} */}
+        //{" "}
       </Routes>
     </Router>
   );
-};
-
-export default AppRouter;
+}

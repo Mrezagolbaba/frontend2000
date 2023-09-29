@@ -3,7 +3,7 @@ import { Button, Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 import Dialog from "components/Dialog";
 import Deposit from "./Deposit";
 
-import wallet from "pages/wallet/style.module.scss";
+import wallet from "../style.module.scss";
 import Withdraw from "./Withdraw";
 
 export default function RialCard() {
