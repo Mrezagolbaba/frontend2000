@@ -1,46 +1,13 @@
-import { IResourceComponentsProps } from "@refinedev/core";
-import { MuiListInferencer } from "@refinedev/inferencer/mui";
 import Layout from "layouts/dashboard";
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React from "react";
+
+import RialCard from "./Rial";
 
 export const WalletList: React.FC = () => {
   return (
     <Layout>
       <section className="page page-wallet">
-        <div className="card card-secondary mb-4">
-          <div className="card-header">
-            <h5 className="card-title">موجودی تومانی</h5>
-          </div>
-          <div className="card-body">
-            <div className="wallet-balance">
-              <div className="wallet-balance__value">
-                <strong className="d-inline-block d-ltr">
-                  893,548,200
-                  <small>تومان</small>
-                </strong>
-              </div>
-              <div className="wallet-balance__actions">
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#onlineDeposit"
-                >
-                  واریز تومان{" "}
-                </button>
-                <a
-                  href="#"
-                  className="btn btn-outline-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#onlineWithdraw"
-                >
-                  برداشت تومان
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <RialCard />
 
         <div className="card card-secondary mb-4">
           <div className="card-header">
