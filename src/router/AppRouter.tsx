@@ -9,7 +9,6 @@ import ForgetPasswordWithEmail from "pages/auth/reset-password/WithEmail";
 import ResetPassword from "pages/auth/reset-password/ResetPassword";
 
 import HomePage from "pages/Home";
-
 import Information from "pages/auth/information";
 
 import CoinPage from "pages/coins";
