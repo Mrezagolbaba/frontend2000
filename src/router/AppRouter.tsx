@@ -51,6 +51,7 @@ export default function AppRouter() {
         { path: "email-otp", element: <OtpEmail /> },
         { path: "forgot-password", element: <Forget /> },
         { path: "coins", element: <CoinPage /> },
+        { path: "information", element: <Information /> },
         DashboardRouter,
       ],
     },
