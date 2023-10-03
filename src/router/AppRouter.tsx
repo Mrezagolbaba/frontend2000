@@ -41,8 +41,6 @@ import ComingSoon from "pages/ComingSoon";
 import DashboardRouter from "./DashboardRouter";
 
 export default function AppRouter() {
-  const user = true;
-
   return (
     <Router>
       <Refine

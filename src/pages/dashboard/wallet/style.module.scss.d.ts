@@ -13,5 +13,10 @@ declare const classNames: {
   readonly "bank-logo": "bank-logo";
   readonly input: "input";
   readonly "iban-text": "iban-text";
+  readonly "table-view": "table-view";
+  readonly "crypto-img": "crypto-img";
+  readonly "crypto-name": "crypto-name";
+  readonly "silver-button": "silver-button";
+  readonly "transaction-button": "transaction-button";
 };
 export = classNames;

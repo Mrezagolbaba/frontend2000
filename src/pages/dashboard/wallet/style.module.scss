@@ -114,3 +114,74 @@
   display: block;
   font-size: 13px;
 }
+.table-view {
+  thead th {
+    font-size: 0.75em;
+    font-weight: 500;
+    color: rgba(3, 4, 27, 0.4);
+    white-space: nowrap;
+  }
+  tbody tr:last-child td {
+    border: none;
+  }
+  tbody td {
+    font-size: 0.875em;
+    font-weight: 500;
+    color: #03041b;
+  }
+
+  .crypto-img {
+    max-width: 15px;
+    margin-left: 12px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .crypto-name {
+    color: rgba(3, 4, 27, 0.5) !important;
+  }
+}
+
+.silver-button {
+  min-width: 100px;
+  padding: 0 !important;
+  height: 36px;
+  line-height: 32px !important;
+  border-radius: 7px !important;
+  color: #03041b;
+  background-color: rgba(3, 4, 27, 0.05);
+  border-color: transparent;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  border-width: 2px !important;
+  &:hover {
+    color: #03041b;
+    background-color: rgba(3, 4, 27, 0.1);
+    border-color: transparent;
+  }
+}
+.transaction-button {
+  display: inline-block;
+  min-width: 100px;
+  padding: 0 !important;
+  height: 36px;
+  line-height: 32px !important;
+  border-radius: 7px !important;
+  color: #111bff;
+  border: 1px solid #111bff;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer !important;
+  user-select: none;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+  &:hover,
+  &:active {
+    color: #fff;
+    background-color: #111bff;
+    border-color: #111bff;
+  }
+}
