@@ -24,7 +24,6 @@ export default function CryptoCard() {
 
   const [isOpenDepositForm, setIsOpenDepositForm] = useState<boolean>(false);
   const [isOpenWithdrawForm, setIsOpenWithdrawForm] = useState<boolean>(false);
-  console.log(data);
 
   return (
     <Card className="custom-card card-secondary mb-4">

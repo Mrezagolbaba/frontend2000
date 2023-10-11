@@ -101,7 +101,7 @@ import CurrencyInput from "react-currency-input-field";
 type Props = {
   name: string;
   value: string | number;
-  onChange?: () => void;
+  onChange?: (value: string) => void;
   placeholder?: string;
   decimalsLimit?: number;
   hasError?: boolean;
@@ -123,7 +123,7 @@ export default function Currency({
       placeholder={placeholder}
       defaultValue={value}
       decimalsLimit={decimalsLimit}
-      onValueChange={(value, name) => console.log(value, name)}
+      onValueChange={(value) => value && onChange?.(value)}
     />
   );
 }
