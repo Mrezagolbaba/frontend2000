@@ -1,4 +1,4 @@
-import { useList } from "@refinedev/core";
+import { useForm, useList } from "@refinedev/core";
 import { AlertInfo, AlertWarning } from "components/AlertWidget";
 import * as Yup from "yup";
 
@@ -7,7 +7,7 @@ import wallet from "pages/dashboard/wallet/style.module.scss";
 import eth from "assets/img/network/eth.svg";
 import tron from "assets/img/network/tron.svg";
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm as useRHF } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Button,
@@ -18,19 +18,38 @@ import {
   Input,
   Label,
   Row,
+  Spinner,
 } from "reactstrap";
 import Currency from "components/Input/CurrencyInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CopyInput from "components/Input/CopyInput";
 
 type CryptoFormType = {
-  network: string;
+  currencyCode: string;
   amount: string;
 };
+
+type CurrencyType = {
+  code: string;
+  type: "FIAT" | "CRYPTO";
+  name: string;
+  symbol: string;
+  decimals: number;
+};
+
 const DepositCrypto = () => {
-  const { data, isSuccess, isError, isLoading } = useList({
-    resource: "wallets",
+  const { data, isSuccess } = useList<CurrencyType>({
+    resource: "currencies",
   });
+
+  const { formLoading, onFinish } = useForm({
+    action: "create",
+    resource: "transactions/deposit",
+    onMutationSuccess: (data, variables, context, isAutoSave) => {
+      console.log({ data, variables, context, isAutoSave });
+    },
+  });
+  const [currencyList, setCurrencyList] = useState<CurrencyType[] | null>(null);
 
   const [showResult, setShowResult] = useState<boolean>(false);
   const [result, setResult] = useState({
@@ -40,37 +59,33 @@ const DepositCrypto = () => {
     endTime: "",
   });
 
-  console.log(data);
+  useEffect(() => {
+    if (isSuccess)
+      setCurrencyList(
+        data.data.filter((currency: CurrencyType) => currency.type === "CRYPTO")
+      );
+  }, [data?.data, isSuccess]);
 
-  const optionList: OptionType[] = [
-    {
-      content: (
-        <div className={wallet["items-credit"]}>
-          <span className={wallet["items-credit__icon"]}>
-            <img alt="ترون" src={tron} className="bank-svg" />
-          </span>
-          <span>TRC20 - ترون</span>
-        </div>
-      ),
-      value: "1",
-    },
-    {
-      content: (
-        <div className={wallet["items-credit"]}>
-          <span className={wallet["items-credit__icon"]}>
-            <img alt="اتریوم" src={eth} className="bank-svg" />
-          </span>
-
-          <span className="text">TRC20 - اتریوم</span>
-        </div>
-      ),
-      value: "2",
-    },
-  ];
+  const optionList: OptionType[] = currencyList
+    ? currencyList.map((currency: CurrencyType) => {
+        return {
+          content: (
+            <div className={wallet["items-credit"]}>
+              <span className={wallet["items-credit__icon"]}>
+                <img alt={currency.name} src={tron} className="bank-svg" />
+              </span>
+              <span>{currency.symbol}</span>
+              <span>{currency.name}</span>
+            </div>
+          ),
+          value: currency.code,
+        };
+      })
+    : [];
 
   const resolver = yupResolver(
     Yup.object().shape({
-      network: Yup.string().required(),
+      currencyCode: Yup.string().required(),
       amount: Yup.string().required(),
     })
   );
@@ -80,17 +95,16 @@ const DepositCrypto = () => {
     control,
     setValue,
     formState: { errors },
-  } = useForm<CryptoFormType>({
+  } = useRHF<CryptoFormType>({
     mode: "onChange",
     defaultValues: {
-      network: "1",
+      currencyCode: "",
       amount: "",
     },
     resolver,
   });
   const onSubmit = async (data: CryptoFormType) => {
-    console.log(data);
-    setShowResult(true);
+    onFinish(data);
   };
 
   return (
@@ -117,7 +131,7 @@ const DepositCrypto = () => {
           <Row>
             <Col xs={12} lg={6}>
               <Controller
-                name="network"
+                name="currencyCode"
                 control={control}
                 render={({ field: { name, value } }) => (
                   <FormGroup className="position-relative">
@@ -159,6 +173,7 @@ const DepositCrypto = () => {
                     <Currency
                       name={name}
                       value={value}
+                      onChange={(val) => setValue(name, val)}
                       placeholder="مبلغ را به تومان وارد کنید"
                       hasError={Boolean(errors?.[name])}
                     />
@@ -175,7 +190,13 @@ const DepositCrypto = () => {
           </Row>
           <Row className="mt-4">
             <div className="d-flex flex-row justify-content-evenly">
-              <Button color="primary" outline type="submit">
+              <Button
+                color="primary"
+                outline
+                type="submit"
+                disabled={formLoading}
+              >
+                {formLoading && <Spinner />}
                 ساخت کیف پول
               </Button>
             </div>
