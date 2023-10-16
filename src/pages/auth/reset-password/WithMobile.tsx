@@ -1,18 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { CiMobile2 } from "react-icons/ci";
-import { useNavigate } from "react-router-dom";
+import { useForgetPassword } from "services/auth";
+import Auth from "layouts/auth";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { toast } from "react-hot-toast";
-
-import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
-import { useLogin } from "services/auth";
-import Auth from "layouts/auth";
-import { loginSchema } from "pages/auth/validationForms";
-import { LoginFormData } from "pages/auth/types";
-import FloatInput from "components/Input/FloatInput";
-import PasswordInput from "components/PasswordInput";
-import SelectCountry from "components/SelectCountry";
+import toast from "react-hot-toast";
 import {
   Button,
   Card,
@@ -22,58 +14,32 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
-
+import FloatInput from "components/Input/FloatInput";
+import SelectCountry from "components/SelectCountry";
+import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
+import { useNavigate } from "react-router-dom";
 import auth from "assets/scss/auth/auth.module.scss";
+import { forgetPassSchema } from "../validationForms";
 
-const LoginPage: React.FC = () => {
+const Forget = () => {
   const navigate = useNavigate();
-  const loginMutation = useLogin();
+  const forgetPasswordMutation = useForgetPassword();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const resolver = yupResolver(loginSchema);
+  const resolver = yupResolver(forgetPassSchema);
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<LoginFormData>({
+  } = useForm({
     mode: "onChange",
     defaultValues: {
       phoneNumber: "",
-      password: "",
       selectedCountry: "98",
     },
     resolver,
   });
-
-  const handleLogin = async (data: LoginFormData) => {
-    setIsLoading(true);
-    const phoneNumber = formatPhoneNumber(
-      persianToEnglishNumbers(data.phoneNumber),
-      data.selectedCountry
-    );
-    const userData = {
-      phoneNumber,
-      password: data.password,
-      type: "PHONE",
-    };
-
-    await loginMutation
-      .mutateAsync(userData)
-      .then((res) => {
-        if (res) {
-          setIsLoading(false);
-          navigate("/mobile-otp", {
-            state: {
-              phoneNumber: userData.phoneNumber,
-            },
-          });
-        }
-      })
-      .catch(() => {
-        setIsLoading(false);
-      });
-  };
 
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>
@@ -81,18 +47,39 @@ const LoginPage: React.FC = () => {
         position: "bottom-left",
       })
     );
+  const handleResetPassword = async (data) => {
+    setIsLoading(true);
+    const phoneNumber = formatPhoneNumber(
+      persianToEnglishNumbers(data.phoneNumber),
+      data.selectedCountry
+    );
+    try {
+      await forgetPasswordMutation
+        .mutateAsync({ phoneNumber, type: "PHONE" })
+        .then((res) => {
+          navigate("/mobile-otp", {
+            state: {
+              data: res.data,
+              redirectTo: "/reset-password",
+            },
+          });
+          setIsLoading(false);
+        });
+    } catch (error) {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Auth>
       <section className={auth.container}>
         <Card className={auth.card}>
           <CardBody className={auth["card-body"]}>
-            <h4 className={auth.title}>ورود به حساب کاربری</h4>
-            <p className={auth.text}> شماره تلفن خود را وارد کنید</p>
-
+            <h4 className={auth.title}>فراموشی رمز عبور</h4>
+            <p className={auth.text}>شماره تلفن همراه خود را وارد کنید</p>
             <form
               className={auth.form}
-              onSubmit={handleSubmit(handleLogin, handleErrors)}
+              onSubmit={handleSubmit(handleResetPassword, handleErrors)}
             >
               <Container>
                 <Row className="gy-2 gx-0">
@@ -128,20 +115,6 @@ const LoginPage: React.FC = () => {
                       render={({ field }) => <SelectCountry {...field} />}
                     />
                   </Col>
-                  <Col xs={12}>
-                    <Controller
-                      name="password"
-                      control={control}
-                      render={({ field }) => <PasswordInput {...field} />}
-                    />
-                  </Col>
-                  <Col xs={12}>
-                    <div className={auth.forgotLink}>
-                      <Button color="link" tag="a" href="/forget-password">
-                        رمز عبور را فراموش کرده&zwnj;ام!
-                      </Button>
-                    </div>
-                  </Col>
                 </Row>
                 <Row>
                   <Col xs={12}>
@@ -150,30 +123,28 @@ const LoginPage: React.FC = () => {
                         <Button
                           type="submit"
                           color="primary"
-                          className={auth.submit}
+                          className={`${auth.submit} mt-5`}
                           disabled={isLoading}
                         >
                           {isLoading ? (
                             <Spinner style={{ color: "white" }} />
                           ) : (
-                            "ورود به حساب"
+                            "ثبت درخواست"
                           )}
                         </Button>
+                      </div>
+                      <div className={`${auth.already} mt-5`}>
                         <Button
-                          type="button"
-                          color="primary"
-                          outline
-                          className={`${auth.submit} mt-3`}
+                          color="link"
                           tag="a"
-                          href="/login-email"
+                          href="/forget-password-with-email"
                         >
-                          ورود با استفاده از ایمیل
+                          بازگردانی رمز عبور با ایمیل
                         </Button>
                       </div>
-                      <div className={auth.already}>
-                        عضو نیستم:{" "}
-                        <Button color="link" tag="a" href="/register">
-                          ثبت نام
+                      <div className={`${auth.already} mt-1`}>
+                        <Button color="link" tag="a" href="/login">
+                          ورود به حساب کاربری
                         </Button>
                       </div>
                     </div>
@@ -187,5 +158,4 @@ const LoginPage: React.FC = () => {
     </Auth>
   );
 };
-
-export default LoginPage;
+export default Forget;

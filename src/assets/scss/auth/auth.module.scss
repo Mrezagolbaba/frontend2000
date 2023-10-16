@@ -1,0 +1,92 @@
+.wrapper {
+  padding-bottom: 15px;
+  direction: rtl;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  background-color: #fffbf1;
+  padding: 15px 60px 15px;
+  margin-bottom: 30px;
+}
+.logo {
+  flex: 0 0 86px;
+  img {
+    width: 75px;
+  }
+}
+.confidence {
+  flex: 0 0 calc(100% - 172px);
+  text-align: center;
+  p {
+    margin-bottom: 12px;
+  }
+  svg {
+    color: #39d98a;
+    margin-right: 30px;
+  }
+  label span {
+    color: #39d98a;
+  }
+}
+
+.container {
+  .card {
+    background: #fff;
+    border-radius: 10px;
+    border: none;
+    width: 100%;
+    max-width: 517px;
+    min-height: 670px;
+    margin: 0 auto;
+    box-shadow: 0 4px 34px rgba(0, 0, 0, 0.04);
+  }
+  .card-body {
+    padding: 25px 100px;
+  }
+}
+
+.title,
+.text {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.title {
+  font-size: 1.5em;
+  font-weight: 500;
+}
+.text {
+  line-height: 26px;
+  span {
+    direction: ltr;
+    padding: 0 5px;
+  }
+}
+.form {
+  direction: rtl;
+  a {
+    color: #111bff;
+    text-decoration: none;
+  }
+  .submit {
+    width: 100%;
+    display: block;
+    padding: 10px;
+  }
+  .link {
+    margin: auto;
+    display: block;
+  }
+}
+.already {
+  word-spacing: 1px;
+  text-align: center;
+}
+.forgotLink {
+  margin-bottom: 1.5rem;
+  a {
+    font-size: 0.75em;
+    font-weight: bold;
+  }
+}

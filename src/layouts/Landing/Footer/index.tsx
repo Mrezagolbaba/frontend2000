@@ -1,72 +1,95 @@
 import React from "react";
-import "./style.scss";
+import { Badge, Col, Container, Row } from "reactstrap";
+import { Link } from "react-router-dom";
+
+import home from "assets/scss/landing/home.module.scss";
 
 const Footer = (): React.JSX.Element => {
   return (
-    <footer className="landing-footer">
-      <div className="container">
-        <div className="row g-4">
-          <div className="col-lg-6">
+    <footer className={home.footer}>
+      <Container>
+        <Row className="g-4">
+          <Col xs={12} lg={6}>
             <div className="footer-widget newsletter">
-              <h3 className="footer-widget-title">عضویت در خبرنامه</h3>
-              <form className="newsletter-form">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="ایمیل خود را وارد کنید"
-                />
-                <button type="submit" className="btn btn-white">
-                  ارسال
-                </button>
-              </form>
+              <h3 className={home["footer-widget-title"]}>
+                با ما در ارتباط باشید
+              </h3>
+              <p className={home["footer-text"]}>
+                خیابان جردن (بلوار آفریقا)، بلوار صبا پلاک ۲۳ واحد ۴
+              </p>
+              <p className={home["footer-text"]}>Support [@] Arsonex [.] com</p>
+              <p className={home["footer-text"]}>021-92004581</p>
+              <p className={home["footer-text"]}> 5411008686 - 90+</p>
+              <p className={home["footer-text"]}>
+                ۲۴ ساعت شبانه روز پاسخگوی شما هستیم
+              </p>
             </div>
-          </div>
-          <div className="col-lg-2 col-md-4 col-sm-6 col-6">
+          </Col>
+          <Col lg={2} md={4} xs={6}>
             <div className="footer-widget">
-              <h3 className="footer-widget-title">بازارها</h3>
-              <ul className="footer-links">
+              <h3 className={home["footer-widget-title"]}>آرسونیکس</h3>
+              <ul className={home["footer-links"]}>
                 <li>
-                  <a href="#">تتر</a>
+                  <Link to="/aboutUs">درباره ما</Link>
                 </li>
                 <li>
-                  <a href="#">لیر</a>
+                  <Link to="/contact">تماس با ما</Link>
+                </li>
+                <li>
+                  <Link to="#">کارمزد&zwnj;ها</Link>
+                </li>
+                <li>
+                  <Link to="/terms">قوانین و مقررات</Link>
                 </li>
               </ul>
             </div>
-          </div>
-          <div className="col-lg-2 col-md-4 col-sm-6 col-6">
+          </Col>
+          <Col lg={2} md={4} xs={6}>
             <div className="footer-widget">
-              <h3 className="footer-widget-title">درباره ما</h3>
-              <ul className="footer-links">
+              <h3 className={home["footer-widget-title"]}>امکانات</h3>
+              <ul className={home["footer-links"]}>
                 <li>
-                  <a href="#">درباره ما</a>
+                  <a href="#">معامله تک نرخی</a>
                 </li>
                 <li>
-                  <a href="#">تماس با ما</a>
+                  <a href="#">برداشت بین&zwnj;المللی</a>
+                </li>
+                <li>
+                  <a href="#">کسب درآمد</a>
+                </li>
+                <li>
+                  <a href="#">ویزا و مستر کارت مجازی</a>
+                  <Badge className={home["badge-custom"]}>بزودی</Badge>
                 </li>
               </ul>
             </div>
-          </div>
-          <div className="col-lg-2 col-md-4 col-sm-6 col-6">
+          </Col>
+          <Col lg={2} md={4} xs={6}>
             <div className="footer-widget">
-              <h3 className="footer-widget-title">خدمات</h3>
-              <ul className="footer-links">
+              <h3 className={home["footer-widget-title"]}>راهنمای استفاده</h3>
+              <ul className={home["footer-links"]}>
                 <li>
-                  <a href="#">سوالات متداول</a>
+                  <a href="#">مرکز راهنمایی</a>
                 </li>
                 <li>
-                  <a href="#">قوانین مقررات</a>
+                  <a href="#">معامله ارز دیجیتال</a>
+                </li>
+                <li>
+                  <a href="#">معامله فیات دیجیتال</a>
+                </li>
+                <li>
+                  <a href="#">خرید بین&zwnj;المللی</a>
+                </li>
+                <li>
+                  <a href="#">احراز هویت فوری</a>
                 </li>
               </ul>
             </div>
-          </div>
-        </div>
+          </Col>
+        </Row>
 
-        <div className="footer-bottom">
-          <div className="footer-copyright">
-            © 2021 تا امروز، تمامی حقوق محفوظ است.{" "}
-          </div>
-          <ul className="social-media">
+        <div className={home["footer-bottom"]}>
+          <ul className={home["social-media"]}>
             <li>
               <a href="#">
                 <span className="icon">
@@ -138,8 +161,12 @@ const Footer = (): React.JSX.Element => {
               </a>
             </li>
           </ul>
+          <div className={home["footer-copyright"]}>
+            © 2021 تا امروز، تمامی حقوق (مادی و معنوی) این وب سایت برای
+            آرسونیکس محفوظ است.{" "}
+          </div>
         </div>
-      </div>
+      </Container>
     </footer>
   );
 };

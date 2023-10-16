@@ -7,10 +7,13 @@ import routerProvider from "@refinedev/react-router-v6";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import LoginPage from "pages/auth/signin";
+import LoginEmailPage from "pages/auth/signin/EmailSignin";
 import SignupPage from "pages/auth/signup";
 import OtpEmail from "pages/auth/otp/OtpEmail";
 import OtpMobile from "pages/auth/otp/OtpMobile";
-import Forget from "pages/auth/forget";
+import ForgetPasswordWithMobile from "pages/auth/reset-password/WithMobile";
+import ForgetPasswordWithEmail from "pages/auth/reset-password/WithEmail";
+import ResetPassword from "pages/auth/reset-password/ResetPassword";
 
 import HomePage from "pages/Home";
 import Dashboard from "pages/dashboard";
@@ -29,6 +32,7 @@ import Information from "pages/auth/information";
 import Market from "pages/market";
 import request from "services/adapter";
 import CoinPage from "pages/coins";
+import ComingSoon from "pages/ComingSoon";
 
 const AppRouter: React.FC = () => {
   // const [showAddToHomeSheet, setShowAddToHomeSheet] = useState(isMobile && !window.matchMedia('(display-mode: standalone)').matches);
@@ -48,9 +52,9 @@ const AppRouter: React.FC = () => {
         routerProvider={routerProvider}
         resources={[
           {
-            name: "wallets",
-            list: "/wallets",
-            create: "/wallets/create",
+            name: "wallet",
+            list: "/wallet",
+            create: "/wallet/create",
           },
           {
             name: "transactions",
@@ -60,7 +64,7 @@ const AppRouter: React.FC = () => {
         ]}
       >
         <Routes>
-          <Route path="wallets">
+          <Route path="wallet">
             <Route index element={<WalletList />} />
             {/* <Route path="create" element={<Wallet />} /> */}
           </Route>
@@ -76,12 +80,19 @@ const AppRouter: React.FC = () => {
       <Routes>
         {/* Define your routes */}
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/login-email" element={<LoginEmailPage />} />
         <Route path="/register" element={<SignupPage />} />
         <Route path="/email-otp" element={<OtpEmail />} />
         <Route path="/mobile-otp" element={<OtpMobile />} />
-        <Route path="/forget" element={<Forget />} />
+        <Route path="/forget-password" element={<ForgetPasswordWithMobile />} />
+        <Route
+          path="/forget-password-with-email"
+          element={<ForgetPasswordWithEmail />}
+        />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/coins" element={<CoinPage />} />
+        <Route path="/coming-soon" element={<ComingSoon />} />
         <Route
           path="/dashboard"
           element={<ProtectedRoute children={<Dashboard />} user={user} />}

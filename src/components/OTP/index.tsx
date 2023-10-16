@@ -6,6 +6,8 @@ import React, {
   KeyboardEvent,
 } from "react";
 
+import otp from "./otp.module.scss";
+
 function OtpInput({ onChange }: OtpInputProps) {
   const [otpValues, setOtpValues] = useState<string[]>([
     "",
@@ -57,7 +59,7 @@ function OtpInput({ onChange }: OtpInputProps) {
 
   const handleInputKeyDown = (
     index: number,
-    e: KeyboardEvent<HTMLInputElement>,
+    e: KeyboardEvent<HTMLInputElement>
   ) => {
     if (e.key === "Backspace" && index > 0 && otpValues[index] === "") {
       const newOtpValues = [...otpValues];
@@ -68,12 +70,12 @@ function OtpInput({ onChange }: OtpInputProps) {
   };
 
   return (
-    <div className="code-input-control">
+    <div className={otp.wrapper}>
       {otpValues.map((value, index) => (
         <input
           key={index}
+          className="form-control control-auto-focus"
           type="text"
-          className="form-control d-ltr control-auto-focus"
           maxLength={1}
           ref={(input) => (otpInputs.current[index] = input!)}
           value={value}

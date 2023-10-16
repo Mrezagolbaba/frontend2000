@@ -1,6 +1,6 @@
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import Header from "./Header";
-import "./style.scss";
+import style from "assets/scss/landing/home.module.scss";
 import Footer from "./Footer";
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 
 const LandingLayout = ({ children }: Props) => {
   return (
-    <div className="landing-wrapper">
+    <div className={style.wrapper}>
       <Header />
       {children}
       <Footer />

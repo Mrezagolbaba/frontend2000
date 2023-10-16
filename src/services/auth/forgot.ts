@@ -13,18 +13,48 @@ export const forgetPassword = async (userData: any) => {
     return response.data;
   } catch (error: any) {
     toast.error(
-      error.response?.data?.message || "Request failed. Please try again.",
+      error.response?.data?.message || "Request failed. Please try again."
     );
     throw new Error(
-      error.response?.data?.message || "Request failed. Please try again.",
+      error.response?.data?.message || "Request failed. Please try again."
     );
   }
 };
 
-const useForgetPassword = (
-  options?: UseMutationOptions<any, Error, any, any>,
+export const setPassword = async (userData: {
+  password: string;
+  token: string;
+}) => {
+  try {
+    const response = await request.post(
+      "auth/set-password",
+      { password: userData.password },
+      {
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+        },
+      }
+    );
+    // Handle any additional logic related to forget password API response if needed
+    return response.data;
+  } catch (error: any) {
+    toast.error(
+      error.response?.data?.message || "Request failed. Please try again."
+    );
+    throw new Error(
+      error.response?.data?.message || "Request failed. Please try again."
+    );
+  }
+};
+
+export const useForgetPassword = (
+  options?: UseMutationOptions<any, Error, any, any>
 ): UseMutationResult<any, Error, any, any> => {
   return useMutation(forgetPassword, options);
 };
 
-export default useForgetPassword;
+export const useSetPassword = (
+  options?: UseMutationOptions<any, Error, any, any>
+): UseMutationResult<any, Error, any, any> => {
+  return useMutation(setPassword, options);
+};

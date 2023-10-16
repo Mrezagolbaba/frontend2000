@@ -1,0 +1,11 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  direction: ltr;
+  & > input {
+    margin: 0 3px;
+    height: 45px;
+    text-align: center;
+  }
+}

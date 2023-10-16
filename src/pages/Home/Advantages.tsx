@@ -7,113 +7,124 @@ import feature002 from "assets/img/features/feature002.png";
 
 import dashboard from "assets/img/lay/dashboard.png";
 
+import home from "assets/scss/landing/home.module.scss";
+import { Col, Container, Row } from "reactstrap";
+
 const Advantages = () => {
   return (
-    <section className="landing-features">
-      <div className="section-title">
-        <h3 className="section-title__title">
+    <section className={home.features}>
+      <div className={home["section-title"]}>
+        <h3 className={home["section-title__title"]}>
           مزایای استفاده از <span className="text-primary">آرسونیکس</span>
         </h3>
       </div>
-      <section className="landing-features__wrapper">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-6">
-              <div className="feature">
-                <div className="feature-img">
+      <section className={home["features__wrapper"]}>
+        <Container>
+          <Row>
+            <Col md={6}>
+              <div className={home.feature}>
+                <div className={home["feature__image"]}>
                   <img src={feature003} />
                 </div>
-                <div className="feature-body">
-                  <h3 className="feature-title">پشتیبانی آنلاین</h3>
-                  <p className="feature-text">
+                <div className={home["feature__body"]}>
+                  <h3 className={home["feature__title"]}>پشتیبانی آنلاین</h3>
+                  <p className={home["feature__text"]}>
                     پشتیبانی آرسونیکس به تمام مشکلات شما در ۲۴ ساعت شبانه روز از
                     طریق تیکت، چت آنلاین یا تماس تلفنی کمک می&zwnj;کند.{" "}
                   </p>
                 </div>
               </div>
-            </div>
-            <div className="col-md-6">
-              <div className="feature">
-                <div className="feature-img">
+            </Col>
+            <Col md={6}>
+              <div className={home.feature}>
+                <div className={home["feature__image"]}>
                   <img src={feature004} />
                 </div>
-                <div className="feature-body">
-                  <h3 className="feature-title">کارمزد منصفانه</h3>
-                  <p className="feature-text">
+                <div className={home["feature__body"]}>
+                  <h3 className={home["feature__title"]}>کارمزد منصفانه</h3>
+                  <p className={home["feature__text"]}>
                     ما به شما تضمین کمترین کارمزد را در بین تمامی صرافی&zwnj;های
                     داخل و خارج ایران می&zwnj;دهیم.{" "}
                   </p>
                 </div>
               </div>
-            </div>
-            <div className="col-md-6">
-              <div className="feature">
-                <div className="feature-img">
+            </Col>
+            <Col md={6}>
+              <div className={home.feature}>
+                <div className={home["feature__image"]}>
                   <img src={feature001} />
                 </div>
-                <div className="feature-body">
-                  <h3 className="feature-title">خرید و فروش سریع و تک نرخی</h3>
-                  <p className="feature-text">
+                <div className={home["feature__body"]}>
+                  <h3 className={home["feature__title"]}>
+                    خرید و فروش سریع و تک نرخی
+                  </h3>
+                  <p className={home["feature__text"]}>
                     در آرسونیکس تمام ارزها یک نرخ دارند، با یک نرخ
                     می&zwnj;فروشید و با همان نرخ می&zwnj;توانید بخرید؛ در
                     سریع&zwnj;ترین زمان ممکن.
                   </p>
                 </div>
               </div>
-            </div>
-            <div className="col-md-6">
-              <div className="feature">
-                <div className="feature-img">
+            </Col>
+            <Col md={6}>
+              <div className={home.feature}>
+                <div className={home["feature__image"]}>
                   <img src={feature002} />
                 </div>
-                <div className="feature-body">
-                  <h3 className="feature-title">امنیت</h3>
-                  <p className="feature-text">
+                <div className={home["feature__body"]}>
+                  <h3 className={home["feature__title"]}>امنیت</h3>
+                  <p className={home["feature__text"]}>
                     اطلاعات و دارایی&zwnj;های شما در امن&zwnj;ترین حالت ممکن
                     نگهداری می&zwnj;شوند و هیچ ارگان و دولتی به آن&zwnj;ها
                     دسترسی نخواهد داشت.
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
+            </Col>
+          </Row>
+        </Container>
       </section>
-      <section className="landing-features__slide">
-        <div className="features-slider">
-          <div className="row g-4">
-            <div className="col-lg-6">
-              <div className="feature-slide feature-slide--blue">
-                <div className="feature-slide-caption">
-                  <h4 className="feature-slide-title">
-                    بدون تحریم، ریال به دلار یا لیر تبدیل کن
+      <section className={home["features__slide"]}>
+        <div className={home["features__slide__container"]}>
+          <Row className="g-4">
+            <Col md={6}>
+              <div className={`${home["feature__box"]} ${home["box--blue"]}`}>
+                <div className={home["feature__box__caption"]}>
+                  <h4 className={home["feature__box__title"]}>
+                    پاسخ سوالات شما؛ اینجاست
                   </h4>
-                  <h5 className="feature-slide-subtitle">
-                    در حساب بانکی بین المللی خودت دریافت کن!
+                  <h5 className={home["feature__box__subtitle"]}>
+                    به تمام سوالات پرتکرار کاربران در مرکز راهنمایی آرسونیکس
+                    پاسخ داده‌ایم.
                   </h5>
                 </div>
               </div>
-            </div>
-            <div className="col-lg-6">
-              <div className="feature-slide feature-slide--darkblue">
-                <div className="feature-slide-caption">
-                  <h4 className="feature-slide-title">چرا دلار کاغذی؟</h4>
-                  <h5 className="feature-slide-subtitle">
-                    با بهترین نرخ بازار سرمایه خودت آنلاین حفظ کن!
+            </Col>
+            <Col md={6}>
+              <div
+                className={`${home["feature__box"]} ${home["box--darkblue"]}`}
+              >
+                <div className={home["feature__box__caption"]}>
+                  <h4 className={home["feature__box__title"]}>
+                    25% درصد کارمزد، برای شما
+                  </h4>
+                  <h5 className={home["feature__box__subtitle"]}>
+                    فقط از دوستان خود دعوت کنید، 25% کارمزد بعد از هر معامله
+                    بصورت آنی دریافت کنید.
                   </h5>
                 </div>
               </div>
-            </div>
-          </div>
+            </Col>
+          </Row>
         </div>
       </section>
-      <section className="landing-features__banner">
-        <div className="container">
-          <div className="feature-banner">
+      <section>
+        <Container>
+          <div className={home["feature__banner"]}>
             <p>سادگی، با آرسونیکس معنای تازه&zwnj;ای پیدا کرده...</p>
             <img src={dashboard} />
           </div>
-        </div>
+        </Container>
       </section>
     </section>
   );

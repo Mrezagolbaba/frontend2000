@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CiMobile2 } from "react-icons/ci";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-hot-toast";
@@ -8,8 +8,8 @@ import { toast } from "react-hot-toast";
 import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
 import { useLogin } from "services/auth";
 import Auth from "layouts/auth";
-import { loginSchema } from "pages/auth/validationForms";
-import { LoginFormData } from "pages/auth/types";
+import { loginEmailSchema, loginSchema } from "pages/auth/validationForms";
+import { LoginEmailFormData } from "pages/auth/types";
 import FloatInput from "components/Input/FloatInput";
 import PasswordInput from "components/PasswordInput";
 import SelectCountry from "components/SelectCountry";
@@ -24,38 +24,34 @@ import {
 } from "reactstrap";
 
 import auth from "assets/scss/auth/auth.module.scss";
+import { HiOutlineMail } from "react-icons/hi";
 
-const LoginPage: React.FC = () => {
+const EmailSignin = () => {
   const navigate = useNavigate();
   const loginMutation = useLogin();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const resolver = yupResolver(loginSchema);
+  const resolver = yupResolver(loginEmailSchema);
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<LoginFormData>({
+  } = useForm<LoginEmailFormData>({
     mode: "onChange",
     defaultValues: {
-      phoneNumber: "",
+      email: "",
       password: "",
-      selectedCountry: "98",
     },
     resolver,
   });
 
-  const handleLogin = async (data: LoginFormData) => {
+  const handleLogin = async (data: LoginEmailFormData) => {
     setIsLoading(true);
-    const phoneNumber = formatPhoneNumber(
-      persianToEnglishNumbers(data.phoneNumber),
-      data.selectedCountry
-    );
     const userData = {
-      phoneNumber,
+      email: data.email,
       password: data.password,
-      type: "PHONE",
+      type: "EMAIL",
     };
 
     await loginMutation
@@ -63,9 +59,9 @@ const LoginPage: React.FC = () => {
       .then((res) => {
         if (res) {
           setIsLoading(false);
-          navigate("/mobile-otp", {
+          navigate("/email-otp", {
             state: {
-              phoneNumber: userData.phoneNumber,
+              email: userData.email,
             },
           });
         }
@@ -96,36 +92,28 @@ const LoginPage: React.FC = () => {
             >
               <Container>
                 <Row className="gy-2 gx-0">
-                  <Col xs={8}>
+                  <Col xs={12}>
                     <Controller
-                      name="phoneNumber"
+                      name="email"
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
                         <FloatInput
-                          type="text"
+                          type="email"
                           name={name}
                           value={value}
-                          label="شماره همراه"
+                          label="email"
                           onChange={onChange}
                           inputProps={{
                             ref: ref,
                             size: "large",
-                            prefix: <CiMobile2 />,
+                            prefix: <HiOutlineMail />,
                             status: errors?.[name]?.message
                               ? "error"
                               : undefined,
                             autoFocus: true,
-                            className: "phone-number-input",
                           }}
                         />
                       )}
-                    />
-                  </Col>
-                  <Col xs={4}>
-                    <Controller
-                      name="selectedCountry"
-                      control={control}
-                      render={({ field }) => <SelectCountry {...field} />}
                     />
                   </Col>
                   <Col xs={12}>
@@ -137,7 +125,11 @@ const LoginPage: React.FC = () => {
                   </Col>
                   <Col xs={12}>
                     <div className={auth.forgotLink}>
-                      <Button color="link" tag="a" href="/forget-password">
+                      <Button
+                        color="link"
+                        tag="a"
+                        href="/forget-password-with-email"
+                      >
                         رمز عبور را فراموش کرده&zwnj;ام!
                       </Button>
                     </div>
@@ -165,9 +157,9 @@ const LoginPage: React.FC = () => {
                           outline
                           className={`${auth.submit} mt-3`}
                           tag="a"
-                          href="/login-email"
+                          href="/login"
                         >
-                          ورود با استفاده از ایمیل
+                          ورود با استفاده از شماره همراه
                         </Button>
                       </div>
                       <div className={auth.already}>
@@ -188,4 +180,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default EmailSignin;
