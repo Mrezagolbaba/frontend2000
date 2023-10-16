@@ -90,3 +90,36 @@
     font-weight: bold;
   }
 }
+
+@media screen and (max-width: 767px) {
+  .header {
+    flex-wrap: wrap;
+    padding: 15px;
+    justify-content: center;
+  }
+  .logo {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .confidence {
+    flex-basis: 100%;
+    span {
+      margin-right: 5px;
+    }
+  }
+  .container {
+    padding: 0 15px;
+    .card {
+      min-height: unset;
+    }
+    .card-body {
+      padding: 25px;
+    }
+  }
+  .title {
+    font-size: 1.125em;
+  }
+  .text {
+    font-size: 0.75em;
+  }
+}
