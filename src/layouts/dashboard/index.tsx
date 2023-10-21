@@ -2,8 +2,8 @@ import { ReactNode, useEffect, useState } from "react";
 import Header from "./Header";
 // import LogoArsonex from '../../assets/img/logo-arsonex.png';
 
-
-import "./style.scss";
+import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+// import "./style.scss";
 
 // import "assets/css/app.css"
 
@@ -20,7 +20,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-
   const dispatch = useAppDispatch();
   const getMe = useGetMe();
   useEffect(() => {
@@ -29,10 +28,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
     });
   }, []);
   return (
-    <div className="admin-wrapper" id="root">
-      <div id="menuOverlay" className="menu-overlay"></div>
+    <div className={dashboard.wrapper}>
+      <div id="menuOverlay" className={dashboard["menu-overlay"]} />
       <Sidebar isOpen={isSidebarOpen} onSidebarToggle={handleSidebarToggle} />
-      <Container fluid className="main-wrapper">
+      <Container fluid className={dashboard["main-wrapper"]}>
         <Header onSidebarToggle={handleSidebarToggle} />
         {children}
       </Container>

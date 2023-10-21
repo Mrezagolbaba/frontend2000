@@ -12,6 +12,8 @@ import { Nav, NavItem } from "reactstrap";
 import "./style.scss";
 import { CiLogout } from "react-icons/ci";
 
+import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+
 type Props = {
   isOpen: boolean;
   onSidebarToggle: () => void;
@@ -59,9 +61,9 @@ export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
   ];
 
   return (
-    <div className={`dashboard-sidebar ${isOpen ? "expanded" : ""}`}>
+    <div className={`${dashboard.sidebar} ${isOpen ? dashboard.expanded : ""}`}>
       <button
-        className="dashboard-sidebar__close"
+        className={dashboard.sidebar__close}
         onClick={() => onSidebarToggle()}
       >
         <span className="icon">
@@ -88,17 +90,17 @@ export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
         </span>
       </button>
 
-      <div className="dashboard-sidebar__logo">
+      <div className={dashboard.sidebar__logo}>
         <Link to="/">
           <img src={LogoArsonex} alt="" className="" />
         </Link>
       </div>
-      <Nav className="dashboard-sidebar__navbar" vertical>
+      <Nav className={dashboard.sidebar__navbar} vertical>
         {items.map((item) => (
           <NavItem
             key={item.path}
-            className={` dashboard-sidebar__navbar__item ${
-              activeItem === item.path && "active"
+            className={` ${dashboard.sidebar__navbar__item} ${
+              activeItem === item.path ? dashboard.active: ""
             }`}
             onClick={() => handleClick(item.path)}
           >
@@ -110,7 +112,7 @@ export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
         ))}
         <NavItem
           key="logout"
-          className={` dashboard-sidebar__navbar__item item-logout`}
+          className={`${dashboard.sidebar__navbar__item} ${dashboard["item-logout"]}`}
           onClick={() => {}}
         >
           <Link to="/login">
@@ -122,48 +124,5 @@ export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
         </NavItem>
       </Nav>
     </div>
-    // <Menu
-    //   onClick={handleClick}
-    //   className={`dashboard-sidebar ${isOpen ? "expanded" : ""}`}
-    //   defaultSelectedKeys={["0"]}
-    //   defaultOpenKeys={["sub1"]}
-    //   mode="inline"
-    //   style={{ width: 256, top: 0 }}
-    //   selectedKeys={[activeItem]}
-    // >
-    //   <div className="dashboard-sidebar__header">
-    //     <button className="dashboard-sidebar__close" onClick={() => onSidebarToggle()}>
-    //       <span className="icon">
-    //         <svg
-    //           width="14"
-    //           height="14"
-    //           viewBox="0 0 14 14"
-    //           fill="none"
-    //           xmlns="http://www.w3.org/2000/svg"
-    //         >
-    //           <path
-    //             d="M13 1L1 13"
-    //             stroke="#03041B"
-    //             strokeWidth="1.5"
-    //             strokeLinecap="round"
-    //           />
-    //           <path
-    //             d="M13 13L1 0.999999"
-    //             stroke="#03041B"
-    //             strokeWidth="1.5"
-    //             strokeLinecap="round"
-    //           />
-    //         </svg>
-    //       </span>
-    //     </button>
-
-    //     <div className="dashboard-sidebar-logo">
-    //       <Link to="/">
-    //         <img src={LogoArsonex} alt="" className="" />
-    //       </Link>
-    //     </div>
-    //   </div>
-    //   <ul className="navbar">{items.map(renderItem)}</ul>
-    // </Menu>
   );
 }

@@ -1,4 +1,27 @@
-.dashboard-header {
+.wrapper {
+  position: relative;
+  background-color: #fbfbfb;
+  display: flex;
+
+  .main-wrapper {
+    width: calc(100% - 236px);
+    padding: 40px 24px;
+  }
+  .menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    background-color: transparent;
+    transition: all 0.4s ease-out 0.1s;
+  }
+}
+
+.header {
   margin-bottom: 24px;
   & .card {
     background: #fff;
@@ -90,8 +113,98 @@
   }
 }
 
+.sidebar {
+  min-width: 236px;
+  max-width: 236px;
+  background-color: #fff;
+  padding: 20px;
+  align-self: flex-start;
+  box-shadow: -10px 4px 64px rgba(0, 0, 0, 0.03);
+  &__close {
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    outline: none;
+    width: 12px;
+    height: 12px;
+    line-height: 12px;
+    display: none;
+  }
+  &__logo {
+    text-align: center;
+    margin-top: 20px;
+    img {
+      width: 86px;
+    }
+  }
+  &__navbar {
+    padding: 60px 0 0;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: calc(100vh - 147px);
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    &__item {
+      position: relative;
+      display: block;
+      width: 100%;
+      transition: all 200ms ease-out;
+      & > a > span {
+        padding: 0 5px;
+      }
+      &:before {
+        display: block;
+        width: 3px;
+        height: 22px;
+        border-radius: 2px;
+        background-color: #111bff;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      &.active {
+        background-color: rgba(17, 27, 255, 0.1);
+        border-radius: 10px;
+
+        &:before {
+          content: "";
+        }
+        a {
+          color: #111bff;
+          font-weight: 500;
+        }
+      }
+      &.item-logout {
+        margin-top: auto;
+        &:hover a {
+          color: #ff1f11;
+        }
+      }
+      a {
+        display: block;
+        height: 62px;
+        line-height: 62px;
+        color: #03041b;
+        padding: 0 25px;
+      }
+      .icon {
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 991px) {
-  .dashboard-header {
+  .wrapper {
+    .main-wrapper {
+      width: 100%;
+      padding: 0 24px 24px;
+    }
+  }
+  .header {
     margin-right: -24px;
     margin-left: -24px;
     & .card {
@@ -114,7 +227,7 @@
 }
 
 @media screen and (max-width: 767px) {
-  .dashboard-header {
+  .header {
     &__navbar {
       position: fixed;
       top: 0;

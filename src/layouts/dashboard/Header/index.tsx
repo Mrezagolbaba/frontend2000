@@ -3,9 +3,9 @@ import Notifications from "assets/img/icons/notification.svg";
 import Support from "assets/img/icons/support.svg";
 import Setting from "assets/img/icons/setting.svg";
 import { GiHamburgerMenu } from "react-icons/gi";
-
-import "./style.scss";
 import { useState } from "react";
+import { Card, CardBody } from "reactstrap";
+import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 
 interface Props {
   onSidebarToggle: () => void;
@@ -14,15 +14,15 @@ interface Props {
 const Header = ({ onSidebarToggle }: Props) => {
   const [isLeftMenuOpen, setIsLefMenuOpen] = useState<boolean>(false);
   return (
-    <header className="dashboard-header header">
-      <div className="card">
-        <div className="card-body">
-          <div className="dashboard-header__logo">
+    <header className={dashboard.header}>
+      <Card className={dashboard.card}>
+        <CardBody className={dashboard["card-body"]}>
+          <div className={dashboard.header__logo}>
             <a href="#">
               <img src={Wallet} alt="" className="logo" />
             </a>
           </div>
-          <ul className="dashboard-header__navbar">
+          <ul className={dashboard.header__navbar}>
             <li>
               <a href="/market">بازارها</a>
             </li>
@@ -31,7 +31,7 @@ const Header = ({ onSidebarToggle }: Props) => {
               <a href="/fast-buy-sell">خرید و فروش سریع</a>
             </li>
           </ul>
-          <div className="dashboard-header__support">
+          <div className={dashboard.header__support}>
             <a href="/support" className="">
               <span className="icon">
                 <img src={Support} alt="support" />
@@ -39,14 +39,14 @@ const Header = ({ onSidebarToggle }: Props) => {
               پشتیبانی
             </a>
           </div>
-          <div className="dashboard-header__setting">
+          <div>
             <a href="/setting">
               <span className="icon">
                 <img src={Setting} alt="setting" />
               </span>
             </a>
           </div>
-          <div className="dashboard-header__notification">
+          <div className={dashboard.header__notification}>
             <a href="/notification">
               <span className="icon">
                 <img src={Notifications} alt="notification" />
@@ -54,9 +54,9 @@ const Header = ({ onSidebarToggle }: Props) => {
             </a>
           </div>
 
-          <div className="dashboard-header__subheader">
+          <div className={dashboard.header__subheader}>
             <button
-              className="dashboard-header__hamburger-btn"
+              className={dashboard["header__hamburger-btn"]}
               onClick={() => onSidebarToggle()}
             >
               <span className="icon">
@@ -64,7 +64,7 @@ const Header = ({ onSidebarToggle }: Props) => {
               </span>
             </button>
             <button
-              className="dashboard-header__hamburger-btn"
+              className={dashboard["header__hamburger-btn"]}
               onClick={() => setIsLefMenuOpen(true)}
             >
               <span className="icon">
@@ -72,14 +72,12 @@ const Header = ({ onSidebarToggle }: Props) => {
               </span>
             </button>
             <ul
-              className={`dashboard-header__navbar ${
-                isLeftMenuOpen ? "expanded" : ""
+              className={`${dashboard.header__navbar} ${
+                isLeftMenuOpen ? dashboard.expanded : ""
               }`}
             >
-              <li className="dashboard-header__navbar__close">
-                <button
-                onClick={() => setIsLefMenuOpen(false)}
-                >
+              <li className={dashboard.header__navbar__close}>
+                <button onClick={() => setIsLefMenuOpen(false)}>
                   <span className="icon">
                     <svg
                       width="14"
@@ -115,8 +113,8 @@ const Header = ({ onSidebarToggle }: Props) => {
               </li>
             </ul>
           </div>
-        </div>
-      </div>
+        </CardBody>
+      </Card>
     </header>
   );
 };
