@@ -104,8 +104,11 @@
     font-weight: bold;
   }
 }
-.phone-number input {
-  direction: ltr !important;
+.phone-number {
+  border-radius: 0 8px 8px 0 !important;
+  input {
+    direction: ltr !important;
+  }
 }
 
 @media screen and (max-width: 767px) {
