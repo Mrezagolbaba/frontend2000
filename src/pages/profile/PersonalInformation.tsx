@@ -18,6 +18,8 @@ import {
 import { useAppSelector } from "redux/hooks";
 import * as Yup from "yup";
 
+import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+
 export default function PersonalInformation() {
   const user = useAppSelector((state) => state.user);
   const { firstName, lastName, nationalId, birthDate } = user;
@@ -60,7 +62,7 @@ export default function PersonalInformation() {
   }, [birthDate, firstName, lastName, nationalId, reset]);
 
   return (
-    <Card className="custom-card card-secondary personal-info-card mb-4">
+    <Card className="mb-4">
       <CardHeader>
         <CardTitle tag="h5">اطلاعات شخصی</CardTitle>
       </CardHeader>
@@ -83,8 +85,8 @@ export default function PersonalInformation() {
         </div>
         <div className="alert alert-warning">
           در صورت تغییر شماره موبایل توجه داشته باشید باید خط به نام شخص
-           {`${firstName} ${lastName}`}
-           باشد در غیر اینصورت شماره موبایل تغییر نمی&zwnj;کند.
+          {`${firstName} ${lastName}`}
+          باشد در غیر اینصورت شماره موبایل تغییر نمی&zwnj;کند.
         </div>
 
         <Form action="" className="">

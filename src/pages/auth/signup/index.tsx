@@ -116,7 +116,7 @@ const SignupPage: React.FC = () => {
                               ? "error"
                               : undefined,
                             autoFocus: true,
-                            className: "phone-number-input",
+                            className: auth["phone-number"],
                           }}
                         />
                       )}
@@ -138,18 +138,13 @@ const SignupPage: React.FC = () => {
                       )}
                     />
                   </Col>
-                  <Col xs={12} className="auth-terms">
+                  <Col xs={12} className={auth.terms}>
                     <Controller
                       name="terms"
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
-                        <div className="form-check form-check--lg auth-terms">
-                          <Label htmlFor={name}>
-                            <Link to="#"> مقررات آرسونیکس</Link> را خوانده‌ام و
-                            با آن موافقم.
-                          </Label>
+                        <div>
                           <Input
-                            style={{ marginRight: "8px" }}
                             checked={value}
                             className="form-check-input"
                             type="checkbox"
@@ -161,6 +156,10 @@ const SignupPage: React.FC = () => {
                               errors?.[name]?.message ? "error" : undefined
                             }
                           />
+                          <Label htmlFor={name}>
+                            <Link to="#"> مقررات آرسونیکس</Link> را خوانده‌ام و
+                            با آن موافقم.
+                          </Label>
                         </div>
                       )}
                     />
@@ -185,7 +184,9 @@ const SignupPage: React.FC = () => {
                       </div>
                       <div className={auth.already}>
                         عضو هستم:
-                        <Link to="/login">ورود</Link>
+                        <Button color="link" tag="a" href="/login">
+                          ورود
+                        </Button>
                       </div>
                     </div>
                   </Col>

@@ -1,18 +1,14 @@
-import React, { useState } from "react";
-import { CiMobile2 } from "react-icons/ci";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-hot-toast";
 
-import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
 import { useLogin } from "services/auth";
 import Auth from "layouts/auth";
-import { loginEmailSchema, loginSchema } from "pages/auth/validationForms";
+import { loginEmailSchema } from "pages/auth/validationForms";
 import { LoginEmailFormData } from "pages/auth/types";
 import FloatInput from "components/Input/FloatInput";
 import PasswordInput from "components/PasswordInput";
-import SelectCountry from "components/SelectCountry";
 import {
   Button,
   Card,
@@ -25,6 +21,7 @@ import {
 
 import auth from "assets/scss/auth/auth.module.scss";
 import { HiOutlineMail } from "react-icons/hi";
+import { useState } from "react";
 
 const EmailSignin = () => {
   const navigate = useNavigate();
@@ -101,7 +98,7 @@ const EmailSignin = () => {
                           type="email"
                           name={name}
                           value={value}
-                          label="email"
+                          label="ایمیل"
                           onChange={onChange}
                           inputProps={{
                             ref: ref,

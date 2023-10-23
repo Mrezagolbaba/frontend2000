@@ -68,7 +68,7 @@ export default function BankInformation() {
   };
   return (
     <>
-      <Card className="custom-card card-secondary banking-info-card mb-4">
+      <Card className="mb-4">
         <CardHeader>
           <CardTitle tag="h5">اطلاعات بانکی</CardTitle>
         </CardHeader>
@@ -166,7 +166,7 @@ export default function BankInformation() {
 
         </CardBody>
       </Card>
-      <Card className="custom-card card-secondary banking-info-card mb-4">
+      <Card className="mb-4">
         <CardHeader>
           <CardTitle>اطلاعات بانکی بین&zwnj;المللی</CardTitle>
         </CardHeader>
@@ -216,6 +216,7 @@ export default function BankInformation() {
                         <Col >
                           <ReactFlagsSelect
                             searchable  
+                            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                             selected={value!!}
                             onSelect={(code) => {
                               onChange(code)

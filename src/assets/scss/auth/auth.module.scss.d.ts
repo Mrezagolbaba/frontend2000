@@ -11,7 +11,9 @@ declare const classNames: {
   readonly form: "form";
   readonly submit: "submit";
   readonly link: "link";
+  readonly terms: "terms";
   readonly already: "already";
   readonly forgotLink: "forgotLink";
+  readonly "phone-number": "phone-number";
 };
 export = classNames;

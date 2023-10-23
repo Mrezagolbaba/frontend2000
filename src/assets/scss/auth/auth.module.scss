@@ -19,12 +19,15 @@
 .confidence {
   flex: 0 0 calc(100% - 172px);
   text-align: center;
+  & > div > span {
+    vertical-align: top;
+  }
   p {
     margin-bottom: 12px;
   }
   svg {
     color: #39d98a;
-    margin-right: 30px;
+    margin-right: 10px;
   }
   label span {
     color: #39d98a;
@@ -78,6 +81,17 @@
     margin: auto;
     display: block;
   }
+  .terms {
+    & > div {
+      display: flex;
+      flex-direction: row;
+      padding-left: 0;
+      & > input {
+        float: none;
+        margin-left: 8px;
+      }
+    }
+  }
 }
 .already {
   word-spacing: 1px;
@@ -89,6 +103,9 @@
     font-size: 0.75em;
     font-weight: bold;
   }
+}
+.phone-number input {
+  direction: ltr !important;
 }
 
 @media screen and (max-width: 767px) {

@@ -9,7 +9,6 @@ import React, { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { Nav, NavItem } from "reactstrap";
 
-import "./style.scss";
 import { CiLogout } from "react-icons/ci";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";

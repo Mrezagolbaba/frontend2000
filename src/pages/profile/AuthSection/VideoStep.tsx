@@ -1,17 +1,16 @@
-import { Alert, Button, Row, Spin, Typography } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import {
   BsCameraVideo,
-  BsExclamationTriangle,
   BsPause,
   BsPlay,
 } from "react-icons/bs";
 import { useReactMediaRecorder } from "react-media-recorder";
-import useUploadDoc from "services/verification";
+import { useUploadDoc } from "services/verification";
 import { AuthenticationLevel2Props } from "./types";
 import { useAppSelector } from "redux/hooks";
+import { Button, Col, Container, Row, Spinner } from "reactstrap";
 
-const { Title, Paragraph } = Typography;
+import profile from "assets/scss/dashboard/profile.module.scss";
 
 export default function VideoStep({
   onClick,
@@ -100,166 +99,181 @@ export default function VideoStep({
   //DOM-rendered functions
   function renderRecordVideo(): React.JSX.Element {
     return (
-      <>
-        <Row className="justify-content-between my-3">
-          <Title level={5}> احراز هویت ویدیویی</Title>
-          <Button
-            type="text"
-            onClick={() => {
-              onClick(1);
-            }}
-            className="title-help"
-          >
-            تغییر روش احراز هویت
-          </Button>
+      <Container>
+        <Row className="mb-3">
+          <Col className={profile["modal-title"]}>
+            <h5> احراز هویت ویدیویی</h5>
+            <Button
+              color="link"
+              onClick={() => {
+                onClick(1);
+              }}
+            >
+              تغییر روش احراز هویت
+            </Button>
+          </Col>
         </Row>
         {!hasCameraAccess && (
           <Row>
-            <Alert
-              type="warning"
-              showIcon
-              className="mb-4 mt-3"
-              style={{ width: "100%" }}
-              message="برای ضبط ویدیو، اجازه دسترسی مرورگر به
-          دوربین و میکروفون موبایل یا رایانه خود
-          را تایید کنید."
-              icon={<BsExclamationTriangle />}
-            />
+            <div className="alert alert-warning mb-4 mt-3">
+              برای ضبط ویدیو، اجازه دسترسی مرورگر به دوربین و میکروفون موبایل یا
+              رایانه خود را تایید کنید.
+            </div>
           </Row>
         )}
         <Row>
-          <div className="timer">
-            {minutes}:{seconds < 10 ? "0" : ""}
-            {seconds}
-          </div>
+          <Col>
+            <div className="timer">
+              {minutes}:{seconds < 10 ? "0" : ""}
+              {seconds}
+            </div>
+          </Col>
         </Row>
         <Row>
-          <div className="video-container mb-4">
-            {status === "recording" ? (
-              <video
-                ref={(video) =>
-                  video ? (video.srcObject = previewStream) : null
-                }
-                autoPlay
-                muted
-              ></video>
-            ) : (
-              <div className="empty-video">
-                <BsCameraVideo />
-              </div>
+          <Col>
+            <div className={profile["video-container"]}>
+              {status === "recording" ? (
+                <video
+                  ref={(video) =>
+                    video ? (video.srcObject = previewStream) : null
+                  }
+                  autoPlay
+                  muted
+                ></video>
+              ) : (
+                <div className={profile["empty-video"]}>
+                  <BsCameraVideo />
+                </div>
+              )}
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <p className={profile["note-text"]}>
+              متن زیر را به طور واضح همراه با یک مدرک هویتی، هنگام ضبط ویدیو
+              نهایتا .در ۶۰ ثانیه بخوانید
+            </p>
+            <p className={profile["video-summary-text"]}>
+              اینجانب
+              {` ${firstName} ${lastName} `}
+              به کد ملی
+              {` ${nationalId} `}
+              متعهد می&zwnj;شوم که حساب کاربری و مدارک خود را جهت خرید و فروش
+              ارزهای دیجیتال در اختیار دیگران قرار ندهم و به کلیه&zwnj;ی قوانین
+              و مقررات درج شده در قوانین سایت متعهد و پایبند باشم و در صورت هر
+              گونه تخلف، کلیه&zwnj;ی مسئولیت&zwnj;های حقوقی و کیفری آن را در
+              قبال آرسونیکس و اشخاص ثالث، به عهده می گیرم.
+            </p>
+          </Col>
+        </Row>
+        <Row>
+          <Col className="text-center">
+            {status !== "recording" && (
+              <Button
+                color="danger"
+                outline
+                size="large"
+                className="py-3 px-5"
+                onClick={() => {
+                  checkCameraAccess();
+                  startRecording();
+                }}
+              >
+                شروع ضبط
+              </Button>
             )}
-          </div>
+            {status === "recording" && (
+              <Button
+                color="danger"
+                size="large"
+                className="py-3 px-5"
+                onClick={() => {
+                  if (recordingTimerRef.current !== null) {
+                    clearInterval(recordingTimerRef.current);
+                  }
+                  setIsRecorded(true);
+                  stopRecording();
+                  setRecordingTime(0);
+                }}
+              >
+                توقف ضبط
+              </Button>
+            )}
+          </Col>
         </Row>
-        <Row>
-          <Paragraph className="note-text">
-            متن زیر را به طور واضح همراه با یک مدرک هویتی، هنگام ضبط ویدیو
-            نهایتا .در ۶۰ ثانیه بخوانید
-          </Paragraph>
-          <Paragraph className="auth-sample-text mb-4 mt-2">
-            اینجانب
-            {` ${firstName} ${lastName} `}
-            به کد ملی
-            {` ${nationalId} `}
-            متعهد می&zwnj;شوم که حساب کاربری و مدارک خود را جهت خرید و فروش
-            ارزهای دیجیتال در اختیار دیگران قرار ندهم و به کلیه&zwnj;ی قوانین و
-            مقررات درج شده در قوانین سایت متعهد و پایبند باشم و در صورت هر گونه
-            تخلف، کلیه&zwnj;ی مسئولیت&zwnj;های حقوقی و کیفری آن را در قبال
-            آرسونیکس و اشخاص ثالث، به عهده می گیرم.
-          </Paragraph>
-        </Row>
-        <Row className="justify-content-center">
-          {status !== "recording" && (
-            <Button
-              type="default"
-              danger
-              size="large"
-              onClick={() => {
-                checkCameraAccess();
-                startRecording();
-              }}
-            >
-              شروع ضبط
-            </Button>
-          )}
-          {status === "recording" && (
-            <Button
-              type="primary"
-              danger
-              size="large"
-              onClick={() => {
-                if (recordingTimerRef.current !== null) {
-                  clearInterval(recordingTimerRef.current);
-                }
-                setIsRecorded(true);
-                stopRecording();
-                setRecordingTime(0);
-              }}
-            >
-              توقف ضبط
-            </Button>
-          )}
-        </Row>
-      </>
+      </Container>
     );
   }
 
   function renderConfirmVideo(): React.JSX.Element {
     return (
       <>
-        <Row className="justify-content-between my-3">
-          <Title level={5}> تایید احراز هویت ویدیویی</Title>
-          <Button
-            type="text"
-            onClick={() => {
-              clearBlobUrl();
-              setIsRecorded(false);
-            }}
-            className="title-help"
-          >
-            ضبط مجدد ویدیو
-          </Button>
+        <Row>
+          <Col className={profile["modal-title"]}>
+            <h5> تایید احراز هویت ویدیویی</h5>
+            <Button
+              color="link"
+              onClick={() => {
+                clearBlobUrl();
+                setIsRecorded(false);
+              }}
+            >
+              ضبط مجدد ویدیو
+            </Button>
+          </Col>
         </Row>
         <Row>
-          <div className="video-container mb-4">
-            {mediaBlobUrl && (
-              <>
-                <video ref={videoPlayRef} onEnded={() => setIsPlayVideo(false)}>
-                  <source src={mediaBlobUrl} type="video/webm" />
-                </video>
-                <div
-                  className="video-cover"
-                  onClick={() => {
-                    if (isPlayVideo) {
-                      videoPlayRef.current?.pause();
-                      setIsPlayVideo(false);
-                    } else {
-                      videoPlayRef.current?.play?.();
-                      setIsPlayVideo(true);
-                    }
-                  }}
-                >
-                  {isPlayVideo ? <BsPause /> : <BsPlay />}
-                </div>
-              </>
-            )}
-          </div>
+          <Col>
+            <div className={profile["video-container"]}>
+              {mediaBlobUrl && (
+                <>
+                  <video
+                    ref={videoPlayRef}
+                    onEnded={() => setIsPlayVideo(false)}
+                  >
+                    <source src={mediaBlobUrl} type="video/webm" />
+                  </video>
+                  <div
+                    className={profile["video-cover"]}
+                    onClick={() => {
+                      if (isPlayVideo) {
+                        videoPlayRef.current?.pause();
+                        setIsPlayVideo(false);
+                      } else {
+                        videoPlayRef.current?.play?.();
+                        setIsPlayVideo(true);
+                      }
+                    }}
+                  >
+                    {isPlayVideo ? <BsPause /> : <BsPlay />}
+                  </div>
+                </>
+              )}
+            </div>
+          </Col>
         </Row>
         <Row>
-          <Paragraph className="auth-sample-text mb-4 mt-2">
-            ارسال ویدیو به معنای تایید احراز هویت شما و مطالعه قوانین و مقررات
-            آرسونیکس می&zwnj;باشد.
-          </Paragraph>
+          <Col>
+            <p className={profile["video-summary-text"]}>
+              ارسال ویدیو به معنای تایید احراز هویت شما و مطالعه قوانین و مقررات
+              آرسونیکس می&zwnj;باشد.
+            </p>
+          </Col>
         </Row>
-        <Row className="justify-content-center">
-          <Button
-            type="primary"
-            ghost
-            size="large"
-            onClick={uploadVideo}
-            disabled={isLoading}
-          >
-            {isLoading ? <Spin /> : "تایید و ارسال ویدیو"}
-          </Button>
+        <Row>
+          <Col className="text-center">
+            <Button
+              color="primary"
+              outline
+              size="large"
+              className="py-3 px-5"
+              onClick={uploadVideo}
+              disabled={isLoading}
+            >
+              {isLoading ? <Spinner /> : "تایید و ارسال ویدیو"}
+            </Button>
+          </Col>
         </Row>
       </>
     );

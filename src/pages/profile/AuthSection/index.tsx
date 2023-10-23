@@ -1,27 +1,27 @@
-import { useState } from "react";
-import { BsCheck2, BsCheck2Circle } from "react-icons/bs";
 import {
-  Alert,
   Button,
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
   Col,
-  Divider,
   List,
   Modal,
+  ModalBody,
+  ModalHeader,
   Row,
-  Typography,
-} from "antd";
+} from "reactstrap";
+import { useState } from "react";
+import { BsCheck2 } from "react-icons/bs";
 
 import FirstStep from "./FirstStep";
 import VideoStep from "./VideoStep";
 import PhotoStep from "./PhotoStep";
 import ConfirmInternationalService from "./ConfirmInternationalService";
-
-import "./style.sass";
 import ResidencyCardStep from "./ResidencyCardStep";
 import FinalStep from "./FinalStep";
-import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 
-const { Title } = Typography;
+import profile from "assets/scss/dashboard/profile.module.scss";
 
 const dataLevel1 = [
   <>
@@ -82,59 +82,44 @@ const AuthSection = () => {
     }
   };
   return (
-    <Card className="custom-card card-secondary authentication-card mb-4">
+    <Card className="mb-4">
       <CardHeader>
-        <CardTitle tag="h5">
-          احراز هویت
-        </CardTitle>
+        <CardTitle tag="h5">احراز هویت</CardTitle>
       </CardHeader>
       <CardBody>
-        <Row gutter={16}>
-          <Col xs={24} sm={12} className="gutter-row">
-            <List
-              className="auth-jumbotron-advantages"
-              size="small"
-              bordered={false}
-              header={<Title level={5}>احراز هویت سطح یک</Title>}
-              dataSource={dataLevel1}
-              renderItem={(item) => (
-                <List.Item>
+        <Row>
+          <Col xs={12} sm={6} className="gutter-row">
+            <h5 className={profile["auth-title"]}>احراز هویت سطح یک</h5>
+            <List className={profile["auth-list"]}>
+              {dataLevel1.map((item) => (
+                <li>
                   <span className="icon">
                     <BsCheck2 />
                   </span>
                   {item}
-                </List.Item>
-              )}
-            />
-            <Alert
-              className="mb-4 mt-3"
-              message="احراز هویت سطح یک شما با موفقیت انجام شده است."
-              type="success"
-              showIcon
-              icon={<BsCheck2Circle />}
-            />
+                </li>
+              ))}
+            </List>
+            <div className="alert alert-success mb-4 mt-3">
+              احراز هویت سطح یک شما با موفقیت انجام شده است.
+            </div>
           </Col>
-          <Col xs={24} sm={12}>
-            <List
-              className="auth-jumbotron-advantages"
-              size="small"
-              bordered={false}
-              header={<Title level={5}>احراز هویت سطح دو</Title>}
-              dataSource={dataLevel2}
-              renderItem={(item) => (
-                <List.Item>
+          <Col xs={12} sm={6}>
+            <h5 className={profile["auth-title"]}>احراز هویت سطح دو</h5>
+            <List className={profile["auth-list"]}>
+              {dataLevel2.map((item) => (
+                <li>
                   <span className="icon">
                     <BsCheck2 />
                   </span>
                   {item}
-                </List.Item>
-              )}
-            />
+                </li>
+              ))}
+            </List>
             <Button
-              type="primary"
-              size="large"
-              block
-              className="Authenticate-button mb-4 mt-3"
+              color="primary"
+              outline
+              className={profile["start-auth"]}
               onClick={() => {
                 setIsOpenDialog(true);
               }}
@@ -145,15 +130,15 @@ const AuthSection = () => {
         </Row>
       </CardBody>
       <Modal
-        className="modal-container"
-        open={isOpenDialog}
-        onCancel={() => setIsOpenDialog(false)}
-        title="احراز هویت سطح 2"
-        footer={null}
-        width={800}
+        className={profile["kyc-modal"]}
+        isOpen={isOpenDialog}
+        toggle={() => setIsOpenDialog(!isOpenDialog)}
+        size="lg"
       >
-        <Divider />
-        {renderSteps()}
+        <ModalHeader toggle={() => setIsOpenDialog(!isOpenDialog)}>
+          احراز هویت سطح 2
+        </ModalHeader>
+        <ModalBody>{renderSteps()}</ModalBody>
       </Modal>
     </Card>
   );

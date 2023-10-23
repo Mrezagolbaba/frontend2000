@@ -21,29 +21,11 @@ type Props = {
 const SelectCountry = ({ name, ref, value, onChange, errors }: Props) => {
   const options = [
     {
-      value: "44",
+      value: "90",
       label: (
         <div className="flag-container">
-          <span>+44</span>
-          <img src={england} alt="England-flag" width="25" />
-        </div>
-      ),
-    },
-    {
-      value: "61",
-      label: (
-        <div className="flag-container">
-          <span>+61</span>
-          <img src={australia} alt="Australia-flag" width="25" />
-        </div>
-      ),
-    },
-    {
-      value: "1",
-      label: (
-        <div className="flag-container">
-          <span>+1</span>
-          <img src={canada} alt="Canada-flag" width="25" />
+          <span>+90</span>
+          <img src={turkey} alt="Turkey-flag" width="25" />
         </div>
       ),
     },
@@ -57,11 +39,29 @@ const SelectCountry = ({ name, ref, value, onChange, errors }: Props) => {
       ),
     },
     {
-      value: "90",
+      value: "44",
       label: (
         <div className="flag-container">
-          <span>+90</span>
-          <img src={turkey} alt="Turkey-flag" width="25" />
+          <span>+44</span>
+          <img src={england} alt="England-flag" width="25" />
+        </div>
+      ),
+    },
+    {
+      value: "1",
+      label: (
+        <div className="flag-container">
+          <span>+1</span>
+          <img src={canada} alt="Canada-flag" width="25" />
+        </div>
+      ),
+    },
+    {
+      value: "61",
+      label: (
+        <div className="flag-container">
+          <span>+61</span>
+          <img src={australia} alt="Australia-flag" width="25" />
         </div>
       ),
     },

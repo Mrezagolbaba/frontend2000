@@ -1,0 +1,157 @@
+.auth-title {
+  font-size: 1.125em;
+  margin-bottom: 20px;
+}
+
+.auth-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 150px;
+  & > li {
+    font-size: 0.75em;
+    font-weight: 400;
+    color: rgba(3, 4, 27, 0.5);
+    & > span {
+      margin-left: 5px;
+      svg {
+        width: 12px;
+        height: 12px;
+        color: rgb(14, 208, 57);
+      }
+    }
+    & > strong {
+      font-weight: 500;
+      color: #03041b;
+      margin-right: 5px;
+    }
+  }
+}
+
+.start-auth {
+  width: 100%;
+  display: block !important;
+  margin-top: 1rem;
+  padding: 1rem !important;
+}
+
+.modal-title {
+  display: flex;
+  justify-content: space-between;
+  width: auto;
+}
+
+.note-text {
+  font-size: 13px;
+}
+
+.secondary-btn {
+  padding: 1rem !important;
+  & > span {
+    margin-left: 5px;
+  }
+}
+
+.button-summary {
+  text-align: right;
+  color: #000;
+  font-size: 11px;
+  margin-top: 0.5rem;
+}
+
+.video-container {
+  display: flex;
+  flex-direction: row;
+  width: 320px;
+  height: 320px;
+  margin: auto;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 1.5rem;
+  &:hover {
+    .video-cover {
+      opacity: 1;
+    }
+  }
+
+  video {
+    transform: scale(1.4);
+  }
+  .empty-video {
+    width: 100%;
+    display: flex;
+    background-color: #91caff;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: #fff;
+  }
+  .video-cover {
+    cursor: pointer;
+    opacity: 0;
+    position: absolute;
+    background-color: rgba(145, 202, 255, 0.6);
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 200ms ease;
+    & > svg {
+      color: #fff;
+      font-size: 4rem;
+    }
+  }
+}
+.video-summary-text {
+  width: 100%;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #bfbfbf;
+  background-color: #d9d9d9;
+}
+.image-container {
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: bold;
+  position: relative;
+  &:hover {
+    .image-cover {
+      opacity: 1;
+    }
+  }
+
+  & > img {
+    width: 100%;
+    object-fit: cover;
+    margin: auto;
+    border-radius: 8px;
+  }
+
+  .image-cover {
+    cursor: pointer;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 163, 158, 0.6);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: #fff;
+    transition: all 200ms ease;
+  }
+}

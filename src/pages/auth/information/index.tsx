@@ -6,7 +6,6 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CiMobile2, CiUser, CiMail } from "react-icons/ci";
 
-import "./styles.css";
 import Auth from "layouts/auth";
 import { InformationFormData } from "../types";
 import { InformationSchema } from "pages/auth/validationForms";
@@ -227,6 +226,7 @@ const Information = () => {
                       <Button
                         type="submit"
                         color="primary"
+                        className={auth.submit}
                         disabled={isLoading}
                       >
                         {isLoading ? (

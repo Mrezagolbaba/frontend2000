@@ -102,7 +102,7 @@ const Forget = () => {
                               ? "error"
                               : undefined,
                             autoFocus: true,
-                            className: "phone-number-input",
+                            className: auth["phone-number"],
                           }}
                         />
                       )}

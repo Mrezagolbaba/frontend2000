@@ -1,39 +1,42 @@
-import { Button, Col, Divider, Row, Typography } from "antd";
-import { Dispatch, SetStateAction } from "react";
 import { BsCameraVideo } from "react-icons/bs";
 import { GiPhotoCamera } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import { AuthenticationLevel2Props } from "./types";
+import { Button, Col, Container, Row } from "reactstrap";
 
-const { Title, Paragraph } = Typography;
+import profile from "assets/scss/dashboard/profile.module.scss";
 
 export default function FirstStep({
   onClick,
 }: AuthenticationLevel2Props): React.JSX.Element {
   return (
-    <div className="tab">
-      <Row className="justify-content-between my-3">
-        <Title level={5}>نحوه احراز هویت</Title>
-        <Link to="#" className="title-help">
-          آموزش احراز هویت
-        </Link>
+    <Container>
+      <Row className="mb-3">
+        <Col className={profile["modal-title"]}>
+          <h6>نحوه احراز هویت</h6>
+          <Link to="#" className="title-help">
+            آموزش احراز هویت
+          </Link>
+        </Col>
       </Row>
       <Row>
-        <Paragraph className="note-text">
+        <p className={profile["note-text"]}>
           برای تکمیل احراز هویت یکی از روش&zwnj;های زیر را انتخاب کنید.
           <br />
           در هر کدام از روش&zwnj;های زیر به همراه داشتن یک مدرک هویتی برای تکمیل
           احراز هویت (کارت ملی، شناسنامه، گواهینامه یا پاسپورت) الزامی
           می&zwnj;باشد.
-        </Paragraph>
+        </p>
       </Row>
 
-      <Row gutter={16} className="mt-2">
-        <Col xs={12} className="d-flex justify-content-around">
+      <Row className="mt-2">
+        <Col xs={6}>
           <Button
             size="large"
+            color="secondary"
+            outline
             block
-            className="btn btn-transparent"
+            className={profile["secondary-btn"]}
             onClick={() => onClick(2)}
           >
             <span className="icon">
@@ -41,12 +44,17 @@ export default function FirstStep({
             </span>
             ضبط ویدیو
           </Button>
+          <span className={profile["button-summary"]}>
+            یک ویدیو کوتاه همراه با مدرک هویتی ضبط و ارسال می&zwnj;کنید.
+          </span>
         </Col>
-        <Col xs={12} className="d-flex justify-content-around">
+        <Col xs={6}>
           <Button
             size="large"
             block
-            className="btn btn-transparent"
+            color="secondary"
+            outline
+            className={profile["secondary-btn"]}
             onClick={() => onClick(3)}
           >
             <span className="icon">
@@ -54,20 +62,11 @@ export default function FirstStep({
             </span>
             عکس سلفی
           </Button>
-        </Col>
-      </Row>
-      <Row gutter={16} className="mt-2">
-        <Col xs={12}>
-          <Paragraph className="text-method mt-2">
-            یک ویدیو کوتاه همراه با مدرک هویتی ضبط و ارسال می&zwnj;کنید.
-          </Paragraph>
-        </Col>
-        <Col xs={12}>
-          <Paragraph className="text-method mt-2">
+          <span className={profile["button-summary"]}>
             یک عکس سلفی همراه با مدرک هویتی ارسال می&zwnj;کنید.
-          </Paragraph>
+          </span>
         </Col>
       </Row>
-    </div>
+    </Container>
   );
 }

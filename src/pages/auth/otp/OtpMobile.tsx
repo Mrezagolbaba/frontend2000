@@ -77,7 +77,7 @@ const OtpMobile: React.FC = () => {
               navigate(redirectTo, { state: { token } });
             }
             // if (res?.firstTierVerified) navigate("/dashboard");
-            else if (res?.firstTierVerified) navigate("/coming-soon");
+            else if (res?.firstTierVerified) navigate("/dashboard");
             else navigate("/information");
           })
           .catch(() => {

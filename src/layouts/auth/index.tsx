@@ -23,12 +23,12 @@ const AuthLayout = ({ children }: Props) => {
           <div className={auth.confidence}>
             <p>از یکسان بودن آدرس صفحه با آدرس زیر مطمئن شوید.</p>
             <div className="d-ltr">
-              <span className="icon">
-                <PiShieldCheckeredFill />
-              </span>
               <label>
                 <span>https://</span>arsonex.com
               </label>
+              <span className="icon">
+                <PiShieldCheckeredFill />
+              </span>
             </div>
           </div>
         </header>
