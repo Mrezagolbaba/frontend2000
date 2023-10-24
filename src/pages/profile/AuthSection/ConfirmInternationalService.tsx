@@ -44,6 +44,7 @@ export default function ConfirmInternationalService({
             color="danger"
             size="large"
             className="py-3 px-5 mx-2"
+            onClick={() => onClick?.(6)}
           >
             خیر
           </Button>

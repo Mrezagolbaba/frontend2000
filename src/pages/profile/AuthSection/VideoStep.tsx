@@ -61,13 +61,12 @@ export default function VideoStep({
       .mutateAsync({ docType: "SELFIE_VIDEO", file: blob, fileName: "file" })
       .then((res) => {
         setIsLoading(false);
-        console.log(res);
+        onClick?.(4);
       })
       .catch((err) => {
         setIsLoading(false);
         console.error(err);
       });
-    onClick?.(4);
   };
 
   //life-cycles

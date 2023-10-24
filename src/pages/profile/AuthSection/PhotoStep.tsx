@@ -30,13 +30,12 @@ export default function PhotoStep({
       })
       .then((res) => {
         setIsLoading(false);
-        console.log(res);
+        onClick?.(4);
       })
       .catch((err) => {
         setIsLoading(false);
         console.error(err);
       });
-    onClick?.(4);
   };
 
   return (
