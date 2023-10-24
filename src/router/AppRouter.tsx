@@ -37,123 +37,33 @@ import Information from "pages/auth/information";
 import Market from "pages/market";
 import request from "services/adapter";
 import CoinPage from "pages/coins";
-import ComingSoon from "pages/ComingSoon";
 import DashboardRouter from "./DashboardRouter";
+import ComingSoon from "pages/ComingSoon";
 
 export default function AppRouter() {
-  return (
-    <Router>
-      <Refine
-        dataProvider={dataProvider(
-          process.env.REACT_APP_BASE_URL as string,
-          request as any
-        )}
-        routerProvider={routerProvider}
-        resources={[
-          {
-            name: "wallet",
-            list: "/wallet",
-            create: "/wallet/create",
-          },
-          {
-            name: "transactions",
-            list: "/transactions",
-            create: "/wallets/create",
-          },
-        ]}
-      >
-        <Routes>
-          <Route path="wallet">
-            <Route index element={<WalletList />} />
-            {/* <Route path="create" element={<Wallet />} /> */}
-          </Route>
-          <Route path="transactions">
-            <Route index element={<TransactionList />} />
-          </Route>
-          {/* <Route path="categories">
-            <Route index element={<Transactions />} />
-            <Route path="show/:id" element={<Transactions />} />
-          </Route> */}
-        </Routes>
-      </Refine>
-      <Routes>
-        {/* Define your routes */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/login-email" element={<LoginEmailPage />} />
-        <Route path="/register" element={<SignupPage />} />
-        <Route path="/email-otp" element={<OtpEmail />} />
-        <Route path="/mobile-otp" element={<OtpMobile />} />
-        <Route path="/forget-password" element={<ForgetPasswordWithMobile />} />
-        <Route
-          path="/forget-password-with-email"
-          element={<ForgetPasswordWithEmail />}
-        />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/" element={<HomePage />} />
-        <Route path="/coins" element={<CoinPage />} />
-        <Route path="/coming-soon" element={<ComingSoon />} />
-        <Route
-          path="/dashboard"
-          element={<ProtectedRoute children={<Dashboard />} />}
-        />
-        {/* <Route
-          path="/wallet"
-          element={<ProtectedRoute children={<Wallet />} />}
-        />
-        <Route
-          path="/transactions/:id"
-          element={<ProtectedRoute children={<Transactions />} />}
-        /> */}
-        <Route
-          path="/setting"
-          element={<ProtectedRoute children={<Setting />} />}
-        />
-        <Route
-          path="/orders"
-          element={<ProtectedRoute children={<Orders />} />}
-        />
-        <Route
-          path="/notification"
-          element={<ProtectedRoute children={<Notifications />} />}
-        />
-        <Route
-          path="/history"
-          element={<ProtectedRoute children={<History />} />}
-        />
-        <Route
-          path="/add-friends"
-          element={<ProtectedRoute children={<AddFriends />} />}
-        />
-        <Route
-          path="/transactions-invoice"
-          element={<ProtectedRoute children={<Invoices />} />}
-        />
-        <Route
-          path="/profile"
-          element={<ProtectedRoute children={<Profile />} />}
-        />
-        <Route
-          path="/support"
-          element={<ProtectedRoute children={<Support />} />}
-        />
-        <Route
-          path="/fast-buy-sell"
-          element={<ProtectedRoute children={<BuySell />} />}
-        />
-        <Route
-          path="/information"
-          element={<ProtectedRoute children={<Information />} />}
-        />
-        <Route
-          path="/market"
-          element={<ProtectedRoute children={<Market />} />}
-        />
-        // {/* Add a 404 route for pages that don't exist */}
-        // {/* <Route path="*" element={<NotFoundPage />} /> */}
-        //{" "}
-        {/* {showAddToHomeSheet && <AddToHomeBottomSheet isOpen={true} onClose={handleCloseAddToHomeSheet} />} */}
-        //{" "}
-      </Routes>
-    </Router>
-  );
+
+  return useRoutes([
+    {
+      path: "/",
+      // element: <HomePage />,
+      children: [
+        { path: "", element: <HomePage /> },
+        { path: "login", element: <LoginPage /> },
+        { path: "/login-email", element: <LoginEmailPage /> },
+        { path: "register", element: <SignupPage /> },
+        { path: "mobile-otp", element: <OtpMobile /> },
+        { path: "email-otp", element: <OtpEmail /> },
+        { path: "/forget-password", element: <ForgetPasswordWithMobile /> },
+        {
+          path: "/forget-password-with-email",
+          element: <ForgetPasswordWithEmail />,
+        },
+        { path: "/reset-password", element: <ResetPassword /> },
+        { path: "coins", element: <CoinPage /> },
+        { path: "information", element: <Information /> },
+        { path: "/coming-soon", element: <ComingSoon /> },
+        DashboardRouter,
+      ],
+    },
+  ]);
 }
