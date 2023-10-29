@@ -32,7 +32,7 @@ import AddFriends from "pages/add-friends";
 import Invoices from "pages/invoices";
 import Profile from "pages/profile";
 import Support from "pages/support";
-import BuySell from "pages/buySell";
+import BuySell from "pages/dashboard/buySell";
 import Information from "pages/auth/information";
 import Market from "pages/market";
 import request from "services/adapter";
