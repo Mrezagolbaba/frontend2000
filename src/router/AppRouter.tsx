@@ -24,7 +24,7 @@ import HomePage from "pages/Home";
 import Dashboard from "pages/dashboard";
 import { WalletList } from "pages/dashboard/wallet";
 import { TransactionList } from "pages/transactions";
-import Setting from "pages/setting";
+import Setting from "pages/dashboard/setting";
 import Orders from "pages/orders";
 import Notifications from "pages/notifications";
 import History from "pages/history";

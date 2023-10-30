@@ -32,7 +32,7 @@ const Header = ({ onSidebarToggle }: Props) => {
             </li>
           </ul>
           <div className={dashboard.header__support}>
-            <a href="/support" className="">
+            <a href="/dashboard/support" className="">
               <span className="icon">
                 <img src={Support} alt="support" />
               </span>
@@ -40,14 +40,14 @@ const Header = ({ onSidebarToggle }: Props) => {
             </a>
           </div>
           <div>
-            <a href="/setting">
+            <a href="/dashboard/setting">
               <span className="icon">
                 <img src={Setting} alt="setting" />
               </span>
             </a>
           </div>
           <div className={dashboard.header__notification}>
-            <a href="/notification">
+            <a href="/dashboard/notification">
               <span className="icon">
                 <img src={Notifications} alt="notification" />
               </span>
