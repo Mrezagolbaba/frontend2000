@@ -101,7 +101,6 @@ const WithdrawCrypto = ({
     resolver,
   });
   const onSubmit = async (data: CryptoFormType) => {
-    console.log(data);
     if (Number(data.amount) > stock)
       toast.error("مبلغ انتخابی بیش تر از موجودی شما می باشد.", {
         position: "bottom-left",
