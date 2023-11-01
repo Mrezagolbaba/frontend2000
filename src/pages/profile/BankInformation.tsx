@@ -216,7 +216,6 @@ export default function BankInformation() {
                         <Col >
                           <ReactFlagsSelect
                             searchable  
-                            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                             selected={value!!}
                             onSelect={(code) => {
                               onChange(code)

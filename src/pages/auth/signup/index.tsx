@@ -145,6 +145,7 @@ const SignupPage: React.FC = () => {
                       render={({ field: { name, value, onChange, ref } }) => (
                         <div>
                           <Input
+                          style={{marginRight:"8px"}}
                             checked={value}
                             className="form-check-input"
                             type="checkbox"
