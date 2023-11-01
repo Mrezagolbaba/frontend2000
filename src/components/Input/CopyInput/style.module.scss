@@ -1,0 +1,23 @@
+.copy-btn {
+  opacity: 1;
+  height: 48px;
+  line-height: 48px;
+  font-size: 0.75rem;
+  background-color: #fff;
+  border: 1px solid rgba(3, 4, 27, 0.1);
+  box-shadow: none;
+  color: #03041b;
+  display: flow-root;
+  border-radius: 10px;
+  transition: all 150ms ease-in-out;
+  width: 100%;
+  &__icon {
+    margin-left: 0;
+    margin-right: 10px;
+    font-size: 15px;
+    color: #111bff;
+  }
+  &__text {
+    font-size: 13px;
+  }
+}
