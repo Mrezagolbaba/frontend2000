@@ -1,9 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  BsCameraVideo,
-  BsPause,
-  BsPlay,
-} from "react-icons/bs";
+import { BsCameraVideo, BsPause, BsPlay } from "react-icons/bs";
 import { useReactMediaRecorder } from "react-media-recorder";
 import { useUploadDoc } from "services/verification";
 import { AuthenticationLevel2Props } from "./types";
@@ -61,7 +57,7 @@ export default function VideoStep({
       .mutateAsync({ docType: "SELFIE_VIDEO", file: blob, fileName: "file" })
       .then((res) => {
         setIsLoading(false);
-        onClick?.(4);
+        onClick?.(6);
       })
       .catch((err) => {
         setIsLoading(false);

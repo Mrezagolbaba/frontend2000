@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardBody,
   CardHeader,
@@ -18,21 +19,43 @@ import DepositCrypto from "./Deposit";
 import WithdrawCrypto from "./Withdraw";
 
 export default function CryptoCard() {
-  const { data, isSuccess, isError, isLoading } = useList({
-    resource: "transactions",
+  const { data, isSuccess, isLoading } = useList({
+    resource: "wallets",
   });
 
   const [isOpenDepositForm, setIsOpenDepositForm] = useState<boolean>(false);
   const [isOpenWithdrawForm, setIsOpenWithdrawForm] = useState<boolean>(false);
 
   return (
-    <Card className="custom-card card-secondary mb-4">
+    <Card className="mb-4">
       <CardHeader>
         <CardTitle tag="h5">موجودی ارز دیجیتال</CardTitle>
       </CardHeader>
       <CardBody>
         <Row>
-          <Col xs={6} className="table-responsive">
+          <Col
+            xs={12}
+            className="d-flex justify-content-evenly align-items-center mb-3"
+          >
+            <Button
+              color="secondary"
+              onClick={() => {
+                setIsOpenDepositForm(true);
+              }}
+            >
+              واریز
+            </Button>
+            <Button
+              color="secondary"
+              onClick={() => setIsOpenWithdrawForm(true)}
+            >
+              برداشت
+            </Button>
+            <Button color="primary" outline>
+              معامله
+            </Button>
+          </Col>
+          <Col xs={12} className="table-responsive">
             <Table borderless className={wallet["table-view"]}>
               <thead>
                 <tr>
@@ -42,53 +65,66 @@ export default function CryptoCard() {
                 </tr>
               </thead>
               <tbody>
-                {data && data.length > 0 ? (
-                  <tr>
-                    <th scope="row">
-                      <div>
-                        <img
-                          src={teter}
-                          alt=""
-                          className={wallet["crypto-img"]}
-                        />
-                        <span className={wallet["crypto-name"]}>تتر</span>
-                      </div>
-                    </th>
-                    <td className="text-center">54.32</td>
-                    <td className="text-center">17,232.32</td>
-                  </tr>
+                {isLoading ? (
+                  <>
+                    <tr>
+                      <th scope="row" className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </th>
+                      <td className="text-center placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="text-center placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row" className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </th>
+                      <td className="text-center placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="text-center placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row" className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </th>
+                      <td className="text-center placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="text-center placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                    </tr>
+                  </>
+                ) : isSuccess && data && data.total > 0 ? (
+                  data.data.map((item, key) => (
+                    <tr key={key}>
+                      <th scope="row">
+                        <div>
+                          <img
+                            src={teter}
+                            alt=""
+                            className={wallet["crypto-img"]}
+                          />
+                          <span className={wallet["crypto-name"]}>
+                            {item.currencyCode}
+                          </span>
+                        </div>
+                      </th>
+                      <td className="text-center">{item.balance}</td>
+                      <td className="text-center">{item.availableBalance}</td>
+                    </tr>
+                  ))
                 ) : (
                   <tr>دیتایی موجود نیست</tr>
                 )}
               </tbody>
             </Table>
-          </Col>
-          <Col
-            xs={6}
-            className="d-flex justify-content-evenly align-items-center"
-          >
-            <button
-              type="button"
-              className={`btn ${wallet["silver-button"]}`}
-              onClick={() => {
-                setIsOpenDepositForm(true);
-              }}
-            >
-              واریز
-            </button>
-            <button
-              type="button"
-              className={`btn ${wallet["silver-button"]}`}
-              onClick={() => setIsOpenWithdrawForm(true)}
-            >
-              برداشت
-            </button>
-            <button
-              type="button"
-              className={`btn ${wallet["transaction-button"]}`}
-            >
-              معامله
-            </button>
           </Col>
         </Row>
       </CardBody>
@@ -98,7 +134,7 @@ export default function CryptoCard() {
         onClose={() => setIsOpenDepositForm(false)}
         hasCloseButton
       >
-        <DepositCrypto />
+        <DepositCrypto onClose={() => setIsOpenDepositForm(false)} />
       </Dialog>
       <Dialog
         title="برداشت ارز دیجیتال"
@@ -106,7 +142,10 @@ export default function CryptoCard() {
         onClose={() => setIsOpenWithdrawForm(false)}
         hasCloseButton
       >
-        <WithdrawCrypto />
+        <WithdrawCrypto
+          wallets={data?.data}
+          onClose={() => setIsOpenDepositForm(false)}
+        />
       </Dialog>
     </Card>
   );

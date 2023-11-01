@@ -6,8 +6,7 @@ import {
   DropdownItem,
 } from "reactstrap";
 
-import dropdown from "./style.module.scss";
-import { boolean } from "yup";
+import dropdown from "assets/scss/components/Input/dropdown.module.scss";
 
 export type OptionType = { value: string; content: ReactNode | string };
 

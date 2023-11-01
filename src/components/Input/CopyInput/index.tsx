@@ -3,7 +3,7 @@ import { LuCopy } from "react-icons/lu";
 import ClipboardJS from "clipboard";
 import toast from "react-hot-toast";
 
-import style from "./style.module.scss";
+import style from "assets/scss/components/Input/copyInput.module.scss";
 
 type Props = {
   text: string;

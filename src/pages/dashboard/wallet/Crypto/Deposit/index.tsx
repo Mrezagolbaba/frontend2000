@@ -23,32 +23,14 @@ import {
 import Currency from "components/Input/CurrencyInput";
 import { useEffect, useState } from "react";
 import CopyInput from "components/Input/CopyInput";
+import { CurrencyType } from "../../constants";
 
 type CryptoFormType = {
   currencyCode: string;
   amount: string;
 };
 
-type CurrencyType = {
-  code: string;
-  type: "FIAT" | "CRYPTO";
-  name: string;
-  symbol: string;
-  decimals: number;
-};
-
-const DepositCrypto = () => {
-  const { data, isSuccess } = useList<CurrencyType>({
-    resource: "currencies",
-  });
-
-  const { formLoading, onFinish } = useForm({
-    action: "create",
-    resource: "transactions/deposit",
-    onMutationSuccess: (data, variables, context, isAutoSave) => {
-      console.log({ data, variables, context, isAutoSave });
-    },
-  });
+const DepositCrypto = ({ onClose }: { onClose: () => void }) => {
   const [currencyList, setCurrencyList] = useState<CurrencyType[] | null>(null);
 
   const [showResult, setShowResult] = useState<boolean>(false);
@@ -57,6 +39,25 @@ const DepositCrypto = () => {
     walletAddress: "",
     amount: "",
     endTime: "",
+  });
+
+  const { data, isSuccess } = useList<CurrencyType>({
+    resource: "currencies",
+  });
+
+  const { formLoading, onFinish } = useForm({
+    action: "create",
+    resource: "transactions/deposit",
+    onMutationSuccess: (data, variables, context, isAutoSave) => {
+      setShowResult(true);
+      setResult({
+        networkName: data.data.currencyCode,
+        walletAddress: data.data.providerData.flowWalletAddress,
+        amount: data.data.amount,
+        endTime: new Date(data.data.expiresAt).toLocaleDateString("fa-IR"),
+      });
+      console.log("looooooooooog", { data, variables, context, isAutoSave });
+    },
   });
 
   useEffect(() => {
@@ -74,7 +75,6 @@ const DepositCrypto = () => {
               <span className={wallet["items-credit__icon"]}>
                 <img alt={currency.name} src={tron} className="bank-svg" />
               </span>
-              <span>{currency.symbol}</span>
               <span>{currency.name}</span>
             </div>
           ),
@@ -94,6 +94,7 @@ const DepositCrypto = () => {
     handleSubmit,
     control,
     setValue,
+    reset,
     formState: { errors },
   } = useRHF<CryptoFormType>({
     mode: "onChange",
@@ -103,8 +104,23 @@ const DepositCrypto = () => {
     },
     resolver,
   });
-  const onSubmit = async (data: CryptoFormType) => {
+  const onSubmit = (data: CryptoFormType) => {
     onFinish(data);
+  };
+
+  const handleClose = () => {
+    reset({
+      currencyCode: "",
+      amount: "",
+    });
+    setResult({
+      networkName: "",
+      walletAddress: "",
+      amount: "",
+      endTime: "",
+    });
+    setShowResult(false);
+    onClose?.();
   };
 
   return (
@@ -195,9 +211,9 @@ const DepositCrypto = () => {
                 outline
                 type="submit"
                 disabled={formLoading}
+                className="px-5 py-3"
               >
-                {formLoading && <Spinner />}
-                ساخت کیف پول
+                {formLoading ? <Spinner /> : "ساخت کیف پول"}
               </Button>
             </div>
           </Row>
@@ -231,6 +247,7 @@ const DepositCrypto = () => {
                   type="text"
                   name="amountResult"
                   id="amountResult"
+                  dir="ltr"
                   value={result.amount}
                 />
               </FormGroup>
@@ -250,10 +267,28 @@ const DepositCrypto = () => {
           </Row>
           <Row className="mt-4">
             <div className="d-flex flex-row justify-content-evenly">
-              <Button color="primary" type="button">
+              <Button
+                color="primary"
+                type="button"
+                className="px-5 py-3"
+                onClick={() => {
+                  setShowResult(false);
+                  setResult({
+                    networkName: "",
+                    walletAddress: "",
+                    amount: "",
+                    endTime: "",
+                  });
+                }}
+              >
                 تغییر مبلغ یا شبکه واریز
               </Button>
-              <Button color="danger" outline type="button">
+              <Button
+                className="px-5 py-3"
+                color="danger"
+                outline
+                onClick={handleClose}
+              >
                 لغو تراکنش
               </Button>
             </div>

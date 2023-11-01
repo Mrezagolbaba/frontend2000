@@ -30,7 +30,7 @@ export default function PhotoStep({
       })
       .then((res) => {
         setIsLoading(false);
-        onClick?.(4);
+        onClick?.(6);
       })
       .catch((err) => {
         setIsLoading(false);
