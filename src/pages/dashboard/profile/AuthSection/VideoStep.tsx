@@ -57,7 +57,7 @@ export default function VideoStep({
       .mutateAsync({ docType: "SELFIE_VIDEO", file: blob, fileName: "file" })
       .then((res) => {
         setIsLoading(false);
-        onClick?.(4);
+        onClick?.(6);
       })
       .catch((err) => {
         setIsLoading(false);
