@@ -9,7 +9,9 @@ export const WalletList: React.FC = () => {
   return (
     <section className="page page-wallet">
       <Row>
-        <RialCard />
+        <Col xs={12}>
+          <RialCard />
+        </Col>
       </Row>
       <Row>
         <Col xs={12} lg={6}>

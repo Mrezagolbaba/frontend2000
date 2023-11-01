@@ -4,7 +4,6 @@ import Wallet from "assets/img/icons/wallet.svg";
 import Order from "assets/img/icons/paper.svg";
 import History from "assets/img/icons/time-circle.svg";
 import AddFriend from "assets/img/icons/add-user.svg";
-import Logout from "assets/img/icons/logout.svg";
 import React, { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { Nav, NavItem } from "reactstrap";
@@ -38,22 +37,22 @@ export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
       icon: <img src={Home} alt="" />,
     },
     {
-      path: "/wallet",
+      path: "/dashboard/wallet",
       label: "کیف پول",
       icon: <img src={Wallet} alt="" />,
     },
     {
-      path: "/orders",
+      path: "/dashboard/orders",
       label: "سفارشات من",
       icon: <img src={Order} alt="" />,
     },
     {
-      path: "/history",
+      path: "/dashboard/history",
       label: "تاریخچه",
       icon: <img src={History} alt="" />,
     },
     {
-      path: "/add-friends",
+      path: "/dashboard/add-friends",
       label: "دعوت دوستان",
       icon: <img src={AddFriend} alt="" />,
     },

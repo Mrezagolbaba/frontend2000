@@ -1,6 +1,6 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { AuthenticationLevel2Props } from "./types";
-import { BsFileEarmarkPlus } from "react-icons/bs";
+import { BsCheck, BsFileEarmarkPlus } from "react-icons/bs";
 import { Button, Col, Container, Row, Spinner } from "reactstrap";
 
 import profile from "assets/scss/dashboard/profile.module.scss";
@@ -61,13 +61,17 @@ export default function ResidencyCardStep({
 
   const handleSubmit = async (fileNumber: number) => {
     setIsLoading(true);
+    // console.log(file[fileNumber], fileNumber);
+
+    const body = {
+      docType:
+        fileNumber === 1 ? "RESIDENCE_PERMIT_FRONT" : "RESIDENCE_PERMIT_BACK",
+      file: file[fileNumber],
+      fileName: "file",
+    };
+
     await uploadDoc
-      .mutateAsync({
-        docType:
-          fileNumber === 1 ? "RESIDENCE_PERMIT_FRONT" : "RESIDENCE_PERMIT_BACK",
-        file: fileNumber === 1 ? file[0] : file[1],
-        fileName: "file",
-      })
+      .mutateAsync({ ...body })
       .then(async (res) => {
         setIsLoading(false);
         console.log(res);
@@ -150,13 +154,24 @@ export default function ResidencyCardStep({
               outline
               size="large"
               className="py-3 px-5 mx-2"
-              disabled={isLoading}
+              disabled={isLoading || counter > 0}
               onClick={() => {
                 handleSubmit(1);
               }}
             >
-              {isLoading ? <Spinner /> : " ارسال روی کارت اقامت"}
-              <BsFileEarmarkPlus />
+              {isLoading ? (
+                <Spinner />
+              ) : counter === 1 ? (
+                <>
+                  روی کارت اقامت ارسال شد
+                  <BsCheck />
+                </>
+              ) : (
+                <>
+                  ارسال روی کارت اقامت
+                  <BsFileEarmarkPlus />
+                </>
+              )}
             </Button>
           )}
           {!file["2"] ? (
@@ -174,16 +189,23 @@ export default function ResidencyCardStep({
             </Button>
           ) : (
             <Button
-              color="primary"
+              color={counter === 1 ? "success" : "primary"}
               outline
               size="large"
               className="py-3 px-5"
+              disabled={isLoading || counter > 1}
               onClick={() => {
                 handleSubmit(2);
               }}
             >
-              ارسال پشت کارت اقامت
-              <BsFileEarmarkPlus />
+              {isLoading ? (
+                <Spinner />
+              ) : (
+                <>
+                  ارسال پشت کارت اقامت
+                  <BsFileEarmarkPlus />
+                </>
+              )}
             </Button>
           )}
         </Col>

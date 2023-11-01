@@ -10,7 +10,7 @@ export default function RialCard() {
   const [isOpenDepositForm, setIsOpenDepositForm] = useState<boolean>(false);
   const [isOpenWithdraw, setIsOpenWithdraw] = useState<boolean>(false);
   return (
-    <Card className="custom-card card-secondary mb-4">
+    <Card className="mb-4">
       <CardHeader>
         <CardTitle tag="h5">موجودی تومانی</CardTitle>
       </CardHeader>

@@ -14,7 +14,7 @@ import teter from "assets/img/icons/flag-turkey.png";
 
 export default function Fiat() {
   return (
-    <Card className="custom-card card-secondary mb-4">
+    <Card className="mb-4">
       <CardHeader>
         <CardTitle tag="h5">موجودی فیات دیجیتال</CardTitle>
       </CardHeader>
