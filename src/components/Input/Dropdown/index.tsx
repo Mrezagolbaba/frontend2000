@@ -17,6 +17,7 @@ type Props = {
   onChange?: (value: string) => void;
   children?: ReactNode;
   hasError?: boolean;
+  disabled?: boolean;
 };
 
 const DropdownInput = ({
@@ -26,6 +27,7 @@ const DropdownInput = ({
   id = "dropdown-input",
   children,
   hasError = false,
+  disabled = false,
 }: Props) => {
   const [isOpenDrop, setIsOpenDrop] = useState(false);
   const [selectedOption, setSelectedOption] = useState<OptionType>();
@@ -53,6 +55,7 @@ const DropdownInput = ({
       isOpen={isOpenDrop}
       id={id}
       toggle={toggleDropdown}
+      disabled={disabled}
     >
       <DropdownToggle
         className={`${dropdown["toggle-btn"]} ${

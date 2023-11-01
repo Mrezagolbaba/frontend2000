@@ -1,4 +1,4 @@
-import { useForm, useList } from "@refinedev/core";
+import { useForm } from "@refinedev/core";
 import { AlertInfo, AlertWarning } from "components/AlertWidget";
 import * as Yup from "yup";
 
@@ -26,13 +26,17 @@ import CopyInput from "components/Input/CopyInput";
 import { CurrencyType } from "../../constants";
 
 type CryptoFormType = {
-  currencyCode: string;
+  network: string;
   amount: string;
 };
 
-const DepositCrypto = ({ onClose }: { onClose: () => void }) => {
-  const [currencyList, setCurrencyList] = useState<CurrencyType[] | null>(null);
-
+const DepositCrypto = ({
+  onClose,
+  currency,
+}: {
+  onClose: () => void;
+  currency: string;
+}) => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [result, setResult] = useState({
     networkName: "",
@@ -41,9 +45,9 @@ const DepositCrypto = ({ onClose }: { onClose: () => void }) => {
     endTime: "",
   });
 
-  const { data, isSuccess } = useList<CurrencyType>({
-    resource: "currencies",
-  });
+  // const { data, isSuccess } = useList<CurrencyType>({
+  //   resource: "currencies",
+  // });
 
   const { formLoading, onFinish } = useForm({
     action: "create",
@@ -60,33 +64,24 @@ const DepositCrypto = ({ onClose }: { onClose: () => void }) => {
     },
   });
 
-  useEffect(() => {
-    if (isSuccess)
-      setCurrencyList(
-        data.data.filter((currency: CurrencyType) => currency.type === "CRYPTO")
-      );
-  }, [data?.data, isSuccess]);
-
-  const optionList: OptionType[] = currencyList
-    ? currencyList.map((currency: CurrencyType) => {
-        return {
-          content: (
-            <div className={wallet["items-credit"]}>
-              <span className={wallet["items-credit__icon"]}>
-                <img alt={currency.name} src={tron} className="bank-svg" />
-              </span>
-              <span>{currency.name}</span>
-            </div>
-          ),
-          value: currency.code,
-        };
-      })
-    : [];
+  const optionList: OptionType[] = [
+    {
+      content: (
+        <div className={wallet["items-credit"]}>
+          <span className={wallet["items-credit__icon"]}>
+            <img alt="ethereum" src={eth} className="bank-svg" />
+          </span>
+          <span>اتریوم</span>
+        </div>
+      ),
+      value: "ETH",
+    },
+  ];
 
   const resolver = yupResolver(
     Yup.object().shape({
-      currencyCode: Yup.string().required(),
       amount: Yup.string().required(),
+      network: Yup.string().required(),
     })
   );
 
@@ -99,18 +94,21 @@ const DepositCrypto = ({ onClose }: { onClose: () => void }) => {
   } = useRHF<CryptoFormType>({
     mode: "onChange",
     defaultValues: {
-      currencyCode: "",
+      network: "ETH",
       amount: "",
     },
     resolver,
   });
   const onSubmit = (data: CryptoFormType) => {
-    onFinish(data);
+    onFinish({
+      currencyCode: currency,
+      amount: data.amount,
+    });
   };
 
   const handleClose = () => {
     reset({
-      currencyCode: "",
+      network: "ETH",
       amount: "",
     });
     setResult({
@@ -147,7 +145,7 @@ const DepositCrypto = ({ onClose }: { onClose: () => void }) => {
           <Row>
             <Col xs={12} lg={6}>
               <Controller
-                name="currencyCode"
+                name="network"
                 control={control}
                 render={({ field: { name, value } }) => (
                   <FormGroup className="position-relative">
@@ -158,6 +156,7 @@ const DepositCrypto = ({ onClose }: { onClose: () => void }) => {
                       value={value}
                       onChange={(val) => setValue(name, val)}
                       options={optionList}
+                      disabled={true}
                       // hasError={Boolean(errors?.[name])}
                     />
                     {errors?.[name] && (
@@ -165,9 +164,7 @@ const DepositCrypto = ({ onClose }: { onClose: () => void }) => {
                         {errors[name]?.message}
                       </FormFeedback>
                     )}
-                    <FormText>
-                      سقف واریز امروز این کارت: ۵۰ میلیون تومان
-                    </FormText>
+                    <FormText>سقف واریز</FormText>
                   </FormGroup>
                 )}
               />
@@ -190,7 +187,7 @@ const DepositCrypto = ({ onClose }: { onClose: () => void }) => {
                       name={name}
                       value={value}
                       onChange={(val) => setValue(name, val)}
-                      placeholder="مبلغ را به تومان وارد کنید"
+                      // placeholder="مبلغ را به تومان وارد کنید"
                       hasError={Boolean(errors?.[name])}
                     />
                     {errors?.[name] && (
@@ -198,7 +195,7 @@ const DepositCrypto = ({ onClose }: { onClose: () => void }) => {
                         {errors[name]?.message}
                       </FormFeedback>
                     )}
-                    <FormText>کارمزد دریافت تتر: صفر USDT </FormText>
+                    <FormText>کارمزد دریافت تتر: صفر {currency} </FormText>
                   </FormGroup>
                 )}
               />
@@ -229,7 +226,7 @@ const DepositCrypto = ({ onClose }: { onClose: () => void }) => {
                   type="text"
                   name="networkName"
                   id="networkName"
-                  value={result.networkName}
+                  value="ETH"
                 />
               </FormGroup>
             </Col>
