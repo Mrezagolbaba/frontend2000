@@ -92,7 +92,7 @@ const DashboardContent = () => {
                   className="profile-btn"
                   outline
                   color="secondary"
-                  href="/profile"
+                  href="/dashboard/profile"
                 >
                   <CiEdit />
                   پروفایل کاربری
