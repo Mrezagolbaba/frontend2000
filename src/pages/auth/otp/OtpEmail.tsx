@@ -38,7 +38,11 @@ const OtpEmail = () => {
     },
     resolver,
   });
-
+  const handleErrors = (errors: any) => {
+    toast.error(errors?.code?.message, {
+      position: "bottom-left",
+    });
+  };
   const handleResend = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -47,7 +51,11 @@ const OtpEmail = () => {
       type: "AUTH",
       method: "EMAIL",
     };
-    await resendOtp(data);
+    await resendOtp(data)
+      .then((res) => {
+        setTimeInSeconds(120);
+      })
+      .catch((err) => handleErrors(err));
   };
 
   const handleOTP = async (data: { code: string }) => {
@@ -56,18 +64,14 @@ const OtpEmail = () => {
       type: "VERIFY_EMAIL",
       method: "EMAIL",
     };
-    await sendOtp(formData).then((res) => {
-      toast.error("ایمیل شما با موفقیت تایید شد.", {
-        position: "bottom-left",
-      });
-      res && navigate("/login");
-    });
-  };
-
-  const handleErrors = (errors: any) => {
-    toast.error(errors?.code?.message, {
-      position: "bottom-left",
-    });
+    await sendOtp(formData)
+      .then((res) => {
+        toast.error("ایمیل شما با موفقیت تایید شد.", {
+          position: "bottom-left",
+        });
+        res && navigate("/login");
+      })
+      .catch((err) => handleErrors(err));
   };
 
   useEffect(() => {

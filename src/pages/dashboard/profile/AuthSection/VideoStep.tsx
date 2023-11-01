@@ -58,7 +58,6 @@ export default function VideoStep({
       .then((res) => {
         setIsLoading(false);
         onClick?.(4);
-        console.log(res);
       })
       .catch((err) => {
         setIsLoading(false);
