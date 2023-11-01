@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Layout from "layouts/dashboard";
 import ModalTeter from "./modal";
 import { useAppSelector } from "redux/hooks";
-import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Input, Row } from "reactstrap";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import ExchangeInput from "components/Input/exchangeInput";
 import DropdownInput from "components/Input/Dropdown";
@@ -10,25 +10,117 @@ import { TbArrowsExchange2 } from "react-icons/tb";
 import { CiWallet } from "react-icons/ci";
 import { BsTag } from "react-icons/bs";
 import buy from "./styles.module.scss";
-import { getCurrencySwap } from "services/currencySwap";
+import { exchangeCurrencySwap, getCurrencySwap } from "services/currencySwap";
 import { getAllWallets } from "services/wallet";
+
+interface wallet {
+  availableBalance: string,
+  balance: string,
+  createdAt: string,
+  currencyCode: string,
+  id: string,
+  updatedAt: string,
+  userId: string,
+}
+
 
 const BuySell = () => {
   const user = useAppSelector((state) => state.user);
   const { firstName, lastName, email, phoneNumber } = user;
   const [visible, setVisible] = useState(false);
+  const [walltes, setWalltes] = useState<wallet[]>([]);
+  const [payValue, setPayValue] = useState<string>("0")
+  const [getValue, setGetValue] = useState<string>("0");
+  const [payDtails, setPayDtails] = useState({
+    balance: "0",
+    availableBalance: "0",
+    currency: ""
+  });
+  const [getDtails, setGetDtails] = useState({
+    balance: "0",
+    availableBalance: "0",
+    currency: ""
+  });
   const hanldeModal = () => {
     setVisible(!visible);
   };
-  console.log(user.id,'user');
   useEffect(() => {
 
-   getAllWallets().then((res) => console.log(res));
+    getAllWallets().then((res) => {
+      console.log(res, 'res');
+      setWalltes(res);
+    }).catch((err) => {
+      console.log(err);
+    })
+
 
   }, [user]);
   const handleCancel = () => {
     setVisible(false);
   };
+  const convertText = (text, direction) => {
+    const currencyMap = {
+      'enToFa': {
+        'USDT': 'تتر',
+        'TRY': 'لیر',
+        'IRR': 'ریال',
+      },
+      'faToEn': {
+        'تتر': 'USDT',
+        'لیر': 'TRY',
+        'ریال': 'IRR',
+      },
+    };
+
+    if (direction in currencyMap && text in currencyMap[direction]) {
+      return currencyMap[direction][text];
+    }
+    return text;
+  };
+  const handleSelectAsset = (e: string, action: string) => {
+    const data = walltes.find((item: wallet) => item.currencyCode === e);
+    if (action === 'pay' && data) {
+      setPayDtails({
+        balance: data?.balance ?? "0",
+        availableBalance: data?.availableBalance ?? "0",
+        currency: convertText(data?.currencyCode, 'enToFa') ?? ""
+
+      })
+    } else if (action === 'get' && data) {
+      setGetDtails({
+        availableBalance: data?.availableBalance ?? "0",
+        balance: data?.balance ?? "0",
+        currency: convertText(data?.currencyCode, 'enToFa') ?? ""
+      })
+    } else if (action === 'pay' && !data) {
+      console.log(e);
+      setPayDtails({
+        balance: "0",
+        availableBalance: "0",
+        currency: convertText(e, 'enToFa') ?? ""
+      })
+    } else if (action === 'get' && !data) {
+      setGetDtails({
+        balance: "0",
+        availableBalance: "0",
+        currency: convertText(e, 'enToFa') ?? ""
+      })
+    }
+
+  }
+  const handleExchange = () => {
+    const data = {
+      sourceCurrencyCode: convertText(payDtails.currency, 'faToEn'),
+      sourceAmount: payValue,
+      destinationCurrencyCode: convertText(getDtails.currency, 'faToEn'),
+      feeCurrencyCode: convertText(payDtails.currency, 'faToEn'),
+    }
+    exchangeCurrencySwap(data).then((res) => {
+      console.log(res);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
   return (
     <section className="page page-wallet">
       <div className="row g-4">
@@ -36,8 +128,6 @@ const BuySell = () => {
           <Card className="card card-secondary currency-exchange card--h100pc">
             <CardHeader >
               <Row>
-
-
                 <div className="card-back col-lg-6">
                   <a className="">
                     <span className="icon">
@@ -53,34 +143,36 @@ const BuySell = () => {
                     data-bs-target="#addCoinModal"
                     onClick={hanldeModal}
                   >
-                    واریز تتر
+                    واریز {convertText(payDtails.currency, 'enToFa')}
                   </button>
                 </div>
               </Row>
             </CardHeader>
             <CardBody>
               <form action="" className={buy["formContainer"]}>
-                <Row style={{justifyContent:'center'}}>
+                <Row style={{ justifyContent: 'center' }}>
                   <Col lg={5} xs={12}> {/* On extra small screens, take up the full width */}
                     <div className="currency-exchange__control-group">
                       <label className="form-label">پرداخت می‌کنید:</label>
                       <ExchangeInput
                         name={"amount"}
-                        value={'12.645585'}
-                        onChange={(e) => console.log(e)}
+                        value={payValue}
+                        onChange={(value) => setPayValue(value)}
+                        onChangeCoin={(e) => handleSelectAsset(e, 'pay')}
+
                       />
                       <div className={buy.amount}>
                         <div>
                           <CiWallet />
                           <span className="title">موجودی در دسترس: </span>
                           <span className="value">
-                            12.645585 تتر
+                            {payDtails.availableBalance} {convertText(payDtails.currency, 'enToFa')}
                           </span>
                         </div>
                         <div >
                           <BsTag />
                           <span className="title">
-                            نرخ تتر:
+                            نرخ {convertText(payDtails.currency, 'enToFa')} :
                           </span>
                           <span className="value">
                             48,900 تومان
@@ -91,30 +183,31 @@ const BuySell = () => {
 
                     </div>
                   </Col>
-                  <Col lg={1} xs={12} style={{ justifyContent:'center',alignItems:'center' }}>
+                  {/* <Col lg={1} xs={12} style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <TbArrowsExchange2 size={30} />
-                  </Col>
+                  </Col> */}
                   <Col lg={5} xs={12}>
                     <div className="currency-exchange__control-group">
                       <label className="form-label">دریافت می‌کنید:</label>
                       <ExchangeInput
                         name="amount"
-                        value={'12.645585'}
-                        onChange={(e) => console.log(e)}
+                        value={getValue}
+                        onChange={(val) => setGetValue(val)}
+                        onChangeCoin={(e) => handleSelectAsset(e, 'get')}
                       />
                       <div className={buy.amount}>
                         <div>
                           <CiWallet />
                           <span className="title">موجودی در دسترس: </span>
                           <span className="value">
-                            12.645585 لیر
+                            {getDtails.availableBalance} {convertText(getDtails.currency, 'enToFa')}
                           </span>
                         </div>
 
                         <div >
                           <BsTag />
                           <span className="title">
-                            نرخ لیر:
+                            نرخ {convertText(getDtails.currency, 'enToFa')} :
                           </span>
                           <span className="value">
                             48,900 تومان
@@ -145,16 +238,20 @@ const BuySell = () => {
                     <tbody>
                       <tr>
                         <td className="text-center">
-                          <fieldset>
-                            <div className="radio-toggle-control">
-                              <input type="radio" name="rtc" id="rtc1" />
-                              <label>لیر</label>
-                            </div>
-                            <div className="radio-toggle-control">
-                              <input type="radio" name="rtc" id="rtc2" />
-                              <label>ریال</label>
-                            </div>
-                          </fieldset>
+                          <Row>
+                            <Col lg={4} xs={6}>
+                              <div className="radio-toggle-control">
+                                <Input type="radio" name="rtc" id="rtc1" className="m-2" />
+                                <label>{convertText(payDtails.currency, 'enToFa')}</label>
+                              </div>
+                            </Col>
+                            <Col lg={4} xs={6}>
+                              <div className="radio-toggle-control">
+                                <Input type="radio" name="rtc" id="rtc2" className="m-2" />
+                                <label>{convertText(getDtails.currency, 'enToFa')}</label>
+                              </div>
+                            </Col>
+                          </Row>
                         </td>
                         <td className="text-center">۲۵ لیر</td>
                         <td className="text-center">453 لیر</td>
@@ -163,7 +260,7 @@ const BuySell = () => {
                   </table>
                 </div>
                 <div className="currency-exchange__action">
-                  <button type="button" className="btn btn-outline-primary">
+                  <button type="button" className="btn btn-outline-primary" onClick={handleExchange}>
                     ثبت نهایی سفارش{" "}
                   </button>
                 </div>
