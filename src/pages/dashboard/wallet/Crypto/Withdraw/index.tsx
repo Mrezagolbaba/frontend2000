@@ -26,52 +26,39 @@ import { CurrencyType } from "../../constants";
 import toast from "react-hot-toast";
 
 type CryptoFormType = {
-  currencyCode: string;
+  network: string;
   amount: string;
   destination: string;
 };
 
 const WithdrawCrypto = ({
   onClose,
-  wallets,
+  currency,
+  stock,
 }: {
   onClose: () => void;
-  wallets: any;
+  currency: string;
+  stock: number;
 }) => {
   const [showOtp, setShowOtp] = useState<boolean>(false);
-  const [currencyList, setCurrencyList] = useState<CurrencyType[] | null>(null);
-  const [stock, setStock] = useState<number>(0);
-  const [stockCode, setStockCode] = useState<string>("");
-  const { data, isSuccess } = useList<CurrencyType>({
-    resource: "currencies",
-  });
 
-  useEffect(() => {
-    if (isSuccess)
-      setCurrencyList(
-        data.data.filter((currency: CurrencyType) => currency.type === "CRYPTO")
-      );
-  }, [data?.data, isSuccess]);
-
-  const optionList: OptionType[] = currencyList
-    ? currencyList.map((currency: CurrencyType) => {
-        return {
-          content: (
-            <div className={wallet["items-credit"]}>
-              <span className={wallet["items-credit__icon"]}>
-                <img alt={currency.name} src={tron} className="bank-svg" />
-              </span>
-              <span>{currency.name}</span>
-            </div>
-          ),
-          value: currency.code,
-        };
-      })
-    : [];
+  const optionList: OptionType[] = [
+    {
+      content: (
+        <div className={wallet["items-credit"]}>
+          <span className={wallet["items-credit__icon"]}>
+            <img alt="ethereum" src={eth} className="bank-svg" />
+          </span>
+          <span>اتریوم</span>
+        </div>
+      ),
+      value: "ETH",
+    },
+  ];
 
   const resolver = yupResolver(
     Yup.object().shape({
-      currencyCode: Yup.string().required(),
+      network: Yup.string().required(),
       amount: Yup.string().required(),
       destination: Yup.string().required(),
     })
@@ -94,7 +81,7 @@ const WithdrawCrypto = ({
   } = useRHF<CryptoFormType>({
     mode: "onChange",
     defaultValues: {
-      currencyCode: "",
+      network: "ETH",
       amount: "",
       destination: "",
     },
@@ -105,7 +92,12 @@ const WithdrawCrypto = ({
       toast.error("مبلغ انتخابی بیش تر از موجودی شما می باشد.", {
         position: "bottom-left",
       });
-    else onFinish(data);
+    else
+      onFinish({
+        currencyCode: currency,
+        amount: data.amount,
+        destination: data.destination,
+      });
   };
 
   return (
@@ -124,7 +116,7 @@ const WithdrawCrypto = ({
           <Row>
             <Col xs={12} lg={6}>
               <Controller
-                name="currencyCode"
+                name="network"
                 control={control}
                 render={({ field: { name, value } }) => (
                   <FormGroup className="position-relative">
@@ -133,15 +125,9 @@ const WithdrawCrypto = ({
                     <DropdownInput
                       id={name}
                       value={value}
-                      onChange={(val) => {
-                        const stockTemp = wallets.filter(
-                          (wallet) => val === wallet.currencyCode && wallet
-                        );
-                        setStock(Number(stockTemp[0]?.balance));
-                        setStockCode(stockTemp[0]?.currencyCode);
-                        setValue(name, val);
-                      }}
+                      onChange={(val) => setValue(name, val)}
                       options={optionList}
+                      disabled={true}
                       // hasError={Boolean(errors?.[name])}
                     />
                     {errors?.[name] && (
@@ -149,9 +135,7 @@ const WithdrawCrypto = ({
                         {errors[name]?.message}
                       </FormFeedback>
                     )}
-                    <FormText>
-                      سقف واریز امروز این کارت: ۵۰ میلیون تومان
-                    </FormText>
+                    <FormText>سقف واریز</FormText>
                   </FormGroup>
                 )}
               />
@@ -174,7 +158,7 @@ const WithdrawCrypto = ({
                       name={name}
                       value={value}
                       onChange={(val) => setValue(name, val)}
-                      placeholder="مبلغ را به تومان وارد کنید"
+                      // placeholder="مبلغ را به تومان وارد کنید"
                       hasError={Boolean(errors?.[name])}
                     />
                     {errors?.[name] && (
@@ -183,7 +167,7 @@ const WithdrawCrypto = ({
                       </FormFeedback>
                     )}
                     <FormText>
-                      موجودی شما: {stock} {stockCode}
+                      موجودی شما: {stock} {currency}
                     </FormText>
                   </FormGroup>
                 )}
