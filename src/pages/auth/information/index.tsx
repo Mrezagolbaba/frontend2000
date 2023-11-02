@@ -56,12 +56,15 @@ const Information = () => {
       persianToEnglishNumbers(data.phoneNumber),
       "98"
     );
+    const nationalCode = persianToEnglishNumbers(data.nationalCode);
     await submitInformation
-      .mutateAsync({ ...data, phoneNumber })
+      .mutateAsync({ ...data, phoneNumber, nationalCode })
       .then((res) => {
-        navigate("/email-otp",{state: {
-          email: data.email,
-        },});
+        navigate("/email-otp", {
+          state: {
+            email: data.email,
+          },
+        });
         setIsLoading(false);
       })
       .catch(() => {

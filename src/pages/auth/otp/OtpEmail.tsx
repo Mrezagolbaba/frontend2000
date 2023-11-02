@@ -18,6 +18,7 @@ import {
   Spinner,
 } from "reactstrap";
 import { useEffect, useState } from "react";
+import { persianToEnglishNumbers } from "helpers";
 const OtpEmail = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -60,7 +61,7 @@ const OtpEmail = () => {
 
   const handleOTP = async (data: { code: string }) => {
     const formData = {
-      code: data.code,
+      code: persianToEnglishNumbers(data.code),
       type: "VERIFY_EMAIL",
       method: "EMAIL",
     };
