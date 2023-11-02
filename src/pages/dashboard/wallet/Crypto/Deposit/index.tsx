@@ -232,7 +232,7 @@ const DepositCrypto = ({
             </Col>
             <Col xs={12} lg={6}>
               <FormGroup>
-                <Label htmlFor="walletAddress"> شماره شبا:</Label>
+                <Label htmlFor="walletAddress"> آدرس کیف پول:</Label>
                 <CopyInput text={result.walletAddress} />
               </FormGroup>
             </Col>
