@@ -34,12 +34,12 @@ const BuySell = () => {
   const [payDtails, setPayDtails] = useState({
     balance: "0",
     availableBalance: "0",
-    currency: ""
+    currency: "IRR"
   });
   const [getDtails, setGetDtails] = useState({
     balance: "0",
     availableBalance: "0",
-    currency: ""
+    currency: "TRY"
   });
   const hanldeModal = () => {
     setVisible(!visible);
