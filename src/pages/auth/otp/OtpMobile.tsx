@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 
-import { PhoneNumberMask } from "helpers";
+import { PhoneNumberMask, persianToEnglishNumbers } from "helpers";
 import OtpInput from "components/OTP";
 import { resendOtp } from "services/auth";
 import Auth from "layouts/auth";
@@ -63,7 +63,7 @@ const OtpMobile: React.FC = () => {
 
   const handleOTP = async (data: { code: string }) => {
     const formData = {
-      code: data.code,
+      code: persianToEnglishNumbers(data.code),
       type: "AUTH",
       method: "PHONE",
     };

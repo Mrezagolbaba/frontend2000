@@ -10,18 +10,44 @@ import {
 } from "reactstrap";
 
 import teter from "assets/img/coins/tether.png";
+import trx from "assets/img/coins/trx.png";
 
-import wallet from "pages/dashboard/wallet/style.module.scss";
 import { useList } from "@refinedev/core";
 import Dialog from "components/Dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DepositCrypto from "./Deposit";
 import WithdrawCrypto from "./Withdraw";
 
+import wallet from "assets/scss/dashboard/wallet.module.scss";
+
+const initiateCrypto = {
+  availableBalance: "",
+  balance: "",
+  createdAt: "",
+  currencyCode: "",
+  id: "",
+  updatedAt: "",
+  userId: "",
+};
+
 export default function CryptoCard() {
+  const [USDT, setUSDT] = useState<any>(initiateCrypto);
+  const [TRX, setTRX] = useState<any>(initiateCrypto);
+
   const { data, isSuccess, isLoading } = useList({
-    resource: "wallets",
+    resource: `wallets`,
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      data?.data.forEach((item) => {
+        item.currencyCode === "USDT" && setUSDT(item);
+        item.currencyCode === "TRX" && setTRX(item);
+      });
+    }
+  }, [data?.data, isSuccess]);
+
+  console.log(USDT, TRX);
 
   const [depositForm, setDepositForm] = useState<{
     isOpen: boolean;
@@ -65,6 +91,15 @@ export default function CryptoCard() {
                       <td className="text-center placeholder-glow">
                         <div className="placeholder col-12 rounded" />
                       </td>
+                      <td className="text-center placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="text-center placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="text-center placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
                     </tr>
                     <tr>
                       <th scope="row" className="placeholder-glow">
@@ -76,11 +111,9 @@ export default function CryptoCard() {
                       <td className="text-center placeholder-glow">
                         <div className="placeholder col-12 rounded" />
                       </td>
-                    </tr>
-                    <tr>
-                      <th scope="row" className="placeholder-glow">
+                      <td className="text-center placeholder-glow">
                         <div className="placeholder col-12 rounded" />
-                      </th>
+                      </td>
                       <td className="text-center placeholder-glow">
                         <div className="placeholder col-12 rounded" />
                       </td>
@@ -90,8 +123,8 @@ export default function CryptoCard() {
                     </tr>
                   </>
                 ) : isSuccess && data && data.total > 0 ? (
-                  data.data.map((item, key) => (
-                    <tr key={key}>
+                  <>
+                    <tr key={0}>
                       <th scope="row">
                         <div>
                           <img
@@ -99,13 +132,15 @@ export default function CryptoCard() {
                             alt=""
                             className={wallet["crypto-img"]}
                           />
-                          <span className={wallet["crypto-name"]}>
-                            {item.currencyCode}
-                          </span>
+                          <span className={wallet["crypto-name"]}>تتر</span>
                         </div>
                       </th>
-                      <td className="text-center">{item.balance}</td>
-                      <td className="text-center">{item.availableBalance}</td>
+                      <td className="text-center">
+                        {Number(USDT.balance | 0)}
+                      </td>
+                      <td className="text-center">
+                        {Number(USDT.availableBalance | 0)}
+                      </td>
                       <td className="text-center">
                         <Button
                           color="secondary"
@@ -113,7 +148,7 @@ export default function CryptoCard() {
                           onClick={() => {
                             setDepositForm({
                               isOpen: true,
-                              currency: item.currencyCode,
+                              currency: "USDT",
                             });
                           }}
                         >
@@ -124,11 +159,12 @@ export default function CryptoCard() {
                         <Button
                           color="secondary"
                           className="px-3 py-2"
+                          disabled={USDT.balance <= 0}
                           onClick={() =>
                             setWithdrawForm({
                               isOpen: true,
-                              currency: item.currencyCode,
-                              stock: item.balance,
+                              currency: "USDT",
+                              stock: USDT.balance,
                             })
                           }
                         >
@@ -146,7 +182,63 @@ export default function CryptoCard() {
                         </Button>
                       </td>
                     </tr>
-                  ))
+                    <tr key={1}>
+                      <th scope="row">
+                        <div>
+                          <img
+                            src={trx}
+                            alt=""
+                            className={wallet["crypto-img"]}
+                          />
+                          <span className={wallet["crypto-name"]}>ترون</span>
+                        </div>
+                      </th>
+                      <td className="text-center">{Number(TRX.balance | 0)}</td>
+                      <td className="text-center">
+                        {Number(TRX.availableBalance | 0)}
+                      </td>
+                      <td className="text-center">
+                        <Button
+                          color="secondary"
+                          className="px-3 py-2"
+                          onClick={() => {
+                            setDepositForm({
+                              isOpen: true,
+                              currency: "TRX",
+                            });
+                          }}
+                        >
+                          واریز
+                        </Button>
+                      </td>
+                      <td className="text-center">
+                        <Button
+                          color="secondary"
+                          className="px-3 py-2"
+                          disabled={TRX.balance <= 0}
+                          onClick={() =>
+                            setWithdrawForm({
+                              isOpen: true,
+                              currency: "TRX",
+                              stock: TRX.balance,
+                            })
+                          }
+                        >
+                          برداشت
+                        </Button>
+                      </td>
+                      <td className="text-center">
+                        <Button
+                          color="primary"
+                          className="px-3 py-2"
+                          outline
+                          disabled={true}
+                        >
+                          معامله
+                        </Button>
+                      </td>
+                    </tr>
+                  </>
                 ) : (
                   <tr>دیتایی موجود نیست</tr>
                 )}
@@ -156,7 +248,7 @@ export default function CryptoCard() {
         </Row>
       </CardBody>
       <Dialog
-        title="واریز ارز دیجیتال"
+        title={depositForm.currency === "USDT" ? "واریز تتر" : "واریز ترون"}
         isOpen={depositForm.isOpen}
         onClose={() => setDepositForm({ isOpen: false, currency: "" })}
         hasCloseButton
@@ -167,7 +259,7 @@ export default function CryptoCard() {
         />
       </Dialog>
       <Dialog
-        title="برداشت ارز دیجیتال"
+        title={withdrawForm.currency === "USDT" ? "برداشت تتر" : "برداشت ترون"}
         isOpen={withdrawForm.isOpen}
         onClose={() =>
           setWithdrawForm({ isOpen: false, currency: "", stock: 0 })
