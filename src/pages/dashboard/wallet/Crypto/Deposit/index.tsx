@@ -4,7 +4,7 @@ import * as Yup from "yup";
 
 import wallet from "pages/dashboard/wallet/style.module.scss";
 
-import eth from "assets/img/network/eth.svg";
+// import eth from "assets/img/network/eth.svg";
 import tron from "assets/img/network/tron.svg";
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import { Controller, useForm as useRHF } from "react-hook-form";
@@ -69,12 +69,12 @@ const DepositCrypto = ({
       content: (
         <div className={wallet["items-credit"]}>
           <span className={wallet["items-credit__icon"]}>
-            <img alt="ethereum" src={eth} className="bank-svg" />
+            <img alt="TRC20" src={tron} className="bank-svg" />
           </span>
-          <span>اتریوم</span>
+          <span>TRC20</span>
         </div>
       ),
-      value: "ETH",
+      value: "TRC20",
     },
   ];
 
@@ -94,7 +94,7 @@ const DepositCrypto = ({
   } = useRHF<CryptoFormType>({
     mode: "onChange",
     defaultValues: {
-      network: "ETH",
+      network: "TRC20",
       amount: "",
     },
     resolver,
@@ -108,7 +108,7 @@ const DepositCrypto = ({
 
   const handleClose = () => {
     reset({
-      network: "ETH",
+      network: "TRC20",
       amount: "",
     });
     setResult({
@@ -226,7 +226,7 @@ const DepositCrypto = ({
                   type="text"
                   name="networkName"
                   id="networkName"
-                  value="ETH"
+                  value="TRC20"
                 />
               </FormGroup>
             </Col>
