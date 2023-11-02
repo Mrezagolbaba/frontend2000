@@ -135,8 +135,12 @@ export default function CryptoCard() {
                           <span className={wallet["crypto-name"]}>تتر</span>
                         </div>
                       </th>
-                      <td className="text-center">{USDT.balance}</td>
-                      <td className="text-center">{USDT.availableBalance}</td>
+                      <td className="text-center">
+                        {Number(USDT.balance | 0)}
+                      </td>
+                      <td className="text-center">
+                        {Number(USDT.availableBalance | 0)}
+                      </td>
                       <td className="text-center">
                         <Button
                           color="secondary"
@@ -189,8 +193,10 @@ export default function CryptoCard() {
                           <span className={wallet["crypto-name"]}>ترون</span>
                         </div>
                       </th>
-                      <td className="text-center">{TRX.balance}</td>
-                      <td className="text-center">{TRX.availableBalance}</td>
+                      <td className="text-center">{Number(TRX.balance | 0)}</td>
+                      <td className="text-center">
+                        {Number(TRX.availableBalance | 0)}
+                      </td>
                       <td className="text-center">
                         <Button
                           color="secondary"
