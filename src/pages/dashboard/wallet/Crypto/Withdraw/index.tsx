@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AlertInfo, AlertWarning } from "components/AlertWidget";
 import * as Yup from "yup";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm as useRHF } from "react-hook-form";
 import {
   Button,
   Col,
@@ -11,6 +11,7 @@ import {
   Input,
   Label,
   Row,
+  Spinner,
 } from "reactstrap";
 
 import wallet from "pages/dashboard/wallet/style.module.scss";
@@ -19,38 +20,39 @@ import eth from "assets/img/network/eth.svg";
 import tron from "assets/img/network/tron.svg";
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import Currency from "components/Input/CurrencyInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useForm, useList } from "@refinedev/core";
+import { CurrencyType } from "../../constants";
+import toast from "react-hot-toast";
 
 type CryptoFormType = {
   network: string;
   amount: string;
+  destination: string;
 };
 
-const WithdrawCrypto = () => {
+const WithdrawCrypto = ({
+  onClose,
+  currency,
+  stock,
+}: {
+  onClose: () => void;
+  currency: string;
+  stock: number;
+}) => {
   const [showOtp, setShowOtp] = useState<boolean>(false);
+
   const optionList: OptionType[] = [
     {
       content: (
         <div className={wallet["items-credit"]}>
           <span className={wallet["items-credit__icon"]}>
-            <img alt="ترون" src={tron} className="bank-svg" />
+            <img alt="ethereum" src={eth} className="bank-svg" />
           </span>
-          <span>TRC20 - ترون</span>
+          <span>اتریوم</span>
         </div>
       ),
-      value: "1",
-    },
-    {
-      content: (
-        <div className={wallet["items-credit"]}>
-          <span className={wallet["items-credit__icon"]}>
-            <img alt="اتریوم" src={eth} className="bank-svg" />
-          </span>
-
-          <span className="text">TRC20 - اتریوم</span>
-        </div>
-      ),
-      value: "2",
+      value: "ETH",
     },
   ];
 
@@ -58,25 +60,44 @@ const WithdrawCrypto = () => {
     Yup.object().shape({
       network: Yup.string().required(),
       amount: Yup.string().required(),
+      destination: Yup.string().required(),
     })
   );
+
+  const { formLoading, onFinish } = useForm({
+    action: "create",
+    resource: "transactions/withdraw",
+    onMutationSuccess: (data, variables, context, isAutoSave) => {
+      setShowOtp(true);
+      console.log("looooooooooog", { data, variables, context, isAutoSave });
+    },
+  });
 
   const {
     handleSubmit,
     control,
     setValue,
     formState: { errors },
-  } = useForm<CryptoFormType>({
+  } = useRHF<CryptoFormType>({
     mode: "onChange",
     defaultValues: {
-      network: "1",
+      network: "ETH",
       amount: "",
+      destination: "",
     },
     resolver,
   });
   const onSubmit = async (data: CryptoFormType) => {
-    console.log(data);
-    // setShowResult(true);
+    if (Number(data.amount) > stock)
+      toast.error("مبلغ انتخابی بیش تر از موجودی شما می باشد.", {
+        position: "bottom-left",
+      });
+    else
+      onFinish({
+        currencyCode: currency,
+        amount: data.amount,
+        destination: data.destination,
+      });
   };
 
   return (
@@ -106,6 +127,7 @@ const WithdrawCrypto = () => {
                       value={value}
                       onChange={(val) => setValue(name, val)}
                       options={optionList}
+                      disabled={true}
                       // hasError={Boolean(errors?.[name])}
                     />
                     {errors?.[name] && (
@@ -113,9 +135,7 @@ const WithdrawCrypto = () => {
                         {errors[name]?.message}
                       </FormFeedback>
                     )}
-                    <FormText>
-                      سقف واریز امروز این کارت: ۵۰ میلیون تومان
-                    </FormText>
+                    <FormText>سقف واریز</FormText>
                   </FormGroup>
                 )}
               />
@@ -137,7 +157,8 @@ const WithdrawCrypto = () => {
                     <Currency
                       name={name}
                       value={value}
-                      placeholder="مبلغ را به تومان وارد کنید"
+                      onChange={(val) => setValue(name, val)}
+                      // placeholder="مبلغ را به تومان وارد کنید"
                       hasError={Boolean(errors?.[name])}
                     />
                     {errors?.[name] && (
@@ -145,7 +166,34 @@ const WithdrawCrypto = () => {
                         {errors[name]?.message}
                       </FormFeedback>
                     )}
-                    <FormText> موجودی شما: 233 USDT </FormText>
+                    <FormText>
+                      موجودی شما: {stock} {currency}
+                    </FormText>
+                  </FormGroup>
+                )}
+              />
+            </Col>
+            <Col xs={12} lg={6}>
+              <Controller
+                name="destination"
+                control={control}
+                render={({ field: { name, value, onChange } }) => (
+                  <FormGroup className="position-relative">
+                    <div className="d-flex flex-row justify-content-between">
+                      <Label htmlFor={name}> آدرس کیف پول: </Label>
+                    </div>
+                    <Input
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      placeholder="آدرس کیف پول خود را وارد کنید"
+                      // hasError={Boolean(errors?.[name])}
+                    />
+                    {errors?.[name] && (
+                      <FormFeedback tooltip>
+                        {errors[name]?.message}
+                      </FormFeedback>
+                    )}
                   </FormGroup>
                 )}
               />
@@ -153,8 +201,14 @@ const WithdrawCrypto = () => {
           </Row>
           <Row className="mt-4">
             <div className="d-flex flex-row justify-content-evenly">
-              <Button color="primary" outline type="submit">
-                ثبت درخواست برداشت
+              <Button
+                color="primary"
+                outline
+                type="submit"
+                className="px-5 py-3"
+                disabled={formLoading}
+              >
+                {formLoading ? <Spinner /> : "ثبت درخواست برداشت"}
               </Button>
             </div>
           </Row>

@@ -6,8 +6,7 @@ import {
   DropdownItem,
 } from "reactstrap";
 
-import dropdown from "./style.module.scss";
-import { boolean } from "yup";
+import dropdown from "assets/scss/components/Input/dropdown.module.scss";
 
 export type OptionType = { value: string; content: ReactNode | string };
 
@@ -18,6 +17,7 @@ type Props = {
   onChange?: (value: string) => void;
   children?: ReactNode;
   hasError?: boolean;
+  disabled?: boolean;
 };
 
 const DropdownInput = ({
@@ -27,6 +27,7 @@ const DropdownInput = ({
   id = "dropdown-input",
   children,
   hasError = false,
+  disabled = false,
 }: Props) => {
   const [isOpenDrop, setIsOpenDrop] = useState(false);
   const [selectedOption, setSelectedOption] = useState<OptionType>();
@@ -54,6 +55,7 @@ const DropdownInput = ({
       isOpen={isOpenDrop}
       id={id}
       toggle={toggleDropdown}
+      disabled={disabled}
     >
       <DropdownToggle
         className={`${dropdown["toggle-btn"]} ${
