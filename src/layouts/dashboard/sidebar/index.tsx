@@ -11,6 +11,7 @@ import { Nav, NavItem } from "reactstrap";
 import { CiLogout } from "react-icons/ci";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import useLogout from "services/auth/logout";
 
 type Props = {
   isOpen: boolean;
@@ -19,6 +20,7 @@ type Props = {
 
 export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
   const [activeItem, setActiveItem] = useState("");
+  const logout = useLogout();
 
   const location = useLocation();
 
@@ -29,6 +31,16 @@ export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
 
   const handleClick = (key: string) => {
     setActiveItem(key);
+  };
+  const handleLogout = async () => {
+    try {
+      await logout.mutateAsync({}).then((res) => {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
   const items = [
     {
@@ -97,9 +109,8 @@ export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
         {items.map((item) => (
           <NavItem
             key={item.path}
-            className={` ${dashboard.sidebar__navbar__item} ${
-              activeItem === item.path ? dashboard.active: ""
-            }`}
+            className={` ${dashboard.sidebar__navbar__item} ${activeItem === item.path ? dashboard.active : ""
+              }`}
             onClick={() => handleClick(item.path)}
           >
             <Link to={item.path}>
@@ -111,14 +122,16 @@ export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
         <NavItem
           key="logout"
           className={`${dashboard.sidebar__navbar__item} ${dashboard["item-logout"]}`}
-          onClick={() => {}}
+          onClick={() => { }}
         >
-          <Link to="/login">
+          <a onClick={handleLogout} style={{
+            cursor: "pointer"
+          }}>
             <span className="icon">
               <CiLogout />
             </span>
             <span>خروج از حساب</span>
-          </Link>
+          </a>
         </NavItem>
       </Nav>
     </div>
