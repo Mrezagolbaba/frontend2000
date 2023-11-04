@@ -30,7 +30,6 @@ interface PhoneNumberMaskProps {
 export const PhoneNumberMask: React.FC<PhoneNumberMaskProps> = ({
   phoneNumber,
 }) => {
-  console.log(phoneNumber);
   if (!phoneNumber) return null;
 
   // Extracting the prefix, masking, and suffix
