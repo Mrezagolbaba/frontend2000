@@ -39,7 +39,6 @@ export const PhoneNumberMask: React.FC<PhoneNumberMaskProps> = ({
 
   // Formatted masked phone number
   const maskedPhoneNumber = `${prefix}${masking}${suffix}`;
-  console.log(maskedPhoneNumber);
   return maskedPhoneNumber;
 };
 
