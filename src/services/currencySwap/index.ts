@@ -44,3 +44,15 @@ export const exchangeCurrencySwap = async ({
     throw new Error(errorMessage);
   }
 }
+interface ExchangeRateData {
+  expiresAt: string;
+  pair: string;
+  rate: string;
+}
+export const exchangeRateBYIRR = async (sourceCurrencyCode:string) => {
+console.log(sourceCurrencyCode)
+  const res = await request.get<ExchangeRateData>(
+    `rates/${sourceCurrencyCode}-IRR`
+  );
+  return res.data;
+}
