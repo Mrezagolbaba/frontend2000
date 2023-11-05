@@ -134,3 +134,12 @@ export const isPasswordValid = (password: string) => {
 
   return isValid;
 };
+export function convertIRRToToman(number: number): number {
+  // Convert the number to an integer
+  const integerPart: number = Math.floor(number);
+
+  // Convert the integer to a string and extract the first four characters
+  const result: string = integerPart.toString().slice(0, 4);
+
+  return parseInt(result, 10);
+}
