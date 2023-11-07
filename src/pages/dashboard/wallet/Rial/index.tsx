@@ -5,10 +5,12 @@ import Deposit from "./Deposit";
 
 import wallet from "../style.module.scss";
 import Withdraw from "./Withdraw";
+import { useList } from "@refinedev/core";
 
 export default function RialCard() {
   const [isOpenDepositForm, setIsOpenDepositForm] = useState<boolean>(false);
   const [isOpenWithdraw, setIsOpenWithdraw] = useState<boolean>(false);
+
   return (
     <Card className="mb-4">
       <CardHeader>
