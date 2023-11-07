@@ -1,7 +1,6 @@
 declare const classNames: {
   readonly "auth-title": "auth-title";
   readonly "auth-list": "auth-list";
-  readonly "start-auth": "start-auth";
   readonly "modal-title": "modal-title";
   readonly "note-text": "note-text";
   readonly "secondary-btn": "secondary-btn";
@@ -12,5 +11,6 @@ declare const classNames: {
   readonly "video-summary-text": "video-summary-text";
   readonly "image-container": "image-container";
   readonly "image-cover": "image-cover";
+  readonly "iban-input-control": "iban-input-control";
 };
 export = classNames;
