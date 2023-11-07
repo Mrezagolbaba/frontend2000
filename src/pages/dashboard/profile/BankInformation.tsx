@@ -13,35 +13,61 @@ import {
   Form,
   FormGroup,
   Input,
-  InputGroup,
-  InputGroupText,
   Label,
   Row,
-  
 } from "reactstrap";
 import { CiTrash } from "react-icons/ci";
 import { useAppSelector } from "redux/hooks";
 import { useState } from "react";
-import ReactFlagsSelect from "react-flags-select";
+import { useList } from "@refinedev/core";
+import { AlertInfo, AlertWarning } from "components/AlertWidget";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
+
+import profile from "assets/scss/dashboard/profile.module.scss";
+
 export default function BankInformation() {
+  const { data, isSuccess, isLoading } = useList({
+    resource: `bank-accounts`,
+  });
+
   const [localRows, setLocalRows] = useState([{ id: 0 }]);
   const [intRows, setIntRows] = useState([{ id: 0 }]);
-  const [selectedCountryCode, setSelectedCountryCode] = useState('TR');
+  const [selectedCountryCode, setSelectedCountryCode] = useState("TR");
   const user = useAppSelector((state) => state.user);
   const { firstName, lastName } = user;
   const resolver = yupResolver(
     Yup.object().shape({
       sheba: Yup.string(),
-      cardNumber: Yup.string(),
-      country: Yup.string(),
+      cardNumber: Yup.string().required(),
+      country: Yup.string().required(),
       IBAN: Yup.string(),
       AccountHolder: Yup.string(),
     })
   );
 
+  const optionList: OptionType[] = [
+    {
+      content: "ترکیه",
+      value: "ترکیه",
+    },
+    {
+      content: "استرالیا",
+      value: "استرالیا",
+    },
+    {
+      content: "آمریکا",
+      value: "آمریکا",
+    },
+    {
+      content: "انگلستان",
+      value: "انگلستان",
+    },
+  ];
+
   const {
     control,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     mode: "onChange",
@@ -73,45 +99,20 @@ export default function BankInformation() {
           <CardTitle tag="h5">اطلاعات بانکی</CardTitle>
         </CardHeader>
         <CardBody>
-          <div className="alert alert-warning">
-            تنها حساب&zwnj;هایی که به نام
-            {` ${firstName} ${lastName} `}
-            باشند قابلیت اضافه شدن را دارند، در نظر داشته باشید واریز و برداشت
-            فقط از طریق حساب هایی که معرفی می&zwnj;کنید امکان پذیر خواهد بود.{" "}
-          </div>
+          <AlertWarning
+            hasIcon
+            key="account-warning"
+            text={`تنها حساب‌هایی که به نام ${firstName} ${lastName} باشند قابلیت اضافه شدن را دارند، در نظر داشته باشید واریز و برداشت فقط از طریق حساب هایی که معرفی می‌کنید امکان پذیر خواهد بود.`}
+          />
+          <AlertInfo
+            hasIcon
+            key="account-info"
+            text="در صورتی که شماره شبا حساب خود را ندارید، وارد کردن شماره کارت کافی است."
+          />
           <Form className="bank-account">
             {localRows.map((row, index) => (
-              <Row key={row.id} style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-                <Col sm={{ offset: 1, size: 11 }} lg={{ offset: 1, size: 5 }}>
-                  <Controller
-                    name="sheba"
-                    control={control}
-                    render={({ field: { name, value, onChange, ref } }) => (
-                      <FormGroup row>
-                        <Label sm={3}>شماره شبا:</Label>
-                        <Col sm={9}>
-                          <InputGroup dir="ltr">
-                            <InputGroupText id={`sheba_${row.id}`}>IR</InputGroupText>
-                            <Input
-                              value={value}
-                              ref={ref}
-                              onChange={onChange}
-                              name={name}
-                              type="text"
-                              className="form-control d-ltr"
-                              id={`input23_${row.id}`}
-                              placeholder=""
-                            />
-                          </InputGroup>
-                        </Col>
-                      </FormGroup>
-                    )}
-                  />
-                </Col>
-                <Col sm={{ size: 12 }} lg={{ size: 5 }}>
+              <Row key={row.id} className="justify-content-center">
+                <Col xs={12} lg={5}>
                   <Controller
                     name="cardNumber"
                     control={control}
@@ -134,36 +135,59 @@ export default function BankInformation() {
                     )}
                   />
                 </Col>
+                <Col xs={12} lg={5}>
+                  <Controller
+                    name="sheba"
+                    control={control}
+                    render={({ field: { name, value, onChange, ref } }) => (
+                      <FormGroup row>
+                        <Label xs={3}>شماره شبا:</Label>
+                        <Col xs={9}>
+                          <div className={profile["iban-input-control"]}>
+                            <span id={`sheba_${row.id}`}>IR</span>
+                            <Input
+                              value={value}
+                              ref={ref}
+                              onChange={onChange}
+                              name={name}
+                              type="text"
+                              id={`input23_${row.id}`}
+                              placeholder=""
+                            />
+                          </div>
+                        </Col>
+                      </FormGroup>
+                    )}
+                  />
+                </Col>
                 <Col sm={{ size: 1 }}>
-                  {index !== 0 &&
-
-                    <span style={{
-                      color: "red",
-                      cursor: "pointer",
-                      fontSize: "1.5rem"
-                    }} onClick={() => removeRow(row.id)} className="icon">
+                  {index !== 0 && (
+                    <span
+                      style={{
+                        color: "red",
+                        cursor: "pointer",
+                        fontSize: "1.5rem",
+                      }}
+                      onClick={() => removeRow(row.id)}
+                      className="icon"
+                    >
                       <CiTrash />
                     </span>
-                  }
+                  )}
                 </Col>
               </Row>
             ))}
 
             <Row>
-              <ButtonGroup style={{ display: 'flex', justifyContent: 'center' }}>
-                <Button
-                  outline
-                  color="primary"
-                  className="btn-simple"
-                  style={{ flex: 'none' }}
-                  onClick={addRow}
-                >
+              <ButtonGroup
+                style={{ display: "flex", justifyContent: "center" }}
+              >
+                <Button color="link" style={{ flex: "none" }} onClick={addRow}>
                   اضافه کردن حساب جدید
                 </Button>
               </ButtonGroup>
             </Row>
           </Form>
-
         </CardBody>
       </Card>
       <Card className="mb-4">
@@ -171,27 +195,33 @@ export default function BankInformation() {
           <CardTitle>اطلاعات بانکی بین&zwnj;المللی</CardTitle>
         </CardHeader>
         <CardBody>
-          <div className="alert alert-warning">
-            تنها حساب&zwnj;هایی که به نام
-            {` ${firstName} ${lastName} `}
-            باشند قابلیت اضافه شدن را دارند، در نظر داشته باشید واریز و برداشت
-            فقط از طریق حساب هایی که معرفی می&zwnj;کنید امکان پذیر خواهد بود.{" "}
-          </div>
-
+          <AlertWarning
+            hasIcon
+            key="warning-international-account"
+            text="در صورتی که کارت اقامت کشوری که در آن ساکن هستید را از قسمت احراز هویت ارسال نکنید، فقط قابلیت برداشت فیات دیجیتال از آرسونیکس را خواهید داشت."
+          />
+          <AlertInfo
+            hasIcon
+            key="info-international-account"
+            text="اطلاعاتی مانند SWIFT Code یا Sort Code هنگام برداشت ارز مورد نظر به طور جداگانه از شما دریافت می‌شود."
+          />
           <Form className="bank-account">
             {intRows.map((row, index) => (
-              <Row key={row.id} style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: '100%'
-              }}>
+              <Row
+                key={row.id}
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                }}
+              >
                 <Col>
                   <Controller
                     name="AccountHolder"
                     control={control}
                     render={({ field: { name, value, onChange, ref } }) => (
                       <FormGroup row>
-                        <Col >
+                        <Col>
                           <Input
                             value={value}
                             ref={ref}
@@ -207,68 +237,75 @@ export default function BankInformation() {
                     )}
                   />
                 </Col>
-                <Col >
+                <Col>
                   <Controller
                     name="country"
                     control={control}
                     render={({ field: { name, value, onChange, ref } }) => (
                       <FormGroup row>
-                        <Col >
-                          <ReactFlagsSelect
-                            searchable  
-                            selected={value!!}
-                            onSelect={(code) => {
-                              onChange(code)
-                              setSelectedCountryCode(code);
-                            }}
+                        <Col>
+                          <DropdownInput
+                            label="کشور بانک"
+                            id={name}
+                            value={value}
+                            onChange={(val) => setValue(name, val)}
+                            options={optionList}
+                            // hasError={Boolean(errors?.[name])}
                           />
                         </Col>
                       </FormGroup>
                     )}
                   />
                 </Col>
-                <Col >
+                <Col>
                   <Controller
                     name="IBAN"
                     control={control}
                     render={({ field: { name, value, onChange, ref } }) => (
                       <FormGroup row>
-                        <Col >
-                        <InputGroup dir="ltr">
-                            <InputGroupText>{selectedCountryCode}</InputGroupText>
-                          <Input
-                            type="text"
-                            className="form-control d-rtl"
-                            id={`input24_${row.id}`}
-                            placeholder="شماره IBAN"
-                          />
-                          </InputGroup>
+                        <Col>
+                          <div className={profile["iban-input-control"]}>
+                            <span id={`sheba_${row.id}`}>
+                              {selectedCountryCode}
+                            </span>
+                            <Input
+                              type="text"
+                              className="form-control d-rtl"
+                              id={`input24_${row.id}`}
+                              placeholder="شماره IBAN"
+                            />
+                          </div>
                         </Col>
                       </FormGroup>
                     )}
                   />
                 </Col>
                 <Col sm={{ size: 1 }} lg={{ size: 1 }}>
-                  {index !== 0 &&
-                    <span style={{
-                      color: "red",
-                      cursor: "pointer",
-                      fontSize: "1.5rem"
-                    }} onClick={() => removeIntRow(row.id)} className="icon">
+                  {index !== 0 && (
+                    <span
+                      style={{
+                        color: "red",
+                        cursor: "pointer",
+                        fontSize: "1.5rem",
+                      }}
+                      onClick={() => removeIntRow(row.id)}
+                      className="icon"
+                    >
                       <CiTrash />
                     </span>
-                  }
+                  )}
                 </Col>
               </Row>
             ))}
 
             <Row>
-              <ButtonGroup style={{ display: 'flex', justifyContent: 'center' }}>
+              <ButtonGroup
+                style={{ display: "flex", justifyContent: "center" }}
+              >
                 <Button
-                  outline
-                  color="primary"
+                  color="link"
                   className="btn-simple"
-                  style={{ flex: 'none' }}
+                  style={{ flex: "none" }}
                   onClick={addIntRow}
                 >
                   اضافه کردن حساب جدید
@@ -276,7 +313,6 @@ export default function BankInformation() {
               </ButtonGroup>
             </Row>
           </Form>
-
         </CardBody>
       </Card>
     </>

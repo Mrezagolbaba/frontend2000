@@ -8,47 +8,17 @@ import {
   Row,
   Table,
 } from "reactstrap";
+import Dialog from "components/Dialog";
+import { useState } from "react";
+import DepositCrypto from "./Deposit";
+import WithdrawCrypto from "./Withdraw";
 
 import teter from "assets/img/coins/tether.png";
 import trx from "assets/img/coins/trx.png";
 
-import { useList } from "@refinedev/core";
-import Dialog from "components/Dialog";
-import { useEffect, useState } from "react";
-import DepositCrypto from "./Deposit";
-import WithdrawCrypto from "./Withdraw";
-
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 
-const initiateCrypto = {
-  availableBalance: "",
-  balance: "",
-  createdAt: "",
-  currencyCode: "",
-  id: "",
-  updatedAt: "",
-  userId: "",
-};
-
-export default function CryptoCard() {
-  const [USDT, setUSDT] = useState<any>(initiateCrypto);
-  const [TRX, setTRX] = useState<any>(initiateCrypto);
-
-  const { data, isSuccess, isLoading } = useList({
-    resource: `wallets`,
-  });
-
-  useEffect(() => {
-    if (isSuccess) {
-      data?.data.forEach((item) => {
-        item.currencyCode === "USDT" && setUSDT(item);
-        item.currencyCode === "TRX" && setTRX(item);
-      });
-    }
-  }, [data?.data, isSuccess]);
-
-  console.log(USDT, TRX);
-
+export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
   const [depositForm, setDepositForm] = useState<{
     isOpen: boolean;
     currency: string;
@@ -122,7 +92,7 @@ export default function CryptoCard() {
                       </td>
                     </tr>
                   </>
-                ) : isSuccess && data && data.total > 0 ? (
+                ) : isSuccess ? (
                   <>
                     <tr key={0}>
                       <th scope="row">
