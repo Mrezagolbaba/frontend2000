@@ -30,7 +30,6 @@ interface PhoneNumberMaskProps {
 export const PhoneNumberMask: React.FC<PhoneNumberMaskProps> = ({
   phoneNumber,
 }) => {
-  console.log(phoneNumber);
   if (!phoneNumber) return null;
 
   // Extracting the prefix, masking, and suffix
@@ -40,7 +39,6 @@ export const PhoneNumberMask: React.FC<PhoneNumberMaskProps> = ({
 
   // Formatted masked phone number
   const maskedPhoneNumber = `${prefix}${masking}${suffix}`;
-  console.log(maskedPhoneNumber);
   return maskedPhoneNumber;
 };
 
@@ -136,3 +134,12 @@ export const isPasswordValid = (password: string) => {
 
   return isValid;
 };
+export function convertIRRToToman(number: number): number {
+  // Convert the number to an integer
+  const integerPart: number = Math.floor(number);
+
+  // Convert the integer to a string and extract the first four characters
+  const result: string = integerPart.toString().slice(0, 4);
+
+  return parseInt(result, 10);
+}

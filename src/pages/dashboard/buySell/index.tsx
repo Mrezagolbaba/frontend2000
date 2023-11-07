@@ -10,8 +10,9 @@ import { TbArrowsExchange2 } from "react-icons/tb";
 import { CiWallet } from "react-icons/ci";
 import { BsTag } from "react-icons/bs";
 import buy from "./styles.module.scss";
-import { exchangeCurrencySwap, getCurrencySwap } from "services/currencySwap";
+import { exchangeCurrencySwap, exchangeRateBYIRR, getCurrencySwap } from "services/currencySwap";
 import { getAllWallets } from "services/wallet";
+import { convertIRRToToman } from "helpers";
 
 interface wallet {
   availableBalance: string,
@@ -34,12 +35,14 @@ const BuySell = () => {
   const [payDtails, setPayDtails] = useState({
     balance: "0",
     availableBalance: "0",
-    currency: "IRR"
+    currency: "IRR",
+    ratePerIRR: 0
   });
   const [getDtails, setGetDtails] = useState({
     balance: "0",
     availableBalance: "0",
-    currency: "TRY"
+    currency: "TRY",
+    ratePerIRR: 0
   });
   const hanldeModal = () => {
     setVisible(!visible);
@@ -64,11 +67,13 @@ const BuySell = () => {
         'USDT': 'تتر',
         'TRY': 'لیر',
         'IRR': 'ریال',
+        'TRX': 'ترون',
       },
       'faToEn': {
         'تتر': 'USDT',
         'لیر': 'TRY',
         'ریال': 'IRR',
+        'ترون': 'TRX',
       },
     };
 
@@ -83,29 +88,54 @@ const BuySell = () => {
       setPayDtails({
         balance: data?.balance ?? "0",
         availableBalance: data?.availableBalance ?? "0",
-        currency: convertText(data?.currencyCode, 'enToFa') ?? ""
+        currency: convertText(data?.currencyCode, 'enToFa') ?? "",
+        ratePerIRR: 0
 
       })
+      console.log(data?.currencyCode, 'data?.currencyCode');
+      const sourceCurrencyCode = convertText(data?.currencyCode, 'faToEn');
+      exchangeRateBYIRR(sourceCurrencyCode).then((res) => {
+        setPayDtails({
+          ...payDtails,
+          ratePerIRR: Number(res?.rate) ?? 0
+        })
+      }).catch((err) => {
+        console.log(err);
+      })
+
     } else if (action === 'get' && data) {
       setGetDtails({
         availableBalance: data?.availableBalance ?? "0",
         balance: data?.balance ?? "0",
-        currency: convertText(data?.currencyCode, 'enToFa') ?? ""
+        currency: convertText(data?.currencyCode, 'enToFa') ?? "",
+        ratePerIRR: 0
+      })
+      const sourceCurrencyCode = convertText(data?.currencyCode, 'faToEn');
+      exchangeRateBYIRR(sourceCurrencyCode).then((res) => {
+       setGetDtails({
+          ...getDtails,
+          ratePerIRR: Number(res?.rate) ?? 0
+        })
+      }).catch((err) => {
+        console.log(err);
       })
     } else if (action === 'pay' && !data) {
       console.log(e);
       setPayDtails({
         balance: "0",
         availableBalance: "0",
-        currency: convertText(e, 'enToFa') ?? ""
+        currency: convertText(e, 'enToFa') ?? "",
+        ratePerIRR: 0
       })
     } else if (action === 'get' && !data) {
       setGetDtails({
         balance: "0",
         availableBalance: "0",
-        currency: convertText(e, 'enToFa') ?? ""
+        currency: convertText(e, 'enToFa') ?? "",
+        ratePerIRR: 0
       })
     }
+
 
   }
   const handleExchange = () => {
@@ -121,6 +151,7 @@ const BuySell = () => {
       console.log(err);
     })
   }
+
   return (
     <section className="page page-wallet">
       <div className="row g-4">
@@ -175,7 +206,7 @@ const BuySell = () => {
                             نرخ {convertText(payDtails.currency, 'enToFa')} :
                           </span>
                           <span className="value">
-                            48,900 تومان
+                            {convertIRRToToman(payDtails.ratePerIRR)} تومان
                           </span>
                         </div>
                       </div>
@@ -210,7 +241,7 @@ const BuySell = () => {
                             نرخ {convertText(getDtails.currency, 'enToFa')} :
                           </span>
                           <span className="value">
-                            48,900 تومان
+                            {convertIRRToToman(getDtails.ratePerIRR)}تومان
                           </span>
                         </div>
 

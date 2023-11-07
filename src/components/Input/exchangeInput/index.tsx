@@ -5,6 +5,7 @@ import Lira from "assets/img/coins/lira.png"
 import Rial from "assets/img/icons/flag-iran.svg";
 import tetter from "assets/img/coins/tether.svg";
 import Euro from "assets/img/coins/Euro.png";
+import TRX from "assets/img/coins/trx.png";
 import { useState } from "react";
 import s from "./styles.module.scss";
 import { Cu } from "react-flags-select";
@@ -87,26 +88,26 @@ const options = [
     //         </>
     //     ),
     // },
-    // {
-    //     value: "EUR",
-    //     label: (
-    //         <>
-    //             <img
-    //                 src={Euro}
-    //                 alt=""
-    //                 className="bs-icon"
-    //                 width={20} height={20}
-    //                 style={{ marginLeft: "5px" }}
-    //             />
-    //             <span style={{ fontFamily: "IRANSansWeb", fontSize: "12px" }}>
-    //                 {" "}
-    //                 یورو
-    //             </span>
+    {
+        value: "TRX",
+        label: (
+            <>
+                <img
+                    src={TRX}
+                    alt=""
+                    className="bs-icon"
+                    width={20} height={20}
+                    style={{ marginLeft: "5px" }}
+                />
+                <span style={{ fontFamily: "IRANSansWeb", fontSize: "12px" }}>
+                    {" "}
+                    ترون
+                </span>
 
 
-    //         </>
-    //     ),
-    // },
+            </>
+        ),
+    },
     {
         value: "USDT",
         label: (

@@ -36,6 +36,9 @@ request.interceptors.request.use(
   async (config: any) => {
     // Add your logic for request interception, e.g., adding authentication tokens
     const token = localStorage.getItem("token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
     if (!token || isTokenExpired()) {
       await refreshAccessToken();
       config.headers["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
