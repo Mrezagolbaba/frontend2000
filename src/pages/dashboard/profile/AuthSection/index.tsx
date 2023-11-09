@@ -22,6 +22,8 @@ import ResidencyCardStep from "./ResidencyCardStep";
 import FinalStep from "./FinalStep";
 
 import profile from "assets/scss/dashboard/profile.module.scss";
+import { AlertSuccess } from "components/AlertWidget";
+import { useAppSelector } from "redux/hooks";
 
 const dataLevel1 = [
   <>
@@ -61,6 +63,10 @@ const dataLevel2 = [
 ];
 
 const AuthSection = () => {
+  const { firstTierVerified, secondTierVerified } = useAppSelector(
+    (state) => state.user
+  );
+
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
   const [activeState, setActiveState] = useState<1 | 2 | 3 | 4 | 5 | 6>(1);
 
@@ -100,9 +106,13 @@ const AuthSection = () => {
                 </li>
               ))}
             </List>
-            <div className="alert alert-success mb-4 mt-3">
-              احراز هویت سطح یک شما با موفقیت انجام شده است.
-            </div>
+            {firstTierVerified && (
+              <AlertSuccess
+                hasIcon
+                key="success-tier1"
+                text="احراز هویت سطح یک شما با موفقیت انجام شده است."
+              />
+            )}
           </Col>
           <Col xs={12} sm={6}>
             <h5 className={profile["auth-title"]}>احراز هویت سطح دو</h5>
@@ -116,16 +126,18 @@ const AuthSection = () => {
                 </li>
               ))}
             </List>
-            <Button
-              color="primary"
-              outline
-              className={profile["start-auth"]}
-              onClick={() => {
-                setIsOpenDialog(true);
-              }}
-            >
-              شروع احراز هویت سطح 2
-            </Button>
+            {firstTierVerified && !secondTierVerified && (
+              <Button
+                color="primary"
+                outline
+                className="px-5 py-3 w-100"
+                onClick={() => {
+                  setIsOpenDialog(true);
+                }}
+              >
+                شروع احراز هویت سطح 2
+              </Button>
+            )}
           </Col>
         </Row>
       </CardBody>

@@ -1,9 +1,8 @@
 import { ReactElement } from "react";
 import { Alert } from "reactstrap";
 import { PiInfo, PiWarning, PiCheckCircle } from "react-icons/pi";
-import { AiOutlineInfoCircle } from "react-icons/ai";
 
-import alert from "./style.module.scss";
+import alert from "assets/scss/components/Alert/style.module.scss";
 
 type Props = {
   text: string;

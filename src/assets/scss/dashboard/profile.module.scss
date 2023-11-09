@@ -6,6 +6,7 @@
 .auth-list {
   margin: 0;
   padding: 0;
+  margin-bottom: 10px;
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -29,13 +30,6 @@
       margin-right: 5px;
     }
   }
-}
-
-.start-auth {
-  width: 100%;
-  display: block !important;
-  margin-top: 1rem;
-  padding: 1rem !important;
 }
 
 .modal-title {
@@ -153,5 +147,27 @@
     font-size: 3rem;
     color: #fff;
     transition: all 200ms ease;
+  }
+}
+
+.iban-input-control {
+  position: relative;
+  direction: ltr;
+  width: 100%;
+  span {
+    font-size: 0.75em;
+    font-weight: 400;
+    color: #03041b;
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    height: 12px;
+    line-height: 15px;
+    transform: translateY(-50%);
+    border-right: 1px solid rgba(3, 4, 27, 0.1);
+    padding-right: 12px;
+  }
+  input {
+    padding-left: 50px;
   }
 }
