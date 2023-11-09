@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react";
-import Layout from "layouts/dashboard";
 import ModalTeter from "./modal";
 import { useAppSelector } from "redux/hooks";
 import { Card, CardBody, CardHeader, CardTitle, Col, Input, Row } from "reactstrap";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import ExchangeInput from "components/Input/exchangeInput";
-import DropdownInput from "components/Input/Dropdown";
-import { TbArrowsExchange2 } from "react-icons/tb";
 import { CiWallet } from "react-icons/ci";
 import { BsTag } from "react-icons/bs";
 import buy from "./styles.module.scss";
 import { exchangeCurrencySwap, exchangeRateBYIRR, getCurrencySwap } from "services/currencySwap";
 import { getAllWallets } from "services/wallet";
-import { convertIRRToToman } from "helpers";
+import { convertIRRToToman, convertText } from "helpers";
 import toast from "react-hot-toast";
+import { setInvoice } from "redux/features/invoice/invoiceSlice";
+import { useNavigate } from "react-router-dom";
 
 interface wallet {
   availableBalance: string,
@@ -28,6 +27,7 @@ interface wallet {
 
 const BuySell = () => {
   const user = useAppSelector((state) => state.user);
+  const router = useNavigate();
   const { firstName, lastName, email, phoneNumber } = user;
   const [visible, setVisible] = useState(false);
   const [walltes, setWalltes] = useState<wallet[]>([]);
@@ -61,27 +61,6 @@ const BuySell = () => {
   }, [user]);
   const handleCancel = () => {
     setVisible(false);
-  };
-  const convertText = (text, direction) => {
-    const currencyMap = {
-      'enToFa': {
-        'USDT': 'تتر',
-        'TRY': 'لیر',
-        'IRR': 'ریال',
-        'TRX': 'ترون',
-      },
-      'faToEn': {
-        'تتر': 'USDT',
-        'لیر': 'TRY',
-        'ریال': 'IRR',
-        'ترون': 'TRX',
-      },
-    };
-
-    if (direction in currencyMap && text in currencyMap[direction]) {
-      return currencyMap[direction][text];
-    }
-    return text;
   };
   const setPayDetails = async (data) => {
     const sourceCurrencyCode = convertText(data?.currencyCode, 'faToEn');
@@ -152,9 +131,14 @@ const BuySell = () => {
       feeCurrencyCode: convertText(payDtails.currency, 'faToEn'),
     }
     exchangeCurrencySwap(data).then((res) => {
-      console.log(res);
+      if(res){
+        setInvoice(res);
+        toast.success('تبدیل با موفقیت انجام شد');
+        router('/dashboard/invoice');
+      }
     }).catch((err) => {
       console.log(err);
+      toast.error('خطایی رخ داده است');
     })
   }
   return (
