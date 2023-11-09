@@ -3,10 +3,14 @@ import { useAppSelector } from "redux/hooks";
 import logo from "assets/img/logo-arsonex.png";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import "./styles.module.scss";
+import { convertText } from "helpers";
+import moment from "jalali-moment";
 
 const Invoice = () => {
   const user = useAppSelector((state) => state.user);
+  const invoice = useAppSelector((state) => state.invoice);
   const { firstName, lastName, phoneNumber, nationalId } = user;
+
 
   return (
     <section className="page page-wallet mt-4">
@@ -34,7 +38,9 @@ const Invoice = () => {
                 <div className="col-sm-12 col-md-4">
                   <div className="invoice-date text-md-start text-center">
                     تاریخ معامله:
-                    <time className="d-inline-block d-ltr">01/06/08 - 11:43</time>
+                    <time className="d-inline-block d-ltr">{
+                      moment(invoice.createdAt).locale('fa').format('YYYY/MM/DD')
+                    }</time>
                   </div>
                 </div>
               </div>
@@ -43,7 +49,7 @@ const Invoice = () => {
           <div className="invoice__body">
             <div className="invoice-table">
               <h6 className="invoice-title">مشخصات خریدار:</h6><div className="table-responsive">
-                <Table responsive style={{border:'1px solid #E4E4E4'}}>
+                <Table responsive style={{ border: '1px solid #E4E4E4' }}>
                   <thead className="table-light" >
                     <tr>
                       <th scope="col" className="text-center">نام</th>
@@ -57,7 +63,7 @@ const Invoice = () => {
                         <fieldset>
                           {firstName} {lastName}
                         </fieldset></td>
-                      <td  className="text-center">{nationalId}</td>
+                      <td className="text-center">{nationalId}</td>
                       <td className="text-center" style={{
                         direction: "ltr",
                         textAlign: "center"
@@ -69,8 +75,8 @@ const Invoice = () => {
             </div>
             <div className="invoice-table">
               <h6 className="invoice-title">جزئیات معامله:</h6><div className="table-responsive">
-                <Table responsive style={{border:'1px solid #E4E4E4'}}>
-                <thead className="table-light">
+                <Table responsive style={{ border: '1px solid #E4E4E4' }}>
+                  <thead className="table-light">
                     <tr>
                       <th scope="col" className="text-center">بازار معاملاتی</th>
                       <th scope="col" className="text-center">مقدار خرید</th><th scope="col" className="text-center">مقدار دریافت</th>
@@ -80,10 +86,11 @@ const Invoice = () => {
                   <tbody>
                     <tr className="tr-responsive">
                       <td data-th="بازار معاملاتی" className="text-center">
-                        تبدیل تومان به تتر
+                        تبدیل {convertText(invoice.sourceCurrencyCode,'enToFa')} به {convertText(invoice.destinationCurrencyCode,'enToFa')}
                       </td>
-                      <td data-th="مقدار خرید	" className="text-center">1,200,000 تومان</td>
-                      <td data-th="مقدار خرید	" className="text-center">600 USDT</td><td data-th="کارمزد" className="text-center">54,000 تومان</td>
+                      <td data-th="مقدار خرید	" className="text-center">{invoice.sourceAmount} {convertText(invoice.sourceCurrencyCode,'enToFa')}</td>
+                      <td data-th="مقدار خرید	" className="text-center">{invoice.destinationAmount} {convertText(invoice.destinationCurrencyCode,'enToFa')}</td>
+                      <td data-th="کارمزد" className="text-center">54,000 تومان</td>
                     </tr></tbody>
                 </Table>
               </div>
@@ -93,10 +100,13 @@ const Invoice = () => {
             <div className="table-responsive">
             </div>
             <p className="invoice-desc"></p>
-            <div className="text-center">
-              <button type="button" className="btn btn-primary mb-2">برداشت تتر
+            <div style={{
+              display: "flex",
+              justifyContent: "space-evenly",
+            }}>
+              <button type="button" className="btn btn-primary mb-2 mr-2">برداشت تتر
               </button>
-              <a href="#" className="btn btn-outline-primary mb-2">چاپ فاکتور</a>
+              <a href="#" className="btn btn-outline-primary mb-2 ml-2">چاپ فاکتور</a>
             </div>
           </div>
         </CardBody>

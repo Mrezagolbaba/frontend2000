@@ -143,3 +143,24 @@ export function convertIRRToToman(number: number): number {
 
   return parseInt(result, 10);
 }
+export const convertText = (text, direction) => {
+  const currencyMap = {
+    'enToFa': {
+      'USDT': 'تتر',
+      'TRY': 'لیر',
+      'IRR': 'ریال',
+      'TRX': 'ترون',
+    },
+    'faToEn': {
+      'تتر': 'USDT',
+      'لیر': 'TRY',
+      'ریال': 'IRR',
+      'ترون': 'TRX',
+    },
+  };
+
+  if (direction in currencyMap && text in currencyMap[direction]) {
+    return currencyMap[direction][text];
+  }
+  return text;
+};
