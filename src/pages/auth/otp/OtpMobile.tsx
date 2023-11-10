@@ -30,6 +30,7 @@ const OtpMobile: React.FC = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { phoneNumber, redirectTo, token } = location.state;
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const sendOtp = useSendOtp();
   const getMe = useGetMe();
@@ -37,12 +38,7 @@ const OtpMobile: React.FC = () => {
   const [timeInSeconds, setTimeInSeconds] = useState(120);
 
   const resolver = yupResolver(OtpSchema);
-  const {
-    handleSubmit,
-    setValue,
-    control,
-    formState: { isLoading, isSubmitting },
-  } = useForm<{ code: string }>({
+  const { handleSubmit, setValue, control } = useForm<{ code: string }>({
     mode: "onChange",
     defaultValues: {
       code: "",
@@ -53,15 +49,17 @@ const OtpMobile: React.FC = () => {
   const handleResend = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    setIsLoading(true);
     e.preventDefault();
     const data = {
       type: "AUTH",
       method: "PHONE",
     };
-    await resendOtp(data);
+    await resendOtp(data).then(() => setIsLoading(false));
   };
 
   const handleOTP = async (data: { code: string }) => {
+    setIsLoading(true);
     const formData = {
       code: persianToEnglishNumbers(data.code),
       type: "AUTH",
@@ -79,9 +77,11 @@ const OtpMobile: React.FC = () => {
             // if (res?.firstTierVerified) navigate("/dashboard");
             else if (res?.firstTierVerified) navigate("/dashboard");
             else navigate("/information");
+            setIsLoading(false);
           })
           .catch(() => {
             navigate("/information");
+            setIsLoading(false);
           });
       }
     });
@@ -142,7 +142,10 @@ const OtpMobile: React.FC = () => {
                         <OtpInput
                           containerStyle={auth["otp-container"]}
                           value={value}
-                          onChange={(code) => setValue("code", code)}
+                          onChange={(code) => {
+                            setValue("code", code);
+                            code.length === 6 && handleOTP({ code });
+                          }}
                           inputStyle={auth["otp-input"]}
                           numInputs={6}
                           renderSeparator={undefined}
