@@ -56,3 +56,25 @@ console.log(sourceCurrencyCode)
   );
   return res.data;
 }
+
+export const exchanteCommission = async ({
+  sourceCurrencyCode,
+  sourceAmount,
+  destinationCurrencyCode,
+  feeCurrencyCode
+}: RequestExchange) => {
+  try {
+    const response = await request.post(`/currency-swaps?dry_run=true`, {
+      sourceCurrencyCode,
+      sourceAmount,
+      destinationCurrencyCode,
+      feeCurrencyCode
+    })
+    return response.data;
+  } catch (error: any) {
+    const errorMessage =
+      error.response?.data?.message || "An error occurred. Please try again.";
+    toast.error(errorMessage, { position: "bottom-left" });
+    throw new Error(errorMessage);
+  }
+}
