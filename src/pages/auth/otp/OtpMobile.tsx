@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { PhoneNumberMask, persianToEnglishNumbers } from "helpers";
-import OtpInput from "components/OTP";
+import OtpInput from "react-otp-input";
 import { resendOtp } from "services/auth";
 import Auth from "layouts/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -138,8 +138,18 @@ const OtpMobile: React.FC = () => {
                     <Controller
                       name="code"
                       control={control}
-                      render={() => (
-                        <OtpInput onChange={(code) => setValue("code", code)} />
+                      render={({ field: { value } }) => (
+                        <OtpInput
+                          containerStyle={auth["otp-container"]}
+                          value={value}
+                          onChange={(code) => setValue("code", code)}
+                          inputStyle={auth["otp-input"]}
+                          numInputs={6}
+                          renderSeparator={undefined}
+                          placeholder="-"
+                          shouldAutoFocus={true}
+                          renderInput={(props) => <input {...props} />}
+                        />
                       )}
                     />
                   </Col>
