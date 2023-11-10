@@ -4,6 +4,7 @@ import DashboardContent from "pages/dashboard/DashboardContent";
 import Dashboard from "pages/dashboard";
 import BuySell from "pages/dashboard/buySell";
 import Profile from "pages/dashboard/profile";
+import Invoice from "pages/dashboard/invoice";
 
 const DashboardRouter = {
   path: "dashboard",
@@ -24,6 +25,10 @@ const DashboardRouter = {
     {
       path: "buy-sell",
       element: <ProtectedRoute children={<BuySell />} />,
+    },
+    {
+      path: "invoice",
+      element: <ProtectedRoute children={<Invoice />} />,
     }
   ],
 };
