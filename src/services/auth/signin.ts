@@ -10,6 +10,9 @@ export const login = async (userData: any) => {
   try {
     const response = await request.post("auth/login", userData);
     localStorage.setItem("token", response.data.accessToken);
+    localStorage.setItem('accessTokenExpires',response.data.accessTokenExpiresAt)
+    localStorage.setItem('refreshToken',response.data.refreshToken)
+    localStorage.setItem('refreshTokenExpires',response.data.refreshTokenExpiresAt)
     return response.data;
   } catch (error: any) {
     toast.error(

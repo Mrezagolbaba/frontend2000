@@ -184,6 +184,23 @@
   --bs-btn-disabled-border-color: #111bff;
 }
 
+.btn-secondary {
+  --bs-btn-color: #03041b;
+  --bs-btn-bg: rgba(3, 4, 27, 0.05);
+  --bs-btn-border-color: transparent;
+  --bs-btn-hover-color: #03041b;
+  --bs-btn-hover-bg: rgba(3, 4, 27, 0.1);
+  --bs-btn-hover-border-color: transparent;
+  --bs-btn-focus-shadow-rgb: 130, 138, 145;
+  --bs-btn-active-color: #03041b;
+  --bs-btn-active-bg: rgba(3, 4, 27, 0.1);
+  --bs-btn-active-border-color: transparent;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #6c757d;
+  --bs-btn-disabled-border-color: transparent;
+}
+
 .btn-danger {
   --bs-btn-color: #fff;
   --bs-btn-bg: #ff1f11;
@@ -346,4 +363,21 @@ ul {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.form-control {
+  height: 48px;
+  line-height: 48px;
+  font-size: 0.75rem;
+  background-color: #fff;
+  border: 1px solid rgba(3, 4, 27, 0.1);
+  box-shadow: none;
+  color: #03041b;
+  background-clip: padding-box;
+  appearance: none;
+  border-radius: 10px;
+  &:disabled {
+    background-color: #e9ecef;
+    opacity: 0.75;
+  }
 }

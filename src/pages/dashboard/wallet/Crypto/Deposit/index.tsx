@@ -1,10 +1,10 @@
-import { useForm, useList } from "@refinedev/core";
+import { useForm } from "@refinedev/core";
 import { AlertInfo, AlertWarning } from "components/AlertWidget";
 import * as Yup from "yup";
 
 import wallet from "pages/dashboard/wallet/style.module.scss";
 
-import eth from "assets/img/network/eth.svg";
+// import eth from "assets/img/network/eth.svg";
 import tron from "assets/img/network/tron.svg";
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import { Controller, useForm as useRHF } from "react-hook-form";
@@ -23,34 +23,20 @@ import {
 import Currency from "components/Input/CurrencyInput";
 import { useEffect, useState } from "react";
 import CopyInput from "components/Input/CopyInput";
+import { CurrencyType } from "../../constants";
 
 type CryptoFormType = {
-  currencyCode: string;
+  network: string;
   amount: string;
 };
 
-type CurrencyType = {
-  code: string;
-  type: "FIAT" | "CRYPTO";
-  name: string;
-  symbol: string;
-  decimals: number;
-};
-
-const DepositCrypto = () => {
-  const { data, isSuccess } = useList<CurrencyType>({
-    resource: "currencies",
-  });
-
-  const { formLoading, onFinish } = useForm({
-    action: "create",
-    resource: "transactions/deposit",
-    onMutationSuccess: (data, variables, context, isAutoSave) => {
-      console.log({ data, variables, context, isAutoSave });
-    },
-  });
-  const [currencyList, setCurrencyList] = useState<CurrencyType[] | null>(null);
-
+const DepositCrypto = ({
+  onClose,
+  currency,
+}: {
+  onClose: () => void;
+  currency: string;
+}) => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [result, setResult] = useState({
     networkName: "",
@@ -59,34 +45,43 @@ const DepositCrypto = () => {
     endTime: "",
   });
 
-  useEffect(() => {
-    if (isSuccess)
-      setCurrencyList(
-        data.data.filter((currency: CurrencyType) => currency.type === "CRYPTO")
-      );
-  }, [data?.data, isSuccess]);
+  // const { data, isSuccess } = useList<CurrencyType>({
+  //   resource: "currencies",
+  // });
 
-  const optionList: OptionType[] = currencyList
-    ? currencyList.map((currency: CurrencyType) => {
-        return {
-          content: (
-            <div className={wallet["items-credit"]}>
-              <span className={wallet["items-credit__icon"]}>
-                <img alt={currency.name} src={tron} className="bank-svg" />
-              </span>
-              <span>{currency.symbol}</span>
-              <span>{currency.name}</span>
-            </div>
-          ),
-          value: currency.code,
-        };
-      })
-    : [];
+  const { formLoading, onFinish } = useForm({
+    action: "create",
+    resource: "transactions/deposit",
+    onMutationSuccess: (data, variables, context, isAutoSave) => {
+      setShowResult(true);
+      setResult({
+        networkName: data.data.currencyCode,
+        walletAddress: data.data.providerData.flowWalletAddress,
+        amount: data.data.amount,
+        endTime: new Date(data.data.expiresAt).toLocaleDateString("fa-IR"),
+      });
+      console.log("looooooooooog", { data, variables, context, isAutoSave });
+    },
+  });
+
+  const optionList: OptionType[] = [
+    {
+      content: (
+        <div className={wallet["items-credit"]}>
+          <span className={wallet["items-credit__icon"]}>
+            <img alt="TRC20" src={tron} className="bank-svg" />
+          </span>
+          <span>TRC20</span>
+        </div>
+      ),
+      value: "TRC20",
+    },
+  ];
 
   const resolver = yupResolver(
     Yup.object().shape({
-      currencyCode: Yup.string().required(),
       amount: Yup.string().required(),
+      network: Yup.string().required(),
     })
   );
 
@@ -94,17 +89,36 @@ const DepositCrypto = () => {
     handleSubmit,
     control,
     setValue,
+    reset,
     formState: { errors },
   } = useRHF<CryptoFormType>({
     mode: "onChange",
     defaultValues: {
-      currencyCode: "",
+      network: "TRC20",
       amount: "",
     },
     resolver,
   });
-  const onSubmit = async (data: CryptoFormType) => {
-    onFinish(data);
+  const onSubmit = (data: CryptoFormType) => {
+    onFinish({
+      currencyCode: currency,
+      amount: data.amount,
+    });
+  };
+
+  const handleClose = () => {
+    reset({
+      network: "TRC20",
+      amount: "",
+    });
+    setResult({
+      networkName: "",
+      walletAddress: "",
+      amount: "",
+      endTime: "",
+    });
+    setShowResult(false);
+    onClose?.();
   };
 
   return (
@@ -131,7 +145,7 @@ const DepositCrypto = () => {
           <Row>
             <Col xs={12} lg={6}>
               <Controller
-                name="currencyCode"
+                name="network"
                 control={control}
                 render={({ field: { name, value } }) => (
                   <FormGroup className="position-relative">
@@ -142,6 +156,7 @@ const DepositCrypto = () => {
                       value={value}
                       onChange={(val) => setValue(name, val)}
                       options={optionList}
+                      disabled={true}
                       // hasError={Boolean(errors?.[name])}
                     />
                     {errors?.[name] && (
@@ -149,9 +164,7 @@ const DepositCrypto = () => {
                         {errors[name]?.message}
                       </FormFeedback>
                     )}
-                    <FormText>
-                      سقف واریز امروز این کارت: ۵۰ میلیون تومان
-                    </FormText>
+                    <FormText>سقف واریز</FormText>
                   </FormGroup>
                 )}
               />
@@ -174,7 +187,7 @@ const DepositCrypto = () => {
                       name={name}
                       value={value}
                       onChange={(val) => setValue(name, val)}
-                      placeholder="مبلغ را به تومان وارد کنید"
+                      // placeholder="مبلغ را به تومان وارد کنید"
                       hasError={Boolean(errors?.[name])}
                     />
                     {errors?.[name] && (
@@ -182,7 +195,7 @@ const DepositCrypto = () => {
                         {errors[name]?.message}
                       </FormFeedback>
                     )}
-                    <FormText>کارمزد دریافت تتر: صفر USDT </FormText>
+                    <FormText>کارمزد دریافت تتر: صفر {currency} </FormText>
                   </FormGroup>
                 )}
               />
@@ -195,9 +208,9 @@ const DepositCrypto = () => {
                 outline
                 type="submit"
                 disabled={formLoading}
+                className="px-5 py-3"
               >
-                {formLoading && <Spinner />}
-                ساخت کیف پول
+                {formLoading ? <Spinner /> : "ساخت کیف پول"}
               </Button>
             </div>
           </Row>
@@ -213,13 +226,13 @@ const DepositCrypto = () => {
                   type="text"
                   name="networkName"
                   id="networkName"
-                  value={result.networkName}
+                  value="TRC20"
                 />
               </FormGroup>
             </Col>
             <Col xs={12} lg={6}>
               <FormGroup>
-                <Label htmlFor="walletAddress"> شماره شبا:</Label>
+                <Label htmlFor="walletAddress"> آدرس کیف پول:</Label>
                 <CopyInput text={result.walletAddress} />
               </FormGroup>
             </Col>
@@ -231,6 +244,7 @@ const DepositCrypto = () => {
                   type="text"
                   name="amountResult"
                   id="amountResult"
+                  dir="ltr"
                   value={result.amount}
                 />
               </FormGroup>
@@ -250,10 +264,28 @@ const DepositCrypto = () => {
           </Row>
           <Row className="mt-4">
             <div className="d-flex flex-row justify-content-evenly">
-              <Button color="primary" type="button">
+              <Button
+                color="primary"
+                type="button"
+                className="px-5 py-3"
+                onClick={() => {
+                  setShowResult(false);
+                  setResult({
+                    networkName: "",
+                    walletAddress: "",
+                    amount: "",
+                    endTime: "",
+                  });
+                }}
+              >
                 تغییر مبلغ یا شبکه واریز
               </Button>
-              <Button color="danger" outline type="button">
+              <Button
+                className="px-5 py-3"
+                color="danger"
+                outline
+                onClick={handleClose}
+              >
                 لغو تراکنش
               </Button>
             </div>

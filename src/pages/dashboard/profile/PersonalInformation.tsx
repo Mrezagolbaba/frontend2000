@@ -18,11 +18,18 @@ import {
 import { useAppSelector } from "redux/hooks";
 import * as Yup from "yup";
 
-import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import { AlertDanger, AlertSuccess } from "components/AlertWidget";
 
 export default function PersonalInformation() {
-  const user = useAppSelector((state) => state.user);
-  const { firstName, lastName, nationalId, birthDate } = user;
+  const {
+    firstName,
+    lastName,
+    nationalId,
+    birthDate,
+    phoneNumber,
+    firstTierVerified,
+    secondTierVerified,
+  }  = useAppSelector((state) => state.user);
 
   const resolver = yupResolver(
     Yup.object().shape({
@@ -57,9 +64,10 @@ export default function PersonalInformation() {
       firstName: firstName,
       lastName: lastName,
       nationalCode: nationalId,
-      birthDate: birthDate,
+      birthDate: new Date(birthDate).toLocaleDateString("fa-IR"),
+      iranianPhone: phoneNumber,
     });
-  }, [birthDate, firstName, lastName, nationalId, reset]);
+  }, [birthDate, firstName, lastName, nationalId, phoneNumber, reset]);
 
   return (
     <Card className="mb-4">
@@ -67,31 +75,29 @@ export default function PersonalInformation() {
         <CardTitle tag="h5">اطلاعات شخصی</CardTitle>
       </CardHeader>
       <CardBody>
-        <div className="alert alert-primary">
-          با وارد کردن اطلاعات زیر در صورتی که تمامی اطلاعات به نام شما باشد
-          احراز هویت سطح یک شما به طور خودکار انجام خواهد شد
-        </div>
-        <div className="alert alert-danger">
-          اطلاعات وارد شده با هم تطبیق ندارند، شماره موبایل وارد شده مربوط به کد
-          ملی دیگری می&zwnj;باشد.{" "}
-        </div>
-        <div className="alert alert-success">
-          احراز هویت شما با موفقیت انجام شد و هم اکنون به سطح یک کاربری ارتقا
-          پیدا کرده&zwnj;اید.{" "}
-        </div>
-        <div className="alert alert-warning">
-          در صورت تغییر شماره موبایل یا ایمیل تا ۲۴ ساعت قابلیت واریز و برداشت
-          نخواهید داشت
-        </div>
-        <div className="alert alert-warning">
-          در صورت تغییر شماره موبایل توجه داشته باشید باید خط به نام شخص
-          {`${firstName} ${lastName}`}
-          باشد در غیر اینصورت شماره موبایل تغییر نمی&zwnj;کند.
-        </div>
+        {!firstTierVerified ? (
+          <AlertDanger
+            hasIcon
+            key="failed-tier"
+            text="احراز هویت شما با مشکل مواجه شده است. لطفا با پشتیبانی تماس بگیرید."
+          />
+        ) : firstTierVerified && !secondTierVerified ? (
+          <AlertSuccess
+            hasIcon
+            key="success-tier1"
+            text="احراز هویت شما با موفقیت انجام شد و هم اکنون به سطح یک کاربری ارتقا پیدا کرده‌اید. حالا می‌توانید با افزودن حساب‌های بانکی خود اقدام به واریز و برداشت نمایید، همچنین برای افزایش میزان واریز و برداشت می‌توانید احراز هویت سطح دو را انجام دهید."
+          />
+        ) : (
+          <AlertSuccess
+            hasIcon
+            key="success-tier2"
+            text="احراز هویت سطح یک و دو شما با موفقیت انجام شده است."
+          />
+        )}
 
-        <Form action="" className="">
-          <Row>
-            <Col sm={{ offset: 1, size: 12 }} lg={{ offset: 1, size: 5 }}>
+        <Form className="container">
+          <Row className="justify-content-center">
+            <Col xs={12} lg={5}>
               <Controller
                 name="firstName"
                 control={control}
@@ -115,7 +121,7 @@ export default function PersonalInformation() {
                 )}
               />
             </Col>
-            <Col sm={{ offset: 1, size: 12 }} lg={{ offset: 1, size: 5 }}>
+            <Col xs={12} lg={5}>
               <Controller
                 name="lastName"
                 control={control}
@@ -139,7 +145,7 @@ export default function PersonalInformation() {
                 )}
               />
             </Col>
-            <Col sm={{ offset: 1, size: 12 }} lg={{ offset: 1, size: 5 }}>
+            <Col xs={12} lg={5}>
               <Controller
                 name="nationalCode"
                 control={control}
@@ -163,7 +169,7 @@ export default function PersonalInformation() {
                 )}
               />
             </Col>
-            <Col sm={{ offset: 1, size: 12 }} lg={{ offset: 1, size: 5 }}>
+            <Col xs={12} lg={5}>
               <Controller
                 name="birthDate"
                 control={control}
@@ -187,7 +193,7 @@ export default function PersonalInformation() {
                 )}
               />
             </Col>
-            <Col sm={{ offset: 1, size: 12 }} lg={{ offset: 1, size: 5 }}>
+            <Col xs={12} lg={5}>
               <Controller
                 name="nationalPhone"
                 control={control}
@@ -217,7 +223,7 @@ export default function PersonalInformation() {
                 )}
               />
             </Col>
-            <Col sm={{ offset: 1, size: 12 }} lg={{ offset: 1, size: 5 }}>
+            <Col xs={12} lg={5}>
               <Controller
                 name="iranianPhone"
                 control={control}
