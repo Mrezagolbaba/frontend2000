@@ -155,6 +155,7 @@ const Setting = () => {
                           <Switch
                             id="cb1"
                             onChange={handleChange}
+                            checked={true}
                           />
                         </div>
                       </td>
@@ -164,6 +165,7 @@ const Setting = () => {
                             // className="switch-toggle"
                             id="cb1"
                             onChange={handleChange}
+                            checked={true}
                           />
                         </div>
                       </td>
@@ -181,6 +183,7 @@ const Setting = () => {
                             // className="switch-toggle"
                             id="cb1"
                             onChange={handleChange}
+                            checked={true}
                           />
                           <label className="switch-toggle-btn"></label>
                         </div>
@@ -191,6 +194,7 @@ const Setting = () => {
                             // className="switch-toggle"
                             id="cb1"
                             onChange={handleChange}
+                            checked
                           />
                           <label className="switch-toggle-btn"></label>
                         </div>
@@ -209,6 +213,7 @@ const Setting = () => {
                             // className="switch-toggle"
                             id="cb1"
                             onChange={handleChange}
+                            checked
                           />
                           <label className="switch-toggle-btn"></label>
                         </div>
@@ -219,6 +224,7 @@ const Setting = () => {
                             // className="switch-toggle"
                             id="cb1"
                             onChange={handleChange}
+                            checked
                           />
                           <label className="switch-toggle-btn"></label>
                         </div>
@@ -237,6 +243,7 @@ const Setting = () => {
                             // className="switch-toggle"
                             id="cb1"
                             onChange={handleChange}
+                            checked
                           />
                           <label className="switch-toggle-btn"></label>
                         </div>
@@ -247,6 +254,7 @@ const Setting = () => {
                             // className="switch-toggle"
                             id="cb1"
                             onChange={handleChange}
+                            checked={true}
                           />
                           <label className="switch-toggle-btn"></label>
                         </div>
@@ -265,6 +273,7 @@ const Setting = () => {
                             // className="switch-toggle"
                             id="cb1"
                             onChange={handleChange}
+                            checked={true}
                           />
                           <label className="switch-toggle-btn"></label>
                         </div>
@@ -275,6 +284,7 @@ const Setting = () => {
                             // className="switch-toggle"
                             id="cb1"
                             onChange={handleChange}
+                            checked
                           />
                           <label className="switch-toggle-btn"></label>
                         </div>
@@ -295,6 +305,7 @@ const Setting = () => {
                             // className="switch-toggle"
                             id="cb1"
                             onChange={handleChange}
+                            checked
                           />
                           <label className="switch-toggle-btn"></label>
                         </div>
@@ -305,6 +316,7 @@ const Setting = () => {
                             // className="switch-toggle"
                             id="cb1"
                             onChange={handleChange}
+                            checked
                           />
                           <label className="switch-toggle-btn"></label>
                         </div>
