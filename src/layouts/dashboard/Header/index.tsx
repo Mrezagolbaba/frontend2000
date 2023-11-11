@@ -30,11 +30,11 @@ const Header = ({ onSidebarToggle }: Props) => {
                 </li>
 
                 <li>
-                  <a href="/dashboard/buy-sell">خرید و فروش سریع</a>
+                  <a href="/fast-buy-sell">خرید و فروش سریع</a>
                 </li>
               </ul>
               <div className={dashboard.header__support}>
-                <a href="/support" className="">
+                <a href="/dashboard/support" className="">
                   <span className="icon">
                     <img src={Support} alt="support" />
                   </span>
@@ -42,14 +42,14 @@ const Header = ({ onSidebarToggle }: Props) => {
                 </a>
               </div>
               <div>
-                <a href="/setting">
+                <a href="/dashboard/setting">
                   <span className="icon">
                     <img src={Setting} alt="setting" />
                   </span>
                 </a>
               </div>
               <div className={dashboard.header__notification}>
-                <a href="/notification">
+                <a href="/dashboard/notification">
                   <span className="icon">
                     <img src={Notifications} alt="notification" />
                   </span>
@@ -74,9 +74,60 @@ const Header = ({ onSidebarToggle }: Props) => {
                   </span>
                 </button>
                 <ul
-                  className={`${dashboard.header__navbar} ${
-                    isLeftMenuOpen ? dashboard.expanded : ""
-                  }`}
+                  className={`${dashboard.header__navbar} ${isLeftMenuOpen ? dashboard.expanded : ""
+                    }`}
+                >
+                  <li className={dashboard.header__navbar__close}>
+                    <button onClick={() => setIsLefMenuOpen(false)}>
+                      <li>
+                        <a href="/dashboard/buy-sell">خرید و فروش سریع</a>
+                      </li>
+                    </button>
+                  </li>
+                </ul>
+                <div className={dashboard.header__support}>
+                  <a href="/support" className="">
+                    <span className="icon">
+                      <img src={Support} alt="support" />
+                    </span>
+                    پشتیبانی
+                  </a>
+                </div>
+                <div>
+                  <a href="/setting">
+                    <span className="icon">
+                      <img src={Setting} alt="setting" />
+                    </span>
+                  </a>
+                </div>
+                <div className={dashboard.header__notification}>
+                  <a href="/notification">
+                    <span className="icon">
+                      <img src={Notifications} alt="notification" />
+                    </span>
+                  </a>
+                </div>
+              </div>
+              <div className={dashboard.header__subheader}>
+                <button
+                  className={dashboard["header__hamburger-btn"]}
+                  onClick={() => onSidebarToggle()}
+                >
+                  <span className="icon">
+                    <GiHamburgerMenu />
+                  </span>
+                </button>
+                <button
+                  className={dashboard["header__hamburger-btn"]}
+                  onClick={() => setIsLefMenuOpen(true)}
+                >
+                  <span className="icon">
+                    <GiHamburgerMenu />
+                  </span>
+                </button>
+                <ul
+                  className={`${dashboard.header__navbar} ${isLeftMenuOpen ? dashboard.expanded : ""
+                    }`}
                 >
                   <li className={dashboard.header__navbar__close}>
                     <button onClick={() => setIsLefMenuOpen(false)}>
