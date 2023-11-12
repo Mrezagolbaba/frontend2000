@@ -1,5 +1,6 @@
 import ProtectedRoute from "./ProtectedRoute";
 import { WalletList } from "pages/dashboard/wallet";
+import Setting from "pages/dashboard/setting";
 import DashboardContent from "pages/dashboard/DashboardContent";
 import Dashboard from "pages/dashboard";
 import BuySell from "pages/dashboard/buySell";
@@ -21,6 +22,10 @@ const DashboardRouter = {
     {
       path: "wallet",
       element: <ProtectedRoute children={<WalletList />} />,
+    },
+    {
+      path: "setting",
+      element: <ProtectedRoute children={<Setting />} />,
     },
     {
       path: "buy-sell",

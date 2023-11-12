@@ -16,11 +16,7 @@ import ExchangeInput from "components/Input/exchangeInput";
 import { CiWallet } from "react-icons/ci";
 import { BsTag } from "react-icons/bs";
 import buy from "./styles.module.scss";
-import {
-  exchangeCurrencySwap,
-  exchangeRateBYIRR,
-  getCurrencySwap,
-} from "services/currencySwap";
+import { exchangeCurrencySwap, exchangeRateBYIRR, exchanteCommission, getCurrencySwap } from "services/currencySwap";
 import { getAllWallets } from "services/wallet";
 import { convertIRRToToman, convertText } from "helpers";
 import toast from "react-hot-toast";
@@ -99,11 +95,33 @@ const BuySell = () => {
       console.log(err);
     }
   };
+  const handleCommission = async () => {
+    if (!payValue) {
+      toast.error('لطفا مقادیر را برای تبدیل وارد کنید');
+      return;
+    }
+    if (payDtails.currency === getDtails.currency) {
+      toast.error('نمیتوانید ارز یکسان را تبدیل کنید');
+      return;
+    }
+    const data = {
+      sourceCurrencyCode: convertText(payDtails.currency, 'faToEn'),
+      sourceAmount: payValue,
+      destinationCurrencyCode: convertText(getDtails.currency, 'faToEn'),
+      feeCurrencyCode: convertText(payDtails.currency, 'faToEn'),
+    }
+    try {
+      const res = await exchanteCommission(data);
+      console.log(res,'commission');
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   const handleSelectAsset = async (e: string, action: string) => {
     const data = walltes.find((item: wallet) => item.currencyCode === e);
-
-    if (action === "pay" && data) {
+    handleCommission();
+    if (action === 'pay' && data) {
       setPayDetails(data);
     } else if (action === "get" && data) {
       setGetDetails(data);
@@ -123,34 +141,33 @@ const BuySell = () => {
       });
     }
   };
+
   const handleExchange = () => {
     if (!payValue) {
-      toast.error("لطفا مقادیر را برای تبدیل وارد کنید");
+      toast.error('لطفا مقادیر را برای تبدیل وارد کنید');
       return;
     }
     if (payDtails.currency === getDtails.currency) {
-      toast.error("نمیتوانید ارز یکسان را تبدیل کنید");
+      toast.error('نمیتوانید ارز یکسان را تبدیل کنید');
       return;
     }
     const data = {
       sourceCurrencyCode: convertText(payDtails.currency, "faToEn"),
       sourceAmount: payValue,
-      destinationCurrencyCode: convertText(getDtails.currency, "faToEn"),
-      feeCurrencyCode: convertText(payDtails.currency, "faToEn"),
-    };
-    exchangeCurrencySwap(data)
-      .then((res) => {
-        if (res) {
-          setInvoice(res);
-          toast.success("تبدیل با موفقیت انجام شد");
-          router("/dashboard/invoice");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error("خطایی رخ داده است");
-      });
-  };
+      destinationCurrencyCode: convertText(getDtails.currency, 'faToEn'),
+      feeCurrencyCode: convertText(payDtails.currency, 'faToEn'),
+    }
+    exchangeCurrencySwap(data).then((res) => {
+      if (res) {
+        setInvoice(res);
+        toast.success('تبدیل با موفقیت انجام شد');
+        router('/dashboard/invoice');
+      }
+    }).catch((err) => {
+      console.log(err);
+      toast.error('خطایی رخ داده است');
+    })
+  }
   return (
     <section className="page page-wallet">
       <div className="row g-4">
