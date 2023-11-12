@@ -1,152 +1,162 @@
 import { useEffect, useState } from "react";
 import ModalTeter from "./modal";
 import { useAppSelector } from "redux/hooks";
-import { Card, CardBody, CardHeader, CardTitle, Col, Input, Row } from "reactstrap";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Col,
+  Input,
+  Row,
+} from "reactstrap";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import ExchangeInput from "components/Input/exchangeInput";
 import { CiWallet } from "react-icons/ci";
 import { BsTag } from "react-icons/bs";
 import buy from "./styles.module.scss";
-import { exchangeCurrencySwap, exchangeRateBYIRR, getCurrencySwap } from "services/currencySwap";
+import {
+  exchangeCurrencySwap,
+  exchangeRateBYIRR,
+  getCurrencySwap,
+} from "services/currencySwap";
 import { getAllWallets } from "services/wallet";
 import { convertIRRToToman, convertText } from "helpers";
 import toast from "react-hot-toast";
 import { setInvoice } from "redux/features/invoice/invoiceSlice";
 import { useNavigate } from "react-router-dom";
+import Dialog from "components/Dialog";
+import DepositCrypto from "../wallet/Crypto/Deposit";
 
 interface wallet {
-  availableBalance: string,
-  balance: string,
-  createdAt: string,
-  currencyCode: string,
-  id: string,
-  updatedAt: string,
-  userId: string,
+  availableBalance: string;
+  balance: string;
+  createdAt: string;
+  currencyCode: string;
+  id: string;
+  updatedAt: string;
+  userId: string;
 }
-
 
 const BuySell = () => {
   const user = useAppSelector((state) => state.user);
   const router = useNavigate();
   const { firstName, lastName, email, phoneNumber } = user;
-  const [visible, setVisible] = useState(false);
+  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
   const [walltes, setWalltes] = useState<wallet[]>([]);
-  const [payValue, setPayValue] = useState<string>("")
+  const [payValue, setPayValue] = useState<string>("");
   const [getValue, setGetValue] = useState<string>("");
   const [payDtails, setPayDtails] = useState({
     balance: "0",
     availableBalance: "0",
     currency: "IRR",
-    ratePerIRR: 0
+    ratePerIRR: 0,
   });
   const [getDtails, setGetDtails] = useState({
     balance: "0",
     availableBalance: "0",
     currency: "TRY",
-    ratePerIRR: 0
+    ratePerIRR: 0,
   });
-  const hanldeModal = () => {
-    setVisible(!visible);
-  };
   useEffect(() => {
-
-    getAllWallets().then((res) => {
-      console.log(res, 'res');
-      setWalltes(res);
-    }).catch((err) => {
-      console.log(err);
-    })
-
-
+    getAllWallets()
+      .then((res) => {
+        console.log(res, "res");
+        setWalltes(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [user]);
-  const handleCancel = () => {
-    setVisible(false);
-  };
+
   const setPayDetails = async (data) => {
-    const sourceCurrencyCode = convertText(data?.currencyCode, 'faToEn');
+    const sourceCurrencyCode = convertText(data?.currencyCode, "faToEn");
     try {
       const res = await exchangeRateBYIRR(sourceCurrencyCode);
       setPayDtails({
         balance: data?.balance ?? "0",
         availableBalance: data?.availableBalance ?? "0",
-        currency: convertText(data?.currencyCode, 'enToFa') ?? "",
-        ratePerIRR: Number(res?.rate) ?? 0
+        currency: convertText(data?.currencyCode, "enToFa") ?? "",
+        ratePerIRR: Number(res?.rate) ?? 0,
       });
     } catch (err) {
       console.log(err);
     }
   };
-  
+
   const setGetDetails = async (data) => {
-    const sourceCurrencyCode = convertText(data?.currencyCode, 'faToEn');
+    const sourceCurrencyCode = convertText(data?.currencyCode, "faToEn");
     try {
       const res = await exchangeRateBYIRR(sourceCurrencyCode);
       setGetDtails({
         availableBalance: data?.availableBalance ?? "0",
         balance: data?.balance ?? "0",
-        currency: convertText(data?.currencyCode, 'enToFa') ?? "",
-        ratePerIRR: Number(res?.rate) ?? 0
+        currency: convertText(data?.currencyCode, "enToFa") ?? "",
+        ratePerIRR: Number(res?.rate) ?? 0,
       });
     } catch (err) {
       console.log(err);
     }
   };
-  
+
   const handleSelectAsset = async (e: string, action: string) => {
     const data = walltes.find((item: wallet) => item.currencyCode === e);
-  
-    if (action === 'pay' && data) {
+
+    if (action === "pay" && data) {
       setPayDetails(data);
-    } else if (action === 'get' && data) {
+    } else if (action === "get" && data) {
       setGetDetails(data);
-    } else if (action === 'pay' && !data) {
+    } else if (action === "pay" && !data) {
       setPayDtails({
         balance: "0",
         availableBalance: "0",
-        currency: convertText(e, 'enToFa') ?? "",
-        ratePerIRR: 0
+        currency: convertText(e, "enToFa") ?? "",
+        ratePerIRR: 0,
       });
-    } else if (action === 'get' && !data) {
+    } else if (action === "get" && !data) {
       setGetDtails({
         balance: "0",
         availableBalance: "0",
-        currency: convertText(e, 'enToFa') ?? "",
-        ratePerIRR: 0
+        currency: convertText(e, "enToFa") ?? "",
+        ratePerIRR: 0,
       });
     }
   };
   const handleExchange = () => {
-    if(!payValue){
-      toast.error('لطفا مقادیر را برای تبدیل وارد کنید');
+    if (!payValue) {
+      toast.error("لطفا مقادیر را برای تبدیل وارد کنید");
       return;
     }
-    if(payDtails.currency===getDtails.currency){
-      toast.error('نمیتوانید ارز یکسان را تبدیل کنید');
+    if (payDtails.currency === getDtails.currency) {
+      toast.error("نمیتوانید ارز یکسان را تبدیل کنید");
       return;
     }
     const data = {
-      sourceCurrencyCode: convertText(payDtails.currency, 'faToEn'),
+      sourceCurrencyCode: convertText(payDtails.currency, "faToEn"),
       sourceAmount: payValue,
-      destinationCurrencyCode: convertText(getDtails.currency, 'faToEn'),
-      feeCurrencyCode: convertText(payDtails.currency, 'faToEn'),
-    }
-    exchangeCurrencySwap(data).then((res) => {
-      if(res){
-        setInvoice(res);
-        toast.success('تبدیل با موفقیت انجام شد');
-        router('/dashboard/invoice');
-      }
-    }).catch((err) => {
-      console.log(err);
-      toast.error('خطایی رخ داده است');
-    })
-  }
+      destinationCurrencyCode: convertText(getDtails.currency, "faToEn"),
+      feeCurrencyCode: convertText(payDtails.currency, "faToEn"),
+    };
+    exchangeCurrencySwap(data)
+      .then((res) => {
+        if (res) {
+          setInvoice(res);
+          toast.success("تبدیل با موفقیت انجام شد");
+          router("/dashboard/invoice");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("خطایی رخ داده است");
+      });
+  };
   return (
     <section className="page page-wallet">
       <div className="row g-4">
         <Col lg={7} xs={12}>
           <Card className="card card-secondary currency-exchange card--h100pc">
-            <CardHeader >
+            <CardHeader>
               <Row>
                 <div className="card-back col-lg-6">
                   <a className="">
@@ -157,42 +167,44 @@ const BuySell = () => {
                   </a>
                 </div>
                 <div className="card-action col-lg-6 justify-content-end d-flex">
-                  <button
-                    className="btn btn-outline-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#addCoinModal"
-                    onClick={hanldeModal}
+                  <Button
+                    color="primary"
+                    outline
+                    className="px-4"
+                    onClick={() => setIsOpenDialog(true)}
                   >
-                    واریز {convertText(payDtails.currency, 'enToFa')}
-                  </button>
+                    واریز {convertText(payDtails.currency, "enToFa")}
+                  </Button>
                 </div>
               </Row>
             </CardHeader>
             <CardBody>
               <form action="" className={buy["formContainer"]}>
-                <Row style={{ justifyContent: 'center' }}>
-                  <Col lg={6} xs={12}> {/* On extra small screens, take up the full width */}
+                <Row style={{ justifyContent: "center" }}>
+                  <Col lg={6} xs={12}>
+                    {" "}
+                    {/* On extra small screens, take up the full width */}
                     <div className="currency-exchange__control-group">
                       <label className="form-label">پرداخت می‌کنید:</label>
                       <ExchangeInput
                         name={"amount"}
                         value={payValue}
                         onChange={(value) => setPayValue(value)}
-                        onChangeCoin={(e) => handleSelectAsset(e, 'pay')}
-
+                        onChangeCoin={(e) => handleSelectAsset(e, "pay")}
                       />
                       <div className={buy.amount}>
                         <div>
                           <CiWallet />
                           <span className="title">موجودی در دسترس: </span>
                           <span className="value">
-                            {payDtails.availableBalance} {convertText(payDtails.currency, 'enToFa')}
+                            {payDtails.availableBalance}{" "}
+                            {convertText(payDtails.currency, "enToFa")}
                           </span>
                         </div>
-                        <div >
+                        <div>
                           <BsTag />
                           <span className="title">
-                            نرخ {convertText(payDtails.currency, 'enToFa')} :
+                            نرخ {convertText(payDtails.currency, "enToFa")} :
                           </span>
                           <span className="value">
                             {convertIRRToToman(payDtails.ratePerIRR)} تومان
@@ -211,23 +223,24 @@ const BuySell = () => {
                         name="amount"
                         value={getValue}
                         onChange={(val) => setGetValue(val)}
-                        onChangeCoin={(e) => handleSelectAsset(e, 'get')}
+                        onChangeCoin={(e) => handleSelectAsset(e, "get")}
                       />
                       <div className={buy.amount}>
-                        <div >
+                        <div>
                           <div>
                             <CiWallet />
                             <span className="title">موجودی در دسترس: </span>
                             <span className="value">
-                              {getDtails.availableBalance} {convertText(getDtails.currency, 'enToFa')}
+                              {getDtails.availableBalance}{" "}
+                              {convertText(getDtails.currency, "enToFa")}
                             </span>
                           </div>
                         </div>
-                        <div >
-                          <div >
+                        <div>
+                          <div>
                             <BsTag />
                             <span className="title">
-                              نرخ {convertText(getDtails.currency, 'enToFa')} :
+                              نرخ {convertText(getDtails.currency, "enToFa")} :
                             </span>
                             <span className="value">
                               {convertIRRToToman(getDtails.ratePerIRR)}تومان
@@ -259,14 +272,28 @@ const BuySell = () => {
                           <Row>
                             <Col lg={4} xs={6}>
                               <div className="radio-toggle-control">
-                                <Input type="radio" name="rtc" id="rtc1" className="m-2" />
-                                <label>{convertText(payDtails.currency, 'enToFa')}</label>
+                                <Input
+                                  type="radio"
+                                  name="rtc"
+                                  id="rtc1"
+                                  className="m-2"
+                                />
+                                <label>
+                                  {convertText(payDtails.currency, "enToFa")}
+                                </label>
                               </div>
                             </Col>
                             <Col lg={4} xs={6}>
                               <div className="radio-toggle-control">
-                                <Input type="radio" name="rtc" id="rtc2" className="m-2" />
-                                <label>{convertText(getDtails.currency, 'enToFa')}</label>
+                                <Input
+                                  type="radio"
+                                  name="rtc"
+                                  id="rtc2"
+                                  className="m-2"
+                                />
+                                <label>
+                                  {convertText(getDtails.currency, "enToFa")}
+                                </label>
                               </div>
                             </Col>
                           </Row>
@@ -278,9 +305,15 @@ const BuySell = () => {
                   </table>
                 </div>
                 <div className={buy.currencyExchangeAction}>
-                  <button type="button" className="btn btn-outline-primary" onClick={handleExchange}>
+                  <Button
+                    type="button"
+                    color="primary"
+                    outline
+                    className="px-5 py-3"
+                    onClick={handleExchange}
+                  >
                     ثبت نهایی سفارش{" "}
-                  </button>
+                  </Button>
                 </div>
               </form>
             </CardBody>
@@ -383,11 +416,14 @@ const BuySell = () => {
           </Card>
         </Col>
       </div>
-      <ModalTeter
-        visible={visible}
-        setVisible={hanldeModal}
-        onCanceled={handleCancel}
-      />
+      <Dialog
+        title="واریز تتر"
+        isOpen={isOpenDialog}
+        onClose={() => setIsOpenDialog(false)}
+        hasCloseButton
+      >
+        <DepositCrypto onClose={() => setIsOpenDialog(false)} currency="USDT" />
+      </Dialog>
     </section>
   );
 };
