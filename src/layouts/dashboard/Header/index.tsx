@@ -30,7 +30,7 @@ const Header = ({ onSidebarToggle }: Props) => {
                 </li>
 
                 <li>
-                  <a href="/fast-buy-sell">خرید و فروش سریع</a>
+                  <a href="/dashboard/buy-sell">خرید و فروش سریع</a>
                 </li>
               </ul>
               <div className={dashboard.header__support}>
@@ -162,7 +162,7 @@ const Header = ({ onSidebarToggle }: Props) => {
                     <a href="#">خرید و فروش پیشرفته</a>
                   </li>
                   <li>
-                    <a href="#">خرید و فروش سریع</a>
+                    <a href="/dashboard/buy-sell">خرید و فروش سریع</a>
                   </li>
                 </ul>
               </div>
