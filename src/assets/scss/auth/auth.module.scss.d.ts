@@ -15,5 +15,7 @@ declare const classNames: {
   readonly already: "already";
   readonly forgotLink: "forgotLink";
   readonly "phone-number": "phone-number";
+  readonly "otp-container": "otp-container";
+  readonly "otp-input": "otp-input";
 };
 export = classNames;
