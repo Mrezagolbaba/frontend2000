@@ -62,7 +62,7 @@ const OtpEmail = () => {
   const handleOTP = async (data: { code: string }) => {
     const formData = {
       code: persianToEnglishNumbers(data.code),
-      type: "VERIFY_EMAIL",
+      type: "AUTH",
       method: "EMAIL",
     };
     await sendOtp(formData)
