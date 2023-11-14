@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import ModalTeter from "./modal";
 import { useAppSelector } from "redux/hooks";
 import {
   Button,
@@ -14,11 +13,16 @@ import {
 import { Skeleton } from "antd";
 
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import ExchangeInput from "components/Input/exchangeInput";
+import ExchangeInput from "components/Input/ExchangeInput";
 import { CiWallet } from "react-icons/ci";
 import { BsTag } from "react-icons/bs";
 import buy from "./styles.module.scss";
-import { exchangeCurrencySwap, exchangeRateBYIRR, exchanteCommission, getCurrencySwap } from "services/currencySwap";
+import {
+  exchangeCurrencySwap,
+  exchangeRateBYIRR,
+  exchanteCommission,
+  getCurrencySwap,
+} from "services/currencySwap";
 import { getAllWallets } from "services/wallet";
 import { convertIRRToToman, convertText } from "helpers";
 import toast from "react-hot-toast";
@@ -123,26 +127,25 @@ const BuySell = () => {
         currency: convertText(data?.currencyCode, "enToFa") ?? "",
         ratePerIRR: Number(res?.rate) ?? 0,
       });
-
     } catch (err) {
       console.log(err);
     }
   };
   const handleCommission = async () => {
     if (!payValue) {
-      toast.error('لطفا مقادیر را برای تبدیل وارد کنید');
+      toast.error("لطفا مقادیر را برای تبدیل وارد کنید");
       return;
     }
     if (payDtails.currency === getDtails.currency) {
-      toast.error('نمیتوانید ارز یکسان را تبدیل کنید');
+      toast.error("نمیتوانید ارز یکسان را تبدیل کنید");
       return;
     }
     const data = {
-      sourceCurrencyCode: convertText(payDtails.currency, 'faToEn'),
+      sourceCurrencyCode: convertText(payDtails.currency, "faToEn"),
       sourceAmount: payValue,
-      destinationCurrencyCode: convertText(getDtails.currency, 'faToEn'),
-      feeCurrencyCode: convertText(payDtails.currency, 'faToEn'),
-    }
+      destinationCurrencyCode: convertText(getDtails.currency, "faToEn"),
+      feeCurrencyCode: convertText(payDtails.currency, "faToEn"),
+    };
     try {
       const res = await exchanteCommission(data);
       setCommissions({
@@ -159,21 +162,21 @@ const BuySell = () => {
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   const handleChangeInput = (value) => {
     setIsLodiang(true);
     const getval = Number(value) * payDtails.ratePerIRR;
     setGetValue(getval.toString());
-    setPayValue(value)
+    setPayValue(value);
     handleCommission();
 
     // Debounce the search callback
     handleSearch(value);
-  }
+  };
   const handleSearch = useDebounce((term) => {
     // Perform search operation with the debounced term
-    console.log('Searching for:', term);
+    console.log("Searching for:", term);
   }, 5000);
 
   const handleSelectAsset = async (e: string, action: string) => {
@@ -181,7 +184,7 @@ const BuySell = () => {
     setPayValue("");
     const data = walltes.find((item: wallet) => item.currencyCode === e);
     setCommissionCurrency(e);
-    if (action === 'pay' && data) {
+    if (action === "pay" && data) {
       setPayDetails(data);
     } else if (action === "get" && data) {
       setGetDetails(data);
@@ -190,44 +193,46 @@ const BuySell = () => {
 
   const handleExchange = () => {
     if (!payValue) {
-      toast.error('لطفا مقادیر را برای تبدیل وارد کنید');
+      toast.error("لطفا مقادیر را برای تبدیل وارد کنید");
       return;
     }
     if (payDtails.currency === getDtails.currency) {
-      toast.error('نمیتوانید ارز یکسان را تبدیل کنید');
+      toast.error("نمیتوانید ارز یکسان را تبدیل کنید");
       return;
     }
     const data = {
       sourceCurrencyCode: convertText(payDtails.currency, "faToEn"),
       sourceAmount: payValue,
-      destinationCurrencyCode: convertText(getDtails.currency, 'faToEn'),
-      feeCurrencyCode: convertText(payDtails.currency, 'faToEn'),
-    }
-    exchangeCurrencySwap(data).then((res) => {
-      if (res) {
-        setInvoice(res);
-        toast.success('تبدیل با موفقیت انجام شد');
-        router('/dashboard/invoice');
-      }
-    }).catch((err) => {
-      console.log(err);
-      toast.error('خطایی رخ داده است');
-    })
-  }
+      destinationCurrencyCode: convertText(getDtails.currency, "faToEn"),
+      feeCurrencyCode: convertText(payDtails.currency, "faToEn"),
+    };
+    exchangeCurrencySwap(data)
+      .then((res) => {
+        if (res) {
+          setInvoice(res);
+          toast.success("تبدیل با موفقیت انجام شد");
+          router("/dashboard/invoice");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("خطایی رخ داده است");
+      });
+  };
   const checkValue = (value) => {
     if (getDtails.currency === "IRR") {
       const val = convertIRRToToman(value);
-      console.log(val, 'val');
+      console.log(val, "val");
       return val;
     } else {
       return value;
     }
-  }
+  };
   return (
     <section className="page page-wallet">
-      <div className="row g-4">
+      <Row className="g-4">
         <Col lg={7} xs={12}>
-          <Card className="card card-secondary currency-exchange card--h100pc">
+          <Card className="card-secondary currency-exchange">
             <CardHeader>
               <Row>
                 <div className="card-back col-lg-6">
@@ -238,7 +243,11 @@ const BuySell = () => {
                     معامله سریع
                   </a>
                 </div>
-                <div className="card-action col-lg-6 justify-content-end d-flex">
+                <Col
+                  xs={12}
+                  lg={6}
+                  className="card-action justify-content-end d-flex"
+                >
                   <Button
                     color="primary"
                     outline
@@ -247,14 +256,13 @@ const BuySell = () => {
                   >
                     واریز {convertText(payDtails.currency, "enToFa")}
                   </Button>
-                </div>
+                </Col>
               </Row>
             </CardHeader>
             <CardBody>
               <form action="" className={buy["formContainer"]}>
                 <Row style={{ justifyContent: "center" }}>
-                  <Col lg={6} xs={12}>
-                    {" "}
+                  <Col xs={6}>
                     {/* On extra small screens, take up the full width */}
                     <div className="currency-exchange__control-group">
                       <label className="form-label">پرداخت می‌کنید:</label>
@@ -288,7 +296,7 @@ const BuySell = () => {
                   {/* <Col lg={1} xs={12} style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <TbArrowsExchange2 size={30} />
                   </Col> */}
-                  <Col lg={6} xs={12}>
+                  <Col xs={6}>
                     <div className="currency-exchange__control-group">
                       <label className="form-label">دریافت می‌کنید:</label>
                       <ExchangeInput
@@ -338,68 +346,89 @@ const BuySell = () => {
                         </th>
                       </tr>
                     </thead>
-                    {!isLodiang && <tbody>
-                      <tr>
-                        <td className="text-center">
-                          <Row>
-                            <Col lg={4} xs={6}>
-                              <div className="radio-toggle-control">
-                                <Input
-                                  type="radio"
-                                  name="rtc"
-                                  id="rtc1"
-                                  className="m-2"
-                                  checked={commissionCurrency === convertText(payDtails.currency, "faToEn")}
-                                  onChange={() => {
-                                    setCommissionCurrency(convertText(payDtails.currency, "faToEn"))
-                                  }}
-                                />
-                                <label>
-                                  {convertText(payDtails.currency, "enToFa")}
-                                </label>
-                              </div>
-                            </Col>
-                            <Col lg={5} xs={6}>
-                              <div className="radio-toggle-control">
-                                <Input
-                                  type="radio"
-                                  name="rtc"
-                                  id="rtc2"
-                                  className="m-2"
-                                  checked={commissionCurrency === convertText(getDtails.currency, "faToEn")}
-                                  onChange={() => {
-                                    setCommissionCurrency(convertText(getDtails.currency, "faToEn"))
-                                  }}
-                                />
-                                <label>
-                                  {convertText(getDtails.currency, "enToFa")}
-                                </label>
-                              </div>
-                            </Col>
-                          </Row>
-                        </td>
-                        <td className="text-center">
-                          {
-                            commissionCurrency === convertText(commissions.get.currency, "faToEn") ?
-                              convertIRRToToman(commissions.get.amount) + convertText(getDtails.currency, "enToFa") :
-                              convertIRRToToman(commissions.pay.amount) + convertText(payDtails.currency, "enToFa")
-                          }
-                        </td>
-                        <td className="text-center">
-                          {
-                            commissionCurrency === convertText(commissions.get.currency, "faToEn") ?
-                              convertIRRToToman(Number(getValue) - commissions.get.amount) + convertText(getDtails.currency, "enToFa") :
-                              convertIRRToToman(Number(getValue) - commissions.pay.amount) + convertText(getDtails.currency, "enToFa")
-                          }
-                        </td>
-                      </tr>
-                    </tbody>}
-
+                    {!isLodiang && (
+                      <tbody>
+                        <tr>
+                          <td className="text-center">
+                            <Row>
+                              <Col lg={4} xs={6}>
+                                <div className="radio-toggle-control">
+                                  <Input
+                                    type="radio"
+                                    name="rtc"
+                                    id="rtc1"
+                                    className="m-2"
+                                    checked={
+                                      commissionCurrency ===
+                                      convertText(payDtails.currency, "faToEn")
+                                    }
+                                    onChange={() => {
+                                      setCommissionCurrency(
+                                        convertText(
+                                          payDtails.currency,
+                                          "faToEn"
+                                        )
+                                      );
+                                    }}
+                                  />
+                                  <label>
+                                    {convertText(payDtails.currency, "enToFa")}
+                                  </label>
+                                </div>
+                              </Col>
+                              <Col lg={5} xs={6}>
+                                <div className="radio-toggle-control">
+                                  <Input
+                                    type="radio"
+                                    name="rtc"
+                                    id="rtc2"
+                                    className="m-2"
+                                    checked={
+                                      commissionCurrency ===
+                                      convertText(getDtails.currency, "faToEn")
+                                    }
+                                    onChange={() => {
+                                      setCommissionCurrency(
+                                        convertText(
+                                          getDtails.currency,
+                                          "faToEn"
+                                        )
+                                      );
+                                    }}
+                                  />
+                                  <label>
+                                    {convertText(getDtails.currency, "enToFa")}
+                                  </label>
+                                </div>
+                              </Col>
+                            </Row>
+                          </td>
+                          <td className="text-center">
+                            {commissionCurrency ===
+                            convertText(commissions.get.currency, "faToEn")
+                              ? convertIRRToToman(commissions.get.amount) +
+                                convertText(getDtails.currency, "enToFa")
+                              : convertIRRToToman(commissions.pay.amount) +
+                                convertText(payDtails.currency, "enToFa")}
+                          </td>
+                          <td className="text-center">
+                            {commissionCurrency ===
+                            convertText(commissions.get.currency, "faToEn")
+                              ? convertIRRToToman(
+                                  Number(getValue) - commissions.get.amount
+                                ) + convertText(getDtails.currency, "enToFa")
+                              : convertIRRToToman(
+                                  Number(getValue) - commissions.pay.amount
+                                ) + convertText(getDtails.currency, "enToFa")}
+                          </td>
+                        </tr>
+                      </tbody>
+                    )}
                   </table>
 
-                  {isLodiang && <Skeleton loading={isLodiang} active={isLodiang} />}
-
-
+                  {isLodiang && (
+                    <Skeleton loading={isLodiang} active={isLodiang} />
+                  )}
                 </div>
                 <div className={buy.currencyExchangeAction}>
                   <Button
@@ -512,7 +541,7 @@ const BuySell = () => {
             </CardBody>
           </Card>
         </Col>
-      </div>
+      </Row>
       <Dialog
         title="واریز تتر"
         isOpen={isOpenDialog}
