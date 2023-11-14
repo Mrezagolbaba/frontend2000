@@ -24,7 +24,7 @@ import {
   getCurrencySwap,
 } from "services/currencySwap";
 import { getAllWallets } from "services/wallet";
-import { convertIRRToToman, convertText } from "helpers";
+import { convertIRRToToman, convertText, rialToToman } from "helpers";
 import toast from "react-hot-toast";
 import { setInvoice } from "redux/features/invoice/invoiceSlice";
 import { useNavigate } from "react-router-dom";
@@ -220,11 +220,13 @@ const BuySell = () => {
       });
   };
   const checkValue = (value) => {
-    if (getDtails.currency === "IRR") {
-      const val = convertIRRToToman(value);
-      console.log(val, "val");
+    if (getDtails.currency === "تومان") {
+      const val = rialToToman(value);
       return val;
-    } else {
+    }else if(getDtails.currency === "تومان"&& payDtails.currency === "لیر"){
+      const val = rialToToman(value);
+      return val.toString().slice(0, 4);
+    }else {
       return value;
     }
   };
@@ -268,7 +270,7 @@ const BuySell = () => {
                       <label className="form-label">پرداخت می‌کنید:</label>
                       <ExchangeInput
                         name={"amount"}
-                        value={checkValue(payValue)}
+                        value={payValue}
                         onChange={(value) => handleChangeInput(value)}
                         onChangeCoin={(e) => handleSelectAsset(e, "pay")}
                       />
@@ -301,7 +303,8 @@ const BuySell = () => {
                       <label className="form-label">دریافت می‌کنید:</label>
                       <ExchangeInput
                         name="amount"
-                        value={getValue}
+                        value={checkValue(getValue)}
+                        defaultValue={checkValue(getValue)}
                         onChange={(val) => setGetValue(val)}
                         onChangeCoin={(e) => handleSelectAsset(e, "get")}
                       />

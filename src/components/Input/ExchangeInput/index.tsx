@@ -45,6 +45,7 @@ type Props = {
   decimalsLimit?: number;
   hasError?: boolean;
   onChangeCoin?: (value) => void;
+  defaultValue?: string;
 };
 
 export default function ExchangeInput({
@@ -55,12 +56,12 @@ export default function ExchangeInput({
   decimalsLimit = 0,
   placeholder = "مبلغ به",
   onChangeCoin,
+  defaultValue
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(options[0]);
 
   const toggle = () => setIsOpen((prevState) => !prevState);
-
   return (
     <div className={exchange.wrapper}>
       <CurrencyInput
@@ -69,6 +70,7 @@ export default function ExchangeInput({
         className={`form-control ${exchange.input}`}
         type="text"
         defaultValue={value}
+        value={value}
         decimalsLimit={decimalsLimit}
         placeholder={placeholder}
         onValueChange={(value) => value && onChange?.(value)}
