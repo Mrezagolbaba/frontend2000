@@ -27,45 +27,6 @@ const options = [
     value: "TRY",
     label: { text: "لیر", img: Lira },
   },
-  // {
-  //     value: "BTC",
-  //     label: (
-  //         <div>
-  //             <img
-  //                 src={bitcoin}
-  //                 alt=""
-  //                 className="bs-icon"
-  //                 width={20}
-  //                 height={20}
-  //                 style={{ marginLeft: "5px" }}
-  //             />
-  //             <span style={{  fontSize: "12px" }}>
-  //                 بیت کوین
-  //             </span>
-
-  //         </div>
-  //     ),
-  // },
-  // {
-  //     value: "ETH",
-  //     label: (
-  //         <div>
-  //             <img
-  //                 src={ethereum}
-  //                 alt=""
-  //                 className="bs-icon"
-  //                 width={20}
-  //                 height={20}
-  //                 style={{ marginLeft: "5px" }}
-  //             />
-  //             <span style={{  fontSize: "12px" }}>
-  //                 {" "}
-  //                 اتریوم
-  //             </span>
-
-  //         </div>
-  //     ),
-  // },
   {
     value: "TRX",
     label: { text: "ترون", img: TRX },
@@ -152,28 +113,6 @@ export default function ExchangeInput({
           ))}
         </DropdownMenu>
       </Dropdown>
-      {/* <div className="dropdown">
-                <button
-                    className={`${s.buttonTop} ${isOpen ? 'open' : ''}`}
-                    onClick={(e) => {
-                        e.preventDefault();
-                        setIsOpen(!isOpen)
-                    }}
-                >
-                    {selected.label}
-                </button>
-                <ul className={`dropdown-menu ${isOpen ? 'show' : ''}`}>
-                    {options.map((option, index) => (
-                        <li key={index}>
-                            <button className={s.button} onClick={(e) => {
-                                e.preventDefault();
-                                handleSelectCoin(option.value)
-                            }
-                            }>{option.label}</button>
-                        </li>
-                    ))}
-                </ul>
-            </div> */}
     </div>
   );
 }
