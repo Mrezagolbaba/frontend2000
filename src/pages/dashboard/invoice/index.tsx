@@ -5,13 +5,13 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import "./styles.module.scss";
 import { convertText } from "helpers";
 import moment from "jalali-moment";
+import {useLocation} from 'react-router-dom';
 
 const Invoice = () => {
   const user = useAppSelector((state) => state.user);
-  const invoice = useAppSelector((state) => state.invoice);
+  const location = useLocation();
   const { firstName, lastName, phoneNumber, nationalId } = user;
-
-
+  const invoice =location.state
   return (
     <section className="page page-wallet mt-4">
       <Card>
