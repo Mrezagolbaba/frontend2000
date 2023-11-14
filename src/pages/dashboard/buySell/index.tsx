@@ -211,7 +211,7 @@ const BuySell = () => {
         if (res) {
           setInvoice(res);
           toast.success("تبدیل با موفقیت انجام شد");
-          router("/dashboard/invoice");
+          router("/dashboard/invoice",{state:res});
         }
       })
       .catch((err) => {
