@@ -148,13 +148,13 @@ export const convertText = (text, direction) => {
     'enToFa': {
       'USDT': 'تتر',
       'TRY': 'لیر',
-      'IRR': 'ریال',
+      'IRR': 'تومان',
       'TRX': 'ترون',
     },
     'faToEn': {
       'تتر': 'USDT',
       'لیر': 'TRY',
-      'ریال': 'IRR',
+      'تومان': 'IRR',
       'ترون': 'TRX',
     },
   };
