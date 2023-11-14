@@ -1,9 +1,11 @@
-import { useEffect, useRef, EffectCallback } from 'react';
+import { useEffect, useRef } from 'react';
 
-const useDebounce = <T extends any[]>(callback: (...args: T) => void, delay: number): ((...args: T) => void) => {
+type CallbackFunction<T extends any[]> = (...args: T) => void;
+
+const useDebounce = <T extends any[]>(callback: CallbackFunction<T>, delay: number): CallbackFunction<T> => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect((): any => {
+  useEffect(() => {
     // Cleanup the previous timeout on re-render
     return () => {
       if (timeoutRef.current) {
@@ -12,7 +14,7 @@ const useDebounce = <T extends any[]>(callback: (...args: T) => void, delay: num
     };
   }, []);
 
-  const debouncedCallback = (...args: T) => {
+  const debouncedCallback: CallbackFunction<T> = (...args: T) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
