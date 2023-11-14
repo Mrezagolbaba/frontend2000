@@ -11,6 +11,8 @@ import {
   Input,
   Row,
 } from "reactstrap";
+import { Skeleton } from "antd";
+
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import ExchangeInput from "components/Input/exchangeInput";
 import { CiWallet } from "react-icons/ci";
@@ -24,6 +26,7 @@ import { setInvoice } from "redux/features/invoice/invoiceSlice";
 import { useNavigate } from "react-router-dom";
 import Dialog from "components/Dialog";
 import DepositCrypto from "../wallet/Crypto/Deposit";
+import useDebounce from "redux/useDebounce";
 
 interface wallet {
   availableBalance: string;
@@ -43,11 +46,23 @@ const BuySell = () => {
   const [walltes, setWalltes] = useState<wallet[]>([]);
   const [payValue, setPayValue] = useState<string>("");
   const [getValue, setGetValue] = useState<string>("");
+  const [isLodiang, setIsLodiang] = useState<boolean>(false);
   const [payDtails, setPayDtails] = useState({
     balance: "0",
     availableBalance: "0",
     currency: "IRR",
     ratePerIRR: 0,
+  });
+  const [commissionCurrency, setCommissionCurrency] = useState<string>();
+  const [commissions, setCommissions] = useState({
+    pay: {
+      amount: 0,
+      currency: "",
+    },
+    get: {
+      amount: 0,
+      currency: "",
+    },
   });
   const [getDtails, setGetDtails] = useState({
     balance: "0",
@@ -58,7 +73,6 @@ const BuySell = () => {
   useEffect(() => {
     getAllWallets()
       .then((res) => {
-        console.log(res, "res");
         setWalltes(res);
       })
       .catch((err) => {
@@ -67,6 +81,15 @@ const BuySell = () => {
   }, [user]);
 
   const setPayDetails = async (data) => {
+    if (data.currencyCode === "IRR") {
+      setPayDtails({
+        balance: data?.balance ?? "0",
+        availableBalance: data?.availableBalance ?? "0",
+        currency: convertText(data?.currencyCode, "enToFa") ?? "",
+        ratePerIRR: 1,
+      });
+      return;
+    }
     const sourceCurrencyCode = convertText(data?.currencyCode, "faToEn");
     try {
       const res = await exchangeRateBYIRR(sourceCurrencyCode);
@@ -82,6 +105,15 @@ const BuySell = () => {
   };
 
   const setGetDetails = async (data) => {
+    if (data.currencyCode === "IRR") {
+      setGetDtails({
+        balance: data?.balance ?? "0",
+        availableBalance: data?.availableBalance ?? "0",
+        currency: convertText(data?.currencyCode, "enToFa") ?? "",
+        ratePerIRR: 1,
+      });
+      return;
+    }
     const sourceCurrencyCode = convertText(data?.currencyCode, "faToEn");
     try {
       const res = await exchangeRateBYIRR(sourceCurrencyCode);
@@ -91,6 +123,7 @@ const BuySell = () => {
         currency: convertText(data?.currencyCode, "enToFa") ?? "",
         ratePerIRR: Number(res?.rate) ?? 0,
       });
+
     } catch (err) {
       console.log(err);
     }
@@ -112,33 +145,46 @@ const BuySell = () => {
     }
     try {
       const res = await exchanteCommission(data);
-      console.log(res,'commission');
+      setCommissions({
+        pay: {
+          amount: res.transactions[0].fee,
+          currency: res.transactions[0].currencyCode,
+        },
+        get: {
+          amount: res.transactions[1].fee,
+          currency: res.transactions[1].currencyCode,
+        },
+      });
+      setIsLodiang(false);
     } catch (err) {
       console.log(err);
     }
   }
 
-  const handleSelectAsset = async (e: string, action: string) => {
-    const data = walltes.find((item: wallet) => item.currencyCode === e);
+  const handleChangeInput = (value) => {
+    setIsLodiang(true);
+    const getval = Number(value) * payDtails.ratePerIRR;
+    setGetValue(getval.toString());
+    setPayValue(value)
     handleCommission();
+
+    // Debounce the search callback
+    handleSearch(value);
+  }
+  const handleSearch = useDebounce((term) => {
+    // Perform search operation with the debounced term
+    console.log('Searching for:', term);
+  }, 5000);
+
+  const handleSelectAsset = async (e: string, action: string) => {
+    setGetValue("");
+    setPayValue("");
+    const data = walltes.find((item: wallet) => item.currencyCode === e);
+    setCommissionCurrency(e);
     if (action === 'pay' && data) {
       setPayDetails(data);
     } else if (action === "get" && data) {
       setGetDetails(data);
-    } else if (action === "pay" && !data) {
-      setPayDtails({
-        balance: "0",
-        availableBalance: "0",
-        currency: convertText(e, "enToFa") ?? "",
-        ratePerIRR: 0,
-      });
-    } else if (action === "get" && !data) {
-      setGetDtails({
-        balance: "0",
-        availableBalance: "0",
-        currency: convertText(e, "enToFa") ?? "",
-        ratePerIRR: 0,
-      });
     }
   };
 
@@ -167,6 +213,15 @@ const BuySell = () => {
       console.log(err);
       toast.error('خطایی رخ داده است');
     })
+  }
+  const checkValue = (value) => {
+    if (getDtails.currency === "IRR") {
+      const val = convertIRRToToman(value);
+      console.log(val, 'val');
+      return val;
+    } else {
+      return value;
+    }
   }
   return (
     <section className="page page-wallet">
@@ -205,8 +260,8 @@ const BuySell = () => {
                       <label className="form-label">پرداخت می‌کنید:</label>
                       <ExchangeInput
                         name={"amount"}
-                        value={payValue}
-                        onChange={(value) => setPayValue(value)}
+                        value={checkValue(payValue)}
+                        onChange={(value) => handleChangeInput(value)}
                         onChangeCoin={(e) => handleSelectAsset(e, "pay")}
                       />
                       <div className={buy.amount}>
@@ -283,7 +338,7 @@ const BuySell = () => {
                         </th>
                       </tr>
                     </thead>
-                    <tbody>
+                    {!isLodiang && <tbody>
                       <tr>
                         <td className="text-center">
                           <Row>
@@ -294,19 +349,27 @@ const BuySell = () => {
                                   name="rtc"
                                   id="rtc1"
                                   className="m-2"
+                                  checked={commissionCurrency === convertText(payDtails.currency, "faToEn")}
+                                  onChange={() => {
+                                    setCommissionCurrency(convertText(payDtails.currency, "faToEn"))
+                                  }}
                                 />
                                 <label>
                                   {convertText(payDtails.currency, "enToFa")}
                                 </label>
                               </div>
                             </Col>
-                            <Col lg={4} xs={6}>
+                            <Col lg={5} xs={6}>
                               <div className="radio-toggle-control">
                                 <Input
                                   type="radio"
                                   name="rtc"
                                   id="rtc2"
                                   className="m-2"
+                                  checked={commissionCurrency === convertText(getDtails.currency, "faToEn")}
+                                  onChange={() => {
+                                    setCommissionCurrency(convertText(getDtails.currency, "faToEn"))
+                                  }}
                                 />
                                 <label>
                                   {convertText(getDtails.currency, "enToFa")}
@@ -315,11 +378,28 @@ const BuySell = () => {
                             </Col>
                           </Row>
                         </td>
-                        <td className="text-center">۲۵ لیر</td>
-                        <td className="text-center">453 لیر</td>
+                        <td className="text-center">
+                          {
+                            commissionCurrency === convertText(commissions.get.currency, "faToEn") ?
+                              convertIRRToToman(commissions.get.amount) + convertText(getDtails.currency, "enToFa") :
+                              convertIRRToToman(commissions.pay.amount) + convertText(payDtails.currency, "enToFa")
+                          }
+                        </td>
+                        <td className="text-center">
+                          {
+                            commissionCurrency === convertText(commissions.get.currency, "faToEn") ?
+                              convertIRRToToman(Number(getValue) - commissions.get.amount) + convertText(getDtails.currency, "enToFa") :
+                              convertIRRToToman(Number(getValue) - commissions.pay.amount) + convertText(getDtails.currency, "enToFa")
+                          }
+                        </td>
                       </tr>
-                    </tbody>
+                    </tbody>}
+
                   </table>
+
+                  {isLodiang && <Skeleton loading={isLodiang} active={isLodiang} />}
+
+
                 </div>
                 <div className={buy.currencyExchangeAction}>
                   <Button
