@@ -143,6 +143,11 @@ export function convertIRRToToman(number: number): number {
 
   return parseInt(result, 10);
 }
+export const rialToToman = (rialAmount: number): number => {
+  // Assuming 1 Toman is equal to 10 Rials
+  const tomanAmount = rialAmount / 10;
+  return tomanAmount;
+};
 export const convertText = (text, direction) => {
   const currencyMap = {
     'enToFa': {
