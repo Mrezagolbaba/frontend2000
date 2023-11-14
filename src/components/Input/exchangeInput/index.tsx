@@ -8,7 +8,6 @@ import Euro from "assets/img/coins/Euro.png";
 import TRX from "assets/img/coins/trx.png";
 import { useState } from "react";
 import s from "./styles.module.scss";
-import { Cu } from "react-flags-select";
 
 
 const options = [
