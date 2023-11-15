@@ -8,6 +8,9 @@ import Turkey from "assets/img/icons/flag-turkey.png";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
 
 import { BsCalendar2Event, BsCheck2 } from "react-icons/bs";
+import { TbArrowsExchange, TbLayersSubtract } from "react-icons/tb";
+import { LuDownload } from "react-icons/lu";
+import { BiSupport } from "react-icons/bi";
 // import CurrencyInput from "../../components/currencyInput";
 import {
   Button,
@@ -353,7 +356,49 @@ const DashboardContent = () => {
           </Col>
         </Row>
       </section>
-
+      <section className="mb-4 mt-4">
+        <Row className="pt-2 align-items-center flex flex-wrap justify-content-evenly">
+          <Col className="col-4 col-sm-3 col-xxl-2   center-vertical">
+            <h6 className="easy-text">دسترسی سریع به خدمات آرسونیکس</h6>
+          </Col>
+          <Col className="col-4 col-sm-3 col-xxl-2  services">
+            <a className="element-box ar-tablo centered trend-in-corner smaller" href="#">
+              <TbArrowsExchange color="#111BFF" size={25} />
+              <div className="value">خرید و فروش</div>
+              </a>
+          </Col>
+          <Col className="col-4 col-sm-3  col-xxl-2  services">
+            <a className="element-box ar-tablo centered trend-in-corner smaller" href="#">
+                <TbLayersSubtract color="#111BFF" size={25} />
+              <div className="value">بازارها</div>
+            </a>
+          </Col>
+          <Col className="col-4 col-sm-3 col-xxl-2 services">
+            <a
+              className="element-box ar-tablo centered trend-in-corner smaller"
+              href="#"
+            >
+              <LuDownload color="#111BFF" size={25} />
+              <div className="value">واریز تتر</div>
+            </a>
+          </Col>
+          <Col className="col-4 col-sm-3 col-xxl-2  services">
+            <a href="#">
+              <LuDownload color="#111BFF" size={25} />
+              <div className="value">واریز تومان</div>
+            </a>
+          </Col>
+          <Col className="col-4 col-sm-3  col-xxl-2  services">
+            <a className="element-box ar-tablo centered trend-in-corner smaller" href="#">
+              <BiSupport color="#111BFF" size={25} />
+              <div className="value">پشتیبانی</div>
+              <div className="trending trending-up">
+                <span>آنلاین</span>
+                <i className="os-icon os-icon-arrow-up6"></i></div>
+            </a>
+          </Col>
+        </Row>
+      </section>
       <section className="mb-4">
         <Card className="custom-card currencies-online-rates card-secondary">
           <CardHeader className="card-header-flex">
