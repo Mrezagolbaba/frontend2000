@@ -107,6 +107,7 @@ type Props = {
   hasError?: boolean;
 };
 
+import currencyStyle from "assets/scss/components/Input/currencyInput.module.scss";
 export default function Currency({
   name,
   value,
@@ -119,7 +120,9 @@ export default function Currency({
     <CurrencyInput
       id={name}
       name={name}
-      className={`form-control mx-0 ${hasError ? "is-invalid" : ""}`}
+      className={` ${currencyStyle["currency-input"]} mx-0 form-control ${
+        hasError ? "is-invalid" : ""
+      }`}
       placeholder={placeholder}
       defaultValue={value}
       decimalsLimit={decimalsLimit}

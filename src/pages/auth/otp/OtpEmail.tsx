@@ -5,7 +5,6 @@ import { OtpSchema } from "../validationForms";
 import { toast } from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { resendOtp, sendOtp } from "services/auth";
-import OtpInput from "components/OTP";
 
 import auth from "assets/scss/auth/auth.module.scss";
 import {
@@ -18,6 +17,8 @@ import {
   Spinner,
 } from "reactstrap";
 import { useEffect, useState } from "react";
+import { persianToEnglishNumbers } from "helpers";
+import OTPInput from "react-otp-input";
 const OtpEmail = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -60,8 +61,8 @@ const OtpEmail = () => {
 
   const handleOTP = async (data: { code: string }) => {
     const formData = {
-      code: data.code,
-      type: "VERIFY_EMAIL",
+      code: persianToEnglishNumbers(data.code),
+      type: "AUTH",
       method: "EMAIL",
     };
     await sendOtp(formData)
@@ -115,8 +116,18 @@ const OtpEmail = () => {
                     <Controller
                       name="code"
                       control={control}
-                      render={() => (
-                        <OtpInput onChange={(code) => setValue("code", code)} />
+                      render={({field:{value}}) => (
+                        <OTPInput
+                          containerStyle={auth["otp-container"]}
+                          value={value}
+                          onChange={(code) => setValue("code", code)}
+                          inputStyle={auth["otp-input"]}
+                          numInputs={6}
+                          renderSeparator={undefined}
+                          placeholder="-"
+                          shouldAutoFocus={true}
+                          renderInput={(props) => <input {...props} />}
+                        />
                       )}
                     />
                   </Col>

@@ -30,7 +30,6 @@ interface PhoneNumberMaskProps {
 export const PhoneNumberMask: React.FC<PhoneNumberMaskProps> = ({
   phoneNumber,
 }) => {
-  console.log(phoneNumber);
   if (!phoneNumber) return null;
 
   // Extracting the prefix, masking, and suffix
@@ -40,7 +39,6 @@ export const PhoneNumberMask: React.FC<PhoneNumberMaskProps> = ({
 
   // Formatted masked phone number
   const maskedPhoneNumber = `${prefix}${masking}${suffix}`;
-  console.log(maskedPhoneNumber);
   return maskedPhoneNumber;
 };
 
@@ -135,4 +133,39 @@ export const isPasswordValid = (password: string) => {
   else isValid[4] = true;
 
   return isValid;
+};
+export function convertIRRToToman(number: number): number {
+  // Convert the number to an integer
+  const integerPart: number = Math.floor(number);
+
+  // Convert the integer to a string and extract the first four characters
+  const result: string = integerPart.toString().slice(0, 4);
+
+  return parseInt(result, 10);
+}
+export const rialToToman = (rialAmount: number): number => {
+  // Assuming 1 Toman is equal to 10 Rials
+  const tomanAmount = rialAmount / 10;
+  return tomanAmount;
+};
+export const convertText = (text, direction) => {
+  const currencyMap = {
+    'enToFa': {
+      'USDT': 'تتر',
+      'TRY': 'لیر',
+      'IRR': 'تومان',
+      'TRX': 'ترون',
+    },
+    'faToEn': {
+      'تتر': 'USDT',
+      'لیر': 'TRY',
+      'تومان': 'IRR',
+      'ترون': 'TRX',
+    },
+  };
+
+  if (direction in currencyMap && text in currencyMap[direction]) {
+    return currencyMap[direction][text];
+  }
+  return text;
 };

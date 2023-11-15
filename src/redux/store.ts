@@ -1,9 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from 'redux/features/user/userSlice'
+import settingReducer from 'redux/features/settings/settingSlice'
+import invoiceReducer from 'redux/features/invoice/invoiceSlice'
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    seting:settingReducer,
+    invoice: invoiceReducer,
   },
 })
 
