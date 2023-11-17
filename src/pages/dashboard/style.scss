@@ -182,7 +182,7 @@
 .wallet-img-chart {
   width: 90px;
 }
-.services{
+.services {
   background-color: #ffffff;
   border-radius: 10px;
   display: flex;
@@ -190,19 +190,18 @@
   justify-content: center;
   box-shadow: 0px 0px 10px #0000001a;
   height: 80px;
-  a{
+ 
+  a {
     display: flex;
     align-items: center;
     justify-content: center;
     color: #03041b;
 
-    .value{
+    .value {
       margin-right: 5px;
     }
-    
   }
-  
-  &:hover{
+  &:hover {
     scale: 1.1;
     transition: 0.5s;
   }
