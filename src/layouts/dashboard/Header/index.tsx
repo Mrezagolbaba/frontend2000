@@ -56,7 +56,7 @@ const Header = ({ onSidebarToggle }: Props) => {
                 </a>
               </div>
 
-              <div className={dashboard.header__subheader}>
+              {/* <div className={dashboard.header__subheader}>
                 <button
                   className={dashboard["header__hamburger-btn"]}
                   onClick={() => onSidebarToggle()}
@@ -107,7 +107,7 @@ const Header = ({ onSidebarToggle }: Props) => {
                     </span>
                   </a>
                 </div>
-              </div>
+              </div> */}
               <div className={dashboard.header__subheader}>
                 <button
                   className={dashboard["header__hamburger-btn"]}

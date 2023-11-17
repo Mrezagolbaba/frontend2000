@@ -8,6 +8,9 @@ import Turkey from "assets/img/icons/flag-turkey.png";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
 
 import { BsCalendar2Event, BsCheck2 } from "react-icons/bs";
+import { TbArrowsExchange, TbLayersSubtract } from "react-icons/tb";
+import { LuDownload } from "react-icons/lu";
+import { BiSupport } from "react-icons/bi";
 // import CurrencyInput from "../../components/currencyInput";
 import {
   Button,
@@ -25,6 +28,7 @@ import "./style.scss";
 import { useGetMe } from "services/auth/user";
 import { useEffect } from "react";
 import { setUser } from "redux/features/user/userSlice";
+import ExchangeInput from "components/Input/ExchangeInput";
 
 const dataArray = [
   { value: "0.00256", number: "45،154", time: "11:30" },
@@ -69,40 +73,27 @@ const DashboardContent = () => {
     loop: true,
   };
 
+  const handleExchange = () => {
+    console.log("handleExchange");
+  }
+
   return (
     <>
       <section className="mb-3">
         <Card className="custom-card user-summary">
           <CardBody>
             <Row className="align-items-start">
-              <Col
-                xs={12}
-                sm={1}
-                className="user-summary__section user-summary-avatar"
-              >
+              <Col xs={12} sm={1} className="user-summary__section user-summary-avatar text-center">
                 <img src={User} alt="" className="avatar" />
               </Col>
-              <Col
-                xs={12}
-                sm={2}
-                className="user-summary__section user-summary-edit"
-              >
+              <Col xs={12} sm={2} className="user-summary__section user-summary-edit text-center text-sm-left">
                 <h6>{firstName + " " + lastName}</h6>
-                <Button
-                  className="profile-btn"
-                  outline
-                  color="secondary"
-                  href="/dashboard/profile"
-                >
+                <Button className="profile-btn" outline color="secondary" href="/dashboard/profile">
                   <CiEdit />
                   پروفایل کاربری
                 </Button>
               </Col>
-              <Col
-                xs={12}
-                sm={2}
-                className="user-summary__section user-summary-lastseen"
-              >
+              <Col xs={12} sm={2} className="user-summary__section user-summary-lastseen text-center text-sm-left">
                 <h6>آخرین ورود</h6>
                 <div className="user-summary-date">
                   <BsCalendar2Event />
@@ -110,6 +101,7 @@ const DashboardContent = () => {
                 </div>
               </Col>
             </Row>
+
           </CardBody>
         </Card>
       </section>
@@ -207,58 +199,33 @@ const DashboardContent = () => {
               </CardHeader>
               <CardBody>
                 <form action="">
-                  <div className="currency-exchange__controls">
-                    <div className="currency-exchange__control-group">
-                      <label className="form-label">پرداخت می‌کنید:</label>
-                      <div className="">
-                        {/* <CurrencyInput
-                          value={""}
-                          onChange={(value: string) => {
-                            console.log(value);
-                          }}
-                        /> */}
+                  <Row className="mt-3">
+                    <Col xs={12} md={6}>
+                      <div className="currency-exchange__control-group">
+                        <label className="form-label" style={{ color: '#03041b66' }}>پرداخت می‌کنید:</label>
+                        <ExchangeInput
+                          name={"amount"}
+                          value={''}
+                          onChange={(value) => console.log(value)}
+                          onChangeCoin={(e) => console.log(e)}
+                        />
                       </div>
-                    </div>
-                    <div className="currency-exchange__divider">
-                      <span className="icon">
-                        <svg
-                          width="19"
-                          height="17"
-                          viewBox="0 0 19 17"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M18 5H1L5 1"
-                            stroke="#03041B"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M1 12L18 12L14 16"
-                            stroke="#03041B"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </span>
-                    </div>
-                    <div className="currency-exchange__control-group">
-                      <label className="form-label">دریافت می‌کنید:</label>
-                      <div className="">
-                        {/* <CurrencyInput
-                          value={""}
-                          onChange={(value: string) => {
-                            console.log(value);
-                          }}
-                        /> */}
+                    </Col>
+                    <Col xs={12} md={6}>
+                      <div className="currency-exchange__control-group">
+                        <label className="form-label" style={{ color: '#03041b66' }}>دریافت می‌کنید:</label>
+                        <ExchangeInput
+                          name={"amount"}
+                          value={''}
+                          onChange={(value) => console.log(value)}
+                          onChangeCoin={(e) => console.log(e)}
+                        />
                       </div>
-                    </div>
-                  </div>
-                  <div className="currency-exchange__action">
-                    <button type="button" className="btn btn-primary">
+                    </Col>
+                  </Row>
+
+                  <div className="mt-5 mb-4 d-flex align-items-center justify-content-center">
+                    <button onClick={handleExchange} type="button" className="btn btn-primary" style={{ padding: "18px 70px" }}>
                       ثبت و ادامه
                     </button>
                   </div>
@@ -268,10 +235,10 @@ const DashboardContent = () => {
           </Col>
           <Col xxl={5} xl={6}>
             <Card className="custom-card wallet-card card--h100pc card-secondary">
-              <CardHeader className="card-header-flex">
+              <CardHeader className="d-flex flex-row justify-content-between align-items-center">
                 <CardTitle tag="h5">کیف پول</CardTitle>
                 <div className="card-action">
-                  <Button href="#">مشاهده کیف پول</Button>
+                  <Button href="/dashboard/wallet">مشاهده کیف پول</Button>
                 </div>
               </CardHeader>
               <CardBody>
@@ -353,18 +320,60 @@ const DashboardContent = () => {
           </Col>
         </Row>
       </section>
-
+      <section className="mb-4 mt-4">
+        <Row className="gx-4">
+          <Col className="col align-items-center justify-content-center d-flex">
+            <h6 className="easy-text">دسترسی سریع به خدمات آرسونیکس</h6>
+          </Col>
+          <Col className="services col-6 col-sm-3 col-xxl-2 mx-xxl-2 mx-md-2 m-0">
+            <a className="element-box ar-tablo centered trend-in-corner smaller" href="/dashboard/buy-sell">
+              <TbArrowsExchange color="#111BFF" size={25} />
+              <div className="value">خرید و فروش</div>
+            </a>
+          </Col>
+          <Col className="services col-6 col-sm-3 col-xxl-2 mx-xxl-2 mx-md-2  m-0">
+            <a className="element-box ar-tablo centered trend-in-corner smaller" href="#">
+              <TbLayersSubtract color="#111BFF" size={25} />
+              <div className="value">بازارها</div>
+            </a>
+          </Col>
+          <Col className="services col-6 col-sm-3 col-xxl-2 mx-xxl-2 mx-md-2  m-0">
+            <a
+              className="element-box ar-tablo centered trend-in-corner smaller"
+              href="/dashboard/wallet"
+            >
+              <LuDownload color="#111BFF" size={25} />
+              <div className="value">واریز تتر</div>
+            </a>
+          </Col>
+          <Col className="services col-6 col-sm-3 col-xxl-2 mx-xxl-2 mx-md-2  m-0">
+            <a href="/dashboard/wallet">
+              <LuDownload color="#111BFF" size={25} />
+              <div className="value">واریز تومان</div>
+            </a>
+          </Col>
+          <Col className="services col-6 col-sm-3 col-xxl-2 mx-xxl-2 mx-md-2  m-0 ">
+            <a className="element-box ar-tablo centered trend-in-corner smaller" href="#">
+              <BiSupport color="#111BFF" size={25} />
+              <div className="value">پشتیبانی</div>
+              <div className="trending trending-up">
+                <span>آنلاین</span>
+                <i className="os-icon os-icon-arrow-up6"></i></div>
+            </a>
+          </Col>
+        </Row>
+      </section>
       <section className="mb-4">
         <Card className="custom-card currencies-online-rates card-secondary">
-          <CardHeader className="card-header-flex">
-            <CardTitle tag="h5">بازارهای معاملاتی</CardTitle>
+          <CardHeader className="d-flex flex-row justify-content-between align-items-center">
+            <CardTitle tag="h5" >بازارهای معاملاتی</CardTitle>
             <div className="card-action">
               <Button href="#">مشاهده تمام بازارها</Button>
             </div>
           </CardHeader>
           <CardBody>
             <div className="table-responsive">
-              <table className="table-modern">
+              <table className="table table-borderless table-hover">
                 <thead>
                   <tr>
                     <th scope="col">ارز</th>
@@ -374,11 +383,9 @@ const DashboardContent = () => {
                     <th scope="col" className="text-center">
                       قیمت واحد (تومان)
                     </th>
-
                     <th scope="col" className="text-center">
                       تغییرات 24 ساعته
                     </th>
-
                     <th scope="col" className="text-center"></th>
                   </tr>
                 </thead>
@@ -425,7 +432,7 @@ const DashboardContent = () => {
                     </td>
 
                     <td className="text-center tm__actions">
-                      <a href="#" className="btn-simple">
+                      <a href="#" className="btn btn-simple">
                         شروع معامله
                       </a>
                     </td>
@@ -472,15 +479,16 @@ const DashboardContent = () => {
                     </td>
 
                     <td className="text-center tm__actions">
-                      <a href="#" className="btn-simple">
+                      <a href="#" className="btn btn-simple">
                         شروع معامله
                       </a>
                     </td>
                   </tr>
                 </tbody>
-              </table>{" "}
+              </table>
             </div>
           </CardBody>
+
         </Card>
       </section>
     </>
