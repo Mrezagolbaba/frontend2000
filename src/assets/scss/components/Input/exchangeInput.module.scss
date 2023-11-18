@@ -115,3 +115,20 @@
     font-size: 1em;
   }
 }
+
+.detail {
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+  border-radius: 10px;
+  border: none;
+  justify-content: space-between;
+  background-color: #f8f8f8;
+  margin-top: 10px;
+  padding: 10px;
+  svg {
+    margin-left: 5px;
+    font-size: 1.2rem;
+    color: #03041b;
+  }
+}

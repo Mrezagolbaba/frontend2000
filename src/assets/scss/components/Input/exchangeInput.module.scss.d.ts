@@ -6,5 +6,6 @@ declare const classNames: {
   readonly selected: "selected";
   readonly selected__item: "selected__item";
   readonly "dropdown-menu": "dropdown-menu";
+  readonly detail: "detail";
 };
 export = classNames;

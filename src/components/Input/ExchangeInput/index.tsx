@@ -7,15 +7,15 @@ import tetter from "assets/img/coins/tether.svg";
 import Euro from "assets/img/coins/Euro.png";
 import TRX from "assets/img/coins/trx.png";
 import { useState } from "react";
-import exchange from "assets/scss/components/Input/exchangeInput.module.scss";
 import {
-  Col,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
-  Row,
 } from "reactstrap";
+import AmountDetails from "./AmountDetails";
+
+import exchange from "assets/scss/components/Input/exchangeInput.module.scss";
 
 const options = [
   {
@@ -46,6 +46,8 @@ type Props = {
   hasError?: boolean;
   onChangeCoin?: (value) => void;
   defaultValue?: string;
+  defaultCurrency?: any;
+  wallets?: any;
 };
 
 export default function ExchangeInput({
@@ -56,65 +58,72 @@ export default function ExchangeInput({
   decimalsLimit = 0,
   placeholder = "مبلغ به",
   onChangeCoin,
-  defaultValue
+  defaultValue,
+  defaultCurrency = "IRR",
+  wallets,
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(options[0]);
+  const [selected, setSelected] = useState(
+    options.find((option) => option.value === defaultCurrency) || options[0]
+  );
 
   const toggle = () => setIsOpen((prevState) => !prevState);
   return (
-    <div className={exchange.wrapper}>
-      <CurrencyInput
-        id={name}
-        name={name}
-        className={`form-control ${exchange.input}`}
-        type="text"
-        defaultValue={value}
-        value={value}
-        decimalsLimit={decimalsLimit}
-        placeholder={placeholder}
-        onValueChange={(value) => value && onChange?.(value)}
-      />
-      <Dropdown isOpen={isOpen} toggle={toggle} className={exchange.dropdown}>
-        <DropdownToggle caret className={exchange["dropdown-btn"]}>
-          <div className={exchange.selected}>
-            <div className={exchange["selected__inner"]}>
-              <div className={exchange["selected__item"]}>
-                <img
-                  src={selected.label.img}
-                  alt="currency-icon"
-                  width={20}
-                  height={20}
-                />
-                {selected.label.text}
+    <>
+      <div className={exchange.wrapper}>
+        <CurrencyInput
+          id={name}
+          name={name}
+          className={`form-control ${exchange.input}`}
+          type="text"
+          defaultValue={value}
+          // value={value}
+          decimalsLimit={decimalsLimit}
+          placeholder={placeholder}
+          onValueChange={(value) => value && onChange?.(value)}
+        />
+        <Dropdown isOpen={isOpen} toggle={toggle} className={exchange.dropdown}>
+          <DropdownToggle caret className={exchange["dropdown-btn"]}>
+            <div className={exchange.selected}>
+              <div className={exchange["selected__inner"]}>
+                <div className={exchange["selected__item"]}>
+                  <img
+                    src={selected.label.img}
+                    alt="currency-icon"
+                    width={20}
+                    height={20}
+                  />
+                  {selected.label.text}
+                </div>
               </div>
             </div>
-          </div>
-        </DropdownToggle>
-        <DropdownMenu className={exchange["dropdown-menu"]}>
-          {options.map((option, index) => (
-            <DropdownItem
-              key={index}
-              onClick={() => {
-                onChangeCoin?.(option.value);
-                setSelected(option);
-              }}
-            >
-              <div>
-                <img
-                  src={option.label.img}
-                  alt=""
-                  className="bs-icon"
-                  width={20}
-                  height={20}
-                  style={{ marginLeft: "5px" }}
-                />
-                <span style={{ fontSize: "12px" }}> {option.label.text}</span>
-              </div>
-            </DropdownItem>
-          ))}
-        </DropdownMenu>
-      </Dropdown>
-    </div>
+          </DropdownToggle>
+          <DropdownMenu className={exchange["dropdown-menu"]}>
+            {options.map((option, index) => (
+              <DropdownItem
+                key={index}
+                onClick={() => {
+                  onChangeCoin?.(option.value);
+                  setSelected(option);
+                }}
+              >
+                <div>
+                  <img
+                    src={option.label.img}
+                    alt=""
+                    className="bs-icon"
+                    width={20}
+                    height={20}
+                    style={{ marginLeft: "5px" }}
+                  />
+                  <span style={{ fontSize: "12px" }}> {option.label.text}</span>
+                </div>
+              </DropdownItem>
+            ))}
+          </DropdownMenu>
+        </Dropdown>
+      </div>
+      <AmountDetails wallets={wallets} value={selected.value} />
+    </>
   );
 }

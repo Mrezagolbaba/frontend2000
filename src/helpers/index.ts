@@ -134,9 +134,9 @@ export const isPasswordValid = (password: string) => {
 
   return isValid;
 };
-export function convertIRRToToman(number: number): number {
+export function convertIRRToToman(number: number | string): number {
   // Convert the number to an integer
-  const integerPart: number = Math.floor(number);
+  const integerPart: number = Math.floor(Number(number));
 
   // Convert the integer to a string and extract the first four characters
   const result: string = integerPart.toString().slice(0, 4);
@@ -150,17 +150,17 @@ export const rialToToman = (rialAmount: number): number => {
 };
 export const convertText = (text, direction) => {
   const currencyMap = {
-    'enToFa': {
-      'USDT': 'تتر',
-      'TRY': 'لیر',
-      'IRR': 'تومان',
-      'TRX': 'ترون',
+    enToFa: {
+      USDT: "تتر",
+      TRY: "لیر",
+      IRR: "تومان",
+      TRX: "ترون",
     },
-    'faToEn': {
-      'تتر': 'USDT',
-      'لیر': 'TRY',
-      'تومان': 'IRR',
-      'ترون': 'TRX',
+    faToEn: {
+      تتر: "USDT",
+      لیر: "TRY",
+      تومان: "IRR",
+      ترون: "TRX",
     },
   };
 
