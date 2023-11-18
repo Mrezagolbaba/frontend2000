@@ -432,10 +432,7 @@ const DashboardContent = () => {
           <Col xxl={7} xl={6}>
             <Card className="custom-card currencies-online-rates card-secondary">
               <CardHeader className="d-flex flex-row justify-content-between align-items-center">
-                <CardTitle tag="h5" >بازارهای معاملاتی</CardTitle>
-                <div className="card-action">
-                  <Button href="#">مشاهده تمام بازارها</Button>
-                </div>
+                <CardTitle tag="h5" >آخرین معاملات </CardTitle>
               </CardHeader>
               <CardBody>
                 <div className="table-responsive">
