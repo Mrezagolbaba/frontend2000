@@ -17,6 +17,7 @@ import {
 import AmountDetails from "./AmountDetails";
 
 import exchange from "assets/scss/components/Input/exchangeInput.module.scss";
+import { convertIRRToToman } from "helpers";
 
 const options = [
   {
@@ -70,9 +71,9 @@ export default function ExchangeInput({
   const [rate, setRate] = useState<number | undefined>();
 
   const handleChange = (val: string | number) => {
-    if (Number(value) > Number(wallet.availableBalance))
+    if (Number(value) > Number(convertIRRToToman(wallet.availableBalance))) {
       onError?.("مبلغ وارد شده از موجودی شما بیش تر است.");
-    else onError?.(null);
+    } else onError?.(null);
     onChange?.(val, selected.value, rate);
   };
 

@@ -3,27 +3,18 @@ import React, { useState } from "react";
 import buy from "./styles.module.scss";
 import { Col, Input, Row } from "reactstrap";
 import { convertIRRToToman, convertText } from "helpers";
-import { useForm, useList } from "@refinedev/core";
 
 type Props = {
-  payInfo: any;
-  passInfo: any;
-  commissionCurrency?: string;
-  setCommissionCurrency: React.Dispatch<
-    React.SetStateAction<string | undefined>
-  >;
-  commissions?: any;
-  passValue: string | number;
+  payValue: any;
+  passValue: any;
+  commission: any;
 };
-export default function WageTable({
-  payInfo,
-  passInfo,
-  commissionCurrency,
-  setCommissionCurrency,
-  commissions,
-  passValue,
-}: Props) {
+export default function WageTable({ payValue, passValue, commission }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [commissionCurrency, setCommissionCurrency] = useState<string>(
+    payValue?.currency
+  );
 
   return (
     <div className={buy.wage}>
@@ -55,15 +46,15 @@ export default function WageTable({
                         className="m-2"
                         checked={
                           commissionCurrency ===
-                          convertText(payInfo?.currency, "faToEn")
+                          convertText(payValue?.currency, "faToEn")
                         }
                         onChange={() => {
                           setCommissionCurrency(
-                            convertText(payInfo?.currency, "faToEn")
+                            convertText(payValue?.currency, "faToEn")
                           );
                         }}
                       />
-                      <label>{convertText(payInfo?.currency, "enToFa")}</label>
+                      <label>{convertText(payValue?.currency, "enToFa")}</label>
                     </div>
                   </Col>
                   <Col lg={5} xs={6}>
@@ -75,36 +66,44 @@ export default function WageTable({
                         className="m-2"
                         checked={
                           commissionCurrency ===
-                          convertText(passInfo?.currency, "faToEn")
+                          convertText(passValue?.currency, "faToEn")
                         }
                         onChange={() => {
                           setCommissionCurrency(
-                            convertText(passInfo?.currency, "faToEn")
+                            convertText(passValue?.currency, "faToEn")
                           );
                         }}
                       />
-                      <label>{convertText(passInfo?.currency, "enToFa")}</label>
+                      <label>
+                        {convertText(passValue?.currency, "enToFa")}
+                      </label>
                     </div>
                   </Col>
                 </Row>
               </td>
               <td className="text-center">
                 {commissionCurrency ===
-                convertText(commissions?.pass.currency, "faToEn")
-                  ? convertIRRToToman(commissions?.get.amount) +
-                    convertText(passInfo?.currency, "enToFa")
-                  : convertIRRToToman(commissions?.pay.amount) +
-                    convertText(payInfo?.currency, "enToFa")}
+                convertText(commission?.pass?.currency, "faToEn")
+                  ? convertIRRToToman(commission?.pass?.amount || 0) +
+                    " " +
+                    convertText(passValue?.currency, "enToFa")
+                  : convertIRRToToman(commission?.pay?.amount || 0) +
+                    " " +
+                    convertText(payValue?.currency, "enToFa")}
               </td>
               <td className="text-center">
                 {commissionCurrency ===
-                convertText(commissions?.pass.currency, "faToEn")
+                convertText(commission?.pass?.currency, "faToEn")
                   ? convertIRRToToman(
-                      Number(passValue) - commissions.get.amount
-                    ) + convertText(passInfo.currency, "enToFa")
+                      Number(passValue) - Number(commission.pass?.amount) || 0
+                    ) +
+                    " " +
+                    convertText(passValue.currency, "enToFa")
                   : convertIRRToToman(
-                      Number(passValue) - commissions.pay.amount
-                    ) + convertText(passInfo.currency, "enToFa")}
+                      Number(passValue) - Number(commission.pay?.amount) || 0
+                    ) +
+                    " " +
+                    convertText(passValue?.currency, "enToFa")}
               </td>
             </tr>
           </tbody>
