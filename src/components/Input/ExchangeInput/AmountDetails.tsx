@@ -9,8 +9,8 @@ import exchange from "assets/scss/components/Input/exchangeInput.module.scss";
 import { isEmpty } from "lodash";
 
 type Props = {
-  value: string;
-  wallets: any;
+  wallet: any;
+  setRate: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 
 const initDetail = {
@@ -20,7 +20,7 @@ const initDetail = {
   ratePerIRR: 0,
 };
 
-export default function AmountDetails({ value, wallets }: Props) {
+export default function AmountDetails({ wallet, setRate }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [detail, setDetail] = useState(initDetail);
 
@@ -32,9 +32,9 @@ export default function AmountDetails({ value, wallets }: Props) {
         currency: convertText(data?.currencyCode, "enToFa") ?? "",
         ratePerIRR: 1,
       });
+      setIsLoading(false);
       return;
     } else {
-      setIsLoading(true);
       const sourceCurrencyCode = convertText(data?.currencyCode, "faToEn");
       try {
         const res = await exchangeRateBYIRR(sourceCurrencyCode);
@@ -56,14 +56,13 @@ export default function AmountDetails({ value, wallets }: Props) {
   };
 
   useEffect(() => {
-    const data =
-      wallets &&
-      wallets.length > 0 &&
-      wallets.find((item) => item?.currencyCode === value);
-    if (Number(value) > 0 || (wallets && wallets.length > 0)) {
-      handleDetail(data);
+    if (wallet) {
+      setIsLoading(true);
+      handleDetail(wallet);
     }
-  }, [value, wallets]);
+  }, [wallet]);
+
+  useEffect(() => setRate(detail?.ratePerIRR), [detail, setRate]);
 
   return (
     <div className={exchange.detail}>

@@ -6,12 +6,13 @@ import Rial from "assets/img/icons/flag-iran.svg";
 import tetter from "assets/img/coins/tether.svg";
 import Euro from "assets/img/coins/Euro.png";
 import TRX from "assets/img/coins/trx.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
+  FormFeedback,
 } from "reactstrap";
 import AmountDetails from "./AmountDetails";
 
@@ -40,47 +41,65 @@ const options = [
 type Props = {
   name: string;
   value: string | number;
-  onChange?: (value: string) => void;
+  onChange?: (amount: string | number, currency: string, rate?: number) => void;
   placeholder?: string;
   decimalsLimit?: number;
-  hasError?: boolean;
   onChangeCoin?: (value) => void;
-  defaultValue?: string;
-  defaultCurrency?: any;
-  wallets?: any;
+  currencyValue: string;
+  wallet?: any;
+  error?: any;
+  onError?: (text: string | null) => void;
 };
 
 export default function ExchangeInput({
   name,
   value,
-  hasError = false,
+  error,
   onChange,
   decimalsLimit = 0,
   placeholder = "مبلغ به",
   onChangeCoin,
-  defaultValue,
-  defaultCurrency = "IRR",
-  wallets,
+  currencyValue,
+  wallet,
+  onError,
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(
-    options.find((option) => option.value === defaultCurrency) || options[0]
+    options.find((option) => option.value === currencyValue) || options[0]
   );
+  const [rate, setRate] = useState<number | undefined>();
+
+  const handleChange = (val: string | number) => {
+    if (Number(value) > Number(wallet.availableBalance))
+      onError?.("مبلغ وارد شده از موجودی شما بیش تر است.");
+    else onError?.(null);
+    onChange?.(val, selected.value, rate);
+  };
+
+  useEffect(() => {
+    if (rate) handleChange(value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rate]);
 
   const toggle = () => setIsOpen((prevState) => !prevState);
   return (
     <>
-      <div className={exchange.wrapper}>
+      <div
+        className={`${exchange.wrapper} ${error ? exchange["has-error"] : ""} `}
+      >
         <CurrencyInput
           id={name}
           name={name}
-          className={`form-control ${exchange.input}`}
+          className={`form-control ${error ? "is-invalid" : ""} ${
+            exchange.input
+          }`}
           type="text"
-          defaultValue={value}
-          // value={value}
+          value={value}
           decimalsLimit={decimalsLimit}
           placeholder={placeholder}
-          onValueChange={(value) => value && onChange?.(value)}
+          onValueChange={(val) =>
+            val === undefined ? handleChange(" ") : handleChange(val)
+          }
         />
         <Dropdown isOpen={isOpen} toggle={toggle} className={exchange.dropdown}>
           <DropdownToggle caret className={exchange["dropdown-btn"]}>
@@ -123,7 +142,7 @@ export default function ExchangeInput({
           </DropdownMenu>
         </Dropdown>
       </div>
-      <AmountDetails wallets={wallets} value={selected.value} />
+      <AmountDetails setRate={setRate} wallet={wallet} />
     </>
   );
 }

@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import Dialog from "components/Dialog";
 import ExchangeInput from "components/Input/ExchangeInput";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsTag } from "react-icons/bs";
 import { CiWallet } from "react-icons/ci";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
@@ -23,12 +23,19 @@ import buy from "./styles.module.scss";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, useList } from "@refinedev/core";
 import { convertIRRToToman, convertText } from "helpers";
-import WageTable from "./WageTable";
-import toast from "react-hot-toast";
+import { AlertDanger } from "components/AlertWidget";
 
 type ExchangeFormType = {
-  amount1: string;
-  amount2: string;
+  pay: {
+    amount: string | number;
+    currency: string;
+    rate?: number;
+  };
+  pass: {
+    amount: string | number;
+    currency: string;
+    rate?: number;
+  };
 };
 
 const initialDetailIRR = {
@@ -47,26 +54,28 @@ const initialDetailTRY = {
 
 const resolver = yupResolver(
   Yup.object().shape({
-    amount1: Yup.string().required(),
-    amount2: Yup.string().required(),
+    pay: Yup.object({
+      amount: Yup.lazy((val) =>
+        typeof val === "string"
+          ? Yup.string().required()
+          : Yup.number().required()
+      ),
+      currency: Yup.string().required(),
+    }),
+    pass: Yup.object({
+      amount: Yup.lazy((val) =>
+        typeof val === "string"
+          ? Yup.string().required()
+          : Yup.number().required()
+      ),
+      currency: Yup.string().required(),
+    }),
   })
 );
 
 export default function BuySell() {
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
-  const [payInfo, setPayInfo] = useState(initialDetailIRR);
-  const [passInfo, setPassInfo] = useState(initialDetailTRY);
-  const [commissionCurrency, setCommissionCurrency] = useState<string>();
-  const [commissions, setCommissions] = useState({
-    pay: {
-      amount: 0,
-      currency: "",
-    },
-    pass: {
-      amount: 0,
-      currency: "",
-    },
-  });
+
   const {
     data: wallets,
     isSuccess,
@@ -87,79 +96,30 @@ export default function BuySell() {
     handleSubmit,
     control,
     getValues,
+    setValue,
+    setError,
+    clearErrors,
     reset,
     formState: { errors },
   } = useRHF<ExchangeFormType>({
     mode: "onChange",
     defaultValues: {
-      amount1: "",
-      amount2: "",
+      pay: { currency: "IRR", amount: "", rate: undefined },
+      pass: { currency: "TRY", amount: "", rate: undefined },
     },
     resolver,
   });
-
-  const handleCommission = async () => {
-    const payValue = getValues("amount1");
-
-    console.log(payInfo, passInfo);
-    if (!payValue) {
-      toast.error("لطفا مقادیر را برای تبدیل وارد کنید");
-      return;
-    }
-    if (payInfo.currency === passInfo.currency) {
-      toast.error("نمیتوانید ارز یکسان را تبدیل کنید");
-      return;
-    }
-    const data = {
-      sourceCurrencyCode: convertText(payInfo.currency, "faToEn"),
-      sourceAmount: payValue,
-      destinationCurrencyCode: convertText(passInfo.currency, "faToEn"),
-      feeCurrencyCode: convertText(payInfo.currency, "faToEn"),
-    };
-
-    await handleSwaps(data);
-  };
 
   const onSubmit = (data) => {
     console.log(data);
   };
 
-  const handlePayInfo = (data: any) => {
-    if (data.currencyCode === "IRR") {
-      setPayInfo({
-        balance: data?.balance ?? "0",
-        availableBalance: data?.availableBalance ?? "0",
-        currency: convertText(data?.currencyCode, "enToFa") ?? "",
-        ratePerIRR: 1,
-      });
-      return;
-    }
-  };
-
-  const handlePassInfo = (data: any) => {
-    if (data.currencyCode === "IRR") {
-      setPassInfo({
-        balance: data?.balance ?? "0",
-        availableBalance: data?.availableBalance ?? "0",
-        currency: convertText(data?.currencyCode, "enToFa") ?? "",
-        ratePerIRR: 1,
-      });
-      return;
-    }
-  };
-
-  const handleSelectAsset = (value: string, action: string) => {
-    reset({ amount1: "", amount2: "" });
-    const data =
-      wallets && wallets.data.length > 0
-        ? wallets.data.find((item: any) => item.currencyCode === value)
-        : null;
-    setCommissionCurrency(value);
-    if (action === "pay" && data) {
-      handlePayInfo(data);
-    } else if (action === "pass" && data) {
-      handlePassInfo(data);
-    }
+  const handleErrors = (name, text) => {
+    setError(name, {
+      type: "custom",
+      message: text,
+    });
+    if (text === null) clearErrors(name);
   };
 
   return (
@@ -188,7 +148,7 @@ export default function BuySell() {
                     className="px-4"
                     onClick={() => setIsOpenDialog(true)}
                   >
-                    واریز {convertText(payInfo.currency, "enToFa")}
+                    واریز {convertText(getValues("pay").currency, "enToFa")}
                   </Button>
                 </Col>
               </Row>
@@ -198,95 +158,86 @@ export default function BuySell() {
                 onSubmit={handleSubmit(onSubmit)}
                 className={buy["formContainer"]}
               >
+                <Row>
+                  {errors.pay && (
+                    <Col xs={12}>
+                      <AlertDanger
+                        hasIcon
+                        text={errors?.pay?.message}
+                        key="amount-error"
+                      />
+                    </Col>
+                  )}
+                </Row>
                 <Row style={{ justifyContent: "center" }}>
                   <Col xs={6}>
                     <Controller
                       control={control}
-                      name="amount1"
-                      render={({ field: { name, value, onChange } }) => (
+                      name="pay"
+                      render={({ field: { name, value } }) => (
                         <div className="currency-exchange__control-group">
                           <label className="form-label">پرداخت می‌کنید:</label>
                           <ExchangeInput
                             name={name}
-                            value={value}
-                            onChange={(e) => {
-                              onChange(e);
-                              handleCommission();
+                            value={value.amount}
+                            error={errors?.[name]}
+                            onError={(text) => handleErrors(name, text)}
+                            onChange={(val, currency, rate) => {
+                              setValue("pay", {
+                                amount: val,
+                                currency: currency,
+                                rate: rate,
+                              });
+                              const passValue = getValues("pass");
+                              passValue &&
+                                passValue.rate &&
+                                setValue("pass", {
+                                  ...passValue,
+                                  amount: Number(val) * passValue.rate,
+                                });
                             }}
-                            defaultCurrency={initialDetailIRR.currency}
-                            wallets={wallets?.data}
-                            onChangeCoin={(val) =>
-                              handleSelectAsset(val, "pay")
-                            }
+                            currencyValue={value.currency}
+                            wallet={wallets?.data.find(
+                              (wallet) =>
+                                wallet?.currencyCode === value.currency
+                            )}
                           />
-                          {/* <div className={buy.amount}>
-                            <div>
-                              <CiWallet />
-                              <span className="title">موجودی در دسترس: </span>
-                              <span className="value">
-                                {payInfo.availableBalance}
-                                {convertText(payInfo.currency, "enToFa")}
-                              </span>
-                            </div>
-                            <div>
-                              <BsTag />
-                              <span className="title">
-                                نرخ {convertText(payInfo.currency, "enToFa")} :
-                              </span>
-                              <span className="value">
-                                {convertIRRToToman(payInfo.ratePerIRR)} تومان
-                              </span>
-                            </div>
-                          </div> */}
                         </div>
                       )}
                     />
-                    {/* On extra small screens, take up the full width */}
                   </Col>
-                  {/* <Col lg={1} xs={12} style={{ justifyContent: 'center', alignItems: 'center' }}>
-                    <TbArrowsExchange2 size={30} />
-                  </Col> */}
+
                   <Col xs={6}>
                     <Controller
                       control={control}
-                      name="amount2"
-                      render={({ field: { name, value, onChange } }) => (
+                      name="pass"
+                      render={({ field: { name, value } }) => (
                         <div className="currency-exchange__control-group">
                           <label className="form-label">دریافت می‌کنید:</label>
                           <ExchangeInput
                             name={name}
-                            value={value}
-                            onChange={(e) => {
-                              onChange(e);
-                              handleCommission();
+                            value={value.amount}
+                            error={errors?.[name]}
+                            // onError={(text) => handleErrors(name, text)}
+                            onChange={(val, currency, rate) => {
+                              setValue("pass", {
+                                amount: val,
+                                currency: currency,
+                                rate: rate,
+                              });
+                              const payValue = getValues("pay");
+                              rate &&
+                                setValue("pay", {
+                                  ...payValue,
+                                  amount: Math.trunc(Number(val) * rate),
+                                });
                             }}
-                            defaultCurrency={initialDetailTRY.currency}
-                            wallets={wallets?.data}
-                            onChangeCoin={(val) =>
-                              handleSelectAsset(val, "pass")
-                            }
+                            currencyValue={value.currency}
+                            wallet={wallets?.data.find(
+                              (wallet) =>
+                                wallet?.currencyCode === value.currency
+                            )}
                           />
-                          {/* <div className={buy.amount}>
-                            <div>
-                              <CiWallet />
-                              <span className="title">موجودی در دسترس: </span>
-                              <span className="value">
-                                {Number(
-                                  passInfo.availableBalance
-                                ).toLocaleString("IRR")}
-                                {convertText(passInfo.currency, "enToFa")}
-                              </span>
-                            </div>
-                            <div>
-                              <BsTag />
-                              <span className="title">
-                                نرخ {convertText(passInfo.currency, "enToFa")} :
-                              </span>
-                              <span className="value">
-                                {passInfo.ratePerIRR} تومان
-                              </span>
-                            </div>
-                          </div> */}
                         </div>
                       )}
                     />
@@ -294,14 +245,14 @@ export default function BuySell() {
                 </Row>
                 <Row>
                   <Col xs={12}>
-                    <WageTable
+                    {/* <WageTable
                       commissionCurrency={commissionCurrency}
                       setCommissionCurrency={setCommissionCurrency}
                       payInfo={payInfo}
                       passInfo={passInfo}
                       commissions={commissions}
-                      passValue={getValues("amount2")}
-                    />
+                      passValue={getValues("passAmount")}
+                    /> */}
                   </Col>
                 </Row>
                 <div className={buy.currencyExchangeAction}>
