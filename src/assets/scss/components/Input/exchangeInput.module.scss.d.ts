@@ -1,7 +1,6 @@
 declare const classNames: {
   readonly wrapper: "wrapper";
   readonly "has-error": "has-error";
-  readonly "error-text": "error-text";
   readonly input: "input";
   readonly dropdown: "dropdown";
   readonly "dropdown-btn": "dropdown-btn";
