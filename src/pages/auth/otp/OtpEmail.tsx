@@ -67,10 +67,7 @@ const OtpEmail = () => {
     };
     await sendOtp(formData)
       .then((res) => {
-        toast.error("ایمیل شما با موفقیت تایید شد.", {
-          position: "bottom-left",
-        });
-        res && navigate("/login");
+        res && navigate("/dashboard");
       })
       .catch((err) => handleErrors(err));
   };
