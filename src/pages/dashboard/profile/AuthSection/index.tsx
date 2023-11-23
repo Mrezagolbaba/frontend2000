@@ -88,7 +88,7 @@ const AuthSection = () => {
     }
   };
   return (
-    <Card className="mb-4">
+    <Card className="mb-4" id="kyc-section">
       <CardHeader>
         <CardTitle tag="h5">احراز هویت</CardTitle>
       </CardHeader>
