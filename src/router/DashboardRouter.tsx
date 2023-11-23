@@ -34,7 +34,7 @@ const DashboardRouter = {
     {
       path: "invoice",
       element: <ProtectedRoute children={<Invoice />} />,
-    }
+    },
   ],
 };
 

@@ -56,7 +56,7 @@ export default function ExchangeInput({
   decimalsLimit = 0,
   placeholder = "مبلغ به",
   onChangeCoin,
-  defaultValue
+  defaultValue,
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(options[0]);
