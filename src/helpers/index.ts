@@ -143,9 +143,9 @@ export function convertIRRToToman(number: number | string): number {
 
   return parseInt(result, 10);
 }
-export const rialToToman = (rialAmount: number): number => {
+export const rialToToman = (rialAmount: number | string): number => {
   // Assuming 1 Toman is equal to 10 Rials
-  const tomanAmount = rialAmount / 10;
+  const tomanAmount = Math.floor(Number(rialAmount) / 10);
   return tomanAmount;
 };
 export const convertText = (text, direction) => {

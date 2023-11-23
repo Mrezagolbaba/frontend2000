@@ -5,7 +5,7 @@ type RequestType = {
   userId: string;
 };
 export const getCurrencySwap = async ({ userId }: RequestType) => {
-  console.log(userId)
+  console.log(userId);
   try {
     const response = await request.get(`/currency-swaps`);
     return response.data;
@@ -15,60 +15,52 @@ export const getCurrencySwap = async ({ userId }: RequestType) => {
     toast.error(errorMessage, { position: "bottom-left" });
     throw new Error(errorMessage);
   }
-}
+};
 interface RequestExchange {
-  sourceCurrencyCode: string,
-  sourceAmount: string,
-  destinationCurrencyCode: string,
-  feeCurrencyCode: string
+  sourceCurrencyCode: string;
+  sourceAmount: string | number;
+  destinationCurrencyCode: string;
+  feeCurrencyCode: string;
+  dry_run?: boolean;
+}
 
-}
-export const exchangeCurrencySwap = async ({
-  sourceCurrencyCode,
-  sourceAmount,
-  destinationCurrencyCode,
-  feeCurrencyCode
-}: RequestExchange) => {
-  try {
-    const response = await request.post(`/currency-swaps`, {
-      sourceCurrencyCode,
-      sourceAmount,
-      destinationCurrencyCode,
-      feeCurrencyCode
-    })
-    return response.data;
-  } catch (error: any) {
-    const errorMessage =
-      error.response?.data?.message || "An error occurred. Please try again.";
-    toast.error(errorMessage, { position: "bottom-left" });
-    throw new Error(errorMessage);
-  }
-}
 interface ExchangeRateData {
   expiresAt: string;
   pair: string;
   rate: string;
 }
-export const exchangeRateBYIRR = async (sourceCurrencyCode:string) => {
+interface ExchangeRateReq {
+  sourceCode: string;
+  destinationCode?: string;
+}
+export const exchangeRate = async ({
+  sourceCode,
+  destinationCode = "IRR",
+}: ExchangeRateReq) => {
   const res = await request.get<ExchangeRateData>(
-    `rates/${sourceCurrencyCode}-IRR`
+    `rates/${sourceCode}-${destinationCode}`
   );
   return res.data;
-}
+};
 
-export const exchanteCommission = async ({
+export const exchangeReq = async ({
   sourceCurrencyCode,
   sourceAmount,
   destinationCurrencyCode,
-  feeCurrencyCode
+  feeCurrencyCode,
+  dry_run,
 }: RequestExchange) => {
+
   try {
-    const response = await request.post(`/currency-swaps?dry_run=true`, {
-      sourceCurrencyCode,
-      sourceAmount,
-      destinationCurrencyCode,
-      feeCurrencyCode
-    })
+    const response = await request.post(
+      `/currency-swaps${dry_run ? "?dry_run=true" : ""}`,
+      {
+        sourceCurrencyCode,
+        sourceAmount,
+        destinationCurrencyCode,
+        feeCurrencyCode,
+      }
+    );
     return response.data;
   } catch (error: any) {
     const errorMessage =
@@ -76,4 +68,4 @@ export const exchanteCommission = async ({
     toast.error(errorMessage, { position: "bottom-left" });
     throw new Error(errorMessage);
   }
-}
+};
