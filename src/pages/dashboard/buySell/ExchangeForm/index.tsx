@@ -77,7 +77,7 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
         }
         setIsLoading(false);
       } catch (error) {}
-    } else {
+    } else if (!dry) {
       toast.error("لطفا مبلغ مورد نظر خود برای تبدیل را انتخاب کنید.", {
         position: "bottom-left",
       });

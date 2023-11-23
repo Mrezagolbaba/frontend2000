@@ -44,10 +44,6 @@ const FloatInput = (props: Props) => {
         value={value}
         onChange={onChange}
         {...inputProps}
-        style={type === 'email' || 'password' ? {
-          direction: 'ltr',
-          textAlign: 'left'
-        } : null}
       />
       <label htmlFor={name} className={`${labelClass} ${isPrefix}`}>
         {label} {requiredMark}
