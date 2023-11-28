@@ -2,7 +2,6 @@ import Layout from "layouts/dashboard";
 
 const Support = () => {
   return (
-    <Layout>
       <section className="page page-support">
         <div className="card card-secondary">
           <div className="card-header card-header-flex">
@@ -150,8 +149,6 @@ const Support = () => {
                                   xmlns="http://www.w3.org/2000/svg"
                                 >
                                   <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
                                     d="M10.2803 1.30176H4.73699C3.02116 1.30176 1.54199 2.69259 1.54199 4.40926V13.3568C1.54199 15.1701 2.92366 16.5959 4.73699 16.5959H11.3937C13.1103 16.5959 14.502 15.0734 14.502 13.3568V5.69842L10.2803 1.30176Z"
                                     stroke="#03041B"
                                     strokeWidth="1.5"
@@ -208,7 +205,6 @@ const Support = () => {
           </div>
         </div>
       </section>
-    </Layout>
   );
 };
 export default Support;

@@ -6,6 +6,10 @@ import Dashboard from "pages/dashboard";
 import BuySell from "pages/dashboard/buySell";
 import Profile from "pages/dashboard/profile";
 import Invoice from "pages/dashboard/invoice";
+import Orders from "pages/dashboard/orders";
+import { TransactionList } from "pages/dashboard/transactions";
+import Support from "pages/dashboard/support";
+import Market from "pages/dashboard/market";
 
 const DashboardRouter = {
   path: "dashboard",
@@ -34,7 +38,24 @@ const DashboardRouter = {
     {
       path: "invoice",
       element: <ProtectedRoute children={<Invoice />} />,
+    },
+    {
+      path: "orders",
+      element: <ProtectedRoute children={<Orders />} />,
+    },
+    {
+      path: "transactions",
+      element: <ProtectedRoute children={<TransactionList />} />,
+    },
+    {
+      path: "support",
+      element: <ProtectedRoute children={<Support />} />,
+    },
+    {
+      path:"market",
+      element: <ProtectedRoute children={<Market />} />,
     }
+
   ],
 };
 

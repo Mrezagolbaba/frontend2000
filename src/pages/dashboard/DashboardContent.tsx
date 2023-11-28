@@ -19,6 +19,8 @@ import { LuDownload } from "react-icons/lu";
 import { BiSupport } from "react-icons/bi";
 import { IoIosArrowDown, IoIosArrowDropup } from "react-icons/io";
 import { IoIosArrowDropdown } from "react-icons/io";
+import { CgDanger } from "react-icons/cg";
+import useSession from "services/auth/session";
 // import CurrencyInput from "../../components/currencyInput";
 import {
   Button,
@@ -34,52 +36,23 @@ import { CiEdit } from "react-icons/ci";
 import "./style.scss";
 
 import { useGetMe } from "services/auth/user";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { setUser } from "redux/features/user/userSlice";
 import ExchangeInput from "components/Input/ExchangeInput";
-
-const dataArray = [
-  { value: "0.00256", number: "45،154", time: "11:30" },
-  { value: "0.00256", number: "45،154", time: "11:30" },
-  { value: "0.00256", number: "45،154", time: "11:30" },
-  { value: "0.00256", number: "45،154", time: "11:30" },
-  { value: "0.00256", number: "45،154", time: "11:30" },
-  { value: "0.00256", number: "45،154", time: "11:30" },
-  { value: "0.00256", number: "45،154", time: "11:30" },
-];
-const secondDummyData = [
-  { type: 'خرید', market: 'بیتکوین - ریال', amount: '0.004524567', price: '32,322,345', date: '01/06/08 - 11:34', color: 'text-success' },
-  { type: 'فروش', market: 'بیتکوین - ریال', amount: '0.004524567', price: '32,322,345', date: '01/06/08 - 11:34', color: 'text-danger' },
-  { type: 'فروش', market: 'بیتکوین - ریال', amount: '0.004524567', price: '32,322,345', date: '01/06/08 - 11:34', color: 'text-danger' },
-  { type: 'خرید', market: 'بیتکوین - ریال', amount: '0.004524567', price: '32,322,345', date: '01/06/08 - 11:34', color: 'text-success' },
-  // Add more items as needed
-];
-const dummyData = [
-  { value: '0.00256', color: 'text-success', amount: '45،154', time: '11:30' },
-  { value: '0.00256', color: 'text-danger', amount: '45،154', time: '11:30' },
-  { value: '0.00256', color: 'text-success', amount: '45،154', time: '11:30' },
-  // Add more dummy data items as needed
-];
-const dataArray2 = [
-  {
-    type: "خرید",
-    currency: "بیتکوین - ریال",
-    value: "0.004524567",
-    number: "32,322,345",
-    time: "01/06/08 - 11:34",
-  },
-  {
-    type: "فروش",
-    currency: "بیتکوین - ریال",
-    value: "0.004524567",
-    number: "32,322,345",
-    time: "01/06/08 - 11:34",
-  },
-  // Add more data objects as needed
-];
+import { Isessions } from "types/user";
+import moment from "jalali-moment";
+import { getCurrencySwap } from "services/exchange";
+import { getTransactionsList } from "redux/features/transaction/transactionSlice";
+import { getExchangeList } from "redux/features/exchange/exchangeSlice";
+import { convertText, convertTextSingle } from "helpers";
 
 const DashboardContent = () => {
+  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
+  const transactions = useAppSelector((state) => state.transaction);
+  const exchange = useAppSelector((state) => state.exchange);
+  const [lastSession, setLastSession] = useState('')
+  const session = useSession()
 
   const { firstName, lastName } = user;
   const settings = {
@@ -93,11 +66,51 @@ const DashboardContent = () => {
     cssEase: "linear",
     loop: true,
   };
+  const getSession = async () => {
+    try {
+      await session.mutateAsync({}).then((res) => {
+        const transformedArray = res.map((item) => {
+          return item;
+        });
+        const lastItem = transformedArray[transformedArray.length - 1];
+        setLastSession(
+          moment(lastItem.createdAt).locale('fa').format(' DD MMMM YYYY')
+        )
+      })
+
+    } catch (err) {
+
+    }
+  }
+  useEffect(() => {
+    dispatch(getExchangeList(user.id))
+    dispatch(getTransactionsList(user.id))
+    getSession()
+
+  }, [])
 
   const handleExchange = () => {
     console.log("handleExchange");
   }
-
+  const convertType = (type: string) => {
+    if (type === 'DEPOSIT') {
+      return 'واریز'
+    }
+    if (type === 'WITHDRAW') {
+      return 'برداشت'
+    }
+    if (type === 'BUY') {
+      return 'خرید'
+    }
+    if (type === 'SELL') {
+      return 'فروش'
+    } if (type === 'EXCHANGE_SOURCE' || type === 'EXCHANGE_DESTINATION') {
+      return 'تبدیل'
+    }
+  }
+  const tableBodyStyle: any = transactions.data.length > 10
+    ? { maxHeight: '300px', overflowY: 'auto' }
+    : '';
   return (
     <>
       <section className="mb-3">
@@ -118,7 +131,7 @@ const DashboardContent = () => {
                 <h6>آخرین ورود</h6>
                 <div className="user-summary-date">
                   <BsCalendar2Event />
-                  دوشنبه، 22 آبان 1401
+                  {lastSession}
                 </div>
               </Col>
             </Row>
@@ -134,7 +147,7 @@ const DashboardContent = () => {
           </CardHeader>
           <CardBody>
             <Row className="g-4">
-              <Col xxl={6}>
+              <Col xxl={5}>
                 <div className="auth-jumbotron__summary">
                   <p>
                     برای استفاده کامل و بدون محدودیت از آرسونیکس باید فرایند
@@ -142,7 +155,7 @@ const DashboardContent = () => {
                     &zwnj;می&zwnj;باشد.{" "}
                   </p>
                   <Button outline color="primary">
-                    شروع احراز هویت
+                    شروع احراز هویت سطح دو
                   </Button>
                 </div>
               </Col>
@@ -172,28 +185,28 @@ const DashboardContent = () => {
                   </li>
                 </ul>
               </Col>
-              <Col xxl={3} md={6}>
+              <Col xxl={4} md={6}>
                 <ul className="auth-jumbotron__advantages">
                   <li>
                     <h5>احراز هویت سطح دو</h5>
                   </li>
                   <li>
-                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    <CgDanger className="icon" size={15} color={"red"} />
                     ﻭﺍﺭﯾﺰ و برداشت ﺗﻮﻣﺎنی ﺭﻭﺯﺍﻧﻪ:
                     <strong>۱۰۰ میلیون تومان - ۱ میلیارد تومان</strong>
                   </li>
                   <li>
-                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    <CgDanger className="icon" size={15} color={"red"} />
                     ﻭﺍﺭﯾﺰ و برداشت فیات ﺭﻭﺯﺍﻧﻪ:
                     <strong>معادل ۳۵ هزار دلار </strong>
                   </li>
                   <li>
-                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    <CgDanger className="icon" size={15} color={"red"} />
                     واریز رمزارز ﺭﻭﺯﺍﻧﻪ:
                     <strong>نامحدود</strong>
                   </li>
                   <li>
-                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    <CgDanger className="icon" size={15} color={"red"} />
                     برداشت رمزارز ﺭﻭﺯﺍﻧﻪ:
                     <strong>نامحدود</strong>
                   </li>
@@ -259,7 +272,7 @@ const DashboardContent = () => {
               <CardHeader className="d-flex flex-row justify-content-between align-items-center">
                 <CardTitle tag="h5"> بازارهای معاملاتی</CardTitle>
                 <div className="card-action">
-                  <Button href="/dashboard/wallet">مشاهده تمام بازارها </Button>
+                  <Button href="/dashboard/market">مشاهده تمام بازارها </Button>
                 </div>
               </CardHeader>
               <CardBody>
@@ -430,33 +443,78 @@ const DashboardContent = () => {
       <section className="mb-4">
         <Row className="gx-4">
           <Col xxl={7} xl={6}>
+            <Card className="ccard--h100pc card-secondary">
+              <CardHeader className="d-flex flex-row justify-content-between align-items-center">
+                <CardTitle tag="h5" >تراکنش&zwnj;های اخیر</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <div className="card-body">
+                  <div className="table-responsive  ">
+                    <table
+                      className="table table-borderless table-striped"
+                    >
+                      <thead>
+                        <tr>
+                          <th scope="col">نوع</th>
+                          <th scope="col" className="text-center">مقدار</th>
+                          <th scope="col" className="text-center">دارایی</th>
+                          <th scope="col" className="text-center">زمان</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {transactions.data.map((data, index) => {
+                          if ((data.type === 'DEPOSIT' || data.type === 'WITHDRAW') && data.status !== 'EXPIRED') {
+                            return (
+                              <tr key={index}>
+                                <td>
+                                  <span className={
+                                    data.type === 'DEPOSIT' ? 'text-success' : 'text-danger'
+                                  }>{convertType(data.type)}</span>
+                                </td>
+                                <td className={`text-center`}>
+                                  <span><span style={{ fontSize: '10px' }}>{data.currencyCode === "IRR" ? "TMN" : data.currencyCode}</span>{" "}{data.amount}</span>
+                                </td>
+                                <td className={`text-center`}>
+                                  <span>{convertTextSingle(data.currencyCode)}</span>
+                                </td>
+                                <td className={`text-center`}>
+                                  <span>{moment(data?.createdAt).locale('fa').format('DD MMMM YYYY')}</span>
+                                </td>
+                              </tr>
+                            )
+                          }
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col xxl={5} xl={6}>
             <Card className="custom-card currencies-online-rates card-secondary">
               <CardHeader className="d-flex flex-row justify-content-between align-items-center">
                 <CardTitle tag="h5" >آخرین معاملات </CardTitle>
               </CardHeader>
               <CardBody>
                 <div className="table-responsive">
-                  <table className="table table-borderless table-hover ">
+                  <table className="table table-borderless table-striped ">
                     <thead>
                       <tr>
-                        <th scope="col">نوع</th>
                         <th scope="col" className="text-center">بازار</th>
                         <th scope="col" className="text-center">مقدار</th>
                         <th scope="col" className="text-center">قیمت واحد</th>
                         <th scope="col" className="text-start">تاریخ</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      {secondDummyData.map((data, index) => (
+                    <tbody className={tableBodyStyle}>
+                      {exchange.data.length > 0 && exchange.data.map((data, index) => (
                         <tr key={index}>
-                          <td>
-                            <span className={data.color}>{data.type}</span>
-                          </td>
-                          <td className="text-center">{data.market}</td>
-                          <td className="text-center">{data.amount}</td>
-                          <td className="text-center">{data.price}</td>
+                          <td className="text-center"><span className="text-success">{convertTextSingle(data.destinationCurrencyCode)}</span>{" "}- {" "}<span className="text-danger">{convertTextSingle(data?.sourceCurrencyCode)}</span></td>
+                          <td className="text-center"><span style={{ fontSize: '10px' }}>{data.destinationCurrencyCode === "IRR" ? "TMN" : data.destinationCurrencyCode}</span>{" "} {data?.sourceAmount}</td>
+                          <td className="text-center">{data?.exchangeRate.substring(0, 5)}</td>
                           <td className="text-start">
-                            <span className="d-ltr d-block">{data.date}</span>
+                            <span className="d-ltr d-block">{moment(data?.createdAt).locale('fa').format('DD MMMM YYYY')}</span>
                           </td>
                         </tr>
                       ))}
@@ -467,47 +525,7 @@ const DashboardContent = () => {
 
             </Card>
           </Col>
-          <Col xxl={5} xl={6}>
-            <Card className="ccard--h100pc card-secondary">
-              <CardHeader className="d-flex flex-row justify-content-between align-items-center">
-                <CardTitle tag="h5" >تراکنش&zwnj;های اخیر</CardTitle>
-              </CardHeader>
-              <CardBody>
-                <div className="card-body">
-                  <div className="table-responsive">
-                    <table
-                      className="table-modern table-modern--compact table table-borderless"
-                    >
-                      <thead>
-                        <tr>
-                          <th scope="col" className="text-center">مقدار (BTC)</th>
-                          <th scope="col" className="text-center">
-                            قیمت واحد (تومان)
-                          </th>
-                          <th scope="col" className="text-center">زمان</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {dummyData.map((data, index) => (
-                          <tr key={index}>
-                            <td className={`text-center ${data.color}`}>
-                              <span>{data.value}</span>
-                            </td>
-                            <td className={`text-center ${data.color}`}>
-                              <span>{data.amount}</span>
-                            </td>
-                            <td className={`text-center ${data.color}`}>
-                              <span>{data.time}</span>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
+
         </Row>
       </section>
     </>

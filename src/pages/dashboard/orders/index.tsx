@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Layout from "layouts/dashboard";
 import { Tabs } from "antd";
 
 const Orders = () => {
@@ -206,7 +205,6 @@ const Orders = () => {
     },
   ];
   return (
-    <Layout>
       <section className="page page-orders">
         <div className="card card-secondary mb-4">
           <div className="card-header">
@@ -537,7 +535,6 @@ const Orders = () => {
           </div>
         </div>
       </section>
-    </Layout>
   );
 };
 export default Orders;

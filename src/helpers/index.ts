@@ -169,3 +169,24 @@ export const convertText = (text, direction) => {
   }
   return text;
 };
+export const convertTextSingle = (text) => {
+  const currencyMap = {
+    'enToFa': {
+      'USDT': 'تتر',
+      'TRY': 'لیر',
+      'IRR': 'تومان',
+      'TRX': 'ترون',
+    },
+    'faToEn': {
+      'تتر': 'USDT',
+      'لیر': 'TRY',
+      'تومان': 'IRR',
+      'ترون': 'TRX',
+    },
+  };
+
+  if (text in currencyMap['enToFa']) {
+    return currencyMap['enToFa'][text];
+  }
+  return text;
+};

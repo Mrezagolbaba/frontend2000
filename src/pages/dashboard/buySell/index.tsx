@@ -22,7 +22,7 @@ import {
   exchangeRateBYIRR,
   exchanteCommission,
   getCurrencySwap,
-} from "services/currencySwap";
+} from "services/exchange";
 import { getAllWallets } from "services/wallet";
 import { convertIRRToToman, convertText, rialToToman } from "helpers";
 import toast from "react-hot-toast";

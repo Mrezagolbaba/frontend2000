@@ -26,7 +26,7 @@ const Header = ({ onSidebarToggle }: Props) => {
               </div>
               <ul className={dashboard.header__navbar}>
                 <li>
-                  <a href="/market">بازارها</a>
+                  <a href="/dashboard/market">بازارها</a>
                 </li>
 
                 <li>

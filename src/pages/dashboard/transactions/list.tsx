@@ -1,4 +1,3 @@
-import Layout from "layouts/dashboard";
 import { useList } from "@refinedev/core";
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 
@@ -6,8 +5,8 @@ export const TransactionList = () => {
   const { data, isSuccess, isError, isLoading } = useList({
     resource: "transactions",
   });
+  console.log(data,'data');
   return (
-    <Layout>
       <section className="page page-wallet">
         <Card className="card-secondary mb-4">
           <CardHeader>
@@ -1045,6 +1044,5 @@ export const TransactionList = () => {
           </div>
         </div>
       </section>
-    </Layout>
   );
 };
