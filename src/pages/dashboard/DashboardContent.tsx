@@ -45,6 +45,7 @@ import { getCurrencySwap } from "services/exchange";
 import { getTransactionsList } from "redux/features/transaction/transactionSlice";
 import { getExchangeList } from "redux/features/exchange/exchangeSlice";
 import { convertText, convertTextSingle } from "helpers";
+import { Link } from "react-router-dom";
 
 const DashboardContent = () => {
   const dispatch = useAppDispatch();
@@ -117,17 +118,34 @@ const DashboardContent = () => {
         <Card className="custom-card user-summary">
           <CardBody>
             <Row className="align-items-start">
-              <Col xs={12} sm={1} className="user-summary__section user-summary-avatar text-center">
+              <Col
+                xs={12}
+                sm={1}
+                className="user-summary__section user-summary-avatar text-center"
+              >
                 <img src={User} alt="" className="avatar" />
               </Col>
-              <Col xs={12} sm={2} className="user-summary__section user-summary-edit text-center text-sm-left">
+              <Col
+                xs={12}
+                sm={2}
+                className="user-summary__section user-summary-edit text-center text-sm-left"
+              >
                 <h6>{firstName + " " + lastName}</h6>
-                <Button className="profile-btn" outline color="secondary" href="/dashboard/profile">
+                <Button
+                  className="profile-btn"
+                  outline
+                  color="secondary"
+                  href="/dashboard/profile"
+                >
                   <CiEdit />
                   پروفایل کاربری
                 </Button>
               </Col>
-              <Col xs={12} sm={2} className="user-summary__section user-summary-lastseen text-center text-sm-left">
+              <Col
+                xs={12}
+                sm={2}
+                className="user-summary__section user-summary-lastseen text-center text-sm-left"
+              >
                 <h6>آخرین ورود</h6>
                 <div className="user-summary-date">
                   <BsCalendar2Event />
@@ -135,7 +153,6 @@ const DashboardContent = () => {
                 </div>
               </Col>
             </Row>
-
           </CardBody>
         </Card>
       </section>
@@ -214,9 +231,12 @@ const DashboardContent = () => {
               </Col>
               <Col xl={12} className="d-none">
                 <div className="auth-jumbotron__summary">
-                  <a href="#" className="btn btn-outline-primary">
+                  <Link
+                    className="btn btn-outline-primary"
+                    to="profile#kyc-section"
+                  >
                     شروع احراز هویت
-                  </a>
+                  </Link>
                 </div>
               </Col>
             </Row>
@@ -236,10 +256,15 @@ const DashboardContent = () => {
                   <Row className="mt-3">
                     <Col xs={12} md={6}>
                       <div className="currency-exchange__control-group">
-                        <label className="form-label" style={{ color: '#03041b66' }}>پرداخت می‌کنید:</label>
+                        <label
+                          className="form-label"
+                          style={{ color: "#03041b66" }}
+                        >
+                          پرداخت می‌کنید:
+                        </label>
                         <ExchangeInput
                           name={"amount"}
-                          value={''}
+                          value={""}
                           onChange={(value) => console.log(value)}
                           onChangeCoin={(e) => console.log(e)}
                         />
@@ -247,10 +272,15 @@ const DashboardContent = () => {
                     </Col>
                     <Col xs={12} md={6}>
                       <div className="currency-exchange__control-group">
-                        <label className="form-label" style={{ color: '#03041b66' }}>دریافت می‌کنید:</label>
+                        <label
+                          className="form-label"
+                          style={{ color: "#03041b66" }}
+                        >
+                          دریافت می‌کنید:
+                        </label>
                         <ExchangeInput
                           name={"amount"}
-                          value={''}
+                          value={""}
                           onChange={(value) => console.log(value)}
                           onChangeCoin={(e) => console.log(e)}
                         />
@@ -259,7 +289,12 @@ const DashboardContent = () => {
                   </Row>
 
                   <div className="mt-5 mb-4 d-flex align-items-center justify-content-center">
-                    <button onClick={handleExchange} type="button" className="btn btn-primary" style={{ padding: "18px 70px" }}>
+                    <button
+                      onClick={handleExchange}
+                      type="button"
+                      className="btn btn-primary"
+                      style={{ padding: "18px 70px" }}
+                    >
                       ثبت و ادامه
                     </button>
                   </div>
@@ -277,7 +312,10 @@ const DashboardContent = () => {
               </CardHeader>
               <CardBody>
                 <div className="table-responsive">
-                  <table id="responsive" className="table-modern table table-borderless">
+                  <table
+                    id="responsive"
+                    className="table-modern table table-borderless"
+                  >
                     <thead>
                       <tr>
                         <th>نام ارز</th>
@@ -296,10 +334,7 @@ const DashboardContent = () => {
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="#000000"
                               >
-                                <g
-                                  id="SVGRepo_bgCarrier"
-                                  stroke-width="0"
-                                ></g>
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                 <g
                                   id="SVGRepo_tracerCarrier"
                                   stroke-linecap="round"
@@ -339,8 +374,9 @@ const DashboardContent = () => {
                           data-th="معامله در بازار
     "
                         >
-                          <a href="#" className="btn-simple tm__actions"
-                          >شروع معامله</a>
+                          <a href="#" className="btn-simple tm__actions">
+                            شروع معامله
+                          </a>
                         </td>
                       </tr>
                       <tr className="tr-responsive">
@@ -352,10 +388,7 @@ const DashboardContent = () => {
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
                               >
-                                <g
-                                  id="SVGRepo_bgCarrier"
-                                  stroke-width="0"
-                                ></g>
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                 <g
                                   id="SVGRepo_tracerCarrier"
                                   stroke-linecap="round"
@@ -386,7 +419,9 @@ const DashboardContent = () => {
                           </div>
                         </td>
                         <td data-th="معامله در بازار">
-                          <a href="#" className="btn-simple tm__actions">شروع معامله</a>
+                          <a href="#" className="btn-simple tm__actions">
+                            شروع معامله
+                          </a>
                         </td>
                       </tr>
                     </tbody>
@@ -403,13 +438,19 @@ const DashboardContent = () => {
             <h6 className="easy-text">دسترسی سریع به خدمات آرسونیکس</h6>
           </Col>
           <Col className="services col-6 col-sm-3 col-xxl-2 mx-xxl-2 mx-md-2 m-0">
-            <a className="element-box ar-tablo centered trend-in-corner smaller" href="/dashboard/buy-sell">
+            <a
+              className="element-box ar-tablo centered trend-in-corner smaller"
+              href="/dashboard/buy-sell"
+            >
               <TbArrowsExchange color="#111BFF" size={25} />
               <div className="value">خرید و فروش</div>
             </a>
           </Col>
           <Col className="services col-6 col-sm-3 col-xxl-2 mx-xxl-2 mx-md-2  m-0">
-            <a className="element-box ar-tablo centered trend-in-corner smaller" href="#">
+            <a
+              className="element-box ar-tablo centered trend-in-corner smaller"
+              href="#"
+            >
               <TbLayersSubtract color="#111BFF" size={25} />
               <div className="value">بازارها</div>
             </a>
@@ -430,12 +471,16 @@ const DashboardContent = () => {
             </a>
           </Col>
           <Col className="services col-6 col-sm-3 col-xxl-2 mx-xxl-2 mx-md-2  m-0 ">
-            <a className="element-box ar-tablo centered trend-in-corner smaller" href="#">
+            <a
+              className="element-box ar-tablo centered trend-in-corner smaller"
+              href="#"
+            >
               <BiSupport color="#111BFF" size={25} />
               <div className="value">پشتیبانی</div>
               <div className="trending trending-up">
                 <span>آنلاین</span>
-                <i className="os-icon os-icon-arrow-up6"></i></div>
+                <i className="os-icon os-icon-arrow-up6"></i>
+              </div>
             </a>
           </Col>
         </Row>
@@ -494,7 +539,7 @@ const DashboardContent = () => {
           <Col xxl={5} xl={6}>
             <Card className="custom-card currencies-online-rates card-secondary">
               <CardHeader className="d-flex flex-row justify-content-between align-items-center">
-                <CardTitle tag="h5" >آخرین معاملات </CardTitle>
+                <CardTitle tag="h5">آخرین معاملات </CardTitle>
               </CardHeader>
               <CardBody>
                 <div className="table-responsive">
@@ -522,10 +567,8 @@ const DashboardContent = () => {
                   </table>
                 </div>
               </CardBody>
-
             </Card>
           </Col>
-
         </Row>
       </section>
     </>
