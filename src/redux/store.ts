@@ -4,6 +4,7 @@ import settingReducer from 'redux/features/settings/settingSlice'
 import invoiceReducer from 'redux/features/invoice/invoiceSlice'
 import transactionReducer from 'redux/features/transaction/transactionSlice'
 import exchangeReducer from 'redux/features/exchange/exchangeSlice'
+import rateReducer from 'redux/features/rates/rateSlice'
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     invoice: invoiceReducer,
     transaction: transactionReducer,
     exchange: exchangeReducer,
+    rates: rateReducer,
   },
 })
 
