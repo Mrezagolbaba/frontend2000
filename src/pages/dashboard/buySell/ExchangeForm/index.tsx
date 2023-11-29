@@ -14,7 +14,7 @@ import WageTable from "./WageTable";
 import { initExchangeContext, useExchangeContext } from "../ContextProvider";
 import { useList } from "@refinedev/core";
 import toast from "react-hot-toast";
-import { exchangeRate, exchangeReq } from "services/currencySwap";
+import { exchangeRate, exchangeReq } from "services/exchange";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { convertText } from "helpers";
 
