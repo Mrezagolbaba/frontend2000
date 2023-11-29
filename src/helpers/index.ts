@@ -190,3 +190,8 @@ export const convertTextSingle = (text) => {
   }
   return text;
 };
+export function extractLeftSide(baseString) {
+  return baseString.includes("/") ? baseString.split("/")[0] : baseString;
+}
+
+      
