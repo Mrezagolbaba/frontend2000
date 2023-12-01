@@ -25,24 +25,15 @@ import profile from "assets/scss/dashboard/profile.module.scss";
 export default function International() {
   const [intRows, setIntRows] = useState([{ id: 0 }]);
   const [selectedCountryCode, setSelectedCountryCode] = useState("TR");
-  const optionList: OptionType[] = [
-    {
-      content: "ترکیه",
-      value: "ترکیه",
+
+
+  const { formLoading, onFinish } = useForm({
+    action: "create",
+    resource: "bank-accounts",
+    onMutationSuccess: (data, variables, context, isAutoSave) => {
+      console.log("looooooooooog", { data, variables, context, isAutoSave });
     },
-    {
-      content: "استرالیا",
-      value: "استرالیا",
-    },
-    {
-      content: "آمریکا",
-      value: "آمریکا",
-    },
-    {
-      content: "انگلستان",
-      value: "انگلستان",
-    },
-  ];
+  });
 
   const resolver = yupResolver(
     Yup.object().shape({
@@ -117,26 +108,6 @@ export default function International() {
                           className="form-control d-rtl"
                           id={`input23_${row.id}`}
                           placeholder="نام صاحب حساب "
-                        />
-                      </Col>
-                    </FormGroup>
-                  )}
-                />
-              </Col>
-              <Col>
-                <Controller
-                  name="country"
-                  control={control}
-                  render={({ field: { name, value, onChange, ref } }) => (
-                    <FormGroup row>
-                      <Col>
-                        <DropdownInput
-                          label="کشور بانک"
-                          id={name}
-                          value={value}
-                          onChange={(val) => setValue(name, val)}
-                          options={optionList}
-                          // hasError={Boolean(errors?.[name])}
                         />
                       </Col>
                     </FormGroup>

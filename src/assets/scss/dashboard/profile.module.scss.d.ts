@@ -12,5 +12,6 @@ declare const classNames: {
   readonly "image-container": "image-container";
   readonly "image-cover": "image-cover";
   readonly "iban-input-control": "iban-input-control";
+  readonly "accounts-field": "accounts-field";
 };
 export = classNames;

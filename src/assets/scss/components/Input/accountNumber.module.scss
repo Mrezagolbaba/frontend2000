@@ -1,0 +1,26 @@
+.input-control {
+  position: relative;
+  width: 100%;
+  input {
+    padding-right: 40px;
+    direction: ltr;
+    &::after {
+      content: "\00a0"; /* Unicode non-breaking space character */
+      white-space: pre; /* Preserve whitespace */
+    }
+  }
+  svg {
+    position: absolute;
+    right: 12px;
+    height: 100%;
+    line-height: 48px;
+    font-size: 1.2rem;
+    box-shadow: none;
+    border-left-color: transparent;
+    border-radius: 10px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border: 0;
+    z-index: 2;
+  }
+}

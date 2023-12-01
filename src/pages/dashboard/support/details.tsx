@@ -1,5 +1,5 @@
 import Layout from "layouts/dashboard";
-import { useAppSelector } from "redux/hooks";
+import { useAppSelector } from "store/hooks";
 
 const Support_details = () => {
   const user = useAppSelector((state) => state.user);

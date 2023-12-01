@@ -11,7 +11,7 @@ import dropdown from "assets/scss/components/Input/dropdown.module.scss";
 export type OptionType = { value: string; content: ReactNode | string };
 
 type Props = {
-  options: OptionType[];
+  options: OptionType[] | [];
   id?: string;
   value: string | number;
   onChange?: (value: string) => void;
@@ -80,24 +80,30 @@ const DropdownInput = ({
           <ul
             className={`${dropdown["custom-dropdown__menu"]} ${dropdown.inner}`}
           >
-            {options.map((option: OptionType, index: number) => {
-              return (
-                <DropdownItem
-                  key={index}
-                  tag="li"
-                  onClick={() => handleOptionSelect(option)}
-                >
-                  <a
-                    role="option"
-                    className={`${dropdown["custom-dropdown__item"]} ${
-                      value === option.value ? dropdown["selected"] : ""
-                    }`}
+            {options?.length > 0 ? (
+              options.map((option: OptionType, index: number) => {
+                return (
+                  <DropdownItem
+                    key={index}
+                    tag="li"
+                    onClick={() => handleOptionSelect(option)}
                   >
-                    {option.content}
-                  </a>
-                </DropdownItem>
-              );
-            })}
+                    <a
+                      role="option"
+                      className={`${dropdown["custom-dropdown__item"]} ${
+                        value === option.value ? dropdown["selected"] : ""
+                      }`}
+                    >
+                      {option.content}
+                    </a>
+                  </DropdownItem>
+                );
+              })
+            ) : (
+              <DropdownItem key={0} tag="li" className="text-center">
+                دیتایی وجود ندارد
+              </DropdownItem>
+            )}
           </ul>
         )}
       </DropdownMenu>

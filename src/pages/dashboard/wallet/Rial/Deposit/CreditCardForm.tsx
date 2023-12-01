@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -20,6 +20,8 @@ import Currency from "components/Input/CurrencyInput";
 import { AlertInfo } from "components/AlertWidget";
 
 import wallet from "../../style.module.scss";
+import { useList } from "@refinedev/core";
+import { formatShowAccount, searchIranianBanks } from "helpers/filesManagement";
 
 type CreditCardForm = {
   accountNumber: string;
@@ -28,6 +30,11 @@ type CreditCardForm = {
 
 const CreditCardForm = () => {
   const [hasAccount, setHasAccount] = useState<boolean>(true);
+  const [optionList, setOptionList] = useState<OptionType[] | []>([]);
+
+  const { data, isSuccess, isLoading, refetch } = useList({
+    resource: `bank-accounts`,
+  });
 
   const resolver = yupResolver(
     Yup.object().shape({
@@ -52,31 +59,29 @@ const CreditCardForm = () => {
     console.log(data);
   };
 
-  const optionList: OptionType[] = [
-    {
-      content: (
-        <div className={wallet["items-credit"]}>
-          <span className={wallet["items-credit__icon"]}>
-            <img alt="بانک پاسارگارد" src={pasargad} className="bank-svg" />
-          </span>
-          <span>5859831058254847</span>
-        </div>
-      ),
-      value: "5859831058254847",
-    },
-    {
-      content: (
-        <div className={wallet["items-credit"]}>
-          <span className={wallet["items-credit__icon"]}>
-            <img alt="بانک سامان" src={saman} className="bank-svg" />
-          </span>
-
-          <span className="text">502229103949549395</span>
-        </div>
-      ),
-      value: "502229103949549395",
-    },
-  ];
+  useEffect(() => {
+    if (isSuccess) {
+      if (data.data.length <= 0) {
+        setHasAccount(false);
+      } else
+        setOptionList(
+          data.data.map((account) => {
+            const bank = searchIranianBanks(account.cardNumber);
+            return {
+              content: (
+                <div className={wallet["items-credit"]}>
+                  <span className={wallet["items-credit__icon"]}>
+                    <img alt={bank.name} src={bank.logo} className="bank-svg" />
+                  </span>
+                  <span dir="ltr">{formatShowAccount(account.cardNumber)}</span>
+                </div>
+              ),
+              value: account.cardNumber,
+            };
+          })
+        );
+    }
+  }, [data?.data, isSuccess]);
 
   return hasAccount ? (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -139,10 +144,15 @@ const CreditCardForm = () => {
       </Row>
       <Row className="mt-4">
         <div className="d-flex flex-row justify-content-evenly">
-          <Button color="primary" outline type="submit">
+          <Button className="px-5 py-3" color="primary" outline type="submit">
             انتقال به درگاه پرداخت
           </Button>
-          <Button color="primary" type="button" onClick={() => {}}>
+          <Button
+            className="px-5 py-3"
+            color="primary"
+            type="button"
+            onClick={() => {}}
+          >
             احراز هویت سطح دو
           </Button>
         </div>

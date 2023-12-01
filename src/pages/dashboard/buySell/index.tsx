@@ -1,22 +1,17 @@
-import { useEffect, } from "react";
-import { useAppSelector } from "redux/hooks";
-import {
-
-  Input,
-} from "reactstrap";
+import { useEffect } from "react";
+import { useAppSelector } from "store/hooks";
+import { Input } from "reactstrap";
 import { Skeleton } from "antd";
 
 import ExchangeInput from "components/Input/ExchangeInput";
 import { CiWallet } from "react-icons/ci";
 import { BsTag } from "react-icons/bs";
 import buy from "./styles.module.scss";
-import {
-  getCurrencySwap,
-} from "services/exchange";
+import { getCurrencySwap } from "services/exchange";
 import { getAllWallets } from "services/wallet";
 import { convertIRRToToman, convertText, rialToToman } from "helpers";
 import toast from "react-hot-toast";
-import { setInvoice } from "redux/features/invoice/invoiceSlice";
+import { setInvoice } from "store/reducers/features/invoice/invoiceSlice";
 import { useNavigate } from "react-router-dom";
 import Dialog from "components/Dialog";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";

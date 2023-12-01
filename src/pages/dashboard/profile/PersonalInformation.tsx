@@ -15,7 +15,7 @@ import {
   Label,
   Row,
 } from "reactstrap";
-import { useAppSelector } from "redux/hooks";
+import { useAppSelector } from "store/hooks";
 import * as Yup from "yup";
 
 import { AlertDanger, AlertSuccess } from "components/AlertWidget";

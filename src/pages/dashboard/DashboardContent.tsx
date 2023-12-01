@@ -11,7 +11,7 @@ import {
 import T from "assets/img/coins/tether.png";
 import Turkey from "assets/img/icons/flag-turkey.png";
 
-import { useAppDispatch, useAppSelector } from "redux/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 
 import { BsCalendar2Event, BsCheck2 } from "react-icons/bs";
 import { TbArrowsExchange, TbLayersSubtract } from "react-icons/tb";
@@ -37,16 +37,15 @@ import "./style.scss";
 
 import { useGetMe } from "services/auth/user";
 import { useEffect, useState } from "react";
-import { setUser } from "redux/features/user/userSlice";
 import ExchangeInput from "components/Input/ExchangeInput";
 import { Isessions } from "types/user";
 import moment from "jalali-moment";
 import { getCurrencySwap } from "services/exchange";
-import { getTransactionsList } from "redux/features/transaction/transactionSlice";
-import { getExchangeList } from "redux/features/exchange/exchangeSlice";
+import { getTransactionsList } from "store/reducers/features/transaction/transactionSlice";
+import { getExchangeList } from "store/reducers/features/exchange/exchangeSlice";
 import { convertText, convertTextSingle, extractLeftSide } from "helpers";
 import { Link } from "react-router-dom";
-import { getRates } from "redux/features/rates/rateSlice";
+import { getRates } from "store/reducers/features/rates/rateSlice";
 
 const DashboardContent = () => {
   const dispatch = useAppDispatch();
@@ -54,8 +53,8 @@ const DashboardContent = () => {
   const transactions = useAppSelector((state) => state.transaction);
   const exchange = useAppSelector((state) => state.exchange);
   const rates = useAppSelector((state) => state.rates);
-  const [lastSession, setLastSession] = useState('')
-  const session = useSession()
+  const [lastSession, setLastSession] = useState("");
+  const session = useSession();
 
   const { firstName, lastName } = user;
   const settings = {
@@ -77,44 +76,42 @@ const DashboardContent = () => {
         });
         const lastItem = transformedArray[transformedArray.length - 1];
         setLastSession(
-          moment(lastItem.createdAt).locale('fa').format(' DD MMMM YYYY')
-        )
-      })
-
-    } catch (err) {
-
-    }
-  }
+          moment(lastItem.createdAt).locale("fa").format(" DD MMMM YYYY")
+        );
+      });
+    } catch (err) {}
+  };
   useEffect(() => {
-    dispatch(getExchangeList(user.id))
-    dispatch(getTransactionsList(user.id))
-    dispatch(getRates())
-    getSession()
-
-  }, [])
+    dispatch(getExchangeList(user.id));
+    dispatch(getTransactionsList(user.id));
+    dispatch(getRates());
+    getSession();
+  }, []);
 
   const handleExchange = () => {
     console.log("handleExchange");
-  }
+  };
   const convertType = (type: string) => {
-    if (type === 'DEPOSIT') {
-      return 'واریز'
+    if (type === "DEPOSIT") {
+      return "واریز";
     }
-    if (type === 'WITHDRAW') {
-      return 'برداشت'
+    if (type === "WITHDRAW") {
+      return "برداشت";
     }
-    if (type === 'BUY') {
-      return 'خرید'
+    if (type === "BUY") {
+      return "خرید";
     }
-    if (type === 'SELL') {
-      return 'فروش'
-    } if (type === 'EXCHANGE_SOURCE' || type === 'EXCHANGE_DESTINATION') {
-      return 'تبدیل'
+    if (type === "SELL") {
+      return "فروش";
     }
-  }
-  const tableBodyStyle: any = transactions.data.length > 10
-    ? { maxHeight: '300px', overflowY: 'auto' }
-    : '';
+    if (type === "EXCHANGE_SOURCE" || type === "EXCHANGE_DESTINATION") {
+      return "تبدیل";
+    }
+  };
+  const tableBodyStyle: any =
+    transactions?.data?.length > 10
+      ? { maxHeight: "300px", overflowY: "auto" }
+      : "";
   return (
     <>
       <section className="mb-3">
@@ -328,20 +325,27 @@ const DashboardContent = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {rates.data.length > 0 && rates.data.map((data, index) => (
-                        <tr className="tr-responsive">
-                          <td data-th="نام ارز">
-                            <div>
-                              <span className="icon">
-                                <img src={data?.image} alt="" />
+                      {rates.data.length > 0 &&
+                        rates.data.map((data, index) => (
+                          <tr className="tr-responsive">
+                            <td data-th="نام ارز">
+                              <div>
+                                <span className="icon">
+                                  <img src={data?.image} alt="" />
+                                </span>
+                                <span className="text-50">
+                                  {convertTextSingle(
+                                    extractLeftSide(data.pair)
+                                  )}
+                                </span>
+                              </div>
+                            </td>
+                            <td data-th="قیمت واحد (تومان)">
+                              <span className="td-responsive">
+                                {data?.rate}
                               </span>
-                              <span className="text-50">{convertTextSingle(extractLeftSide(data.pair))}</span>
-                            </div>
-                          </td>
-                          <td data-th="قیمت واحد (تومان)">
-                            <span className="td-responsive">{data?.rate}</span>
-                          </td>
-                          {/* <td data-th="تغییرات ۲۴ ساعته">
+                            </td>
+                            {/* <td data-th="تغییرات ۲۴ ساعته">
                             <div className="tm__crypto-changes">
                               <span className="icon">
                                 <IoIosArrowDropdown color="red" />
@@ -349,16 +353,19 @@ const DashboardContent = () => {
                               <strong className="text-danger">{data?.change}</strong>
                             </div>
                           </td> */}
-                          <td
-                            data-th="معامله در بازار
+                            <td
+                              data-th="معامله در بازار
     "
-                          >
-                            <a href="/dashboard/buy-sell" className="btn-simple tm__actions">
-                              شروع معامله
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
+                            >
+                              <a
+                                href="/dashboard/buy-sell"
+                                className="btn-simple tm__actions"
+                              >
+                                شروع معامله
+                              </a>
+                            </td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>
@@ -425,43 +432,70 @@ const DashboardContent = () => {
           <Col xxl={7} xl={6}>
             <Card className="ccard--h100pc card-secondary">
               <CardHeader className="d-flex flex-row justify-content-between align-items-center">
-                <CardTitle tag="h5" >تراکنش&zwnj;های اخیر</CardTitle>
+                <CardTitle tag="h5">تراکنش&zwnj;های اخیر</CardTitle>
               </CardHeader>
               <CardBody>
                 <div className="card-body">
                   <div className="table-responsive  ">
-                    <table
-                      className="table table-borderless table-striped"
-                    >
+                    <table className="table table-borderless table-striped">
                       <thead>
                         <tr>
                           <th scope="col">نوع</th>
-                          <th scope="col" className="text-center">مقدار</th>
-                          <th scope="col" className="text-center">دارایی</th>
-                          <th scope="col" className="text-center">زمان</th>
+                          <th scope="col" className="text-center">
+                            مقدار
+                          </th>
+                          <th scope="col" className="text-center">
+                            دارایی
+                          </th>
+                          <th scope="col" className="text-center">
+                            زمان
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
                         {transactions.data.map((data, index) => {
-                          if ((data.type === 'DEPOSIT' || data.type === 'WITHDRAW') && data.status !== 'EXPIRED') {
+                          if (
+                            (data.type === "DEPOSIT" ||
+                              data.type === "WITHDRAW") &&
+                            data.status !== "EXPIRED"
+                          ) {
                             return (
                               <tr key={index}>
                                 <td>
-                                  <span className={
-                                    data.type === 'DEPOSIT' ? 'text-success' : 'text-danger'
-                                  }>{convertType(data.type)}</span>
+                                  <span
+                                    className={
+                                      data.type === "DEPOSIT"
+                                        ? "text-success"
+                                        : "text-danger"
+                                    }
+                                  >
+                                    {convertType(data.type)}
+                                  </span>
                                 </td>
                                 <td className={`text-center`}>
-                                  <span><span style={{ fontSize: '10px' }}>{data.currencyCode === "IRR" ? "TMN" : data.currencyCode}</span>{" "}{data.amount}</span>
+                                  <span>
+                                    <span style={{ fontSize: "10px" }}>
+                                      {data.currencyCode === "IRR"
+                                        ? "TMN"
+                                        : data.currencyCode}
+                                    </span>{" "}
+                                    {data.amount}
+                                  </span>
                                 </td>
                                 <td className={`text-center`}>
-                                  <span>{convertTextSingle(data.currencyCode)}</span>
+                                  <span>
+                                    {convertTextSingle(data.currencyCode)}
+                                  </span>
                                 </td>
                                 <td className={`text-center`}>
-                                  <span>{moment(data?.createdAt).locale('fa').format('DD MMMM YYYY')}</span>
+                                  <span>
+                                    {moment(data?.createdAt)
+                                      .locale("fa")
+                                      .format("DD MMMM YYYY")}
+                                  </span>
                                 </td>
                               </tr>
-                            )
+                            );
                           }
                         })}
                       </tbody>
@@ -481,23 +515,55 @@ const DashboardContent = () => {
                   <table className="table table-borderless table-striped ">
                     <thead>
                       <tr>
-                        <th scope="col" className="text-center">بازار</th>
-                        <th scope="col" className="text-center">مقدار</th>
-                        <th scope="col" className="text-center">قیمت واحد</th>
-                        <th scope="col" className="text-start">تاریخ</th>
+                        <th scope="col" className="text-center">
+                          بازار
+                        </th>
+                        <th scope="col" className="text-center">
+                          مقدار
+                        </th>
+                        <th scope="col" className="text-center">
+                          قیمت واحد
+                        </th>
+                        <th scope="col" className="text-start">
+                          تاریخ
+                        </th>
                       </tr>
                     </thead>
                     <tbody className={tableBodyStyle}>
-                      {exchange.data.length > 0 && exchange.data.map((data, index) => (
-                        <tr key={index}>
-                          <td className="text-center"><span className="text-success">{convertTextSingle(data.destinationCurrencyCode)}</span>{" "}- {" "}<span className="text-danger">{convertTextSingle(data?.sourceCurrencyCode)}</span></td>
-                          <td className="text-center"><span style={{ fontSize: '10px' }}>{data.destinationCurrencyCode === "IRR" ? "TMN" : data.destinationCurrencyCode}</span>{" "} {data?.sourceAmount}</td>
-                          <td className="text-center">{data?.exchangeRate.substring(0, 5)}</td>
-                          <td className="text-start">
-                            <span className="d-ltr d-block">{moment(data?.createdAt).locale('fa').format('DD MMMM YYYY')}</span>
-                          </td>
-                        </tr>
-                      ))}
+                      {exchange.data.length > 0 &&
+                        exchange.data.map((data, index) => (
+                          <tr key={index}>
+                            <td className="text-center">
+                              <span className="text-success">
+                                {convertTextSingle(
+                                  data.destinationCurrencyCode
+                                )}
+                              </span>{" "}
+                              -{" "}
+                              <span className="text-danger">
+                                {convertTextSingle(data?.sourceCurrencyCode)}
+                              </span>
+                            </td>
+                            <td className="text-center">
+                              <span style={{ fontSize: "10px" }}>
+                                {data.destinationCurrencyCode === "IRR"
+                                  ? "TMN"
+                                  : data.destinationCurrencyCode}
+                              </span>{" "}
+                              {data?.sourceAmount}
+                            </td>
+                            <td className="text-center">
+                              {data?.exchangeRate.substring(0, 5)}
+                            </td>
+                            <td className="text-start">
+                              <span className="d-ltr d-block">
+                                {moment(data?.createdAt)
+                                  .locale("fa")
+                                  .format("DD MMMM YYYY")}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>
