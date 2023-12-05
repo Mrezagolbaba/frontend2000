@@ -73,7 +73,9 @@ export default function RialCard({ stock, isLoading }: Props) {
         onClose={() => setIsOpenWithdraw(false)}
         hasCloseButton
       >
-        <Withdraw />
+        <Withdraw
+        // onClose={() => setIsOpenWithdraw(false)}
+        />
       </Dialog>
     </Card>
   );

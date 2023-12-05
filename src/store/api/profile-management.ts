@@ -1,12 +1,25 @@
 import {
   BankAccountsRequest,
   BankAccountsResponse,
+  BanksResponse,
+  BanksRequest,
   FormBankAccountRequest,
 } from "types/profile";
 import { enhancedApi } from ".";
 
 export const profileManagement = enhancedApi.injectEndpoints({
   endpoints: (builder) => ({
+    banks: builder.query<BanksResponse[], BanksRequest>({
+      query({ filters }) {
+        return {
+          method: "GET",
+          url: "/banks",
+          params: {
+            filter: filters,
+          },
+        };
+      },
+    }),
     bankAccounts: builder.query<BankAccountsResponse[], BankAccountsRequest>({
       query() {
         return {
@@ -50,6 +63,7 @@ export const profileManagement = enhancedApi.injectEndpoints({
 });
 
 export const {
+  useBanksQuery,
   useBankAccountsQuery,
   useCreateBankAccountMutation,
   useDeleteBankAccountMutation,

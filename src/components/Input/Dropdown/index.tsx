@@ -8,13 +8,17 @@ import {
 
 import dropdown from "assets/scss/components/Input/dropdown.module.scss";
 
-export type OptionType = { value: string; content: ReactNode | string };
+export type OptionType = {
+  value: string;
+  content: ReactNode | string;
+  otherOptions?: any;
+};
 
 type Props = {
   options: OptionType[] | [];
   id?: string;
   value: string | number;
-  onChange?: (value: string) => void;
+  onChange?: (value: string, other?: any) => void;
   children?: ReactNode;
   hasError?: boolean;
   disabled?: boolean;
@@ -44,7 +48,9 @@ const DropdownInput = ({
   };
 
   const handleOptionSelect = (option: OptionType) => {
-    onChange?.(option.value);
+    option.otherOptions
+      ? onChange?.(option.value, option.otherOptions)
+      : onChange?.(option.value);
     setSelectedOption(option);
     setIsOpenDrop(false); // Close the dropdown when an option is selected
   };

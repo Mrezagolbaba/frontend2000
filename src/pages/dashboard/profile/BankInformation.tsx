@@ -23,7 +23,7 @@ export default function BankInformation() {
   return (
     <>
       <Internal accounts={iranianAccounts} isLoading={isLoading} />
-      <International />
+      <International accounts={internationalAccounts} isLoading={isLoading} />
     </>
   );
 }

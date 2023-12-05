@@ -212,7 +212,7 @@ export const iranianBanks = [
   },
   {
     code: "502938",
-    bankId: "",
+    bankId: "1c57ef49-9fd3-410a-91e5-dfaf242d1caf",
     name: "Day",
     persianName: "دی",
     logo: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

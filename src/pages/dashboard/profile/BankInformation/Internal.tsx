@@ -36,7 +36,6 @@ import {
   useEditBankAccountMutation,
 } from "store/api/profile-management";
 import { MdClose } from "react-icons/md";
-import { ErrorType, errorNormalizer } from "components/ErrorHandler";
 
 const resolver = yupResolver(
   Yup.object().shape({
@@ -133,6 +132,10 @@ export default function Internal({ accounts, isLoading }: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (accounts.length <= 0) setIsOpenForm(true);
+  }, [accounts]);
 
   return (
     <>
@@ -381,7 +384,7 @@ export default function Internal({ accounts, isLoading }: Props) {
                   color="link"
                   onClick={() => setIsOpenForm(true)}
                 >
-                  {formLoading ? <Spinner /> : "اضافه کردن حساب جدید"}
+                  اضافه کردن حساب جدید
                 </Button>
               </ButtonGroup>
             </Col>

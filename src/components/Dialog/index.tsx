@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import { Modal, ModalBody, ModalHeader } from "reactstrap";
-import dialog from "./style.module.scss";
+import dialog from "assets/scss/components/Dialog/style.module.scss";
 
 type Props = {
   isOpen: boolean;
@@ -23,7 +23,6 @@ function Dialog({
       isOpen={isOpen}
       toggle={onClose}
       size="lg"
-      centered
       backdrop
       fade
     >

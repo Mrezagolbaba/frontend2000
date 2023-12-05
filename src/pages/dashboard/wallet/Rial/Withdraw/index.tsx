@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { AlertInfo } from "components/AlertWidget";
 import {
@@ -15,65 +15,113 @@ import {
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import Currency from "components/Input/CurrencyInput";
 
-import pasargad from "assets/img/bank/Pasargad.svg";
-import saman from "assets/img/bank/Saman.svg";
-
-import wallet from "../../style.module.scss";
+import wallet from "assets/scss/dashboard/wallet.module.scss";
+import { useBankAccountsQuery } from "store/api/profile-management";
+import { formatShowAccount, searchIranianBanks } from "helpers/filesManagement";
+import { useWithdrawMutation } from "store/api/wallet-management";
+import toast from "react-hot-toast";
 
 type WithdrawType = {
-  sheba: string;
+  iban: string;
   amount: string;
+  accountId: string;
 };
 
-export default function Withdraw() {
-  const optionList: OptionType[] = [
-    {
-      content: (
-        <div className={wallet["items-credit"]}>
-          <span className={wallet["items-credit__icon"]}>
-            <img alt="بانک پاسارگارد" src={pasargad} className="bank-svg" />
-          </span>
-          <span>5859831058254847</span>
-        </div>
-      ),
-      value: "5859831058254847",
-    },
-    {
-      content: (
-        <div className={wallet["items-credit"]}>
-          <span className={wallet["items-credit__icon"]}>
-            <img alt="بانک سامان" src={saman} className="bank-svg" />
-          </span>
+type Props = {
+  onClose?: () => void;
+};
 
-          <span className="text">502229103949549395</span>
-        </div>
-      ),
-      value: "502229103949549395",
+export default function Withdraw({ onClose }: Props) {
+  const [optionList, setOptionList] = useState<OptionType[] | []>([]);
+  const { data, isSuccess } = useBankAccountsQuery({});
+
+  const [
+    withdrawRequest,
+    {
+      data: response,
+      isLoading,
+      isSuccess: isSuccessWithdraw,
+      isError: isErrorWithdraw,
     },
-  ];
+  ] = useWithdrawMutation();
 
   const resolver = yupResolver(
     Yup.object().shape({
-      sheba: Yup.string().required(),
+      iban: Yup.string().required(),
       amount: Yup.string().required(),
+      accountId: Yup.string().required(),
     })
   );
   const {
     handleSubmit,
     control,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<WithdrawType>({
     mode: "onChange",
     defaultValues: {
-      sheba: "502229103949549395",
+      iban: "",
       amount: "",
+      accountId: "",
     },
     resolver,
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      if (data.length <= 0) {
+        // setHasAccount(false);
+      } else
+        setOptionList(
+          data.map((account) => {
+            const bank = searchIranianBanks(account.cardNumber);
+            return {
+              content: (
+                <div className={wallet["items-credit"]}>
+                  <span className={wallet["items-credit__icon"]}>
+                    <span
+                      className="mx-3"
+                      dangerouslySetInnerHTML={{ __html: bank.logo }}
+                    />
+                  </span>
+                  <span dir="ltr">{formatShowAccount(account.iban)}</span>
+                </div>
+              ),
+              otherOptions: { accountId: account.id },
+              value: account.iban,
+            };
+          })
+        );
+      reset({
+        iban: data[0].iban,
+        accountId: data[0].id,
+        amount: "",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, isSuccess]);
+
   const onSubmit = async (data: WithdrawType) => {
-    console.log(data);
+    await withdrawRequest({
+      destination: data.accountId,
+      currencyCode: "IRR",
+      amount: (Number(data.amount) * 10).toString(),
+    });
   };
+
+  useEffect(() => {
+    isSuccessWithdraw &&
+      toast.success(
+        "درخواست برداشت با موفقیت ثبت شد. لطفا منتظر تایید پشتیبانی بمانید."
+      );
+    isErrorWithdraw &&
+      toast.error(
+        "در ثبت درخواست مشکلی پیش آمده است لطفا در صورت هرگونه ابهام با پشتیبانی ارتباط برقرار کنید."
+      );
+
+    onClose?.();
+  }, [isSuccessWithdraw, isErrorWithdraw, onClose]);
   return (
     <form className="px-3" onSubmit={handleSubmit(onSubmit)}>
       <Row>
@@ -93,7 +141,7 @@ export default function Withdraw() {
       <Row>
         <Col xs={12} lg={6}>
           <Controller
-            name="sheba"
+            name="iban"
             control={control}
             render={({ field: { name, value } }) => (
               <FormGroup className="position-relative">
@@ -106,7 +154,10 @@ export default function Withdraw() {
                 <DropdownInput
                   id={name}
                   value={value}
-                  onChange={(val) => setValue(name, val)}
+                  onChange={(val, otherOption) => {
+                    setValue("accountId", otherOption.accountId);
+                    setValue(name, val);
+                  }}
                   options={optionList}
                   hasError={Boolean(errors?.[name])}
                 />
@@ -139,6 +190,7 @@ export default function Withdraw() {
                 <Currency
                   name={name}
                   value={value}
+                  onChange={(val) => setValue(name, val)}
                   placeholder="مبلغ را به تومان وارد کنید"
                   hasError={Boolean(errors?.[name])}
                 />
@@ -156,7 +208,7 @@ export default function Withdraw() {
       </Row>
       <Row className="mt-4">
         <div className="text-center">
-          <Button color="primary" outline type="submit">
+          <Button className="px-5 py-3" color="primary" outline type="submit">
             ثبت درخواست برداشت
           </Button>
         </div>
