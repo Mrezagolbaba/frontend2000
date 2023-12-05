@@ -63,9 +63,9 @@ const ShebaForm = () => {
     isSuccess &&
       data &&
       reset({
-        accountName: data.accountOwnerName,
-        shebaNumber: data.iban,
-        bankName: data.bankName,
+        accountName: data?.accountOwnerName,
+        shebaNumber: data?.iban,
+        bankName: data?.bankName,
       });
   }, [data, isSuccess, reset]);
 

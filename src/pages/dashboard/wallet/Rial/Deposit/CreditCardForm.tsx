@@ -21,6 +21,7 @@ import { formatShowAccount, searchIranianBanks } from "helpers/filesManagement";
 import { useBankAccountsQuery } from "store/api/profile-management";
 import { useDepositMutation } from "store/api/wallet-management";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "store/hooks";
 
 type CreditCardForm = {
   accountNumber: string;
@@ -29,6 +30,7 @@ type CreditCardForm = {
 };
 
 const CreditCardForm = () => {
+  const { firstName, lastName } = useAppSelector((state) => state.user);
   const navigate = useNavigate();
   const [hasAccount, setHasAccount] = useState<boolean>(true);
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
@@ -75,7 +77,7 @@ const CreditCardForm = () => {
     if (isSuccess) {
       if (data.length <= 0) {
         setHasAccount(false);
-      } else
+      } else {
         setOptionList(
           data.map((account) => {
             const bank = searchIranianBanks(account.cardNumber);
@@ -88,19 +90,23 @@ const CreditCardForm = () => {
                       dangerouslySetInnerHTML={{ __html: bank.logo }}
                     />
                   </span>
-                  <span dir="ltr">{formatShowAccount(account.cardNumber)}</span>
+                  <span dir="ltr">
+                    {formatShowAccount(account?.cardNumber)}
+                  </span>
                 </div>
               ),
-              otherOptions: { accountId: account.id },
-              value: account.cardNumber,
+              otherOptions: { accountId: account?.id },
+              value: account?.cardNumber,
             };
           })
         );
-      reset({
-        accountNumber: data[0].cardNumber,
-        accountId: data[0].id,
-        amount: "",
-      });
+        setHasAccount(true);
+        reset({
+          accountNumber: data[0]?.cardNumber,
+          accountId: data[0]?.id,
+          amount: "",
+        });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, isSuccess]);
@@ -198,11 +204,17 @@ const CreditCardForm = () => {
   ) : (
     <Row>
       <AlertInfo
-        text="شما هیچ حسابی به پروفایل خود اضافه نکرده‌اید، ابتدا یک حساب به نام بهزاد بابائی به پروفایل خود اضافه کنید."
+        text={`شما هیچ حسابی به پروفایل خود اضافه نکرده‌اید، ابتدا یک حساب به نام  ${firstName} ${lastName} به پروفایل خود اضافه کنید.`}
         hasIcon={true}
       />
       <div className="text-center mt-3">
-        <Button color="primary" type="button" onClick={() => {}} outline>
+        <Button
+          color="primary"
+          type="button"
+          className="px-5 py-3"
+          onClick={() => navigate("/dashboard/profile")}
+          outline
+        >
           افزودن حساب بانکی
         </Button>
       </div>

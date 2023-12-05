@@ -20,6 +20,8 @@ import { useBankAccountsQuery } from "store/api/profile-management";
 import { formatShowAccount, searchIranianBanks } from "helpers/filesManagement";
 import { useWithdrawMutation } from "store/api/wallet-management";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "store/hooks";
 
 type WithdrawType = {
   iban: string;
@@ -32,6 +34,9 @@ type Props = {
 };
 
 export default function Withdraw({ onClose }: Props) {
+  const { firstName, lastName } = useAppSelector((state) => state.user);
+  const navigate = useNavigate();
+  const [hasAccount, setHasAccount] = useState<boolean>(true);
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
   const { data, isSuccess } = useBankAccountsQuery({});
 
@@ -71,11 +76,12 @@ export default function Withdraw({ onClose }: Props) {
   useEffect(() => {
     if (isSuccess) {
       if (data.length <= 0) {
-        // setHasAccount(false);
-      } else
+        setHasAccount(false);
+      } else {
+        setHasAccount(true);
         setOptionList(
           data.map((account) => {
-            const bank = searchIranianBanks(account.cardNumber);
+            const bank = searchIranianBanks(account?.cardNumber);
             return {
               content: (
                 <div className={wallet["items-credit"]}>
@@ -85,19 +91,20 @@ export default function Withdraw({ onClose }: Props) {
                       dangerouslySetInnerHTML={{ __html: bank.logo }}
                     />
                   </span>
-                  <span dir="ltr">{formatShowAccount(account.iban)}</span>
+                  <span dir="ltr">{formatShowAccount(account?.iban)}</span>
                 </div>
               ),
-              otherOptions: { accountId: account.id },
-              value: account.iban,
+              otherOptions: { accountId: account?.id },
+              value: account?.iban,
             };
           })
         );
-      reset({
-        iban: data[0].iban,
-        accountId: data[0].id,
-        amount: "",
-      });
+        reset({
+          iban: data[0]?.iban,
+          accountId: data[0]?.id,
+          amount: "",
+        });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, isSuccess]);
@@ -122,7 +129,7 @@ export default function Withdraw({ onClose }: Props) {
 
     onClose?.();
   }, [isSuccessWithdraw, isErrorWithdraw, onClose]);
-  return (
+  return hasAccount ? (
     <form className="px-3" onSubmit={handleSubmit(onSubmit)}>
       <Row>
         <AlertInfo
@@ -214,5 +221,23 @@ export default function Withdraw({ onClose }: Props) {
         </div>
       </Row>
     </form>
+  ) : (
+    <Row>
+      <AlertInfo
+        text={`شما هیچ حسابی به پروفایل خود اضافه نکرده‌اید، ابتدا یک حساب به نام  ${firstName} ${lastName} به پروفایل خود اضافه کنید.`}
+        hasIcon={true}
+      />
+      <div className="text-center mt-3">
+        <Button
+          color="primary"
+          type="button"
+          className="px-5 py-3"
+          onClick={() => navigate("/dashboard/profile")}
+          outline
+        >
+          افزودن حساب بانکی
+        </Button>
+      </div>
+    </Row>
   );
 }
