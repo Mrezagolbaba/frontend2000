@@ -36,6 +36,7 @@ import {
   useEditBankAccountMutation,
 } from "store/api/profile-management";
 import { MdClose } from "react-icons/md";
+import DeleteModal from "./DeleteModal";
 
 const resolver = yupResolver(
   Yup.object().shape({
@@ -65,7 +66,7 @@ export default function Internal({ accounts, isLoading }: Props) {
     isOpen: boolean;
     id?: string;
     logo?: string;
-    accountNumber: string;
+    accountNumber?: string;
   }>({
     isOpen: false,
     id: undefined,
@@ -77,9 +78,6 @@ export default function Internal({ accounts, isLoading }: Props) {
     useCreateBankAccountMutation();
 
   const [editAccount] = useEditBankAccountMutation();
-
-  const [deleteAccount, { isLoading: deleteLoading }] =
-    useDeleteBankAccountMutation();
 
   const {
     handleSubmit,
@@ -101,22 +99,6 @@ export default function Internal({ accounts, isLoading }: Props) {
     editOption.isEdit ? editAccount(data) : createAccount(data);
   };
 
-  const deleteAccountHandler = async (id: string) => {
-    await deleteAccount(id)
-      .then((res) => {
-        toast.success("این حساب از لیست حساب های بانکی شما حذف گردید.");
-        setDeleteOptions({
-          isOpen: false,
-          id: undefined,
-          logo: undefined,
-          accountNumber: "",
-        });
-      })
-      .catch((err) => {
-        toast.error(err.message);
-      });
-  };
-
   const resetForm = () => {
     reset({
       iban: "",
@@ -135,6 +117,7 @@ export default function Internal({ accounts, isLoading }: Props) {
 
   useEffect(() => {
     if (accounts.length <= 0) setIsOpenForm(true);
+    else setIsOpenForm(false);
   }, [accounts]);
 
   return (
@@ -392,78 +375,10 @@ export default function Internal({ accounts, isLoading }: Props) {
         </CardBody>
       </Card>
 
-      <Dialog
-        isOpen={deleteOptions.isOpen}
-        onClose={() =>
-          setDeleteOptions({
-            isOpen: false,
-            id: undefined,
-            accountNumber: "",
-            logo: undefined,
-          })
-        }
-        hasCloseButton={true}
-        key="delete-dialog"
-        title={
-          <div className="text-secondary fs-6">
-            حذف حساب بانکی
-            {" ( "}
-            <span dir="ltr">
-              {formatShowAccount(deleteOptions.accountNumber)}
-            </span>
-            {deleteOptions?.logo ? (
-              <span
-                className="mx-3"
-                dangerouslySetInnerHTML={{ __html: deleteOptions.logo }}
-              />
-            ) : (
-              <PiCreditCardLight />
-            )}
-            {")"}
-          </div>
-        }
-      >
-        <Row className="mt-3 mb-5">
-          <h5 className="text-center">آیا از حذف این حساب اطمینان دارید؟</h5>
-        </Row>
-        <Row>
-          <div className="d-flex flex-row justify-content-evenly">
-            <Button
-              className="py-2 px-3"
-              outline
-              color="success"
-              onClick={() =>
-                setDeleteOptions({
-                  isOpen: false,
-                  id: undefined,
-                  accountNumber: "",
-                  logo: undefined,
-                })
-              }
-            >
-              <FaExclamation />
-              نه منصرف شدم
-            </Button>
-            <Button
-              className="py-2 px-4"
-              color="danger"
-              disabled={deleteLoading}
-              onClick={() =>
-                deleteOptions.id && deleteAccountHandler(deleteOptions.id)
-              }
-            >
-              {deleteLoading ? (
-                <Spinner />
-              ) : (
-                <>
-                  <CiTrash className="mx-1" />
-                  آره حذف بشه
-                </>
-              )}
-            </Button>
-          </div>
-        </Row>
-      </Dialog>
+      <DeleteModal
+        setDeleteOptions={setDeleteOptions}
+        deleteOptions={deleteOptions}
+      />
     </>
   );
 }

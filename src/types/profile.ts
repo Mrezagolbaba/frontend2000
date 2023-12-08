@@ -9,7 +9,7 @@ export interface BankAccountsResponse {
   deletedAt?: string | null;
   iban: string;
   id: string;
-  ownerFullName?: string | null;
+  ownerFullName?: string;
   updatedAt?: string | null;
   userId: string;
   verifiedAt: string;
