@@ -113,8 +113,7 @@ const CreditCardForm = () => {
 
   useEffect(() => {
     if (isSubmitSuccess && response) {
-      navigate(response.providerData.flowRedirectUrl, { replace: true });
-      // window.location.href = ;
+      window.location.replace(response.providerData.flowRedirectUrl);
     }
   }, [isSubmitSuccess, navigate, response]);
 
