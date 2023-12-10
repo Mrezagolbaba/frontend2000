@@ -1,16 +1,20 @@
 import Layout from "layouts/dashboard";
+import { Button, Card, CardBody, CardHeader, CardTitle,Table } from "reactstrap";
+import { useTable, HttpError } from "@refinedev/core";
+
 
 const Notifications = () => {
   return (
     <Layout>
       <section className="page page-notifications">
-        <div className="card card-secondary">
-          <div className="card-header card-header-flex">
-            <h5 className="card-title">پیام های من</h5>
-          </div>
-          <div className="card-body">
+        <Card className="card-secondary mb-4">
+          <CardHeader>
+            <CardTitle tag="h5">پیام های من </CardTitle>
+          </CardHeader>
+
+          <CardBody>
             <div className="table-responsive">
-              <table className="table-modern table-modern--fonts-md">
+              <Table className="table-modern table-modern--fonts-md">
                 <thead>
                   <tr>
                     <th scope="col" className="text-center">
@@ -35,14 +39,14 @@ const Notifications = () => {
                       <span className="text-success">مشاهده شده</span>
                     </td>
                     <td className="text-center table-new__actions">
-                      <button
+                      <Button
                         type="button"
                         className="btn-simple"
                         data-bs-toggle="modal"
                         data-bs-target="#notificationDetailsModal"
                       >
                         مشاهده جزئیات
-                      </button>
+                      </Button>
                     </td>
                   </tr>
                   <tr>
@@ -65,10 +69,10 @@ const Notifications = () => {
                     </td>
                   </tr>
                 </tbody>
-              </table>
+              </Table>
             </div>
-          </div>
-        </div>
+          </CardBody>
+        </Card>
 
         <div
           className="modal fade"

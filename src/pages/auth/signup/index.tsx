@@ -1,4 +1,3 @@
-import { Input, Spin } from "antd";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { CiMobile2 } from "react-icons/ci";
@@ -6,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import toast from "react-hot-toast";
 
-import AuthLayout from "layouts/Authentication";
+import Auth from "layouts/auth";
 import { registerSchema } from "pages/auth/validationForms";
 import { RegisterFormData } from "pages/auth/types";
 import { useCreateUser } from "services/auth";
@@ -14,7 +13,19 @@ import SelectCountry from "components/SelectCountry";
 import PasswordInput from "components/PasswordInput";
 import FloatInput from "components/Input/FloatInput";
 import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
-import { useState } from "react";
+import React, { useState } from "react";
+import auth from "assets/scss/auth/auth.module.scss";
+import {
+  Button,
+  Card,
+  CardBody,
+  Col,
+  Container,
+  Input,
+  Label,
+  Row,
+  Spinner,
+} from "reactstrap";
 
 const SignupPage: React.FC = () => {
   const navigate = useNavigate();
@@ -73,20 +84,20 @@ const SignupPage: React.FC = () => {
     );
 
   return (
-    <AuthLayout>
-      <section className="auth auth-signup">
-        <div className="card auth-card auth-card--bordered">
-          <div className="card-body">
-            <h4 className="auth-title">ثبت نام</h4>
-            <p className="auth-text"> شماره تلفن خود را وارد کنید.</p>
+    <Auth>
+      <section className={auth.container}>
+        <Card className={auth.card}>
+          <CardBody className={auth["card-body"]}>
+            <h4 className={auth.title}>ثبت نام</h4>
+            <p className={auth.text}> شماره تلفن خود را وارد کنید.</p>
 
             <form
-              className="auth-form"
+              className={auth.form}
               onSubmit={handleSubmit(handleRegister, handleErrors)}
             >
-              <div className="container">
-                <div className="row gy-2 gx-0">
-                  <div className="col-12 col-md-8">
+              <Container>
+                <Row className="gy-2 gx-0">
+                  <Col xs={8}>
                     <Controller
                       name="phoneNumber"
                       control={control}
@@ -105,20 +116,20 @@ const SignupPage: React.FC = () => {
                               ? "error"
                               : undefined,
                             autoFocus: true,
-                            className: "phone-number-input",
+                            className: auth["phone-number"],
                           }}
                         />
                       )}
                     />
-                  </div>
-                  <div className="col-12 col-md-4">
+                  </Col>
+                  <Col xs={4}>
                     <Controller
                       name="selectedCountry"
                       control={control}
                       render={({ field }) => <SelectCountry {...field} />}
                     />
-                  </div>
-                  <div className="col-12">
+                  </Col>
+                  <Col xs={12}>
                     <Controller
                       name="password"
                       control={control}
@@ -126,18 +137,15 @@ const SignupPage: React.FC = () => {
                         <PasswordInput hasShowHint={true} {...field} />
                       )}
                     />
-                  </div>
-                  <div className="col-12 auth-terms">
+                  </Col>
+                  <Col xs={12} className={auth.terms}>
                     <Controller
                       name="terms"
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
-                        <div className="form-check form-check--lg auth-terms">
-                          <label htmlFor={name} className="form-check-label">
-                            <Link to="#"> مقررات آرسونیکس</Link> را خوانده‌ام و
-                            با آن موافقم.
-                          </label>
+                        <div>
                           <Input
+                          style={{marginRight:"8px"}}
                             checked={value}
                             className="form-check-input"
                             type="checkbox"
@@ -149,40 +157,47 @@ const SignupPage: React.FC = () => {
                               errors?.[name]?.message ? "error" : undefined
                             }
                           />
+                          <Label htmlFor={name}>
+                            <Link to="#"> مقررات آرسونیکس</Link> را خوانده‌ام و
+                            با آن موافقم.
+                          </Label>
                         </div>
                       )}
                     />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-12">
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12}>
                     <div className="auth-footer">
-                      <div className="auth-terms mb-3"></div>
                       <div className="mb-3">
-                        <button
+                        <Button
+                          color="primary"
                           type="submit"
-                          className="btn btn-primary auth-submit"
+                          className={auth.submit}
+                          disabled={isLoading}
                         >
                           {isLoading ? (
-                            <Spin style={{ color: "white" }} />
+                            <Spinner style={{ color: "white" }} />
                           ) : (
                             "ثبت نام"
                           )}
-                        </button>
+                        </Button>
                       </div>
-                      <div className="auth-already">
+                      <div className={auth.already}>
                         عضو هستم:
-                        <Link to="/login">ورود</Link>
+                        <Button color="link" tag="a" href="/login">
+                          ورود
+                        </Button>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
+                  </Col>
+                </Row>
+              </Container>
             </form>
-          </div>
-        </div>
+          </CardBody>
+        </Card>
       </section>
-    </AuthLayout>
+    </Auth>
   );
 };
 

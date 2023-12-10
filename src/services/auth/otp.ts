@@ -6,6 +6,8 @@ import {
 import request from "../adapter";
 import toast from "react-hot-toast";
 
+
+
 export const sendOtp = async (data: any) => {
   try {
     const response = await request.post("auth/verify-2fa", data);
@@ -21,6 +23,7 @@ export const useSendOtp = (
 ): UseMutationResult<any, Error, any, any> => {
   return useMutation(sendOtp, options);
 };
+
 
 export const resendOtp = async (data: any) => {
   try {

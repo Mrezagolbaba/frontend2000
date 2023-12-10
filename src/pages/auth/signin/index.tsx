@@ -1,19 +1,29 @@
 import React, { useState } from "react";
 import { CiMobile2 } from "react-icons/ci";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {  Spin } from "antd";
 import { toast } from "react-hot-toast";
 
 import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
 import { useLogin } from "services/auth";
-import AuthLayout from "layouts/Authentication";
+import Auth from "layouts/auth";
 import { loginSchema } from "pages/auth/validationForms";
 import { LoginFormData } from "pages/auth/types";
 import FloatInput from "components/Input/FloatInput";
 import PasswordInput from "components/PasswordInput";
 import SelectCountry from "components/SelectCountry";
+import {
+  Button,
+  Card,
+  CardBody,
+  Col,
+  Container,
+  Row,
+  Spinner,
+} from "reactstrap";
+
+import auth from "assets/scss/auth/auth.module.scss";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -73,20 +83,20 @@ const LoginPage: React.FC = () => {
     );
 
   return (
-    <AuthLayout>
-      <section className="auth auth-signin">
-        <div className="card auth-card">
-          <div className="card-body">
-            <h4 className="auth-title">ورود به حساب کاربری</h4>
-            <p className="auth-text"> شماره تلفن خود را وارد کنید</p>
+    <Auth>
+      <section className={auth.container}>
+        <Card className={auth.card}>
+          <CardBody className={auth["card-body"]}>
+            <h4 className={auth.title}>ورود به حساب کاربری</h4>
+            <p className={auth.text}> شماره تلفن خود را وارد کنید</p>
 
             <form
-              className="auth-form"
+              className={auth.form}
               onSubmit={handleSubmit(handleLogin, handleErrors)}
             >
-              <div className="container">
-                <div className="row gy-2 gx-0">
-                  <div className="col-12 col-md-8">
+              <Container>
+                <Row className="gy-2 gx-0">
+                  <Col xs={8}>
                     <Controller
                       name="phoneNumber"
                       control={control}
@@ -105,68 +115,76 @@ const LoginPage: React.FC = () => {
                               ? "error"
                               : undefined,
                             autoFocus: true,
-                            className: "phone-number-input",
+                            className: auth["phone-number"],
                           }}
                         />
                       )}
                     />
-                  </div>
-                  <div className="col-12 col-md-4">
+                  </Col>
+                  <Col xs={4}>
                     <Controller
                       name="selectedCountry"
                       control={control}
                       render={({ field }) => <SelectCountry {...field} />}
                     />
-                  </div>
-                  <div className="col-12">
+                  </Col>
+                  <Col xs={12}>
                     <Controller
                       name="password"
                       control={control}
                       render={({ field }) => <PasswordInput {...field} />}
                     />
-                  </div>
-                  <div className="col-12">
-                    <div className="auth-forgot mb-4">
-                      <Link to="/forget">رمز عبور را فراموش کرده&zwnj;ام!</Link>
+                  </Col>
+                  <Col xs={12}>
+                    <div className={auth.forgotLink}>
+                      <Button color="link" tag="a" href="/forget-password">
+                        رمز عبور را فراموش کرده&zwnj;ام!
+                      </Button>
                     </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-12">
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12}>
                     <div className="auth-footer">
                       <div className="mb-3">
-                        <button
+                        <Button
                           type="submit"
-                          className="btn btn-primary auth-submit"
+                          color="primary"
+                          className={auth.submit}
+                          disabled={isLoading}
                         >
                           {isLoading ? (
-                            <Spin style={{ color: "white" }} />
+                            <Spinner style={{ color: "white" }} />
                           ) : (
                             "ورود به حساب"
                           )}
-                        </button>
-                        <button
-                          type="submit"
-                          className="btn btn-outline-primary auth-submit mt-3"
+                        </Button>
+                        <Button
+                          type="button"
+                          color="primary"
+                          outline
+                          className={`${auth.submit} mt-3`}
+                          tag="a"
+                          href="/login-email"
                         >
                           ورود با استفاده از ایمیل
-                        </button>
+                        </Button>
                       </div>
-                      <div
-                        className="auth-already"
-                        style={{ wordSpacing: "1px" }}
-                      >
-                        عضو نیستم: <Link to="/register">ثبت نام</Link>
+                      <div className={auth.already}>
+                        عضو نیستم:{" "}
+                        <Button color="link" tag="a" href="/register">
+                          ثبت نام
+                        </Button>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
+                  </Col>
+                </Row>
+              </Container>
             </form>
-          </div>
-        </div>
+          </CardBody>
+        </Card>
       </section>
-    </AuthLayout>
+    </Auth>
   );
 };
 

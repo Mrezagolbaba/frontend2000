@@ -1,30 +1,44 @@
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-import { PhoneNumberMask } from "helpers";
-import OtpInput from "components/OTP";
-import { resendOtp, sendOtp } from "services/auth";
-import AuthLayout from "layouts/Authentication";
+import { PhoneNumberMask, persianToEnglishNumbers } from "helpers";
+import OtpInput from "react-otp-input";
+import { resendOtp } from "services/auth";
+import Auth from "layouts/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { OtpSchema } from "pages/auth/validationForms";
-import { Spin } from "antd";
 import { toast } from "react-hot-toast";
-import { useGetMe } from "services/users";
+import React, { useEffect, useState } from "react";
+import { useSendOtp } from "services/auth/otp";
+import { useGetMe } from "services/auth/user";
+import { useAppDispatch } from "store/hooks";
+import { setUser } from "store/reducers/features/user/userSlice";
+
+import auth from "assets/scss/auth/auth.module.scss";
+import {
+  Button,
+  Card,
+  CardBody,
+  Col,
+  Container,
+  Row,
+  Spinner,
+} from "reactstrap";
 
 const OtpMobile: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const phoneNumber = location.state.phoneNumber;
+  const dispatch = useAppDispatch();
+  const { phoneNumber, redirectTo, token } = location.state;
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { data: MeData } = useGetMe();
+  const sendOtp = useSendOtp();
+  const getMe = useGetMe();
+
+  const [timeInSeconds, setTimeInSeconds] = useState(120);
 
   const resolver = yupResolver(OtpSchema);
-  const {
-    handleSubmit,
-    setValue,
-    control,
-    formState: { isLoading, isSubmitting },
-  } = useForm<{ code: string }>({
+  const { handleSubmit, setValue, control } = useForm<{ code: string }>({
     mode: "onChange",
     defaultValues: {
       code: "",
@@ -35,24 +49,40 @@ const OtpMobile: React.FC = () => {
   const handleResend = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    setIsLoading(true);
     e.preventDefault();
-    const data: OtpData = {
+    const data = {
       type: "AUTH",
       method: "PHONE",
     };
-    await resendOtp(data);
+    await resendOtp(data).then(() => setIsLoading(false));
   };
 
   const handleOTP = async (data: { code: string }) => {
+    setIsLoading(true);
     const formData = {
-      code: data.code,
+      code: persianToEnglishNumbers(data.code),
       type: "AUTH",
       method: "PHONE",
     };
-    await sendOtp(formData).then((res) => {
+    await sendOtp.mutateAsync(formData).then((res: any) => {
       if (res) {
-        if (MeData?.firstTierVerified) navigate("/");
-        else navigate("/information");
+        getMe
+          .mutateAsync(null)
+          .then((res: any) => {
+            dispatch(setUser(res));
+            if (redirectTo) {
+              navigate(redirectTo, { state: { token } });
+            }
+            // if (res?.firstTierVerified) navigate("/dashboard");
+            else if (res?.firstTierVerified) navigate("/dashboard");
+            else navigate("/information");
+            setIsLoading(false);
+          })
+          .catch(() => {
+            navigate("/information");
+            setIsLoading(false);
+          });
       }
     });
   };
@@ -63,59 +93,118 @@ const OtpMobile: React.FC = () => {
     });
   };
 
+  useEffect(() => {
+    const timerInterval = setInterval(() => {
+      if (timeInSeconds > 0) {
+        setTimeInSeconds(timeInSeconds - 1);
+      }
+    }, 1000);
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(timerInterval);
+  }, [timeInSeconds]);
+
+  const formatTime = () => {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = timeInSeconds % 60;
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
+
   return (
-    <AuthLayout>
-      <section className="auth auth-confirmation">
-        <div className="card auth-card auth-card--bordered">
-          <div className="card-body">
-            <h4 className="auth-title">تایید شماره همراه</h4>
+    <Auth>
+      <section className={auth.container}>
+        <Card className={auth.card}>
+          <CardBody className={auth["card-body"]}>
+            <h4 className={auth.title}>تایید شماره همراه</h4>
             <div className="auth-summary">
-              <p className="auth-text text-end">
+              <p className={auth.text}>
                 کد تایید ارسال شده به
-                <span className="d-ltr d-inline-block">
+                <span className="d-inline-block">
                   {PhoneNumberMask({
                     phoneNumber,
                   })}
                 </span>
                 را وارد کنید.
               </p>
-              <button onClick={handleResend} className="btn-simple auth-resend">
-                ارسال مجدد کد
-              </button>
             </div>
 
             <form
-              className="auth-form"
+              className={auth.form}
               onSubmit={handleSubmit(handleOTP, handleErrors)}
             >
-              <div className="mb-4">
-                <Controller
-                  name="code"
-                  control={control}
-                  render={() => (
-                    <OtpInput onChange={(code) => setValue("code", code)} />
-                  )}
-                />
-              </div>
-              <div className="auth-footer">
-                <div className="mb-3">
-                  <button type="submit" className="btn btn-primary auth-submit">
-                    {isLoading || isSubmitting ? (
-                      <Spin style={{ color: "white" }} />
-                    ) : (
-                      "ارسال"
-                    )}
-                  </button>
-                </div>
-                <div className="auth-edit-mobile text-center">
-                  <Link to="/register">ویرایش شماره همراه</Link>
-                </div>
-              </div>
+              <Container>
+                <Row className="gy-2 gx-0">
+                  <Col xs={12} className="my-5">
+                    <Controller
+                      name="code"
+                      control={control}
+                      render={({ field: { value } }) => (
+                        <OtpInput
+                          containerStyle={auth["otp-container"]}
+                          value={value}
+                          onChange={(code) => {
+                            setValue("code", code);
+                            code.length === 6 && handleOTP({ code });
+                          }}
+                          inputStyle={auth["otp-input"]}
+                          numInputs={6}
+                          renderSeparator={undefined}
+                          placeholder="-"
+                          shouldAutoFocus={true}
+                          renderInput={(props) => <input {...props} />}
+                        />
+                      )}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12}>
+                    <div className="auth-footer">
+                      <div className="mb-3">
+                        {timeInSeconds > 0 ? (
+                          <span className="auth-counter text-start d-ltr">
+                            {formatTime()}
+                          </span>
+                        ) : (
+                          <Button
+                            color="link"
+                            className={auth.link}
+                            onClick={handleResend}
+                          >
+                            ارسال مجدد کد
+                          </Button>
+                        )}
+                        <Button
+                          type="submit"
+                          color="primary"
+                          disabled={timeInSeconds <= 0}
+                          className={auth.submit}
+                        >
+                          {isLoading ? (
+                            <Spinner style={{ color: "white" }} />
+                          ) : (
+                            "ارسال"
+                          )}
+                        </Button>
+                      </div>
+                      <div className="mt-5">
+                        <Button
+                          className={auth.link}
+                          color="link"
+                          onClick={() => navigate(-1)}
+                        >
+                          ویرایش شماره همراه
+                        </Button>
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+              </Container>
             </form>
-          </div>
-        </div>
+          </CardBody>
+        </Card>
       </section>
-    </AuthLayout>
+    </Auth>
   );
 };
 export default OtpMobile;

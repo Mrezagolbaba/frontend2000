@@ -1,5 +1,6 @@
 import { Select } from "antd";
 import React from "react";
+import "./style.scss";
 
 const SelectComponent: React.FC<SelectProps> = ({
   options,

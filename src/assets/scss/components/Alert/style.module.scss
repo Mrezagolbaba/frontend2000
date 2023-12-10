@@ -1,0 +1,45 @@
+.alert {
+    position: relative;
+    display: flex;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    padding: 18px 16px;
+    border: 1px solid transparent;
+    &::before {
+      content: none;
+    }
+    &__icon {
+      margin-left: 5px;
+      &>svg{
+          font-size: 27px;
+      }
+    }
+    &__text {
+      margin-top: 3px;
+    }
+  
+    &.info {
+      color: #055160;
+      background-color: #cff4fc;
+      border-color: #b6effb;
+    }
+    &.warning {
+      background-color: #fffbf2;
+      border-color: #fffbf2;
+      color: #493605;
+      .alert__icon>svg {
+          color: #ff9500;
+      }
+    }
+    &.success {
+      color: #065317;
+      background-color: #cff6d7;
+      border-color: #b7f1c4;
+    }
+    &.danger {
+      color: #99130a;
+      background-color: #ffd2cf;
+      border-color: #ffbcb8;
+    }
+  }
+  

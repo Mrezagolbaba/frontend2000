@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Input, Spin } from "antd";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { LiaIdCardSolid } from "react-icons/lia";
@@ -7,15 +6,26 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CiMobile2, CiUser, CiMail } from "react-icons/ci";
 
-import "./styles.css";
-import AuthLayout from "layouts/Authentication";
+import Auth from "layouts/auth";
 import { InformationFormData } from "../types";
 import { InformationSchema } from "pages/auth/validationForms";
 import DatePicker from "components/DatePicker";
 import { useSubmitInformation } from "services/auth";
 import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
+import FloatInput from "components/Input/FloatInput";
 
-const Information: React.FC = () => {
+import auth from "assets/scss/auth/auth.module.scss";
+import {
+  Button,
+  Card,
+  CardBody,
+  Col,
+  Container,
+  Row,
+  Spinner,
+} from "reactstrap";
+
+const Information = () => {
   const navigate = useNavigate();
   const submitInformation = useSubmitInformation();
 
@@ -46,11 +56,19 @@ const Information: React.FC = () => {
       persianToEnglishNumbers(data.phoneNumber),
       "98"
     );
+    const nationalCode = persianToEnglishNumbers(data.nationalCode);
     await submitInformation
-      .mutateAsync({ ...data, phoneNumber })
+      .mutateAsync({ ...data, phoneNumber, nationalCode })
       .then((res) => {
+        navigate("/email-otp", {
+          state: {
+            email: data.email,
+          },
+        });
         setIsLoading(false);
-        res && navigate("/otp-email", { state: { email: data.email } });
+      })
+      .catch(() => {
+        setIsLoading(false);
       });
   };
 
@@ -62,78 +80,88 @@ const Information: React.FC = () => {
     );
 
   return (
-    <AuthLayout>
-      <section className="auth auth-information">
-        <div className="card auth-card auth-card--bordered">
-          <div className="card-body">
-            <h4 className="auth-title">اطلاعات هویتی</h4>
-            <p className="auth-text">اطلاعات هویتی خود را تکمیل کنید</p>
+    <Auth>
+      <section className={auth.container}>
+        <Card className={auth.card}>
+          <CardBody className={auth["card-body"]}>
+            <h4 className={auth.title}>اطلاعات هویتی</h4>
+            <p className={auth.text}>اطلاعات هویتی خود را تکمیل کنید</p>
             <form
-              className="auth-information-form"
+              className={auth.form}
               onSubmit={handleSubmit(handleInfo, handleErrors)}
             >
-              <div className="container">
-                <div className="row gy-2">
-                  <div className="col-12">
+              <Container>
+                <Row className="gy-2 gx-0">
+                  <Col xs={12}>
                     <Controller
                       name="firstName"
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
-                        <Input
+                        <FloatInput
                           type="text"
-                          id={name}
                           name={name}
-                          placeholder="نام"
+                          label="نام"
                           value={value}
-                          ref={ref}
                           onChange={onChange}
-                          size="large"
-                          prefix={<CiUser size={20} />}
-                          status={errors?.[name]?.message ? "error" : undefined}
+                          inputProps={{
+                            ref: ref,
+                            size: "large",
+                            prefix: <CiUser size={20} />,
+                            status: errors?.[name]?.message
+                              ? "error"
+                              : undefined,
+                          }}
                         />
                       )}
                     />
-                  </div>
-                  <div className="col-12">
+                  </Col>
+                  <Col xs={12}>
                     <Controller
                       name="lastName"
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
-                        <Input
+                        <FloatInput
                           type="text"
-                          id={name}
-                          placeholder=" نام خانوادگی"
+                          label=" نام خانوادگی"
+                          name={name}
                           value={value}
-                          ref={ref}
                           onChange={onChange}
-                          size="large"
-                          prefix={<CiUser size={20} />}
-                          status={errors?.[name]?.message ? "error" : undefined}
+                          inputProps={{
+                            ref: ref,
+                            size: "large",
+                            prefix: <CiUser size={20} />,
+                            status: errors?.[name]?.message
+                              ? "error"
+                              : undefined,
+                          }}
                         />
                       )}
                     />
-                  </div>
-                  <div className="col-12">
+                  </Col>
+                  <Col xs={12}>
                     <Controller
                       name="nationalCode"
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
-                        <Input
+                        <FloatInput
                           type="text"
-                          id={name}
                           name={name}
-                          placeholder="کدملی"
+                          label="کدملی"
                           value={value}
-                          ref={ref}
                           onChange={onChange}
-                          size="large"
-                          prefix={<LiaIdCardSolid size={20} />}
-                          status={errors?.[name]?.message ? "error" : undefined}
+                          inputProps={{
+                            ref: ref,
+                            size: "large",
+                            prefix: <LiaIdCardSolid size={20} />,
+                            status: errors?.[name]?.message
+                              ? "error"
+                              : undefined,
+                          }}
                         />
                       )}
                     />
-                  </div>
-                  <div className="col-12">
+                  </Col>
+                  <Col xs={12}>
                     <Controller
                       name="birthDate"
                       control={control}
@@ -145,67 +173,78 @@ const Information: React.FC = () => {
                         />
                       )}
                     />
-                  </div>
-                  <div className="col-12">
+                  </Col>
+                  <Col xs={12}>
                     <Controller
                       name="phoneNumber"
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
-                        <Input
+                        <FloatInput
                           type="text"
-                          id={name}
                           name={name}
-                          placeholder="شماره تلفن ایران"
+                          label="شماره تلفن ایران"
                           value={value}
-                          ref={ref}
                           onChange={onChange}
-                          size="large"
-                          prefix={<CiMobile2 size={20} />}
-                          status={errors?.[name]?.message ? "error" : undefined}
+                          inputProps={{
+                            ref: ref,
+                            size: "large",
+                            prefix: <CiMobile2 size={20} />,
+                            status: errors?.[name]?.message
+                              ? "error"
+                              : undefined,
+                          }}
                         />
                       )}
                     />
-                  </div>
-                  <div className="col-12">
+                  </Col>
+                  <Col xs={12}>
                     <Controller
                       name="email"
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
-                        <Input
+                        <FloatInput
                           type="email"
-                          id={name}
                           name={name}
-                          placeholder="ایمیل"
+                          label="ایمیل"
                           value={value}
-                          ref={ref}
                           onChange={onChange}
-                          size="large"
-                          prefix={<CiMail size={20} />}
-                          status={errors?.[name]?.message ? "error" : undefined}
+                          inputProps={{
+                            ref: ref,
+                            size: "large",
+                            prefix: <CiMail size={20} />,
+                            status: errors?.[name]?.message
+                              ? "error"
+                              : undefined,
+                          }}
                         />
                       )}
                     />
-                  </div>
-                  <div className="col-12 auth-footer">
-                    <button
-                      type="submit"
-                      className="btn btn-primary auth-submit"
-                      disabled={isLoading}
-                    >
-                      {isLoading ? (
-                        <Spin style={{ color: "white" }} />
-                      ) : (
-                        "ثبت اطلاعات"
-                      )}
-                    </button>
-                  </div>
-                </div>
-              </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12}>
+                    <div className="auth-footer">
+                      <Button
+                        type="submit"
+                        color="primary"
+                        className={auth.submit}
+                        disabled={isLoading}
+                      >
+                        {isLoading ? (
+                          <Spinner style={{ color: "white" }} />
+                        ) : (
+                          "ثبت اطلاعات"
+                        )}
+                      </Button>
+                    </div>
+                  </Col>
+                </Row>
+              </Container>
             </form>
-          </div>
-        </div>
+          </CardBody>
+        </Card>
       </section>
-    </AuthLayout>
+    </Auth>
   );
 };
 export default Information;
