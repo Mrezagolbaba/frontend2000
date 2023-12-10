@@ -25,8 +25,6 @@ import {
 
 import auth from "assets/scss/auth/auth.module.scss";
 
-import "pages/auth/style.scss";
-
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const loginMutation = useLogin();
