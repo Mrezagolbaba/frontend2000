@@ -134,21 +134,42 @@ export const isPasswordValid = (password: string) => {
 
   return isValid;
 };
-export function convertIRRToToman(number: number): number {
+export function convertIRRToToman(number: number | string): number {
   // Convert the number to an integer
-  const integerPart: number = Math.floor(number);
+  const integerPart: number = Math.floor(Number(number));
 
   // Convert the integer to a string and extract the first four characters
   const result: string = integerPart.toString().slice(0, 4);
 
   return parseInt(result, 10);
 }
-export const rialToToman = (rialAmount: number): number => {
+export const rialToToman = (rialAmount: number | string): number => {
   // Assuming 1 Toman is equal to 10 Rials
-  const tomanAmount = rialAmount / 10;
+  const tomanAmount = Math.floor(Number(rialAmount) / 10);
   return tomanAmount;
 };
 export const convertText = (text, direction) => {
+  const currencyMap = {
+    enToFa: {
+      USDT: "تتر",
+      TRY: "لیر",
+      IRR: "تومان",
+      TRX: "ترون",
+    },
+    faToEn: {
+      تتر: "USDT",
+      لیر: "TRY",
+      تومان: "IRR",
+      ترون: "TRX",
+    },
+  };
+
+  if (direction in currencyMap && text in currencyMap[direction]) {
+    return currencyMap[direction][text];
+  }
+  return text;
+};
+export const convertTextSingle = (text) => {
   const currencyMap = {
     'enToFa': {
       'USDT': 'تتر',
@@ -164,8 +185,13 @@ export const convertText = (text, direction) => {
     },
   };
 
-  if (direction in currencyMap && text in currencyMap[direction]) {
-    return currencyMap[direction][text];
+  if (text in currencyMap['enToFa']) {
+    return currencyMap['enToFa'][text];
   }
   return text;
 };
+export function extractLeftSide(baseString) {
+  return baseString.includes("/") ? baseString.split("/")[0] : baseString;
+}
+
+      

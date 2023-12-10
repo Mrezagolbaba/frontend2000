@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { LiaIdCardSolid } from "react-icons/lia";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -27,9 +27,11 @@ import {
 
 const Information = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const submitInformation = useSubmitInformation();
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const { phoneNumber } = location.state;
 
   const resolver = yupResolver(InformationSchema);
   const {
@@ -52,13 +54,15 @@ const Information = () => {
 
   const handleInfo = async (data: InformationFormData) => {
     setIsLoading(true);
-    const phoneNumber = formatPhoneNumber(
-      persianToEnglishNumbers(data.phoneNumber),
-      "98"
-    );
     const nationalCode = persianToEnglishNumbers(data.nationalCode);
     await submitInformation
-      .mutateAsync({ ...data, phoneNumber, nationalCode })
+      .mutateAsync({
+        ...data,
+        phoneNumber: data.phoneNumber
+          ? formatPhoneNumber(persianToEnglishNumbers(data.phoneNumber), "98")
+          : undefined,
+        nationalCode,
+      })
       .then((res) => {
         navigate("/email-otp", {
           state: {
@@ -174,29 +178,31 @@ const Information = () => {
                       )}
                     />
                   </Col>
-                  <Col xs={12}>
-                    <Controller
-                      name="phoneNumber"
-                      control={control}
-                      render={({ field: { name, value, onChange, ref } }) => (
-                        <FloatInput
-                          type="text"
-                          name={name}
-                          label="شماره تلفن ایران"
-                          value={value}
-                          onChange={onChange}
-                          inputProps={{
-                            ref: ref,
-                            size: "large",
-                            prefix: <CiMobile2 size={20} />,
-                            status: errors?.[name]?.message
-                              ? "error"
-                              : undefined,
-                          }}
-                        />
-                      )}
-                    />
-                  </Col>
+                  {!phoneNumber.includes("+98") && (
+                    <Col xs={12}>
+                      <Controller
+                        name="phoneNumber"
+                        control={control}
+                        render={({ field: { name, value, onChange, ref } }) => (
+                          <FloatInput
+                            type="text"
+                            name={name}
+                            label="شماره تلفن ایران"
+                            value={value as string}
+                            onChange={onChange}
+                            inputProps={{
+                              ref: ref,
+                              size: "large",
+                              prefix: <CiMobile2 size={20} />,
+                              status: errors?.[name]?.message
+                                ? "error"
+                                : undefined,
+                            }}
+                          />
+                        )}
+                      />
+                    </Col>
+                  )}
                   <Col xs={12}>
                     <Controller
                       name="email"

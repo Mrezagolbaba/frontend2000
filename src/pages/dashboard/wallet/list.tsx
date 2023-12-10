@@ -6,7 +6,7 @@ import CryptoCard from "./Crypto";
 import Fiat from "./Fiat";
 import { useList } from "@refinedev/core";
 
-const initiateCrypto = {
+const initiateCurrency = {
   availableBalance: "",
   balance: "",
   createdAt: "",
@@ -17,8 +17,10 @@ const initiateCrypto = {
 };
 
 export const WalletList: React.FC = () => {
-  const [USDT, setUSDT] = useState<any>(initiateCrypto);
-  const [TRX, setTRX] = useState<any>(initiateCrypto);
+  const [USDT, setUSDT] = useState<any>(initiateCurrency);
+  const [TRX, setTRX] = useState<any>(initiateCurrency);
+  const [Rial, setRial] = useState<any>(initiateCurrency);
+  const [Lir, setLir] = useState<any>(initiateCurrency);
 
   const { data, isSuccess, isLoading } = useList({
     resource: `wallets`,
@@ -29,6 +31,8 @@ export const WalletList: React.FC = () => {
       data?.data.forEach((item) => {
         item.currencyCode === "USDT" && setUSDT(item);
         item.currencyCode === "TRX" && setTRX(item);
+        item.currencyCode === "IRR" && setRial(item);
+        item.currencyCode === "TRY" && setLir(item);
       });
     }
   }, [data?.data, isSuccess]);
@@ -37,7 +41,7 @@ export const WalletList: React.FC = () => {
     <section className="page page-wallet">
       <Row>
         <Col xs={12}>
-          <RialCard />
+          <RialCard stock={Rial} isLoading={isLoading} />
         </Col>
       </Row>
       <Row>
@@ -50,7 +54,7 @@ export const WalletList: React.FC = () => {
           />
         </Col>
         <Col xs={12} lg={6}>
-          <Fiat />
+          <Fiat TRY={Lir} isLoading={isLoading} isSuccess={isSuccess} />
         </Col>
       </Row>
     </section>

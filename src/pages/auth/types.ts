@@ -19,6 +19,6 @@ export interface InformationFormData {
   lastName: string;
   nationalCode: string;
   birthDate: string;
-  phoneNumber: string;
+  phoneNumber?: string;
   email: string;
 }

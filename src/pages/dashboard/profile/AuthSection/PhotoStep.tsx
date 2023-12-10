@@ -3,7 +3,7 @@ import { AuthenticationLevel2Props } from "./types";
 import defaultImage from "assets/img/profile/auth.png";
 import { BsTrash3, BsUpload } from "react-icons/bs";
 import { useUploadDoc } from "services/verification";
-import { useAppSelector } from "redux/hooks";
+import { useAppSelector } from "store/hooks";
 
 import profile from "assets/scss/dashboard/profile.module.scss";
 import { Button, Col, Container, Row, Spinner } from "reactstrap";

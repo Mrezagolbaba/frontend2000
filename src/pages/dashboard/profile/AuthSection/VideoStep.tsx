@@ -3,7 +3,7 @@ import { BsCameraVideo, BsPause, BsPlay } from "react-icons/bs";
 import { useReactMediaRecorder } from "react-media-recorder";
 import { useUploadDoc } from "services/verification";
 import { AuthenticationLevel2Props } from "./types";
-import { useAppSelector } from "redux/hooks";
+import { useAppSelector } from "store/hooks";
 import { Button, Col, Container, Row, Spinner } from "reactstrap";
 
 import profile from "assets/scss/dashboard/profile.module.scss";

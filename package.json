@@ -45,6 +45,7 @@
     "react-slick": "^0.29.0",
     "react-spring-bottom-sheet": "^3.4.1",
     "reactstrap": "^9.2.0",
+    "redux-persist": "^6.0.0",
     "sass": "^1.65.0",
     "slick-carousel": "^1.8.1",
     "vite-plugin-sass": "^0.1.0",

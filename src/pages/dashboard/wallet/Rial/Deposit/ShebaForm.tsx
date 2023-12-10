@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -17,21 +17,24 @@ import { AlertInfo } from "components/AlertWidget";
 
 import saman from "assets/img/bank/Saman.svg";
 
-import wallet from "../../style.module.scss";
+import wallet from "assets/scss/dashboard/wallet.module.scss";
+import { useDepositInfoQuery } from "store/api/wallet-management";
 
 type ShebaFormType = {
   accountName: string;
-  ShebaNumber: string;
+  shebaNumber: string;
   depositId: string;
   bankName: string;
 };
 const ShebaForm = () => {
   const [hasLevel2, setHasLevel2] = useState<boolean>(true);
 
+  const { data, isLoading, isSuccess } = useDepositInfoQuery("IRR");
+
   const resolver = yupResolver(
     Yup.object().shape({
       accountName: Yup.string().required(),
-      ShebaNumber: Yup.string().required(),
+      shebaNumber: Yup.string().required(),
       depositId: Yup.string().required(),
       bankName: Yup.string().required(),
     })
@@ -40,20 +43,31 @@ const ShebaForm = () => {
     handleSubmit,
     control,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<ShebaFormType>({
     mode: "onChange",
     defaultValues: {
-      accountName: "سامانه تبادل سریع آرسونیکس",
-      ShebaNumber: "IR100100100100100100100101000",
-      depositId: "9124312329593000",
-      bankName: "بانک سامان",
+      accountName: "",
+      shebaNumber: "",
+      depositId: "",
+      bankName: "",
     },
     resolver,
   });
   const onSubmit = async (data: ShebaFormType) => {
     console.log(data);
   };
+
+  useEffect(() => {
+    isSuccess &&
+      data &&
+      reset({
+        accountName: data?.accountOwnerName,
+        shebaNumber: data?.iban,
+        bankName: data?.bankName,
+      });
+  }, [data, isSuccess, reset]);
 
   return hasLevel2 ? (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -79,7 +93,7 @@ const ShebaForm = () => {
         </Col>
         <Col xs={12} lg={6}>
           <Controller
-            name="ShebaNumber"
+            name="shebaNumber"
             control={control}
             render={({ field: { name, value } }) => (
               <FormGroup>

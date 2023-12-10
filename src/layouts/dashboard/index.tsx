@@ -9,9 +9,9 @@ import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 
 import Sidebar from "./sidebar";
 import { Container } from "reactstrap";
-import { useAppDispatch } from "redux/hooks";
+import { useAppDispatch } from "store/hooks";
 import { useGetMe } from "services/auth/user";
-import { setUser } from "redux/features/user/userSlice";
+import { setUser } from "store/reducers/features/user/userSlice";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);

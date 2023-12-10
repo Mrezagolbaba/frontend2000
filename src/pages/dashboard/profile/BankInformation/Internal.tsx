@@ -1,9 +1,9 @@
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AlertInfo, AlertWarning } from "components/AlertWidget";
-import React, { useState } from "react";
-import { Controller, useForm as useRHF } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { CiTrash } from "react-icons/ci";
+import { FaExclamation } from "react-icons/fa";
 import {
   Button,
   ButtonGroup,
@@ -17,31 +17,67 @@ import {
   Input,
   Label,
   Row,
+  Spinner,
 } from "reactstrap";
-import { useAppSelector } from "redux/hooks";
-import { useForm } from "@refinedev/core";
+import { LuCheck, LuPencil } from "react-icons/lu";
+import { useAppSelector } from "store/hooks";
 
 import profile from "assets/scss/dashboard/profile.module.scss";
+import AccountNumberInput from "components/Input/AccountNumber";
+import Dialog from "components/Dialog";
+import { useEffect, useState } from "react";
+import { formatShowAccount, searchIranianBanks } from "helpers/filesManagement";
+import { PiCreditCardLight } from "react-icons/pi";
+import toast from "react-hot-toast";
+import { BankAccountsResponse, FormBankAccountRequest } from "types/profile";
+import {
+  useCreateBankAccountMutation,
+  useDeleteBankAccountMutation,
+  useEditBankAccountMutation,
+} from "store/api/profile-management";
+import { MdClose } from "react-icons/md";
+import DeleteModal from "./DeleteModal";
 
 const resolver = yupResolver(
   Yup.object().shape({
-    sheba: Yup.string(),
+    iban: Yup.string(),
     cardNumber: Yup.string().required(),
+    bankId: Yup.string().required(),
   })
 );
 
-export default function Internal() {
+type Props = {
+  accounts: BankAccountsResponse[];
+  isLoading: boolean;
+};
+
+export default function Internal({ accounts, isLoading }: Props) {
   const { firstName, lastName } = useAppSelector((state) => state.user);
 
-  const { formLoading, onFinish } = useForm({
-    action: "create",
-    resource: "bank-accounts",
-    onMutationSuccess: (data, variables, context, isAutoSave) => {
-      console.log("looooooooooog", { data, variables, context, isAutoSave });
-    },
+  const [isOpenForm, setIsOpenForm] = useState<boolean>(false);
+  const [editOption, setEditOption] = useState<{
+    isEdit: boolean;
+    bankId: string;
+  }>({
+    isEdit: false,
+    bankId: "",
+  });
+  const [deleteOptions, setDeleteOptions] = useState<{
+    isOpen: boolean;
+    id?: string;
+    logo?: string;
+    accountNumber?: string;
+  }>({
+    isOpen: false,
+    id: undefined,
+    logo: undefined,
+    accountNumber: "",
   });
 
-  const [localRows, setLocalRows] = useState([{ id: 0 }]);
+  const [createAccount, { isLoading: formLoading, isSuccess }] =
+    useCreateBankAccountMutation();
+
+  const [editAccount] = useEditBankAccountMutation();
 
   const {
     handleSubmit,
@@ -49,116 +85,300 @@ export default function Internal() {
     reset,
     setValue,
     formState: { errors },
-  } = useRHF({
+  } = useForm<FormBankAccountRequest>({
     mode: "onChange",
     defaultValues: {
-      sheba: "",
+      iban: "",
       cardNumber: "",
+      bankId: "",
     },
     resolver,
   });
 
-  const addRow = () => {
-    setLocalRows([...localRows, { id: localRows.length }]);
+  const submitHandler = (data) => {
+    editOption.isEdit ? editAccount(data) : createAccount(data);
   };
-  const removeRow = (id) => {
-    setLocalRows(localRows.filter((row) => row.id !== id));
+
+  const resetForm = () => {
+    reset({
+      iban: "",
+      cardNumber: "",
+      bankId: "",
+    });
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      setIsOpenForm(false);
+      resetForm();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if (accounts.length <= 0) setIsOpenForm(true);
+    else setIsOpenForm(false);
+  }, [accounts]);
 
   return (
-    <Card className="mb-4">
-      <CardHeader>
-        <CardTitle tag="h5">اطلاعات بانکی</CardTitle>
-      </CardHeader>
-      <CardBody>
-        <AlertWarning
-          hasIcon
-          key="account-warning"
-          text={`تنها حساب‌هایی که به نام ${firstName} ${lastName} باشند قابلیت اضافه شدن را دارند، در نظر داشته باشید واریز و برداشت فقط از طریق حساب هایی که معرفی می‌کنید امکان پذیر خواهد بود.`}
-        />
-        <AlertInfo
-          hasIcon
-          key="account-info"
-          text="در صورتی که شماره شبا حساب خود را ندارید، وارد کردن شماره کارت کافی است."
-        />
-        <Form className="bank-account" onSubmit={handleSubmit(onFinish)}>
-          {localRows.map((row, index) => (
-            <Row key={row.id} className="justify-content-center">
-              <Col xs={12} lg={5}>
-                <Controller
-                  name="cardNumber"
-                  control={control}
-                  render={({ field: { name, value, onChange, ref } }) => (
-                    <FormGroup row>
-                      <Label sm={3}>شماره کارت:</Label>
-                      <Col sm={9}>
-                        <Input
-                          value={value}
-                          ref={ref}
-                          onChange={onChange}
-                          name={name}
-                          type="text"
-                          className="form-control d-ltr"
-                          id={`input24_${row.id}`}
-                          placeholder=""
-                        />
-                      </Col>
-                    </FormGroup>
-                  )}
-                />
-              </Col>
-              <Col xs={12} lg={5}>
-                <Controller
-                  name="sheba"
-                  control={control}
-                  render={({ field: { name, value, onChange, ref } }) => (
-                    <FormGroup row>
-                      <Label xs={3}>شماره شبا:</Label>
-                      <Col xs={9}>
-                        <div className={profile["iban-input-control"]}>
-                          <span id={`sheba_${row.id}`}>IR</span>
-                          <Input
-                            value={value}
-                            ref={ref}
-                            onChange={onChange}
-                            name={name}
-                            type="text"
-                            id={`input23_${row.id}`}
-                            placeholder=""
-                          />
-                        </div>
-                      </Col>
-                    </FormGroup>
-                  )}
-                />
-              </Col>
-              <Col sm={{ size: 1 }}>
-                {index !== 0 && (
-                  <span
-                    style={{
-                      color: "red",
-                      cursor: "pointer",
-                      fontSize: "1.5rem",
-                    }}
-                    onClick={() => removeRow(row.id)}
-                    className="icon"
-                  >
-                    <CiTrash />
-                  </span>
-                )}
-              </Col>
-            </Row>
-          ))}
+    <>
+      <Card className="mb-4">
+        <CardHeader>
+          <CardTitle tag="h5">اطلاعات بانکی</CardTitle>
+        </CardHeader>
+        <CardBody>
+          <AlertWarning
+            hasIcon
+            key="account-warning"
+            text={`تنها حساب‌هایی که به نام ${firstName} ${lastName} باشند قابلیت اضافه شدن را دارند، در نظر داشته باشید واریز و برداشت فقط از طریق حساب هایی که معرفی می‌کنید امکان پذیر خواهد بود.`}
+          />
+          <AlertInfo
+            hasIcon
+            key="account-info"
+            text="در صورتی که شماره شبا حساب خود را ندارید، وارد کردن شماره کارت کافی است."
+          />
 
+          {isOpenForm && (
+            <Form onSubmit={handleSubmit(submitHandler)}>
+              <Row>
+                <Col xs={10}>
+                  <Row className="px-2">
+                    <Col xs={12} xl={6}>
+                      <Controller
+                        name="cardNumber"
+                        control={control}
+                        render={({ field: { name, value, onChange } }) => (
+                          <FormGroup className={profile["accounts-field"]}>
+                            <Label>شماره کارت:</Label>
+                            <AccountNumberInput
+                              value={value}
+                              onChange={onChange}
+                              setBankId={(val) => {
+                                console.log("bankId", val);
+
+                                setValue("bankId", val);
+                              }}
+                              name={name}
+                              id="00"
+                            />
+                          </FormGroup>
+                        )}
+                      />
+                    </Col>
+                    <Col xs={12} xl={6}>
+                      <Controller
+                        name="iban"
+                        control={control}
+                        render={({ field: { name, value, onChange, ref } }) => (
+                          <FormGroup className={profile["accounts-field"]}>
+                            <Label>شماره شبا:</Label>
+                            <div className={profile["iban-input-control"]}>
+                              <span id={`sheba_00`}>IR</span>
+                              <Input
+                                value={value}
+                                ref={ref}
+                                onChange={onChange}
+                                name={name}
+                                type="text"
+                                id={`inputSheba_00`}
+                                placeholder=""
+                              />
+                            </div>
+                          </FormGroup>
+                        )}
+                      />
+                    </Col>
+                  </Row>
+                </Col>
+                <Col xs={2} className="align-self-center">
+                  <Button
+                    type="button"
+                    color="icon-danger"
+                    disabled={accounts.length <= 0}
+                    onClick={() => {
+                      setIsOpenForm(false);
+                      resetForm();
+                      setEditOption({
+                        isEdit: false,
+                        bankId: "",
+                      });
+                    }}
+                  >
+                    <MdClose />
+                  </Button>
+                  <Button type="submit" color="icon-success">
+                    <LuCheck />
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+          )}
+
+          {!accounts || isLoading ? (
+            <>
+              <Row>
+                <Col xs={10}>
+                  <Row className="px-2 my-1">
+                    <Col xs={12} xl={6} className="placeholder-glow">
+                      <div className={profile["accounts-field"]}>
+                        <label className="placeholder rounded" />
+                        <Col className="placeholder rounded py-3" />
+                      </div>
+                    </Col>
+                    <Col
+                      xs={12}
+                      xl={6}
+                      className="text-center placeholder-glow"
+                    >
+                      <div className={profile["accounts-field"]}>
+                        <label className="placeholder rounded" />
+                        <div className="placeholder rounded py-3" />
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row className="px-2 my-1">
+                    <Col xs={12} xl={6} className="placeholder-glow">
+                      <div className={profile["accounts-field"]}>
+                        <label className="placeholder rounded" />
+                        <Col className="placeholder rounded py-3" />
+                      </div>
+                    </Col>
+                    <Col
+                      xs={12}
+                      xl={6}
+                      className="text-center placeholder-glow"
+                    >
+                      <div className={profile["accounts-field"]}>
+                        <label className="placeholder rounded" />
+                        <div className="placeholder rounded py-3" />
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row className="px-2 my-1">
+                    <Col xs={12} xl={6} className="placeholder-glow">
+                      <div className={profile["accounts-field"]}>
+                        <label className="placeholder rounded" />
+                        <Col className="placeholder rounded py-3" />
+                      </div>
+                    </Col>
+                    <Col
+                      xs={12}
+                      xl={6}
+                      className="text-center placeholder-glow"
+                    >
+                      <div className={profile["accounts-field"]}>
+                        <label className="placeholder rounded" />
+                        <div className="placeholder rounded py-3" />
+                      </div>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+            </>
+          ) : (
+            accounts.length > 0 &&
+            accounts.map((account) => {
+              if (editOption.isEdit && editOption.bankId === account.bankId)
+                return null;
+              else
+                return (
+                  <Row>
+                    <Col xs={10}>
+                      <Row className="px-2">
+                        <Col xs={12} xl={6}>
+                          <FormGroup className={profile["accounts-field"]}>
+                            <Label>شماره کارت:</Label>
+                            <AccountNumberInput
+                              value={account?.cardNumber}
+                              name={account?.cardNumber}
+                              id={account?.id}
+                              disabled={true}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col xs={12} xl={6}>
+                          <FormGroup className={profile["accounts-field"]}>
+                            <Label>شماره شبا:</Label>
+                            <div className={profile["iban-input-control"]}>
+                              <span id={`sheba_${account?.id}`}>IR</span>
+                              <Input
+                                value={account?.iban}
+                                name={account?.iban}
+                                type="text"
+                                id={`input23_${account?.id}`}
+                                placeholder=""
+                                disabled={true}
+                              />
+                            </div>
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col sm={2} className="align-self-center">
+                      <Button
+                        type="button"
+                        color="icon-danger"
+                        onClick={() => {
+                          const logo = searchIranianBanks(
+                            account?.cardNumber
+                          ).logo;
+                          setDeleteOptions({
+                            isOpen: true,
+                            id: account?.id,
+                            logo,
+                            accountNumber: account?.cardNumber,
+                          });
+                        }}
+                      >
+                        <CiTrash />
+                      </Button>
+                      <Button
+                        type="button"
+                        color="icon-secondary"
+                        disabled
+                        onClick={() => {
+                          setIsOpenForm(true);
+                          reset({
+                            bankId: account.bankId,
+                            cardNumber: account.cardNumber,
+                            iban: account.iban,
+                          });
+                          setEditOption({
+                            isEdit: true,
+                            bankId: account?.bankId,
+                          });
+                        }}
+                      >
+                        <LuPencil />
+                      </Button>
+                    </Col>
+                  </Row>
+                );
+            })
+          )}
           <Row>
-            <ButtonGroup style={{ display: "flex", justifyContent: "center" }}>
-              <Button type="submit" color="link" style={{ flex: "none" }}>
-                اضافه کردن حساب جدید
-              </Button>
-            </ButtonGroup>
+            <Col xs={11}>
+              <ButtonGroup
+                style={{ display: "flex", justifyContent: "center" }}
+              >
+                <Button
+                  disabled={isOpenForm}
+                  type="button"
+                  color="link"
+                  onClick={() => setIsOpenForm(true)}
+                >
+                  اضافه کردن حساب جدید
+                </Button>
+              </ButtonGroup>
+            </Col>
           </Row>
-        </Form>
-      </CardBody>
-    </Card>
+        </CardBody>
+      </Card>
+
+      <DeleteModal
+        setDeleteOptions={setDeleteOptions}
+        deleteOptions={deleteOptions}
+      />
+    </>
   );
 }

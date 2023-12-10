@@ -23,7 +23,7 @@ import FinalStep from "./FinalStep";
 
 import profile from "assets/scss/dashboard/profile.module.scss";
 import { AlertSuccess } from "components/AlertWidget";
-import { useAppSelector } from "redux/hooks";
+import { useAppSelector } from "store/hooks";
 
 const dataLevel1 = [
   <>
@@ -88,7 +88,7 @@ const AuthSection = () => {
     }
   };
   return (
-    <Card className="mb-4">
+    <Card className="mb-4" id="kyc-section">
       <CardHeader>
         <CardTitle tag="h5">احراز هویت</CardTitle>
       </CardHeader>

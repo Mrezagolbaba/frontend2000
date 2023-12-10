@@ -171,3 +171,21 @@
     padding-left: 50px;
   }
 }
+
+.accounts-field {
+  display: flex;
+  margin-top: 2rem;
+  & > label {
+    display: flex;
+    line-height: 48px;
+    flex: 0 0 120px;
+    margin-left: 10px;
+  }
+  & > div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    height: 100%;
+    width: 100%;
+  }
+}

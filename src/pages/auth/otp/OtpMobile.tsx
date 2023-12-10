@@ -11,8 +11,8 @@ import { toast } from "react-hot-toast";
 import React, { useEffect, useState } from "react";
 import { useSendOtp } from "services/auth/otp";
 import { useGetMe } from "services/auth/user";
-import { useAppDispatch } from "redux/hooks";
-import { setUser } from "redux/features/user/userSlice";
+import { useAppDispatch } from "store/hooks";
+import { setUser } from "store/reducers/features/user/userSlice";
 
 import auth from "assets/scss/auth/auth.module.scss";
 import {
@@ -76,7 +76,12 @@ const OtpMobile: React.FC = () => {
             }
             // if (res?.firstTierVerified) navigate("/dashboard");
             else if (res?.firstTierVerified) navigate("/dashboard");
-            else navigate("/information");
+            else
+              navigate("/information", {
+                state: {
+                  phoneNumber,
+                },
+              });
             setIsLoading(false);
           })
           .catch(() => {

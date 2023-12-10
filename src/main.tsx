@@ -5,7 +5,7 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import App from "./App.tsx";
 import { Provider } from "react-redux";
 import * as Sentry from "@sentry/react";
-import { store } from "redux/store.ts";
+import { store } from "store/store.ts";
 
 import "assets/scss/index.scss";
 

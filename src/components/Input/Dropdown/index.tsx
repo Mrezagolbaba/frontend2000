@@ -8,13 +8,17 @@ import {
 
 import dropdown from "assets/scss/components/Input/dropdown.module.scss";
 
-export type OptionType = { value: string; content: ReactNode | string };
+export type OptionType = {
+  value: string;
+  content: ReactNode | string;
+  otherOptions?: any;
+};
 
 type Props = {
-  options: OptionType[];
+  options: OptionType[] | [];
   id?: string;
   value: string | number;
-  onChange?: (value: string) => void;
+  onChange?: (value: string, other?: any) => void;
   children?: ReactNode;
   hasError?: boolean;
   disabled?: boolean;
@@ -44,7 +48,9 @@ const DropdownInput = ({
   };
 
   const handleOptionSelect = (option: OptionType) => {
-    onChange?.(option.value);
+    option.otherOptions
+      ? onChange?.(option.value, option.otherOptions)
+      : onChange?.(option.value);
     setSelectedOption(option);
     setIsOpenDrop(false); // Close the dropdown when an option is selected
   };
@@ -80,24 +86,30 @@ const DropdownInput = ({
           <ul
             className={`${dropdown["custom-dropdown__menu"]} ${dropdown.inner}`}
           >
-            {options.map((option: OptionType, index: number) => {
-              return (
-                <DropdownItem
-                  key={index}
-                  tag="li"
-                  onClick={() => handleOptionSelect(option)}
-                >
-                  <a
-                    role="option"
-                    className={`${dropdown["custom-dropdown__item"]} ${
-                      value === option.value ? dropdown["selected"] : ""
-                    }`}
+            {options?.length > 0 ? (
+              options.map((option: OptionType, index: number) => {
+                return (
+                  <DropdownItem
+                    key={index}
+                    tag="li"
+                    onClick={() => handleOptionSelect(option)}
                   >
-                    {option.content}
-                  </a>
-                </DropdownItem>
-              );
-            })}
+                    <a
+                      role="option"
+                      className={`${dropdown["custom-dropdown__item"]} ${
+                        value === option.value ? dropdown["selected"] : ""
+                      }`}
+                    >
+                      {option.content}
+                    </a>
+                  </DropdownItem>
+                );
+              })
+            ) : (
+              <DropdownItem key={0} tag="li" className="text-center">
+                دیتایی وجود ندارد
+              </DropdownItem>
+            )}
           </ul>
         )}
       </DropdownMenu>
