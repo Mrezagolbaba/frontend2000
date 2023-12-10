@@ -2,12 +2,12 @@
   color: #fff;
   width: 100vw;
   height: 100vh;
-  font-family: "Roboto Condensed", sans-serif;
+  font-family: var(--bs-font-shabnam);
   background-image: url(https://images.unsplash.com/photo-1508389377389-b8221c0bcc9e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80);
   background-position: top top;
   background-size: cover;
   margin: 0;
-  font-family: "IRANYekanX", sans-serif;
+  // font-family: "IRANYekanX", sans-serif;
   .App {
     position: fixed;
     top: 0;
@@ -38,6 +38,7 @@
     font-size: 38px;
     text-transform: uppercase;
     line-height: 76px;
+    direction: rtl;
   }
   .optin {
     direction: ltr;

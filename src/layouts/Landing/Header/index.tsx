@@ -1,39 +1,26 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "assets/img/logo-light.png";
-import classNames from "classnames";
-import "./style.scss";
-import React, { useEffect, useState } from "react";
+
+import home from "assets/scss/landing/home.module.scss";
+import { Button, Container } from "reactstrap";
+import { IoIosCloseCircleOutline } from "react-icons/io";
+import { TbMenu } from "react-icons/tb";
 
 const Header = () => {
   const [openOverlayMenu, setOpenOverlayMenu] = useState<boolean>(false);
-  const [isMobile, setIsMobile] = useState(true);
-  //how to find user agant
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    window.addEventListener('resize', handleResize);
-    handleResize();
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  const headerClassNames = classNames('landing-header', {
-    'header--landing--mobile': isMobile,
-    'header--landing': !isMobile,
-  });
 
   return (
     <>
       <div
         id="menuOverlay"
-        className={`menu-overlay ${openOverlayMenu ? "show" : ""}`}
-      ></div>
-      <header className={headerClassNames}>
-        <div className="header__top">
-          <div className="header__logo">
+        className={`${home["menu-overlay"]} ${
+          openOverlayMenu ? home.show : ""
+        }`}
+      />
+      <header className={home.header}>
+        <div className={home.header__top}>
+          <div className={home.header__logo}>
             <Link to="/">
               <img src={Logo} className="logo" />
             </Link>
@@ -41,79 +28,59 @@ const Header = () => {
 
           <nav>
             <ul
-              className={`navbar navbar--light ${
-                openOverlayMenu ? "expanded" : ""
+              className={`${home.navbar} navbar--light ${
+                openOverlayMenu ? home.expanded : ""
               }`}
               id="navbar"
             >
               <li>
-                <div className="header__auth">
-                  <ul className="navbar navbar--simple">
-                    <li className="navbar__item header__auth--login">
-                      <a href="/login">ورود</a>
+                <div className={home.header__auth}>
+                  <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
+                    <li className={home.navbar__item}>
+                      <Link to="/login">ورود</Link>
                     </li>
-                    <li className="header__auth--register">
-                      <a href="/register" className="btn btn-primary">
+                    <li className={home.header__auth__register}>
+                      <Button
+                        tag="a"
+                        href="/register"
+                        color="primary"
+                        className={home["rounded-button"]}
+                      >
                         ثبت نام
-                      </a>
+                      </Button>
                     </li>
                   </ul>
                 </div>
               </li>
-              <li className="navbar__item navbar__item--active">
-                <a href="/">صفحه اصلی</a>
+              <li className={`${home.navbar__item} ${home.active}`}>
+                <Link to="/">صفحه اصلی</Link>
               </li>
-              <li className="navbar__item">
-                <a href="/market">بازارها</a>
+              <li className={home.navbar__item}>
+                <Link to="/market">بازارها</Link>
               </li>
-              <li className="navbar__item">
-                <a href="/terms">قوانین</a>
+              <li className={home.navbar__item}>
+                <Link to="/terms">قوانین</Link>
               </li>
-              <li className="navbar__item">
-                <a href="https://www.arsonex.com/blog" target="_blank">بلاگ</a>
+              <li className={home.navbar__item}>
+                <Link to="https://www.arsonex.com/blog" target="_blank">
+                  بلاگ
+                </Link>
               </li>
-              <li className="navbar__item">
-                <a href="/aboutUs">درباره ما</a>
+              <li className={home.navbar__item}>
+                <Link to="/aboutUs">درباره ما</Link>
               </li>
-              <li className="navbar__item">
-                <a href="/contact">تماس با ما</a>
+              <li className={home.navbar__item}>
+                <Link to="/contact">تماس با ما</Link>
               </li>
               <li>
-                <div className="navbar-close">
+                <div className={home.navbar__close}>
                   {/* <button type="button" onclick={()=>respMenu.dismiss()}> */}
                   <button
                     type="button"
                     onClick={() => setOpenOverlayMenu(false)}
                   >
                     <span className="icon">
-                      <svg
-                        width="48"
-                        height="48"
-                        viewBox="0 0 48 48"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <circle
-                          cx="24"
-                          cy="24"
-                          r="23.25"
-                          stroke="#040F4A"
-                          stroke-opacity="0.1"
-                          stroke-width="1.5"
-                        ></circle>
-                        <path
-                          d="M17 31L31.1421 16.8579"
-                          stroke="#040F4A"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                        ></path>
-                        <path
-                          d="M17 17L31.1421 31.1421"
-                          stroke="#040F4A"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                        ></path>
-                      </svg>
+                      <IoIosCloseCircleOutline />
                     </span>
                   </button>
                 </div>
@@ -121,66 +88,49 @@ const Header = () => {
             </ul>
           </nav>
 
-          <div className="header__auth">
-            <ul className="navbar navbar--simple">
-              <li className="navbar__item header__auth--login">
-                <a href="/login">ورود</a>
+          <div className={home.header__auth}>
+            <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
+              <li className={home.navbar__item}>
+                <Link to="/login">ورود</Link>
               </li>
-              <li className="header__auth--register">
-                <a href="/register" className="btn btn-primary">
+              <li className={home.header__auth__register}>
+                <Button
+                  tag="a"
+                  href="/register"
+                  color="primary"
+                  className={home["rounded-button"]}
+                >
                   ثبت نام
-                </a>
+                </Button>
               </li>
             </ul>
           </div>
-          <div className="header-hamburger">
+          <div className={home.header__hamburger}>
             {/* <button type="button" onclick="respMenu.open()"> */}
             <button type="button" onClick={() => setOpenOverlayMenu(true)}>
               <span className="icon">
-                <svg
-                  width="48"
-                  height="48"
-                  viewBox="0 0 48 48"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle
-                    cx="24"
-                    cy="24"
-                    r="23.25"
-                    stroke="#040F4A"
-                    stroke-opacity="0.1"
-                    stroke-width="1.5"
-                  ></circle>
-                  <path
-                    d="M14 20H34"
-                    stroke="#040F4A"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  ></path>
-                  <path
-                    d="M14 28H34"
-                    stroke="#040F4A"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  ></path>
-                </svg>
+                <TbMenu />
               </span>
             </button>
           </div>
         </div>
-        <div className="container">
-          <div className="header-intro">
+        <Container>
+          <div className={home.header__intro}>
             <h1>آرسونیکس، همراه ارز دیجیتال شما</h1>
             <p>
               مهم نیست ارز دیجیتال نیاز داشته باشی یا واحد پول یه کشور دیگه،
               آرسونیکس برات به آسانی تبدیل می&zwnj;کنه.
             </p>
-            <a href="/register" className="btn btn-primary">
+            <Button
+              tag="a"
+              href="/register"
+              color="primary"
+              className={home["rounded-button"]}
+            >
               با آرسونیکس شروع کنید
-            </a>
+            </Button>
           </div>
-        </div>
+        </Container>
       </header>
     </>
   );

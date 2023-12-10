@@ -1,48 +1,8 @@
-.custom-card {
-  background: #fff;
-  box-shadow: 0px 4px 64px rgba(0, 0, 0, 0.03);
-  border-radius: 10px;
-  border: none;
-  &.card--h100pc {
-    height: 100%;
-  }
-  &.card-secondary {
-    .card-header {
-      padding-bottom: 15px;
-    }
-  }
-  .card-header {
-    background-color: #fff;
-    border-radius: 20px 20px 0 0;
-    padding: 25px 0 20px;
-    margin-right: 25px;
-    margin-left: 25px;
-    border-bottom: 1px solid rgba(3, 4, 27, 0.03);
-    &.card-header-flex {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .card-action .btn {
-      border: none;
-      background-color: transparent;
-      outline: none;
-      font-size: 1rem;
-      font-weight: 500;
-      color: #111bff;
-      padding: 0;
-      text-decoration: none;
-    }
-  }
-  .card-body {
-    padding: 25px;
-  }
-}
 .user-summary {
-  background-image: url(../../assets/img/coins/bitcoin-batch.png);
-  background-repeat: no-repeat;
-  background-size: 235px 183px;
-  background-position: 40px -14px;
+  background-image: url('../../assets/img/coins/bitcoin-batch.png') !important;
+  background-repeat: no-repeat !important;
+  background-size: 235px 183px !important;
+  background-position: 40px -14px !important;
   & .user-summary__section {
     min-height: 75px;
     margin-top: 24px;
@@ -221,4 +181,28 @@
 
 .wallet-img-chart {
   width: 90px;
+}
+.services {
+  background-color: #ffffff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 10px #0000001a;
+  height: 80px;
+ 
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #03041b;
+
+    .value {
+      margin-right: 5px;
+    }
+  }
+  &:hover {
+    scale: 1.1;
+    transition: 0.5s;
+  }
 }

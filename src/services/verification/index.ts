@@ -9,10 +9,10 @@ import request from "../adapter";
 type RequestType = {
   docType: string;
   file: File;
-  fileName: string
+  fileName: string;
 };
 
-export const uploadDoc = async ({ docType, file,fileName }: RequestType) => {
+export const uploadDoc = async ({ docType, file, fileName }: RequestType) => {
   try {
     const formData = new FormData();
     formData.append(fileName, file);
@@ -40,4 +40,24 @@ const useUploadDoc = (
   return useMutation(uploadDoc, options);
 };
 
-export default useUploadDoc;
+const initialVerification = async (useInternationalServices: boolean) => {
+  try {
+    const response = await request.post(`verifications/initiate-second-tier`, {
+      useInternationalServices,
+    });
+    return response.data;
+  } catch (error: any) {
+    const errorMessage =
+      error.response?.data?.message || "An error occurred. Please try again.";
+    toast.error(errorMessage, { position: "bottom-left" });
+    throw new Error(errorMessage);
+  }
+};
+
+const useInitialVerification = (
+  options?: UseMutationOptions<any, Error, any, any>
+): UseMutationResult<any, Error, any, any> => {
+  return useMutation(initialVerification, options);
+};
+
+export { useUploadDoc, useInitialVerification };

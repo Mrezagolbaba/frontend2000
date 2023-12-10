@@ -1,7 +1,11 @@
 .float-input {
+  font-family: var(--bs-font-shabnam);
   position: relative;
   padding-bottom: 5px;
 
+  .ant-input {
+    font-family: var(--bs-font-shabnam);
+  }
   .ant-input-affix-wrapper.ant-input-affix-wrapper-lg {
     padding: 10px 11px;
   }

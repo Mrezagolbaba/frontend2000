@@ -19,3 +19,15 @@ export interface IUser {
     updatedAt: string;
     deletedAt: string;
   }
+  export interface Isessions {
+    id: string;
+    ownerType: string;
+    ownerId: string;
+    accessTokenExpiresAt: string;
+    refreshTokenExpiresAt: string;
+    status: string;
+    clientIpAddress: string;
+    clientUserAgent: string;
+    createdAt: string;
+    updatedAt: string;
+  }

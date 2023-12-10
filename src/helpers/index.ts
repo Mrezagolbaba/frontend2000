@@ -30,7 +30,6 @@ interface PhoneNumberMaskProps {
 export const PhoneNumberMask: React.FC<PhoneNumberMaskProps> = ({
   phoneNumber,
 }) => {
-  console.log(phoneNumber);
   if (!phoneNumber) return null;
 
   // Extracting the prefix, masking, and suffix
@@ -40,7 +39,6 @@ export const PhoneNumberMask: React.FC<PhoneNumberMaskProps> = ({
 
   // Formatted masked phone number
   const maskedPhoneNumber = `${prefix}${masking}${suffix}`;
-  console.log(maskedPhoneNumber);
   return maskedPhoneNumber;
 };
 
@@ -89,8 +87,8 @@ export const persianToEnglishNumbers = (persianNumber: string) => {
 
 export const passwordListValidation = [
   {
-    title: "حداقل 8 کاراکتر",
-    isCheck: true,
+    title: "حداقل یک کاراکتر ویژه از قبیل: !@#$%^&*()-+",
+    isCheck: false,
   },
   {
     title: "حداقل یک کاراکتر با حرف کوچک",
@@ -101,12 +99,13 @@ export const passwordListValidation = [
     isCheck: false,
   },
   {
-    title: "حداقل یک عدد",
+    title: "حداقل 8 کاراکتر",
     isCheck: true,
   },
+
   {
-    title: "حداقل یک کاراکتر ویژه از قبیل: !@#$%^&*()-+",
-    isCheck: false,
+    title: "حداقل یک عدد",
+    isCheck: true,
   },
 ];
 
@@ -135,3 +134,64 @@ export const isPasswordValid = (password: string) => {
 
   return isValid;
 };
+export function convertIRRToToman(number: number | string): number {
+  // Convert the number to an integer
+  const integerPart: number = Math.floor(Number(number));
+
+  // Convert the integer to a string and extract the first four characters
+  const result: string = integerPart.toString().slice(0, 4);
+
+  return parseInt(result, 10);
+}
+export const rialToToman = (rialAmount: number | string): number => {
+  // Assuming 1 Toman is equal to 10 Rials
+  const tomanAmount = Math.floor(Number(rialAmount) / 10);
+  return tomanAmount;
+};
+export const convertText = (text, direction) => {
+  const currencyMap = {
+    enToFa: {
+      USDT: "تتر",
+      TRY: "لیر",
+      IRR: "تومان",
+      TRX: "ترون",
+    },
+    faToEn: {
+      تتر: "USDT",
+      لیر: "TRY",
+      تومان: "IRR",
+      ترون: "TRX",
+    },
+  };
+
+  if (direction in currencyMap && text in currencyMap[direction]) {
+    return currencyMap[direction][text];
+  }
+  return text;
+};
+export const convertTextSingle = (text) => {
+  const currencyMap = {
+    'enToFa': {
+      'USDT': 'تتر',
+      'TRY': 'لیر',
+      'IRR': 'تومان',
+      'TRX': 'ترون',
+    },
+    'faToEn': {
+      'تتر': 'USDT',
+      'لیر': 'TRY',
+      'تومان': 'IRR',
+      'ترون': 'TRX',
+    },
+  };
+
+  if (text in currencyMap['enToFa']) {
+    return currencyMap['enToFa'][text];
+  }
+  return text;
+};
+export function extractLeftSide(baseString) {
+  return baseString.includes("/") ? baseString.split("/")[0] : baseString;
+}
+
+      

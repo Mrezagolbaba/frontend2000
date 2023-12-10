@@ -2,16 +2,16 @@ import { ReactNode, useEffect, useState } from "react";
 import Header from "./Header";
 // import LogoArsonex from '../../assets/img/logo-arsonex.png';
 
-
-import "./style.scss";
+import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+// import "./style.scss";
 
 // import "assets/css/app.css"
 
 import Sidebar from "./sidebar";
 import { Container } from "reactstrap";
-import { useAppDispatch } from "redux/hooks";
+import { useAppDispatch } from "store/hooks";
 import { useGetMe } from "services/auth/user";
-import { setUser } from "redux/features/user/userSlice";
+import { setUser } from "store/reducers/features/user/userSlice";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
@@ -19,7 +19,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
 
   const dispatch = useAppDispatch();
   const getMe = useGetMe();
@@ -29,10 +28,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
     });
   }, []);
   return (
-    <div className="admin-wrapper" id="root">
-      <div id="menuOverlay" className="menu-overlay"></div>
+    <div className={dashboard.wrapper}>
+      <div id="menuOverlay" className={dashboard["menu-overlay"]} />
       <Sidebar isOpen={isSidebarOpen} onSidebarToggle={handleSidebarToggle} />
-      <Container fluid className="main-wrapper">
+      <Container fluid className={dashboard["main-wrapper"]}>
         <Header onSidebarToggle={handleSidebarToggle} />
         {children}
       </Container>

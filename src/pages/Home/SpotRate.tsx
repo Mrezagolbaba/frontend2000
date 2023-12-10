@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-
+import { Container } from "reactstrap";
+import { HiOutlineChevronLeft } from "react-icons/hi";
 //components
 import { FilterNavCoin } from "components/FilterNavCoin";
 import request from "services/adapter";
@@ -17,6 +18,8 @@ import shib from "assets/img/coins/SHIB.png";
 import ADA from "assets/img/coins/ADA.png";
 import graphG from "assets/img/graph-g.png";
 import graphR from "assets/img/graph-r.png";
+
+import home from "assets/scss/landing/home.module.scss";
 
 interface ExchangeRateData {
   expiresAt: string;
@@ -72,29 +75,30 @@ const SpotRate = () => {
     e.preventDefault();
     setActiveTab(tabId);
   };
+
   return (
-    <section className="landing-currency-rates section-gap">
-      <div className="container">
-        <div className="section-title">
-          <h3 className="section-title__title">
+    <section className={`${home["currency-rates"]} ${home["section-gap"]}`}>
+      <Container>
+        <div className={home["section-title"]}>
+          <h3 className={home["section-title__title"]}>
             نرخ لحظه ای <span className="text-primary">ارزها</span>
           </h3>
         </div>
-        <div className="nav-tabs-wrapper">
+        <div className={home["currency-rates__tabs"]}>
           <FilterNavCoin
             activeTab={activeTab}
             handleTabClick={handleTabClick}
           />
         </div>
-        <div className="tab-content" id="myTabContent">
+        <div className={home["tab-content"]} id="myTabContent">
           <div
-            className="tab-pane fade show active"
+            className={`${home.fade} ${home.show} ${home.active}}`}
             id="tab-1"
             role="tabpanel"
             aria-labelledby="tab1"
           >
             <div className="table-responsive">
-              <table className="table-crypto">
+              <table className={home["currency-rates__table"]}>
                 <thead>
                   <tr>
                     <th className="text-center">ارز</th>
@@ -108,7 +112,7 @@ const SpotRate = () => {
                   {currencyPairs.map((currencyPair: any, index: number) => (
                     <tr key={index}>
                       <td>
-                        <div className="table-crypto-title">
+                        <div className={home["currency-rates__table__title"]}>
                           <img
                             src={currencyPair.imgSrc}
                             alt={currencyPair.code}
@@ -153,13 +157,13 @@ const SpotRate = () => {
             </div>
           </div>
           <div
-            className="tab-pane fade"
+            className={`${home["tab-pane"]} ${home.fade}`}
             id="tab-2"
             role="tabpanel"
             aria-labelledby="tab2"
           >
             <div className="table-responsive">
-              <table className="table-crypto">
+              <table className={home["currency-rates__table"]}>
                 <thead>
                   <tr>
                     <th className="text-center">ارز</th>
@@ -355,13 +359,13 @@ const SpotRate = () => {
             </div>
           </div>
           <div
-            className="tab-pane fade"
+            className={`${home["tab-pane"]} ${home.fade}`}
             id="tab-3"
             role="tabpanel"
             aria-labelledby="tab3"
           >
             <div className="table-responsive">
-              <table className="table-crypto">
+              <table className={home["currency-rates__table"]}>
                 <thead>
                   <tr>
                     <th className="text-center">ارز</th>
@@ -557,13 +561,13 @@ const SpotRate = () => {
             </div>
           </div>
           <div
-            className="tab-pane fade"
+            className={`${home["tab-pane"]} ${home.fade}`}
             id="tab-4"
             role="tabpanel"
             aria-labelledby="tab4"
           >
             <div className="table-responsive">
-              <table className="table-crypto">
+              <table className={home["currency-rates__table"]}>
                 <thead>
                   <tr>
                     <th className="text-center">ارز</th>
@@ -759,26 +763,15 @@ const SpotRate = () => {
             </div>
           </div>
         </div>
-        <div className="section-more">
+        <div className={home["more-section-button"]}>
           <a href="/coins">
             دیدن همه
             <span className="icon">
-              <svg
-                width="8"
-                height="12"
-                viewBox="0 0 8 12"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M7.41 10.59L2.83 6L7.41 1.41L6 0L0 6L6 12L7.41 10.59Z"
-                  fill="#3360FC"
-                ></path>
-              </svg>
+              <HiOutlineChevronLeft />
             </span>
           </a>
         </div>
-      </div>
+      </Container>
     </section>
   );
 };

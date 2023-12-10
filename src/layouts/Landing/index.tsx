@@ -9,7 +9,7 @@ type Props = {
 
 const LandingLayout = ({ children }: Props) => {
   return (
-    <div className="landing-wrapper">
+    <div className={style.wrapper}>
       <Header />
       {children}
       <Footer />
