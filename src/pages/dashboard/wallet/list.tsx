@@ -20,6 +20,7 @@ export const WalletList: React.FC = () => {
   const [USDT, setUSDT] = useState<any>(initiateCurrency);
   const [TRX, setTRX] = useState<any>(initiateCurrency);
   const [Rial, setRial] = useState<any>(initiateCurrency);
+  const [Lir, setLir] = useState<any>(initiateCurrency);
 
   const { data, isSuccess, isLoading } = useList({
     resource: `wallets`,
@@ -31,6 +32,7 @@ export const WalletList: React.FC = () => {
         item.currencyCode === "USDT" && setUSDT(item);
         item.currencyCode === "TRX" && setTRX(item);
         item.currencyCode === "IRR" && setRial(item);
+        item.currencyCode === "TRY" && setLir(item);
       });
     }
   }, [data?.data, isSuccess]);
@@ -52,7 +54,7 @@ export const WalletList: React.FC = () => {
           />
         </Col>
         <Col xs={12} lg={6}>
-          <Fiat />
+          <Fiat TRY={Lir} isLoading={isLoading} isSuccess={isSuccess} />
         </Col>
       </Row>
     </section>
