@@ -216,7 +216,7 @@ export default function BankInformation() {
                         <Col >
                           <ReactFlagsSelect
                             searchable  
-                            selected={value!!}
+                            selected={value!}
                             onSelect={(code) => {
                               onChange(code)
                               setSelectedCountryCode(code);

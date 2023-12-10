@@ -6,7 +6,7 @@ export interface IInvoice{
     destinationAmount: string;
     exchangeRate: string;
     id: string;
-    meta: {};
+    meta: any;
     createdAt: string;
     updatedAt: string;
 }
