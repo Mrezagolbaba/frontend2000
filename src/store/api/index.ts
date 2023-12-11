@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 type methodType = "get" | "post" | "put" | "patch" | "delete";
 
 export const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: process.env.REACT_APP_BASE_URL_DEV,
   validateStatus: function (status: any) {
     return status >= 200 && status < 300;
   },
@@ -66,7 +66,7 @@ const axiosBaseQuery =
 
 export const api = createApi({
   baseQuery: axiosBaseQuery(),
-  tagTypes: ["bank-accounts"],
+  tagTypes: ["bank-accounts","settings","user"],
   endpoints: () => ({}),
 });
 

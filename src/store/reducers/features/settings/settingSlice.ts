@@ -1,24 +1,17 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getNotificationSettings, updateNotificationSettings } from "services/settings";
+import { getAuthenticator, getNotificationSettings, setAuthenticator, updateNotificationSettings } from "services/settings";
 import { ISetting } from "types/settings";
 
 
 const initialState: ISetting = {
-    fiat_deposit_email: false,
-    fiat_deposit_sms: false,
-    fiat_withdraw_email: false,
-    fiat_withdraw_sms: false,
-    crypto_deposit_email: false,
-    crypto_deposit_sms: false,
-    crypto_withdraw_email: false,
-    crypto_withdraw_sms: false,
-    login_sms: false,
-    login_email: false,
-    updates_email: false,
-    updates_sms: false,
+    notificationSettings: [],
+    authenticator: {
+        keyUrl: "",
+        secret: "",
+    }
 };
 
-const updateNotifSettings = createAsyncThunk('setting/setNotificationSetting', async (data: any) => {
+export const updateNotifSettings = createAsyncThunk('setting/setNotificationSetting', async (data: any) => {
     try {
         const res = await updateNotificationSettings(data);
         return res;
@@ -26,13 +19,31 @@ const updateNotifSettings = createAsyncThunk('setting/setNotificationSetting', a
         console.log(error);
     }
 });
-const getSettingsNotif = createAsyncThunk('setting/getNotificationSetting', async () => {
+export const getNotifSettings = createAsyncThunk('setting/getNotificationSetting', async () => {
     try {
         const res = await getNotificationSettings();
         return res;
     } catch (error) {
         console.log(error);
     }
+})
+export const getAuthenticatorData = createAsyncThunk('setting/getAuthenticator', async () => {
+    try {
+        const res = await getAuthenticator();
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+
+})
+export const setAuthenticatorData = createAsyncThunk('setting/setAuthenticator', async (data: any) => {
+    try {
+        const res = await setAuthenticator(data);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+
 })
 
 
@@ -53,28 +64,32 @@ const settingSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        .addCase(updateNotifSettings.fulfilled, (state, action) => {
-            return { ...state, ...action.payload };
-        })
-        .addCase(updateNotifSettings.rejected, (state, action:any) => {
-            return { ...state, ...action.payload };
-        })
-        .addCase(updateNotifSettings.pending, (state, action:any) => {
-            return { ...state, ...action.payload };
-        })
-        .addCase(getSettingsNotif.fulfilled, (state, action) => {
-            return { ...state, ...action.payload };
-        }
-        )
-        .addCase(getSettingsNotif.rejected, (state, action:any) => {
-            return { ...state, ...action.payload };
-        })
-        .addCase(getSettingsNotif.pending, (state, action:any) => {
-            return { ...state, ...action.payload };
-        })
-    }
+            .addCase(updateNotifSettings.fulfilled, (state, action) => {
+                return { ...state, notificationSettings: action.payload };
+            })
+            .addCase(updateNotifSettings.rejected, (state, action: any) => {
+                return state; // You might want to handle errors differently
+            })
+            .addCase(getNotifSettings.fulfilled, (state, action) => {
+                return { ...state, notificationSettings: action.payload };
+            })
+            .addCase(getNotifSettings.rejected, (state, action: any) => {
+                return state; // You might want to handle errors differently
+            })
+            .addCase(getAuthenticatorData.fulfilled, (state, action) => {
+                return { ...state, authenticator: action.payload };
+            })
+            .addCase(getAuthenticatorData.rejected, (state, action: any) => {
+                return state;
+            })
+            .addCase(setAuthenticatorData.fulfilled, (state, action) => {
+                return { ...state, authenticator: action.payload };
+            })
+            .addCase(setAuthenticatorData.rejected, (state, action: any) => {
+                return state; 
+            });
 
+    },
 });
-
 export const { setSetting, clearSetting } = settingSlice.actions;
 export default settingSlice.reducer;
