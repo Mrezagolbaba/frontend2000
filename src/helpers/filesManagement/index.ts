@@ -1,5 +1,5 @@
 import { persianToEnglishNumbers } from "helpers";
-import { iranianBanks } from "./iranian-banks";
+import { iranianBanks, turkishBanks } from "./banksList";
 
 export function searchIranianBanks(query: string) {
   const headAccountNumber = query.slice(0, 6);
@@ -23,4 +23,14 @@ export function formatShowAccount(accountNumber: string) {
   }
 
   return outputString;
+}
+
+export function searchTurkishBanks(query: string) {
+  const headAccountNumber = query.slice(2, 7);
+  const entity = turkishBanks.filter(
+    (bank) =>
+      Number(bank.code) === Number(persianToEnglishNumbers(headAccountNumber))
+  );
+
+  return entity[0] || null;
 }

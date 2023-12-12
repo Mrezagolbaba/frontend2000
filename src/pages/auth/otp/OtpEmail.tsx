@@ -49,7 +49,7 @@ const OtpEmail = () => {
   ) => {
     e.preventDefault();
     const data = {
-      type: "AUTH",
+      type: "VERIFY_EMAIL",
       method: "EMAIL",
     };
     await resendOtp(data)
@@ -62,7 +62,7 @@ const OtpEmail = () => {
   const handleOTP = async (data: { code: string }) => {
     const formData = {
       code: persianToEnglishNumbers(data.code),
-      type: "AUTH",
+      type: "VERIFY_EMAIL",
       method: "EMAIL",
     };
     await sendOtp(formData)

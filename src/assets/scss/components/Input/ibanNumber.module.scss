@@ -1,0 +1,47 @@
+.iban-input-control {
+  position: relative;
+  direction: ltr;
+  width: 100%;
+  span {
+    font-size: 0.75em;
+    font-weight: 400;
+    color: #03041b;
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    height: 12px;
+    line-height: 15px;
+    transform: translateY(-50%);
+    border-right: 1px solid rgba(3, 4, 27, 0.1);
+    padding-right: 12px;
+  }
+  input {
+    padding-left: 50px;
+    padding-right: 40px;
+    &::after {
+      content: "\00a0"; /* Unicode non-breaking space character */
+      white-space: pre; /* Preserve whitespace */
+    }
+  }
+  svg,
+  img {
+    position: absolute;
+    right: 12px;
+    width: 30px !important;
+    height: auto;
+    top: 10px;
+    line-height: 48px;
+    font-size: 1.2rem;
+    box-shadow: none;
+    border-left-color: transparent;
+    border: 0;
+    z-index: 2;
+    transition: all ease 200ms;
+  }
+  img {
+    width: 20px !important;
+    height: auto;
+    opacity: 0.7;
+    top: 10px;
+  }
+}
