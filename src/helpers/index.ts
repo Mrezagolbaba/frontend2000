@@ -139,7 +139,7 @@ export function convertIRRToToman(number: number | string): number {
   const integerPart: number = Math.floor(Number(number));
 
   // Convert the integer to a string and extract the first four characters
-  const result: string = integerPart.toString().slice(0, 4);
+  const result: string = integerPart.toString().slice(0, 5);
 
   return parseInt(result, 10);
 }
