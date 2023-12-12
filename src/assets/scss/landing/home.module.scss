@@ -870,7 +870,6 @@ img.avatar {
       transform: translateY(-100%);
       transition: all 0.4s ease-out 0.1s;
     }
-
     &:not(.navbar--simple) {
       & > .navbar__item:not(.navbar__item--active) a {
         color: rgba(4, 15, 74, 0.6);
