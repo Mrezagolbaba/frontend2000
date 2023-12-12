@@ -12,6 +12,14 @@ declare const classNames: {
   readonly header__auth__register: "header__auth__register";
   readonly header__hamburger: "header__hamburger";
   readonly header__intro: "header__intro";
+  readonly img_bottom_right: "img_bottom_right";
+  readonly img_top_right: "img_top_right";
+  readonly img_top_left: "img_top_left";
+  readonly img_bottom_left: "img_bottom_left";
+  readonly i_b_r_img: "i_b_r_img";
+  readonly i_t_r_img: "i_t_r_img";
+  readonly i_t_l_img: "i_t_l_img";
+  readonly i_b_l_img: "i_b_l_img";
   readonly "navbar--simple": "navbar--simple";
   readonly expanded: "expanded";
   readonly active: "active";

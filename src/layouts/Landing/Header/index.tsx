@@ -56,10 +56,10 @@ const Header = () => {
                 <Link to="/">صفحه اصلی</Link>
               </li>
               <li className={home.navbar__item}>
-                <Link to="/market">بازارها</Link>
+                <Link to="/market">قیمت لحظه ای</Link>
               </li>
               <li className={home.navbar__item}>
-                <Link to="/terms">قوانین</Link>
+                <Link to="/terms">خرید و فروش آنی</Link>
               </li>
               <li className={home.navbar__item}>
                 <Link to="https://www.arsonex.com/blog" target="_blank">
@@ -97,7 +97,7 @@ const Header = () => {
                 <Button
                   tag="a"
                   href="/register"
-                  color="primary"
+                  color="landing-primary"
                   className={home["rounded-button"]}
                 >
                   ثبت نام
@@ -115,20 +115,39 @@ const Header = () => {
           </div>
         </div>
         <Container>
+
+
+
+       
+        <div className={`${home['img_bottom_right']} position-absolute `}>
+            <div className={home.i_b_r_img}></div>
+          </div>
+          <div className={`${home['img_top_right']} position-absolute `}>
+            <div className={home.i_t_r_img}></div>
+          </div>
+
+
+
+
           <div className={home.header__intro}>
             <h1>آرسونیکس، همراه ارز دیجیتال شما</h1>
             <p>
-              مهم نیست ارز دیجیتال نیاز داشته باشی یا واحد پول یه کشور دیگه،
-              آرسونیکس برات به آسانی تبدیل می&zwnj;کنه.
+            ارز دیجیتال، تومان یا فیات؛ بدون محدودیت، به سرعت معامله کنید 
             </p>
             <Button
               tag="a"
               href="/register"
-              color="primary"
+              color="landing-primary"
               className={home["rounded-button"]}
             >
               با آرسونیکس شروع کنید
             </Button>
+          </div>
+          <div className={`${home['img_top_left']} position-absolute `}>
+            <div className={home.i_t_l_img}></div>
+          </div>
+          <div className={`${home['img_bottom_left']} position-absolute `} >
+            <div className={home.i_b_l_img}></div>
           </div>
         </Container>
       </header>

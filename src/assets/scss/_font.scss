@@ -1,5 +1,5 @@
 @font-face {
-  font-family: "Shabnam";
+  //font-family: "Shabnam";
   src: url("../fonts/shabnam/Shabnam-FD-WOL.eot"); /* IE9 Compat Modes */
   src:
     local("Shabnam"),
@@ -9,4 +9,74 @@
     url("../fonts/shabnam/Shabnam-FD-WOL.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
+}
+@font-face {
+    
+  font-family: IRANYekanFa;
+  font-weight: 100;
+  font-style: normal;
+  src: url(../fonts/IRANYekanFaNum/eot/iranyekanwebthinfanum.eot);
+  src: url(../fonts/IRANYekanFaNum/eot/iranyekanwebthinfanum.eot#iefix) format("embedded-opentype"),url(../fonts/IRANYekanFaNum/woff2/iranyekanwebthinfanum.woff2) format("woff2"),url(../fonts/IRANYekanFaNum/ttf/iranyekanwebthinfanum.ttf) format("truetype"),url(../fonts/IRANYekanFaNum/woff/iranyekanwebthinfanum.woff) format("woff")
+}
+@font-face {
+  
+  font-family: IRANYekanFa;
+  font-weight: 300;
+  font-style: normal;
+  src: url(../fonts/IRANYekanFaNum/eot/iranyekanweblightfanum.eot);
+  src: url(../fonts/IRANYekanFaNum/eot/iranyekanweblightfanum.eot#iefix) format("embedded-opentype"),url(../fonts/IRANYekanFaNum/woff2/iranyekanweblightfanum.woff2) format("woff2"),url(../fonts/IRANYekanFaNum/ttf/iranyekanweblightfanum.ttf) format("truetype"),url(../fonts/IRANYekanFaNum/woff/iranyekanweblightfanum.woff) format("woff")
+}
+
+@font-face {
+  
+  font-family: IRANYekanFa;
+  font-weight: 400;
+  font-style: normal;
+  src: url(../fonts/IRANYekanFaNum/eot/iranyekanwebregularfanum.eot);
+  src: url(../fonts/IRANYekanFaNum/eot/iranyekanwebregularfanum.eot#iefix) format("embedded-opentype"),url(../fonts/IRANYekanFaNum/woff2/iranyekanwebregularfanum.woff2) format("woff2"),url(../fonts/IRANYekanFaNum/ttf/iranyekanwebregularfanum.ttf) format("truetype"),url(../fonts/IRANYekanFaNum/woff/iranyekanwebregularfanum.woff) format("woff")
+}
+
+@font-face {
+  
+  font-family: IRANYekanFa;
+  font-weight: 500;
+  font-style: normal;
+  src: url(../fonts/IRANYekanFaNum/eot/iranyekanwebmediumfanum.eot);
+  src: url(../fonts/IRANYekanFaNum/eot/iranyekanwebmediumfanum.eot#iefix) format("embedded-opentype"),url(../fonts/IRANYekanFaNum/woff2/iranyekanwebmediumfanum.woff2) format("woff2"),url(../fonts/IRANYekanFaNum/ttf/iranyekanwebmediumfanum.ttf) format("truetype"),url(../fonts/IRANYekanFaNum/woff/iranyekanwebmediumfanum.woff) format("woff")
+}
+
+@font-face {
+  
+  font-family: IRANYekanFa;
+  font-weight: 700;
+  font-style: normal;
+  src: url(../fonts/IRANYekanFaNum/eot/iranyekanwebboldfanum.eot);
+  src: url(../fonts/IRANYekanFaNum/eot/iranyekanwebboldfanum.eot#iefix) format("embedded-opentype"),url(../fonts/IRANYekanFaNum/woff2/iranyekanwebboldfanum.woff2) format("woff2"),url(../fonts/IRANYekanFaNum/ttf/iranyekanwebboldfanum.ttf) format("truetype"),url(../fonts/IRANYekanFaNum/woff/iranyekanwebboldfanum.woff) format("woff")
+}
+
+@font-face {
+  
+  font-family: IRANYekanFa;
+  font-weight: 800;
+  font-style: normal;
+  src: url(../fonts/IRANYekanFaNum/eot/iranyekanwebextraboldfanum.eot);
+  src: url(../fonts/IRANYekanFaNum/eot/iranyekanwebextraboldfanum.eot#iefix) format("embedded-opentype"),url(../fonts/IRANYekanFaNum/woff2/iranyekanwebextraboldfanum.woff2) format("woff2"),url(../fonts/IRANYekanFaNum/ttf/iranyekanwebextraboldfanum.ttf) format("truetype"),url(../fonts/IRANYekanFaNum/woff/iranyekanwebextraboldfanum.woff) format("woff")
+}
+
+@font-face {
+  
+  font-family: IRANYekanFa;
+  font-weight: 850;
+  font-style: normal;
+  src: url(../fonts/IRANYekanFaNum/eot/iranyekanwebblackfanum.eot);
+  src: url(../fonts/IRANYekanFaNum/eot/iranyekanwebblackfanum.eot#iefix) format("embedded-opentype"),url(../fonts/IRANYekanFaNum/woff2/iranyekanwebblackfanum.woff2) format("woff2"),url(../fonts/IRANYekanFaNum/ttf/iranyekanwebblackfanum.ttf) format("truetype"),url(../fonts/IRANYekanFaNum/woff/iranyekanwebblackfanum.woff) format("woff")
+}
+
+@font-face {
+  
+  font-family: IRANYekanFa;
+  font-weight: 900;
+  font-style: normal;
+  src: url(../fonts/IRANYekanFaNum/eot/iranyekanwebextrablackfanum.eot);
+  src: url(../fonts/IRANYekanFaNum/eot/iranyekanwebextrablackfanum.eot#iefix) format("embedded-opentype"),url(../fonts/IRANYekanFaNum/woff2/iranyekanwebextrablackfanum.woff2) format("woff2"),url(../fonts/IRANYekanFaNum/ttf/iranyekanwebextrablackfanum.ttf) format("truetype"),url(../fonts/IRANYekanFaNum/woff/iranyekanwebextrablackfanum.woff) format("woff")
 }
