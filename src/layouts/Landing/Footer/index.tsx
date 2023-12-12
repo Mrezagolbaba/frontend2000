@@ -15,11 +15,11 @@ const Footer = (): React.JSX.Element => {
                 با ما در ارتباط باشید
               </h3>
               <p className={home["footer-text"]}>
-                خیابان جردن (بلوار آفریقا)، بلوار صبا پلاک ۲۳ واحد ۴
+              support@arsonex.com
               </p>
-              <p className={home["footer-text"]}>Support [@] Arsonex [.] com</p>
+             
               <p className={home["footer-text"]}>021-92004581</p>
-              <p className={home["footer-text"]}> 5411008686 - 90+</p>
+              <p className={home["footer-text"]}>  خیابان ۱۵ خرداد بازار بین الحرمین کوچه شیخ رضا پلاک ۴۶ </p>
               <p className={home["footer-text"]}>
                 ۲۴ ساعت شبانه روز پاسخگوی شما هستیم
               </p>
@@ -39,6 +39,9 @@ const Footer = (): React.JSX.Element => {
                   <Link to="#">کارمزد&zwnj;ها</Link>
                 </li>
                 <li>
+                  <Link to="#">بروزرسانی‌ها</Link>
+                </li>
+                <li>
                   <Link to="/terms">قوانین و مقررات</Link>
                 </li>
               </ul>
@@ -49,18 +52,20 @@ const Footer = (): React.JSX.Element => {
               <h3 className={home["footer-widget-title"]}>امکانات</h3>
               <ul className={home["footer-links"]}>
                 <li>
-                  <a href="#">معامله تک نرخی</a>
+                  <a href="http://mvp.arsonex.com/blog/help">معامله سریع تک نرخی</a>
                 </li>
                 <li>
-                  <a href="#">برداشت بین&zwnj;المللی</a>
+                  <a href="http://mvp.arsonex.com/blog/help">واریز و برداشت بین‌المللی</a>
+                </li>
+                <li>
+                  <a href="#">آرسونیکس کارت</a>
+                  <Badge className={home["badge-custom"]}>بزودی</Badge>
                 </li>
                 <li>
                   <a href="#">کسب درآمد</a>
+                  <Badge className={home["badge-custom"]}>تا سقف 30%</Badge>
                 </li>
-                <li>
-                  <a href="#">ویزا و مستر کارت مجازی</a>
-                  <Badge className={home["badge-custom"]}>بزودی</Badge>
-                </li>
+              
               </ul>
             </div>
           </Col>
@@ -78,9 +83,6 @@ const Footer = (): React.JSX.Element => {
                   <a href="#">معامله فیات دیجیتال</a>
                 </li>
                 <li>
-                  <a href="#">خرید بین&zwnj;المللی</a>
-                </li>
-                <li>
                   <a href="#">احراز هویت فوری</a>
                 </li>
               </ul>
@@ -89,9 +91,12 @@ const Footer = (): React.JSX.Element => {
         </Row>
 
         <div className={home["footer-bottom"]}>
-          <ul className={home["social-media"]}>
+        <div className={home["footer-copyright"]}>
+        © 1399 تا امروز، تمامی حقوق (مادی و معنوی) این وب سایت برای آرسونیکس محفوظ است. 
+          </div>
+          <ul className={home["social-media"] }>
             <li>
-              <a href="#">
+              <a href="https://t.me/Arsonexchange">
                 <span className="icon">
                   <svg
                     width="24"
@@ -110,7 +115,7 @@ const Footer = (): React.JSX.Element => {
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="https://twitter.com/Arsonexchange">
                 <span className="icon">
                   <svg
                     width="24"
@@ -128,27 +133,9 @@ const Footer = (): React.JSX.Element => {
                 </span>
               </a>
             </li>
+          
             <li>
-              <a href="#">
-                <span className="icon">
-                  <svg
-                    width="24"
-                    height="18"
-                    viewBox="0 0 24 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M11.9992 17.7184C11.9971 17.7184 11.9949 17.7184 11.9927 17.7184C11.2686 17.7135 4.86645 17.6551 3.0526 17.1645C1.78496 16.8238 0.784288 15.8242 0.442612 14.5564C-0.0319979 12.7746 -0.00178541 9.34407 0.0015105 9.07014C-0.0016023 8.7975 -0.032181 5.33863 0.441147 3.54218C0.441697 3.54053 0.442063 3.5387 0.442612 3.53705C0.780442 2.28369 1.80364 1.25318 3.04949 0.9115C3.0526 0.910584 3.0559 0.909852 3.05901 0.908936C4.85235 0.437622 11.2671 0.379944 11.9927 0.375H12.0057C12.7318 0.379944 19.1509 0.438355 20.9481 0.929627C22.2124 1.26947 23.2124 2.26776 23.555 3.53394C24.0473 5.33167 24.0017 8.79805 23.9968 9.09065C24.0003 9.37886 24.029 12.7786 23.5572 14.5694C23.5568 14.5712 23.5562 14.5728 23.5559 14.5745C23.214 15.8423 22.2135 16.8419 20.9444 17.183C20.9428 17.1836 20.9409 17.1839 20.9393 17.1845C19.1461 17.6556 12.7312 17.7133 12.0057 17.7184C12.0035 17.7184 12.0013 17.7184 11.9992 17.7184ZM2.25353 4.02302C1.83678 5.60871 1.87615 9.02345 1.87651 9.05788V9.08259C1.86406 10.0296 1.90782 12.7722 2.25371 14.0711C2.42144 14.6931 2.91491 15.1859 3.54076 15.3542C4.87908 15.7162 10.0934 15.83 11.9992 15.8434C13.9099 15.83 19.1319 15.7193 20.4603 15.3717C21.0841 15.2029 21.5759 14.7118 21.7448 14.0891C22.091 12.7711 22.1344 10.0419 22.1218 9.10091C22.1218 9.09102 22.1218 9.08113 22.122 9.07124C22.1392 8.11287 22.1053 5.33826 21.7464 4.02888C21.7461 4.02759 21.7457 4.02631 21.7455 4.02503C21.577 3.40027 21.0834 2.90754 20.4575 2.73926C19.1322 2.3769 13.9095 2.26337 11.9992 2.25C10.0897 2.26337 4.87286 2.37397 3.5404 2.72113C2.92644 2.89142 2.4218 3.40174 2.25353 4.02302ZM22.6506 14.3306H22.6511H22.6506ZM9.60944 12.8434V5.24983L16.1719 9.04671L9.60944 12.8434Z"
-                      fill="white"
-                      fill-opacity="0.4"
-                    ></path>
-                  </svg>
-                </span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
+              <a href="https://www.instagram.com/Arsonexchange/">
                 <span className="icon">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                     <path
@@ -161,10 +148,7 @@ const Footer = (): React.JSX.Element => {
               </a>
             </li>
           </ul>
-          <div className={home["footer-copyright"]}>
-            © 2021 تا امروز، تمامی حقوق (مادی و معنوی) این وب سایت برای
-            آرسونیکس محفوظ است.{" "}
-          </div>
+    
         </div>
       </Container>
     </footer>

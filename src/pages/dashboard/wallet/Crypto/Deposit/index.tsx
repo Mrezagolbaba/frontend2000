@@ -2,7 +2,7 @@ import { useForm } from "@refinedev/core";
 import { AlertInfo, AlertWarning } from "components/AlertWidget";
 import * as Yup from "yup";
 
-import wallet from "pages/dashboard/wallet/style.module.scss";
+import wallet from "assets/scss/dashboard/wallet.module.scss";
 
 // import eth from "assets/img/network/eth.svg";
 import tron from "assets/img/network/tron.svg";
@@ -21,10 +21,8 @@ import {
   Spinner,
 } from "reactstrap";
 import Currency from "components/Input/CurrencyInput";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CopyInput from "components/Input/CopyInput";
-import { CurrencyType } from "../../constants";
-
 type CryptoFormType = {
   network: string;
   amount: string;

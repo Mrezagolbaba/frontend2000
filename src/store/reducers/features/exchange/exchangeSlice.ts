@@ -17,7 +17,6 @@ export const getExchangeList = createAsyncThunk(
   async (userId: string) => {
     try {
       const response = await getCurrencySwap({ userId });
-      console.log(response, "transactions111111");
       return response;
     } catch (error: any) {
       console.log(error);

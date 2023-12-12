@@ -25,6 +25,8 @@ import { MdClose } from "react-icons/md";
 import { LuCheck, LuPencil } from "react-icons/lu";
 import { useCreateBankAccountMutation } from "store/api/profile-management";
 import DeleteModal from "./DeleteModal";
+import IBANNumber from "components/Input/IBANNumber";
+import { persianToEnglishNumbers } from "helpers";
 
 type Props = {
   accounts: BankAccountsResponse[];
@@ -103,7 +105,7 @@ export default function International({ accounts, isLoading }: Props) {
   }, [accounts]);
 
   const submitHandler = (data) => {
-    createAccount(data);
+    createAccount({ ...data, iban: persianToEnglishNumbers(data.iban) });
   };
 
   return (
@@ -158,15 +160,10 @@ export default function International({ accounts, isLoading }: Props) {
                         render={({ field: { name, value, onChange, ref } }) => (
                           <FormGroup className={profile["accounts-field"]}>
                             <Label> شماره IBAN:</Label>
-                            <Input
-                              type="text"
-                              className="form-control d-rtl"
-                              value={value}
+                            <IBANNumber
                               name={name}
+                              value={value}
                               onChange={onChange}
-                              id={name}
-                              ref={ref}
-                              dir="ltr"
                             />
                           </FormGroup>
                         )}

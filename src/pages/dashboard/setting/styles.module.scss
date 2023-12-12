@@ -1,0 +1,75 @@
+  .filedOption {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-evenly;
+    border: 1px solid rgba(3, 4, 27, 0.1);
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: 500;
+    color: #000;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    line-height: 30px;
+    cursor: pointer;
+    transition: all 180ms ease-in-out;
+    &:hover {
+      border-color: #111BFF;
+    }
+    &:active {
+      border-color: #111BFF;
+    }  
+  }
+  .steps{
+    width:50%;
+    background-color:#f1f1f1;
+    display:flex;
+    flex-Direction:column  ;
+    justify-content:center;
+    align-items:center;
+    border-radius:10px;
+    padding:20px;
+    hr{
+      width:100%;
+      border:1px solid #e4e4e4;
+    }
+  }
+  .btn-apple{
+    background-color:#000;
+    color:#fff;
+    border-radius:10px;
+    padding:10px;
+    width:25%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-top:10px;
+    margin-left: 5px;
+    margin-right: 10px;
+    cursor:pointer;
+    transition:all 180ms ease-in-out;
+    &:hover{
+      background-color:#fff;
+      color:#000;
+      border:1px solid #000;
+    }
+  }
+  .btn-google{
+    background-color:#27ac45;
+    color:#fff;
+    border-radius:10px;
+    padding:10px;
+    width:25%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-top:10px;
+    margin-left: 10px;
+    margin-right: 5px;
+    cursor:pointer;
+    transition:all 180ms ease-in-out;
+    &:hover{
+      background-color:#fff;
+      color:#000;
+      border:1px solid #000;
+    }
+  }

@@ -76,7 +76,12 @@ const OtpMobile: React.FC = () => {
             }
             // if (res?.firstTierVerified) navigate("/dashboard");
             else if (res?.firstTierVerified) navigate("/dashboard");
-            else navigate("/information");
+            else
+              navigate("/information", {
+                state: {
+                  phoneNumber,
+                },
+              });
             setIsLoading(false);
           })
           .catch(() => {

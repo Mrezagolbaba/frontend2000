@@ -6,6 +6,7 @@
   .main-wrapper {
     width: calc(100% - 236px);
     padding: 40px 24px;
+    margin-right: 225px;
   }
   .menu-overlay {
     position: fixed;
@@ -120,6 +121,7 @@
   padding: 20px;
   align-self: flex-start;
   box-shadow: -10px 4px 64px rgba(0, 0, 0, 0.03);
+  position: fixed;
   &__close {
     border: none;
     padding: 0;
@@ -252,6 +254,12 @@
       flex-wrap: nowrap;
     }
   }
+}
+
+@media screen and (max-width:978px) {
+  .main-wrapper {
+    margin-right: 0!important;
+  } 
 }
 
 @media screen and (max-width: 767px) {

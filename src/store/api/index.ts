@@ -66,7 +66,7 @@ const axiosBaseQuery =
 
 export const api = createApi({
   baseQuery: axiosBaseQuery(),
-  tagTypes: ["bank-accounts"],
+  tagTypes: ["bank-accounts","settings","user"],
   endpoints: () => ({}),
 });
 

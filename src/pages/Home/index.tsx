@@ -14,7 +14,7 @@ export default function HomePage() {
         <SpotRate />
         <Advantages />
 
-        <UserComments />
+        {/* <UserComments /> */}
         <LastBlogs />
         <BottomBanner />
       </main>
