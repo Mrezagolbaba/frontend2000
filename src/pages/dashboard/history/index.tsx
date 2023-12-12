@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Layout from "layouts/dashboard";
 import { Tabs } from "antd";
+import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 
 const History = () => {
   const [activeTab, setActiveTab] = useState<string>("1");
@@ -10,7 +11,7 @@ const History = () => {
   };
   const TabOption: TabOptionProps[] = [
     {
-      label: <span className="nav-link">برداشت کوین</span>,
+      label: <span>برداشت کوین</span>,
       key: "1",
       children: (
         <div
@@ -29,7 +30,7 @@ const History = () => {
           </div>
 
           <div className="table-responsive">
-            <table className="table-modern table-modern--fonts-md">
+            <table className="table table-borderless table-striped ">
               <thead>
                 <tr>
                   <th scope="col" className="text-center">
@@ -83,7 +84,7 @@ const History = () => {
       ),
     },
     {
-      label: <span className="nav-link">واریز درگاه پرداخت </span>,
+      label: <span>واریز درگاه پرداخت </span>,
       key: "2",
       children: (
         <div
@@ -108,7 +109,7 @@ const History = () => {
           </div>
 
           <div className="table-responsive">
-            <table className="table-modern table-modern--fonts-md">
+            <table className="table table-borderless table-striped">
               <thead>
                 <tr>
                   <th scope="col" className="text-center">
@@ -189,12 +190,12 @@ const History = () => {
       children: (
         <div
           className={`tab-pane fade  ${activeTab === "3" && " show active"}`}
-          id="tab-3"
-          role="tabpanel"
-          aria-labelledby="tab3"
+          // id="tab-3"
+          // role="tabpanel"
+          // aria-labelledby="tab3"
         >
           <div className="table-responsive">
-            <table className="table-modern table-modern--fonts-md">
+            <table className="table table-borderless table-striped ">
               <thead>
                 <tr>
                   <th scope="col" className="text-center">
@@ -249,7 +250,7 @@ const History = () => {
           </div>
 
           <div className="table-responsive">
-            <table className="table-modern table-modern--fonts-md">
+            <table className="table table-borderless table-striped">
               <thead>
                 <tr>
                   <th scope="col" className="text-center">
@@ -319,7 +320,7 @@ const History = () => {
           </div>
 
           <div className="table-responsive">
-            <table className="table-modern table-modern--fonts-md">
+            <table className="table table-borderless table-striped">
               <thead>
                 <tr>
                   <th scope="col" className="text-center">
@@ -404,7 +405,7 @@ const History = () => {
           </div>
 
           <div className="table-responsive">
-            <table className="table-modern table-modern--fonts-md">
+            <table className="table table-borderless table-striped">
               <thead>
                 <tr>
                   <th scope="col" className="text-center">
@@ -470,7 +471,7 @@ const History = () => {
           aria-labelledby="tab8"
         >
           <div className="table-responsive">
-            <table className="table-modern table-modern--fonts-md">
+            <table className="table table-borderless table-striped">
               <thead>
                 <tr>
                   <th scope="col" className="text-center">
@@ -517,26 +518,24 @@ const History = () => {
     },
   ];
   return (
-    <Layout>
-      <section className="page page-history">
-        <div className="card card-secondary">
-          <div className="card-header">
-            <h5 className="card-title">لیست تراکنش‌ها</h5>
-          </div>
-          <div className="card-body">
-            <div className="nav-tabs-wrapper">
+      <section className="page">
+        <Card>
+          <CardHeader>
+            <CardTitle>لیست تراکنش‌ها</CardTitle>
+          </CardHeader>
+          <CardBody>
               <Tabs
-                className="nav nav-tabs"
+                // className="nav nav-tabs"
+                animated={true}
+                style={{ width: "100%" }}
                 defaultActiveKey="1"
                 centered
                 items={TabOption}
                 onChange={(activeKey: string) => handleChangeTab(activeKey)}
               />
-            </div>
-          </div>
-        </div>
+          </ CardBody>
+        </Card>
       </section>
-    </Layout>
   );
 };
 export default History;

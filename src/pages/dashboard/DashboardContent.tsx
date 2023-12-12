@@ -10,6 +10,9 @@ import {
 
 import T from "assets/img/coins/tether.png";
 import Turkey from "assets/img/icons/flag-turkey.png";
+import Deposit from "assets/img/icons/depositIcon.svg";
+import Exchange from "assets/img/icons/exchange.svg";
+import Market from "assets/img/icons/markets.svg";
 
 import { useAppDispatch, useAppSelector } from "store/hooks";
 
@@ -79,7 +82,7 @@ const DashboardContent = () => {
           moment(lastItem.createdAt).locale("fa").format(" DD MMMM YYYY")
         );
       });
-    } catch (err) {}
+    } catch (err) { }
   };
   useEffect(() => {
     dispatch(getExchangeList(user.id));
@@ -384,7 +387,14 @@ const DashboardContent = () => {
               className="element-box ar-tablo centered trend-in-corner smaller"
               href="/dashboard/buy-sell"
             >
-              <TbArrowsExchange color="#111BFF" size={25} />
+              <img
+                src={Exchange}
+                style={{
+                  height: '25px',
+                  width: '25px',
+                  background: '#fff',
+                }}
+              />
               <div className="value">خرید و فروش</div>
             </a>
           </Col>
@@ -393,7 +403,14 @@ const DashboardContent = () => {
               className="element-box ar-tablo centered trend-in-corner smaller"
               href="#"
             >
-              <TbLayersSubtract color="#111BFF" size={25} />
+              <img
+                src={Market}
+                style={{
+                  height: '25px',
+                  width: '25px',
+                  background: '#fff',
+                }}
+              />
               <div className="value">بازارها</div>
             </a>
           </Col>
@@ -402,13 +419,28 @@ const DashboardContent = () => {
               className="element-box ar-tablo centered trend-in-corner smaller"
               href="/dashboard/wallet"
             >
-              <LuDownload color="#111BFF" size={25} />
+              <img
+                src={Deposit}
+                style={{
+                  height: '25px',
+                  width: '25px',
+                  background: '#fff',
+                }}
+              />
               <div className="value">واریز تتر</div>
             </a>
           </Col>
           <Col className="services col-6 col-sm-3 col-xxl-2 mx-xxl-2 mx-md-2  m-0">
             <a href="/dashboard/wallet">
-              <LuDownload color="#111BFF" size={25} />
+              <img
+                src={Deposit}
+                alt=""
+                style={{
+                  height: '25px',
+                  width: '25px',
+                  background: '#fff',
+                }}
+              />
               <div className="value">واریز تومان</div>
             </a>
           </Col>
@@ -437,7 +469,7 @@ const DashboardContent = () => {
               <CardBody>
                 <div className="card-body">
                   <div className="table-responsive  ">
-                    <table className="table table-borderless table-striped">
+                  <table className={`table table-borderless ${transactions.data.length === 0 ? 'table-modern' : 'table-striped'}`}>
                       <thead>
                         <tr>
                           <th scope="col">نوع</th>
@@ -498,6 +530,22 @@ const DashboardContent = () => {
                             );
                           }
                         })}
+                        {transactions.data.length === 0 && (
+                          <tr>
+                            <td colSpan={4} className="text-center">
+                              <img
+                                src={Exchange}
+                                style={{
+                                  height: '50px',
+                                  width: '50px',
+                                  marginBottom: '10px',
+                                }}
+                              />
+                              <p>اولین معامله خود را با آرسونیکس تجربه کنید</p>
+
+                            </td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -512,7 +560,7 @@ const DashboardContent = () => {
               </CardHeader>
               <CardBody>
                 <div className="table-responsive">
-                  <table className="table table-borderless table-striped ">
+                <table className={`table table-borderless ${exchange.data.length === 0 ? 'table-modern' : 'table-striped'}`}>
                     <thead>
                       <tr>
                         <th scope="col" className="text-center">
@@ -564,6 +612,23 @@ const DashboardContent = () => {
                             </td>
                           </tr>
                         ))}
+                      {exchange.data.length === 0 && (
+                        <tr>
+                          <td colSpan={4} className="text-center bg-white">
+                          <img
+                              src={Deposit}
+                              style={{
+                                height: '50px',
+                                width: '50px',
+                                marginBottom: '10px',
+                              }}
+                            />
+                            <p>اولین تراکنش خود را با آرسونیکس تجربه کنید</p>
+                           
+                          </td>
+                        </tr>
+                      )}
+
                     </tbody>
                   </table>
                 </div>

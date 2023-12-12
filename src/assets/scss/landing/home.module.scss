@@ -34,10 +34,10 @@
   position: relative;
   padding-top: 40px;
   height: 862px;
-  background-image: url("/src/assets/img/coins/coin-tl-p.png"),
-    url("/src/assets/img/coins/coin-rial-w.png"),
-    url("/src/assets/img/coins/coin-btc.png"),
-    url("/src/assets/img/coins/coin-usdt.png"),
+  background-image: url(""),
+    url(""),
+    url(""),
+    url(""),
     url("/src/assets/img/lay/header-pattern.png"),
     url("/src/assets/img/lay/header-bg-2.png");
   background-repeat: no-repeat;
@@ -107,8 +107,8 @@
       margin-bottom: 30px;
     }
     & > p {
-      font-size: 1.25em;
-      font-weight: 500;
+      font-size: 1.1em;
+      font-weight: 300;
       max-width: 535px;
       margin-right: auto;
       margin-left: auto;
@@ -120,6 +120,136 @@
     margin: 0 auto;
   }
 }
+
+.img_bottom_right{
+  right: 50px;bottom: 150px
+}
+.img_top_right{
+  right: 155px;top: 325px
+}
+.img_top_left{
+  left: 60px;top: 330px
+}
+.img_bottom_left{
+  left: 280px;bottom: 200px
+}
+
+.img_bottom_right .i_b_r_img{
+  
+background-image:url(/src/assets/img/header/china-currency.png);
+  width: 209px;
+  height: 203px;
+  background-repeat: no-repeat;
+  -webkit-animation: changeimg1 20s infinite ease-in-out;
+  -moz-animation: changeimg1 20s infinite ease-in-out;
+  animation: changeimg1 20s infinite ease-in-out;
+}
+@keyframes changeimg1 {
+  0%,15% {
+    background-image:url(/src/assets/img/header/china-currency.png);
+  }
+  30% {
+      background-image: url(/src/assets/img/header/eu-currency.png);
+
+  }
+  50% {
+      background-image: url(/src/assets/img/header/tmn-currency.png);
+
+  }
+  70% {
+      background-image: url(/src/assets/img/header/turkey-currency.png);
+
+  }
+  100% {
+      background-image: url(/src/assets/img/header/uk-currency.png);
+
+  }
+}
+
+.img_top_right .i_t_r_img{
+  background-image: url(/src/assets/img/header/token-cardano.png);
+  width: 111px;
+  height: 104px;
+  background-repeat: no-repeat;
+  animation: changeimg2 40s infinite;
+  animation-timing-function: ease-in-out;
+}
+@keyframes changeimg2 {
+  0%,15% {
+      background-image: url(/src/assets/img/header/token-cardano.png);
+  }
+  35% {
+      background-image: url(/src/assets/img/header/token-litecoin.png);
+  }
+  55% {
+      background-image: url(/src/assets/img/header/token-usdt.png);
+  }
+  75% {
+      background-image: url(/src/assets/img/header/token-xrp.png);
+  }
+
+}
+
+
+
+.img_top_left .i_t_l_img{
+  background-image: url(/src/assets/img/header/btc-coin.png);
+  width: 216px;
+  height: 210px;
+  background-repeat: no-repeat;
+  animation: changeimg3 60s infinite;
+  animation-timing-function: ease-in-out;
+}
+@keyframes changeimg3 {
+  0%,15% {
+      background-image: url(/src/assets/img/header/btc-coin.png);
+  }
+  32% {
+      background-image: url(/src/assets/img/header/coin-solana.png);
+  }
+  52% {
+      background-image: url(/src/assets/img/header/coin-tron.png);
+
+  }
+  72% {
+      background-image: url(/src/assets/img/header/eth-coin.png);
+  }
+
+}
+
+.img_bottom_left .i_b_l_img{
+  background-image: url(/src/assets/img/header/doge-mim.png);
+  width: 129px;
+  height: 126px;
+  background-repeat: no-repeat;
+  animation: changeimg4 80s infinite;
+  animation-timing-function: ease-in-out;
+}
+@keyframes changeimg4 {
+  0%,15% {
+      background-image: url(/src/assets/img/header/doge-mim.png);
+  }
+  36% {
+      background-image: url(/src/assets/img/header/polygan-mim.png);
+  }
+  56% {
+      background-image: url(/src/assets/img/header/shiba-mim.png);
+  }
+  76% {
+      background-image: url(/src/assets/img/header/ton-mim.png);
+  }
+
+}
+
+
+@media only screen and (min-width: 945px) and (max-width: 1100px){
+  .img_top_right{   right: 75px;  top: 325px };
+}
+@media screen and (max-width: 945px){
+.img_bottom_right .i_b_r_img, .img_top_right .i_t_r_img, .img_top_left .i_t_l_img, .img_bottom_left .i_b_l_img {
+  display: none;
+}}
+
 .navbar {
   position: relative;
   display: flex;
@@ -130,6 +260,7 @@
   &:not(.navbar--simple).expanded {
     transform: translateY(0);
   }
+ 
   & .header__auth {
     display: none;
     margin-bottom: 32px;
@@ -149,6 +280,7 @@
       height: 36px;
       line-height: 34px;
     }
+ 
     &:not(.active) > a {
       color: rgba(255, 255, 255, 0.6);
     }
@@ -157,6 +289,10 @@
       color: #335ffc;
       font-weight: 700;
     }
+    &:not(.active):hover > a {
+      color: #2d59e8; 
+    }
+    
   }
   &__close {
     display: none;
@@ -559,6 +695,7 @@ img.avatar {
   &__desc {
     color: #fff;
     font-size: 18px;
+    font-weight: 300;
   }
   &__button {
     font-size: 1rem !important;
@@ -570,7 +707,11 @@ img.avatar {
     background-color: #fff !important;
     border-color: #fff !important;
     color: #040f4a !important;
-    font-weight: 500 !important;
+    font-weight: 700 !important;
+  }
+  &__button:hover {
+    background-color: transparent !important;
+    color: #fff !important;
   }
 }
 //*********** footer ****************///
@@ -585,6 +726,7 @@ img.avatar {
   }
   .footer-text {
     color: #fff;
+    font-weight: 300;
   }
 
   .social-media {
@@ -601,7 +743,7 @@ img.avatar {
 
   .footer-widget-title {
     font-size: 1.5em;
-    font-weight: 700;
+    font-weight: 400;
     color: #fff;
     margin-bottom: 50px;
   }
@@ -613,8 +755,8 @@ img.avatar {
 
     a {
       color: #fff;
-      font-size: 1em;
-      font-weight: 500;
+      font-size: 0.90em;
+      font-weight: 300;
     }
   }
 
@@ -654,8 +796,8 @@ img.avatar {
 
 .footer-links .badge-custom {
   padding: 0 8px;
-  font-size: 0.625rem;
-  font-weight: 500;
+  font-size: 0.725rem;
+  font-weight: 400;
   border-radius: 0;
   line-height: 20px;
   text-transform: uppercase;
@@ -666,6 +808,8 @@ img.avatar {
   white-space: nowrap;
   vertical-align: baseline;
   display: inline-block;
+  border-radius: 5px;
+  margin-right: 6px;
 }
 
 .fade {
@@ -713,6 +857,7 @@ img.avatar {
   }
 
   .navbar {
+  
     &:not(.navbar--simple) {
       position: fixed;
       top: 0;
@@ -725,13 +870,17 @@ img.avatar {
       transform: translateY(-100%);
       transition: all 0.4s ease-out 0.1s;
     }
+
     &:not(.navbar--simple) {
       & > .navbar__item:not(.navbar__item--active) a {
         color: rgba(4, 15, 74, 0.6);
       }
+
       & > .navbar__item + .navbar__item {
         margin-top: 12px;
       }
+      
+    
     }
 
     &__close,
@@ -826,4 +975,19 @@ img.avatar {
       -240px 155px,
       50% 100%;
   }
+
+}
+@media screen and (max-width: 992px) {
+ .footer .footer-bottom{justify-content: center;}
+.footer-copyright {
+  order:2;
+  text-align: center;
+  justify-content: center;
+ }
+ 
+ .social-media {
+    text-align: center;
+   order:1;
+   
+ }
 }
