@@ -76,7 +76,7 @@ const DropdownInput = ({
         {selectedOption?.content || label}
       </DropdownToggle>
       <DropdownMenu
-        className={`${dropdown["custom-dropdown__menu"]} ${
+        className={`${dropdown["custom-dropdown__menu-wrapper"]} ${
           isOpenDrop ? dropdown["show"] : ""
         }`}
       >

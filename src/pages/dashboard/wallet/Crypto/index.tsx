@@ -17,8 +17,10 @@ import teter from "assets/img/coins/tether.png";
 import trx from "assets/img/coins/trx.png";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
+import { useNavigate } from "react-router-dom";
 
 export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
+  const navigate = useNavigate();
   const [depositForm, setDepositForm] = useState<{
     isOpen: boolean;
     currency: string;
@@ -30,7 +32,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
   }>({ isOpen: false, currency: "", stock: 0 });
 
   return (
-    <Card className="mb-4">
+    <Card className="mb-4 h-100">
       <CardHeader>
         <CardTitle tag="h5">موجودی ارز دیجیتال</CardTitle>
       </CardHeader>
@@ -52,9 +54,9 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                 {isLoading ? (
                   <>
                     <tr>
-                      <th scope="row" className="placeholder-glow">
+                      <td className="placeholder-glow">
                         <div className="placeholder col-12 rounded" />
-                      </th>
+                      </td>
                       <td className="text-center placeholder-glow">
                         <div className="placeholder col-12 rounded" />
                       </td>
@@ -95,7 +97,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                 ) : isSuccess ? (
                   <>
                     <tr key={0}>
-                      <th scope="row">
+                      <td>
                         <div>
                           <img
                             src={teter}
@@ -104,7 +106,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                           />
                           <span className={wallet["crypto-name"]}>تتر</span>
                         </div>
-                      </th>
+                      </td>
                       <td className="text-center">
                         {Number(USDT.balance | 0)}
                       </td>
@@ -114,7 +116,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                       <td className="text-center">
                         <Button
                           color="secondary"
-                          className="px-3 py-2"
+                          className="px-4 py-1"
                           onClick={() => {
                             setDepositForm({
                               isOpen: true,
@@ -128,7 +130,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                       <td className="text-center">
                         <Button
                           color="secondary"
-                          className="px-3 py-2"
+                          className="px-4 py-1"
                           disabled={USDT.balance <= 0}
                           onClick={() =>
                             setWithdrawForm({
@@ -144,16 +146,23 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                       <td className="text-center">
                         <Button
                           color="primary"
-                          className="px-3 py-2"
+                          className="px-4 py-1"
                           outline
-                          disabled={true}
+                          disabled={false}
+                          onClick={() =>
+                            navigate(`/dashboard/buy-sell`, {
+                              state: {
+                                source: "USDT",
+                              },
+                            })
+                          }
                         >
                           معامله
                         </Button>
                       </td>
                     </tr>
                     <tr key={1}>
-                      <th scope="row">
+                      <td>
                         <div>
                           <img
                             src={trx}
@@ -162,7 +171,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                           />
                           <span className={wallet["crypto-name"]}>ترون</span>
                         </div>
-                      </th>
+                      </td>
                       <td className="text-center">{Number(TRX.balance | 0)}</td>
                       <td className="text-center">
                         {Number(TRX.availableBalance | 0)}
@@ -170,7 +179,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                       <td className="text-center">
                         <Button
                           color="secondary"
-                          className="px-3 py-2"
+                          className="px-4 py-1"
                           onClick={() => {
                             setDepositForm({
                               isOpen: true,
@@ -184,7 +193,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                       <td className="text-center">
                         <Button
                           color="secondary"
-                          className="px-3 py-2"
+                          className="px-4 py-1"
                           disabled={TRX.balance <= 0}
                           onClick={() =>
                             setWithdrawForm({
@@ -200,9 +209,15 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                       <td className="text-center">
                         <Button
                           color="primary"
-                          className="px-3 py-2"
+                          className="px-4 py-1"
                           outline
-                          disabled={true}
+                          onClick={() =>
+                            navigate(`/dashboard/buy-sell`, {
+                              state: {
+                                source: "TRX",
+                              },
+                            })
+                          }
                         >
                           معامله
                         </Button>

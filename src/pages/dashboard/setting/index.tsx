@@ -1,14 +1,171 @@
-import Layout from "layouts/dashboard";
+import { useState, useEffect } from "react";
 import { Switch } from "antd";
-import {BsApple,BsGooglePlay} from 'react-icons/bs'
-import { Card, CardBody, CardHeader, CardTitle, Col, Row } from "reactstrap";
-
+import { BsApple, BsGooglePlay } from 'react-icons/bs'
+import { Card, CardBody, CardHeader, CardTitle, Col, FormGroup, Input, Label, Row } from "reactstrap";
+import OtpInput from "react-otp-input";
+import s from "./styles.module.scss";
+import { Controller, useForm } from "react-hook-form";
+import auth from "assets/scss/auth/auth.module.scss";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { getAuthenticatorData, getNotifSettings, updateNotifSettings } from "store/reducers/features/settings/settingSlice";
+import Authenticator from "./authenticator";
+import ChangePassword from "./changePassword";
+import { useRequestDisableAuthenticatorMutation, useRequestSwitchOtpMethodMutation, useVerifySwitchOtpMethodMutation } from "store/api/settings";
+import toast from "react-hot-toast";
+import { useGetMe } from "services/auth/user";
+import { setUser } from "store/reducers/features/user/userSlice";
+import { IUser } from "types/user";
+import OtpVerification from "./otpVerification";
+import PhoneVerification from "./phoneVerification";
+import EmailVerification from "./emailVerification";
+interface NotificationSetting {
+  key: string;
+  userId: string;
+  value: boolean;
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+const LabeLText = {
+  EMAIL: "ایمیل",
+  PHONE: "پیامک",
+  AUTHENTICATOR: 'google Authenticator'
+}
 const Setting = () => {
-  const handleChange = (checked: boolean) => {
-    console.log(`switch to ${checked}`);
+  const dispatch = useAppDispatch();
+  const getMe: any = useGetMe();
+  const user = useAppSelector((state) => state.user);
+  const notificationSetting = useAppSelector((state) => state.setting.notificationSettings);
+  const [securitySelection, setSecuritySelection] = useState('');
+  const [requestSwitchOtpMethod] = useRequestSwitchOtpMethodMutation();
+  const [verifySwitchOtpMethod, { isSuccess }] = useVerifySwitchOtpMethodMutation();
+  const [requestDisableAuthenticator] = useRequestDisableAuthenticatorMutation();
+  const [showInput, setShowInput] = useState(false);
+  const [notificationStatesCopy, setNotificationStatesCopy] = useState([]);
+  const [isInitial, setIsInitial] = useState(false);
+  const { handleSubmit, control, setValue, getValues } = useForm(
+    {
+      mode: "onChange",
+      defaultValues: {
+        code: "",
+      },
+    }
+  )
+  const [notificationStates, setNotificationStates] = useState({
+    emailState: false,
+    smsState: false,
+  });
+  const handleRadioChange = async (event) => {
+    setSecuritySelection(event.target.value);
+    if (user?.otpMethod === 'AUTHENTICATOR') {
+      await requestDisableAuthenticator({ targetMethod: event.target.value })
+    }
+    setIsInitial(false)
+    // setShowInput(true)
+    // if (event.target.value === "AUTHENTICATOR") {
+    //   await requestSwitchOtpMethod({ targetMethod: event.target.value });
+    //   // await requestDisableAuthenticator({ targetMethod: event.target.value })
+    // } else {
+    //   try {
+    //     setShowInput(true)
+    //     await requestSwitchOtpMethod({ targetMethod: event.target.value });
+    //   } catch (error) {
+    //     console.error('Error requesting switch OTP method:', error);
+    //   }
+    // }
   };
+  const handleOTP = async (data: { code: string }) => {
+    try {
+      verifySwitchOtpMethod({ code: data.code }).then((res) => {
+        // @ts-ignore
+        if (res.data) {
+          toast.success('نحوه تایید هویت دو مرحله ای با موفقیت تغییر کرد', { position: 'bottom-left' })
+          setShowInput(false)
+          getMe.mutateAsync(null).then((res) => {
+            res && dispatch(setUser(res));
+          });
+        } else {
+          // @ts-ignore
+          toast.error(res?.error?.data.message, { position: 'bottom-left' })
+        }
+      });
+    } catch (error) {
+      toast.error('خطایی رخ داده است')
+
+    };
+  }
+
+  useEffect(() => {
+    setSecuritySelection(user?.otpMethod);
+    setIsInitial(true);
+  }, [user?.otpMethod]);
+
+  const transformApiData = (apiData) => {
+    return apiData.reduce((acc, item) => {
+      return {
+        ...acc,
+        [item.key]: item.value,
+      };
+    }, {
+    });
+  };
+
+  useEffect(() => {
+    if (notificationSetting.length === 0) return;
+    const x = transformApiData(notificationSetting)
+    setNotificationStates(transformApiData(notificationSetting));
+    const newArray = Object.entries(x).map(([key, value]) => ({
+      key,
+      value,
+    }));
+
+    // Update the notificationStatesCopy with the new array
+    setNotificationStatesCopy(newArray as any);
+  }, [notificationSetting]);
+
+  useEffect(() => {
+    dispatch(getNotifSettings())
+    dispatch(getAuthenticatorData())
+  }, []);
+
+  const fetchData = async () => {
+    await dispatch(getNotifSettings())
+  };
+  const handleChange = async (id: string, checked: boolean) => {
+    setNotificationStates((prevState) => {
+      const newState = {
+        ...prevState,
+        [id]: checked,
+      };
+      return newState;
+    });
+
+    await dispatch(updateNotifSettings(id));
+    await fetchData();
+
+    // Use the state updater callback to get the updated state
+    setNotificationStates((prevState) => {
+      const newArray = Object.entries(prevState).map(([key, value]) => ({
+        key,
+        value,
+      }));
+
+      // Update the notificationStatesCopy with the new array
+      setNotificationStatesCopy(newArray as any);
+      return prevState;
+    });
+  };
+  const rows = [
+    { email: 'FIAT_DEPOSIT_EMAIL', sms: 'FIAT_DEPOSIT_SMS', label: 'واریز تومان و فیات' },
+    { email: 'FIAT_WITHDRAW_EMAIL', sms: 'FIAT_WITHDRAW_SMS', label: 'برداشت تومان و فیات' },
+    { email: 'CRYPTO_DEPOSIT_EMAIL', sms: 'CRYPTO_DEPOSIT_SMS', label: 'واریز ارز دیجیتال' },
+    { email: 'CRYPTO_WITHDRAW_EMAIL', sms: 'CRYPTO_WITHDRAW_SMS', label: 'برداشت ارز دیجیتال' },
+    { email: 'LOGIN_EMAIL', sms: 'LOGIN_SMS', label: 'ورود به حساب کاربری' },
+    { email: 'UPDATES_EMAIL', sms: 'UPDATES_SMS', label: 'جشنواره‌ها و بروزرسانی‌ها' },
+  ];
+  console.log(securitySelection, 'securitySelection')
   return (
-    <section className="page page-settings">
+    <section className="page settings">
       <Row>
         <Col xl={6} lg={6}>
           <Card>
@@ -16,114 +173,62 @@ const Setting = () => {
               <CardTitle>تنظیمات امنیتی</CardTitle>
             </CardHeader>
             <CardBody>
-              <form action="" className="security-form">
-                <h6>
+              <form action="" className="security-form ">
+                <h6 className=" mb-4 mt-4">
                   نحوه تایید هویت دو مرحله ای جهت ورود به حساب کاربری و
                   درخواست برداشت
                 </h6>
-                <Row>
-                  <Col xl={3} lg={3}>
-                    <div className="radio-toggle-control">
-                      <input type="radio" name="rtc" id="rtc1" />
-                      <label>ایمیل</label>
-                    </div>
+                <Row className="mb-4">
+                  <Col xl={3} lg={3} md={2} sm={2}>
+                    <FormGroup className={s["filedOption"]}>
+                      <Label >
+                        ایمیل
+                      </Label>
+                      {' '}
+                      <Input
+                        name="ایمیل"
+                        type="radio"
+                        value="EMAIL"
+                        checked={securitySelection === "EMAIL"}
+                        onChange={handleRadioChange}
+                      />
+                    </FormGroup>
                   </Col>
-                  <Col xl={3} lg={3}>
-                    <div className="radio-toggle-control">
-                      <input type="radio" name="rtc" id="rtc2" />
-                      <label>پیامک</label>
-                    </div>
+                  <Col xl={3} lg={3} md={2} sm={2}>
+                    <FormGroup className={s["filedOption"]}>
+                      <Label >
+                        پیامک
+                      </Label>
+                      {' '}
+                      <Input
+                        name="پیامک"
+                        type="radio"
+                        value="PHONE"
+                        checked={securitySelection === "PHONE"}
+                        onChange={handleRadioChange}
+                      />
+                    </FormGroup>
                   </Col>
-                  <Col xl={6} lg={6}>
-                    <div className="radio-toggle-control">
-                      <input type="radio" name="rtc" id="rtc3" />
-                      <label> Google Authenticator</label>
-                    </div>
+                  <Col xl={6} lg={6} md={2} sm={2}>
+                    <FormGroup className={s["filedOption"]}>
+                      <Label >
+                        Google Authenticator
+                      </Label>
+                      {' '}
+                      <Input
+                        name="googleAuthenticator"
+                        type="radio"
+                        value="AUTHENTICATOR"
+                        checked={securitySelection === "AUTHENTICATOR"}
+                        onChange={handleRadioChange}
+                      />
+                    </FormGroup>
                   </Col>
                 </Row>
-                <div className="alert alert-success">
-                  در ابتدا برنامه را از طریق
-                  <button type="button" className="btn btn-google">
-                    <BsGooglePlay/>{" "}
-                    گوگل پلی{" "}
-                  </button>
-                  یا
-                  <button type="button" className="btn btn-apple">
-                    <BsApple/>{" "}
-                    اپل استور{" "}
-                  </button>
-                  دانلود نمایید.
-                </div>
-                <div className="alert alert-success">
-                  سپس این عکس{" "}
-                  <img
-                    src="assets/img/qr.png"
-                    alt=""
-                    className=""
-                    style={{ width: "6%" }}
-                  />{" "}
-                  را از طریق برنامه Authenticator اسکن کنید یا کد AAAAAAA را
-                  در برنامه وارد نمایید.
-                </div>
-                <div className="alert alert-success">
-                  حالا برای فعال شدن قابلیت استفاده از Google Authenticator کد
-                  6 رقمی نمایش داده شده در برنامه را در فیلد زیر وارد کرده و
-                  دکمه تایید را بزنید.
-                </div>
-                <div className="d-flex justify-content-center align-items-center container">
-                  <div className="py-5 px-3">
-                    <h5 className="m-0">کد تایید Google Authenticator</h5>
-                    <div className="d-flex flex-row mt-5">
-                      <input type="text" className="form-control" />
-                      <input type="text" className="form-control" />
-                      <input type="text" className="form-control" />
-                      <input type="text" className="form-control" />
-                      <input type="text" className="form-control" />
-                      <input type="text" className="form-control" />
-                    </div>
-                    <div className="text-center mt-5">
-                      <div className="text-center">
-                        <button
-                          type="submit"
-                          className="btn btn-outline-primary"
-                        >
-                          ثبت و فعالسازی
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="row mb-2">
-                  <label className="col-xl-3 col-lg-5 col-form-label">
-                    رمزعبور:
-                  </label>
-                  <div className="col-xl-6 col-lg-7">
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="inputPass1"
-                      placeholder="رمز را وارد کنید"
-                    />
-                  </div>
-                </div>
-                <div className="row mb-4">
-                  <label className="col-xl-3 col-lg-5 col-form-label">
-                    تکرار رمزعبور:
-                  </label>
-                  <div className="col-xl-6 col-lg-7">
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="inputPass2"
-                      placeholder="تکرار رمز عبور"
-                    />
-                  </div>
-                </div>
-                <div className="text-center">
-                  <button type="submit" className="btn btn-outline-primary">
-                    ذخیره
-                  </button>
-                </div>
+                {securitySelection === "AUTHENTICATOR" && !isInitial && <Authenticator initialMethod={user.otpMethod} />}
+                {securitySelection === "PHONE" && !isInitial && <PhoneVerification />}
+                {securitySelection === "EMAIL" && !isInitial && <EmailVerification />}
+                <ChangePassword />
               </form>
             </CardBody>
           </Card>
@@ -145,183 +250,52 @@ const Setting = () => {
                       <th scope="col" className="text-center"></th>
                     </tr>
                   </thead>
-                  <tbody >
-                    <tr>
-                      <td >
-                        <span className="text-50">واریز تومان و فیات</span>
-                      </td>
-                      <td className="text-center">
-                        <div className="notice__toggle">
-                          <Switch
-                            id="cb1"
-                            onChange={handleChange}
-                            checked={true}
-                          />
-                        </div>
-                      </td>
-                      <td className="text-center">
-                        <div className="notice__toggle">
-                          <Switch
-                            // className="switch-toggle"
-                            id="cb1"
-                            onChange={handleChange}
-                            checked={true}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div>
-                          <span className="text-50">برداشت تومان و فیات</span>
-                        </div>
-                      </td>
+                  <tbody>
+                    {rows.map((row) => {
+                      return (
+                        <tr key={row.email}>
+                          <td>
+                            <span className="text-50">{row.label}</span>
+                          </td>
+                          {notificationStatesCopy.map((i: any) => {
+                            if (row.email === i.key) {
+                              const switchId = row.email === i.key && i.key;
+                              return (
+                                <td key={switchId} className="text-center">
+                                  <div className="notice__toggle">
+                                    <Switch
+                                      id={switchId}
+                                      key={switchId}
+                                      onChange={(checked) => {
+                                        handleChange(i.key, checked);
+                                      }}
+                                      checked={i.value}
+                                    />
+                                  </div>
+                                </td>
+                              );
+                            } else if (row.sms === i.key) {
+                              const switchId = row.sms === i.key && i.key;
+                              return (
+                                <td key={switchId} className="text-center">
+                                  <div className="notice__toggle">
+                                    <Switch
+                                      id={switchId}
+                                      key={switchId}
+                                      onChange={(checked) => {
+                                        handleChange(i.key, checked);
+                                      }}
+                                      checked={i.value}
+                                    />
+                                  </div>
+                                </td>
+                              );
+                            }
+                          })}
+                        </tr>
+                      );
+                    })}
 
-                      <td className="text-center">
-                        <div className="notice__toggle">
-                          <Switch
-                            // className="switch-toggle"
-                            id="cb1"
-                            onChange={handleChange}
-                            checked={true}
-                          />
-                          <label className="switch-toggle-btn"></label>
-                        </div>
-                      </td>
-                      <td className="text-center">
-                        <div className="notice__toggle">
-                          <Switch
-                            // className="switch-toggle"
-                            id="cb1"
-                            onChange={handleChange}
-                            checked
-                          />
-                          <label className="switch-toggle-btn"></label>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div>
-                          <span className="text-50">واریز ارز دیجیتال</span>
-                        </div>
-                      </td>
-
-                      <td className="text-center">
-                        <div className="notice__toggle">
-                          <Switch
-                            // className="switch-toggle"
-                            id="cb1"
-                            onChange={handleChange}
-                            checked
-                          />
-                          <label className="switch-toggle-btn"></label>
-                        </div>
-                      </td>
-                      <td className="text-center">
-                        <div className="notice__toggle">
-                          <Switch
-                            // className="switch-toggle"
-                            id="cb1"
-                            onChange={handleChange}
-                            checked
-                          />
-                          <label className="switch-toggle-btn"></label>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div>
-                          <span className="text-50">برداشت ارز دیجیتال</span>
-                        </div>
-                      </td>
-
-                      <td className="text-center">
-                        <div className="notice__toggle">
-                          <Switch
-                            // className="switch-toggle"
-                            id="cb1"
-                            onChange={handleChange}
-                            checked
-                          />
-                          <label className="switch-toggle-btn"></label>
-                        </div>
-                      </td>
-                      <td className="text-center">
-                        <div className="notice__toggle">
-                          <Switch
-                            // className="switch-toggle"
-                            id="cb1"
-                            onChange={handleChange}
-                            checked={true}
-                          />
-                          <label className="switch-toggle-btn"></label>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div>
-                          <span className="text-50">ورود به حساب کاربری</span>
-                        </div>
-                      </td>
-
-                      <td className="text-center">
-                        <div className="notice__toggle">
-                          <Switch
-                            // className="switch-toggle"
-                            id="cb1"
-                            onChange={handleChange}
-                            checked={true}
-                          />
-                          <label className="switch-toggle-btn"></label>
-                        </div>
-                      </td>
-                      <td className="text-center">
-                        <div className="notice__toggle">
-                          <Switch
-                            // className="switch-toggle"
-                            id="cb1"
-                            onChange={handleChange}
-                            checked
-                          />
-                          <label className="switch-toggle-btn"></label>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div>
-                          <span className="text-50">
-                            جشنواره&zwnj;ها و بروزرسانی&zwnj;ها
-                          </span>
-                        </div>
-                      </td>
-
-                      <td className="text-center">
-                        <div className="notice__toggle">
-                          <Switch
-                            // className="switch-toggle"
-                            id="cb1"
-                            onChange={handleChange}
-                            checked
-                          />
-                          <label className="switch-toggle-btn"></label>
-                        </div>
-                      </td>
-                      <td className="text-center">
-                        <div className="notice__toggle">
-                          <Switch
-                            // className="switch-toggle"
-                            id="cb1"
-                            onChange={handleChange}
-                            checked
-                          />
-                          <label className="switch-toggle-btn"></label>
-                        </div>
-                      </td>
-                    </tr>
                   </tbody>
                 </table>
               </div>

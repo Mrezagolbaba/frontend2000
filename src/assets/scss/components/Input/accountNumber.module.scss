@@ -9,7 +9,8 @@
       white-space: pre; /* Preserve whitespace */
     }
   }
-  svg {
+  svg,
+  img {
     position: absolute;
     right: 12px;
     height: 100%;
@@ -22,5 +23,12 @@
     border-bottom-left-radius: 0;
     border: 0;
     z-index: 2;
+    transition: all ease 200ms;
+  }
+  img {
+    width: 20px;
+    height: auto;
+    opacity: 0.7;
+    top: 10px;
   }
 }

@@ -142,14 +142,10 @@ const Header = ({ onSidebarToggle }: Props) => {
                           <path
                             d="M13 1L1 13"
                             stroke="#03041B"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
                           />
                           <path
                             d="M13 13L1 0.999999"
                             stroke="#03041B"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
                           />
                         </svg>
                       </span>

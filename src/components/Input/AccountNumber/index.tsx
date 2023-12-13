@@ -1,9 +1,9 @@
-import React, { ReactElement, useEffect, useState } from "react";
-import { PiCreditCardLight } from "react-icons/pi";
+import { useEffect, useState } from "react";
 import { Input } from "reactstrap";
 
 import accountNumber from "assets/scss/components/Input/accountNumber.module.scss";
 import { searchIranianBanks } from "helpers/filesManagement";
+import arsonexMark from "assets/img/icons/Arsonex Mark.svg";
 
 type Props = {
   value: string;
@@ -24,40 +24,38 @@ export default function AccountNumberInput({
   className,
   setBankId,
 }: Props) {
-  const [logo, setLogo] = useState<ReactElement | string>(
-    <PiCreditCardLight />
-  );
+  const [logo, setLogo] = useState<string>(arsonexMark);
 
   useEffect(() => {
     if (value?.length >= 6) {
       const result = searchIranianBanks(value);
       if (result) {
         setLogo(result.logo);
+        console.log("bankkkkkkkkkkk", result.bankId);
+
         setBankId?.(result.bankId);
-      } else setLogo(<PiCreditCardLight />);
-    } else setLogo(<PiCreditCardLight />);
+      } else setLogo(arsonexMark);
+    } else setLogo(arsonexMark);
   }, []);
 
   const handleChange = (e) => {
     const value = e.target.value;
     if (value?.length === 6) {
       const result = searchIranianBanks(value);
-      console.log(result);
-
       if (result) {
         setLogo(result.logo);
         setBankId?.(result.bankId);
-      } else setLogo(<PiCreditCardLight />);
-    } else if (value?.length < 6) setLogo(<PiCreditCardLight />);
+      } else setLogo(arsonexMark);
+    } else if (value?.length < 6) setLogo(arsonexMark);
     onChange?.(e);
   };
 
   return (
     <div className={accountNumber["input-control"]}>
-      {typeof logo === "string" ? (
-        <div dangerouslySetInnerHTML={{ __html: logo }} />
+      {logo === arsonexMark ? (
+        <img src={arsonexMark} alt="card" />
       ) : (
-        logo
+        <div dangerouslySetInnerHTML={{ __html: logo }} />
       )}
       <Input
         value={value}

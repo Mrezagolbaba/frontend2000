@@ -67,7 +67,7 @@ html {
   --bs-dark-border-subtle: #adb5bd;
   --bs-white-rgb: 255, 255, 255;
   --bs-black-rgb: 0, 0, 0;
-  --bs-font-shabnam: "Shabnam", sans-serif;
+  --bs-font-iranyekaneFa: "IRANYekanFa", sans-serif;
   --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -78,7 +78,7 @@ html {
     rgba(255, 255, 255, 0.15),
     rgba(255, 255, 255, 0)
   );
-  --bs-body-font-family: var(--bs-font-shabnam);
+  --bs-body-font-family: var(--bs-font-iranyekaneFa);
   --bs-body-font-size: 1rem;
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
@@ -132,7 +132,7 @@ html {
 .btn {
   --bs-btn-padding-x: 0.75rem;
   --bs-btn-padding-y: 0.375rem;
-  --bs-btn-font-family: var(--bs-font-shabnam);
+  --bs-btn-font-family: var(--bs-font-iranyekaneFa);
   --bs-btn-font-size: 1rem;
   --bs-btn-font-weight: 400;
   --bs-btn-line-height: 1.5;
@@ -186,7 +186,22 @@ html {
   --bs-btn-disabled-bg: #111bff;
   --bs-btn-disabled-border-color: #111bff;
 }
-
+.btn-landing-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #335ffc;
+  --bs-btn-border-color: #335ffc;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg:transparent;
+  --bs-btn-hover-border-color: #335ffc;
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #335ffc;
+  --bs-btn-active-border-color: #335ffc;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #111bff;
+  --bs-btn-disabled-border-color: #111bff;
+}
 .btn-secondary {
   --bs-btn-color: #03041b;
   --bs-btn-bg: rgba(3, 4, 27, 0.05);

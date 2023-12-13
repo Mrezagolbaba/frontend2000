@@ -23,8 +23,13 @@ import profile from "assets/scss/dashboard/profile.module.scss";
 import { BankAccountsResponse } from "types/profile";
 import { MdClose } from "react-icons/md";
 import { LuCheck, LuPencil } from "react-icons/lu";
-import { useCreateBankAccountMutation } from "store/api/profile-management";
+import {
+  useBanksQuery,
+  useCreateBankAccountMutation,
+} from "store/api/profile-management";
 import DeleteModal from "./DeleteModal";
+import IBANNumber from "components/Input/IBANNumber";
+import { persianToEnglishNumbers } from "helpers";
 
 type Props = {
   accounts: BankAccountsResponse[];
@@ -51,9 +56,10 @@ export default function International({ accounts, isLoading }: Props) {
     logo: undefined,
     iban: "",
   });
-  // const { data: bakList } = useBanksQuery({
-  //   filters: "currencyCode||$eq||TRY",
-  // });
+  const { data: bakList } = useBanksQuery({
+    filters: "currencyCode||$eq||TRY",
+  });
+
   const [createAccount, { isLoading: formLoading, isSuccess }] =
     useCreateBankAccountMutation();
 
@@ -103,7 +109,7 @@ export default function International({ accounts, isLoading }: Props) {
   }, [accounts]);
 
   const submitHandler = (data) => {
-    createAccount(data);
+    createAccount({ ...data, iban: persianToEnglishNumbers(data.iban) });
   };
 
   return (
@@ -158,15 +164,11 @@ export default function International({ accounts, isLoading }: Props) {
                         render={({ field: { name, value, onChange, ref } }) => (
                           <FormGroup className={profile["accounts-field"]}>
                             <Label> شماره IBAN:</Label>
-                            <Input
-                              type="text"
-                              className="form-control d-rtl"
-                              value={value}
+                            <IBANNumber
                               name={name}
+                              value={value}
                               onChange={onChange}
-                              id={name}
-                              ref={ref}
-                              dir="ltr"
+                              setBankId={(id) => setValue("bankId", id)}
                             />
                           </FormGroup>
                         )}
@@ -283,12 +285,10 @@ export default function International({ accounts, isLoading }: Props) {
                         <FormGroup className={profile["accounts-field"]}>
                           <Label>شماره IBAN:</Label>
                           <div className={profile["iban-input-control"]}>
-                            <Input
-                              type="text"
-                              value={account.iban}
+                            <IBANNumber
                               name={account.iban}
-                              id={account.iban}
-                              disabled
+                              value={account.iban}
+                              disabled={true}
                             />
                           </div>
                         </FormGroup>

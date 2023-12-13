@@ -14,15 +14,14 @@ import {
   Spinner,
 } from "reactstrap";
 
-import wallet from "pages/dashboard/wallet/style.module.scss";
+import wallet from "assets/scss/dashboard/wallet.module.scss";
 
 // import eth from "assets/img/network/eth.svg";
 import tron from "assets/img/network/tron.svg";
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import Currency from "components/Input/CurrencyInput";
-import { useEffect, useState } from "react";
-import { useForm, useList } from "@refinedev/core";
-import { CurrencyType } from "../../constants";
+import { useState } from "react";
+import { useForm } from "@refinedev/core";
 import toast from "react-hot-toast";
 
 type CryptoFormType = {

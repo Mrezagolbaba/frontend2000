@@ -3,6 +3,7 @@ import {
   DepositRequest,
   TransactionResponse,
   WithdrawRequest,
+  DepositInfoResponse,
 } from "types/wallet";
 import { enhancedApi } from ".";
 
@@ -26,7 +27,7 @@ export const walletManagement = enhancedApi.injectEndpoints({
         };
       },
     }),
-    depositInfo: builder.query<any, CurrencyCode>({
+    depositInfo: builder.query<DepositInfoResponse[], CurrencyCode>({
       query(currencyCode) {
         return {
           method: "GET",

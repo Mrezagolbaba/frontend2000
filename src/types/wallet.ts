@@ -82,3 +82,9 @@ export interface ErrorResponse {
   };
   status: number;
 }
+
+export interface DepositInfoResponse {
+  accountOwnerName: string;
+  bankName: string;
+  iban: string;
+}
