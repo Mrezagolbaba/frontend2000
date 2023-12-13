@@ -46,7 +46,7 @@ const Information = () => {
       lastName: "",
       nationalCode: "",
       birthDate: "",
-      phoneNumber: "",
+      phoneNumber: phoneNumber.includes("+98") ? phoneNumber : "",
       email: "",
     },
     resolver,
@@ -58,7 +58,9 @@ const Information = () => {
     await submitInformation
       .mutateAsync({
         ...data,
-        phoneNumber: data.phoneNumber
+        phoneNumber: phoneNumber.includes("+98")
+          ? phoneNumber
+          : data.phoneNumber
           ? formatPhoneNumber(persianToEnglishNumbers(data.phoneNumber), "98")
           : undefined,
         nationalCode,
@@ -178,31 +180,33 @@ const Information = () => {
                       )}
                     />
                   </Col>
-                  {!phoneNumber.includes("+98") && (
-                    <Col xs={12}>
-                      <Controller
-                        name="phoneNumber"
-                        control={control}
-                        render={({ field: { name, value, onChange, ref } }) => (
-                          <FloatInput
-                            type="text"
-                            name={name}
-                            label="شماره تلفن ایران"
-                            value={value as string}
-                            onChange={onChange}
-                            inputProps={{
-                              ref: ref,
-                              size: "large",
-                              prefix: <CiMobile2 size={20} />,
-                              status: errors?.[name]?.message
-                                ? "error"
-                                : undefined,
-                            }}
-                          />
-                        )}
-                      />
-                    </Col>
-                  )}
+
+                  <Col xs={12}>
+                    <Controller
+                      name="phoneNumber"
+                      control={control}
+                      render={({ field: { name, value, onChange, ref } }) => (
+                        <FloatInput
+                          type="text"
+                          name={name}
+                          label="شماره تلفن ایران"
+                          value={value as string}
+                          onChange={onChange}
+                          disabled={phoneNumber.includes("+98")}
+                          inputProps={{
+                            dir: "ltr",
+                            ref: ref,
+                            size: "large",
+                            prefix: <CiMobile2 size={20} />,
+                            status: errors?.[name]?.message
+                              ? "error"
+                              : undefined,
+                          }}
+                        />
+                      )}
+                    />
+                  </Col>
+
                   <Col xs={12}>
                     <Controller
                       name="email"

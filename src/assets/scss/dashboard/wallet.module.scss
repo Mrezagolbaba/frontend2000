@@ -58,7 +58,8 @@
   justify-content: start;
   &__icon {
     margin-left: 20px;
-    & > img {
+    & > img,
+    svg {
       width: 32px;
       height: auto;
       object-fit: contain;

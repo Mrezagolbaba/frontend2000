@@ -31,6 +31,8 @@ export default function AccountNumberInput({
       const result = searchIranianBanks(value);
       if (result) {
         setLogo(result.logo);
+        console.log("bankkkkkkkkkkk", result.bankId);
+
         setBankId?.(result.bankId);
       } else setLogo(arsonexMark);
     } else setLogo(arsonexMark);
