@@ -8,15 +8,18 @@ import {
   Row,
   Table,
 } from "reactstrap";
-
-import wallet from "assets/scss/dashboard/wallet.module.scss";
-
-import turkeyFlag from "assets/img/icons/flag-turkey.png";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Dialog from "components/Dialog";
 import DepositFiat from "./Deposit";
 
+import turkeyFlag from "assets/img/icons/flag-turkey.png";
+
+import wallet from "assets/scss/dashboard/wallet.module.scss";
+
+
 export default function Fiat({ TRY, isLoading, isSuccess }: any) {
+  const navigate = useNavigate();
   const [depositForm, setDepositForm] = useState<{
     isOpen: boolean;
     currency: string;
@@ -119,7 +122,9 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
                         color="primary"
                         className="px-4 py-1"
                         outline
-                        disabled={true}
+                        onClick={() =>
+                          navigate(`/dashboard/buy-sell?resource="TRY"`)
+                        }
                       >
                         معامله
                       </Button>

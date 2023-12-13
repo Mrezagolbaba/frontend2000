@@ -4,9 +4,14 @@ import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import { searchTurkishBanks } from "helpers/filesManagement";
 import { useEffect, useState } from "react";
 import { Button, Col, Form, FormGroup, Label, Row } from "reactstrap";
-import { useDepositInfoQuery } from "store/api/wallet-management";
+import {
+  useDepositInfoQuery,
+  useDepositMutation,
+} from "store/api/wallet-management";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
+import { useAppSelector } from "store/hooks";
+import { useBanksQuery } from "store/api/profile-management";
 
 const DepositFiat = ({ onClose }: { onClose: () => void }) => {
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
@@ -18,7 +23,21 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
     ownerName: "",
     code: "",
   });
+
+  const user = useAppSelector((state) => state.user);
+
+  console.log(user);
+
   const { data, isLoading, isSuccess } = useDepositInfoQuery("TRY");
+
+  const [
+    depositRequest,
+    {
+      data: depResponse,
+      isLoading: isLoadingDeposit,
+      isSuccess: isSubmitSuccess,
+    },
+  ] = useDepositMutation();
 
   useEffect(() => {
     let list = [] as OptionType[] | [];
@@ -37,12 +56,12 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
           },
           content: (
             <div className={wallet["items-credit"]}>
-              <span className={wallet["items-credit__icon"]}>
+              {/* <span className={wallet["items-credit__icon"]}>
                 <span
                   className="mx-3"
                   dangerouslySetInnerHTML={{ __html: bank.logo }}
                 />
-              </span>
+              </span> */}
               <span dir="ltr">{item.bankName}</span>
             </div>
           ),
@@ -82,6 +101,11 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
                   setSelectedBank(val);
                   setOtherInfo({
                     ownerName: otherOption.ownerName,
+                  });
+                  depositRequest({
+                    currencyCode: "TRY",
+                    amount: "0",
+                    flow: "MANUAL_WITH_WALLET_ADDRESS",
                   });
                 }}
                 options={optionList}

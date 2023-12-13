@@ -17,6 +17,7 @@ import { BsTag } from "react-icons/bs";
 import { useExchangeContext } from "../ContextProvider";
 
 import exchange from "assets/scss/dashboard/buy-sell.module.scss";
+import { useLocation } from "react-router-dom";
 
 const options = [
   {
@@ -56,13 +57,11 @@ export default function ExchangeInput({
   onChange,
   isLoading = false,
 }: Props) {
+  const { state } = useLocation();
   const { exchangeContext, setExchangeContext } = useExchangeContext();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(
-    options.find((option) => option.value === exchangeContext[name].currency) ||
-      options[0]
-  );
+  const [selected, setSelected] = useState(options[0]);
   const [error, setError] = useState<string | undefined>(undefined);
 
   const handleChange = (val: string | number) => {
@@ -92,6 +91,26 @@ export default function ExchangeInput({
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [exchangeContext.source.amount]);
+
+  useEffect(() => {
+    if (state[name]) {
+      const result = options.find((option) => option.value === state[name]);
+      result && setSelected(result);
+      setExchangeContext({
+        ...exchangeContext,
+        [name]: {
+          ...exchangeContext[name],
+          currency: state[name],
+        },
+      });
+    } else if (exchangeContext[name].currency) {
+      const result = options.find(
+        (option) => option.value === exchangeContext[name].currency
+      );
+      result && setSelected(result);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggle = () => setIsOpen((prevState) => !prevState);
 
@@ -179,6 +198,7 @@ export default function ExchangeInput({
                     exchangeContext[name].stock || 0
                   ).toLocaleString()}{" "}
               {convertText(exchangeContext[name].currency, "enToFa")}
+              {exchangeContext[name].currency}
             </span>
           </div>
         )}

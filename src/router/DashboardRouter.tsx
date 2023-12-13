@@ -53,14 +53,13 @@ const DashboardRouter = {
       element: <ProtectedRoute children={<Support />} />,
     },
     {
-      path:"market",
+      path: "market",
       element: <ProtectedRoute children={<Market />} />,
     },
     {
-      path:'history',
+      path: "history",
       element: <ProtectedRoute children={<History />} />,
-    }
-
+    },
   ],
 };
 
