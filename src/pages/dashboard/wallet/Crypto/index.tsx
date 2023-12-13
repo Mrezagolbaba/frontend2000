@@ -17,8 +17,10 @@ import teter from "assets/img/coins/tether.png";
 import trx from "assets/img/coins/trx.png";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
+import { useNavigate } from "react-router-dom";
 
 export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
+  const navigate = useNavigate();
   const [depositForm, setDepositForm] = useState<{
     isOpen: boolean;
     currency: string;
@@ -146,7 +148,14 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                           color="primary"
                           className="px-4 py-1"
                           outline
-                          disabled={true}
+                          disabled={false}
+                          onClick={() =>
+                            navigate(`/dashboard/buy-sell`, {
+                              state: {
+                                source: "USDT",
+                              },
+                            })
+                          }
                         >
                           معامله
                         </Button>
@@ -202,7 +211,13 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                           color="primary"
                           className="px-4 py-1"
                           outline
-                          disabled={true}
+                          onClick={() =>
+                            navigate(`/dashboard/buy-sell`, {
+                              state: {
+                                source: "TRX",
+                              },
+                            })
+                          }
                         >
                           معامله
                         </Button>

@@ -60,13 +60,13 @@ const ShebaForm = () => {
   };
 
   useEffect(() => {
-    isSuccess &&
-      data &&
+    if (isSuccess && data && data.length > 0) {
       reset({
-        accountName: data?.accountOwnerName,
-        shebaNumber: data?.iban,
-        bankName: data?.bankName,
+        accountName: data[0]?.accountOwnerName,
+        shebaNumber: data[0]?.iban,
+        bankName: data[0]?.bankName,
       });
+    }
   }, [data, isSuccess, reset]);
 
   return hasLevel2 ? (

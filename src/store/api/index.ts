@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 type methodType = "get" | "post" | "put" | "patch" | "delete";
 
 export const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL_DEV,
+  baseURL: process.env.REACT_APP_BASE_URL,
   validateStatus: function (status: any) {
     return status >= 200 && status < 300;
   },

@@ -58,8 +58,7 @@
   justify-content: start;
   &__icon {
     margin-left: 20px;
-    & > img,
-    svg {
+    & > img {
       width: 32px;
       height: auto;
       object-fit: contain;
@@ -184,11 +183,5 @@
     color: #fff;
     background-color: #111bff;
     border-color: #111bff;
-  }
-}
-
-@media screen and (max-width: 1399px) {
-  .table-view tbody td {
-    min-width: 140px;
   }
 }

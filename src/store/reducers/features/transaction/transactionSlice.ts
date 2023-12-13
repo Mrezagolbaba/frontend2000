@@ -15,7 +15,6 @@ const initialState:{
 export const getTransactionsList = createAsyncThunk('setting/setNotificationSetting', async (id: string) => {
     try {
         const response = await getTransactions({ id });
-        console.log(response, "transactions111111");
         return response;
     } catch (error: any) {
         console.log(error);

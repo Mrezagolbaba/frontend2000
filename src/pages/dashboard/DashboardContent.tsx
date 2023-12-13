@@ -8,11 +8,13 @@ import {
   DropdownToggle,
 } from "reactstrap";
 
-import T from "assets/img/coins/tether.png";
-import Turkey from "assets/img/icons/flag-turkey.png";
+import USDT from "assets/img/coins/usdt.svg";
+import Turkey from "assets/img/coins/try.svg";
 import Deposit from "assets/img/icons/depositIcon.svg";
 import Exchange from "assets/img/icons/exchange.svg";
 import Market from "assets/img/icons/markets.svg";
+import User1 from "assets/img/level-1.svg";
+import User2 from "assets/img/level-2.svg";
 
 import { useAppDispatch, useAppSelector } from "store/hooks";
 
@@ -92,7 +94,7 @@ const DashboardContent = () => {
   }, []);
 
   const handleExchange = () => {
-    console.log("handleExchange");
+    window.location.href = "/dashboard/buy-sell";
   };
   const convertType = (type: string) => {
     if (type === "DEPOSIT") {
@@ -155,13 +157,24 @@ const DashboardContent = () => {
                   {lastSession}
                 </div>
               </Col>
+              <Col
+                xs={12}
+                sm={2}
+                className="user-summary__section user-summary-lastseen text-center text-sm-left"
+              >
+                <h6> سطح احراز هویت شما</h6>
+                <div className="user-summary-date">
+                {user?.firstTierVerified ? <img src={User1} alt="" style={{width:'20px',marginLeft:'5px'}} /> :  <img src={User2} alt="" style={{width:'20px',marginLeft:'5px'}} />}
+                  {user?.firstTierVerified ? <span><span>سطح یک</span>{" "}<a href="/dashboard/profile" style={{marginRight:'10px',color:'#111bff'}}>ارتقا سطح</a></span> :  <span>سطح دو</span>}
+                </div>
+              </Col>
             </Row>
           </CardBody>
         </Card>
       </section>
 
       <section className="mb-4">
-        <Card className="custom-card  auth-jumbotron">
+        <Card className="custom-card  auth-jumbotron " style={{backgroundColor:'#111bff08'}}>
           <CardHeader>
             <CardTitle tag="h5">احراز هویت</CardTitle>
           </CardHeader>
@@ -185,23 +198,26 @@ const DashboardContent = () => {
                     <h5>احراز هویت سطح یک</h5>
                   </li>
                   <li>
-                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
-                    ﻭﺍﺭﯾﺰ و برداشت تومانی ﺭﻭﺯﺍﻧﻪ:
+                    <BsCheck2 className="icon" size={15} color={"#ff8d00"} />
+                    ﻭﺍﺭﯾﺰ تومان ﺭﻭﺯﺍﻧﻪ   :
                     <strong>۱ میلیون تومان</strong>
                   </li>
                   <li>
                     <BsCheck2 className="icon" size={15} color={"#55cd51"} />
-                    واریز و برداشت فیات روزانه: <strong>معادل ۵۰۰ دلار</strong>
-                  </li>
-                  <li>
-                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
-                    واریز رمزارز ﺭﻭﺯﺍﻧﻪ:
+                    برداشت تومان ﺭﻭﺯﺍﻧﻪ 
                     <strong>نامحدود</strong>
                   </li>
                   <li>
                     <BsCheck2 className="icon" size={15} color={"#55cd51"} />
-                    برداشت رمزارز ﺭﻭﺯﺍﻧﻪ:
+                    واریز و برداشت رمزارز ﺭﻭﺯﺍﻧﻪ  :
                     <strong>نامحدود</strong>
+                  </li>
+                  <li>
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    واریز و برداشت فیات روزانه :
+                    <strong>معادل ۵۰۰ دلار</strong>
+                    
+                   
                   </li>
                 </ul>
               </Col>
@@ -211,24 +227,24 @@ const DashboardContent = () => {
                     <h5>احراز هویت سطح دو</h5>
                   </li>
                   <li>
-                    <CgDanger className="icon" size={15} color={"red"} />
-                    ﻭﺍﺭﯾﺰ و برداشت ﺗﻮﻣﺎنی ﺭﻭﺯﺍﻧﻪ:
-                    <strong>۱۰۰ میلیون تومان - ۱ میلیارد تومان</strong>
+                  <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                      ﻭﺍﺭﯾﺰ تومان ﺭﻭﺯﺍﻧﻪ:
+                    <strong>نامحدود </strong>
                   </li>
                   <li>
-                    <CgDanger className="icon" size={15} color={"red"} />
-                    ﻭﺍﺭﯾﺰ و برداشت فیات ﺭﻭﺯﺍﻧﻪ:
-                    <strong>معادل ۳۵ هزار دلار </strong>
+                  <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                  برداشت تومان ﺭﻭﺯﺍﻧﻪ:
+                    <strong>  نامحدود  </strong>
                   </li>
                   <li>
-                    <CgDanger className="icon" size={15} color={"red"} />
-                    واریز رمزارز ﺭﻭﺯﺍﻧﻪ:
+                  <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                  واریز و برداشت رمزارز ﺭﻭﺯﺍﻧﻪ:
                     <strong>نامحدود</strong>
                   </li>
                   <li>
-                    <CgDanger className="icon" size={15} color={"red"} />
-                    برداشت رمزارز ﺭﻭﺯﺍﻧﻪ:
-                    <strong>نامحدود</strong>
+                  <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                  ﻭﺍﺭﯾﺰ و برداشت فیات ﺭﻭﺯﺍﻧﻪ  :
+                    <strong>۳۵ هزار دلار</strong>
                   </li>
                 </ul>
               </Col>
@@ -321,10 +337,10 @@ const DashboardContent = () => {
                   >
                     <thead>
                       <tr>
-                        <th>نام ارز</th>
-                        <th>قیمت واحد (تومان)</th>
+                        <th className="text-center" >نام ارز</th>
+                        <th className="text-center" >قیمت واحد (تومان)</th>
                         {/* <th>تغییرات 24 ساعته</th> */}
-                        <th>معامله در بازار</th>
+                        <th >معامله در بازار</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -334,7 +350,8 @@ const DashboardContent = () => {
                             <td data-th="نام ارز">
                               <div>
                                 <span className="icon">
-                                  <img src={data?.image} alt="" />
+                                  {data.pair==="USDT/IRR" ? <img src={USDT} alt="" style={{width:'20px',marginLeft:'5px'}} /> :
+                                    <img src={Turkey} alt="" style={{width:'20px',marginLeft:'5px'}} />}
                                 </span>
                                 <span className="text-50">
                                   {convertTextSingle(
@@ -343,9 +360,9 @@ const DashboardContent = () => {
                                 </span>
                               </div>
                             </td>
-                            <td data-th="قیمت واحد (تومان)">
+                            <td className="text-center" data-th="قیمت واحد (تومان)">
                               <span className="td-responsive">
-                                {data?.rate}
+                                {data?.rate.substring(0, 5)}
                               </span>
                             </td>
                             {/* <td data-th="تغییرات ۲۴ ساعته">
@@ -356,7 +373,7 @@ const DashboardContent = () => {
                               <strong className="text-danger">{data?.change}</strong>
                             </div>
                           </td> */}
-                            <td
+                            <td className="text-center" 
                               data-th="معامله در بازار
     "
                             >
@@ -467,10 +484,9 @@ const DashboardContent = () => {
                 <CardTitle tag="h5">تراکنش&zwnj;های اخیر</CardTitle>
               </CardHeader>
               <CardBody>
-                <div className="card-body">
                   <div className="table-responsive  ">
-                  <table className={`table table-borderless ${transactions.data.length === 0 ? 'table-modern' : 'table-striped'}`}>
-                      <thead>
+                    <table className={`table table-borderless ${transactions.data.length === 0 ? 'table-modern' : 'table-striped'}`}>
+                     {transactions.data.length > 0 && <thead>
                         <tr>
                           <th scope="col">نوع</th>
                           <th scope="col" className="text-center">
@@ -483,7 +499,7 @@ const DashboardContent = () => {
                             زمان
                           </th>
                         </tr>
-                      </thead>
+                      </thead>}
                       <tbody>
                         {transactions.data.map((data, index) => {
                           if (
@@ -549,7 +565,6 @@ const DashboardContent = () => {
                       </tbody>
                     </table>
                   </div>
-                </div>
               </CardBody>
             </Card>
           </Col>
@@ -560,8 +575,8 @@ const DashboardContent = () => {
               </CardHeader>
               <CardBody>
                 <div className="table-responsive">
-                <table className={`table table-borderless ${exchange.data.length === 0 ? 'table-modern' : 'table-striped'}`}>
-                    <thead>
+                  <table className={`table table-borderless ${exchange.data.length === 0 ? 'table-modern' : 'table-striped'}`}>
+                    {exchange.data.length > 0 && <thead>
                       <tr>
                         <th scope="col" className="text-center">
                           بازار
@@ -576,7 +591,7 @@ const DashboardContent = () => {
                           تاریخ
                         </th>
                       </tr>
-                    </thead>
+                    </thead>}
                     <tbody className={tableBodyStyle}>
                       {exchange.data.length > 0 &&
                         exchange.data.map((data, index) => (
@@ -615,7 +630,7 @@ const DashboardContent = () => {
                       {exchange.data.length === 0 && (
                         <tr>
                           <td colSpan={4} className="text-center bg-white">
-                          <img
+                            <img
                               src={Deposit}
                               style={{
                                 height: '50px',
@@ -624,7 +639,7 @@ const DashboardContent = () => {
                               }}
                             />
                             <p>اولین تراکنش خود را با آرسونیکس تجربه کنید</p>
-                           
+
                           </td>
                         </tr>
                       )}
