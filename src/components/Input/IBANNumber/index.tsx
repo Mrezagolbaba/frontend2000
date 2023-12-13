@@ -3,7 +3,6 @@ import { Input } from "reactstrap";
 import style from "assets/scss/components/Input/ibanNumber.module.scss";
 import { searchTurkishBanks } from "helpers/filesManagement";
 import arsonexMark from "assets/img/icons/Arsonex Mark.svg";
-
 type Props = {
   name: string;
   value: string;
