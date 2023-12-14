@@ -11,9 +11,17 @@ import {
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import { useAppSelector } from "store/hooks";
-import { useBanksQuery } from "store/api/profile-management";
+import {
+  useBankAccountsQuery,
+  useBanksQuery,
+} from "store/api/profile-management";
+import { isEmpty } from "lodash";
 
 const DepositFiat = ({ onClose }: { onClose: () => void }) => {
+  const { secondTierVerified, firstNameEn, lastNameEn } = useAppSelector(
+    (state) => state.user
+  );
+
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
   const [selectedBank, setSelectedBank] = useState<string>("");
   const [otherInfo, setOtherInfo] = useState<{
@@ -24,11 +32,11 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
     code: "",
   });
 
-  const user = useAppSelector((state) => state.user);
-
-  console.log(user);
-
   const { data, isLoading, isSuccess } = useDepositInfoQuery("TRY");
+  const { data: accounts, isSuccess: getSuccessAccounts } =
+    useBankAccountsQuery({
+      filters: "currencyCode||$eq||TRY",
+    });
 
   const [
     depositRequest,
@@ -48,7 +56,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
       });
       list = data.map((item) => {
         const ibanValue = item.iban.replace("TR", "");
-        const bank = searchTurkishBanks(ibanValue, false);
+        // const bank = searchTurkishBanks(ibanValue);
         return {
           value: item.iban,
           otherOptions: {
@@ -71,24 +79,43 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
     setOptionList(list);
   }, [data, isSuccess]);
 
+  useEffect(() => {
+    accounts &&
+      depositRequest({
+        currencyCode: "TRY",
+        amount: "1",
+        flow: "MANUAL_WITH_PAYMENT_IDENTIFIER",
+        bankAccountId: accounts[0].id,
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accounts, getSuccessAccounts]);
+
   return (
     <div className="px-2">
-      <AlertInfo
-        hasIcon
-        text="برای استفاده از خدمات لیر ترکیه، باید کارت اقامت ترکیه خود را ارسال نمایید."
-        key="passport-alert"
-      />
-      <Row>
-        <Col className="text-center">
-          <Button className="px-5 py-3" color="primary" outline>
-            ارسال کارت اقامت
-          </Button>
-        </Col>
-      </Row>
-      <AlertWarning
-        hasIcon
-        text={`در صورت ارسال مبلغ از حسابی بجز ${""}   عودت مبلغ بعد از 72 ساعت با کسر کارمزد بانکی انجام می‌شود.`}
-      />
+      {!secondTierVerified && (
+        <>
+          <AlertInfo
+            hasIcon
+            text="برای استفاده از خدمات لیر ترکیه، باید کارت اقامت ترکیه خود را ارسال نمایید."
+            key="passport-alert"
+          />
+          <Row>
+            <Col className="text-center">
+              <Button className="px-5 py-3" color="primary" outline>
+                ارسال کارت اقامت
+              </Button>
+            </Col>
+          </Row>
+        </>
+      )}
+      {!isEmpty(firstNameEn) && !isEmpty(lastNameEn) && (
+        <AlertWarning
+          hasIcon
+          text={`در صورت ارسال مبلغ از حسابی بجز ${
+            firstNameEn + " " + lastNameEn
+          }   عودت مبلغ بعد از 72 ساعت با کسر کارمزد بانکی انجام می‌شود.`}
+        />
+      )}
       <Form>
         <Row>
           <Col xs={12} md={6}>
@@ -101,11 +128,6 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
                   setSelectedBank(val);
                   setOtherInfo({
                     ownerName: otherOption.ownerName,
-                  });
-                  depositRequest({
-                    currencyCode: "TRY",
-                    amount: "0",
-                    flow: "MANUAL_WITH_WALLET_ADDRESS",
                   });
                 }}
                 options={optionList}
@@ -125,12 +147,17 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
               <CopyInput text={selectedBank || ""} key="iban-account" />
             </FormGroup>
           </Col>
-          <Col xs={12} md={6}>
-            <FormGroup>
-              <Label htmlFor="ownerAccount"> شناسه واریز :</Label>
-              <CopyInput text={otherInfo.code || ""} key="number-account" />
-            </FormGroup>
-          </Col>
+          {depResponse && (
+            <Col xs={12} md={6}>
+              <FormGroup>
+                <Label htmlFor="ownerAccount"> شناسه واریز :</Label>
+                <CopyInput
+                  text={depResponse.providerData.flowPaymentIdentifier || ""}
+                  key="number-account"
+                />
+              </FormGroup>
+            </Col>
+          )}
         </Row>
       </Form>
     </div>

@@ -5,7 +5,7 @@ import { isEmpty } from "lodash";
 
 export function searchIranianBanks(
   query: string,
-  banks: BanksResponse[] | undefined
+  banks?: BanksResponse[] | undefined
 ) {
   const headAccountNumber = query.slice(0, 6);
 
@@ -18,8 +18,9 @@ export function searchIranianBanks(
   const entity = iranianBanks.filter(
     (bank) => bank.code === persianToEnglishNumbers(headAccountNumber)
   );
-
-  return { bankId: findBank[0]?.id, logo: entity[0]?.logo } || null;
+  if (findBank && findBank.length > 0)
+    return { bankId: findBank[0]?.id, logo: entity[0]?.logo } || null;
+  else return { bankId: "", logo: entity[0]?.logo };
 }
 
 export function searchTurkishBanks(

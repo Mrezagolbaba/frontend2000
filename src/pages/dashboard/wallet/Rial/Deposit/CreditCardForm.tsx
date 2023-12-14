@@ -30,10 +30,12 @@ type CreditCardForm = {
 };
 
 const CreditCardForm = () => {
-  const { firstName, lastName } = useAppSelector((state) => state.user);
+  const { firstName, lastName, secondTierVerified } = useAppSelector(
+    (state) => state.user
+  );
   const navigate = useNavigate();
   const [hasAccount, setHasAccount] = useState<boolean>(true);
-  const [optionList, setOptionList] = useState<OptionType[] | []>([]);
+  const [optionList, setOptionList] = useState<OptionType[] | any[]>([]);
 
   const { data, isSuccess } = useBankAccountsQuery({});
 
@@ -80,23 +82,28 @@ const CreditCardForm = () => {
       } else {
         setOptionList(
           data.map((account) => {
-            const bank = searchIranianBanks(account.cardNumber);
+            const bank =
+              account.cardNumber && searchIranianBanks(account.cardNumber);
             return {
               content: (
                 <div className={wallet["items-credit"]}>
-                  <span className={wallet["items-credit__icon"]}>
-                    <span
-                      className="mx-3"
-                      dangerouslySetInnerHTML={{ __html: bank.logo }}
-                    />
-                  </span>
+                  {bank && bank.logo && (
+                    <span className={wallet["items-credit__icon"]}>
+                      <span
+                        className="mx-3"
+                        dangerouslySetInnerHTML={{ __html: bank.logo }}
+                      />
+                    </span>
+                  )}
+
                   <span dir="ltr">
-                    {formatShowAccount(account?.cardNumber)}
+                    {account?.cardNumber &&
+                      formatShowAccount(account?.cardNumber)}
                   </span>
                 </div>
               ),
               otherOptions: { accountId: account?.id },
-              value: account?.cardNumber,
+              value: account?.cardNumber ? account?.cardNumber : "",
             };
           })
         );
@@ -145,7 +152,11 @@ const CreditCardForm = () => {
                 {errors?.[name] && (
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
-                <FormText>سقف واریز امروز این کارت: ۵۰ میلیون تومان</FormText>
+                <FormText>
+                  {`سقف واریز: ${
+                    secondTierVerified ? "نامحدود" : "ا میلیون تومان"
+                  }`}
+                </FormText>
               </FormGroup>
             )}
           />
@@ -189,14 +200,16 @@ const CreditCardForm = () => {
           >
             {isLoading ? <Spinner /> : "انتقال به درگاه پرداخت"}
           </Button>
-          <Button
-            className="px-5 py-3"
-            color="primary"
-            type="button"
-            onClick={() => {}}
-          >
-            احراز هویت سطح دو
-          </Button>
+          {!secondTierVerified && (
+            <Button
+              className="px-5 py-3"
+              color="primary"
+              type="button"
+              onClick={() => {}}
+            >
+              احراز هویت سطح دو
+            </Button>
+          )}
         </div>
       </Row>
     </form>

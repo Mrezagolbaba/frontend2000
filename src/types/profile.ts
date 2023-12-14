@@ -1,5 +1,5 @@
 export interface BankAccountsRequest {
-  params?: any;
+  filters?: any;
 }
 
 export interface BankAccountsResponse {
