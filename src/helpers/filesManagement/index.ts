@@ -1,46 +1,49 @@
 import { persianToEnglishNumbers } from "helpers";
 import { iranianBanks, turkishBanks } from "./banksList";
-import request from "services/adapter";
+import { BanksResponse } from "types/profile";
+import { isEmpty } from "lodash";
 
-export type BankType = {
-  code: string;
-  bankId?: Promise<string>;
-  name: string;
-  logo: string;
-  persianName: string;
-};
-
-async function getBankId(name: string, type: "TRY" | "IRR"): Promise<string> {
-  const res = await request.get(`/banks?filter=currencyCode||$eq||${type}`);
-  const resultId = res.data.find((item) => item.name === name).id;
-
-  return resultId;
-}
-
-export function searchIranianBanks(query: string) {
+export function searchIranianBanks(
+  query: string,
+  banks: BanksResponse[] | undefined
+) {
   const headAccountNumber = query.slice(0, 6);
+
+  let findBank: BanksResponse[] | [] = [];
+  if (!isEmpty(query) && banks) {
+    findBank = banks.filter(
+      (bank) => bank?.meta.codes.find((code) => code === query)
+    );
+  }
   const entity = iranianBanks.filter(
     (bank) => bank.code === persianToEnglishNumbers(headAccountNumber)
   );
-  const id = getBankId(entity[0].name, "IRR");
 
-  return { bankId: id, ...entity[0] } || null;
+  return { bankId: findBank[0]?.id, logo: entity[0]?.logo } || null;
 }
 
 export function searchTurkishBanks(
   query: string,
+  banks: BanksResponse[] | undefined,
   isSearchId: boolean | undefined = true
-): BankType {
-  const headAccountNumber = query.slice(2, 7);
+) {
+  const headAccountNumber = query.slice(4, 7);
+
+  let findBank: BanksResponse[] | [] = [];
+  if (!isEmpty(query) && banks) {
+    findBank = banks.filter(
+      (bank) =>
+        bank?.meta.codes.find(
+          (code) => Number(code) === Number(headAccountNumber)
+        )
+    );
+  }
+
   const entity = turkishBanks.filter(
     (bank) =>
       Number(bank.code) === Number(persianToEnglishNumbers(headAccountNumber))
   );
-  if (isSearchId && entity) {
-    const id = getBankId(entity[0]?.name, "TRY");
-
-    return { bankId: id, ...entity[0] } || null;
-  } else return entity[0] || null;
+  return { bankId: findBank[0]?.id, logo: entity[0].logo } || null;
 }
 
 export function formatShowAccount(accountNumber: string) {
@@ -57,4 +60,3 @@ export function formatShowAccount(accountNumber: string) {
 
   return outputString;
 }
-

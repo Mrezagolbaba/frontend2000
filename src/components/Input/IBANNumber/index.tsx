@@ -1,8 +1,9 @@
-import { ChangeEvent, ReactElement, useState } from "react";
+import { ChangeEvent, ReactElement, useEffect, useState } from "react";
 import { Input } from "reactstrap";
 import style from "assets/scss/components/Input/ibanNumber.module.scss";
 import { searchTurkishBanks } from "helpers/filesManagement";
 import arsonexMark from "assets/img/icons/Arsonex Mark.svg";
+import { useBanksQuery } from "store/api/profile-management";
 
 type Props = {
   name: string;
@@ -22,10 +23,27 @@ export default function IBANNumber({
   setBankId,
 }: Props) {
   const [logo, setLogo] = useState<string>(arsonexMark);
+
+  const { data: banks,isSuccess } = useBanksQuery({
+    filters: "currencyCode||$eq||TRY",
+  });
+
+  useEffect(() => {
+    if (value?.length >= 6) {
+      const result = searchTurkishBanks(value, banks);
+      if (result) {
+        setLogo(result.logo);
+        setBankId?.(result.bankId);
+      } else setLogo(arsonexMark);
+    } else setLogo(arsonexMark);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
+
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     if (value.length >= 7) {
-      const result = searchTurkishBanks(value);
+      const result = searchTurkishBanks(value,banks);
       if (result) {
         setLogo(result.logo);
         setBankId?.(result.bankId)

@@ -56,9 +56,6 @@ export default function International({ accounts, isLoading }: Props) {
     logo: undefined,
     iban: "",
   });
-  const { data: bakList } = useBanksQuery({
-    filters: "currencyCode||$eq||TRY",
-  });
 
   const [createAccount, { isLoading: formLoading, isSuccess }] =
     useCreateBankAccountMutation();
@@ -137,7 +134,24 @@ export default function International({ accounts, isLoading }: Props) {
               <Row>
                 <Col xs={10}>
                   <Row>
-                    <Col xs={12} xl={6}>
+                    <Col xs={12} xl={7}>
+                      <Controller
+                        name="iban"
+                        control={control}
+                        render={({ field: { name, value, onChange, ref } }) => (
+                          <FormGroup className={profile["accounts-field"]}>
+                            <Label> شماره IBAN:</Label>
+                            <IBANNumber
+                              name={name}
+                              value={value}
+                              onChange={onChange}
+                              setBankId={(id) => setValue("bankId", id)}
+                            />
+                          </FormGroup>
+                        )}
+                      />
+                    </Col>
+                    <Col xs={12} xl={5}>
                       <Controller
                         name="ownerFullName"
                         control={control}
@@ -152,23 +166,6 @@ export default function International({ accounts, isLoading }: Props) {
                               type="text"
                               className="form-control d-rtl"
                               id={`input23_001`}
-                            />
-                          </FormGroup>
-                        )}
-                      />
-                    </Col>
-                    <Col xs={12} xl={6}>
-                      <Controller
-                        name="iban"
-                        control={control}
-                        render={({ field: { name, value, onChange, ref } }) => (
-                          <FormGroup className={profile["accounts-field"]}>
-                            <Label> شماره IBAN:</Label>
-                            <IBANNumber
-                              name={name}
-                              value={value}
-                              onChange={onChange}
-                              setBankId={(id) => setValue("bankId", id)}
                             />
                           </FormGroup>
                         )}
@@ -269,19 +266,7 @@ export default function International({ accounts, isLoading }: Props) {
                 <Row>
                   <Col xs={10}>
                     <Row className="px-2">
-                      <Col xs={12} xl={6}>
-                        <FormGroup className={profile["accounts-field"]}>
-                          <Label> صاحب حساب:</Label>
-                          <Input
-                            value={account?.ownerFullName}
-                            name={account?.ownerFullName}
-                            type="text"
-                            id={account?.ownerFullName}
-                            disabled
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col xs={12} xl={6}>
+                      <Col xs={12} xl={7}>
                         <FormGroup className={profile["accounts-field"]}>
                           <Label>شماره IBAN:</Label>
                           <div className={profile["iban-input-control"]}>
@@ -291,6 +276,18 @@ export default function International({ accounts, isLoading }: Props) {
                               disabled={true}
                             />
                           </div>
+                        </FormGroup>
+                      </Col>
+                      <Col xs={12} xl={5}>
+                        <FormGroup className={profile["accounts-field"]}>
+                          <Label> صاحب حساب:</Label>
+                          <Input
+                            value={account?.ownerFullName}
+                            name={account?.ownerFullName}
+                            type="text"
+                            id={account?.ownerFullName}
+                            disabled
+                          />
                         </FormGroup>
                       </Col>
                     </Row>

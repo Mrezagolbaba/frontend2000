@@ -40,4 +40,7 @@ export interface BanksResponse {
   currencyCode: string;
   createdAt: string;
   updatedAt: string | undefined | null;
+  meta: {
+    codes: string[];
+  };
 }
