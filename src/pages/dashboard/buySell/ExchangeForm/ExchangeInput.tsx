@@ -93,7 +93,7 @@ export default function ExchangeInput({
   }, [exchangeContext.source.amount]);
 
   useEffect(() => {
-    if (state[name]) {
+    if (state && state?.[name]) {
       const result = options.find((option) => option.value === state[name]);
       result && setSelected(result);
       setExchangeContext({

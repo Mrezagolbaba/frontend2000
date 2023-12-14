@@ -17,7 +17,6 @@ import turkeyFlag from "assets/img/icons/flag-turkey.png";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 
-
 export default function Fiat({ TRY, isLoading, isSuccess }: any) {
   const navigate = useNavigate();
   const [depositForm, setDepositForm] = useState<{
@@ -123,7 +122,11 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
                         className="px-4 py-1"
                         outline
                         onClick={() =>
-                          navigate(`/dashboard/buy-sell?resource="TRY"`)
+                          navigate("/dashboard/buy-sell", {
+                            state: {
+                              source: "TRY",
+                            },
+                          })
                         }
                       >
                         معامله
