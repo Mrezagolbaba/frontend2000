@@ -81,16 +81,16 @@ export default function Withdraw({ onClose }: Props) {
         setHasAccount(true);
         setOptionList(
           data.map((account) => {
-            const bank = searchIranianBanks(account?.cardNumber);
+            // const bank = searchIranianBanks(account?.cardNumber);
             return {
               content: (
                 <div className={wallet["items-credit"]}>
-                  <span className={wallet["items-credit__icon"]}>
+                  {/* <span className={wallet["items-credit__icon"]}>
                     <span
                       className="mx-3"
                       dangerouslySetInnerHTML={{ __html: bank.logo }}
                     />
-                  </span>
+                  </span> */}
                   <span dir="ltr">{formatShowAccount(account?.iban)}</span>
                 </div>
               ),

@@ -44,6 +44,7 @@ export function searchTurkishBanks(
     (bank) =>
       Number(bank.code) === Number(persianToEnglishNumbers(headAccountNumber))
   );
+
   return { bankId: findBank[0]?.id, logo: entity[0].logo } || null;
 }
 

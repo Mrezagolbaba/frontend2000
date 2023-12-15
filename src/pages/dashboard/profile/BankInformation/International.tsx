@@ -145,7 +145,9 @@ export default function International({ accounts, isLoading }: Props) {
                               name={name}
                               value={value}
                               onChange={onChange}
-                              setBankId={(id) => setValue("bankId", id)}
+                              setBankId={(id) => {
+                                setValue("bankId", id);
+                              }}
                             />
                           </FormGroup>
                         )}
@@ -344,6 +346,7 @@ export default function International({ accounts, isLoading }: Props) {
                 className="btn-simple"
                 disabled={isOpenForm}
                 style={{ flex: "none" }}
+                onClick={() => setIsOpenForm(true)}
               >
                 اضافه کردن حساب جدید
               </Button>

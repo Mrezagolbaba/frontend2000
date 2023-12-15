@@ -1,7 +1,6 @@
 import { AlertInfo, AlertWarning } from "components/AlertWidget";
 import CopyInput from "components/Input/CopyInput";
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
-import { searchTurkishBanks } from "helpers/filesManagement";
 import { useEffect, useState } from "react";
 import { Button, Col, Form, FormGroup, Label, Row } from "reactstrap";
 import {
@@ -11,19 +10,20 @@ import {
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import { useAppSelector } from "store/hooks";
-import {
-  useBankAccountsQuery,
-  useBanksQuery,
-} from "store/api/profile-management";
+import { useBankAccountsQuery } from "store/api/profile-management";
 import { isEmpty } from "lodash";
+import { useCheckVerificationsQuery } from "store/api/user";
+import Dialog from "components/Dialog";
+import ConfirmInternationalService from "pages/dashboard/profile/AuthSection/ConfirmInternationalService";
+import ResidencyCardStep from "pages/dashboard/profile/AuthSection/ResidencyCardStep";
 
 const DepositFiat = ({ onClose }: { onClose: () => void }) => {
-  const { secondTierVerified, firstNameEn, lastNameEn } = useAppSelector(
-    (state) => state.user
-  );
+  const { firstNameEn, lastNameEn } = useAppSelector((state) => state.user);
 
+  const [isVerified, setIsVerified] = useState<1 | 2 | 3>(1);
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
   const [selectedBank, setSelectedBank] = useState<string>("");
+  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
   const [otherInfo, setOtherInfo] = useState<{
     ownerName?: string;
     code?: string;
@@ -32,6 +32,8 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
     code: "",
   });
 
+  const { data: verifications, isSuccess: successVerification } =
+    useCheckVerificationsQuery();
   const { data, isLoading, isSuccess } = useDepositInfoQuery("TRY");
   const { data: accounts, isSuccess: getSuccessAccounts } =
     useBankAccountsQuery({
@@ -80,6 +82,18 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
   }, [data, isSuccess]);
 
   useEffect(() => {
+    if (successVerification) {
+      setIsVerified(
+        verifications?.[2] === "PROCESSING"
+          ? 2
+          : verifications?.[2] === "VERIFIED"
+          ? 3
+          : 1
+      );
+    } else setIsVerified(1);
+  }, [successVerification, verifications]);
+
+  useEffect(() => {
     accounts &&
       depositRequest({
         currencyCode: "TRY",
@@ -89,10 +103,11 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, getSuccessAccounts]);
+  console.log("vert", isVerified);
 
   return (
     <div className="px-2">
-      {!secondTierVerified && (
+      {isVerified===1 ? (
         <>
           <AlertInfo
             hasIcon
@@ -101,65 +116,88 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
           />
           <Row>
             <Col className="text-center">
-              <Button className="px-5 py-3" color="primary" outline>
+              <Button
+                className="px-5 py-3"
+                color="primary"
+                outline
+                onClick={() => setIsOpenDialog(true)}
+              >
                 ارسال کارت اقامت
               </Button>
             </Col>
           </Row>
         </>
-      )}
-      {!isEmpty(firstNameEn) && !isEmpty(lastNameEn) && (
-        <AlertWarning
-          hasIcon
-          text={`در صورت ارسال مبلغ از حسابی بجز ${
-            firstNameEn + " " + lastNameEn
-          }   عودت مبلغ بعد از 72 ساعت با کسر کارمزد بانکی انجام می‌شود.`}
-        />
-      )}
-      <Form>
-        <Row>
-          <Col xs={12} md={6}>
-            <FormGroup>
-              <Label htmlFor="ownerAccount"> بانک مقصد:</Label>
-              <DropdownInput
-                id="bank-name"
-                value={selectedBank}
-                onChange={(val, otherOption) => {
-                  setSelectedBank(val);
-                  setOtherInfo({
-                    ownerName: otherOption.ownerName,
-                  });
-                }}
-                options={optionList}
-                // hasError={Boolean(errors?.[name])}
-              />
-            </FormGroup>
-          </Col>
-          <Col xs={12} md={6}>
-            <FormGroup>
-              <Label htmlFor="ownerAccount">نام صاحب حساب:</Label>
-              <CopyInput text={otherInfo.ownerName || ""} key="owner-account" />
-            </FormGroup>
-          </Col>
-          <Col xs={12} md={6}>
-            <FormGroup>
-              <Label htmlFor="iban"> شماره iban:</Label>
-              <CopyInput text={selectedBank || ""} key="iban-account" />
-            </FormGroup>
-          </Col>
-          {depResponse && (
+      ) :isVerified===2? <>
+      <AlertInfo
+        hasIcon
+        text="مدارک ارسالی شما در حال بررسی است. لطفا تا زمان تایید، منتظر بمانید."
+        key="passport-alert"
+      />
+    </>:(
+        <Form>
+          {!isEmpty(firstNameEn) && !isEmpty(lastNameEn) && (
+            <AlertWarning
+              hasIcon
+              text={`در صورت ارسال مبلغ از حسابی بجز ${
+                firstNameEn + " " + lastNameEn
+              }   عودت مبلغ بعد از 72 ساعت با کسر کارمزد بانکی انجام می‌شود.`}
+            />
+          )}
+          <Row>
             <Col xs={12} md={6}>
               <FormGroup>
-                <Label htmlFor="ownerAccount"> شناسه واریز :</Label>
-                <CopyInput
-                  text={depResponse.providerData.flowPaymentIdentifier || ""}
-                  key="number-account"
+                <Label htmlFor="bank-name"> بانک مقصد:</Label>
+                <DropdownInput
+                  id="bank-name"
+                  value={selectedBank}
+                  onChange={(val, otherOption) => {
+                    setSelectedBank(val);
+                    setOtherInfo({
+                      ownerName: otherOption.ownerName,
+                    });
+                  }}
+                  options={optionList}
+                  // hasError={Boolean(errors?.[name])}
                 />
               </FormGroup>
             </Col>
-          )}
-        </Row>
-      </Form>
+            <Col xs={12} md={6}>
+              <FormGroup>
+                <Label htmlFor="ownerAccount">نام صاحب حساب:</Label>
+                <CopyInput
+                  text={otherInfo.ownerName || ""}
+                  key="owner-account"
+                />
+              </FormGroup>
+            </Col>
+            <Col xs={12} md={6}>
+              <FormGroup>
+                <Label htmlFor="iban"> شماره iban:</Label>
+                <CopyInput text={selectedBank || ""} key="iban-account" />
+              </FormGroup>
+            </Col>
+            {depResponse && (
+              <Col xs={12} md={6}>
+                <FormGroup>
+                  <Label htmlFor="ownerAccount"> شناسه واریز :</Label>
+                  <CopyInput
+                    text={depResponse.providerData.flowPaymentIdentifier || ""}
+                    key="number-account"
+                  />
+                </FormGroup>
+              </Col>
+            )}
+          </Row>
+        </Form>
+      )}
+      <Dialog
+        title="ارسال کارت اقامت"
+        isOpen={isOpenDialog}
+        hasCloseButton={true}
+        onClose={() => setIsOpenDialog(false)}
+      >
+        <ResidencyCardStep onClick={() => {}} />
+      </Dialog>
     </div>
   );
 };
