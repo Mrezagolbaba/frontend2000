@@ -61,14 +61,17 @@ export default function ExchangeInput({
   const { exchangeContext, setExchangeContext } = useExchangeContext();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(options[0]);
+  const [selected, setSelected] = useState({
+    value: options[0],
+    amount: 0,
+  });
   const [error, setError] = useState<string | undefined>(undefined);
 
   const handleChange = (val: string | number) => {
     setExchangeContext({
       ...exchangeContext,
       [name]: {
-        amount: val,
+        amount: selected.amount ?? val,
         currency: selected.value,
         stock: exchangeContext[name].stock,
       },
@@ -93,9 +96,12 @@ export default function ExchangeInput({
   }, [exchangeContext.source.amount]);
 
   useEffect(() => {
-    if (state && state?.[name]) {
+    if (state && state?.[name] && !state.destination) {
       const result = options.find((option) => option.value === state[name]);
-      result && setSelected(result);
+      result && setSelected({
+        ...selected,
+        value: result,
+      });
       setExchangeContext({
         ...exchangeContext,
         [name]: {
@@ -103,13 +109,29 @@ export default function ExchangeInput({
           currency: state[name],
         },
       });
-    } else if (exchangeContext[name].currency) {
+    } else if (exchangeContext[name].currency && !state.destination) {
       const result = options.find(
         (option) => option.value === exchangeContext[name].currency
       );
-      result && setSelected(result);
+      result && setSelected({
+        ...selected,
+        value: result,
+      });
+    } else if (state && state?.source && state?.destination) {
+      const result = options.find((option) => option.value === state[name].currency);
+      result && setSelected({
+        value: result,
+        amount: state[name].amount,
+      });
+      setExchangeContext({
+        ...exchangeContext,
+        [name]: {
+          ...exchangeContext[name],
+          currency: state[name].currency,
+          amount: state[name].amount,
+        },
+      });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const toggle = () => setIsOpen((prevState) => !prevState);
@@ -122,9 +144,8 @@ export default function ExchangeInput({
         <CurrencyInput
           id={name}
           name={name}
-          className={`form-control ${error ? "is-invalid" : ""} ${
-            exchange.input
-          }`}
+          className={`form-control ${error ? "is-invalid" : ""} ${exchange.input
+            }`}
           type="text"
           value={exchangeContext[name].amount}
           decimalsLimit={decimalsLimit}
@@ -139,12 +160,12 @@ export default function ExchangeInput({
               <div className={exchange["selected__inner"]}>
                 <div className={exchange["selected__item"]}>
                   <img
-                    src={selected.label.img}
+                    src={selected.value.label.img}
                     alt="currency-icon"
                     width={20}
                     height={20}
                   />
-                  {selected.label.text}
+                  {selected.value.label.text}
                 </div>
               </div>
             </div>
@@ -163,7 +184,11 @@ export default function ExchangeInput({
                       currency: option.value,
                     },
                   });
-                  setSelected(option);
+                  setSelected({
+                    ...selected,
+                    value: option,
+                   
+                  });
                 }}
               >
                 <div>
@@ -195,8 +220,8 @@ export default function ExchangeInput({
               {exchangeContext[name].currency === "IRR"
                 ? rialToToman(exchangeContext[name].stock).toLocaleString()
                 : Number(
-                    exchangeContext[name].stock || 0
-                  ).toLocaleString()}{" "}
+                  exchangeContext[name].stock || 0
+                ).toLocaleString()}{" "}
               {convertText(exchangeContext[name].currency, "enToFa")}
               {exchangeContext[name].currency}
             </span>
@@ -216,10 +241,10 @@ export default function ExchangeInput({
               <span className="value">
                 {exchangeContext.source.currency === "IRR"
                   ? rialToToman(exchangeContext.rate).toLocaleString() +
-                    " تومان"
+                  " تومان"
                   : parseFloat(exchangeContext.rate).toLocaleString() +
-                    " " +
-                    convertText(exchangeContext.source.currency, "enToFa")}
+                  " " +
+                  convertText(exchangeContext.source.currency, "enToFa")}
               </span>
             </div>
           ))}
