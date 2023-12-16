@@ -6,7 +6,7 @@ const API_BASE_DEV_URL = "http://localhost:3000/v1/";
 
 // Create and configure the Axios instance
 const request: AxiosInstance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: process.env.REACT_APP_BASE_URL,
   // You can add more default configurations here, like headers, timeouts, etc.
 });
 const accessTokenExpires = typeof window !== 'undefined' ? window.localStorage.getItem('accessTokenExpires') : null;
