@@ -10,10 +10,15 @@ const BottomBanner = () => {
             آرسونیکس یعنی؛ بهترین نرخ و کمترین کارمزد
           </h2>
           <p className={home["bottom-banner__desc"]}>
-            در کمتر از 2 دقیقه بدون ارسال هیچ مدرکی اولین معامله را انجام خواهید
-            داد
+            در کمتر از دو دقیقه بدون ارسال هیچ مدرکی اولین معامله را انجام
+            خواهید داد
           </p>
-          <Button href="/register" tag="a" color="light" className={home["bottom-banner__button"]}>
+          <Button
+            href="/register"
+            tag="a"
+            color="light"
+            className={home["bottom-banner__button"]}
+          >
             شروع کنید
           </Button>
         </div>

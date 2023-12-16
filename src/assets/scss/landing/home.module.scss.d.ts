@@ -4,6 +4,7 @@ declare const classNames: {
   readonly "menu-overlay": "menu-overlay";
   readonly show: "show";
   readonly header: "header";
+  readonly withoutBg: "withoutBg";
   readonly header__top: "header__top";
   readonly header__logo: "header__logo";
   readonly header__auth: "header__auth";
