@@ -30,14 +30,16 @@
   }
 }
 
+.header.withoutBg {
+  background-image: none;
+  height: auto;
+  margin-bottom: 135px;
+}
 .header {
   position: relative;
   padding-top: 40px;
   height: 862px;
-  background-image: url(""),
-    url(""),
-    url(""),
-    url(""),
+  background-image: url(""), url(""), url(""), url(""),
     url("/src/assets/img/lay/header-pattern.png"),
     url("/src/assets/img/lay/header-bg-2.png");
   background-repeat: no-repeat;
@@ -121,22 +123,25 @@
   }
 }
 
-.img_bottom_right{
-  right: 50px;bottom: 150px
+.img_bottom_right {
+  right: 50px;
+  bottom: 150px;
 }
-.img_top_right{
-  right: 155px;top: 325px
+.img_top_right {
+  right: 155px;
+  top: 325px;
 }
-.img_top_left{
-  left: 60px;top: 330px
+.img_top_left {
+  left: 60px;
+  top: 330px;
 }
-.img_bottom_left{
-  left: 280px;bottom: 200px
+.img_bottom_left {
+  left: 280px;
+  bottom: 200px;
 }
 
-.img_bottom_right .i_b_r_img{
-  
-background-image:url(/src/assets/img/header/china-currency.png);
+.img_bottom_right .i_b_r_img {
+  background-image: url(/src/assets/img/header/china-currency.png);
   width: 209px;
   height: 203px;
   background-repeat: no-repeat;
@@ -145,28 +150,25 @@ background-image:url(/src/assets/img/header/china-currency.png);
   animation: changeimg1 20s infinite ease-in-out;
 }
 @keyframes changeimg1 {
-  0%,15% {
-    background-image:url(/src/assets/img/header/china-currency.png);
+  0%,
+  15% {
+    background-image: url(/src/assets/img/header/china-currency.png);
   }
   30% {
-      background-image: url(/src/assets/img/header/eu-currency.png);
-
+    background-image: url(/src/assets/img/header/eu-currency.png);
   }
   50% {
-      background-image: url(/src/assets/img/header/tmn-currency.png);
-
+    background-image: url(/src/assets/img/header/tmn-currency.png);
   }
   70% {
-      background-image: url(/src/assets/img/header/turkey-currency.png);
-
+    background-image: url(/src/assets/img/header/turkey-currency.png);
   }
   100% {
-      background-image: url(/src/assets/img/header/uk-currency.png);
-
+    background-image: url(/src/assets/img/header/uk-currency.png);
   }
 }
 
-.img_top_right .i_t_r_img{
+.img_top_right .i_t_r_img {
   background-image: url(/src/assets/img/header/token-cardano.png);
   width: 111px;
   height: 104px;
@@ -175,24 +177,22 @@ background-image:url(/src/assets/img/header/china-currency.png);
   animation-timing-function: ease-in-out;
 }
 @keyframes changeimg2 {
-  0%,15% {
-      background-image: url(/src/assets/img/header/token-cardano.png);
+  0%,
+  15% {
+    background-image: url(/src/assets/img/header/token-cardano.png);
   }
   35% {
-      background-image: url(/src/assets/img/header/token-litecoin.png);
+    background-image: url(/src/assets/img/header/token-litecoin.png);
   }
   55% {
-      background-image: url(/src/assets/img/header/token-usdt.png);
+    background-image: url(/src/assets/img/header/token-usdt.png);
   }
   75% {
-      background-image: url(/src/assets/img/header/token-xrp.png);
+    background-image: url(/src/assets/img/header/token-xrp.png);
   }
-
 }
 
-
-
-.img_top_left .i_t_l_img{
+.img_top_left .i_t_l_img {
   background-image: url(/src/assets/img/header/btc-coin.png);
   width: 216px;
   height: 210px;
@@ -201,23 +201,22 @@ background-image:url(/src/assets/img/header/china-currency.png);
   animation-timing-function: ease-in-out;
 }
 @keyframes changeimg3 {
-  0%,15% {
-      background-image: url(/src/assets/img/header/btc-coin.png);
+  0%,
+  15% {
+    background-image: url(/src/assets/img/header/btc-coin.png);
   }
   32% {
-      background-image: url(/src/assets/img/header/coin-solana.png);
+    background-image: url(/src/assets/img/header/coin-solana.png);
   }
   52% {
-      background-image: url(/src/assets/img/header/coin-tron.png);
-
+    background-image: url(/src/assets/img/header/coin-tron.png);
   }
   72% {
-      background-image: url(/src/assets/img/header/eth-coin.png);
+    background-image: url(/src/assets/img/header/eth-coin.png);
   }
-
 }
 
-.img_bottom_left .i_b_l_img{
+.img_bottom_left .i_b_l_img {
   background-image: url(/src/assets/img/header/doge-mim.png);
   width: 129px;
   height: 126px;
@@ -226,29 +225,35 @@ background-image:url(/src/assets/img/header/china-currency.png);
   animation-timing-function: ease-in-out;
 }
 @keyframes changeimg4 {
-  0%,15% {
-      background-image: url(/src/assets/img/header/doge-mim.png);
+  0%,
+  15% {
+    background-image: url(/src/assets/img/header/doge-mim.png);
   }
   36% {
-      background-image: url(/src/assets/img/header/polygan-mim.png);
+    background-image: url(/src/assets/img/header/polygan-mim.png);
   }
   56% {
-      background-image: url(/src/assets/img/header/shiba-mim.png);
+    background-image: url(/src/assets/img/header/shiba-mim.png);
   }
   76% {
-      background-image: url(/src/assets/img/header/ton-mim.png);
+    background-image: url(/src/assets/img/header/ton-mim.png);
   }
-
 }
 
-
-@media only screen and (min-width: 945px) and (max-width: 1100px){
-  .img_top_right{   right: 75px;  top: 325px };
+@media only screen and (min-width: 945px) and (max-width: 1100px) {
+  .img_top_right {
+    right: 75px;
+    top: 325px;
+  }
 }
-@media screen and (max-width: 945px){
-.img_bottom_right .i_b_r_img, .img_top_right .i_t_r_img, .img_top_left .i_t_l_img, .img_bottom_left .i_b_l_img {
-  display: none;
-}}
+@media screen and (max-width: 945px) {
+  .img_bottom_right .i_b_r_img,
+  .img_top_right .i_t_r_img,
+  .img_top_left .i_t_l_img,
+  .img_bottom_left .i_b_l_img {
+    display: none;
+  }
+}
 
 .navbar {
   position: relative;
@@ -260,7 +265,7 @@ background-image:url(/src/assets/img/header/china-currency.png);
   &:not(.navbar--simple).expanded {
     transform: translateY(0);
   }
- 
+
   & .header__auth {
     display: none;
     margin-bottom: 32px;
@@ -280,7 +285,7 @@ background-image:url(/src/assets/img/header/china-currency.png);
       height: 36px;
       line-height: 34px;
     }
- 
+
     &:not(.active) > a {
       color: rgba(255, 255, 255, 0.6);
     }
@@ -290,9 +295,8 @@ background-image:url(/src/assets/img/header/china-currency.png);
       font-weight: 700;
     }
     &:not(.active):hover > a {
-      color: #2d59e8; 
+      color: #2d59e8;
     }
-    
   }
   &__close {
     display: none;
@@ -755,7 +759,7 @@ img.avatar {
 
     a {
       color: #fff;
-      font-size: 0.90em;
+      font-size: 0.9em;
       font-weight: 300;
     }
   }
@@ -857,7 +861,6 @@ img.avatar {
   }
 
   .navbar {
-  
     &:not(.navbar--simple) {
       position: fixed;
       top: 0;
@@ -878,8 +881,6 @@ img.avatar {
       & > .navbar__item + .navbar__item {
         margin-top: 12px;
       }
-      
-    
     }
 
     &__close,
@@ -974,19 +975,19 @@ img.avatar {
       -240px 155px,
       50% 100%;
   }
-
 }
 @media screen and (max-width: 992px) {
- .footer .footer-bottom{justify-content: center;}
-.footer-copyright {
-  order:2;
-  text-align: center;
-  justify-content: center;
- }
- 
- .social-media {
+  .footer .footer-bottom {
+    justify-content: center;
+  }
+  .footer-copyright {
+    order: 2;
     text-align: center;
-   order:1;
-   
- }
+    justify-content: center;
+  }
+
+  .social-media {
+    text-align: center;
+    order: 1;
+  }
 }

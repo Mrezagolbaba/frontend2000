@@ -35,8 +35,16 @@ export const walletManagement = enhancedApi.injectEndpoints({
         };
       },
     }),
+    transactionStatus: builder.query<TransactionResponse, string>({
+      query(transactionId) {
+        return {
+          method: "GET",
+          url: `/transactions/${transactionId}`,
+        };
+      },
+    }),
   }),
 });
 
-export const { useDepositMutation, useDepositInfoQuery, useWithdrawMutation } =
+export const { useDepositMutation, useDepositInfoQuery, useWithdrawMutation, useTransactionStatusQuery } =
   walletManagement;

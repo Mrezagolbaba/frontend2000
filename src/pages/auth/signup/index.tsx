@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CiMobile2 } from "react-icons/ci";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { PiShieldCheckeredFill } from "react-icons/pi";
 import toast from "react-hot-toast";
 
 import Auth from "layouts/auth";
@@ -88,7 +89,20 @@ const SignupPage: React.FC = () => {
       <section className={auth.container}>
         <Card className={auth.card}>
           <CardBody className={auth["card-body"]}>
-            <h4 className={auth.title}>ثبت نام</h4>
+            <h4 className={auth.title}> ثبت نام در آرسونیکس</h4>
+
+            <div className={auth.confidence}>
+
+              <p>از یکسان بودن آدرس صفحه با آدرس زیر مطمئن شوید.</p>
+              <div className="d-ltr">
+                <label>
+                  <span>https://</span>arsonex.com
+                </label>
+                <span className="icon">
+                  <PiShieldCheckeredFill />
+                </span>
+              </div>
+            </div>
             <p className={auth.text}> شماره تلفن خود را وارد کنید.</p>
 
             <form
@@ -145,7 +159,7 @@ const SignupPage: React.FC = () => {
                       render={({ field: { name, value, onChange, ref } }) => (
                         <div>
                           <Input
-                          style={{marginRight:"8px"}}
+                            style={{ marginRight: "8px" }}
                             checked={value}
                             className="form-check-input"
                             type="checkbox"

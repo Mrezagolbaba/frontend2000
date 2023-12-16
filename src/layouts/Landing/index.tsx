@@ -5,12 +5,13 @@ import Footer from "./Footer";
 
 type Props = {
   children: ReactNode;
+  disableBanner?: boolean;
 };
 
-const LandingLayout = ({ children }: Props) => {
+const LandingLayout = ({ children,disableBanner=false }: Props) => {
   return (
     <div className={style.wrapper}>
-      <Header />
+      <Header disableBanner={disableBanner}/>
       {children}
       <Footer />
     </div>

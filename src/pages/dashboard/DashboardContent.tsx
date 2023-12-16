@@ -48,17 +48,26 @@ import moment from "jalali-moment";
 import { getCurrencySwap } from "services/exchange";
 import { getTransactionsList } from "store/reducers/features/transaction/transactionSlice";
 import { getExchangeList } from "store/reducers/features/exchange/exchangeSlice";
-import { convertText, convertTextSingle, extractLeftSide } from "helpers";
-import { Link } from "react-router-dom";
+import { convertIRRToToman, convertText, convertTextSingle, extractLeftSide } from "helpers";
+import { Link, useNavigate } from "react-router-dom";
 import { getRates } from "store/reducers/features/rates/rateSlice";
 
 const DashboardContent = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const user = useAppSelector((state) => state.user);
   const transactions = useAppSelector((state) => state.transaction);
   const exchange = useAppSelector((state) => state.exchange);
   const rates = useAppSelector((state) => state.rates);
   const [lastSession, setLastSession] = useState("");
+  const [payValue, setPayValue] = useState({
+    amount: "",
+    currency: "",
+  });
+  const [receiveValue, setReceiveValue] = useState({
+    amount: "",
+    currency: "",
+  });
   const session = useSession();
 
   const { firstName, lastName } = user;
@@ -92,10 +101,6 @@ const DashboardContent = () => {
     dispatch(getRates());
     getSession();
   }, []);
-
-  const handleExchange = () => {
-    window.location.href = "/dashboard/buy-sell";
-  };
   const convertType = (type: string) => {
     if (type === "DEPOSIT") {
       return "واریز";
@@ -133,7 +138,7 @@ const DashboardContent = () => {
               <Col
                 xs={12}
                 sm={2}
-                className="user-summary__section user-summary-edit text-center text-sm-left"
+                className="user-summary__section user-summary-edit text-sm-left"
               >
                 <h6>{firstName + " " + lastName}</h6>
                 <Button
@@ -149,7 +154,7 @@ const DashboardContent = () => {
               <Col
                 xs={12}
                 sm={2}
-                className="user-summary__section user-summary-lastseen text-center text-sm-left"
+                className="user-summary__section user-summary-lastseen  text-sm-left"
               >
                 <h6>آخرین ورود</h6>
                 <div className="user-summary-date">
@@ -160,12 +165,12 @@ const DashboardContent = () => {
               <Col
                 xs={12}
                 sm={2}
-                className="user-summary__section user-summary-lastseen text-center text-sm-left"
+                className="user-summary__section user-summary-lastseen text-sm-left"
               >
                 <h6> سطح احراز هویت شما</h6>
                 <div className="user-summary-date">
                 {user?.firstTierVerified ? <img src={User1} alt="" style={{width:'20px',marginLeft:'5px'}} /> :  <img src={User2} alt="" style={{width:'20px',marginLeft:'5px'}} />}
-                  {user?.firstTierVerified ? <span><span>سطح یک</span>{" "}<a href="/dashboard/profile" style={{marginRight:'10px',color:'#111bff'}}>ارتقا سطح</a></span> :  <span>سطح دو</span>}
+                  {user?.firstTierVerified ? <span><span>سطح یک</span>{" "}<a href="/dashboard/profile" style={{ color:'#111bff'}}>ارتقا سطح</a></span> :  <span>سطح دو</span>}
                 </div>
               </Col>
             </Row>
@@ -283,9 +288,19 @@ const DashboardContent = () => {
                         </label>
                         <ExchangeInput
                           name={"amount"}
-                          value={""}
-                          onChange={(value) => console.log(value)}
-                          onChangeCoin={(e) => console.log(e)}
+                          value={payValue.amount}
+                          onChange={(value) => 
+                            setPayValue({
+                              ...payValue,
+                              amount:value
+                            })
+                          }
+                          onChangeCoin={(e) =>{
+                              setPayValue({
+                                ...payValue,
+                                currency:e
+                              })
+                          } }
                         />
                       </div>
                     </Col>
@@ -299,9 +314,19 @@ const DashboardContent = () => {
                         </label>
                         <ExchangeInput
                           name={"amount"}
-                          value={""}
-                          onChange={(value) => console.log(value)}
-                          onChangeCoin={(e) => console.log(e)}
+                          value={receiveValue.amount}
+                          onChange={(value) =>{
+                            setReceiveValue({
+                              ...receiveValue,
+                              amount: value,
+                            });
+                          } }
+                          onChangeCoin={(e) => {
+                            setReceiveValue({
+                              ...receiveValue,
+                              currency: e,
+                            });
+                          }}
                         />
                       </div>
                     </Col>
@@ -309,7 +334,14 @@ const DashboardContent = () => {
 
                   <div className="mt-5 mb-4 d-flex align-items-center justify-content-center">
                     <button
-                      onClick={handleExchange}
+                      onClick={() =>
+                        navigate(`/dashboard/buy-sell`, {
+                          state: {
+                            source: payValue,
+                            destination: receiveValue,
+                          },
+                        })
+                      }
                       type="button"
                       className="btn btn-primary"
                       style={{ padding: "18px 70px" }}
@@ -362,7 +394,7 @@ const DashboardContent = () => {
                             </td>
                             <td className="text-center" data-th="قیمت واحد (تومان)">
                               <span className="td-responsive">
-                                {data?.rate.substring(0, 5)}
+                                {convertIRRToToman(data?.rate)}
                               </span>
                             </td>
                             {/* <td data-th="تغییرات ۲۴ ساعته">

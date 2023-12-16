@@ -21,10 +21,13 @@ export const profileManagement = enhancedApi.injectEndpoints({
       },
     }),
     bankAccounts: builder.query<BankAccountsResponse[], BankAccountsRequest>({
-      query() {
+      query(filters) {
         return {
           method: "GET",
           url: "/bank-accounts",
+          params: {
+            filter: filters,
+          },
         };
       },
       providesTags: ["bank-accounts"],

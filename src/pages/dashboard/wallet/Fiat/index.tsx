@@ -16,7 +16,7 @@ import DepositFiat from "./Deposit";
 import turkeyFlag from "assets/img/icons/flag-turkey.png";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
-
+import WithdrawFiat from "./Withdraw";
 
 export default function Fiat({ TRY, isLoading, isSuccess }: any) {
   const navigate = useNavigate();
@@ -123,7 +123,11 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
                         className="px-4 py-1"
                         outline
                         onClick={() =>
-                          navigate(`/dashboard/buy-sell?resource="TRY"`)
+                          navigate("/dashboard/buy-sell", {
+                            state: {
+                              source: "TRY",
+                            },
+                          })
                         }
                       >
                         معامله
@@ -146,6 +150,23 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
       >
         <DepositFiat
           onClose={() => setDepositForm({ isOpen: false, currency: "" })}
+        />
+      </Dialog>
+
+      <Dialog
+        title="برداشت لیر"
+        isOpen={withdrawForm.isOpen}
+        onClose={() =>
+          setWithdrawForm({ isOpen: false, currency: "", stock: 0 })
+        }
+        hasCloseButton
+      >
+        <WithdrawFiat
+          stock={withdrawForm.stock}
+          currency={withdrawForm.currency}
+          onClose={() =>
+            setWithdrawForm({ isOpen: false, currency: "", stock: 0 })
+          }
         />
       </Dialog>
     </Card>
