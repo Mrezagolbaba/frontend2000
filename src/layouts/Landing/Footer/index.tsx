@@ -136,7 +136,6 @@ const Footer = (): React.JSX.Element => {
                 </span>
               </a>
             </li>
-
             <li>
               <a href="https://www.instagram.com/Arsonexchange/">
                 <span className="icon">

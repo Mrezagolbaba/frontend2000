@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "assets/img/logo-light.png";
-import LogoPrimary from "assets/img/logo-primary.png"
+import LogoPrimary from "assets/img/logo-primary.png";
 
 import home from "assets/scss/landing/home.module.scss";
 import { Button, Container } from "reactstrap";
@@ -28,7 +28,7 @@ const Header = ({ disableBanner = false }: Props) => {
         <div className={home.header__top}>
           <div className={home.header__logo}>
             <Link to="/">
-              <img src={!disableBanner ?Logo:LogoPrimary} className="logo" />
+              <img src={!disableBanner ? Logo : LogoPrimary} className="logo" />
             </Link>
           </div>
 

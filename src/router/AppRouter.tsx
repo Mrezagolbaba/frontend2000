@@ -15,6 +15,7 @@ import CoinPage from "pages/coins";
 import DashboardRouter from "./DashboardRouter";
 import ComingSoon from "pages/ComingSoon";
 import ContactUs from "pages/contact-us";
+import RulesPage from "pages/rules";
 
 export default function AppRouter() {
   return useRoutes([
@@ -38,6 +39,7 @@ export default function AppRouter() {
         { path: "information", element: <Information /> },
         { path: "/coming-soon", element: <ComingSoon /> },
         { path: "contact-us", element: <ContactUs /> },
+        { path: "/rules", element: <RulesPage /> },
         DashboardRouter,
       ],
     },
