@@ -14,8 +14,7 @@ import { useBankAccountsQuery } from "store/api/profile-management";
 import { isEmpty } from "lodash";
 import { useCheckVerificationsQuery } from "store/api/user";
 import Dialog from "components/Dialog";
-import ConfirmInternationalService from "pages/dashboard/profile/AuthSection/ConfirmInternationalService";
-import ResidencyCardStep from "pages/dashboard/profile/AuthSection/ResidencyCardStep";
+import InternationalVerification from "pages/dashboard/profile/InternationalVerification";
 
 const DepositFiat = ({ onClose }: { onClose: () => void }) => {
   const { firstNameEn, lastNameEn } = useAppSelector((state) => state.user);
@@ -107,7 +106,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <div className="px-2">
-      {isVerified===1 ? (
+      {isVerified === 1 ? (
         <>
           <AlertInfo
             hasIcon
@@ -127,13 +126,15 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
             </Col>
           </Row>
         </>
-      ) :isVerified===2? <>
-      <AlertInfo
-        hasIcon
-        text="مدارک ارسالی شما در حال بررسی است. لطفا تا زمان تایید، منتظر بمانید."
-        key="passport-alert"
-      />
-    </>:(
+      ) : isVerified === 2 ? (
+        <>
+          <AlertInfo
+            hasIcon
+            text="مدارک ارسالی شما در حال بررسی است. لطفا تا زمان تایید، منتظر بمانید."
+            key="passport-alert"
+          />
+        </>
+      ) : (
         <Form>
           {!isEmpty(firstNameEn) && !isEmpty(lastNameEn) && (
             <AlertWarning
@@ -196,7 +197,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
         hasCloseButton={true}
         onClose={() => setIsOpenDialog(false)}
       >
-        <ResidencyCardStep onClick={() => {}} />
+        <InternationalVerification />
       </Dialog>
     </div>
   );
