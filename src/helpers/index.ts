@@ -87,11 +87,11 @@ export const persianToEnglishNumbers = (persianNumber: string) => {
 
 export const passwordListValidation = [
   {
-    title: "حداقل یک کاراکتر ویژه از قبیل: !@#$%^&*()-+",
-    isCheck: false,
+    title: "حداقل یک عدد",
+    isCheck: true,
   },
   {
-    title: "حداقل یک کاراکتر با حرف کوچک",
+    title: "حداقل 8 کاراکتر",
     isCheck: true,
   },
   {
@@ -99,13 +99,12 @@ export const passwordListValidation = [
     isCheck: false,
   },
   {
-    title: "حداقل 8 کاراکتر",
+    title: "حداقل یک کاراکتر با حرف کوچک",
     isCheck: true,
   },
-
   {
-    title: "حداقل یک عدد",
-    isCheck: true,
+    title: "حداقل یک کاراکتر ویژه از قبیل: !@#$%^&*()-+",
+    isCheck: false,
   },
 ];
 

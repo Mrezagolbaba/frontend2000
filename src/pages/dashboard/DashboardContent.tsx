@@ -1,13 +1,4 @@
 import User from "assets/img/icons/user.png";
-
-import chart from "assets/img/chart-img.png";
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-} from "reactstrap";
-
 import USDT from "assets/img/coins/usdt.svg";
 import Turkey from "assets/img/coins/try.svg";
 import Deposit from "assets/img/icons/depositIcon.svg";
@@ -26,7 +17,6 @@ import { IoIosArrowDown, IoIosArrowDropup } from "react-icons/io";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { CgDanger } from "react-icons/cg";
 import useSession from "services/auth/session";
-// import CurrencyInput from "../../components/currencyInput";
 import {
   Button,
   Card,
@@ -122,22 +112,19 @@ const DashboardContent = () => {
     transactions?.data?.length > 10
       ? { maxHeight: "300px", overflowY: "auto" }
       : "";
+      console.log(transactions.data ,'transactions.data.length')
   return (
     <>
       <section className="mb-3">
         <Card className="custom-card user-summary">
           <CardBody>
             <Row className="align-items-start">
-              <Col
-                xs={12}
-                sm={1}
+              <Col xs={12} sm={1} g={1}
                 className="user-summary__section user-summary-avatar text-center"
               >
                 <img src={User} alt="" className="avatar" />
               </Col>
-              <Col
-                xs={12}
-                sm={2}
+              <Col xs={12} sm={2}
                 className="user-summary__section user-summary-edit text-sm-left"
               >
                 <h6>{firstName + " " + lastName}</h6>
@@ -151,9 +138,7 @@ const DashboardContent = () => {
                   پروفایل کاربری
                 </Button>
               </Col>
-              <Col
-                xs={12}
-                sm={2}
+              <Col xs={12} sm={2}
                 className="user-summary__section user-summary-lastseen  text-sm-left"
               >
                 <h6>آخرین ورود</h6>
@@ -162,15 +147,13 @@ const DashboardContent = () => {
                   {lastSession}
                 </div>
               </Col>
-              <Col
-                xs={12}
-                sm={2}
+              <Col xs={12} sm={2}
                 className="user-summary__section user-summary-lastseen text-sm-left"
               >
                 <h6> سطح احراز هویت شما</h6>
                 <div className="user-summary-date">
-                {user?.firstTierVerified ? <img src={User1} alt="" style={{width:'20px',marginLeft:'5px'}} /> :  <img src={User2} alt="" style={{width:'20px',marginLeft:'5px'}} />}
-                  {user?.firstTierVerified ? <span><span>سطح یک</span>{" "}<a href="/dashboard/profile" style={{ color:'#111bff'}}>ارتقا سطح</a></span> :  <span>سطح دو</span>}
+                  {user?.firstTierVerified ? <img src={User1} alt="" style={{ width: '20px', marginLeft: '5px' }} /> : <img src={User2} alt="" style={{ width: '20px', marginLeft: '5px' }} />}
+                  {user?.firstTierVerified ? <span><span>سطح یک</span>{" "}<a href="/dashboard/profile" style={{ color: '#111bff' }}>ارتقا سطح</a></span> : <span>سطح دو</span>}
                 </div>
               </Col>
             </Row>
@@ -179,13 +162,13 @@ const DashboardContent = () => {
       </section>
 
       <section className="mb-4">
-        <Card className="custom-card  auth-jumbotron " style={{backgroundColor:'#111bff08'}}>
+        <Card className="custom-card  auth-jumbotron " style={{ backgroundColor: '#111bff08' }}>
           <CardHeader>
             <CardTitle tag="h5">احراز هویت</CardTitle>
           </CardHeader>
           <CardBody>
             <Row className="g-4">
-              <Col xxl={5}>
+              <Col xxl={6}>
                 <div className="auth-jumbotron__summary">
                   <p>
                     برای استفاده کامل و بدون محدودیت از آرسونیکس باید فرایند
@@ -209,7 +192,7 @@ const DashboardContent = () => {
                   </li>
                   <li>
                     <BsCheck2 className="icon" size={15} color={"#55cd51"} />
-                    برداشت تومان ﺭﻭﺯﺍﻧﻪ 
+                    برداشت تومان ﺭﻭﺯﺍﻧﻪ
                     <strong>نامحدود</strong>
                   </li>
                   <li>
@@ -221,34 +204,34 @@ const DashboardContent = () => {
                     <BsCheck2 className="icon" size={15} color={"#55cd51"} />
                     واریز و برداشت فیات روزانه :
                     <strong>معادل ۵۰۰ دلار</strong>
-                    
-                   
+
+
                   </li>
                 </ul>
               </Col>
-              <Col xxl={4} md={6}>
+              <Col xxl={3} md={6}>
                 <ul className="auth-jumbotron__advantages">
                   <li>
                     <h5>احراز هویت سطح دو</h5>
                   </li>
                   <li>
-                  <BsCheck2 className="icon" size={15} color={"#55cd51"} />
-                      ﻭﺍﺭﯾﺰ تومان ﺭﻭﺯﺍﻧﻪ:
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    ﻭﺍﺭﯾﺰ تومان ﺭﻭﺯﺍﻧﻪ:
                     <strong>نامحدود </strong>
                   </li>
                   <li>
-                  <BsCheck2 className="icon" size={15} color={"#55cd51"} />
-                  برداشت تومان ﺭﻭﺯﺍﻧﻪ:
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    برداشت تومان ﺭﻭﺯﺍﻧﻪ:
                     <strong>  نامحدود  </strong>
                   </li>
                   <li>
-                  <BsCheck2 className="icon" size={15} color={"#55cd51"} />
-                  واریز و برداشت رمزارز ﺭﻭﺯﺍﻧﻪ:
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    واریز و برداشت رمزارز ﺭﻭﺯﺍﻧﻪ:
                     <strong>نامحدود</strong>
                   </li>
                   <li>
-                  <BsCheck2 className="icon" size={15} color={"#55cd51"} />
-                  ﻭﺍﺭﯾﺰ و برداشت فیات ﺭﻭﺯﺍﻧﻪ  :
+                    <BsCheck2 className="icon" size={15} color={"#55cd51"} />
+                    ﻭﺍﺭﯾﺰ و برداشت فیات ﺭﻭﺯﺍﻧﻪ  :
                     <strong>۳۵ هزار دلار</strong>
                   </li>
                 </ul>
@@ -289,18 +272,18 @@ const DashboardContent = () => {
                         <ExchangeInput
                           name={"amount"}
                           value={payValue.amount}
-                          onChange={(value) => 
+                          onChange={(value) =>
                             setPayValue({
                               ...payValue,
-                              amount:value
+                              amount: value
                             })
                           }
-                          onChangeCoin={(e) =>{
-                              setPayValue({
-                                ...payValue,
-                                currency:e
-                              })
-                          } }
+                          onChangeCoin={(e) => {
+                            setPayValue({
+                              ...payValue,
+                              currency: e
+                            })
+                          }}
                         />
                       </div>
                     </Col>
@@ -315,12 +298,12 @@ const DashboardContent = () => {
                         <ExchangeInput
                           name={"amount"}
                           value={receiveValue.amount}
-                          onChange={(value) =>{
+                          onChange={(value) => {
                             setReceiveValue({
                               ...receiveValue,
                               amount: value,
                             });
-                          } }
+                          }}
                           onChangeCoin={(e) => {
                             setReceiveValue({
                               ...receiveValue,
@@ -358,34 +341,36 @@ const DashboardContent = () => {
               <CardHeader className="d-flex flex-row justify-content-between align-items-center">
                 <CardTitle tag="h5"> بازارهای معاملاتی</CardTitle>
                 <div className="card-action">
-                  <Button href="/dashboard/market">مشاهده تمام بازارها </Button>
+                  <div className="card-action">
+                    <a href="/dashboard/market"> مشاهده تمام بازارها  </a>
+                  </div>
                 </div>
               </CardHeader>
               <CardBody>
                 <div className="table-responsive">
                   <table
                     id="responsive"
-                    className="table-modern table table-borderless"
+                    className="table-modern table table-borderless data-tables"
                   >
                     <thead>
-                      <tr>
-                        <th className="text-center" >نام ارز</th>
+                    <tr className="tr-responsive">
+                        <th className="text-center">نام ارز</th>
                         <th className="text-center" >قیمت واحد (تومان)</th>
                         {/* <th>تغییرات 24 ساعته</th> */}
-                        <th >معامله در بازار</th>
+                        <th className="text-center" >معامله در بازار</th>
                       </tr>
                     </thead>
                     <tbody>
                       {rates.data.length > 0 &&
                         rates.data.map((data, index) => (
                           <tr className="tr-responsive">
-                            <td data-th="نام ارز">
+                            <td className="text-center" data-th="نام ارز">
                               <div>
                                 <span className="icon">
-                                  {data.pair==="USDT/IRR" ? <img src={USDT} alt="" style={{width:'20px',marginLeft:'5px'}} /> :
-                                    <img src={Turkey} alt="" style={{width:'20px',marginLeft:'5px'}} />}
+                                  {data.pair === "USDT/IRR" ? <img src={USDT} alt="" /> :
+                                    <img src={Turkey} alt=""  />}
                                 </span>
-                                <span className="text-50">
+                                <span className="text-50 item-title">
                                   {convertTextSingle(
                                     extractLeftSide(data.pair)
                                   )}
@@ -405,7 +390,7 @@ const DashboardContent = () => {
                               <strong className="text-danger">{data?.change}</strong>
                             </div>
                           </td> */}
-                            <td className="text-center" 
+                            <td className="text-center"
                               data-th="معامله در بازار
     "
                             >
@@ -516,87 +501,87 @@ const DashboardContent = () => {
                 <CardTitle tag="h5">تراکنش&zwnj;های اخیر</CardTitle>
               </CardHeader>
               <CardBody>
-                  <div className="table-responsive  ">
-                    <table className={`table table-borderless ${transactions.data.length === 0 ? 'table-modern' : 'table-striped'}`}>
-                     {transactions.data.length > 0 && <thead>
+                <div className="table-responsive  ">
+                  <table className={`table table-borderless data-tables ${transactions.data.length === 0 ? 'table-modern' : 'table-striped'}`}>
+                    {transactions.data.length > 0 && <thead>
+                      <tr>
+                        <th scope="col">نوع</th>
+                        <th scope="col" className="text-center">
+                          مقدار
+                        </th>
+                        <th scope="col" className="text-center">
+                          دارایی
+                        </th>
+                        <th scope="col" className="text-center">
+                          زمان
+                        </th>
+                      </tr>
+                    </thead>}
+                    <tbody>
+                      {transactions.data.map((data, index) => {
+                        if (
+                          (data.type === "DEPOSIT" ||
+                            data.type === "WITHDRAW") &&
+                          data.status !== "EXPIRED"
+                        ) {
+                          return (
+                            <tr key={index}>
+                              <td>
+                                <span
+                                  className={
+                                    data.type === "DEPOSIT"
+                                      ? "text-success"
+                                      : "text-danger"
+                                  }
+                                >
+                                  {convertType(data.type)}
+                                </span>
+                              </td>
+                              <td className={`text-center`}>
+                                <span>
+                                  <span style={{ fontSize: "10px" }}>
+                                    {data.currencyCode === "IRR"
+                                      ? "TMN"
+                                      : data.currencyCode}
+                                  </span>{" "}
+                                  {data.amount}
+                                </span>
+                              </td>
+                              <td className={`text-center`}>
+                                <span>
+                                  {convertTextSingle(data.currencyCode)}
+                                </span>
+                              </td>
+                              <td className={`text-center`}>
+                                <span>
+                                  {moment(data?.createdAt)
+                                    .locale("fa")
+                                    .format("DD MMMM YYYY")}
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        }
+                      })}
+                      {transactions.data.length === 0 && (
                         <tr>
-                          <th scope="col">نوع</th>
-                          <th scope="col" className="text-center">
-                            مقدار
-                          </th>
-                          <th scope="col" className="text-center">
-                            دارایی
-                          </th>
-                          <th scope="col" className="text-center">
-                            زمان
-                          </th>
-                        </tr>
-                      </thead>}
-                      <tbody>
-                        {transactions.data.map((data, index) => {
-                          if (
-                            (data.type === "DEPOSIT" ||
-                              data.type === "WITHDRAW") &&
-                            data.status !== "EXPIRED"
-                          ) {
-                            return (
-                              <tr key={index}>
-                                <td>
-                                  <span
-                                    className={
-                                      data.type === "DEPOSIT"
-                                        ? "text-success"
-                                        : "text-danger"
-                                    }
-                                  >
-                                    {convertType(data.type)}
-                                  </span>
-                                </td>
-                                <td className={`text-center`}>
-                                  <span>
-                                    <span style={{ fontSize: "10px" }}>
-                                      {data.currencyCode === "IRR"
-                                        ? "TMN"
-                                        : data.currencyCode}
-                                    </span>{" "}
-                                    {data.amount}
-                                  </span>
-                                </td>
-                                <td className={`text-center`}>
-                                  <span>
-                                    {convertTextSingle(data.currencyCode)}
-                                  </span>
-                                </td>
-                                <td className={`text-center`}>
-                                  <span>
-                                    {moment(data?.createdAt)
-                                      .locale("fa")
-                                      .format("DD MMMM YYYY")}
-                                  </span>
-                                </td>
-                              </tr>
-                            );
-                          }
-                        })}
-                        {transactions.data.length === 0 && (
-                          <tr>
-                            <td colSpan={4} className="text-center">
-                              <img
-                                src={Exchange}
-                                style={{
-                                  height: '50px',
-                                  width: '50px',
-                                  marginBottom: '10px',
-                                }}
-                              />
-                              <p>اولین معامله خود را با آرسونیکس تجربه کنید</p>
+                          <td colSpan={4} className="text-center">
+                            <img
+                              src={Exchange}
+                              style={{
+                                height: '50px',
+                                width: '50px',
+                                marginBottom: '10px',
+                              }}
+                            />
+                            <p>اولین معامله خود را با آرسونیکس تجربه کنید</p>
 
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </CardBody>
             </Card>
           </Col>

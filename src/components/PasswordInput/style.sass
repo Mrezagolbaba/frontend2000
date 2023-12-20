@@ -10,6 +10,8 @@
   .ant-list-item
     font-family: var(--bs-font-iranyekaneFa)
     border-block-end: none
+    display: flex
+    flex-direction: row-reverse
 
   .check.ant-list-item-meta
     .ant-list-item-meta-content>h4,.ant-list-item-meta-avatar
@@ -19,5 +21,10 @@
     .ant-list-item-meta-content>h4,.ant-list-item-meta-avatar
       color: #f5222d
 
-:where(.css-dev-only-do-not-override-1vr7spz).ant-list .ant-list-item
+.ant-list .ant-list-item
   padding: 5px 0
+:where(.css-dev-only-do-not-override-1vr7spz).ant-list .ant-list-item .ant-list-item-meta .ant-list-item-meta-avatar
+    margin-inline-end: 5px
+
+
+

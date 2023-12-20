@@ -25,20 +25,28 @@ const Header = ({ onSidebarToggle }: Props) => {
                 </a>
               </div>
               <ul className={dashboard.header__navbar}>
+              <li>
+                  <a href="/dashboard/buy-sell">خرید و فروش سریع</a>
+                </li>
                 <li>
                   <a href="/dashboard/market">بازارها</a>
                 </li>
-
                 <li>
-                  <a href="/dashboard/buy-sell">خرید و فروش سریع</a>
+                  <a href="/dashboard/wallet">واریز و برداشت</a>
                 </li>
+                <li>
+                  <a href="/blog"> وبلاگ </a>
+                </li>
+
+                
               </ul>
               <div className={dashboard.header__support}>
                 <a href="/dashboard/support" className="">
                   <span className="icon">
                     <img src={Support} alt="support" />
                   </span>
-                  پشتیبانی
+                  <span style={{marginRight:'10px'}}>پشتیبانی</span>
+                  
                 </a>
               </div>
               <div>

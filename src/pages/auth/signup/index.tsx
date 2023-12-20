@@ -159,7 +159,7 @@ const SignupPage: React.FC = () => {
                       render={({ field: { name, value, onChange, ref } }) => (
                         <div>
                           <Input
-                            style={{ marginRight: "8px" }}
+                            style={{ marginRight: "4px" }}
                             checked={value}
                             className="form-check-input"
                             type="checkbox"
@@ -171,7 +171,7 @@ const SignupPage: React.FC = () => {
                               errors?.[name]?.message ? "error" : undefined
                             }
                           />
-                          <Label htmlFor={name}>
+                          <Label htmlFor={name} style={{fontSize:'13px'}}>
                             <Link to="#"> مقررات آرسونیکس</Link> را خوانده‌ام و
                             با آن موافقم.
                           </Label>
