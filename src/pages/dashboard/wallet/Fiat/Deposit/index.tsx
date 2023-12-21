@@ -89,7 +89,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
           ? 3
           : 1
       );
-    } else setIsVerified(1);
+    } else setIsVerified(2);
   }, [successVerification, verifications]);
 
   useEffect(() => {
