@@ -19,7 +19,7 @@ import InternationalVerification from "pages/dashboard/profile/InternationalVeri
 const DepositFiat = ({ onClose }: { onClose: () => void }) => {
   const { firstNameEn, lastNameEn } = useAppSelector((state) => state.user);
 
-  const [isVerified, setIsVerified] = useState<1 | 2 | 3>(1);
+  const [isVerified, setIsVerified] = useState<1 | 2 | 3>(3);
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
   const [selectedBank, setSelectedBank] = useState<string>("");
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
@@ -89,7 +89,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
           ? 3
           : 1
       );
-    } else setIsVerified(2);
+    } else setIsVerified(1);
   }, [successVerification, verifications]);
 
   useEffect(() => {
