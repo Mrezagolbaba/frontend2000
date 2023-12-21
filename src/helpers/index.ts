@@ -87,11 +87,11 @@ export const persianToEnglishNumbers = (persianNumber: string) => {
 
 export const passwordListValidation = [
   {
-    title: "حداقل یک کاراکتر ویژه از قبیل: !@#$%^&*()-+",
-    isCheck: false,
+    title: "حداقل یک عدد",
+    isCheck: true,
   },
   {
-    title: "حداقل یک کاراکتر با حرف کوچک",
+    title: "حداقل 8 کاراکتر",
     isCheck: true,
   },
   {
@@ -99,13 +99,12 @@ export const passwordListValidation = [
     isCheck: false,
   },
   {
-    title: "حداقل 8 کاراکتر",
+    title: "حداقل یک کاراکتر با حرف کوچک",
     isCheck: true,
   },
-
   {
-    title: "حداقل یک عدد",
-    isCheck: true,
+    title: "حداقل یک کاراکتر ویژه از قبیل: !@#$%^&*()-+",
+    isCheck: false,
   },
 ];
 
@@ -134,14 +133,16 @@ export const isPasswordValid = (password: string) => {
 
   return isValid;
 };
-export function convertIRRToToman(number: number | string): number {
-  // Convert the number to an integer
-  const integerPart: number = Math.floor(Number(number));
-
-  // Convert the integer to a string and extract the first four characters
-  const result: string = integerPart.toString().slice(0, 5);
-
-  return parseInt(result, 10);
+export function convertIRRToToman(number: number) {
+   // 1 toman is equal to 10 rials
+   const tomanAmount = Math.trunc( number ) / 10;
+   // Format the result to include commas for thousands
+   const formattedTomanAmount = new Intl.NumberFormat('fa-IR', {
+    useGrouping: true,
+    style: 'decimal'
+  }).format(tomanAmount);
+ 
+   return formattedTomanAmount;
 }
 export const rialToToman = (rialAmount: number | string): number => {
   // Assuming 1 Toman is equal to 10 Rials

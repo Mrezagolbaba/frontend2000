@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { AuthenticationLevel2Props } from "./types";
 import defaultImage from "assets/img/profile/auth.png";
 import { BsTrash3, BsUpload } from "react-icons/bs";
@@ -7,6 +7,9 @@ import { useAppSelector } from "store/hooks";
 
 import profile from "assets/scss/dashboard/profile.module.scss";
 import { Button, Col, Container, Row, Spinner } from "reactstrap";
+import { useUploadDocMutation } from "store/api/profile-management";
+import toast from "react-hot-toast";
+import { ErrorType, errorNormalizer } from "components/ErrorHandler";
 
 export default function PhotoStep({
   onClick,
@@ -14,29 +17,27 @@ export default function PhotoStep({
   const user = useAppSelector((state) => state.user);
   const { firstName, lastName, nationalId } = user;
   const inputRef = useRef<HTMLInputElement>(null);
-  const uploadDoc = useUploadDoc();
+  const [uploadDoc, { isLoading, isSuccess, isError, error }] =
+    useUploadDocMutation();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string>(defaultImage);
 
   const uploadFile = async () => {
-    setIsLoading(true);
-    await uploadDoc
-      .mutateAsync({
-        docType: "COMMITMENT_LETTER",
-        file: file,
-        fileName: "file",
-      })
-      .then((res) => {
-        setIsLoading(false);
-        onClick?.(6);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.error(err);
-      });
+    await uploadDoc({
+      docType: "COMMITMENT_LETTER",
+      file: file,
+      fileName: "file",
+    });
   };
+
+  useEffect(() => {
+    isSuccess && onClick?.(4);
+  }, [isSuccess, onClick]);
+
+  useEffect(() => {
+    isError && error && toast.error(errorNormalizer(error as ErrorType));
+  }, [error, isError]);
 
   return (
     <Container>

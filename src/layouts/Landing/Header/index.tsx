@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "assets/img/logo-light.png";
+import LogoPrimary from "assets/img/logo-primary.png";
 
 import home from "assets/scss/landing/home.module.scss";
 import { Button, Container } from "reactstrap";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { TbMenu } from "react-icons/tb";
 
-const Header = () => {
+type Props = {
+  disableBanner?: boolean;
+};
+const Header = ({ disableBanner = false }: Props) => {
   const [openOverlayMenu, setOpenOverlayMenu] = useState<boolean>(false);
 
   return (
@@ -18,11 +22,13 @@ const Header = () => {
           openOverlayMenu ? home.show : ""
         }`}
       />
-      <header className={home.header}>
+      <header
+        className={`${home.header} ${disableBanner ? home.withoutBg : ""}`}
+      >
         <div className={home.header__top}>
           <div className={home.header__logo}>
             <Link to="/">
-              <img src={Logo} className="logo" />
+              <img src={!disableBanner ? Logo : LogoPrimary} className="logo" />
             </Link>
           </div>
 
@@ -114,42 +120,36 @@ const Header = () => {
             </button>
           </div>
         </div>
-        <Container>
-
-
-
-       
-        <div className={`${home['img_bottom_right']} position-absolute `}>
-            <div className={home.i_b_r_img}></div>
-          </div>
-          <div className={`${home['img_top_right']} position-absolute `}>
-            <div className={home.i_t_r_img}></div>
-          </div>
-
-
-
-
-          <div className={home.header__intro}>
-            <h1>آرسونیکس، همراه ارز دیجیتال شما</h1>
-            <p>
-            ارز دیجیتال، تومان یا فیات؛ بدون محدودیت، به سرعت معامله کنید 
-            </p>
-            <Button
-              tag="a"
-              href="/register"
-              color="landing-primary"
-              className={home["rounded-button"]}
-            >
-              با آرسونیکس شروع کنید
-            </Button>
-          </div>
-          <div className={`${home['img_top_left']} position-absolute `}>
-            <div className={home.i_t_l_img}></div>
-          </div>
-          <div className={`${home['img_bottom_left']} position-absolute `} >
-            <div className={home.i_b_l_img}></div>
-          </div>
-        </Container>
+        {!disableBanner && (
+          <Container>
+            <div className={`${home["img_bottom_right"]} position-absolute `}>
+              <div className={home.i_b_r_img}></div>
+            </div>
+            <div className={`${home["img_top_right"]} position-absolute `}>
+              <div className={home.i_t_r_img}></div>
+            </div>
+            <div className={home.header__intro}>
+              <h1>آرسونیکس، همراه ارز دیجیتال شما</h1>
+              <p>
+                ارز دیجیتال، تومان یا فیات؛ بدون محدودیت، به سرعت معامله کنید
+              </p>
+              <Button
+                tag="a"
+                href="/register"
+                color="landing-primary"
+                className={home["rounded-button"]}
+              >
+                با آرسونیکس شروع کنید
+              </Button>
+            </div>
+            <div className={`${home["img_top_left"]} position-absolute `}>
+              <div className={home.i_t_l_img}></div>
+            </div>
+            <div className={`${home["img_bottom_left"]} position-absolute `}>
+              <div className={home.i_b_l_img}></div>
+            </div>
+          </Container>
+        )}
       </header>
     </>
   );

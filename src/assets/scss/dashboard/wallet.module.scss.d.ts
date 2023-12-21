@@ -18,5 +18,6 @@ declare const classNames: {
   readonly "crypto-name": "crypto-name";
   readonly "silver-button": "silver-button";
   readonly "transaction-button": "transaction-button";
+  readonly "lir-icon": "lir-icon";
 };
 export = classNames;

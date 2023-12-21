@@ -4,6 +4,7 @@ declare const classNames: {
   readonly "menu-overlay": "menu-overlay";
   readonly show: "show";
   readonly header: "header";
+  readonly withoutBg: "withoutBg";
   readonly header__top: "header__top";
   readonly header__logo: "header__logo";
   readonly header__auth: "header__auth";
@@ -89,6 +90,14 @@ declare const classNames: {
   readonly icon: "icon";
   readonly "badge-custom": "badge-custom";
   readonly fade: "fade";
+  readonly header__page: "header__page";
+  readonly header__page__top: "header__page__top";
+  readonly header__page__logo: "header__page__logo";
+  readonly header__page__auth: "header__page__auth";
+  readonly header__page__auth__register: "header__page__auth__register";
+  readonly header__page__hamburger: "header__page__hamburger";
+  readonly header__page__intro: "header__page__intro";
+  readonly page__navitem: "page__navitem";
   readonly "navbar__item--active": "navbar__item--active";
 };
 export = classNames;

@@ -1,5 +1,5 @@
 .user-summary {
-  background-image: url('../../assets/img/coins/bitcoin-batch.png') !important;
+  background-image: url("../../assets/img/coins/bitcoin-batch.png") !important;
   background-repeat: no-repeat !important;
   background-size: 235px 183px !important;
   background-position: 40px -14px !important;
@@ -27,7 +27,7 @@
   }
   .user-summary-edit {
     .profile-btn {
-      padding: 9px 18px;
+      padding: 5px 18px;
       background-color: transparent;
       border: 1px solid rgba(3, 4, 27, 0.1);
       border-radius: 10px;
@@ -190,7 +190,7 @@
   justify-content: center;
   box-shadow: 0px 0px 10px #0000001a;
   height: 80px;
- 
+
   a {
     display: flex;
     align-items: center;
@@ -204,5 +204,43 @@
   &:hover {
     scale: 1.1;
     transition: 0.5s;
+  }
+}
+.data-tables {
+  .card-body{
+    padding: 25px !important;
+  }
+  thead {
+    tr {
+      th {
+        color: #03041b66;
+        font-size: 0.75em;
+        text-align: center;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid rgba(3, 4, 27, 0.05);
+      td {
+        font-size: 0.875em;
+        font-weight: 500;
+        color: #03041b;
+
+        > div span {
+          img {
+            width: 16px;
+            margin-left: 5px;
+          }
+        }
+      }
+    }
+    tr:last-child {
+      border-bottom: none;
+    }
+  }
+  .item-title {
+    color: rgba(3, 4, 27, 0.5);
   }
 }

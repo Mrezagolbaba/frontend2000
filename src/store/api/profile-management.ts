@@ -9,6 +9,36 @@ import { enhancedApi } from ".";
 
 export const profileManagement = enhancedApi.injectEndpoints({
   endpoints: (builder) => ({
+    uploadDoc: builder.mutation<any, any>({
+      query({ docType, fileName, file }) {
+        const formData = new FormData();
+        formData.append(fileName, file);
+        return {
+          method: "POST",
+          url: `verifications/documents/upload/${docType}`,
+          data: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        };
+      },
+    }),
+    initialVerification: builder.mutation<any, void>({
+      query() {
+        return {
+          method: "POST",
+          url: "verifications/initiate-second-tier",
+        };
+      },
+    }),
+    initialInternational: builder.mutation<any, void>({
+      query() {
+        return {
+          method: "POST",
+          url: "verifications/initiate-international-services",
+        };
+      },
+    }),
     banks: builder.query<BanksResponse[], BanksRequest>({
       query({ filters }) {
         return {
@@ -21,10 +51,13 @@ export const profileManagement = enhancedApi.injectEndpoints({
       },
     }),
     bankAccounts: builder.query<BankAccountsResponse[], BankAccountsRequest>({
-      query() {
+      query(filters) {
         return {
           method: "GET",
           url: "/bank-accounts",
+          params: {
+            filter: filters,
+          },
         };
       },
       providesTags: ["bank-accounts"],
@@ -63,6 +96,9 @@ export const profileManagement = enhancedApi.injectEndpoints({
 });
 
 export const {
+  useUploadDocMutation,
+  useInitialVerificationMutation,
+  useInitialInternationalMutation,
   useBanksQuery,
   useBankAccountsQuery,
   useCreateBankAccountMutation,

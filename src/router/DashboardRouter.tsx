@@ -11,6 +11,7 @@ import { TransactionList } from "pages/dashboard/transactions";
 import Support from "pages/dashboard/support";
 import Market from "pages/dashboard/market";
 import History from "pages/dashboard/history";
+import PaymentRecipt from "pages/dashboard/payment-receipt";
 
 const DashboardRouter = {
   path: "dashboard",
@@ -60,6 +61,10 @@ const DashboardRouter = {
       path: "history",
       element: <ProtectedRoute children={<History />} />,
     },
+    {
+      path:"payment-receipt/:id",
+      element:<ProtectedRoute children={<PaymentRecipt />} />
+    }
   ],
 };
 

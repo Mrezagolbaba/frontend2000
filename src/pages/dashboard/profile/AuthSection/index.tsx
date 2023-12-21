@@ -17,8 +17,6 @@ import { BsCheck2 } from "react-icons/bs";
 import FirstStep from "./FirstStep";
 import VideoStep from "./VideoStep";
 import PhotoStep from "./PhotoStep";
-import ConfirmInternationalService from "./ConfirmInternationalService";
-import ResidencyCardStep from "./ResidencyCardStep";
 import FinalStep from "./FinalStep";
 
 import profile from "assets/scss/dashboard/profile.module.scss";
@@ -68,16 +66,12 @@ const AuthSection = () => {
   );
 
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
-  const [activeState, setActiveState] = useState<1 | 2 | 3 | 4 | 5 | 6>(1);
+  const [activeState, setActiveState] = useState<1 | 2 | 3 | 4>(1);
 
   const renderSteps = () => {
     switch (activeState) {
-      case 6:
-        return <FinalStep onClick={setActiveState} />;
-      case 5:
-        return <ResidencyCardStep onClick={setActiveState} />;
       case 4:
-        return <ConfirmInternationalService onClick={setActiveState} />;
+        return <FinalStep onClick={setActiveState} />;
       case 3:
         return <PhotoStep onClick={setActiveState} />;
       case 2:

@@ -61,18 +61,17 @@ const Setting = () => {
       await requestDisableAuthenticator({ targetMethod: event.target.value })
     }
     setIsInitial(false)
-    // setShowInput(true)
-    // if (event.target.value === "AUTHENTICATOR") {
-    //   await requestSwitchOtpMethod({ targetMethod: event.target.value });
-    //   // await requestDisableAuthenticator({ targetMethod: event.target.value })
-    // } else {
-    //   try {
-    //     setShowInput(true)
-    //     await requestSwitchOtpMethod({ targetMethod: event.target.value });
-    //   } catch (error) {
-    //     console.error('Error requesting switch OTP method:', error);
-    //   }
-    // }
+    setShowInput(true)
+    if (event.target.value === "AUTHENTICATOR") {
+      await requestSwitchOtpMethod({ targetMethod: event.target.value });
+    } else {
+      try {
+        setShowInput(true)
+        await requestSwitchOtpMethod({ targetMethod: event.target.value });
+      } catch (error) {
+        console.error('Error requesting switch OTP method:', error);
+      }
+    }
   };
   const handleOTP = async (data: { code: string }) => {
     try {
@@ -163,7 +162,6 @@ const Setting = () => {
     { email: 'LOGIN_EMAIL', sms: 'LOGIN_SMS', label: 'ورود به حساب کاربری' },
     { email: 'UPDATES_EMAIL', sms: 'UPDATES_SMS', label: 'جشنواره‌ها و بروزرسانی‌ها' },
   ];
-  console.log(securitySelection, 'securitySelection')
   return (
     <section className="page settings">
       <Row>
