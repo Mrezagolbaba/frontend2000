@@ -1,4 +1,3 @@
-import { useForm } from "@refinedev/core";
 import { AlertInfo, AlertWarning } from "components/AlertWidget";
 import * as Yup from "yup";
 
@@ -21,8 +20,16 @@ import {
   Spinner,
 } from "reactstrap";
 import Currency from "components/Input/CurrencyInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CopyInput from "components/Input/CopyInput";
+import {
+  useCancelTransactionMutation,
+  useDepositMutation,
+  useTransactionFeeQuery,
+} from "store/api/wallet-management";
+import { CurrencyCode } from "types/wallet";
+import { success } from "assets/scss/components/Alert/style.module.scss";
+import CountdownTimer from "components/Input/CountDownInput";
 type CryptoFormType = {
   network: string;
   amount: string;
@@ -33,8 +40,9 @@ const DepositCrypto = ({
   currency,
 }: {
   onClose: () => void;
-  currency: string;
+  currency: CurrencyCode;
 }) => {
+  const { data: fee } = useTransactionFeeQuery(currency);
   const [showResult, setShowResult] = useState<boolean>(false);
   const [result, setResult] = useState({
     networkName: "",
@@ -43,24 +51,8 @@ const DepositCrypto = ({
     endTime: "",
   });
 
-  // const { data, isSuccess } = useList<CurrencyType>({
-  //   resource: "currencies",
-  // });
-
-  const { formLoading, onFinish } = useForm({
-    action: "create",
-    resource: "transactions/deposit",
-    onMutationSuccess: (data, variables, context, isAutoSave) => {
-      setShowResult(true);
-      setResult({
-        networkName: data.data.currencyCode,
-        walletAddress: data.data.providerData.flowWalletAddress,
-        amount: data.data.amount,
-        endTime: new Date(data.data.expiresAt).toLocaleDateString("fa-IR"),
-      });
-      console.log("looooooooooog", { data, variables, context, isAutoSave });
-    },
-  });
+  const [depositRequest, { data, isLoading, isSuccess }] = useDepositMutation();
+  const [cancelTransaction] = useCancelTransactionMutation();
 
   const optionList: OptionType[] = [
     {
@@ -80,7 +72,7 @@ const DepositCrypto = ({
     Yup.object().shape({
       amount: Yup.string().required(),
       network: Yup.string().required(),
-    })
+    }),
   );
 
   const {
@@ -98,9 +90,10 @@ const DepositCrypto = ({
     resolver,
   });
   const onSubmit = (data: CryptoFormType) => {
-    onFinish({
+    depositRequest({
       currencyCode: currency,
       amount: data.amount,
+      flow: "MANUAL_WITH_WALLET_ADDRESS",
     });
   };
 
@@ -116,8 +109,21 @@ const DepositCrypto = ({
       endTime: "",
     });
     setShowResult(false);
+    data && cancelTransaction(data.id);
     onClose?.();
   };
+
+  useEffect(() => {
+    if (success && data) {
+      setShowResult(true);
+      setResult({
+        networkName: data.currencyCode,
+        walletAddress: data.providerData.flowWalletAddress,
+        amount: data.amount,
+        endTime: data.expiresAt as string,
+      });
+    }
+  }, [data, isSuccess]);
 
   return (
     <div className="px-2">
@@ -162,7 +168,6 @@ const DepositCrypto = ({
                         {errors[name]?.message}
                       </FormFeedback>
                     )}
-                    <FormText>سقف واریز</FormText>
                   </FormGroup>
                 )}
               />
@@ -193,7 +198,11 @@ const DepositCrypto = ({
                         {errors[name]?.message}
                       </FormFeedback>
                     )}
-                    <FormText>کارمزد دریافت تتر: صفر {currency} </FormText>
+                    {fee && (
+                      <FormText>
+                        کارمزد دریافت : {fee.depositFeeStatic} {currency}{" "}
+                      </FormText>
+                    )}
                   </FormGroup>
                 )}
               />
@@ -205,10 +214,10 @@ const DepositCrypto = ({
                 color="primary"
                 outline
                 type="submit"
-                disabled={formLoading}
+                disabled={isLoading}
                 className="px-5 py-3"
               >
-                {formLoading ? <Spinner /> : "ساخت کیف پول"}
+                {isLoading ? <Spinner /> : "ساخت کیف پول"}
               </Button>
             </div>
           </Row>
@@ -257,6 +266,7 @@ const DepositCrypto = ({
                   id="endTime"
                   value={result.endTime}
                 />
+                <CountdownTimer targetDate={result.endTime} />
               </FormGroup>
             </Col>
           </Row>

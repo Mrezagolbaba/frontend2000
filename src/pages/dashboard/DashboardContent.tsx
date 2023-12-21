@@ -38,7 +38,12 @@ import moment from "jalali-moment";
 import { getCurrencySwap } from "services/exchange";
 import { getTransactionsList } from "store/reducers/features/transaction/transactionSlice";
 import { getExchangeList } from "store/reducers/features/exchange/exchangeSlice";
-import { convertIRRToToman, convertText, convertTextSingle, extractLeftSide } from "helpers";
+import {
+  convertIRRToToman,
+  convertText,
+  convertTextSingle,
+  extractLeftSide,
+} from "helpers";
 import { Link, useNavigate } from "react-router-dom";
 import { getRates } from "store/reducers/features/rates/rateSlice";
 
@@ -80,10 +85,10 @@ const DashboardContent = () => {
         });
         const lastItem = transformedArray[transformedArray.length - 1];
         setLastSession(
-          moment(lastItem.createdAt).locale("fa").format(" DD MMMM YYYY")
+          moment(lastItem.createdAt).locale("fa").format(" DD MMMM YYYY"),
         );
       });
-    } catch (err) { }
+    } catch (err) {}
   };
   useEffect(() => {
     dispatch(getExchangeList(user.id));
@@ -112,19 +117,24 @@ const DashboardContent = () => {
     transactions?.data?.length > 10
       ? { maxHeight: "300px", overflowY: "auto" }
       : "";
-      console.log(transactions.data ,'transactions.data.length')
+  console.log(transactions.data, "transactions.data.length");
   return (
     <>
       <section className="mb-3">
         <Card className="custom-card user-summary">
           <CardBody>
             <Row className="align-items-start">
-              <Col xs={12} sm={1} g={1}
+              <Col
+                xs={12}
+                sm={1}
+                g={1}
                 className="user-summary__section user-summary-avatar text-center"
               >
                 <img src={User} alt="" className="avatar" />
               </Col>
-              <Col xs={12} sm={2}
+              <Col
+                xs={12}
+                sm={2}
                 className="user-summary__section user-summary-edit text-sm-left"
               >
                 <h6>{firstName + " " + lastName}</h6>
@@ -138,7 +148,9 @@ const DashboardContent = () => {
                   پروفایل کاربری
                 </Button>
               </Col>
-              <Col xs={12} sm={2}
+              <Col
+                xs={12}
+                sm={2}
                 className="user-summary__section user-summary-lastseen  text-sm-left"
               >
                 <h6>آخرین ورود</h6>
@@ -147,13 +159,36 @@ const DashboardContent = () => {
                   {lastSession}
                 </div>
               </Col>
-              <Col xs={12} sm={2}
+              <Col
+                xs={12}
+                sm={2}
                 className="user-summary__section user-summary-lastseen text-sm-left"
               >
                 <h6> سطح احراز هویت شما</h6>
                 <div className="user-summary-date">
-                  {user?.firstTierVerified ? <img src={User1} alt="" style={{ width: '20px', marginLeft: '5px' }} /> : <img src={User2} alt="" style={{ width: '20px', marginLeft: '5px' }} />}
-                  {user?.firstTierVerified ? <span><span>سطح یک</span>{" "}<a href="/dashboard/profile" style={{ color: '#111bff' }}>ارتقا سطح</a></span> : <span>سطح دو</span>}
+                  {user?.firstTierVerified ? (
+                    <img
+                      src={User1}
+                      alt=""
+                      style={{ width: "20px", marginLeft: "5px" }}
+                    />
+                  ) : (
+                    <img
+                      src={User2}
+                      alt=""
+                      style={{ width: "20px", marginLeft: "5px" }}
+                    />
+                  )}
+                  {user?.firstTierVerified ? (
+                    <span>
+                      <span>سطح یک</span>{" "}
+                      <a href="/dashboard/profile" style={{ color: "#111bff" }}>
+                        ارتقا سطح
+                      </a>
+                    </span>
+                  ) : (
+                    <span>سطح دو</span>
+                  )}
                 </div>
               </Col>
             </Row>
@@ -162,7 +197,10 @@ const DashboardContent = () => {
       </section>
 
       <section className="mb-4">
-        <Card className="custom-card  auth-jumbotron " style={{ backgroundColor: '#111bff08' }}>
+        <Card
+          className="custom-card  auth-jumbotron "
+          style={{ backgroundColor: "#111bff08" }}
+        >
           <CardHeader>
             <CardTitle tag="h5">احراز هویت</CardTitle>
           </CardHeader>
@@ -187,8 +225,7 @@ const DashboardContent = () => {
                   </li>
                   <li>
                     <BsCheck2 className="icon" size={15} color={"#ff8d00"} />
-                    ﻭﺍﺭﯾﺰ تومان ﺭﻭﺯﺍﻧﻪ   :
-                    <strong>۱ میلیون تومان</strong>
+                    ﻭﺍﺭﯾﺰ تومان ﺭﻭﺯﺍﻧﻪ :<strong>۱ میلیون تومان</strong>
                   </li>
                   <li>
                     <BsCheck2 className="icon" size={15} color={"#55cd51"} />
@@ -197,15 +234,11 @@ const DashboardContent = () => {
                   </li>
                   <li>
                     <BsCheck2 className="icon" size={15} color={"#55cd51"} />
-                    واریز و برداشت رمزارز ﺭﻭﺯﺍﻧﻪ  :
-                    <strong>نامحدود</strong>
+                    واریز و برداشت رمزارز ﺭﻭﺯﺍﻧﻪ :<strong>نامحدود</strong>
                   </li>
                   <li>
                     <BsCheck2 className="icon" size={15} color={"#55cd51"} />
-                    واریز و برداشت فیات روزانه :
-                    <strong>معادل ۵۰۰ دلار</strong>
-
-
+                    واریز و برداشت فیات روزانه :<strong>معادل ۵۰۰ دلار</strong>
                   </li>
                 </ul>
               </Col>
@@ -222,7 +255,7 @@ const DashboardContent = () => {
                   <li>
                     <BsCheck2 className="icon" size={15} color={"#55cd51"} />
                     برداشت تومان ﺭﻭﺯﺍﻧﻪ:
-                    <strong>  نامحدود  </strong>
+                    <strong> نامحدود </strong>
                   </li>
                   <li>
                     <BsCheck2 className="icon" size={15} color={"#55cd51"} />
@@ -231,8 +264,7 @@ const DashboardContent = () => {
                   </li>
                   <li>
                     <BsCheck2 className="icon" size={15} color={"#55cd51"} />
-                    ﻭﺍﺭﯾﺰ و برداشت فیات ﺭﻭﺯﺍﻧﻪ  :
-                    <strong>۳۵ هزار دلار</strong>
+                    ﻭﺍﺭﯾﺰ و برداشت فیات ﺭﻭﺯﺍﻧﻪ :<strong>۳۵ هزار دلار</strong>
                   </li>
                 </ul>
               </Col>
@@ -275,14 +307,14 @@ const DashboardContent = () => {
                           onChange={(value) =>
                             setPayValue({
                               ...payValue,
-                              amount: value
+                              amount: value,
                             })
                           }
                           onChangeCoin={(e) => {
                             setPayValue({
                               ...payValue,
-                              currency: e
-                            })
+                              currency: e,
+                            });
                           }}
                         />
                       </div>
@@ -342,7 +374,7 @@ const DashboardContent = () => {
                 <CardTitle tag="h5"> بازارهای معاملاتی</CardTitle>
                 <div className="card-action">
                   <div className="card-action">
-                    <a href="/dashboard/market"> مشاهده تمام بازارها  </a>
+                    <a href="/dashboard/market"> مشاهده تمام بازارها </a>
                   </div>
                 </div>
               </CardHeader>
@@ -353,31 +385,53 @@ const DashboardContent = () => {
                     className="table-modern table table-borderless data-tables"
                   >
                     <thead>
-                    <tr className="tr-responsive">
+                      <tr>
                         <th className="text-center">نام ارز</th>
-                        <th className="text-center" >قیمت واحد (تومان)</th>
+                        <th className="text-center">قیمت واحد (تومان)</th>
                         {/* <th>تغییرات 24 ساعته</th> */}
-                        <th className="text-center" >معامله در بازار</th>
+                        <th>معامله در بازار</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {rates?.data?.length > 0 &&
-                        rates?.data.map((data, index) => (
+                      {rates &&
+                        rates.data &&
+                        rates.data?.length > 0 &&
+                        rates.data.map((data, index) => (
                           <tr className="tr-responsive">
                             <td className="text-center" data-th="نام ارز">
                               <div>
                                 <span className="icon">
-                                  {data.pair === "USDT/IRR" ? <img src={USDT} alt="" /> :
-                                    <img src={Turkey} alt=""  />}
+                                  {data.pair === "USDT/IRR" ? (
+                                    <img
+                                      src={USDT}
+                                      alt=""
+                                      style={{
+                                        width: "20px",
+                                        marginLeft: "5px",
+                                      }}
+                                    />
+                                  ) : (
+                                    <img
+                                      src={Turkey}
+                                      alt=""
+                                      style={{
+                                        width: "20px",
+                                        marginLeft: "5px",
+                                      }}
+                                    />
+                                  )}
                                 </span>
                                 <span className="text-50 item-title">
                                   {convertTextSingle(
-                                    extractLeftSide(data.pair)
+                                    extractLeftSide(data.pair),
                                   )}
                                 </span>
                               </div>
                             </td>
-                            <td className="text-center" data-th="قیمت واحد (تومان)">
+                            <td
+                              className="text-center"
+                              data-th="قیمت واحد (تومان)"
+                            >
                               <span className="td-responsive">
                                 {convertIRRToToman(data?.rate)}
                               </span>
@@ -390,7 +444,8 @@ const DashboardContent = () => {
                               <strong className="text-danger">{data?.change}</strong>
                             </div>
                           </td> */}
-                            <td className="text-center"
+                            <td
+                              className="text-center"
                               data-th="معامله در بازار
     "
                             >
@@ -424,9 +479,9 @@ const DashboardContent = () => {
               <img
                 src={Exchange}
                 style={{
-                  height: '25px',
-                  width: '25px',
-                  background: '#fff',
+                  height: "25px",
+                  width: "25px",
+                  background: "#fff",
                 }}
               />
               <div className="value">خرید و فروش</div>
@@ -440,9 +495,9 @@ const DashboardContent = () => {
               <img
                 src={Market}
                 style={{
-                  height: '25px',
-                  width: '25px',
-                  background: '#fff',
+                  height: "25px",
+                  width: "25px",
+                  background: "#fff",
                 }}
               />
               <div className="value">بازارها</div>
@@ -456,9 +511,9 @@ const DashboardContent = () => {
               <img
                 src={Deposit}
                 style={{
-                  height: '25px',
-                  width: '25px',
-                  background: '#fff',
+                  height: "25px",
+                  width: "25px",
+                  background: "#fff",
                 }}
               />
               <div className="value">واریز تتر</div>
@@ -470,9 +525,9 @@ const DashboardContent = () => {
                 src={Deposit}
                 alt=""
                 style={{
-                  height: '25px',
-                  width: '25px',
-                  background: '#fff',
+                  height: "25px",
+                  width: "25px",
+                  background: "#fff",
                 }}
               />
               <div className="value">واریز تومان</div>
@@ -502,21 +557,29 @@ const DashboardContent = () => {
               </CardHeader>
               <CardBody>
                 <div className="table-responsive  ">
-                  <table className={`table table-borderless data-tables ${transactions.data.length === 0 ? 'table-modern' : 'table-striped'}`}>
-                    {transactions.data.length > 0 && <thead>
-                      <tr>
-                        <th scope="col">نوع</th>
-                        <th scope="col" className="text-center">
-                          مقدار
-                        </th>
-                        <th scope="col" className="text-center">
-                          دارایی
-                        </th>
-                        <th scope="col" className="text-center">
-                          زمان
-                        </th>
-                      </tr>
-                    </thead>}
+                  <table
+                    className={`table table-borderless data-tables ${
+                      transactions.data.length === 0
+                        ? "table-modern"
+                        : "table-striped"
+                    }`}
+                  >
+                    {transactions.data.length > 0 && (
+                      <thead>
+                        <tr>
+                          <th scope="col">نوع</th>
+                          <th scope="col" className="text-center">
+                            مقدار
+                          </th>
+                          <th scope="col" className="text-center">
+                            دارایی
+                          </th>
+                          <th scope="col" className="text-center">
+                            زمان
+                          </th>
+                        </tr>
+                      </thead>
+                    )}
                     <tbody>
                       {transactions.data.map((data, index) => {
                         if (
@@ -569,13 +632,12 @@ const DashboardContent = () => {
                             <img
                               src={Exchange}
                               style={{
-                                height: '50px',
-                                width: '50px',
-                                marginBottom: '10px',
+                                height: "50px",
+                                width: "50px",
+                                marginBottom: "10px",
                               }}
                             />
                             <p>اولین معامله خود را با آرسونیکس تجربه کنید</p>
-
                           </td>
                         </tr>
                       )}
@@ -592,23 +654,31 @@ const DashboardContent = () => {
               </CardHeader>
               <CardBody>
                 <div className="table-responsive">
-                  <table className={`table table-borderless ${exchange.data.length === 0 ? 'table-modern' : 'table-striped'}`}>
-                    {exchange.data.length > 0 && <thead>
-                      <tr>
-                        <th scope="col" className="text-center">
-                          بازار
-                        </th>
-                        <th scope="col" className="text-center">
-                          مقدار
-                        </th>
-                        <th scope="col" className="text-center">
-                          قیمت واحد
-                        </th>
-                        <th scope="col" className="text-start">
-                          تاریخ
-                        </th>
-                      </tr>
-                    </thead>}
+                  <table
+                    className={`table table-borderless ${
+                      exchange.data.length === 0
+                        ? "table-modern"
+                        : "table-striped"
+                    }`}
+                  >
+                    {exchange.data.length > 0 && (
+                      <thead>
+                        <tr>
+                          <th scope="col" className="text-center">
+                            بازار
+                          </th>
+                          <th scope="col" className="text-center">
+                            مقدار
+                          </th>
+                          <th scope="col" className="text-center">
+                            قیمت واحد
+                          </th>
+                          <th scope="col" className="text-start">
+                            تاریخ
+                          </th>
+                        </tr>
+                      </thead>
+                    )}
                     <tbody className={tableBodyStyle}>
                       {exchange.data.length > 0 &&
                         exchange.data.map((data, index) => (
@@ -616,7 +686,7 @@ const DashboardContent = () => {
                             <td className="text-center">
                               <span className="text-success">
                                 {convertTextSingle(
-                                  data.destinationCurrencyCode
+                                  data.destinationCurrencyCode,
                                 )}
                               </span>{" "}
                               -{" "}
@@ -650,17 +720,15 @@ const DashboardContent = () => {
                             <img
                               src={Deposit}
                               style={{
-                                height: '50px',
-                                width: '50px',
-                                marginBottom: '10px',
+                                height: "50px",
+                                width: "50px",
+                                marginBottom: "10px",
                               }}
                             />
                             <p>اولین تراکنش خود را با آرسونیکس تجربه کنید</p>
-
                           </td>
                         </tr>
                       )}
-
                     </tbody>
                   </table>
                 </div>
