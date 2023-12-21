@@ -361,8 +361,8 @@ const DashboardContent = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {rates.data.length > 0 &&
-                        rates.data.map((data, index) => (
+                      {rates?.data?.length > 0 &&
+                        rates?.data.map((data, index) => (
                           <tr className="tr-responsive">
                             <td className="text-center" data-th="نام ارز">
                               <div>
