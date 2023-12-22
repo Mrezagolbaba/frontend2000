@@ -19,7 +19,10 @@ import { AlertInfo } from "components/AlertWidget";
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import { formatShowAccount, searchIranianBanks } from "helpers/filesManagement";
 import { useBankAccountsQuery } from "store/api/profile-management";
-import { useDepositMutation } from "store/api/wallet-management";
+import {
+  useDepositMutation,
+  useTransactionFeeQuery,
+} from "store/api/wallet-management";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "store/hooks";
 
@@ -31,12 +34,13 @@ type CreditCardForm = {
 
 const CreditCardForm = () => {
   const { firstName, lastName, secondTierVerified } = useAppSelector(
-    (state) => state.user
+    (state) => state.user,
   );
   const navigate = useNavigate();
   const [hasAccount, setHasAccount] = useState<boolean>(true);
   const [optionList, setOptionList] = useState<OptionType[] | any[]>([]);
 
+  const { data: fee } = useTransactionFeeQuery("IRR");
   const { data, isSuccess } = useBankAccountsQuery({});
 
   const [
@@ -49,7 +53,7 @@ const CreditCardForm = () => {
       accountNumber: Yup.string().required(),
       amount: Yup.string().required(),
       accountId: Yup.string().required(),
-    })
+    }),
   );
   const {
     handleSubmit,
@@ -105,7 +109,7 @@ const CreditCardForm = () => {
               otherOptions: { accountId: account?.id },
               value: account?.cardNumber ? account?.cardNumber : "",
             };
-          })
+          }),
         );
         setHasAccount(true);
         reset({
@@ -183,7 +187,11 @@ const CreditCardForm = () => {
                 {errors?.[name] && (
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
-                <FormText>کارمزد واریز: صفر تومان </FormText>
+                {fee && (
+                  <FormText>
+                    کارمزد واریز: {fee.depositFeeStatic} تومان{" "}
+                  </FormText>
+                )}
               </FormGroup>
             )}
           />

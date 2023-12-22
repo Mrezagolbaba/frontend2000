@@ -43,8 +43,30 @@ export const walletManagement = enhancedApi.injectEndpoints({
         };
       },
     }),
+    cancelTransaction: builder.mutation<TransactionResponse, string>({
+      query(transactionId) {
+        return {
+          method: "POST",
+          url: `/transactions/${transactionId}/cancel`,
+        };
+      },
+    }),
+    transactionFee: builder.query<any, any>({
+      query(code) {
+        return {
+          method: "GET",
+          url: `/currencies/${code}`,
+        };
+      },
+    }),
   }),
 });
 
-export const { useDepositMutation, useDepositInfoQuery, useWithdrawMutation, useTransactionStatusQuery } =
-  walletManagement;
+export const {
+  useDepositMutation,
+  useDepositInfoQuery,
+  useWithdrawMutation,
+  useTransactionStatusQuery,
+  useCancelTransactionMutation,
+  useTransactionFeeQuery,
+} = walletManagement;

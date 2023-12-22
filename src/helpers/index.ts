@@ -194,5 +194,10 @@ export const convertTextSingle = (text) => {
 export function extractLeftSide(baseString) {
   return baseString.includes("/") ? baseString.split("/")[0] : baseString;
 }
+export const LabeLText = {
+  EMAIL: "ایمیل",
+  PHONE: "پیامک",
+  AUTHENTICATOR: 'google Authenticator'
+}
 
       
