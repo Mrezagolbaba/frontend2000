@@ -17,7 +17,6 @@ import { BsTag } from "react-icons/bs";
 import { useExchangeContext } from "../ContextProvider";
 
 import exchange from "assets/scss/dashboard/buy-sell.module.scss";
-import { useLocation } from "react-router-dom";
 
 const options = [
   {
@@ -57,21 +56,20 @@ export default function ExchangeInput({
   onChange,
   isLoading = false,
 }: Props) {
-  const { state } = useLocation();
   const { exchangeContext, setExchangeContext } = useExchangeContext();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState({
-    value: options[0],
-    amount: 0,
-  });
+  const [selected, setSelected] = useState(
+    options.find((option) => option.value === exchangeContext[name].currency) ||
+      options[0]
+  );
   const [error, setError] = useState<string | undefined>(undefined);
 
   const handleChange = (val: string | number) => {
     setExchangeContext({
       ...exchangeContext,
       [name]: {
-        amount: selected.amount ?? val,
+        amount: val,
         currency: selected.value,
         stock: exchangeContext[name].stock,
       },
@@ -95,45 +93,6 @@ export default function ExchangeInput({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [exchangeContext.source.amount]);
 
-  useEffect(() => {
-    if (state && state?.[name] && !state.destination) {
-      const result = options.find((option) => option.value === state[name]);
-      result && setSelected({
-        ...selected,
-        value: result,
-      });
-      setExchangeContext({
-        ...exchangeContext,
-        [name]: {
-          ...exchangeContext[name],
-          currency: state[name],
-        },
-      });
-    } else if (exchangeContext[name].currency && !state.destination) {
-      const result = options.find(
-        (option) => option.value === exchangeContext[name].currency
-      );
-      result && setSelected({
-        ...selected,
-        value: result,
-      });
-    } else if (state && state?.source && state?.destination) {
-      const result = options.find((option) => option.value === state[name].currency);
-      result && setSelected({
-        value: result,
-        amount: state[name].amount,
-      });
-      setExchangeContext({
-        ...exchangeContext,
-        [name]: {
-          ...exchangeContext[name],
-          currency: state[name].currency,
-          amount: state[name].amount,
-        },
-      });
-    }
-  }, []);
-
   const toggle = () => setIsOpen((prevState) => !prevState);
 
   return (
@@ -144,8 +103,9 @@ export default function ExchangeInput({
         <CurrencyInput
           id={name}
           name={name}
-          className={`form-control ${error ? "is-invalid" : ""} ${exchange.input
-            }`}
+          className={`form-control ${error ? "is-invalid" : ""} ${
+            exchange.input
+          }`}
           type="text"
           value={exchangeContext[name].amount}
           decimalsLimit={decimalsLimit}
@@ -160,12 +120,12 @@ export default function ExchangeInput({
               <div className={exchange["selected__inner"]}>
                 <div className={exchange["selected__item"]}>
                   <img
-                    src={selected.value.label.img}
+                    src={selected.label.img}
                     alt="currency-icon"
                     width={20}
                     height={20}
                   />
-                  {selected.value.label.text}
+                  {selected.label.text}
                 </div>
               </div>
             </div>
@@ -184,11 +144,7 @@ export default function ExchangeInput({
                       currency: option.value,
                     },
                   });
-                  setSelected({
-                    ...selected,
-                    value: option,
-                   
-                  });
+                  setSelected(option);
                 }}
               >
                 <div>
@@ -220,10 +176,9 @@ export default function ExchangeInput({
               {exchangeContext[name].currency === "IRR"
                 ? rialToToman(exchangeContext[name].stock).toLocaleString()
                 : Number(
-                  exchangeContext[name].stock || 0
-                ).toLocaleString()}{" "}
+                    exchangeContext[name].stock || 0
+                  ).toLocaleString()}{" "}
               {convertText(exchangeContext[name].currency, "enToFa")}
-              {exchangeContext[name].currency}
             </span>
           </div>
         )}
@@ -241,10 +196,10 @@ export default function ExchangeInput({
               <span className="value">
                 {exchangeContext.source.currency === "IRR"
                   ? rialToToman(exchangeContext.rate).toLocaleString() +
-                  " تومان"
+                    " تومان"
                   : parseFloat(exchangeContext.rate).toLocaleString() +
-                  " " +
-                  convertText(exchangeContext.source.currency, "enToFa")}
+                    " " +
+                    convertText(exchangeContext.source.currency, "enToFa")}
               </span>
             </div>
           ))}
