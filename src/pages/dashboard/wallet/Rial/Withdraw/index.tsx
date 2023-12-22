@@ -20,7 +20,7 @@ import { useBankAccountsQuery } from "store/api/profile-management";
 import { formatShowAccount, searchIranianBanks } from "helpers/filesManagement";
 import { useWithdrawMutation } from "store/api/wallet-management";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "store/hooks";
 
 type WithdrawType = {
@@ -55,7 +55,7 @@ export default function Withdraw({ onClose }: Props) {
       iban: Yup.string().required(),
       amount: Yup.string().required(),
       accountId: Yup.string().required(),
-    })
+    }),
   );
   const {
     handleSubmit,
@@ -78,9 +78,12 @@ export default function Withdraw({ onClose }: Props) {
       if (data.length <= 0) {
         setHasAccount(false);
       } else {
+        const accounts = data.filter((account) => {
+          if (account.cardNumber !== null) return account;
+        });
         setHasAccount(true);
         setOptionList(
-          data.map((account) => {
+          accounts.map((account) => {
             // const bank = searchIranianBanks(account?.cardNumber);
             return {
               content: (
@@ -97,7 +100,7 @@ export default function Withdraw({ onClose }: Props) {
               otherOptions: { accountId: account?.id },
               value: account?.iban,
             };
-          })
+          }),
         );
         reset({
           iban: data[0]?.iban,
@@ -120,11 +123,11 @@ export default function Withdraw({ onClose }: Props) {
   useEffect(() => {
     isSuccessWithdraw &&
       toast.success(
-        "درخواست برداشت با موفقیت ثبت شد. لطفا منتظر تایید پشتیبانی بمانید."
+        "درخواست برداشت با موفقیت ثبت شد. لطفا منتظر تایید پشتیبانی بمانید.",
       );
     isErrorWithdraw &&
       toast.error(
-        "در ثبت درخواست مشکلی پیش آمده است لطفا در صورت هرگونه ابهام با پشتیبانی ارتباط برقرار کنید."
+        "در ثبت درخواست مشکلی پیش آمده است لطفا در صورت هرگونه ابهام با پشتیبانی ارتباط برقرار کنید.",
       );
 
     onClose?.();
@@ -154,9 +157,11 @@ export default function Withdraw({ onClose }: Props) {
               <FormGroup className="position-relative">
                 <div className="d-flex flex-row justify-content-between">
                   <Label htmlFor={name}> واریز به شبا: </Label>
-                  <a href="#">
-                    <span className="full-withraw mt-1">افزودن حساب جدید</span>
-                  </a>
+                  <Link to="/dashboard/profile" target="blank">
+                    <span className={wallet?.["little-label"]}>
+                      افزودن حساب جدید
+                    </span>
+                  </Link>
                 </div>
                 <DropdownInput
                   id={name}
@@ -173,9 +178,6 @@ export default function Withdraw({ onClose }: Props) {
                     {errors[name]?.message}sdfsdfsfd
                   </FormFeedback>
                 )}
-                <FormText>
-                  سقف باقی مانده برداشت روزانه این حساب: 100,000,000 تومان
-                </FormText>
               </FormGroup>
             )}
           />
@@ -189,7 +191,7 @@ export default function Withdraw({ onClose }: Props) {
                 <div className="d-flex flex-row justify-content-between">
                   <Label htmlFor={name}>مبلغ برداشت: </Label>
                   <a href="#">
-                    <span className="full-withraw mt-1">
+                    <span className={wallet?.["little-label"]}>
                       حداکثر قابل برداشت
                     </span>
                   </a>
@@ -205,8 +207,8 @@ export default function Withdraw({ onClose }: Props) {
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
                 <span className="d-flex flex-row justify-content-between">
-                  <FormText>موجودی شما: 12,000,000 تومان</FormText>
-                  <FormText>کارمزد برداشت بانکی: 2,000 هزارتومان</FormText>
+                  <FormText>موجودی شما: تومان</FormText>
+                  <FormText>کارمزد برداشت بانکی: هزارتومان</FormText>
                 </span>
               </FormGroup>
             )}

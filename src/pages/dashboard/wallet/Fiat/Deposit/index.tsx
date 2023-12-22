@@ -82,13 +82,13 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
 
   useEffect(() => {
     if (successVerification) {
-      setIsVerified(
-        verifications?.[2] === "PROCESSING"
-          ? 2
-          : verifications?.[2] === "VERIFIED"
-          ? 3
-          : 1
+      const level3 = verifications.filter(
+        (verification) => verification.type === "KYC_INTERNATIONAL_SERVICES",
       );
+      if (level3[0].status === "VERIFIED" || level3[0].status === "INITIATED") {
+        setIsVerified(3);
+      } else if (level3[0].status === "PROCESSING") setIsVerified(2);
+      else setIsVerified(1);
     } else setIsVerified(1);
   }, [successVerification, verifications]);
 

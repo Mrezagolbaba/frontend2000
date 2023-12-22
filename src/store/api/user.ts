@@ -17,7 +17,7 @@ export const userApi = enhancedApi.injectEndpoints({
       invalidatesTags: ["user"],
     }),
 
-    checkVerifications: builder.query<CheckVerificationsResponse, void>({
+    checkVerifications: builder.query<CheckVerificationsResponse[], void>({
       query() {
         return {
           method: "GET",
@@ -37,5 +37,8 @@ export const userApi = enhancedApi.injectEndpoints({
   }),
 });
 
-export const { useUpdatePasswordMutation, useCheckVerificationsQuery,useEnglishNamesMutation } =
-  userApi;
+export const {
+  useUpdatePasswordMutation,
+  useCheckVerificationsQuery,
+  useEnglishNamesMutation,
+} = userApi;
