@@ -17,7 +17,8 @@ import Dialog from "components/Dialog";
 import InternationalVerification from "pages/dashboard/profile/InternationalVerification";
 
 const DepositFiat = ({ onClose }: { onClose: () => void }) => {
-  const { firstNameEn, lastNameEn } = useAppSelector((state) => state.user);
+  const { firstNameEn, lastNameEn, internationalServicesVerified } =
+    useAppSelector((state) => state.user);
 
   const [isVerified, setIsVerified] = useState<1 | 2 | 3>(1);
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
@@ -30,9 +31,6 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
     ownerName: "",
     code: "",
   });
-
-  const { data: verifications, isSuccess: successVerification } =
-    useCheckVerificationsQuery();
   const { data, isLoading, isSuccess } = useDepositInfoQuery("TRY");
   const { data: accounts, isSuccess: getSuccessAccounts } =
     useBankAccountsQuery({
@@ -81,18 +79,6 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
   }, [data, isSuccess]);
 
   useEffect(() => {
-    if (successVerification) {
-      const level3 = verifications.filter(
-        (verification) => verification.type === "KYC_INTERNATIONAL_SERVICES",
-      );
-      if (level3[0].status === "VERIFIED" || level3[0].status === "INITIATED") {
-        setIsVerified(3);
-      } else if (level3[0].status === "PROCESSING") setIsVerified(2);
-      else setIsVerified(1);
-    } else setIsVerified(1);
-  }, [successVerification, verifications]);
-
-  useEffect(() => {
     accounts &&
       depositRequest({
         currencyCode: "TRY",
@@ -106,7 +92,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <div className="px-2">
-      {isVerified === 1 ? (
+      {!internationalServicesVerified ? (
         <>
           <AlertInfo
             hasIcon
@@ -125,14 +111,6 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
               </Button>
             </Col>
           </Row>
-        </>
-      ) : isVerified === 2 ? (
-        <>
-          <AlertInfo
-            hasIcon
-            text="مدارک ارسالی شما در حال بررسی است. لطفا تا زمان تایید، منتظر بمانید."
-            key="passport-alert"
-          />
         </>
       ) : (
         <Form>
