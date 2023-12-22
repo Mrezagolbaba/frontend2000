@@ -27,7 +27,6 @@ import {
   useDepositMutation,
   useTransactionFeeQuery,
 } from "store/api/wallet-management";
-import { CurrencyCode } from "types/wallet";
 import { success } from "assets/scss/components/Alert/style.module.scss";
 import CountdownTimer from "components/Input/CountDownInput";
 type CryptoFormType = {
@@ -35,13 +34,12 @@ type CryptoFormType = {
   amount: string;
 };
 
-const DepositCrypto = ({
-  onClose,
-  currency,
-}: {
+type Props = {
   onClose: () => void;
-  currency: CurrencyCode;
-}) => {
+  currency: any;
+};
+
+const DepositCrypto = ({ onClose, currency }: Props) => {
   const { data: fee } = useTransactionFeeQuery(currency);
   const [showResult, setShowResult] = useState<boolean>(false);
   const [result, setResult] = useState({
