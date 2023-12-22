@@ -180,11 +180,6 @@ const DepositCrypto = ({
                   <FormGroup className="position-relative">
                     <div className="d-flex flex-row justify-content-between">
                       <Label htmlFor={name}>مبلغ واریز: </Label>
-                      <a href="#">
-                        <span className="full-withraw mt-1">
-                          حداکثر مبلغ واریز
-                        </span>
-                      </a>
                     </div>
                     <Currency
                       name={name}
