@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { PiShieldCheckeredFill } from "react-icons/pi";
 
 import auth from "assets/scss/auth/auth.module.scss";
+import HeadAuth from "layouts/headAuth";
 
 type Props = {
   children: ReactNode;
@@ -14,7 +15,8 @@ const AuthLayout = ({ children }: Props) => {
   return (
     <div className={auth.wrapper}>
       <main>
-        <header className={auth.header}>
+        <HeadAuth />
+        {/* <header className={auth.header}>
           <div className={auth.logo}>
             <Link to="/">
               <img src={logo} alt="arsonex-logo" />
@@ -31,7 +33,7 @@ const AuthLayout = ({ children }: Props) => {
               </span>
             </div>
           </div>
-        </header>
+        </header> */}
         {children}
       </main>
     </div>

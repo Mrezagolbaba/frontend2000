@@ -84,7 +84,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
         currencyCode: "TRY",
         amount: "1",
         flow: "MANUAL_WITH_PAYMENT_IDENTIFIER",
-        bankAccountId: accounts[0].id,
+        bankAccountId: accounts[0]?.id,
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, getSuccessAccounts]);

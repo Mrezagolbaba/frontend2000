@@ -43,6 +43,15 @@ export const walletManagement = enhancedApi.injectEndpoints({
         };
       },
     }),
+    verifyOtpWithdraw: builder.mutation<any, any>({
+      query({ transactionId, code }) {
+        return {
+          method: "POST",
+          url: `/v1/transactions/withdraw/${transactionId}/verify-2fa`,
+          code,
+        }
+      }
+    }),
     cancelTransaction: builder.mutation<TransactionResponse, string>({
       query(transactionId) {
         return {
@@ -62,11 +71,13 @@ export const walletManagement = enhancedApi.injectEndpoints({
   }),
 });
 
+
 export const {
   useDepositMutation,
   useDepositInfoQuery,
   useWithdrawMutation,
   useTransactionStatusQuery,
+  useVerifyOtpWithdrawMutation,
   useCancelTransactionMutation,
   useTransactionFeeQuery,
 } = walletManagement;
