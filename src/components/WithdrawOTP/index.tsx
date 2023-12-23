@@ -62,8 +62,10 @@ const WithdrawOTP = ({ securitySelection, section, handleGetCode, handleResend }
                 value={otpCode}
                 onChange={(code) => {
                     setOtpCode(code);
-                    if (code.length === 6)
-                        handleGetCode(otpCode)
+                    if (code.length === 6){
+                        handleGetCode(code)
+                    }
+                    
                 }}
                 inputStyle={otp["otp-input"]}
                 numInputs={6}
