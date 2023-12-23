@@ -27,6 +27,7 @@ declare const classNames: {
   readonly "user-summary__avatar": "user-summary__avatar";
   readonly "user-summary__edit": "user-summary__edit";
   readonly "user-summary__last-seen": "user-summary__last-seen";
+  readonly "user-summary__level": "user-summary__level";
   readonly __navbar: "__navbar";
   readonly expanded: "expanded";
 };

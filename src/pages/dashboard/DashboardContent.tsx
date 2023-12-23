@@ -128,7 +128,8 @@ const DashboardContent = () => {
           <CardBody className={dashboard["user-summary__body"]}>
             <ul>
               <li className={dashboard["user-summary__avatar"]}>
-                <img src={User} alt="user-profile" />
+                {/* <img src={User} alt="user-profile" /> */}
+                <span>{firstName[0]}</span>
               </li>
               <li className={dashboard["user-summary__edit"]}>
                 <h6>{firstName + " " + lastName}</h6>
@@ -150,7 +151,7 @@ const DashboardContent = () => {
                 </div>
               </li>
               <li className={dashboard["user-summary__level"]}>
-              <h6> سطح احراز هویت شما</h6>
+                <h6> سطح احراز هویت شما</h6>
                 <div className="user-summary-date">
                   {user?.secondTierVerified ? (
                     <img
