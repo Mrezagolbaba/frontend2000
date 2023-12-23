@@ -44,55 +44,20 @@ import { Link, useNavigate } from "react-router-dom";
 import { getRates } from "store/reducers/features/rates/rateSlice";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import UserInformation from "./UserInformation";
+import ExchangeSection from "./ExchangeSection";
 
 const DashboardContent = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const user = useAppSelector((state) => state.user);
   const transactions = useAppSelector((state) => state.transaction);
   const exchange = useAppSelector((state) => state.exchange);
   const rates = useAppSelector((state) => state.rates);
-  const [lastSession, setLastSession] = useState("");
-  const [payValue, setPayValue] = useState({
-    amount: "",
-    currency: "",
-  });
-  const [receiveValue, setReceiveValue] = useState({
-    amount: "",
-    currency: "",
-  });
-  const session = useSession();
 
-  const { firstName, lastName } = user;
-  const settings = {
-    dots: true,
-    infinite: true,
-    slidesToShow: 2,
-    slidesToScroll: 1,
-    autoplay: true,
-    speed: 20000,
-    autoplaySpeed: 20000,
-    cssEase: "linear",
-    loop: true,
-  };
-  const getSession = async () => {
-    try {
-      await session.mutateAsync({}).then((res) => {
-        const transformedArray = res.map((item) => {
-          return item;
-        });
-        const lastItem = transformedArray[transformedArray.length - 1];
-        setLastSession(
-          moment(lastItem.createdAt).locale("fa").format(" DD MMMM YYYY"),
-        );
-      });
-    } catch (err) {}
-  };
   useEffect(() => {
     dispatch(getExchangeList(user.id));
     dispatch(getTransactionsList(user.id));
     dispatch(getRates());
-    getSession();
   }, []);
   const convertType = (type: string) => {
     if (type === "DEPOSIT") {
@@ -124,63 +89,7 @@ const DashboardContent = () => {
   return (
     <>
       <section className="mb-3">
-        <Card className={dashboard["user-summary"]}>
-          <CardBody className={dashboard["user-summary__body"]}>
-            <ul>
-              <li className={dashboard["user-summary__avatar"]}>
-                {/* <img src={User} alt="user-profile" /> */}
-                <span>{firstName[0]}</span>
-              </li>
-              <li className={dashboard["user-summary__edit"]}>
-                <h6>{firstName + " " + lastName}</h6>
-                <Button
-                  className="profile-btn"
-                  outline
-                  color="secondary"
-                  href="/dashboard/profile"
-                >
-                  <CiEdit />
-                  پروفایل کاربری
-                </Button>
-              </li>
-              <li className={dashboard["user-summary__last-seen"]}>
-                <h6>آخرین ورود</h6>
-                <div>
-                  <RxCalendar />
-                  {lastSession}
-                </div>
-              </li>
-              <li className={dashboard["user-summary__level"]}>
-                <h6> سطح احراز هویت شما</h6>
-                <div className="user-summary-date">
-                  {user?.secondTierVerified ? (
-                    <img
-                      src={User2}
-                      alt=""
-                      style={{ width: "20px", marginLeft: "5px" }}
-                    />
-                  ) : (
-                    <img
-                      src={User1}
-                      alt=""
-                      style={{ width: "20px", marginLeft: "5px" }}
-                    />
-                  )}
-                  {user?.secondTierVerified ? (
-                    <span>سطح دو</span>
-                  ) : (
-                    <span>
-                      <span>سطح یک</span>{" "}
-                      <a href="/dashboard/profile" style={{ color: "#111bff" }}>
-                        ارتقا سطح
-                      </a>
-                    </span>
-                  )}
-                </div>
-              </li>
-            </ul>
-          </CardBody>
-        </Card>
+        <UserInformation />
       </section>
 
       {!user?.secondTierVerified && (
@@ -276,87 +185,7 @@ const DashboardContent = () => {
       <section className="mb-4">
         <Row className="g-4">
           <Col xxl={7} xl={6}>
-            <Card className="custom-card currency-exchange card--h100pc card-secondary">
-              <CardHeader>
-                <CardTitle tag="h5">خرید و فروش</CardTitle>
-              </CardHeader>
-              <CardBody>
-                <form action="">
-                  <Row className="mt-3">
-                    <Col xs={12} md={6}>
-                      <div className="currency-exchange__control-group">
-                        <label
-                          className="form-label"
-                          style={{ color: "#03041b66" }}
-                        >
-                          پرداخت می‌کنید:
-                        </label>
-                        <ExchangeInput
-                          name={"amount"}
-                          value={payValue.amount}
-                          onChange={(value) =>
-                            setPayValue({
-                              ...payValue,
-                              amount: value,
-                            })
-                          }
-                          onChangeCoin={(e) => {
-                            setPayValue({
-                              ...payValue,
-                              currency: e,
-                            });
-                          }}
-                        />
-                      </div>
-                    </Col>
-                    <Col xs={12} md={6}>
-                      <div className="currency-exchange__control-group">
-                        <label
-                          className="form-label"
-                          style={{ color: "#03041b66" }}
-                        >
-                          دریافت می‌کنید:
-                        </label>
-                        <ExchangeInput
-                          name={"amount"}
-                          value={receiveValue.amount}
-                          onChange={(value) => {
-                            setReceiveValue({
-                              ...receiveValue,
-                              amount: value,
-                            });
-                          }}
-                          onChangeCoin={(e) => {
-                            setReceiveValue({
-                              ...receiveValue,
-                              currency: e,
-                            });
-                          }}
-                        />
-                      </div>
-                    </Col>
-                  </Row>
-
-                  <div className="mt-5 mb-4 d-flex align-items-center justify-content-center">
-                    <button
-                      onClick={() =>
-                        navigate(`/dashboard/buy-sell`, {
-                          state: {
-                            source: payValue,
-                            destination: receiveValue,
-                          },
-                        })
-                      }
-                      type="button"
-                      className="btn btn-primary"
-                      style={{ padding: "18px 70px" }}
-                    >
-                      ثبت و ادامه
-                    </button>
-                  </div>
-                </form>
-              </CardBody>
-            </Card>
+            <ExchangeSection />
           </Col>
           <Col xxl={5} xl={6}>
             <Card className="custom-card wallet-card card--h100pc card-secondary">
