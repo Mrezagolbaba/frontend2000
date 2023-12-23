@@ -25,7 +25,8 @@ import { useState } from "react";
 import { useForm } from "@refinedev/core";
 import toast from "react-hot-toast";
 import { useAppSelector } from "store/hooks";
-import { useVerifyOtpWithdrawMutation } from "store/api/wallet-management";
+import { useResendOtpWithdrawMutation, useVerifyOtpWithdrawMutation } from "store/api/wallet-management";
+
 import WithdrawOTP from "components/WithdrawOTP";
 
 type CryptoFormType = {
@@ -48,6 +49,7 @@ const WithdrawCrypto = ({
   const [transactionId, setTransactionId] = useState<string>("");
   const user = useAppSelector((state) => state.user);
   const [verifyOtpWithdraw, { isSuccess }] = useVerifyOtpWithdrawMutation()
+  const [resendOtpWithdraw, { isSuccess: isResendSuccess }] = useResendOtpWithdrawMutation()
   const optionList: OptionType[] = [
     {
       content: (
@@ -111,7 +113,11 @@ const WithdrawCrypto = ({
     })
   };
   const handleSendOtp = async () => {
-    await verifyOtpWithdraw({ code: otpCode, transactionId: transactionId }).then((res) => {
+    const data ={
+      transactionId,
+      code: otpCode
+    }
+    await verifyOtpWithdraw(data).then((res) => {
       if (res && isSuccess) {
         toast.success('برداشت با موفقیت انجام شد', { position: 'bottom-left' })
         onClose()
@@ -121,7 +127,11 @@ const WithdrawCrypto = ({
     })
   }
   const handleReSendOtp = async () => {
-    console.log('resend')
+    await resendOtpWithdraw(transactionId).then((res) => {
+      if (isResendSuccess) {
+        toast.success('کد مجددا ارسال شد', { position: 'bottom-left' })
+      }
+    })
   }
 
   return (
