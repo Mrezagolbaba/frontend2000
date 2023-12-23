@@ -134,15 +134,15 @@ export const isPasswordValid = (password: string) => {
   return isValid;
 };
 export function convertIRRToToman(number: number) {
-   // 1 toman is equal to 10 rials
-   const tomanAmount = Math.trunc( number ) / 10;
-   // Format the result to include commas for thousands
-   const formattedTomanAmount = new Intl.NumberFormat('fa-IR', {
+  // 1 toman is equal to 10 rials
+  const tomanAmount = Math.trunc(number) / 10;
+  // Format the result to include commas for thousands
+  const formattedTomanAmount = new Intl.NumberFormat('fa-IR', {
     useGrouping: true,
     style: 'decimal'
   }).format(tomanAmount);
- 
-   return formattedTomanAmount;
+
+  return formattedTomanAmount;
 }
 export const rialToToman = (rialAmount: number | string): number => {
   // Assuming 1 Toman is equal to 10 Rials
@@ -196,8 +196,12 @@ export function extractLeftSide(baseString) {
 }
 export const LabeLText = {
   EMAIL: "ایمیل",
-  PHONE: "پیامک",
+  PHONE: "تلفن همراه",
   AUTHENTICATOR: 'google Authenticator'
 }
+export const LabeLTextTransaction = {
+  DARAFT: 'ناموفق',
+  SUCCESSFUL: 'موفق',
+}
 
-      
+

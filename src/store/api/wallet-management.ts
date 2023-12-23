@@ -47,7 +47,7 @@ export const walletManagement = enhancedApi.injectEndpoints({
       query({ transactionId, code }) {
         return {
           method: "POST",
-          url: `/v1/transactions/withdraw/${transactionId}/verify-2fa`,
+          url: `/transactions/withdraw/${transactionId}/verify-2fa`,  
           code,
         }
       }
