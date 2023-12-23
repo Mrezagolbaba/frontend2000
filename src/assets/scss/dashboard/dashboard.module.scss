@@ -346,6 +346,54 @@
   padding-right: 5px;
 }
 
+.easy-text {
+  font-size: 15px;
+  line-height: 26px;
+}
+
+.easy-box {
+  position: relative;
+  background-color: #fff;
+  background-clip: border-box;
+  border-radius: 10px;
+  text-align: center;
+  padding: 1.5rem 10px;
+  text-decoration: none;
+  display: block;
+  color: #3e4b5b;
+  box-shadow: 0 2px 4px rgba(126, 142, 177, 0.12);
+  transition: all 0.25s ease;
+  &:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 5px 12px rgba(126, 142, 177, 0.2);
+  }
+}
+.trading {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  line-height: 1.2;
+  font-size: 0.63rem;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 10px;
+  span {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  i {
+    margin-left: 2px;
+    vertical-align: middle;
+    font-size: 14px;
+  }
+}
+.trading-up {
+  color: #fff;
+  background-color: #24b314;
+}
+
 @media screen and (max-width: 978px) {
   .main-wrapper {
     margin-right: 0 !important;

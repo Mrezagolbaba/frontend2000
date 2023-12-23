@@ -46,6 +46,7 @@ import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 import UserInformation from "./UserInformation";
 import ExchangeSection from "./ExchangeSection";
 import TradingMarkets from "./TradingMarkets";
+import EasyAccess from "./EasyAccess";
 
 const DashboardContent = () => {
   const dispatch = useAppDispatch();
@@ -194,84 +195,7 @@ const DashboardContent = () => {
       </section>
       <section className="mb-4 mt-4">
         <Row className="gx-4">
-          <Col className="col align-items-center justify-content-center d-flex">
-            <h6 className="easy-text">دسترسی سریع به خدمات آرسونیکس</h6>
-          </Col>
-          <Col className="services col-6 col-sm-3 col-xxl-2 mx-xxl-2 mx-md-2 m-0">
-            <a
-              className="element-box ar-tablo centered trend-in-corner smaller"
-              href="/dashboard/buy-sell"
-            >
-              <img
-                src={Exchange}
-                style={{
-                  height: "25px",
-                  width: "25px",
-                  background: "#fff",
-                }}
-              />
-              <div className="value">خرید و فروش</div>
-            </a>
-          </Col>
-          <Col className="services col-6 col-sm-3 col-xxl-2 mx-xxl-2 mx-md-2  m-0">
-            <a
-              className="element-box ar-tablo centered trend-in-corner smaller"
-              href="#"
-            >
-              <img
-                src={Market}
-                style={{
-                  height: "25px",
-                  width: "25px",
-                  background: "#fff",
-                }}
-              />
-              <div className="value">بازارها</div>
-            </a>
-          </Col>
-          <Col className="services col-6 col-sm-3 col-xxl-2 mx-xxl-2 mx-md-2  m-0">
-            <a
-              className="element-box ar-tablo centered trend-in-corner smaller"
-              href="/dashboard/wallet"
-            >
-              <img
-                src={Deposit}
-                style={{
-                  height: "25px",
-                  width: "25px",
-                  background: "#fff",
-                }}
-              />
-              <div className="value">واریز تتر</div>
-            </a>
-          </Col>
-          <Col className="services col-6 col-sm-3 col-xxl-2 mx-xxl-2 mx-md-2  m-0">
-            <a href="/dashboard/wallet">
-              <img
-                src={Deposit}
-                alt=""
-                style={{
-                  height: "25px",
-                  width: "25px",
-                  background: "#fff",
-                }}
-              />
-              <div className="value">واریز تومان</div>
-            </a>
-          </Col>
-          <Col className="services col-6 col-sm-3 col-xxl-2 mx-xxl-2 mx-md-2  m-0 ">
-            <a
-              className="element-box ar-tablo centered trend-in-corner smaller"
-              href="#"
-            >
-              <BiSupport color="#111BFF" size={25} />
-              <div className="value">پشتیبانی</div>
-              <div className="trending trending-up">
-                <span>آنلاین</span>
-                <i className="os-icon os-icon-arrow-up6"></i>
-              </div>
-            </a>
-          </Col>
+          <EasyAccess />
         </Row>
       </section>
       <section className="mb-4">

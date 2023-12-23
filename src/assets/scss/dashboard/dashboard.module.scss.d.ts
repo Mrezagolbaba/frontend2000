@@ -32,6 +32,10 @@ declare const classNames: {
   readonly "table-responsive": "table-responsive";
   readonly "data-table": "data-table";
   readonly "text-50": "text-50";
+  readonly "easy-text": "easy-text";
+  readonly "easy-box": "easy-box";
+  readonly trading: "trading";
+  readonly "trading-up": "trading-up";
   readonly __navbar: "__navbar";
   readonly expanded: "expanded";
 };
