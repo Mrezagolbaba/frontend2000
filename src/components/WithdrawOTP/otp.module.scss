@@ -1,0 +1,41 @@
+.otp-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: #f1f1f1;
+  border-radius: 10px;
+  padding: 30px 20px;
+  margin-bottom: 20px;
+  .input-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    direction: ltr;
+    width: 80%;
+    margin-top: 20px;
+    .otp-input {
+      direction: ltr;
+      text-align: center !important;
+      display: block;
+      width: calc(80% / 8) !important;
+      height: 48px;
+      line-height: 48px;
+      margin: 0;
+      padding: 0.375rem 0.75rem;
+      font-size: 0.875em;
+      font-weight: bold;
+      color: #03041b;
+      box-shadow: none;
+      background-color: #fff;
+      background-clip: padding-box;
+      appearance: none;
+      border-radius: 10px;
+      border: 1px solid rgba(3, 4, 27, 0.1);
+      transition:
+        border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
+    }
+  }
+}

@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
 import { Switch } from "antd";
-import { BsApple, BsGooglePlay } from 'react-icons/bs'
 import { Card, CardBody, CardHeader, CardTitle, Col, FormGroup, Input, Label, Row } from "reactstrap";
-import OtpInput from "react-otp-input";
 import s from "./styles.module.scss";
-import { Controller, useForm } from "react-hook-form";
-import auth from "assets/scss/auth/auth.module.scss";
+import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { getAuthenticatorData, getNotifSettings, updateNotifSettings } from "store/reducers/features/settings/settingSlice";
 import Authenticator from "./authenticator";
@@ -14,8 +11,6 @@ import { useRequestDisableAuthenticatorMutation, useRequestSwitchOtpMethodMutati
 import toast from "react-hot-toast";
 import { useGetMe } from "services/auth/user";
 import { setUser } from "store/reducers/features/user/userSlice";
-import { IUser } from "types/user";
-import OtpVerification from "./otpVerification";
 import PhoneVerification from "./phoneVerification";
 import EmailVerification from "./emailVerification";
 interface NotificationSetting {
@@ -25,11 +20,6 @@ interface NotificationSetting {
   id: string;
   createdAt: string;
   updatedAt: string;
-}
-const LabeLText = {
-  EMAIL: "ایمیل",
-  PHONE: "پیامک",
-  AUTHENTICATOR: 'google Authenticator'
 }
 const Setting = () => {
   const dispatch = useAppDispatch();

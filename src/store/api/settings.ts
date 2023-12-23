@@ -6,7 +6,7 @@ export const notificationSettingsApi = enhancedApi.injectEndpoints({
             query(data) {
                 return {
                     method: "PATCH",
-                    url: `user-settings/${data}/toggle`,
+                    url: `/user-settings/${data}/toggle`,
                 };
             },
             invalidatesTags: ["settings"],
@@ -15,7 +15,7 @@ export const notificationSettingsApi = enhancedApi.injectEndpoints({
             query() {
                 return {
                     method: "GET",
-                    url: "user-settings",
+                    url: "/user-settings",
                 };
             },
             providesTags: ["settings"],
@@ -73,7 +73,7 @@ export const notificationSettingsApi = enhancedApi.injectEndpoints({
             query(data) {
                 return {
                     method: "POST",
-                    url: "/v1/auth/disable-authenticator",
+                    url: "/auth/disable-authenticator",
                     data,
                 };
             },

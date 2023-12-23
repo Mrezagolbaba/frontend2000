@@ -24,10 +24,9 @@ import Currency from "components/Input/CurrencyInput";
 import { useState } from "react";
 import { useForm } from "@refinedev/core";
 import toast from "react-hot-toast";
-import auth from "layouts/auth";
 import { useAppSelector } from "store/hooks";
-import { LabeLText } from "helpers";
 import { useVerifyOtpWithdrawMutation } from "store/api/wallet-management";
+import WithdrawOTP from "components/WithdrawOTP";
 
 type CryptoFormType = {
   network: string;
@@ -100,21 +99,29 @@ const WithdrawCrypto = ({
         position: "bottom-left",
       });
     else
-      onFinish({
-        currencyCode: currency,
-        amount: data.amount,
-        destination: data.destination,
-      });
+      setShowOtp(true);
+    onFinish({
+      currencyCode: currency,
+      amount: data.amount,
+      destination: data.destination,
+    }).then((res: any) => {
+      if (res) {
+        setTransactionId(res.data.id);
+      }
+    })
   };
   const handleSendOtp = async () => {
     await verifyOtpWithdraw({ code: otpCode, transactionId: transactionId }).then((res) => {
-      if (isSuccess) {
+      if (res && isSuccess) {
         toast.success('برداشت با موفقیت انجام شد', { position: 'bottom-left' })
         onClose()
       } else {
         toast.error('کد وارد شده صحیح نمی باشد', { position: 'bottom-left' })
       }
     })
+  }
+  const handleReSendOtp = async () => {
+    console.log('resend')
   }
 
   return (
@@ -301,34 +308,20 @@ const WithdrawCrypto = ({
         </>
       )}
       {showOtp && (
-        <div className="d-flex justify-content-center align-items-center container">
-          <div className="py-5 px-3 d-flex-col justify-content-center align-items-center  " style={{ backgroundColor: '#f1f1f1', borderRadius: '10px' }}>
-            <div className="d-flex justify-content-center align-items-center flex-row">
-            </div>
-            <hr />
-            <h6> برای تایید تغییر تایید هویت دو مرحله ای کد ارسال شده به {LabeLText[user.otpMethod]} را وارد کنید </h6>
-
-            <OtpInput
-              containerStyle={auth["otp-container"]}
-              value={otpCode}
-              onChange={(code) => {
+        <div className="d-flex flex-column align-items-center justify-content-center mt-5">
+          <WithdrawOTP
+            securitySelection={user.otpMethod}
+            handleResend={handleReSendOtp}
+            handleGetCode={(code) => {
+              if (code.length === 6) {
                 setOtpCode(code);
-              }}
-              inputStyle={auth["otp-input"]}
-              numInputs={6}
-              renderSeparator={undefined}
-              placeholder={undefined}
-              shouldAutoFocus={true}
-              renderInput={(props) => <input {...props} />}
-            />
-
-            <button disabled={otpCode.length !== 6} className="btn btn-primary mt-4" onClick={handleSendOtp}>تایید</button>
-          </div>
+              }
+            }}
+          />
+          <button className="btn btn-primary mt-2 px-5 py-2"
+            onClick={handleSendOtp}> تایید </button>
         </div>
-
-      )
-
-      }
+      )}
     </div>
   );
 };

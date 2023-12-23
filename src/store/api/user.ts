@@ -10,7 +10,7 @@ export const userApi = enhancedApi.injectEndpoints({
       query(data) {
         return {
           method: "POST",
-          url: "/v1/users/update-password",
+          url: "/users/update-password",
           data,
         };
       },
