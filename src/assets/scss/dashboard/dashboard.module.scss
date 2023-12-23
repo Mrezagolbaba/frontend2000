@@ -206,6 +206,77 @@
   border: none;
 }
 
+.user-summary {
+  background-image: url(/assets/img/coins/bitcoin-batch.png) !important;
+  background-repeat: no-repeat !important;
+  background-size: 235px 183px !important;
+  background-position: 40px -14px !important;
+  &__body {
+    padding: 40px !important;
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-top: -24px;
+  }
+  li {
+    min-height: 75px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 24px;
+    &:not(:last-child, .user-summary__avatar) {
+      margin-left: 65px;
+    }
+    h6 {
+      margin-bottom: 20px;
+      font-size: 0.875em;
+      font-weight: 500;
+      line-height: 18px;
+    }
+  }
+  &__avatar {
+    justify-content: center;
+    margin-left: 30px;
+    img {
+      width: 68px;
+      height: 68px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+    }
+  }
+  &__edit {
+    h6 {
+      font-size: 1em;
+      font-weight: 700;
+    }
+    a {
+      padding: 9px 18px;
+      background-color: transparent;
+      border: 1px solid rgba(3, 4, 27, 0.1);
+      border-radius: 10px;
+      color: rgba(3, 4, 27, 0.4);
+      font-size: 0.875rem;
+    }
+  }
+  &__last-seen {
+    & > div {
+      color: rgba(3, 4, 27, 0.6);
+    }
+    svg {
+      margin-left: 5px;
+    }
+  }
+}
+
+@media screen and (max-width: 978px) {
+  .main-wrapper {
+    margin-right: 0 !important;
+  }
+}
+
 @media screen and (max-width: 991px) {
   .wrapper {
     .main-wrapper {
@@ -254,12 +325,6 @@
       flex-wrap: nowrap;
     }
   }
-}
-
-@media screen and (max-width:978px) {
-  .main-wrapper {
-    margin-right: 0!important;
-  } 
 }
 
 @media screen and (max-width: 767px) {

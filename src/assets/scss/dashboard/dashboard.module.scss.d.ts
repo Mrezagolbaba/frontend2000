@@ -22,6 +22,11 @@ declare const classNames: {
   readonly "item-logout": "item-logout";
   readonly icon: "icon";
   readonly "custom-card": "custom-card";
+  readonly "user-summary": "user-summary";
+  readonly "user-summary__body": "user-summary__body";
+  readonly "user-summary__avatar": "user-summary__avatar";
+  readonly "user-summary__edit": "user-summary__edit";
+  readonly "user-summary__last-seen": "user-summary__last-seen";
   readonly __navbar: "__navbar";
   readonly expanded: "expanded";
 };
