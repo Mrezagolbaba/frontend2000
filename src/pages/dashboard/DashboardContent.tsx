@@ -118,7 +118,7 @@ const DashboardContent = () => {
       ? { maxHeight: "300px", overflowY: "auto" }
       : "";
   const filteredData = transactions.data.filter(item =>
-    item.status !== "EXPIRED" && item.status !== "INITIATED" &&
+    item.status !== "EXPIRED" && item.status !== "INITIATED" && item.status !== "DRAFT" &&
     (item.type === "DEPOSIT" || item.type === "WITHDRAW")
   );
   return (
