@@ -44,13 +44,19 @@ export const walletManagement = enhancedApi.injectEndpoints({
       },
     }),
     verifyOtpWithdraw: builder.mutation<any, any>({
-      query({ transactionId, code }) {
+      query (data) {
         return {
           method: "POST",
-          url: `/v1/transactions/withdraw/${transactionId}/verify-2fa`,
-          code,
+          url: `/transactions/withdraw/${data.transactionId}/verify-2fa`,
+          data: { code: data.code },
         }
-      }
+      },
+    }),
+    resendOtpWithdraw: builder.mutation<any, any>({
+      query: (transactionId) => ({
+        method: "POST",
+        url: `/transactions/withdraw/${transactionId}/resend-2fa`,
+      })
     }),
     cancelTransaction: builder.mutation<TransactionResponse, string>({
       query(transactionId) {
@@ -78,6 +84,7 @@ export const {
   useWithdrawMutation,
   useTransactionStatusQuery,
   useVerifyOtpWithdrawMutation,
+  useResendOtpWithdrawMutation,
   useCancelTransactionMutation,
   useTransactionFeeQuery,
 } = walletManagement;

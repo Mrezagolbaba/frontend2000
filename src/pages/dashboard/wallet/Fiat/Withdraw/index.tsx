@@ -17,15 +17,14 @@ import {
 } from "reactstrap";
 import { useBankAccountsQuery } from "store/api/profile-management";
 import { useEffect, useState } from "react";
-import { useVerifyOtpWithdrawMutation, useWithdrawMutation } from "store/api/wallet-management";
+import { useResendOtpWithdrawMutation, useVerifyOtpWithdrawMutation, useWithdrawMutation } from "store/api/wallet-management";
 
 import turkeyFlag from "assets/img/icons/flag-turkey.png";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import { useAppSelector } from "store/hooks";
 import toast from "react-hot-toast";
-import auth from "layouts/auth";
-import { LabeLText } from "helpers";
+import WithdrawOTP from "components/WithdrawOTP";
 
 type Props = {
   onClose: () => void;
@@ -46,6 +45,7 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
   const [otpCode, setOtpCode] = useState("");
   const [transactionId, setTransactionId] = useState<string>("");
   const [verifyOtpWithdraw, { isSuccess: isVerifySuccess }] = useVerifyOtpWithdrawMutation()
+  const [resendOtpWithdraw, { isSuccess: isResendSuccess }] = useResendOtpWithdrawMutation()
   const user = useAppSelector((state) => state.user);
   const { data: accounts, isSuccess: getSuccessAccounts } =
     useBankAccountsQuery({
@@ -82,8 +82,13 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
     resolver,
   });
   const handleSendOtp = async () => {
-    await verifyOtpWithdraw({ code: otpCode, transactionId: transactionId }).then((res) => {
-      if (isVerifySuccess) {
+    if (otpCode.length > 6) return toast.error('لطفا کد را وارد کنید', { position: 'bottom-left' }) 
+    const data ={
+      transactionId,
+      code: otpCode
+    }
+    await verifyOtpWithdraw(data).then((res) => {
+      if (res && isVerifySuccess) {
         toast.success('برداشت با موفقیت انجام شد', { position: 'bottom-left' })
         onClose()
       } else {
@@ -91,13 +96,26 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
       }
     })
   }
+  
+  const handleReSendOtp = async () => {
+    await resendOtpWithdraw(transactionId).then((res) => {
+      if (isResendSuccess) {
+        toast.success('کد مجددا ارسال شد', { position: 'bottom-left' })
+      }
+    })
+  }
 
   const onSubmit = async (data: FiatFormType) => {
+    if (Number(data.amount) > stock) return toast.error('موجودی شما کافی نمی باشد', { position: 'bottom-left' })
+    setShowOtp(true);
+
     withdrawRequest({
       currencyCode: "TRY",
       amount: data.amount,
       destination: data.destination,
-    });
+    }).then((res: any) => {
+      setTransactionId(res.data?.id)
+    })
   };
 
   useEffect(() => {
@@ -122,7 +140,6 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
     setAccountOptions(list.filter((item) => !item.value.includes("IR")));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, getSuccessAccounts]);
-
   return (
     <div className="px-2">
       {!showOtp && (<>
@@ -267,28 +284,18 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
         </Form>
       </>)}
       {showOtp && (
-        <div className="d-flex justify-content-center align-items-center container">
-          <div className="py-5 px-3 d-flex-col justify-content-center align-items-center  " style={{ backgroundColor: '#f1f1f1', borderRadius: '10px' }}>
-            <div className="d-flex justify-content-center align-items-center flex-row">
-            </div>
-            <hr />
-            <h6> برای تایید تغییر تایید هویت دو مرحله ای کد ارسال شده به {LabeLText[user.otpMethod]} را وارد کنید </h6>
-            <OtpInput
-              containerStyle={auth["otp-container"]}
-              value={otpCode}
-              onChange={(code) => {
+        <div className="d-flex flex-column align-items-center justify-content-center mt-5">
+          <WithdrawOTP
+            securitySelection={user.otpMethod}
+            handleResend={handleReSendOtp}
+            handleGetCode={(code) => {
+              if (code.length === 6) {
                 setOtpCode(code);
-              }}
-              inputStyle={auth["otp-input"]}
-              numInputs={6}
-              renderSeparator={undefined}
-              placeholder={undefined}
-              shouldAutoFocus={true}
-              renderInput={(props) => <input {...props} />}
-            />
-
-            <button disabled={otpCode.length !== 6} className="btn btn-primary mt-4" onClick={handleSendOtp}>تایید</button>
-          </div>
+              }
+            }}
+          />
+          <button className="btn btn-primary mt-2 px-5 py-2"
+            onClick={handleSendOtp}> تایید </button>
         </div>
       )}
     </div>
@@ -296,7 +303,4 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
 };
 
 export default WithdrawFiat;
-function verifyOtpWithdraw(arg0: { code: any; transactionId: any; }) {
-  throw new Error("Function not implemented.");
-}
 
