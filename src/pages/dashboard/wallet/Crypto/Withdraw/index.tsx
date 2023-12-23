@@ -1,5 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AlertInfo, AlertWarning } from "components/AlertWidget";
+import OtpInput from "react-otp-input";
 import * as Yup from "yup";
 import { Controller, useForm as useRHF } from "react-hook-form";
 import {
@@ -23,6 +24,10 @@ import Currency from "components/Input/CurrencyInput";
 import { useState } from "react";
 import { useForm } from "@refinedev/core";
 import toast from "react-hot-toast";
+import auth from "layouts/auth";
+import { useAppSelector } from "store/hooks";
+import { LabeLText } from "helpers";
+import { useVerifyOtpWithdrawMutation } from "store/api/wallet-management";
 
 type CryptoFormType = {
   network: string;
@@ -40,7 +45,10 @@ const WithdrawCrypto = ({
   stock: number;
 }) => {
   const [showOtp, setShowOtp] = useState<boolean>(false);
-
+  const [otpCode, setOtpCode] = useState("");
+  const [transactionId, setTransactionId] = useState<string>("");
+  const user = useAppSelector((state) => state.user);
+  const [verifyOtpWithdraw, { isSuccess }] = useVerifyOtpWithdrawMutation()
   const optionList: OptionType[] = [
     {
       content: (
@@ -68,7 +76,7 @@ const WithdrawCrypto = ({
     resource: "transactions/withdraw",
     onMutationSuccess: (data, variables, context, isAutoSave) => {
       setShowOtp(true);
-      console.log("looooooooooog", { data, variables, context, isAutoSave });
+      setTransactionId('data');
     },
   });
 
@@ -98,6 +106,16 @@ const WithdrawCrypto = ({
         destination: data.destination,
       });
   };
+  const handleSendOtp = async () => {
+    await verifyOtpWithdraw({ code: otpCode, transactionId: transactionId }).then((res) => {
+      if (isSuccess) {
+        toast.success('برداشت با موفقیت انجام شد', { position: 'bottom-left' })
+        onClose()
+      } else {
+        toast.error('کد وارد شده صحیح نمی باشد', { position: 'bottom-left' })
+      }
+    })
+  }
 
   return (
     <div className="px-2">
@@ -127,7 +145,7 @@ const WithdrawCrypto = ({
                       onChange={(val) => setValue(name, val)}
                       options={optionList}
                       disabled={true}
-                      // hasError={Boolean(errors?.[name])}
+                    // hasError={Boolean(errors?.[name])}
                     />
                     {errors?.[name] && (
                       <FormFeedback tooltip>
@@ -181,7 +199,7 @@ const WithdrawCrypto = ({
                       value={value}
                       onChange={onChange}
                       placeholder="آدرس کیف پول خود را وارد کنید"
-                      // hasError={Boolean(errors?.[name])}
+                    // hasError={Boolean(errors?.[name])}
                     />
                     {errors?.[name] && (
                       <FormFeedback tooltip>
@@ -282,6 +300,35 @@ const WithdrawCrypto = ({
           </Row>
         </>
       )}
+      {showOtp && (
+        <div className="d-flex justify-content-center align-items-center container">
+          <div className="py-5 px-3 d-flex-col justify-content-center align-items-center  " style={{ backgroundColor: '#f1f1f1', borderRadius: '10px' }}>
+            <div className="d-flex justify-content-center align-items-center flex-row">
+            </div>
+            <hr />
+            <h6> برای تایید تغییر تایید هویت دو مرحله ای کد ارسال شده به {LabeLText[user.otpMethod]} را وارد کنید </h6>
+
+            <OtpInput
+              containerStyle={auth["otp-container"]}
+              value={otpCode}
+              onChange={(code) => {
+                setOtpCode(code);
+              }}
+              inputStyle={auth["otp-input"]}
+              numInputs={6}
+              renderSeparator={undefined}
+              placeholder={undefined}
+              shouldAutoFocus={true}
+              renderInput={(props) => <input {...props} />}
+            />
+
+            <button disabled={otpCode.length !== 6} className="btn btn-primary mt-4" onClick={handleSendOtp}>تایید</button>
+          </div>
+        </div>
+
+      )
+
+      }
     </div>
   );
 };
