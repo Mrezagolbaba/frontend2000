@@ -70,7 +70,7 @@ export default function ExchangeSection() {
 
   const handleChangeSelect = () => {};
   return (
-    <Card className="custom-card currency-exchange card--h100pc card-secondary">
+    <Card className="h-100">
       <CardHeader>
         <CardTitle tag="h5">خرید و فروش</CardTitle>
       </CardHeader>

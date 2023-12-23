@@ -28,6 +28,10 @@ declare const classNames: {
   readonly "user-summary__edit": "user-summary__edit";
   readonly "user-summary__last-seen": "user-summary__last-seen";
   readonly "user-summary__level": "user-summary__level";
+  readonly "sub-link": "sub-link";
+  readonly "table-responsive": "table-responsive";
+  readonly "data-table": "data-table";
+  readonly "text-50": "text-50";
   readonly __navbar: "__navbar";
   readonly expanded: "expanded";
 };

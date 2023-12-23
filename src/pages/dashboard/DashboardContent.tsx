@@ -1,6 +1,5 @@
 import User from "assets/img/icons/user.png";
-import USDT from "assets/img/coins/usdt.svg";
-import Turkey from "assets/img/coins/try.svg";
+
 import Deposit from "assets/img/icons/depositIcon.svg";
 import Exchange from "assets/img/icons/exchange.svg";
 import Market from "assets/img/icons/markets.svg";
@@ -46,6 +45,7 @@ import { getRates } from "store/reducers/features/rates/rateSlice";
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 import UserInformation from "./UserInformation";
 import ExchangeSection from "./ExchangeSection";
+import TradingMarkets from "./TradingMarkets";
 
 const DashboardContent = () => {
   const dispatch = useAppDispatch();
@@ -188,84 +188,7 @@ const DashboardContent = () => {
             <ExchangeSection />
           </Col>
           <Col xxl={5} xl={6}>
-            <Card className="custom-card wallet-card card--h100pc card-secondary">
-              <CardHeader className="d-flex flex-row justify-content-between align-items-center">
-                <CardTitle tag="h5"> بازارهای معاملاتی</CardTitle>
-                <div className="card-action">
-                  <div className="card-action">
-                    <a href="/dashboard/market"> مشاهده تمام بازارها </a>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardBody>
-                <div className="table-responsive">
-                  <table
-                    id="responsive"
-                    className="table-modern table table-borderless data-tables"
-                  >
-                    <thead>
-                      <tr className="tr-responsive">
-                        <th className="text-center">نام ارز</th>
-                        <th className="text-center">قیمت واحد (تومان)</th>
-                        {/* <th>تغییرات 24 ساعته</th> */}
-                        <th className="text-center">معامله در بازار</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rates?.data?.length > 0 &&
-                        rates?.data.map((data, index) => (
-                          <tr className="tr-responsive">
-                            <td className="text-center" data-th="نام ارز">
-                              <div>
-                                <span className="icon">
-                                  {data.pair === "USDT/IRR" ? (
-                                    <img src={USDT} alt="" />
-                                  ) : (
-                                    <img src={Turkey} alt="" />
-                                  )}
-                                </span>
-                                <span className="text-50 item-title">
-                                  {convertTextSingle(
-                                    extractLeftSide(data.pair),
-                                  )}
-                                </span>
-                              </div>
-                            </td>
-                            <td
-                              className="text-center"
-                              data-th="قیمت واحد (تومان)"
-                            >
-                              <span className="td-responsive">
-                                {convertIRRToToman(data?.rate)}
-                              </span>
-                            </td>
-                            {/* <td data-th="تغییرات ۲۴ ساعته">
-                            <div className="tm__crypto-changes">
-                              <span className="icon">
-                                <IoIosArrowDropdown color="red" />
-                              </span>
-                              <strong className="text-danger">{data?.change}</strong>
-                            </div>
-                          </td> */}
-                            <td
-                              className="text-center"
-                              data-th="معامله در بازار
-    "
-                            >
-                              <a
-                                href="/dashboard/buy-sell"
-                                className="btn-simple tm__actions"
-                              >
-                                شروع معامله
-                              </a>
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-              </CardBody>
-            </Card>
+            <TradingMarkets />
           </Col>
         </Row>
       </section>
