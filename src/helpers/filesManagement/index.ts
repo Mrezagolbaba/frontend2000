@@ -28,7 +28,10 @@ export function searchTurkishBanks(
   banks: BanksResponse[] | undefined,
   isSearchId: boolean | undefined = true
 ) {
-  const headAccountNumber = query.slice(4, 7);
+  let headAccountNumber = query.slice(4, 7);
+  if(query.includes("TR")){
+   headAccountNumber = query.slice(6, 9);
+  }
 
   let findBank: BanksResponse[] | [] = [];
   if (!isEmpty(query) && banks) {

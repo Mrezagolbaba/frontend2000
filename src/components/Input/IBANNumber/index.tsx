@@ -23,7 +23,7 @@ export default function IBANNumber({
 }: Props) {
   const [logo, setLogo] = useState<string>(arsonexMark);
 
-  const { data: banks,isSuccess } = useBanksQuery({
+  const { data: banks, isSuccess } = useBanksQuery({
     filters: "currencyCode||$eq||TRY",
   });
 
@@ -35,17 +35,19 @@ export default function IBANNumber({
         setBankId?.(result.bankId);
       } else setLogo(arsonexMark);
     } else setLogo(arsonexMark);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
-
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    if (value.length >= 7) {
-      const result = searchTurkishBanks(value,banks);
+    if (
+      (value.length >= 7 && !value.includes("TR")) ||
+      (value.includes("TR") && value.length >= 9)
+    ) {
+      const result = searchTurkishBanks(value, banks);
       if (result) {
         setLogo(result.logo);
-        setBankId?.(result.bankId)
+        setBankId?.(result.bankId);
       } else setLogo(arsonexMark);
     } else setLogo(arsonexMark);
     onChange?.(e);
