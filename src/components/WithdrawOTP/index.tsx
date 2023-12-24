@@ -30,6 +30,11 @@ const WithdrawOTP = ({ securitySelection, section, handleGetCode, handleResend }
         const seconds = timeInSeconds % 60;
         return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
     };
+    const handleResendClick = () => {
+        setTimeInSeconds(120)
+        handleResend()
+        setOtpCode("")
+    }
     return (
         <div className={otp["otp-container"]}>
             <hr />
@@ -43,10 +48,8 @@ const WithdrawOTP = ({ securitySelection, section, handleGetCode, handleResend }
                     <Button
                         color="link"
                         className={auth.link}
-                        onClick={() => {
-                            setTimeInSeconds(120)
-                            handleResend()
-                        }}
+                        onClick={handleResendClick}
+
                     >
                         ارسال مجدد کد
                     </Button>
@@ -59,8 +62,10 @@ const WithdrawOTP = ({ securitySelection, section, handleGetCode, handleResend }
                 value={otpCode}
                 onChange={(code) => {
                     setOtpCode(code);
-                    if (code.length === 6)
-                        handleGetCode(otpCode)
+                    if (code.length === 6){
+                        handleGetCode(code)
+                    }
+                    
                 }}
                 inputStyle={otp["otp-input"]}
                 numInputs={6}

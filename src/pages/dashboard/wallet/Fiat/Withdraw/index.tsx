@@ -17,7 +17,7 @@ import {
 } from "reactstrap";
 import { useBankAccountsQuery } from "store/api/profile-management";
 import { useEffect, useState } from "react";
-import { useVerifyOtpWithdrawMutation, useWithdrawMutation } from "store/api/wallet-management";
+import { useResendOtpWithdrawMutation, useVerifyOtpWithdrawMutation, useWithdrawMutation } from "store/api/wallet-management";
 
 import turkeyFlag from "assets/img/icons/flag-turkey.png";
 
@@ -45,6 +45,7 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
   const [otpCode, setOtpCode] = useState("");
   const [transactionId, setTransactionId] = useState<string>("");
   const [verifyOtpWithdraw, { isSuccess: isVerifySuccess }] = useVerifyOtpWithdrawMutation()
+  const [resendOtpWithdraw, { isSuccess: isResendSuccess }] = useResendOtpWithdrawMutation()
   const user = useAppSelector((state) => state.user);
   const { data: accounts, isSuccess: getSuccessAccounts } =
     useBankAccountsQuery({
@@ -81,12 +82,12 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
     resolver,
   });
   const handleSendOtp = async () => {
-    if (otpCode.length > 6) return toast.error('لطفا کد را وارد کنید', { position: 'bottom-left' })
-    console.log(otpCode, 'otpCode', transactionId, 'transactionId')
-    await verifyOtpWithdraw({
-      transactionId: transactionId,
-      code: otpCode,
-    }).then((res) => {
+    if (otpCode.length > 6) return toast.error('لطفا کد را وارد کنید', { position: 'bottom-left' }) 
+    const data ={
+      transactionId,
+      code: otpCode
+    }
+    await verifyOtpWithdraw(data).then((res) => {
       if (res && isVerifySuccess) {
         toast.success('برداشت با موفقیت انجام شد', { position: 'bottom-left' })
         onClose()
@@ -95,8 +96,13 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
       }
     })
   }
+  
   const handleReSendOtp = async () => {
-    console.log('resend')
+    await resendOtpWithdraw(transactionId).then((res) => {
+      if (isResendSuccess) {
+        toast.success('کد مجددا ارسال شد', { position: 'bottom-left' })
+      }
+    })
   }
 
   const onSubmit = async (data: FiatFormType) => {
