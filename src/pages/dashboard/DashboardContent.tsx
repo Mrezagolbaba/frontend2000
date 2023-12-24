@@ -1,17 +1,6 @@
-import User from "assets/img/icons/user.png";
-
 import Deposit from "assets/img/icons/depositIcon.svg";
-import Exchange from "assets/img/icons/exchange.svg";
-import Market from "assets/img/icons/markets.svg";
-import User1 from "assets/img/level-1.svg";
-import User2 from "assets/img/level-2.svg";
-
 import { useAppDispatch, useAppSelector } from "store/hooks";
-
 import { BsCheck2 } from "react-icons/bs";
-
-import { BiSupport } from "react-icons/bi";
-
 import {
   Button,
   Card,
@@ -33,6 +22,7 @@ import UserInformation from "./UserInformation";
 import ExchangeSection from "./ExchangeSection";
 import TradingMarkets from "./TradingMarkets";
 import EasyAccess from "./EasyAccess";
+import LatestDeals from "./LatestDeals";
 
 const DashboardContent = () => {
   const dispatch = useAppDispatch();
@@ -68,13 +58,6 @@ const DashboardContent = () => {
     transactions?.data?.length > 10
       ? { maxHeight: "300px", overflowY: "auto" }
       : "";
-  const filteredData = transactions.data.filter(
-    (item) =>
-      item.status !== "EXPIRED" &&
-      item.status !== "INITIATED" &&
-      item.status !== "DRAFT" &&
-      (item.type === "DEPOSIT" || item.type === "WITHDRAW"),
-  );
   return (
     <>
       <section className="mb-3">
@@ -189,111 +172,7 @@ const DashboardContent = () => {
       <section className="mb-4">
         <Row className="gx-4">
           <Col xxl={7} xl={6}>
-            <Card className="ccard--h100pc card-secondary">
-              <CardHeader className="d-flex flex-row justify-content-between align-items-center">
-                <CardTitle tag="h5">تراکنش&zwnj;های اخیر</CardTitle>
-              </CardHeader>
-              <CardBody>
-                <div className="table-responsive  ">
-                  <table
-                    className={`table table-borderless data-tables ${
-                      transactions.data.length === 0
-                        ? "table-modern"
-                        : "table-striped"
-                    }`}
-                  >
-                    {filteredData?.length > 0 && (
-                      <thead>
-                        <tr>
-                          <th scope="col">نوع</th>
-                          <th scope="col" className="text-center">
-                            مقدار
-                          </th>
-                          <th scope="col" className="text-center">
-                            دارایی
-                          </th>
-                          <th scope="col" className="text-center">
-                            زمان
-                          </th>
-                          <th scope="col" className="text-center">
-                            وضعیت
-                          </th>
-                        </tr>
-                      </thead>
-                    )}
-                    <tbody>
-                      {filteredData?.map((data, index) => {
-                        return (
-                          <tr key={index}>
-                            <td>
-                              <span
-                                className={
-                                  data.type === "DEPOSIT"
-                                    ? "text-success"
-                                    : "text-danger"
-                                }
-                              >
-                                {convertType(data.type)}
-                              </span>
-                            </td>
-                            <td className={`text-center`}>
-                              <span>
-                                <span style={{ fontSize: "10px" }}>
-                                  {data.currencyCode === "IRR"
-                                    ? "TMN"
-                                    : data.currencyCode}
-                                </span>{" "}
-                                {data.amount}
-                              </span>
-                            </td>
-                            <td className={`text-center`}>
-                              <span>
-                                {convertTextSingle(data.currencyCode)}
-                              </span>
-                            </td>
-                            <td className={`text-center`}>
-                              <span>
-                                {moment(data?.createdAt)
-                                  .locale("fa")
-                                  .format("DD MMMM YYYY")}
-                              </span>
-                            </td>
-                            <td className={`text-center`}>
-                              <span
-                                className={
-                                  data.status === "SUCCESSFUL"
-                                    ? "text-success"
-                                    : "text-danger"
-                                }
-                              >
-                                {data.status === "SUCCESSFUL"
-                                  ? " موفق"
-                                  : "ناموفق"}
-                              </span>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                      {filteredData?.length === 0 && (
-                        <tr>
-                          <td colSpan={4} className="text-center">
-                            <img
-                              src={Exchange}
-                              style={{
-                                height: "50px",
-                                width: "50px",
-                                marginBottom: "10px",
-                              }}
-                            />
-                            <p>اولین معامله خود را با آرسونیکس تجربه کنید</p>
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </CardBody>
-            </Card>
+            <LatestDeals />
           </Col>
           <Col xxl={5} xl={6}>
             <Card className="custom-card currencies-online-rates card-secondary">

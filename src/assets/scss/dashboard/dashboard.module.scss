@@ -402,6 +402,23 @@
   background-color: #24b314;
 }
 
+.table-striped {
+  tbody > tr td {
+    border-bottom-width: 0;
+  }
+  tbody > tr:nth-of-type(odd) > * {
+    background-color: #f8f8f8;
+    color: #03041b;
+    --bs-table-accent-bg: unset;
+  }
+}
+
+@media screen and (max-width: 1399px) {
+  .data-table tbody td {
+    min-width: 140px;
+  }
+}
+
 @media screen and (max-width: 978px) {
   .main-wrapper {
     margin-right: 0 !important;
@@ -459,6 +476,9 @@
 
   .user-summary {
     background-image: none !important;
+  }
+  .data-table tbody td {
+    min-width: 140px;
   }
 }
 
