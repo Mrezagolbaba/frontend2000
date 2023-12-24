@@ -367,6 +367,14 @@
     transform: translateY(-5px) scale(1.02);
     box-shadow: 0 5px 12px rgba(126, 142, 177, 0.2);
   }
+  &__value {
+    font-size: 1rem;
+    transition: all 0.25s ease;
+    font-weight: 500;
+    line-height: 1.2;
+    display: inline-block;
+    vertical-align: middle;
+  }
 }
 .trading {
   position: absolute;
@@ -448,6 +456,10 @@
       flex-wrap: nowrap;
     }
   }
+
+  .user-summary {
+    background-image: none !important;
+  }
 }
 
 @media screen and (max-width: 767px) {
@@ -494,6 +506,24 @@
     &__hamburger-btn {
       & + & {
         display: block;
+      }
+    }
+  }
+
+  .user-summary {
+    li {
+      flex: 0 0 50%;
+      padding: 0 25px;
+
+      &:not(:last-child, .user-summary__avatar) {
+        margin-left: 0;
+      }
+    }
+    &__avatar {
+      flex: 0 0 100% !important;
+      margin-left: 0;
+      span {
+        margin: auto;
       }
     }
   }

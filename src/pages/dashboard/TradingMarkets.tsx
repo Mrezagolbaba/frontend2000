@@ -13,9 +13,9 @@ export default function TradingMarkets() {
       <CardHeader className="d-flex flex-row justify-content-between align-items-center">
         <CardTitle tag="h5"> بازارهای معاملاتی</CardTitle>
         <div className="card-action">
-          <div className={dashboard["sub-link"]}>
-            <a href="/dashboard/market"> مشاهده تمام بازارها </a>
-          </div>
+          <a className={dashboard["sub-link"]} href="/dashboard/market">
+            مشاهده تمام بازارها
+          </a>
         </div>
       </CardHeader>
       <CardBody>

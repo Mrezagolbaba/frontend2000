@@ -34,6 +34,7 @@ declare const classNames: {
   readonly "text-50": "text-50";
   readonly "easy-text": "easy-text";
   readonly "easy-box": "easy-box";
+  readonly "easy-box__value": "easy-box__value";
   readonly trading: "trading";
   readonly "trading-up": "trading-up";
   readonly __navbar: "__navbar";

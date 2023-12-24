@@ -12,8 +12,6 @@ import { BsCheck2 } from "react-icons/bs";
 
 import { BiSupport } from "react-icons/bi";
 
-import { RxCalendar } from "react-icons/rx";
-import useSession from "services/auth/session";
 import {
   Button,
   Card,
@@ -23,26 +21,14 @@ import {
   Col,
   Row,
 } from "reactstrap";
-import { CiEdit } from "react-icons/ci";
-
-import { useGetMe } from "services/auth/user";
-import { useEffect, useState } from "react";
-import ExchangeInput from "components/Input/ExchangeInput";
-import { Isessions } from "types/user";
+import { useEffect } from "react";
 import moment from "jalali-moment";
-import { getCurrencySwap } from "services/exchange";
 import { getTransactionsList } from "store/reducers/features/transaction/transactionSlice";
 import { getExchangeList } from "store/reducers/features/exchange/exchangeSlice";
-import {
-  convertIRRToToman,
-  convertText,
-  convertTextSingle,
-  extractLeftSide,
-} from "helpers";
-import { Link, useNavigate } from "react-router-dom";
+import { convertTextSingle } from "helpers";
+import { Link } from "react-router-dom";
 import { getRates } from "store/reducers/features/rates/rateSlice";
 
-import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 import UserInformation from "./UserInformation";
 import ExchangeSection from "./ExchangeSection";
 import TradingMarkets from "./TradingMarkets";
@@ -53,13 +39,14 @@ const DashboardContent = () => {
   const user = useAppSelector((state) => state.user);
   const transactions = useAppSelector((state) => state.transaction);
   const exchange = useAppSelector((state) => state.exchange);
-  const rates = useAppSelector((state) => state.rates);
 
   useEffect(() => {
     dispatch(getExchangeList(user.id));
     dispatch(getTransactionsList(user.id));
     dispatch(getRates());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const convertType = (type: string) => {
     if (type === "DEPOSIT") {
       return "واریز";
@@ -81,9 +68,12 @@ const DashboardContent = () => {
     transactions?.data?.length > 10
       ? { maxHeight: "300px", overflowY: "auto" }
       : "";
-  const filteredData = transactions.data.filter(item =>
-    item.status !== "EXPIRED" && item.status !== "INITIATED" && item.status !== "DRAFT" &&
-    (item.type === "DEPOSIT" || item.type === "WITHDRAW")
+  const filteredData = transactions.data.filter(
+    (item) =>
+      item.status !== "EXPIRED" &&
+      item.status !== "INITIATED" &&
+      item.status !== "DRAFT" &&
+      (item.type === "DEPOSIT" || item.type === "WITHDRAW"),
   );
   return (
     <>
