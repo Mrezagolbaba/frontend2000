@@ -1,5 +1,4 @@
-import Deposit from "assets/img/icons/depositIcon.svg";
-import { useAppDispatch, useAppSelector } from "store/hooks";
+import { useAppSelector } from "store/hooks";
 import { BsCheck2 } from "react-icons/bs";
 import {
   Button,
@@ -10,56 +9,18 @@ import {
   Col,
   Row,
 } from "reactstrap";
-import { useEffect } from "react";
-import moment from "jalali-moment";
-import { getTransactionsList } from "store/reducers/features/transaction/transactionSlice";
-import { getExchangeList } from "store/reducers/features/exchange/exchangeSlice";
-import { convertTextSingle } from "helpers";
 import { Link } from "react-router-dom";
-import { getRates } from "store/reducers/features/rates/rateSlice";
 
 import UserInformation from "./UserInformation";
 import ExchangeSection from "./ExchangeSection";
 import TradingMarkets from "./TradingMarkets";
 import EasyAccess from "./EasyAccess";
 import LatestDeals from "./LatestDeals";
-
-import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import LastTransactions from "./LastTransactions";
 
 const DashboardContent = () => {
-  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
-  const transactions = useAppSelector((state) => state.transaction);
-  const exchange = useAppSelector((state) => state.exchange);
 
-  useEffect(() => {
-    dispatch(getExchangeList(user.id));
-    dispatch(getTransactionsList(user.id));
-    dispatch(getRates());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const convertType = (type: string) => {
-    if (type === "DEPOSIT") {
-      return "واریز";
-    }
-    if (type === "WITHDRAW") {
-      return "برداشت";
-    }
-    if (type === "BUY") {
-      return "خرید";
-    }
-    if (type === "SELL") {
-      return "فروش";
-    }
-    if (type === "EXCHANGE_SOURCE" || type === "EXCHANGE_DESTINATION") {
-      return "تبدیل";
-    }
-  };
-  const tableBodyStyle: any =
-    transactions?.data?.length > 10
-      ? { maxHeight: "300px", overflowY: "auto" }
-      : "";
   return (
     <>
       <section className="mb-3">
@@ -177,95 +138,7 @@ const DashboardContent = () => {
             <LatestDeals />
           </Col>
           <Col xxl={5} xl={6} className="mb-4">
-            <Card>
-              <CardHeader className="d-flex flex-row justify-content-between align-items-center">
-                <CardTitle tag="h5"> تراکنش های اخیر </CardTitle>
-                <a className={dashboard["sub-link"]} href="/dashboard/orders">
-                  سفارشات من
-                </a>
-              </CardHeader>
-              <CardBody>
-                <div className="table-responsive">
-                  <table
-                    className={`table table-borderless ${
-                      exchange.data.length === 0
-                        ? "table-modern"
-                        : "table-striped"
-                    }`}
-                  >
-                    {exchange.data.length > 0 && (
-                      <thead>
-                        <tr>
-                          <th scope="col" className="text-center">
-                            بازار
-                          </th>
-                          <th scope="col" className="text-center">
-                            مقدار
-                          </th>
-                          <th scope="col" className="text-center">
-                            قیمت واحد
-                          </th>
-                          <th scope="col" className="text-start">
-                            تاریخ
-                          </th>
-                        </tr>
-                      </thead>
-                    )}
-                    <tbody className={tableBodyStyle}>
-                      {exchange.data.length > 0 &&
-                        exchange.data.map((data, index) => (
-                          <tr key={index}>
-                            <td className="text-center">
-                              <span className="text-success">
-                                {convertTextSingle(
-                                  data.destinationCurrencyCode,
-                                )}
-                              </span>{" "}
-                              -{" "}
-                              <span className="text-danger">
-                                {convertTextSingle(data?.sourceCurrencyCode)}
-                              </span>
-                            </td>
-                            <td className="text-center">
-                              <span style={{ fontSize: "10px" }}>
-                                {data.destinationCurrencyCode === "IRR"
-                                  ? "TMN"
-                                  : data.destinationCurrencyCode}
-                              </span>{" "}
-                              {data?.sourceAmount}
-                            </td>
-                            <td className="text-center">
-                              {data?.exchangeRate.substring(0, 5)}
-                            </td>
-                            <td className="text-start">
-                              <span className="d-ltr d-block">
-                                {moment(data?.createdAt)
-                                  .locale("fa")
-                                  .format("DD MMMM YYYY")}
-                              </span>
-                            </td>
-                          </tr>
-                        ))}
-                      {exchange.data.length === 0 && (
-                        <tr>
-                          <td colSpan={4} className="text-center bg-white">
-                            <img
-                              src={Deposit}
-                              style={{
-                                height: "50px",
-                                width: "50px",
-                                marginBottom: "10px",
-                              }}
-                            />
-                            <p>اولین تراکنش خود را با آرسونیکس تجربه کنید</p>
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </CardBody>
-            </Card>
+            <LastTransactions />
           </Col>
         </Row>
       </section>

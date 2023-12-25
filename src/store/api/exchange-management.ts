@@ -15,7 +15,16 @@ export const exchangeManagement = enhancedApi.injectEndpoints({
         };
       },
     }),
+    currencySwap: builder.query<any, any>({
+      query({params}) {
+        return {
+          method: "GET",
+          url: `/currency-swaps`,
+          params: params,
+        };
+      },
+    }),
   }),
 });
 
-export const { useLazyRatesQuery } = exchangeManagement;
+export const { useLazyRatesQuery, useCurrencySwapQuery } = exchangeManagement;
