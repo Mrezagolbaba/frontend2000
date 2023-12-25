@@ -24,6 +24,8 @@ import TradingMarkets from "./TradingMarkets";
 import EasyAccess from "./EasyAccess";
 import LatestDeals from "./LatestDeals";
 
+import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+
 const DashboardContent = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
@@ -171,13 +173,16 @@ const DashboardContent = () => {
       </section>
       <section className="mb-4">
         <Row className="gx-4">
-          <Col xxl={7} xl={6}>
+          <Col xxl={7} xl={6} className="mb-4">
             <LatestDeals />
           </Col>
-          <Col xxl={5} xl={6}>
-            <Card className="custom-card currencies-online-rates card-secondary">
+          <Col xxl={5} xl={6} className="mb-4">
+            <Card>
               <CardHeader className="d-flex flex-row justify-content-between align-items-center">
-                <CardTitle tag="h5">آخرین معاملات </CardTitle>
+                <CardTitle tag="h5"> تراکنش های اخیر </CardTitle>
+                <a className={dashboard["sub-link"]} href="/dashboard/orders">
+                  سفارشات من
+                </a>
               </CardHeader>
               <CardBody>
                 <div className="table-responsive">
