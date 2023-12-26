@@ -88,7 +88,6 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, getSuccessAccounts]);
-  console.log("vert", isVerified);
 
   return (
     <div className="px-2">
