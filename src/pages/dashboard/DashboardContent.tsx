@@ -18,6 +18,8 @@ import EasyAccess from "./EasyAccess";
 import LatestDeals from "./LatestDeals";
 import LastTransactions from "./LastTransactions";
 
+import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+
 const DashboardContent = () => {
   const user = useAppSelector((state) => state.user);
 
