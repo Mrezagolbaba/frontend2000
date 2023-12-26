@@ -24,6 +24,9 @@ import tetter from "assets/img/coins/tether.svg";
 import TRX from "assets/img/coins/trx.png";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
+import { useLazyRatesQuery } from "store/api/exchange-management";
+import { CurrencyCode } from "types/wallet";
+import CurrencyInput from "react-currency-input-field";
 
 const options = [
   {
@@ -52,6 +55,8 @@ export default function ExchangeSection() {
   const toggleSource = () => setIsOpenSource((prevState) => !prevState);
   const toggleDestination = () =>
     setIsOpenDestination((prevState) => !prevState);
+
+  const [getRate, { data: currencyRes }] = useLazyRatesQuery();
   const {
     handleSubmit,
     control,
@@ -61,14 +66,13 @@ export default function ExchangeSection() {
   } = useForm({
     mode: "onChange",
     defaultValues: {
-      source: "",
+      source: "" as number | string,
       sourceCurrency: { value: "IRR", label: { text: "تومان", img: Rial } },
-      destination: "",
+      destination: "" as number | string,
       destinationCurrency: { value: "TRY", label: { text: "لیر", img: Lira } },
     },
   });
 
-  const handleChangeSelect = () => {};
   return (
     <Card className="h-100">
       <CardHeader>
@@ -89,7 +93,16 @@ export default function ExchangeSection() {
                       name={name}
                       id={name}
                       value={value}
-                      onChange={onChange}
+                      className="form-control"
+                      onChange={(e) => {
+                        onChange(e);
+                        if (currencyRes) {
+                          const value = e.target.value;
+                          const result =
+                            Number(value) * Number(currencyRes.rate);
+                          setValue("destination", result);
+                        }
+                      }}
                       placeholder="مبلغ به "
                     />
                   )}
@@ -139,6 +152,13 @@ export default function ExchangeSection() {
                               setValue(name, {
                                 value: option.value,
                                 label: option.label,
+                              });
+                              getRate({
+                                sourceCurrencyCode:
+                                  option.value as CurrencyCode,
+                                targetCurrencyCode: getValues(
+                                  "destinationCurrency",
+                                ).value as CurrencyCode,
                               });
                             }}
                           >
@@ -204,7 +224,16 @@ export default function ExchangeSection() {
                       name={name}
                       id={name}
                       value={value}
-                      onChange={onChange}
+                      className="form-control"
+                      onChange={(e) => {
+                        onChange(e);
+                        if (currencyRes) {
+                          const value = e.target.value;
+                          const result =
+                            Number(value) / Number(currencyRes.rate);
+                          setValue("source", result);
+                        }
+                      }}
                       placeholder="مبلغ به "
                     />
                   )}
@@ -254,6 +283,12 @@ export default function ExchangeSection() {
                               setValue(name, {
                                 value: option.value,
                                 label: option.label,
+                              });
+                              getRate({
+                                sourceCurrencyCode: getValues("sourceCurrency")
+                                  .value as CurrencyCode,
+                                targetCurrencyCode:
+                                  option.value as CurrencyCode,
                               });
                             }}
                           >
