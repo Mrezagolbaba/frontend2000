@@ -42,8 +42,7 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
               <thead>
                 <tr>
                   <th>ارز</th>
-                  <th className="text-center">موجودی</th>
-                  <th className="text-center"> ارزش تخمینی</th>
+                  <th className="text-center">موجودی در دسترس</th>
                   <th className="text-center" />
                   <th className="text-center" />
                   <th className="text-center" />
@@ -53,9 +52,6 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
                 {isLoading ? (
                   <tr>
                     <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="text-center placeholder-glow">
                       <div className="placeholder col-12 rounded" />
                     </td>
                     <td className="text-center placeholder-glow">
@@ -83,9 +79,8 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
                         <span className={wallet["crypto-name"]}>لیر</span>
                       </div>
                     </td>
-                    <td className="text-center">{Number(TRY.balance | 0)}</td>
                     <td className="text-center">
-                      {Number(TRY.availableBalance | 0)}
+                      {Number(TRY.availableBalance | 0).toLocaleString()}
                     </td>
                     <td className="text-center">
                       <Button
