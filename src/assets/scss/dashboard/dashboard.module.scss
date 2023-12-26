@@ -139,6 +139,22 @@
       width: 86px;
     }
   }
+  &__user {
+    width: 160px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 40px 0;
+    border-bottom: 1px solid rgba(3, 4, 27, 0.03);
+    img {
+      width: 46px;
+      height: 46px;
+      margin-bottom: 10px;
+    }
+    &__name {
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+  }
   &__navbar {
     padding: 60px 0 0;
     flex-direction: column;
