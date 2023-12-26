@@ -6,6 +6,7 @@ import { PiShieldCheckeredFill } from "react-icons/pi";
 
 import auth from "assets/scss/auth/auth.module.scss";
 import HeadAuth from "layouts/headAuth";
+import NormalHeader from "layouts/headPage/NormalHeader";
 
 type Props = {
   children: ReactNode;
@@ -15,7 +16,8 @@ const AuthLayout = ({ children }: Props) => {
   return (
     <div className={auth.wrapper}>
       <main>
-        <HeadAuth />
+        <NormalHeader />
+        {/* <HeadAuth /> */}
         {/* <header className={auth.header}>
           <div className={auth.logo}>
             <Link to="/">
