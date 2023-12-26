@@ -67,21 +67,11 @@ function LatestDeals() {
               <>
                 <thead>
                   <tr>
-                    <th scope="col" className="text-center">
-                      نوع تراکنش
-                    </th>
-                    <th scope="col" className="text-center">
-                      ارز
-                    </th>
-                    <th scope="col" className="text-center">
-                      مقدار
-                    </th>
-                    <th scope="col" className="text-center">
-                      وضعیت
-                    </th>
-                    <th scope="col" className="text-center">
-                      تاریخ
-                    </th>
+                    <th scope="col">نوع تراکنش</th>
+                    <th scope="col">ارز</th>
+                    <th scope="col">مقدار</th>
+                    <th scope="col">وضعیت</th>
+                    <th scope="col">تاریخ</th>
                   </tr>
                 </thead>
                 {isLoading ? (
@@ -142,7 +132,7 @@ function LatestDeals() {
                   <tbody>
                     {transActions?.map((item) => (
                       <tr>
-                        <td className="text-center">
+                        <td>
                           <span
                             className={
                               item.type === "DEPOSIT"
@@ -153,13 +143,9 @@ function LatestDeals() {
                             {item.type === "DEPOSIT" ? "واریز" : "برداشت"}
                           </span>
                         </td>
-                        <td className="text-center">
-                          {convertCoins(item.currencyCode)}
-                        </td>
-                        <td className="text-center">
-                          {Number(item.amount).toLocaleString()}
-                        </td>
-                        <td className="text-center">
+                        <td>{convertCoins(item.currencyCode)}</td>
+                        <td>{Number(item.amount).toLocaleString()}</td>
+                        <td>
                           <span
                             className={`${
                               item.status === "CANCELED" ||
@@ -174,11 +160,11 @@ function LatestDeals() {
                             {convertStatus(item.status)}
                           </span>
                         </td>
-                        <td className="text-center">
+                        <td>
                           <span className="d-ltr d-block">
                             {moment(item?.createdAt)
                               .locale("fa")
-                              .format("hh:mm YYYY/MM/DD")}
+                              .format("HH:MM YYYY/MM/DD")}
                           </span>
                         </td>
                       </tr>

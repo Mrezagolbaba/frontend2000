@@ -24,23 +24,17 @@ export default function LastTransactions() {
         </a>
       </CardHeader>
       <CardBody>
-        <div className="table-responsive">
-          <table className={`table table-borderless table-striped`}>
+        <div className={dashboard["table-responsive"]}>
+          <table
+            className={`${dashboard["data-table"]} ${dashboard["table-striped"]}`}
+          >
             {data && data?.length > 0 && (
               <thead>
                 <tr>
-                  <th scope="col" className="text-center">
-                    بازار
-                  </th>
-                  <th scope="col" className="text-center">
-                    مقدار
-                  </th>
-                  <th scope="col" className="text-center">
-                    قیمت واحد
-                  </th>
-                  <th scope="col" className="text-start">
-                    تاریخ
-                  </th>
+                  <th scope="col">بازار</th>
+                  <th scope="col">مقدار</th>
+                  <th scope="col">قیمت واحد</th>
+                  <th scope="col">زمان</th>
                 </tr>
               </thead>
             )}
@@ -49,29 +43,27 @@ export default function LastTransactions() {
                 data?.length > 0 &&
                 data.map((item, index) => (
                   <tr key={index}>
-                    <td className="text-center">
+                    <td>
                       <span className="text-success">
-                        {convertTextSingle(item.destinationCurrencyCode)}
+                        {item.destinationCurrencyCode}
                       </span>{" "}
                       -{" "}
                       <span className="text-danger">
-                        {convertTextSingle(item?.sourceCurrencyCode)}
+                        {item?.sourceCurrencyCode}
                       </span>
                     </td>
-                    <td className="text-center">
+                    <td>
                       <span style={{ fontSize: "10px" }}>
                         {item.sourceCurrencyCode}
                       </span>{" "}
                       {Number(item?.sourceAmount).toLocaleString()}
                     </td>
-                    <td className="text-center">
-                      {item?.exchangeRate.substring(0, 5)}
-                    </td>
-                    <td className="text-start">
+                    <td>{item?.exchangeRate.substring(0, 5)}</td>
+                    <td>
                       <span className="d-ltr d-block">
                         {moment(item?.createdAt)
                           .locale("fa")
-                          .format("DD MMMM YYYY")}
+                          .format("HH:MM YYYY/MM/DD")}
                       </span>
                     </td>
                   </tr>
