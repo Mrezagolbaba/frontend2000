@@ -1,13 +1,18 @@
 import { convertIRRToToman, convertTextSingle, extractLeftSide } from "helpers";
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import USDT from "assets/img/coins/usdt.svg";
 import Turkey from "assets/img/coins/try.svg";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import { useEffect } from "react";
+import { getRates } from "store/reducers/features/rates/rateSlice";
 export default function TradingMarkets() {
+  const dispatch = useAppDispatch();
   const rates = useAppSelector((state) => state.rates);
-
+  useEffect(() => {
+    dispatch(getRates());
+  }, []);
   return (
     <Card className="h-100">
       <CardHeader className="d-flex flex-row justify-content-between align-items-center">
