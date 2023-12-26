@@ -18,7 +18,12 @@ import { AlertInfo } from "components/AlertWidget";
 import saman from "assets/img/bank/Saman.svg";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
-import { useDepositInfoQuery } from "store/api/wallet-management";
+import {
+  useDepositInfoQuery,
+  useDepositMutation,
+} from "store/api/wallet-management";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import { useBankAccountsQuery } from "store/api/profile-management";
 
 type ShebaFormType = {
   accountName: string;
@@ -28,8 +33,32 @@ type ShebaFormType = {
 };
 const ShebaForm = () => {
   const [hasLevel2, setHasLevel2] = useState<boolean>(true);
+  const [optionList, setOptionList] = useState<OptionType[] | []>([]);
+  const [selectedBank, setSelectedBank] = useState<string>("");
+  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
+  const [otherInfo, setOtherInfo] = useState<{
+    ownerName?: string;
+    code?: string;
+  }>({
+    ownerName: "",
+    code: "",
+  });
 
   const { data, isLoading, isSuccess } = useDepositInfoQuery("IRR");
+
+  const [
+    depositRequest,
+    {
+      data: depResponse,
+      isLoading: isLoadingDeposit,
+      isSuccess: isSubmitSuccess,
+    },
+  ] = useDepositMutation();
+
+  const { data: accounts, isSuccess: getSuccessAccounts } =
+    useBankAccountsQuery({
+      filters: "currencyCode||$eq||IRR",
+    });
 
   const resolver = yupResolver(
     Yup.object().shape({
@@ -37,7 +66,7 @@ const ShebaForm = () => {
       shebaNumber: Yup.string().required(),
       depositId: Yup.string().required(),
       bankName: Yup.string().required(),
-    })
+    }),
   );
   const {
     handleSubmit,
@@ -60,18 +89,68 @@ const ShebaForm = () => {
   };
 
   useEffect(() => {
-    if (isSuccess && data && data.length > 0) {
-      reset({
-        accountName: data[0]?.accountOwnerName,
-        shebaNumber: data[0]?.iban,
-        bankName: data[0]?.bankName,
+    let list = [] as OptionType[] | [];
+    if (data && data?.length > 0) {
+      setSelectedBank(data[0].iban);
+      setOtherInfo({
+        ownerName: data[0].accountOwnerName,
+      });
+      list = data.map((item) => {
+        const ibanValue = item.iban.replace("TR", "");
+        // const bank = searchTurkishBanks(ibanValue);
+        return {
+          value: item.iban,
+          otherOptions: {
+            ownerName: item.accountOwnerName,
+          },
+          content: (
+            <div className={wallet["items-credit"]}>
+              {/* <span className={wallet["items-credit__icon"]}>
+                <span
+                  className="mx-3"
+                  dangerouslySetInnerHTML={{ __html: bank.logo }}
+                />
+              </span> */}
+              <span dir="ltr">{item.bankName}</span>
+            </div>
+          ),
+        };
       });
     }
-  }, [data, isSuccess, reset]);
+    setOptionList(list);
+  }, [data, isSuccess]);
+
+  useEffect(() => {
+    accounts &&
+      depositRequest({
+        currencyCode: "IRR",
+        amount: "1",
+        flow: "MANUAL_WITH_PAYMENT_IDENTIFIER",
+        bankAccountId: accounts[0]?.id,
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accounts, getSuccessAccounts]);
 
   return hasLevel2 ? (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Row>
+        <Col xs={12} lg={6}>
+          <FormGroup>
+            <Label htmlFor="bank-name"> بانک مقصد:</Label>
+            <DropdownInput
+              id="bank-name"
+              value={selectedBank}
+              onChange={(val, otherOption) => {
+                setSelectedBank(val);
+                setOtherInfo({
+                  ownerName: otherOption.ownerName,
+                });
+              }}
+              options={optionList}
+              // hasError={Boolean(errors?.[name])}
+            />
+          </FormGroup>
+        </Col>
         <Col xs={12} lg={6}>
           <Controller
             name="accountName"
@@ -83,7 +162,7 @@ const ShebaForm = () => {
                   disabled
                   type="text"
                   name={name}
-                  value={value}
+                  value={otherInfo?.ownerName}
                   onChange={onChange}
                   ref={ref}
                 />
@@ -98,26 +177,30 @@ const ShebaForm = () => {
             render={({ field: { name, value } }) => (
               <FormGroup>
                 <Label htmlFor={name}> شماره شبا:</Label>
-                <CopyInput text={value} />
+                <CopyInput text={selectedBank || ""} />
                 <FormText>حداقل مبلغ واریز: 500 هزارتومان</FormText>
               </FormGroup>
             )}
           />
         </Col>
-        <Col xs={12} lg={6}>
-          <Controller
-            name="depositId"
-            control={control}
-            render={({ field: { name, value } }) => (
-              <FormGroup>
-                <Label htmlFor={name}> شناسه واریز:</Label>
-                <CopyInput text={value} />
-                <FormText>کارمزد واریز بین بانکی: صفر تومان</FormText>
-              </FormGroup>
-            )}
-          />
-        </Col>
-        <Col xs={12} lg={6}>
+        {depResponse && (
+          <Col xs={12} lg={6}>
+            <Controller
+              name="depositId"
+              control={control}
+              render={({ field: { name, value } }) => (
+                <FormGroup>
+                  <Label htmlFor={name}> شناسه واریز:</Label>
+                  <CopyInput
+                    text={depResponse.providerData.flowPaymentIdentifier || ""}
+                  />
+                  <FormText>کارمزد واریز بین بانکی: صفر تومان</FormText>
+                </FormGroup>
+              )}
+            />
+          </Col>
+        )}
+        {/* <Col xs={12} lg={6}>
           <Controller
             name="bankName"
             control={control}
@@ -147,7 +230,7 @@ const ShebaForm = () => {
               </FormGroup>
             )}
           />
-        </Col>
+        </Col> */}
       </Row>
 
       <Row>

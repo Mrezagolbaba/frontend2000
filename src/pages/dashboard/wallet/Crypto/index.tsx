@@ -161,7 +161,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                         </Button>
                       </td>
                     </tr>
-                    <tr key={1}>
+                    {/* <tr key={1}>
                       <td>
                         <div>
                           <img
@@ -222,7 +222,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                           معامله
                         </Button>
                       </td>
-                    </tr>
+                    </tr> */}
                   </>
                 ) : (
                   <tr>دیتایی موجود نیست</tr>
