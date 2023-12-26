@@ -66,9 +66,9 @@ export default function ExchangeSection() {
   } = useForm({
     mode: "onChange",
     defaultValues: {
-      source: "",
+      source: "" as number | string,
       sourceCurrency: { value: "IRR", label: { text: "تومان", img: Rial } },
-      destination: "",
+      destination: "" as number | string,
       destinationCurrency: { value: "TRY", label: { text: "لیر", img: Lira } },
     },
   });
@@ -88,7 +88,7 @@ export default function ExchangeSection() {
                   name="source"
                   control={control}
                   render={({ field: { name, value, onChange } }) => (
-                    <CurrencyInput
+                    <Input
                       type="text"
                       name={name}
                       id={name}
@@ -100,8 +100,7 @@ export default function ExchangeSection() {
                           const value = e.target.value;
                           const result =
                             Number(value) * Number(currencyRes.rate);
-                          setValue("destination", result.toString());
-                          console.log("here", value, result);
+                          setValue("destination", result);
                         }
                       }}
                       placeholder="مبلغ به "
@@ -220,7 +219,7 @@ export default function ExchangeSection() {
                   name="destination"
                   control={control}
                   render={({ field: { name, value, onChange } }) => (
-                    <CurrencyInput
+                    <Input
                       type="text"
                       name={name}
                       id={name}
@@ -232,7 +231,7 @@ export default function ExchangeSection() {
                           const value = e.target.value;
                           const result =
                             Number(value) / Number(currencyRes.rate);
-                          setValue("source", result.toString());
+                          setValue("source", result);
                         }
                       }}
                       placeholder="مبلغ به "
