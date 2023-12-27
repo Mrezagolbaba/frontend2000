@@ -213,6 +213,9 @@
       }
     }
   }
+  .short-navbar {
+    height: calc(100vh - 370px) !important;
+  }
 }
 
 .custom-card {

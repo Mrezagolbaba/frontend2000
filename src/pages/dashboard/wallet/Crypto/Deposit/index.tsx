@@ -19,7 +19,6 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
-import Currency from "components/Input/CurrencyInput";
 import { useEffect, useState } from "react";
 import CopyInput from "components/Input/CopyInput";
 import {
@@ -31,7 +30,6 @@ import { success } from "assets/scss/components/Alert/style.module.scss";
 import CountdownTimer from "components/Input/CountDownInput";
 type CryptoFormType = {
   network: string;
-  amount: string;
 };
 
 type Props = {
@@ -68,7 +66,6 @@ const DepositCrypto = ({ onClose, currency }: Props) => {
 
   const resolver = yupResolver(
     Yup.object().shape({
-      amount: Yup.string().required(),
       network: Yup.string().required(),
     }),
   );
@@ -83,14 +80,13 @@ const DepositCrypto = ({ onClose, currency }: Props) => {
     mode: "onChange",
     defaultValues: {
       network: "TRC20",
-      amount: "",
     },
     resolver,
   });
   const onSubmit = (data: CryptoFormType) => {
     depositRequest({
       currencyCode: currency,
-      amount: data.amount,
+      amount: "1",
       flow: "MANUAL_WITH_WALLET_ADDRESS",
     });
   };
@@ -98,7 +94,6 @@ const DepositCrypto = ({ onClose, currency }: Props) => {
   const handleClose = () => {
     reset({
       network: "TRC20",
-      amount: "",
     });
     setResult({
       networkName: "",
@@ -137,11 +132,6 @@ const DepositCrypto = ({ onClose, currency }: Props) => {
           بین المللی، آرسونیکس در هر واریز کیف پول کابران را به طور کامل
           تغییر می دهد."
       />
-      <AlertInfo
-        hasIcon
-        text="در صورت واریز مبلغ متفاوت از عدد مشخص شده باید مبلغ واریز را تغییر
-          دهید."
-      />
       {!showResult ? (
         <form onSubmit={handleSubmit(onSubmit)}>
           <Row>
@@ -165,36 +155,6 @@ const DepositCrypto = ({ onClose, currency }: Props) => {
                       <FormFeedback tooltip>
                         {errors[name]?.message}
                       </FormFeedback>
-                    )}
-                  </FormGroup>
-                )}
-              />
-            </Col>
-            <Col xs={12} lg={6}>
-              <Controller
-                name="amount"
-                control={control}
-                render={({ field: { name, value } }) => (
-                  <FormGroup className="position-relative">
-                    <div className="d-flex flex-row justify-content-between">
-                      <Label htmlFor={name}>مبلغ واریز: </Label>
-                    </div>
-                    <Currency
-                      name={name}
-                      value={value}
-                      onChange={(val) => setValue(name, val)}
-                      // placeholder="مبلغ را به تومان وارد کنید"
-                      hasError={Boolean(errors?.[name])}
-                    />
-                    {errors?.[name] && (
-                      <FormFeedback tooltip>
-                        {errors[name]?.message}
-                      </FormFeedback>
-                    )}
-                    {fee && (
-                      <FormText>
-                        کارمزد دریافت : {fee.depositFeeStatic} {currency}{" "}
-                      </FormText>
                     )}
                   </FormGroup>
                 )}

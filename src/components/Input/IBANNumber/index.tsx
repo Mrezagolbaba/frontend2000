@@ -1,8 +1,8 @@
-import { ChangeEvent, ReactElement, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Input } from "reactstrap";
 import style from "assets/scss/components/Input/ibanNumber.module.scss";
 import { searchTurkishBanks } from "helpers/filesManagement";
-import arsonexMark from "assets/img/icons/Arsonex Mark.svg";
+import arsonexMark from "assets/img/icons/bankDefault.svg";
 import { useBanksQuery } from "store/api/profile-management";
 type Props = {
   name: string;

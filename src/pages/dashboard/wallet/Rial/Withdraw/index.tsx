@@ -34,7 +34,9 @@ type Props = {
 };
 
 export default function Withdraw({ onClose }: Props) {
-  const { firstName, lastName } = useAppSelector((state) => state.user);
+  const { firstName, lastName, secondTierVerified } = useAppSelector(
+    (state) => state.user,
+  );
   const navigate = useNavigate();
   const [hasAccount, setHasAccount] = useState<boolean>(true);
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
@@ -135,10 +137,12 @@ export default function Withdraw({ onClose }: Props) {
   return hasAccount ? (
     <form className="px-3" onSubmit={handleSubmit(onSubmit)}>
       <Row>
-        <AlertInfo
-          hasIcon
-          text="برای افزایش میزان برداشت، احراز هویت سطح دو را تکمیل نمایید."
-        />
+        {!secondTierVerified && (
+          <AlertInfo
+            hasIcon
+            text="برای افزایش میزان برداشت، احراز هویت سطح دو را تکمیل نمایید."
+          />
+        )}
         <AlertInfo
           hasIcon
           text="تسویه حساب با بانک‌های سامان، صادرات، کشاورزی، پارسیان، سپه، شهر، ملی، اقتصادنوین، آینده، پاسارگارد، ملت و تجارت سریع‌تر انجام می‌شود."

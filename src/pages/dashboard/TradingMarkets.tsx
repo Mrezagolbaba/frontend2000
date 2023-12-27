@@ -7,6 +7,7 @@ import Turkey from "assets/img/coins/try.svg";
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 import { useEffect } from "react";
 import { getRates } from "store/reducers/features/rates/rateSlice";
+import { parseInt } from "lodash";
 export default function TradingMarkets() {
   const dispatch = useAppDispatch();
   const rates = useAppSelector((state) => state.rates);
@@ -100,17 +101,10 @@ export default function TradingMarkets() {
                     </td>
                     <td className="text-center" data-th="قیمت واحد (تومان)">
                       <span className="td-responsive">
-                        {convertIRRToToman(data?.rate)}
+                        {Math.floor(Number(data?.rate) / 10).toLocaleString()}
                       </span>
                     </td>
-                    {/* <td data-th="تغییرات ۲۴ ساعته">
-                <div className="tm__crypto-changes">
-                  <span className="icon">
-                    <IoIosArrowDropdown color="red" />
-                  </span>
-                  <strong className="text-danger">{data?.change}</strong>
-                </div>
-              </td> */}
+
                     <td
                       className="text-center"
                       data-th="معامله در بازار

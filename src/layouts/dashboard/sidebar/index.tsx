@@ -130,7 +130,12 @@ export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
           </div>
         </div>
       )}
-      <Nav className={dashboard.sidebar__navbar} vertical>
+      <Nav
+        className={`${dashboard.sidebar__navbar} ${
+          location.pathname !== "/dashboard" ? dashboard["short-navbar"] : ""
+        }`}
+        vertical
+      >
         {items.map((item) => (
           <NavItem
             key={item.path}

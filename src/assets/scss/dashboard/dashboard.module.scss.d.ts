@@ -23,6 +23,7 @@ declare const classNames: {
   readonly active: "active";
   readonly "item-logout": "item-logout";
   readonly icon: "icon";
+  readonly "short-navbar": "short-navbar";
   readonly "custom-card": "custom-card";
   readonly "user-summary": "user-summary";
   readonly "user-summary__body": "user-summary__body";

@@ -13,7 +13,7 @@ import { useState } from "react";
 import Dialog from "components/Dialog";
 import DepositFiat from "./Deposit";
 
-import turkeyFlag from "assets/img/icons/flag-turkey.png";
+import lirFlag from "assets/img/coins/lira.png";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import WithdrawFiat from "./Withdraw";
@@ -72,7 +72,7 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
                     <td>
                       <div>
                         <img
-                          src={turkeyFlag}
+                          src={lirFlag}
                           alt=""
                           className={wallet["crypto-img"]}
                         />
@@ -105,7 +105,7 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
                           setWithdrawForm({
                             isOpen: true,
                             currency: "TRY",
-                            stock: TRY.balance,
+                            stock: TRY.availableBalance,
                           })
                         }
                       >
