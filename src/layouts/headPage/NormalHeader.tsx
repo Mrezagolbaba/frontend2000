@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { Button } from "reactstrap";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { TbMenu } from "react-icons/tb";
-import Logo from "assets/img/logo-wallex.png";
+import Logo from "assets/img/dark lands.png";
 
 function NormalHeader() {
   const [openOverlayMenu, setOpenOverlayMenu] = useState<boolean>(false);

@@ -6,12 +6,15 @@ import History from "assets/img/icons/time-circle.svg";
 import AddFriend from "assets/img/icons/add-user.svg";
 import React, { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
-import { Nav, NavItem } from "reactstrap";
+import { Button, Nav, NavItem } from "reactstrap";
 
-import { CiLogout } from "react-icons/ci";
+import { CiEdit, CiLogout } from "react-icons/ci";
+
+import personIcon from "assets/img/icons/profile.png";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 import useLogout from "services/auth/logout";
+import { useAppSelector } from "store/hooks";
 
 type Props = {
   isOpen: boolean;
@@ -19,6 +22,7 @@ type Props = {
 };
 
 export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
+  const { firstName, lastName } = useAppSelector((state) => state.user);
   const [activeItem, setActiveItem] = useState("");
   const logout = useLogout();
 
@@ -105,12 +109,34 @@ export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
           <img src={LogoArsonex} alt="" className="" />
         </Link>
       </div>
+      {location.pathname !== "/dashboard" && (
+        <div className={dashboard.sidebar__user}>
+          <div>
+            <img src={personIcon} alt="" />
+          </div>
+          <div>
+            <h6 className={dashboard.sidebar__user__name}>
+              {firstName + " " + lastName}
+            </h6>
+            <Button
+              className="profile-btn"
+              outline
+              color="secondary"
+              href="/dashboard/profile"
+            >
+              <CiEdit />
+              پروفایل کاربری
+            </Button>
+          </div>
+        </div>
+      )}
       <Nav className={dashboard.sidebar__navbar} vertical>
         {items.map((item) => (
           <NavItem
             key={item.path}
-            className={` ${dashboard.sidebar__navbar__item} ${activeItem === item.path ? dashboard.active : ""
-              }`}
+            className={` ${dashboard.sidebar__navbar__item} ${
+              activeItem === item.path ? dashboard.active : ""
+            }`}
             onClick={() => handleClick(item.path)}
           >
             <Link to={item.path}>
@@ -122,11 +148,14 @@ export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
         <NavItem
           key="logout"
           className={`${dashboard.sidebar__navbar__item} ${dashboard["item-logout"]}`}
-          onClick={() => { }}
+          onClick={() => {}}
         >
-          <a onClick={handleLogout} style={{
-            cursor: "pointer"
-          }}>
+          <a
+            onClick={handleLogout}
+            style={{
+              cursor: "pointer",
+            }}
+          >
             <span className="icon">
               <CiLogout />
             </span>

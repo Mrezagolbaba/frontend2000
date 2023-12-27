@@ -16,6 +16,8 @@ declare const classNames: {
   readonly sidebar: "sidebar";
   readonly sidebar__close: "sidebar__close";
   readonly sidebar__logo: "sidebar__logo";
+  readonly sidebar__user: "sidebar__user";
+  readonly sidebar__user__name: "sidebar__user__name";
   readonly sidebar__navbar: "sidebar__navbar";
   readonly sidebar__navbar__item: "sidebar__navbar__item";
   readonly active: "active";
