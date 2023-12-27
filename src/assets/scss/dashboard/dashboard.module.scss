@@ -145,9 +145,20 @@
     text-align: center;
     padding: 40px 0;
     border-bottom: 1px solid rgba(3, 4, 27, 0.03);
-    img {
-      width: 46px;
-      height: 46px;
+    span {
+      width: 68px;
+      height: 68px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      font-weight: bold;
+      font-size: 1.4rem;
+      background-color: rgba(17, 27, 255, 0.1);
+      color: #335ffc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
       margin-bottom: 10px;
     }
     &__name {
@@ -215,6 +226,7 @@
   }
   .short-navbar {
     height: calc(100vh - 370px) !important;
+    padding-top: 10px;
   }
 }
 

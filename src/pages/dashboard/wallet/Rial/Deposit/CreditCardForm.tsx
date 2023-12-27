@@ -166,9 +166,9 @@ const CreditCardForm = () => {
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
                 <FormText>
-                  {`سقف واریز: ${
+                  {/* {`سقف واریز: ${
                     secondTierVerified ? "نامحدود" : "ا میلیون تومان"
-                  }`}
+                  }`} */}
                 </FormText>
               </FormGroup>
             )}
@@ -182,11 +182,11 @@ const CreditCardForm = () => {
               <FormGroup className="position-relative">
                 <div className="d-flex flex-row justify-content-between">
                   <Label htmlFor={name}>مبلغ واریز: </Label>
-                  <a href="#">
+                  {/* <a href="#">
                     <span className={wallet?.["little-label"]}>
                       حداکثر مبلغ واریز
                     </span>
-                  </a>
+                  </a> */}
                 </div>
                 <Currency
                   name={name}

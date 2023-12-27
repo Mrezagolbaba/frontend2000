@@ -51,13 +51,13 @@ const Header = ({ onSidebarToggle }: Props) => {
               </span>
             </a>
           </div>
-          <div className={dashboard.header__notification}>
+          {/* <div className={dashboard.header__notification}>
             <a href="/dashboard/notification">
               <span className="icon">
                 <img src={Notifications} alt="notification" />
               </span>
             </a>
-          </div>
+          </div> */}
 
           {/* <div className={dashboard.header__subheader}>
                 <button

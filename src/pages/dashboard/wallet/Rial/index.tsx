@@ -33,7 +33,7 @@ export default function RialCard({ stock, isLoading }: Props) {
             ) : (
               <strong className="d-inline-block">
                 {(Number(stock.availableBalance || 0) / 10).toLocaleString(
-                  "IRR"
+                  "IRR",
                 )}
                 <small>تومان</small>
               </strong>
@@ -74,7 +74,8 @@ export default function RialCard({ stock, isLoading }: Props) {
         hasCloseButton
       >
         <Withdraw
-        // onClose={() => setIsOpenWithdraw(false)}
+          stock={stock}
+          // onClose={() => setIsOpenWithdraw(false)}
         />
       </Dialog>
     </Card>
