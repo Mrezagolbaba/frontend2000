@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
   Col,
+  Modal,
   Row,
   Table,
 } from "reactstrap";
@@ -17,9 +18,17 @@ import lirFlag from "assets/img/coins/lira.png";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import WithdrawFiat from "./Withdraw";
+import WithdrawOTP from "components/WithdrawOTP";
+import { useAppSelector } from "store/hooks";
+import toast from "react-hot-toast";
+import { useResendOtpWithdrawMutation, useVerifyOtpWithdrawMutation } from "store/api/wallet-management";
 
 export default function Fiat({ TRY, isLoading, isSuccess }: any) {
+  const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
+  const [otpCode, setOtpCode] = useState("");
+  const [verifyOtpWithdraw, { isSuccess: isVerifySuccess }] = useVerifyOtpWithdrawMutation()
+  const [resendOtpWithdraw, { isSuccess: isResendSuccess }] = useResendOtpWithdrawMutation()
   const [depositForm, setDepositForm] = useState<{
     isOpen: boolean;
     currency: string;
@@ -29,7 +38,32 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
     currency: string;
     stock: number;
   }>({ isOpen: false, currency: "", stock: 0 });
+  const [showOtp, setShowOtp] = useState<boolean>(false);
+  const [transactionId, setTransactionId] = useState<string>('');
 
+  const handleSendOtp = async () => {
+    if (otpCode.length > 6) return toast.error('لطفا کد را وارد کنید', { position: 'bottom-left' })
+    const data = {
+      transactionId,
+      code: otpCode
+    }
+    await verifyOtpWithdraw(data).then(() => {
+      if (isVerifySuccess) {
+        toast.success('برداشت با موفقیت انجام شد', { position: 'bottom-left' })
+        setShowOtp(false)
+      } else {
+        toast.error('کد وارد شده صحیح نمی باشد', { position: 'bottom-left' })
+      }
+    })
+  }
+
+  const handleReSendOtp = async () => {
+    await resendOtpWithdraw(transactionId).then(() => {
+      if (isResendSuccess) {
+        toast.success('کد مجددا ارسال شد', { position: 'bottom-left' })
+      }
+    })
+  }
   return (
     <Card className="mb-4 h-100">
       <CardHeader>
@@ -147,7 +181,6 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
           onClose={() => setDepositForm({ isOpen: false, currency: "" })}
         />
       </Dialog>
-
       <Dialog
         title="برداشت لیر"
         isOpen={withdrawForm.isOpen}
@@ -157,6 +190,12 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
         hasCloseButton
       >
         <WithdrawFiat
+          setShowOtp={() => {
+            setShowOtp(true)
+          }}
+          setTransactionId={(id) => setTransactionId(id)}
+          onCloseModal={() => setWithdrawForm({ isOpen: false, currency: "", stock: 0 })}
+          open={withdrawForm.isOpen}
           stock={withdrawForm.stock}
           currency={withdrawForm.currency}
           onClose={() =>
@@ -164,6 +203,21 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
           }
         />
       </Dialog>
+      <Modal isOpen={showOtp} toggle={() => setShowOtp(false)} >
+        <WithdrawOTP
+          onClose={() => setShowOtp(false)}
+          handleSendOtp={handleSendOtp}
+          securitySelection={user.otpMethod}
+          handleResend={handleReSendOtp}
+          handleGetCode={(code) => {
+            if (code.length === 6) {
+              setOtpCode(code);
+              handleSendOtp()
+            }
+          }}
+        />
+      </Modal>
+
     </Card>
   );
 }
