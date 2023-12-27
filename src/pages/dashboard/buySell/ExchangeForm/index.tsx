@@ -19,12 +19,15 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { convertText } from "helpers";
 
 import buy from "assets/scss/dashboard/buy-sell.module.scss";
+import { useNavigate } from "react-router-dom";
+import { setInvoice } from "store/reducers/features/invoice/invoiceSlice";
 
 type Props = {
   setIsOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function ExchangeForm({ setIsOpenDialog }: Props) {
+  const redirect = useNavigate();
   const { exchangeContext, setExchangeContext } = useExchangeContext();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -74,6 +77,8 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
             position: "bottom-left",
           });
           setExchangeContext(initExchangeContext);
+          redirect("/dashboard/invoice",{state:res});
+          setInvoice(res);
         }
         setIsLoading(false);
       } catch (error) {}
