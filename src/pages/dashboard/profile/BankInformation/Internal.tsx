@@ -103,6 +103,9 @@ export default function Internal({ accounts, isLoading }: Props) {
     });
   };
 
+  console.log(errors);
+  
+
 
   useEffect(() => {
     if (isSuccess) {

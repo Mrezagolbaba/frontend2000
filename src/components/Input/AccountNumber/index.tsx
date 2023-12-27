@@ -46,8 +46,6 @@ export default function AccountNumberInput({
     const value = e.target.value;
     if (value?.length >= 6) {
       const result = searchIranianBanks(persianToEnglishNumbers(value), banks);
-      console.log("result", result);
-
       if (result) {
         setLogo(result.logo);
         setBankId?.(result.bankId);

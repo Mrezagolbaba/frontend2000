@@ -126,7 +126,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                   <>
                     <tr key={0}>
                       <td>
-                        <div>
+                        <div className="d-flex">
                           <img
                             src={teter}
                             alt=""
