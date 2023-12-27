@@ -7,6 +7,7 @@ import Market from "assets/img/icons/markets.svg";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 import { BiSupport } from "react-icons/bi";
+import { Link } from "react-router-dom";
 
 export default function EasyAccess() {
   return (
@@ -22,7 +23,7 @@ export default function EasyAccess() {
         </h6>
       </Col>
       <Col xs={6} sm={3} xxl={2}>
-        <a className={dashboard["easy-box"]} href="/dashboard/buy-sell">
+        <Link className={dashboard["easy-box"]} to="/dashboard/buy-sell">
           <span className="icon">
             <svg
               fill="#000000"
@@ -66,10 +67,10 @@ export default function EasyAccess() {
             </svg>
           </span>
           <div className={dashboard["easy-box__value"]}>خرید و فروش</div>
-        </a>
+        </Link>
       </Col>
       <Col xs={6} sm={3} xxl={2}>
-        <a className={dashboard["easy-box"]} href="#">
+        <Link className={dashboard["easy-box"]} to="/dashboard/market">
           <span className="icon">
             <svg
               style={{
@@ -115,10 +116,10 @@ export default function EasyAccess() {
             </svg>
           </span>
           <div className={dashboard["easy-box__value"]}>بازارها</div>
-        </a>
+        </Link>
       </Col>
       <Col xs={6} sm={3} xxl={2}>
-        <a className={dashboard["easy-box"]} href="/dashboard/wallet">
+        <Link className={dashboard["easy-box"]} to="/dashboard/wallet">
           <span className="icon">
             <svg
               viewBox="0 0 24 24"
@@ -157,10 +158,10 @@ export default function EasyAccess() {
             </svg>
           </span>
           <div className={dashboard["easy-box__value"]}>واریز تتر</div>
-        </a>
+        </Link>
       </Col>
       <Col xs={6} xxl={2} className="d-sm-none d-xxl-block">
-        <a className={dashboard["easy-box"]} href="/dashboard/wallet">
+        <Link className={dashboard["easy-box"]} to="/dashboard/wallet">
           <span className="icon">
             <svg
               viewBox="0 0 24 24"
@@ -199,10 +200,10 @@ export default function EasyAccess() {
             </svg>
           </span>
           <div className={dashboard["easy-box__value"]}>واریز تومان</div>
-        </a>
+        </Link>
       </Col>
       <Col xs={6} xxl={2} className="d-sm-none d-xxl-block">
-        <a className={dashboard["easy-box"]} href="#">
+        <Link className={dashboard["easy-box"]} to="#">
           <span className="icon">
             <svg
               viewBox="0 0 24 24"
@@ -246,7 +247,7 @@ export default function EasyAccess() {
             <span>آنلاین</span>
             <i className="os-icon os-icon-arrow-up6"></i>
           </div>
-        </a>
+        </Link>
       </Col>
     </Row>
   );

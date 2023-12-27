@@ -13,7 +13,7 @@ import { useState } from "react";
 import DepositCrypto from "./Deposit";
 import WithdrawCrypto from "./Withdraw";
 
-import teter from "assets/img/coins/tether.png";
+import teter from "assets/img/coins/tether.svg";
 import trx from "assets/img/coins/trx.png";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";

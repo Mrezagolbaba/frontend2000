@@ -121,6 +121,11 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
               }   عودت مبلغ بعد از 72 ساعت با کسر کارمزد بانکی انجام می‌شود.`}
             />
           )}
+          <AlertWarning
+            hasIcon
+            text="در هنگام واریز حتما شناسه واریز را  در بخش Description یا Aciklama به طور دقیق وارد کنید، در صورت رعایت نکردن این مساله مبلغ به حساب کاربری شما واریز نمی‌شود و بعد از ۷۲ ساعت کاری به حساب شما پس از کسر کارمزد بانکی عودت داده می‌شود."
+          />
+
           <Row>
             <Col xs={12} md={6}>
               <FormGroup>
@@ -150,7 +155,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
             </Col>
             <Col xs={12} md={6}>
               <FormGroup>
-                <Label htmlFor="iban"> شماره iban:</Label>
+                <Label htmlFor="iban"> شماره IBAN:</Label>
                 <CopyInput text={selectedBank || ""} key="iban-account" />
               </FormGroup>
             </Col>

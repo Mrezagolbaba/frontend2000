@@ -30,7 +30,7 @@ export default function TradingMarkets() {
             <thead>
               <tr className="tr-responsive">
                 <th className="text-center">نام ارز</th>
-                <th className="text-center">قیمت واحد (تومان)</th>
+                <th className="text-center">قیمت (تومان)</th>
                 {/* <th>تغییرات 24 ساعته</th> */}
                 <th className="text-center">معامله در بازار</th>
               </tr>

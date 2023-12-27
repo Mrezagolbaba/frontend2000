@@ -237,7 +237,7 @@ export default function PersonalInformation() {
                 render={({ field: { name, value, onChange, ref } }) => (
                   <FormGroup row>
                     <Label sm={3} htmlFor={name}>
-                      شماره موبایل بین الملل:
+                      شماره موبایل بین المللی:
                     </Label>
                     <Col sm={9}>
                       <Input

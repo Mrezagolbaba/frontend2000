@@ -33,7 +33,7 @@ export default function LastTransactions() {
                 <tr>
                   <th scope="col">بازار</th>
                   <th scope="col">مقدار</th>
-                  <th scope="col">قیمت واحد</th>
+                  <th scope="col">قیمت </th>
                   <th scope="col">زمان</th>
                 </tr>
               </thead>
@@ -54,9 +54,13 @@ export default function LastTransactions() {
                     </td>
                     <td>
                       <span style={{ fontSize: "10px" }}>
-                        {item.sourceCurrencyCode}
+                        {item.sourceCurrencyCode === "IRR"
+                          ? "TMN"
+                          : item.sourceCurrencyCode}
                       </span>{" "}
-                      {Number(item?.sourceAmount).toLocaleString()}
+                      {item.sourceCurrencyCode === "IRR"
+                        ? (Number(item?.sourceAmount) / 10).toLocaleString()
+                        : Number(item?.sourceAmount).toLocaleString()}
                     </td>
                     <td>{item?.exchangeRate.substring(0, 5)}</td>
                     <td>

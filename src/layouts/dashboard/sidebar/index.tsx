@@ -67,11 +67,6 @@ export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
       label: "تاریخچه",
       icon: <img src={History} alt="" />,
     },
-    {
-      path: "/dashboard/add-friends",
-      label: "دعوت دوستان",
-      icon: <img src={AddFriend} alt="" />,
-    },
   ];
 
   return (
@@ -111,9 +106,7 @@ export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
       </div>
       {location.pathname !== "/dashboard" && (
         <div className={dashboard.sidebar__user}>
-          <div>
-            <img src={personIcon} alt="" />
-          </div>
+          <span>{firstName[0]}</span>
           <div>
             <h6 className={dashboard.sidebar__user__name}>
               {firstName + " " + lastName}

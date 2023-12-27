@@ -31,9 +31,10 @@ type WithdrawType = {
 
 type Props = {
   onClose?: () => void;
+  stock: string | number;
 };
 
-export default function Withdraw({ onClose }: Props) {
+export default function Withdraw({ onClose, stock }: Props) {
   const { firstName, lastName, secondTierVerified } = useAppSelector(
     (state) => state.user,
   );
@@ -178,9 +179,7 @@ export default function Withdraw({ onClose }: Props) {
                   hasError={Boolean(errors?.[name])}
                 />
                 {errors?.[name] && (
-                  <FormFeedback tooltip>
-                    {errors[name]?.message}sdfsdfsfd
-                  </FormFeedback>
+                  <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
               </FormGroup>
             )}
@@ -194,11 +193,11 @@ export default function Withdraw({ onClose }: Props) {
               <FormGroup className="position-relative">
                 <div className="d-flex flex-row justify-content-between">
                   <Label htmlFor={name}>مبلغ برداشت: </Label>
-                  <a href="#">
+                  {/* <a href="#">
                     <span className={wallet?.["little-label"]}>
                       حداکثر قابل برداشت
                     </span>
-                  </a>
+                  </a> */}
                 </div>
                 <Currency
                   name={name}
@@ -211,7 +210,9 @@ export default function Withdraw({ onClose }: Props) {
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
                 <span className="d-flex flex-row justify-content-between">
-                  <FormText>موجودی شما: تومان</FormText>
+                  <FormText>{`موجودی شما: ${(
+                    Number(stock) / 10
+                  ).toLocaleString()}$ تومان`}</FormText>
                   <FormText>کارمزد برداشت بانکی: هزارتومان</FormText>
                 </span>
               </FormGroup>
