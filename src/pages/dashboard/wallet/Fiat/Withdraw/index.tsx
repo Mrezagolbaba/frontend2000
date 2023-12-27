@@ -13,16 +13,13 @@ import {
   FormGroup,
   FormText,
   Label,
+  Modal,
   Row,
+  Spinner,
 } from "reactstrap";
 import { useBankAccountsQuery } from "store/api/profile-management";
 import { useEffect, useState } from "react";
-import {
-  useResendOtpWithdrawMutation,
-  useVerifyOtpWithdrawMutation,
-  useWithdrawMutation,
-} from "store/api/wallet-management";
-
+import { useResendOtpWithdrawMutation, useVerifyOtpWithdrawMutation, useWithdrawMutation } from "store/api/wallet-management";
 import turkeyFlag from "assets/img/icons/flag-turkey.png";
 import lirFlag from "assets/img/coins/lira.png";
 
@@ -30,11 +27,17 @@ import wallet from "assets/scss/dashboard/wallet.module.scss";
 import { useAppSelector } from "store/hooks";
 import toast from "react-hot-toast";
 import WithdrawOTP from "components/WithdrawOTP";
+import Dialog from "components/Dialog";
+import { set } from "lodash";
 
 type Props = {
   onClose: () => void;
   stock: number;
   currency: string;
+  open: boolean;
+  onCloseModal: () => void;
+  setTransactionId: (id: string) => void
+  setShowOtp: () => void
 };
 type FiatFormType = {
   network: string;
@@ -44,15 +47,11 @@ type FiatFormType = {
   destinationCountry: string;
 };
 
-const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
-  const [showOtp, setShowOtp] = useState<boolean>(false);
+const WithdrawFiat = ({ onClose, stock, currency, open, onCloseModal, setTransactionId, setShowOtp }: Props) => {
   const [accountOptions, setAccountOptions] = useState<OptionType[] | []>([]);
   const [otpCode, setOtpCode] = useState("");
-  const [transactionId, setTransactionId] = useState<string>("");
-  const [verifyOtpWithdraw, { isSuccess: isVerifySuccess }] =
-    useVerifyOtpWithdrawMutation();
-  const [resendOtpWithdraw, { isSuccess: isResendSuccess }] =
-    useResendOtpWithdrawMutation();
+  const [verifyOtpWithdraw, { isSuccess: isVerifySuccess }] = useVerifyOtpWithdrawMutation()
+  const [resendOtpWithdraw, { isSuccess: isResendSuccess }] = useResendOtpWithdrawMutation()
   const user = useAppSelector((state) => state.user);
   const { data: accounts, isSuccess: getSuccessAccounts } =
     useBankAccountsQuery({
@@ -88,45 +87,19 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
     },
     resolver,
   });
-  const handleSendOtp = async () => {
-    if (otpCode.length > 6)
-      return toast.error("لطفا کد را وارد کنید", { position: "bottom-left" });
-    const data = {
-      transactionId,
-      code: otpCode,
-    };
-    await verifyOtpWithdraw(data).then((res) => {
-      if (res && isVerifySuccess) {
-        toast.success("برداشت با موفقیت انجام شد", { position: "bottom-left" });
-        onClose();
-      } else {
-        toast.error("کد وارد شده صحیح نمی باشد", { position: "bottom-left" });
-      }
-    });
-  };
-
-  const handleReSendOtp = async () => {
-    await resendOtpWithdraw(transactionId).then((res) => {
-      if (isResendSuccess) {
-        toast.success("کد مجددا ارسال شد", { position: "bottom-left" });
-      }
-    });
-  };
 
   const onSubmit = async (data: FiatFormType) => {
-    if (Number(data.amount) > stock)
-      return toast.error("موجودی شما کافی نمی باشد", {
-        position: "bottom-left",
-      });
-    setShowOtp(true);
+    if (Number(data.amount) > stock) return toast.error('موجودی شما کافی نمی باشد', { position: 'bottom-left' })
 
     withdrawRequest({
       currencyCode: "TRY",
       amount: data.amount,
       destination: data.destination,
     }).then((res: any) => {
-      setTransactionId(res.data?.id);
-    });
+      setTransactionId(res.data?.id)
+      setShowOtp()
+      onCloseModal()
+    })
   };
 
   useEffect(() => {
@@ -153,177 +126,158 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
   }, [accounts, getSuccessAccounts]);
   return (
     <div className="px-2">
-      {!showOtp && (
-        <>
-          <AlertWarning
-            hasIcon
-            text="در هنگام برداشت به اطلاعات وارد شده دقت نمایید بعد از برداشت، دارایی شما امکان بازگردانی ندارد."
-            key="withdraw-alert"
-          />
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <Row>
-              <Col xs={12} md={6}>
-                <Controller
-                  name="network"
-                  control={control}
-                  render={({ field: { name, value, onChange } }) => (
-                    <FormGroup>
-                      <Label htmlFor={name}> برداشت ارز:</Label>
-                      <DropdownInput
-                        id={name}
-                        value={value}
-                        onChange={onChange}
-                        options={[
-                          {
-                            value: "TRY",
-                            content: (
-                              <div className={wallet["items-credit"]}>
-                                <span className={wallet["items-credit__icon"]}>
-                                  <img
-                                    className={wallet["lir-icon"]}
-                                    src={lirFlag}
-                                    alt="lir"
-                                  />
-                                </span>
-                                <span dir="ltr"> لیر ترکیه - TL</span>
-                              </div>
-                            ),
-                          },
-                        ]}
-                        disabled={true}
-                        // hasError={Boolean(errors?.[name])}
-                      />
-                    </FormGroup>
+      <AlertWarning
+        hasIcon
+        text="در هنگام برداشت به اطلاعات وارد شده دقت نمایید بعد از برداشت، دارایی شما امکان بازگردانی ندارد."
+        key="withdraw-alert"
+      />
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Row>
+          <Col xs={12} md={6}>
+            <Controller
+              name="network"
+              control={control}
+              render={({ field: { name, value, onChange } }) => (
+                <FormGroup>
+                  <Label htmlFor={name}> برداشت ارز:</Label>
+                  <DropdownInput
+                    id={name}
+                    value={value}
+                    onChange={onChange}
+                    options={[
+                      {
+                        value: "TRY",
+                        content: (
+                          <div className={wallet["items-credit"]}>
+                            <span className={wallet["items-credit__icon"]}>
+                              <img
+                                className={wallet["lir-icon"]}
+                                src={lirFlag}
+                                alt="lir"
+                              />
+                            </span>
+                            <span dir="ltr"> لیر ترکیه - TL</span>
+                          </div>
+                        ),
+                      },
+                    ]}
+                    disabled={true}
+                  // hasError={Boolean(errors?.[name])}
+                  />
+                </FormGroup>
+              )}
+            />
+          </Col>
+          <Col xs={12} lg={6}>
+            <Controller
+              name="amount"
+              control={control}
+              render={({ field: { name, value } }) => (
+                <FormGroup className="position-relative">
+                  <div className="d-flex flex-row justify-content-between">
+                    <Label htmlFor={name}>مبلغ برداشت: </Label>
+                    {/* <a href="#">
+                          <span className="full-withraw mt-1">
+                            حداکثر مبلغ واریز
+                          </span>
+                        </a> */}
+                  </div>
+                  <Currency
+                    name={name}
+                    value={value}
+                    onChange={(val) => setValue(name, val)}
+                  // placeholder="مبلغ را به تومان وارد کنید"
+                  // hasError={Boolean(errors?.[name])}
+                  />
+                  {errors?.[name] && (
+                    <FormFeedback tooltip>
+                      {errors[name]?.message}
+                    </FormFeedback>
                   )}
-                />
-              </Col>
-              <Col xs={12} lg={6}>
-                <Controller
-                  name="amount"
-                  control={control}
-                  render={({ field: { name, value } }) => (
-                    <FormGroup className="position-relative">
-                      <div className="d-flex flex-row justify-content-between">
-                        <Label htmlFor={name}>مبلغ برداشت: </Label>
-                        {/* <a href="#">
-                      <span className="full-withraw mt-1">
-                        حداکثر مبلغ واریز
-                      </span>
-                    </a> */}
-                      </div>
-                      <Currency
-                        name={name}
-                        value={value}
-                        onChange={(val) => setValue(name, val)}
-                        // placeholder="مبلغ را به تومان وارد کنید"
-                        // hasError={Boolean(errors?.[name])}
-                      />
-                      {errors?.[name] && (
-                        <FormFeedback tooltip>
-                          {errors[name]?.message}
-                        </FormFeedback>
-                      )}
-                      <FormText>
-                        {` موجودی در دسترس: ${stock} ${currency}`}
-                      </FormText>
-                    </FormGroup>
-                  )}
-                />
-              </Col>
-              <Col xs={12} md={6}>
-                <Controller
-                  name="destinationCountry"
-                  control={control}
-                  render={({ field: { name, value, onChange } }) => (
-                    <FormGroup>
-                      <Label htmlFor={name}> انتقال به کشور:</Label>
-                      <DropdownInput
-                        id={name}
-                        value={value}
-                        onChange={onChange}
-                        options={[
-                          {
-                            value: "TRY",
-                            content: (
-                              <div className={wallet["items-credit"]}>
-                                <span className={wallet["items-credit__icon"]}>
-                                  <img
-                                    className={wallet["lir-icon"]}
-                                    src={turkeyFlag}
-                                    alt="lir"
-                                  />
-                                </span>
-                                <span dir="ltr"> ترکیه</span>
-                              </div>
-                            ),
-                          },
-                        ]}
-                        disabled={true}
-                        // hasError={Boolean(errors?.[name])}
-                      />
-                    </FormGroup>
-                  )}
-                />
-              </Col>
-              <Col xs={12} md={6}>
-                <Controller
-                  name="iban"
-                  control={control}
-                  render={({ field: { name, value } }) => (
-                    <FormGroup>
-                      <Label htmlFor={name}> واریز به حساب:</Label>
-                      <DropdownInput
-                        id={name}
-                        value={value}
-                        onChange={(val, otherOption) => {
-                          setValue(name, val);
-                          setValue("destination", otherOption.accountId);
-                        }}
-                        options={accountOptions}
-                        // hasError={Boolean(errors?.[name])}
-                      />
-                    </FormGroup>
-                  )}
-                />
-              </Col>
-            </Row>
-            <Row className="mt-4">
-              <div className="text-center">
-                <Button
-                  className="px-5 py-3"
-                  color="primary"
-                  outline
-                  type="submit"
-                >
-                  ثبت درخواست برداشت
-                </Button>
-              </div>
-            </Row>
-          </Form>
-        </>
-      )}
-      {showOtp && (
-        <div className="d-flex flex-column align-items-center justify-content-center mt-5">
-          <WithdrawOTP
-            securitySelection={user.otpMethod}
-            handleResend={handleReSendOtp}
-            handleGetCode={(code) => {
-              if (code.length === 6) {
-                setOtpCode(code);
-              }
-            }}
-          />
-          <button
-            className="btn btn-primary mt-2 px-5 py-2"
-            onClick={handleSendOtp}
-          >
-            {" "}
-            تایید{" "}
-          </button>
-        </div>
-      )}
+                  <FormText>
+                    {` موجودی در دسترس: ${stock} ${currency}`}
+                  </FormText>
+                </FormGroup>
+              )}
+            />
+          </Col>
+          <Col xs={12} md={6}>
+            <Controller
+              name="destinationCountry"
+              control={control}
+              render={({ field: { name, value, onChange } }) => (
+                <FormGroup>
+                  <Label htmlFor={name}> انتقال به کشور:</Label>
+                  <DropdownInput
+                    id={name}
+                    value={value}
+                    onChange={onChange}
+                    options={[
+                      {
+                        value: "TRY",
+                        content: (
+                          <div className={wallet["items-credit"]}>
+                            <span className={wallet["items-credit__icon"]}>
+                              <img
+                                className={wallet["lir-icon"]}
+                                src={turkeyFlag} alt="lir" />
+                            </span>
+                            <span dir="ltr"> ترکیه</span>
+                          </div>
+                        ),
+                      },
+                    ]}
+                    disabled={true}
+                  // hasError={Boolean(errors?.[name])}
+                  />
+                </FormGroup>
+              )}
+            />
+          </Col>
+          <Col xs={12} md={6}>
+            <Controller
+              name="iban"
+              control={control}
+              render={({ field: { name, value } }) => (
+                <FormGroup>
+                  <Label htmlFor={name}> واریز به حساب:</Label>
+                  <DropdownInput
+                    id={name}
+                    value={value}
+                    onChange={(val, otherOption) => {
+                      setValue(name, val);
+                      setValue("destination", otherOption.accountId);
+                    }}
+                    options={accountOptions}
+                  // hasError={Boolean(errors?.[name])}
+                  />
+                </FormGroup>
+              )}
+            />
+          </Col>
+        </Row>
+        <Row className="mt-4">
+          <div className="text-center">
+            <Button
+              className="px-5 py-3"
+              color="primary"
+              outline
+              type="submit"
+            >
+              {isLoading ? (
+                <Spinner style={{ color: "white" }} />
+              ) : (
+                "  ثبت درخواست برداشت"
+
+              )}
+            </Button>
+          </div>
+        </Row>
+      </Form>
+
     </div>
   );
+
 };
 
 export default WithdrawFiat;

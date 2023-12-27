@@ -1,6 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AlertInfo, AlertWarning } from "components/AlertWidget";
-import OtpInput from "react-otp-input";
 import * as Yup from "yup";
 import { Controller, useForm as useRHF } from "react-hook-form";
 import {
@@ -24,10 +23,8 @@ import Currency from "components/Input/CurrencyInput";
 import { useState } from "react";
 import { useForm } from "@refinedev/core";
 import toast from "react-hot-toast";
-import { useAppSelector } from "store/hooks";
 import { useResendOtpWithdrawMutation, useVerifyOtpWithdrawMutation } from "store/api/wallet-management";
 
-import WithdrawOTP from "components/WithdrawOTP";
 
 type CryptoFormType = {
   network: string;
@@ -39,17 +36,18 @@ const WithdrawCrypto = ({
   onClose,
   currency,
   stock,
+  onCloseModal,
+  setShowOtp,
+  setTransactionId
 }: {
   onClose: () => void;
   currency: string;
   stock: number;
+  onCloseModal: () => void;
+  setShowOtp: () => void;
+  setTransactionId: (id: string) => void
 }) => {
-  const [showOtp, setShowOtp] = useState<boolean>(false);
-  const [otpCode, setOtpCode] = useState("");
-  const [transactionId, setTransactionId] = useState<string>("");
-  const user = useAppSelector((state) => state.user);
-  const [verifyOtpWithdraw, { isSuccess }] = useVerifyOtpWithdrawMutation()
-  const [resendOtpWithdraw, { isSuccess: isResendSuccess }] = useResendOtpWithdrawMutation()
+
   const optionList: OptionType[] = [
     {
       content: (
@@ -71,13 +69,12 @@ const WithdrawCrypto = ({
       destination: Yup.string().required(),
     })
   );
-
   const { formLoading, onFinish } = useForm({
     action: "create",
     resource: "transactions/withdraw",
     onMutationSuccess: (data, variables, context, isAutoSave) => {
-      setShowOtp(true);
-      setTransactionId('data');
+      setShowOtp()
+      onCloseModal()
     },
   });
 
@@ -101,38 +98,17 @@ const WithdrawCrypto = ({
         position: "bottom-left",
       });
     else
-      setShowOtp(true);
-    onFinish({
-      currencyCode: currency,
-      amount: data.amount,
-      destination: data.destination,
-    }).then((res: any) => {
-      if (res) {
-        setTransactionId(res.data.id);
-      }
-    })
+      onFinish({
+        currencyCode: currency,
+        amount: data.amount,
+        destination: data.destination,
+      }).then((res: any) => {
+        if (res) {
+          setTransactionId(res.data?.id)
+
+        }
+      })
   };
-  const handleSendOtp = async () => {
-    const data ={
-      transactionId,
-      code: otpCode
-    }
-    await verifyOtpWithdraw(data).then((res) => {
-      if (res && isSuccess) {
-        toast.success('برداشت با موفقیت انجام شد', { position: 'bottom-left' })
-        onClose()
-      } else {
-        toast.error('کد وارد شده صحیح نمی باشد', { position: 'bottom-left' })
-      }
-    })
-  }
-  const handleReSendOtp = async () => {
-    await resendOtpWithdraw(transactionId).then((res) => {
-      if (isResendSuccess) {
-        toast.success('کد مجددا ارسال شد', { position: 'bottom-left' })
-      }
-    })
-  }
 
   return (
     <div className="px-2">
@@ -145,193 +121,103 @@ const WithdrawCrypto = ({
         hasIcon
         text="انتقال داخلی (آرسونیکس به آرسونیکس) هیچ کارمزدی ندارد."
       />
-      {!showOtp ? (
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Row>
-            <Col xs={12} lg={6}>
-              <Controller
-                name="network"
-                control={control}
-                render={({ field: { name, value } }) => (
-                  <FormGroup className="position-relative">
-                    <Label htmlFor={name}> شبکه برداشت: </Label>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Row>
+          <Col xs={12} lg={6}>
+            <Controller
+              name="network"
+              control={control}
+              render={({ field: { name, value } }) => (
+                <FormGroup className="position-relative">
+                  <Label htmlFor={name}> شبکه برداشت: </Label>
 
-                    <DropdownInput
-                      id={name}
-                      value={value}
-                      onChange={(val) => setValue(name, val)}
-                      options={optionList}
-                      disabled={true}
-                    // hasError={Boolean(errors?.[name])}
-                    />
-                    {errors?.[name] && (
-                      <FormFeedback tooltip>
-                        {errors[name]?.message}
-                      </FormFeedback>
-                    )}
-                    <FormText>سقف واریز</FormText>
-                  </FormGroup>
-                )}
-              />
-            </Col>
-            <Col xs={12} lg={6}>
-              <Controller
-                name="amount"
-                control={control}
-                render={({ field: { name, value } }) => (
-                  <FormGroup className="position-relative">
-                    <div className="d-flex flex-row justify-content-between">
-                      <Label htmlFor={name}>مبلغ واریز: </Label>
-                    </div>
-                    <Currency
-                      name={name}
-                      value={value}
-                      onChange={(val) => setValue(name, val)}
-                      // placeholder="مبلغ را به تومان وارد کنید"
-                      hasError={Boolean(errors?.[name])}
-                    />
-                    {errors?.[name] && (
-                      <FormFeedback tooltip>
-                        {errors[name]?.message}
-                      </FormFeedback>
-                    )}
-                    <FormText>
-                      موجودی شما: {stock} {currency}
-                    </FormText>
-                  </FormGroup>
-                )}
-              />
-            </Col>
-            <Col xs={12} lg={6}>
-              <Controller
-                name="destination"
-                control={control}
-                render={({ field: { name, value, onChange } }) => (
-                  <FormGroup className="position-relative">
-                    <div className="d-flex flex-row justify-content-between">
-                      <Label htmlFor={name}> آدرس کیف پول: </Label>
-                    </div>
-                    <Input
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      placeholder="آدرس کیف پول خود را وارد کنید"
-                    // hasError={Boolean(errors?.[name])}
-                    />
-                    {errors?.[name] && (
-                      <FormFeedback tooltip>
-                        {errors[name]?.message}
-                      </FormFeedback>
-                    )}
-                  </FormGroup>
-                )}
-              />
-            </Col>
-          </Row>
-          <Row className="mt-4">
-            <div className="d-flex flex-row justify-content-evenly">
-              <Button
-                color="primary"
-                outline
-                type="submit"
-                className="px-5 py-3"
-                disabled={formLoading}
-              >
-                {formLoading ? <Spinner /> : "ثبت درخواست برداشت"}
-              </Button>
-            </div>
-          </Row>
-        </form>
-      ) : (
-        <>
-          <AlertInfo
-            hasIcon
-            text="کد تایید را که در برنامه Google Authenticator تولید شده است، وارد
-              کنید و ثبت نهایی را انتخاب کنید."
-          />
-          <Row>
-            <Col xs={12} lg={6}>
-              <FormGroup className="position-relative">
-                <Label htmlFor="networkName"> روش تایید برداشت:</Label>
-                <a href="#">
-                  <span className="full-withraw mt-1">ارسال کد به موبایل</span>
-                </a>
-                <Input
-                  disabled
-                  type="text"
-                  name="networkName"
-                  id="networkName"
-                  value="Google Authenticator"
-                />
-              </FormGroup>
-            </Col>
-            <Col xs={12} lg={6}>
-              <div className="col-lg-6">
-                <label htmlFor="disabledTextInput">کد تایید برداشت: </label>
-                <a href="#">
-                  <span className="full-withraw mt-1">
-                    ارسال مجدد به موبایل
-                  </span>
-                </a>
-                <div className="mb-4">
-                  <div className="code-input-control">
-                    {/* <input type="number" className="form-control d-ltr control-auto-focus" maxlength="1" placeholder="-" />
-<input type="number" className="form-control d-ltr control-auto-focus" maxlength="1" placeholder="-"/>
-<input type="number" className="form-control d-ltr control-auto-focus" maxlength="1" placeholder="-"/>
-<input type="number" className="form-control d-ltr control-auto-focus" maxlength="1" placeholder="-"/>
-<input type="number" className="form-control d-ltr control-auto-focus" maxlength="1" placeholder="-"/>
-<input type="number" className="form-control d-ltr control-auto-focus" maxlength="1" placeholder="-"/> */}
+                  <DropdownInput
+                    id={name}
+                    value={value}
+                    onChange={(val) => setValue(name, val)}
+                    options={optionList}
+                    disabled={true}
+                  // hasError={Boolean(errors?.[name])}
+                  />
+                  {errors?.[name] && (
+                    <FormFeedback tooltip>
+                      {errors[name]?.message}
+                    </FormFeedback>
+                  )}
+                  <FormText>سقف واریز</FormText>
+                </FormGroup>
+              )}
+            />
+          </Col>
+          <Col xs={12} lg={6}>
+            <Controller
+              name="amount"
+              control={control}
+              render={({ field: { name, value } }) => (
+                <FormGroup className="position-relative">
+                  <div className="d-flex flex-row justify-content-between">
+                    <Label htmlFor={name}>مبلغ واریز: </Label>
                   </div>
-                </div>
-              </div>
-            </Col>
-          </Row>
-          <Row></Row>
-          <div className="row mt-4">
-            <div className="col-lg-6">
-              <label htmlFor="disabledTextInput">کد تایید برداشت: </label>
-              <a href="#">
-                <span className="full-withraw mt-1">ارسال مجدد به موبایل</span>
-              </a>
-              <div className="mb-4">
-                <div className="code-input-control">
-                  {/* <input type="number" className="form-control d-ltr control-auto-focus" maxlength="1" placeholder="-" />
-<input type="number" className="form-control d-ltr control-auto-focus" maxlength="1" placeholder="-"/>
-<input type="number" className="form-control d-ltr control-auto-focus" maxlength="1" placeholder="-"/>
-<input type="number" className="form-control d-ltr control-auto-focus" maxlength="1" placeholder="-"/>
-<input type="number" className="form-control d-ltr control-auto-focus" maxlength="1" placeholder="-"/>
-<input type="number" className="form-control d-ltr control-auto-focus" maxlength="1" placeholder="-"/> */}
-                </div>
-              </div>
-            </div>
+                  <Currency
+                    name={name}
+                    value={value}
+                    onChange={(val) => setValue(name, val)}
+                    // placeholder="مبلغ را به تومان وارد کنید"
+                    hasError={Boolean(errors?.[name])}
+                  />
+                  {errors?.[name] && (
+                    <FormFeedback tooltip>
+                      {errors[name]?.message}
+                    </FormFeedback>
+                  )}
+                  <FormText>
+                    موجودی شما: {stock} {currency}
+                  </FormText>
+                </FormGroup>
+              )}
+            />
+          </Col>
+          <Col xs={12} lg={6}>
+            <Controller
+              name="destination"
+              control={control}
+              render={({ field: { name, value, onChange } }) => (
+                <FormGroup className="position-relative">
+                  <div className="d-flex flex-row justify-content-between">
+                    <Label htmlFor={name}> آدرس کیف پول: </Label>
+                  </div>
+                  <Input
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    placeholder="آدرس کیف پول خود را وارد کنید"
+                  // hasError={Boolean(errors?.[name])}
+                  />
+                  {errors?.[name] && (
+                    <FormFeedback tooltip>
+                      {errors[name]?.message}
+                    </FormFeedback>
+                  )}
+                </FormGroup>
+              )}
+            />
+          </Col>
+        </Row>
+        <Row className="mt-4">
+          <div className="d-flex flex-row justify-content-evenly">
+            <Button
+              color="primary"
+              outline
+              type="submit"
+              className="px-5 py-3"
+              disabled={formLoading}
+            >
+              {formLoading ? <Spinner /> : "ثبت درخواست برداشت"}
+            </Button>
           </div>
-          <Row className="mt-4">
-            <div className="d-flex flex-row justify-content-evenly">
-              <Button color="primary" type="button">
-                ثبت نهایی برداشت
-              </Button>
-              <Button color="danger" outline type="button">
-                لغو برداشت
-              </Button>
-            </div>
-          </Row>
-        </>
-      )}
-      {showOtp && (
-        <div className="d-flex flex-column align-items-center justify-content-center mt-5">
-          <WithdrawOTP
-            securitySelection={user.otpMethod}
-            handleResend={handleReSendOtp}
-            handleGetCode={(code) => {
-              if (code.length === 6) {
-                setOtpCode(code);
-              }
-            }}
-          />
-          <button className="btn btn-primary mt-2 px-5 py-2"
-            onClick={handleSendOtp}> تایید </button>
-        </div>
-      )}
+        </Row>
+      </form>
+
     </div>
   );
 };
