@@ -1,15 +1,12 @@
-import {
-  convertIRRToToman,
-  convertTextSingle,
-  extractLeftSide,
-  rialToToman,
-} from "helpers";
+import { convertTextSingle, extractLeftSide } from "helpers";
 import { useEffect } from "react";
-import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
+import { Card, CardBody, CardHeader } from "reactstrap";
 import { getRates } from "store/reducers/features/rates/rateSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import USDT from "assets/img/coins/usdt.svg";
 import Turkey from "assets/img/coins/try.svg";
+
+import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 
 const Market = () => {
   const dispatch = useAppDispatch();
@@ -57,8 +54,8 @@ const Market = () => {
                             </select>
                         </div>
                     </div> */}
-          <div className="table-responsive">
-            <table className="table-modern table table-borderless">
+          <div className={dashboard["table-responsive"]}>
+            <table id="responsive" className={dashboard["data-table"]}>
               <thead>
                 <tr>
                   <th scope="col">ارز</th>
@@ -76,8 +73,19 @@ const Market = () => {
                       <td style={{ display: "flex", alignItems: "center" }}>
                         <div style={{ marginRight: "10px" }}>
                           <span className="icon">
-                            {data.pair === "USDT/IRR" ? <img src={USDT} alt="" style={{ width: '20px', marginLeft: '5px' }} /> :
-                              <img src={Turkey} alt="" style={{ width: '20px', marginLeft: '5px' }} />}
+                            {data.pair === "USDT/IRR" ? (
+                              <img
+                                src={USDT}
+                                alt=""
+                                style={{ width: "20px", marginLeft: "5px" }}
+                              />
+                            ) : (
+                              <img
+                                src={Turkey}
+                                alt=""
+                                style={{ width: "20px", marginLeft: "5px" }}
+                              />
+                            )}
                           </span>
                           <span className="text-50 m-fa">
                             {convertTextSingle(extractLeftSide(data.pair))}
@@ -87,8 +95,9 @@ const Market = () => {
                       <td className="text-center">
                         <div className="market-data">
                           <span className="m-fa">
-                            
-                            {convertIRRToToman(data?.rate)}
+                            {Math.floor(
+                              Number(data?.rate) / 10,
+                            ).toLocaleString()}
                           </span>
                         </div>
                       </td>
