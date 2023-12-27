@@ -1,5 +1,5 @@
 import ExchangeInput from "components/Input/ExchangeInput";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {
@@ -26,7 +26,6 @@ import TRX from "assets/img/coins/trx.png";
 import exchange from "assets/scss/dashboard/exchange.module.scss";
 import { useLazyRatesQuery } from "store/api/exchange-management";
 import { CurrencyCode } from "types/wallet";
-import CurrencyInput from "react-currency-input-field";
 
 const options = [
   {
@@ -57,6 +56,12 @@ export default function ExchangeSection() {
     setIsOpenDestination((prevState) => !prevState);
 
   const [getRate, { data: currencyRes }] = useLazyRatesQuery();
+
+  useEffect(() => {
+    getRate({ sourceCurrencyCode: "IRR", targetCurrencyCode: "TRY" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const {
     handleSubmit,
     control,
@@ -94,8 +99,7 @@ export default function ExchangeSection() {
                       id={name}
                       value={value}
                       className="form-control"
-                      onChange={(e) => {
-                        onChange(e);
+                      onBlur={(e) => {
                         if (currencyRes) {
                           const value = e.target.value;
                           const result =
@@ -103,6 +107,7 @@ export default function ExchangeSection() {
                           setValue("destination", result);
                         }
                       }}
+                      onChange={onChange}
                       placeholder="مبلغ به "
                     />
                   )}
@@ -225,8 +230,7 @@ export default function ExchangeSection() {
                       id={name}
                       value={value}
                       className="form-control"
-                      onChange={(e) => {
-                        onChange(e);
+                      onBlur={(e) => {
                         if (currencyRes) {
                           const value = e.target.value;
                           const result =
@@ -234,6 +238,7 @@ export default function ExchangeSection() {
                           setValue("source", result);
                         }
                       }}
+                      onChange={onChange}
                       placeholder="مبلغ به "
                     />
                   )}
