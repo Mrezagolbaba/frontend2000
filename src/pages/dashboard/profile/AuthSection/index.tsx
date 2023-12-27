@@ -25,44 +25,44 @@ import { useAppSelector } from "store/hooks";
 
 const dataLevel1 = [
   <>
-    ﻭﺍﺭﯾﺰ و برداشت تومان ﺭﻭﺯﺍﻧﻪ:
+    ﻭﺍﺭﯾﺰ تومان ﺭﻭﺯﺍﻧﻪ:
     <strong>۱ میلیون تومان</strong>
   </>,
   <>
+    برداشت تومان روزانه:
+    <strong> نامحدود </strong>
+  </>,
+  <>
+    واریز و برداشت رمزارز ﺭﻭﺯﺍﻧﻪ:
+    <strong>نامحدود</strong>
+  </>,
+  <>
     واریز و برداشت فیات روزانه:
-    <strong>معادل ۵۰۰ دلار</strong>
-  </>,
-  <>
-    واریز رمزارز ﺭﻭﺯﺍﻧﻪ:
-    <strong>نامحدود</strong>
-  </>,
-  <>
-    برداشت رمزارز ﺭﻭﺯﺍﻧﻪ:
-    <strong>نامحدود</strong>
+    <strong>۵۰۰ دلار</strong>
   </>,
 ];
 const dataLevel2 = [
   <>
-    ﻭﺍﺭﯾﺰ و برداشت تومان ﺭﻭﺯﺍﻧﻪ:
-    <strong>۱۰۰ میلیون تومان</strong>
-  </>,
-  <>
-    ﻭﺍﺭﯾﺰ و برداشت فیات ﺭﻭﺯﺍﻧﻪ:
-    <strong>معادل ۳۵ هزار دلار </strong>
-  </>,
-  <>
-    واریز رمزارز ﺭﻭﺯﺍﻧﻪ:
+    ﻭﺍﺭﯾﺰ تومان ﺭﻭﺯﺍﻧﻪ:
     <strong>نامحدود</strong>
   </>,
   <>
-    برداشت رمزارز ﺭﻭﺯﺍﻧﻪ:
+    برداشت تومان ﺭﻭﺯﺍﻧﻪ:
+    <strong>نامحدود </strong>
+  </>,
+  <>
+    واریز و برداشت رمزارز ﺭﻭﺯﺍﻧﻪ:
     <strong>نامحدود</strong>
+  </>,
+  <>
+    واریز و برداشت فیات ﺭﻭﺯﺍﻧﻪ:
+    <strong>۳۵ هزار دلار</strong>
   </>,
 ];
 
 const AuthSection = () => {
   const { firstTierVerified, secondTierVerified } = useAppSelector(
-    (state) => state.user
+    (state) => state.user,
   );
 
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
@@ -100,7 +100,7 @@ const AuthSection = () => {
                 </li>
               ))}
             </List>
-            {firstTierVerified && (
+            {firstTierVerified && !secondTierVerified && (
               <AlertSuccess
                 hasIcon
                 key="success-tier1"
@@ -133,6 +133,15 @@ const AuthSection = () => {
               </Button>
             )}
           </Col>
+          {secondTierVerified && (
+            <Col xs={12}>
+              <AlertSuccess
+                hasIcon
+                key="success-tier1"
+                text="احراز هویت سطح یک و دو شما با موفقیت انجام شده است."
+              />
+            </Col>
+          )}
         </Row>
       </CardBody>
       <Modal

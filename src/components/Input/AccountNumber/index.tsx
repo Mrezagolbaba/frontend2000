@@ -3,8 +3,9 @@ import { Input } from "reactstrap";
 
 import accountNumber from "assets/scss/components/Input/accountNumber.module.scss";
 import { searchIranianBanks } from "helpers/filesManagement";
-import arsonexMark from "assets/img/icons/Arsonex Mark.svg";
+import arsonexMark from "assets/img/icons/bankDefault.svg";
 import { useBanksQuery } from "store/api/profile-management";
+import { persianToEnglishNumbers } from "helpers";
 
 type Props = {
   value: string;
@@ -32,19 +33,21 @@ export default function AccountNumberInput({
 
   useEffect(() => {
     if (value?.length >= 6) {
-      const result = searchIranianBanks(value, banks);
+      const result = searchIranianBanks(persianToEnglishNumbers(value), banks);
       if (result) {
         setLogo(result.logo);
         setBankId?.(result.bankId);
       } else setLogo(arsonexMark);
     } else setLogo(arsonexMark);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
   const handleChange = (e) => {
     const value = e.target.value;
-    if (value?.length === 6) {
-      const result = searchIranianBanks(value, banks);
+    if (value?.length >= 6) {
+      const result = searchIranianBanks(persianToEnglishNumbers(value), banks);
+      console.log("result", result);
+
       if (result) {
         setLogo(result.logo);
         setBankId?.(result.bankId);

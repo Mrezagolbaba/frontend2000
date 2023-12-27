@@ -18,6 +18,7 @@ export interface IUser {
   createdAt: string;
   updatedAt: string;
   deletedAt: string;
+  irPhoneNumber?: string;
 }
 export interface Isessions {
   id: string;
