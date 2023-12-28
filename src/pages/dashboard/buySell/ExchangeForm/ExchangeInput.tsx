@@ -29,10 +29,6 @@ const options = [
     label: { text: "لیر", img: Lira },
   },
   {
-    value: "TRX",
-    label: { text: "ترون", img: TRX },
-  },
-  {
     value: "USDT",
     label: { text: "تتر", img: tetter },
   },

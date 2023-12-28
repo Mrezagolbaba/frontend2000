@@ -141,7 +141,7 @@ export default function International({ accounts, isLoading }: Props) {
                             <IBANNumber
                               name={name}
                               value={value}
-                              onChange={onChange}
+                              onChange={(value) => setValue(name, value)}
                               setBankId={(id) => {
                                 setValue("bankId", id);
                               }}

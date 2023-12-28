@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Button, Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 import Dialog from "components/Dialog";
 import Deposit from "./Deposit";
+import Withdraw from "./Withdraw";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
-import Withdraw from "./Withdraw";
 
 type Props = {
   stock: any;
@@ -74,7 +74,7 @@ export default function RialCard({ stock, isLoading }: Props) {
         hasCloseButton
       >
         <Withdraw
-          stock={stock.availableBalance}
+          stock={stock?.availableBalance}
           onClose={() => setIsOpenWithdraw(false)}
         />
       </Dialog>
