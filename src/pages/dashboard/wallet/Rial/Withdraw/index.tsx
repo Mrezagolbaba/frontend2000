@@ -38,6 +38,8 @@ export default function Withdraw({ onClose, stock }: Props) {
   const { firstName, lastName, secondTierVerified } = useAppSelector(
     (state) => state.user,
   );
+  console.log("stock", stock);
+
   const navigate = useNavigate();
   const [hasAccount, setHasAccount] = useState<boolean>(true);
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
@@ -128,6 +130,7 @@ export default function Withdraw({ onClose, stock }: Props) {
       toast.success(
         "درخواست برداشت با موفقیت ثبت شد. لطفا منتظر تایید پشتیبانی بمانید.",
       );
+
     isErrorWithdraw &&
       toast.error(
         "در ثبت درخواست مشکلی پیش آمده است لطفا در صورت هرگونه ابهام با پشتیبانی ارتباط برقرار کنید.",
@@ -212,8 +215,8 @@ export default function Withdraw({ onClose, stock }: Props) {
                 <span className="d-flex flex-row justify-content-between">
                   <FormText>{`موجودی شما: ${(
                     Number(stock) / 10
-                  ).toLocaleString()}$ تومان`}</FormText>
-                  <FormText>کارمزد برداشت بانکی: هزارتومان</FormText>
+                  ).toLocaleString()} تومان`}</FormText>
+                  {/* <FormText>کارمزد برداشت بانکی: هزارتومان</FormText> */}
                 </span>
               </FormGroup>
             )}
