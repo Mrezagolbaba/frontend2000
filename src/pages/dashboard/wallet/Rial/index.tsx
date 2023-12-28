@@ -74,8 +74,8 @@ export default function RialCard({ stock, isLoading }: Props) {
         hasCloseButton
       >
         <Withdraw
-          stock={stock}
-          // onClose={() => setIsOpenWithdraw(false)}
+          stock={stock.availableBalance}
+          onClose={() => setIsOpenWithdraw(false)}
         />
       </Dialog>
     </Card>
