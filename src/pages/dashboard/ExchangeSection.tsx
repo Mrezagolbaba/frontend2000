@@ -1,4 +1,3 @@
-import ExchangeInput from "components/Input/ExchangeInput";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -21,11 +20,11 @@ import {
 import Lira from "assets/img/coins/lira.png";
 import Rial from "assets/img/icons/flag-iran.svg";
 import tetter from "assets/img/coins/tether.svg";
-import TRX from "assets/img/coins/trx.png";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
 import { useLazyRatesQuery } from "store/api/exchange-management";
 import { CurrencyCode } from "types/wallet";
+import CurrencyInput from "react-currency-input-field";
 
 const options = [
   {
@@ -36,10 +35,6 @@ const options = [
   {
     value: "TRY",
     label: { text: "لیر", img: Lira },
-  },
-  {
-    value: "TRX",
-    label: { text: "ترون", img: TRX },
   },
   {
     value: "USDT",
@@ -93,21 +88,31 @@ export default function ExchangeSection() {
                   name="source"
                   control={control}
                   render={({ field: { name, value, onChange } }) => (
-                    <Input
+                    <CurrencyInput
                       type="text"
                       name={name}
                       id={name}
                       value={value}
                       className="form-control"
-                      onBlur={(e) => {
+                      decimalsLimit={0}
+                      onBlur={() => {
+                        const sourceCurrency =
+                          getValues("sourceCurrency").value;
+                        const value =
+                          sourceCurrency === "IRR"
+                            ? Number(getValues(name)) * 10
+                            : getValues(name);
                         if (currencyRes) {
-                          const value = e.target.value;
                           const result =
                             Number(value) * Number(currencyRes.rate);
-                          setValue("destination", result);
+                          setValue("destination", Math.round(result));
                         }
                       }}
-                      onChange={onChange}
+                      onValueChange={(val) =>
+                        val === undefined
+                          ? setValue(name, "")
+                          : setValue(name, val)
+                      }
                       placeholder="مبلغ به "
                     />
                   )}
@@ -144,6 +149,8 @@ export default function ExchangeSection() {
                           <DropdownItem
                             key={index}
                             onClick={() => {
+                              setValue("source", "");
+                              setValue("destination", "");
                               const other = getValues("destinationCurrency");
                               if (option.value === other.value) {
                                 const filter = options.filter(
@@ -224,21 +231,32 @@ export default function ExchangeSection() {
                   name="destination"
                   control={control}
                   render={({ field: { name, value, onChange } }) => (
-                    <Input
+                    <CurrencyInput
                       type="text"
                       name={name}
                       id={name}
                       value={value}
                       className="form-control"
-                      onBlur={(e) => {
+                      decimalsLimit={0}
+                      onBlur={() => {
+                        const destinationCurrency = getValues(
+                          "destinationCurrency",
+                        ).value;
+                        const value =
+                          destinationCurrency === "IRR"
+                            ? Number(getValues(name)) * 10
+                            : getValues(name);
                         if (currencyRes) {
-                          const value = e.target.value;
                           const result =
                             Number(value) / Number(currencyRes.rate);
-                          setValue("source", result);
+                          setValue("destination", Math.round(result));
                         }
                       }}
-                      onChange={onChange}
+                      onValueChange={(val) =>
+                        val === undefined
+                          ? setValue(name, "")
+                          : setValue(name, val)
+                      }
                       placeholder="مبلغ به "
                     />
                   )}
@@ -275,6 +293,8 @@ export default function ExchangeSection() {
                           <DropdownItem
                             key={index}
                             onClick={() => {
+                              setValue("source", "");
+                              setValue("destination", "");
                               const other = getValues("sourceCurrency");
                               if (option.value === other.value) {
                                 const filter = options.filter(
@@ -323,14 +343,7 @@ export default function ExchangeSection() {
 
           <div className="mt-5 mb-4 d-flex align-items-center justify-content-center">
             <button
-              onClick={() =>
-                navigate(`/dashboard/buy-sell`, {
-                  //   state: {
-                  //     source: payValue,
-                  //     destination: receiveValue,
-                  //   },
-                })
-              }
+              onClick={() => navigate(`/dashboard/buy-sell`, {})}
               type="button"
               className="btn btn-primary"
               style={{ padding: "18px 70px" }}
