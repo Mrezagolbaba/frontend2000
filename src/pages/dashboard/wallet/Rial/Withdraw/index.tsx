@@ -38,7 +38,6 @@ export default function Withdraw({ onClose, stock }: Props) {
   const { firstName, lastName, secondTierVerified } = useAppSelector(
     (state) => state.user,
   );
-  console.log("stock", stock);
 
   const navigate = useNavigate();
   const [hasAccount, setHasAccount] = useState<boolean>(true);
@@ -138,6 +137,8 @@ export default function Withdraw({ onClose, stock }: Props) {
 
     onClose?.();
   }, [isSuccessWithdraw, isErrorWithdraw, onClose]);
+  console.log(hasAccount);
+
   return hasAccount ? (
     <form className="px-3" onSubmit={handleSubmit(onSubmit)}>
       <Row>

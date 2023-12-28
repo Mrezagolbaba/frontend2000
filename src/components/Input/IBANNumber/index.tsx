@@ -8,7 +8,7 @@ type Props = {
   name: string;
   value: string;
   disabled?: boolean;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (value: string) => void;
   className?: string;
   setBankId?: (string) => void;
 };
@@ -39,18 +39,18 @@ export default function IBANNumber({
   }, [isSuccess]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    if (
-      (value.length >= 7 && !value.includes("TR")) ||
-      (value.includes("TR") && value.length >= 9)
-    ) {
+    const value = e.target.value.replace("TR", "").replace(/\s/g, '') ;
+
+    console.log("value", value);
+
+    if (value.length >= 7) {
       const result = searchTurkishBanks(value, banks);
       if (result) {
         setLogo(result.logo);
         setBankId?.(result.bankId);
       } else setLogo(arsonexMark);
     } else setLogo(arsonexMark);
-    onChange?.(e);
+    onChange?.(value);
   };
   return (
     <div className={style["iban-input-control"]}>

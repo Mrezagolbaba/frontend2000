@@ -23,7 +23,12 @@ import { useNavigate } from "react-router-dom";
 import { setInvoice } from "store/reducers/features/invoice/invoiceSlice";
 
 type Props = {
-  setIsOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpenDialog: React.Dispatch<
+    React.SetStateAction<{
+      isOpen: boolean;
+      currency: "IRR" | "USDT" | "TRY";
+    }>
+  >;
 };
 
 export default function ExchangeForm({ setIsOpenDialog }: Props) {
@@ -77,7 +82,7 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
             position: "bottom-left",
           });
           setExchangeContext(initExchangeContext);
-          redirect("/dashboard/invoice",{state:res});
+          redirect("/dashboard/invoice", { state: res });
           setInvoice(res);
         }
         setIsLoading(false);
@@ -119,10 +124,11 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
   useEffect(() => {
     if (wallets && wallets.data) {
       const source = wallets.data.find(
-        (wallet) => wallet.currencyCode === exchangeContext.source.currency
+        (wallet) => wallet.currencyCode === exchangeContext.source.currency,
       );
       const destination = wallets.data.find(
-        (wallet) => wallet.currencyCode === exchangeContext.destination.currency
+        (wallet) =>
+          wallet.currencyCode === exchangeContext.destination.currency,
       );
 
       setExchangeContext({
@@ -166,7 +172,12 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
               outline
               className="px-4 "
               size="sm"
-              onClick={() => setIsOpenDialog(true)}
+              onClick={() =>
+                setIsOpenDialog({
+                  isOpen: true,
+                  currency: exchangeContext.source.currency,
+                })
+              }
             >
               واریز {convertText(exchangeContext.source.currency, "enToFa")}
             </Button>

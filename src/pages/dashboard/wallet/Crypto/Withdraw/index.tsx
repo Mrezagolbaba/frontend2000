@@ -23,8 +23,10 @@ import Currency from "components/Input/CurrencyInput";
 import { useState } from "react";
 import { useForm } from "@refinedev/core";
 import toast from "react-hot-toast";
-import { useResendOtpWithdrawMutation, useVerifyOtpWithdrawMutation } from "store/api/wallet-management";
-
+import {
+  useResendOtpWithdrawMutation,
+  useVerifyOtpWithdrawMutation,
+} from "store/api/wallet-management";
 
 type CryptoFormType = {
   network: string;
@@ -38,16 +40,15 @@ const WithdrawCrypto = ({
   stock,
   onCloseModal,
   setShowOtp,
-  setTransactionId
+  setTransactionId,
 }: {
   onClose: () => void;
   currency: string;
   stock: number;
   onCloseModal: () => void;
   setShowOtp: () => void;
-  setTransactionId: (id: string) => void
+  setTransactionId: (id: string) => void;
 }) => {
-
   const optionList: OptionType[] = [
     {
       content: (
@@ -67,14 +68,14 @@ const WithdrawCrypto = ({
       network: Yup.string().required(),
       amount: Yup.string().required(),
       destination: Yup.string().required(),
-    })
+    }),
   );
   const { formLoading, onFinish } = useForm({
     action: "create",
     resource: "transactions/withdraw",
     onMutationSuccess: (data, variables, context, isAutoSave) => {
-      setShowOtp()
-      onCloseModal()
+      setShowOtp();
+      onCloseModal();
     },
   });
 
@@ -104,10 +105,9 @@ const WithdrawCrypto = ({
         destination: data.destination,
       }).then((res: any) => {
         if (res) {
-          setTransactionId(res.data?.id)
-
+          setTransactionId(res.data?.id);
         }
-      })
+      });
   };
 
   return (
@@ -137,14 +137,12 @@ const WithdrawCrypto = ({
                     onChange={(val) => setValue(name, val)}
                     options={optionList}
                     disabled={true}
-                  // hasError={Boolean(errors?.[name])}
+                    // hasError={Boolean(errors?.[name])}
                   />
                   {errors?.[name] && (
-                    <FormFeedback tooltip>
-                      {errors[name]?.message}
-                    </FormFeedback>
+                    <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                   )}
-                  <FormText>سقف واریز</FormText>
+                  {/* <FormText>سقف واریز</FormText> */}
                 </FormGroup>
               )}
             />
@@ -156,7 +154,7 @@ const WithdrawCrypto = ({
               render={({ field: { name, value } }) => (
                 <FormGroup className="position-relative">
                   <div className="d-flex flex-row justify-content-between">
-                    <Label htmlFor={name}>مبلغ واریز: </Label>
+                    <Label htmlFor={name}>مبلغ برداشت: </Label>
                   </div>
                   <Currency
                     name={name}
@@ -166,9 +164,7 @@ const WithdrawCrypto = ({
                     hasError={Boolean(errors?.[name])}
                   />
                   {errors?.[name] && (
-                    <FormFeedback tooltip>
-                      {errors[name]?.message}
-                    </FormFeedback>
+                    <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                   )}
                   <FormText>
                     موجودی شما: {stock} {currency}
@@ -191,12 +187,10 @@ const WithdrawCrypto = ({
                     value={value}
                     onChange={onChange}
                     placeholder="آدرس کیف پول خود را وارد کنید"
-                  // hasError={Boolean(errors?.[name])}
+                    // hasError={Boolean(errors?.[name])}
                   />
                   {errors?.[name] && (
-                    <FormFeedback tooltip>
-                      {errors[name]?.message}
-                    </FormFeedback>
+                    <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                   )}
                 </FormGroup>
               )}
@@ -217,7 +211,6 @@ const WithdrawCrypto = ({
           </div>
         </Row>
       </form>
-
     </div>
   );
 };
