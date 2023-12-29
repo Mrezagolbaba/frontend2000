@@ -4,14 +4,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { LiaIdCardSolid } from "react-icons/lia";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CiMobile2, CiUser, CiMail } from "react-icons/ci";
+import { CiMobile2, CiUser, CiMail, CiCalendarDate } from "react-icons/ci";
+import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
+import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
 
 import Auth from "layouts/auth";
 import { InformationFormData } from "../types";
 import { InformationSchema } from "pages/auth/validationForms";
-import DatePicker from "components/DatePicker";
 import { useSubmitInformation } from "services/auth";
-import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
+import { convertPersianToGregorian, formatPhoneNumber, getDate18YearsAgo, persianToEnglishNumbers } from "helpers";
 import FloatInput from "components/Input/FloatInput";
 
 import auth from "assets/scss/auth/auth.module.scss";
@@ -29,6 +30,9 @@ const Information = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const submitInformation = useSubmitInformation();
+  const minimumDate = getDate18YearsAgo();
+
+  const [selectedDay, setSelectedDay] = useState(minimumDate);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { phoneNumber } = location.state;
@@ -38,6 +42,7 @@ const Information = () => {
     handleSubmit,
     control,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<InformationFormData>({
     mode: "onChange",
@@ -45,7 +50,6 @@ const Information = () => {
       firstName: "",
       lastName: "",
       nationalCode: "",
-      birthDate: "",
       phoneNumber: phoneNumber.includes("+98") ? phoneNumber : "",
       email: "",
     },
@@ -55,15 +59,17 @@ const Information = () => {
   const handleInfo = async (data: InformationFormData) => {
     setIsLoading(true);
     const nationalCode = persianToEnglishNumbers(data.nationalCode);
+    const birthDate = convertPersianToGregorian(selectedDay.year + "/" + selectedDay.month + "/" + selectedDay.day);
     await submitInformation
       .mutateAsync({
         ...data,
         phoneNumber: phoneNumber.includes("+98")
           ? phoneNumber
           : data.phoneNumber
-          ? formatPhoneNumber(persianToEnglishNumbers(data.phoneNumber), "98")
-          : undefined,
+            ? formatPhoneNumber(persianToEnglishNumbers(data.phoneNumber), "98")
+            : undefined,
         nationalCode,
+        birthDate,
       })
       .then((res) => {
         navigate("/email-otp", {
@@ -84,7 +90,6 @@ const Information = () => {
         position: "bottom-left",
       })
     );
-
   return (
     <Auth>
       <section className={auth.container}>
@@ -171,11 +176,32 @@ const Information = () => {
                     <Controller
                       name="birthDate"
                       control={control}
-                      render={({ field: { name } }) => (
+                      render={({ field: { } }) => (
                         <DatePicker
-                          label="تاریخ تولد"
-                          onChange={(date) => setValue("birthDate", date)}
-                          error={errors?.[name]?.message}
+                          value={selectedDay}
+                          onChange={(date) => setSelectedDay(date as any)}
+                          shouldHighlightWeekends
+                          locale="fa"
+                          wrapperClassName="w-100"
+                          maximumDate={minimumDate}
+                          colorPrimary="#111bff"
+                          renderInput={({ ref }) => (
+                            <FloatInput
+                              type="text"
+                              name={'birthDate'}
+                              label="تاریخ تولد"
+                              value={selectedDay.year + "-" + selectedDay.month + "-" + selectedDay.day}
+                              onChange={() => console.log('onChange')}
+                              inputProps={{
+                                ref: ref,
+                                size: "large",
+                                prefix: <CiCalendarDate size={20} />,
+                                status: errors?.['birthDate']?.message
+                                  ? "error"
+                                  : undefined,
+                              }}
+                            />
+                          )}
                         />
                       )}
                     />

@@ -1,3 +1,6 @@
+import moment from "jalali-moment";
+import jalaliMoment from "jalali-moment";
+
 export function generateLabelValueArray(start: number, end: number) {
   const resultArray: { label: string; value: string }[] = [];
   for (let i = start; i <= end; i++) {
@@ -202,6 +205,24 @@ export const LabeLText = {
 export const LabeLTextTransaction = {
   DARAFT: 'ناموفق',
   SUCCESSFUL: 'موفق',
+}
+
+export function getDate18YearsAgo(): { year: number; month: number; day: number } {
+  const currentDate: Date = new Date();
+  const eighteenYearsAgo: Date = new Date(currentDate);
+  eighteenYearsAgo.setFullYear(currentDate.getFullYear() - 18);
+
+  const jalaliDate18YearsAgo = jalaliMoment(eighteenYearsAgo);
+
+  const year18YearsAgo: number = jalaliDate18YearsAgo.jYear();
+  const month18YearsAgo: number = jalaliDate18YearsAgo.jMonth() + 1;
+  const date18YearsAgo: number = jalaliDate18YearsAgo.jDate(); 
+
+  return { year: year18YearsAgo, month: month18YearsAgo, day: date18YearsAgo };
+}
+export function convertPersianToGregorian(persianDate: string): string {
+  const gregorianDate = moment(persianDate, 'jYYYY/jMM/jDD').format('YYYY-MM-DD');
+  return gregorianDate;
 }
 
 
