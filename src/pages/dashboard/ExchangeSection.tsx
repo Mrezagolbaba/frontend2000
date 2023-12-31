@@ -1,21 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  CardTitle,
-  Col,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Form,
-  Input,
-  Label,
-  Row,
-} from "reactstrap";
+import { Card, CardBody, CardHeader, CardTitle, Form, Label } from "reactstrap";
 
 import Lira from "assets/img/coins/lira.png";
 import Rial from "assets/img/icons/flag-iran.svg";
@@ -24,9 +9,16 @@ import tetter from "assets/img/coins/tether.svg";
 import exchange from "assets/scss/dashboard/exchange.module.scss";
 import { useLazyRatesQuery } from "store/api/exchange-management";
 import { CurrencyCode } from "types/wallet";
-import CurrencyInput from "react-currency-input-field";
+import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
+import SelectCurrency from "components/Input/CurrencyInput/SelectCurrency";
 
-const options = [
+const options: {
+  value: CurrencyCode;
+  label: {
+    img: string;
+    text: string;
+  };
+}[] = [
   {
     value: "IRR",
     label: { text: "تومان", img: Rial },
@@ -44,34 +36,32 @@ const options = [
 export default function ExchangeSection() {
   const navigate = useNavigate();
 
-  const [isOpenSource, setIsOpenSource] = useState(false);
-  const [isOpenDestination, setIsOpenDestination] = useState(false);
-  const toggleSource = () => setIsOpenSource((prevState) => !prevState);
-  const toggleDestination = () =>
-    setIsOpenDestination((prevState) => !prevState);
+  const [source, setSource] = useState<{
+    amount: number;
+    currency: CurrencyCode;
+  }>({ amount: 0, currency: "IRR" });
+  const [destination, setDestination] = useState<{
+    amount: number;
+    currency: CurrencyCode;
+  }>({
+    amount: 0,
+    currency: "TRY",
+  });
 
   const [getRate, { data: currencyRes }] = useLazyRatesQuery();
 
   useEffect(() => {
-    getRate({ sourceCurrencyCode: "IRR", targetCurrencyCode: "TRY" });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const intervalId = setInterval(() => {
+      getRate({
+        sourceCurrencyCode: source.currency,
+        targetCurrencyCode: destination.currency,
+      });
+    }, 5000); // 5 seconds in milliseconds
 
-  const {
-    handleSubmit,
-    control,
-    setValue,
-    getValues,
-    formState: { errors },
-  } = useForm({
-    mode: "onChange",
-    defaultValues: {
-      source: "" as number | string,
-      sourceCurrency: { value: "IRR", label: { text: "تومان", img: Rial } },
-      destination: "" as number | string,
-      destinationCurrency: { value: "TRY", label: { text: "لیر", img: Lira } },
-    },
-  });
+    // Clean up the interval when the component is unmounted
+    return () => clearInterval(intervalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [source.currency, destination.currency]);
 
   return (
     <Card className="h-100">
@@ -84,115 +74,47 @@ export default function ExchangeSection() {
             <div className={exchange["currency-controls__group"]}>
               <Label htmlFor="source">پرداخت می‌کنید:</Label>
               <div>
-                <Controller
-                  name="source"
-                  control={control}
-                  render={({ field: { name, value, onChange } }) => (
-                    <CurrencyInput
-                      type="text"
-                      name={name}
-                      id={name}
-                      value={value}
-                      className="form-control"
-                      decimalsLimit={0}
-                      onBlur={() => {
-                        const sourceCurrency =
-                          getValues("sourceCurrency").value;
-                        const value =
-                          sourceCurrency === "IRR"
-                            ? Number(getValues(name)) * 10
-                            : getValues(name);
-                        if (currencyRes) {
-                          const result =
-                            Number(value) * Number(currencyRes.rate);
-                          setValue("destination", Math.round(result));
-                        }
-                      }}
-                      onValueChange={(val) =>
-                        val === undefined
-                          ? setValue(name, "")
-                          : setValue(name, val)
-                      }
-                      placeholder="مبلغ به "
-                    />
-                  )}
+                <CurrencyInput
+                  thousandSeparator=","
+                  value={source.amount}
+                  onBlur={() => {
+                    const amount =
+                      source.currency === "IRR"
+                        ? source.amount * 10
+                        : source.amount;
+                    const res =
+                      destination.currency === "IRR"
+                        ? Number(currencyRes?.rate) * amount * 10
+                        : Number(currencyRes?.rate) * amount;
+                    setDestination({
+                      ...destination,
+                      amount: Math.round(res),
+                    });
+                  }}
+                  onValueChange={(values) => {
+                    const value = values.floatValue as number;
+                    setSource({
+                      ...source,
+                      amount: value,
+                    });
+                  }}
                 />
-                <Controller
-                  name="sourceCurrency"
-                  control={control}
-                  render={({ field: { name, value } }) => (
-                    <Dropdown
-                      isOpen={isOpenSource}
-                      toggle={toggleSource}
-                      className={exchange.dropdown}
-                    >
-                      <DropdownToggle
-                        caret
-                        className={exchange["dropdown-btn"]}
-                      >
-                        <div className={exchange.selected}>
-                          <div className={exchange["selected__inner"]}>
-                            <div className={exchange["selected__item"]}>
-                              <img
-                                src={value.label.img}
-                                alt="currency-icon"
-                                width={20}
-                                height={20}
-                              />
-                              {value.label.text}
-                            </div>
-                          </div>
-                        </div>
-                      </DropdownToggle>
-                      <DropdownMenu className={exchange["dropdown-menu"]}>
-                        {options.map((option, index) => (
-                          <DropdownItem
-                            key={index}
-                            onClick={() => {
-                              setValue("source", "");
-                              setValue("destination", "");
-                              const other = getValues("destinationCurrency");
-                              if (option.value === other.value) {
-                                const filter = options.filter(
-                                  (item) => item.value !== option.value,
-                                );
-                                setValue("destinationCurrency", {
-                                  value: filter[0].value,
-                                  label: filter[0].label,
-                                });
-                              }
-                              setValue(name, {
-                                value: option.value,
-                                label: option.label,
-                              });
-                              getRate({
-                                sourceCurrencyCode:
-                                  option.value as CurrencyCode,
-                                targetCurrencyCode: getValues(
-                                  "destinationCurrency",
-                                ).value as CurrencyCode,
-                              });
-                            }}
-                          >
-                            <div>
-                              <img
-                                src={option.label.img}
-                                alt=""
-                                className="bs-icon"
-                                width={20}
-                                height={20}
-                                style={{ marginLeft: "5px" }}
-                              />
-                              <span style={{ fontSize: "12px" }}>
-                                {" "}
-                                {option.label.text}
-                              </span>
-                            </div>
-                          </DropdownItem>
-                        ))}
-                      </DropdownMenu>
-                    </Dropdown>
-                  )}
+                <SelectCurrency
+                  value={source.currency}
+                  onChange={(option) => {
+                    setSource({
+                      amount: 0,
+                      currency: option.value,
+                    });
+
+                    if (option.value === destination.currency) {
+                      const filter = options.find(
+                        (item) => item.value !== option.value,
+                      );
+                      filter &&
+                        setDestination({ amount: 0, currency: filter?.value });
+                    } else setDestination({ ...destination, amount: 0 });
+                  }}
                 />
               </div>
             </div>
@@ -223,119 +145,56 @@ export default function ExchangeSection() {
               </span>
             </div>
             <div className={exchange["currency-controls__group"]}>
-              <Label className="form-label" style={{ color: "#03041b66" }}>
+              <Label
+                htmlFor="destination"
+                className="form-label"
+                style={{ color: "#03041b66" }}
+              >
                 دریافت می‌کنید:
               </Label>
               <div>
-                <Controller
-                  name="destination"
-                  control={control}
-                  render={({ field: { name, value, onChange } }) => (
-                    <CurrencyInput
-                      type="text"
-                      name={name}
-                      id={name}
-                      value={value}
-                      className="form-control"
-                      decimalsLimit={0}
-                      onBlur={() => {
-                        const destinationCurrency = getValues(
-                          "destinationCurrency",
-                        ).value;
-                        const value =
-                          destinationCurrency === "IRR"
-                            ? Number(getValues(name)) * 10
-                            : getValues(name);
-                        if (currencyRes) {
-                          const result =
-                            Number(value) / Number(currencyRes.rate);
-                          setValue("destination", Math.round(result));
-                        }
-                      }}
-                      onValueChange={(val) =>
-                        val === undefined
-                          ? setValue(name, "")
-                          : setValue(name, val)
-                      }
-                      placeholder="مبلغ به "
-                    />
-                  )}
+                <CurrencyInput
+                  thousandSeparator=","
+                  value={destination.amount}
+                  onBlur={() => {
+                    const amount =
+                      destination.currency === "IRR"
+                        ? destination.amount * 10
+                        : destination.amount;
+                    const res =
+                      source.currency === "IRR"
+                        ? amount / Number(currencyRes?.rate) / 10
+                        : amount / Number(currencyRes?.rate);
+                    setSource({
+                      ...source,
+                      amount: Math.round(res),
+                    });
+                  }}
+                  onValueChange={(values) => {
+                    const value = values.floatValue as number;
+
+                    setDestination({
+                      ...destination,
+                      amount: value,
+                    });
+                  }}
                 />
-                <Controller
-                  name="destinationCurrency"
-                  control={control}
-                  render={({ field: { name, value } }) => (
-                    <Dropdown
-                      isOpen={isOpenDestination}
-                      toggle={toggleDestination}
-                      className={exchange.dropdown}
-                    >
-                      <DropdownToggle
-                        caret
-                        className={exchange["dropdown-btn"]}
-                      >
-                        <div className={exchange.selected}>
-                          <div className={exchange["selected__inner"]}>
-                            <div className={exchange["selected__item"]}>
-                              <img
-                                src={value.label.img}
-                                alt="currency-icon"
-                                width={20}
-                                height={20}
-                              />
-                              {value.label.text}
-                            </div>
-                          </div>
-                        </div>
-                      </DropdownToggle>
-                      <DropdownMenu className={exchange["dropdown-menu"]}>
-                        {options.map((option, index) => (
-                          <DropdownItem
-                            key={index}
-                            onClick={() => {
-                              setValue("source", "");
-                              setValue("destination", "");
-                              const other = getValues("sourceCurrency");
-                              if (option.value === other.value) {
-                                const filter = options.filter(
-                                  (item) => item.value !== option.value,
-                                );
-                                setValue("sourceCurrency", {
-                                  value: filter[0].value,
-                                  label: filter[0].label,
-                                });
-                              }
-                              setValue(name, {
-                                value: option.value,
-                                label: option.label,
-                              });
-                              getRate({
-                                sourceCurrencyCode: getValues("sourceCurrency")
-                                  .value as CurrencyCode,
-                                targetCurrencyCode:
-                                  option.value as CurrencyCode,
-                              });
-                            }}
-                          >
-                            <div>
-                              <img
-                                src={option.label.img}
-                                alt=""
-                                className="bs-icon"
-                                width={20}
-                                height={20}
-                                style={{ marginLeft: "5px" }}
-                              />
-                              <span style={{ fontSize: "12px" }}>
-                                {" "}
-                                {option.label.text}
-                              </span>
-                            </div>
-                          </DropdownItem>
-                        ))}
-                      </DropdownMenu>
-                    </Dropdown>
-                  )}
+                <SelectCurrency
+                  value={destination.currency}
+                  onChange={(option) => {
+                    setDestination({
+                      amount: 0,
+                      currency: option.value,
+                    });
+
+                    if (option.value === source.currency) {
+                      const filter = options.find(
+                        (item) => item.value !== option.value,
+                      );
+                      filter &&
+                        setSource({ amount: 0, currency: filter?.value });
+                    } else setSource({ ...source, amount: 0 });
+                  }}
                 />
               </div>
             </div>
