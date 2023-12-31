@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Switch } from "antd";
+import { Checkbox, Switch } from "antd";
 import { Card, CardBody, CardHeader, CardTitle, Col, FormGroup, Input, Label, Row } from "reactstrap";
 import s from "./styles.module.scss";
 import { useForm } from "react-hook-form";
@@ -13,6 +13,7 @@ import { useGetMe } from "services/auth/user";
 import { setUser } from "store/reducers/features/user/userSlice";
 import PhoneVerification from "./phoneVerification";
 import EmailVerification from "./emailVerification";
+import { CheckboxChangeEvent } from "antd/es/checkbox";
 interface NotificationSetting {
   key: string;
   userId: string;
@@ -120,7 +121,7 @@ const Setting = () => {
   const fetchData = async () => {
     await dispatch(getNotifSettings())
   };
-  const handleChange = async (id: string, checked: boolean) => {
+  const handleChange = async (id: string, checked: CheckboxChangeEvent) => {
     setNotificationStates((prevState) => {
       const newState = {
         ...prevState,
@@ -251,7 +252,7 @@ const Setting = () => {
                               return (
                                 <td key={switchId} className="text-center">
                                   <div className="notice__toggle">
-                                    <Switch
+                                    <Checkbox
                                       id={switchId}
                                       key={switchId}
                                       onChange={(checked) => {
@@ -267,7 +268,7 @@ const Setting = () => {
                               return (
                                 <td key={switchId} className="text-center">
                                   <div className="notice__toggle">
-                                    <Switch
+                                    <Checkbox
                                       id={switchId}
                                       key={switchId}
                                       onChange={(checked) => {
