@@ -16,7 +16,7 @@ export const exchangeManagement = enhancedApi.injectEndpoints({
       },
     }),
     currencySwap: builder.query<any, any>({
-      query({params}) {
+      query({ params }) {
         return {
           method: "GET",
           url: `/currency-swaps`,
@@ -24,7 +24,16 @@ export const exchangeManagement = enhancedApi.injectEndpoints({
         };
       },
     }),
+    wallets: builder.query<any, void>({
+      query() {
+        return {
+          method: "GET",
+          url: "/wallets",
+        };
+      },
+    }),
   }),
 });
 
-export const { useLazyRatesQuery, useCurrencySwapQuery } = exchangeManagement;
+export const { useLazyRatesQuery, useCurrencySwapQuery, useWalletsQuery } =
+  exchangeManagement;
