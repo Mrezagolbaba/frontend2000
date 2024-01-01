@@ -293,14 +293,11 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
         <WithdrawOTP
           title="تایید برداشت"
           onClose={() => setShowOtp(false)}
-          handleSendOtp={handleSendOtp}
           securitySelection={user.otpMethod}
           handleResend={handleReSendOtp}
-          handleGetCode={(code) => {
-            if (code.length === 6) {
-              setOtpCode(code);
-              handleSendOtp()
-            }
+          handleGetCode={(data) => {
+            setOtpCode(data.code);
+            data.code.length === 6 && handleSendOtp()
           }}
         />
       </Modal>
