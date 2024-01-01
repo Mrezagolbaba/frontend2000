@@ -1,14 +1,75 @@
 import { Col, Input, Row } from "reactstrap";
-import { convertText } from "helpers";
-import { useExchangeContext } from "../ContextProvider";
+import { convertIRRToToman, convertText } from "helpers";
 
 import buy from "assets/scss/dashboard/buy-sell.module.scss";
+import { useCreateCurrencySwapMutation } from "store/api/exchange-management";
+import { CurrencyCode } from "types/wallet";
+import { useEffect, useState } from "react";
 
 type Props = {
-  isLoading?: boolean;
+  source: {
+    amount: number | string;
+    currency: CurrencyCode;
+  };
+  destination: {
+    amount: number | string;
+    currency: CurrencyCode;
+  };
 };
-export default function WageTable({ isLoading = false }: Props) {
-  const { exchangeContext, setExchangeContext } = useExchangeContext();
+export default function WageTable({ source, destination }: Props) {
+  const [feeCurrency, setFeeCurrency] = useState<CurrencyCode>(source.currency);
+  const [currencySwap, { data, isLoading, isSuccess }] =
+    useCreateCurrencySwapMutation();
+  const [resultData, setResultData] = useState({
+    sourceFee: "",
+    sourceFeePercent: 0,
+    destinationFee: "",
+    destinationFeePercent: 0,
+    destinationAmount: "",
+  });
+
+  useEffect(() => {
+    const data = {
+      sourceCurrencyCode: source.currency,
+      sourceAmount:
+        source.currency === "IRR"
+          ? (Number(source.amount) * 10).toString()
+          : source.amount.toString(),
+      destinationCurrencyCode: destination.currency,
+      feeCurrencyCode: feeCurrency,
+    };
+    currencySwap({ isDry: true, data });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [source, destination]);
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      setResultData({
+        sourceFee:
+          source.currency === "IRR"
+            ? convertIRRToToman(data?.transactions[0]?.fee)
+            : Number(data?.transactions[0]?.fee).toLocaleString(),
+        sourceFeePercent: Number(data?.transactions[0]?.fees[0]?.value) * 100,
+        destinationFee:
+          destination.currency === "IRR"
+            ? convertIRRToToman(data?.transactions[1]?.fee)
+            : Number(data?.transactions[1]?.fee).toLocaleString(),
+        destinationFeePercent: 0,
+        // Number(data?.transactions[1]?.fees[1]?.value) * 100,
+        destinationAmount:
+          destination.currency === "IRR"
+            ? convertIRRToToman(
+                Number(data?.transactions[1]?.amount) -
+                  Number(data?.transactions[1]?.fee),
+              )
+            : Number(
+                Number(data?.transactions[1]?.amount) -
+                  Number(data?.transactions[1]?.fee),
+              ).toLocaleString(),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, isSuccess]);
 
   return (
     <div className={buy.wage}>
@@ -38,23 +99,12 @@ export default function WageTable({ isLoading = false }: Props) {
                         name="rtc"
                         id="rtc1"
                         className="m-2"
-                        checked={
-                          exchangeContext.commission.currencyReference ===
-                          "source"
-                        }
+                        checked={feeCurrency === source.currency}
                         onChange={() => {
-                          setExchangeContext({
-                            ...exchangeContext,
-                            commission: {
-                              ...exchangeContext.commission,
-                              currencyReference: "source",
-                            },
-                          });
+                          setFeeCurrency(source.currency);
                         }}
                       />
-                      <label>
-                        {convertText(exchangeContext.source.currency, "enToFa")}
-                      </label>
+                      <label>{convertText(source.currency, "enToFa")}</label>
                     </div>
                   </Col>
                   <Col lg={5} xs={6}>
@@ -64,59 +114,37 @@ export default function WageTable({ isLoading = false }: Props) {
                         name="rtc"
                         id="rtc2"
                         className="m-2"
-                        checked={
-                          exchangeContext.commission.currencyReference ===
-                          "destination"
-                        }
+                        checked={feeCurrency === destination.currency}
                         onChange={() => {
-                          setExchangeContext({
-                            ...exchangeContext,
-                            commission: {
-                              ...exchangeContext.commission,
-                              currencyReference: "destination",
-                            },
-                          });
+                          setFeeCurrency(destination.currency);
                         }}
                       />
                       <label>
-                        {convertText(
-                          exchangeContext.destination.currency,
-                          "enToFa"
-                        )}
+                        {convertText(destination.currency, "enToFa")}
                       </label>
                     </div>
                   </Col>
                 </Row>
               </td>
-              <td className="text-center">
-                {exchangeContext.commission.currencyReference === "source"
-                  ? `${exchangeContext.commission.sourceFeePercent}٪ معادل ${
-                      exchangeContext.commission.sourceFee
-                    } ${convertText(exchangeContext.source.currency, "enToFa")}`
-                  : `${
-                      exchangeContext.commission.destinationFeePercent
-                    }٪ معادل ${
-                      exchangeContext.commission.destinationFee
-                    } ${convertText(
-                      exchangeContext.destination.currency,
-                      "enToFa"
+              {data && (
+                <>
+                  <td className="text-center">
+                    {feeCurrency === source.currency
+                      ? `${resultData.sourceFeePercent}٪ معادل ${
+                          resultData.sourceFee
+                        } ${convertText(source.currency, "enToFa")}`
+                      : `${resultData.destinationFeePercent}٪ معادل ${
+                          resultData.destinationFee
+                        } ${convertText(destination.currency, "enToFa")}`}
+                  </td>
+                  <td className="text-center">
+                    {`${resultData.destinationAmount} ${convertText(
+                      destination.currency,
+                      "enToFa",
                     )}`}
-              </td>
-              <td className="text-center">
-                {exchangeContext.commission.currencyReference === "source"
-                  ? `${
-                      exchangeContext.commission.destinationAmount
-                    } ${convertText(
-                      exchangeContext.destination.currency,
-                      "enToFa"
-                    )}`
-                  : `${
-                      exchangeContext.commission.destinationAmount
-                    } ${convertText(
-                      exchangeContext.destination.currency,
-                      "enToFa"
-                    )}`}
-              </td>
+                  </td>
+                </>
+              )}
             </tr>
           </tbody>
         )}

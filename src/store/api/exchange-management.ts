@@ -32,8 +32,24 @@ export const exchangeManagement = enhancedApi.injectEndpoints({
         };
       },
     }),
+    createCurrencySwap: builder.mutation<any, { isDry: boolean; data: any }>({
+      query({ isDry, data }) {
+        return {
+          method: "POST",
+          url: "/currency-swaps",
+          params: {
+            dry_run: isDry,
+          },
+          data,
+        };
+      },
+    }),
   }),
 });
 
-export const { useLazyRatesQuery, useCurrencySwapQuery, useWalletsQuery } =
-  exchangeManagement;
+export const {
+  useLazyRatesQuery,
+  useCurrencySwapQuery,
+  useWalletsQuery,
+  useCreateCurrencySwapMutation,
+} = exchangeManagement;
