@@ -25,6 +25,12 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
+type Day = {
+  year: number;
+  month: number;
+  day: number;
+};
+type DayValue = Day | null | undefined;
 
 const Information = () => {
   const navigate = useNavigate();
@@ -32,7 +38,7 @@ const Information = () => {
   const submitInformation = useSubmitInformation();
   const minimumDate = getDate18YearsAgo();
 
-  const [selectedDay, setSelectedDay] = useState(minimumDate);
+  const [selectedDay, setSelectedDay] = useState<DayValue>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { phoneNumber } = location.state;
@@ -43,6 +49,7 @@ const Information = () => {
     control,
     setValue,
     getValues,
+    setError,
     formState: { errors },
   } = useForm<InformationFormData>({
     mode: "onChange",
@@ -59,7 +66,15 @@ const Information = () => {
   const handleInfo = async (data: InformationFormData) => {
     setIsLoading(true);
     const nationalCode = persianToEnglishNumbers(data.nationalCode);
-    const birthDate = convertPersianToGregorian(selectedDay.year + "/" + selectedDay.month + "/" + selectedDay.day);
+    const birthDate = convertPersianToGregorian(selectedDay?.year + "/" + selectedDay?.month + "/" + selectedDay?.day);
+    if (birthDate === undefined) {
+      toast.error("تاریخ تولد الزامی می باشد.", {
+        position: "bottom-left",
+      })
+
+      setIsLoading(false);
+      return;
+    }
     await submitInformation
       .mutateAsync({
         ...data,
@@ -176,7 +191,7 @@ const Information = () => {
                     <Controller
                       name="birthDate"
                       control={control}
-                      render={({ field: { } }) => (
+                      render={({ field: { name, value, onChange, ref } }) => (
                         <DatePicker
                           value={selectedDay}
                           onChange={(date) => setSelectedDay(date as any)}
@@ -188,10 +203,10 @@ const Information = () => {
                           renderInput={({ ref }) => (
                             <FloatInput
                               type="text"
-                              name={'birthDate'}
+                              name={name}
                               label="تاریخ تولد"
-                              value={selectedDay.year + "-" + selectedDay.month + "-" + selectedDay.day}
-                              onChange={() => console.log('onChange')}
+                              value={selectedDay !== undefined ? selectedDay?.year + "-" + selectedDay?.month + "-" + selectedDay?.day : ""}
+                              onChange={onChange}
                               inputProps={{
                                 ref: ref,
                                 size: "large",

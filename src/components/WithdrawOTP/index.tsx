@@ -14,8 +14,9 @@ interface Props {
     handleResend: () => void
     handleSendOtp: () => void
     onClose: () => void
+    title?: string
 }
-const WithdrawOTP = ({ securitySelection, section, handleGetCode, handleResend, handleSendOtp, onClose }: Props) => {
+const WithdrawOTP = ({ securitySelection, section, handleGetCode, handleResend, handleSendOtp, onClose,title }: Props) => {
     const [timeInSeconds, setTimeInSeconds] = useState(120);
     const user = useAppSelector((state) => state.user);
     useEffect(() => {
@@ -55,7 +56,7 @@ const WithdrawOTP = ({ securitySelection, section, handleGetCode, handleResend, 
             </div>
             <div className={otp["otp-content"]}>
                 <div className={otp["otp-title"]}>
-                    <h5 >تایید برداشت</h5>
+                    <h5 >{title}</h5>
                     {user.otpMethod === "PHONE" &&
                         <h6 className={otp["otp-title-text"]}>یک کد ۶ رقمی به شماره
                             <span>{" "} {PhoneNumberMask({ phoneNumber: user.phoneNumber})} {" "}</span>
