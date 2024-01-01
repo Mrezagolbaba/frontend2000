@@ -14,5 +14,6 @@ declare const classNames: {
   readonly selected__item: "selected__item";
   readonly "dropdown-menu": "dropdown-menu";
   readonly detail: "detail";
+  readonly radioToggleControl: "radioToggleControl";
 };
 export = classNames;
