@@ -2,37 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardBody, CardHeader, CardTitle, Form, Label } from "reactstrap";
 
-import Lira from "assets/img/coins/lira.png";
-import Rial from "assets/img/icons/flag-iran.svg";
-import tetter from "assets/img/coins/tether.svg";
-
 import exchange from "assets/scss/dashboard/exchange.module.scss";
 import { useLazyRatesQuery } from "store/api/exchange-management";
 import { CurrencyCode } from "types/wallet";
 import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
 import SelectCurrency from "components/Input/CurrencyInput/SelectCurrency";
+import { currencyOptions } from "components/Input/CurrencyInput/SelectCurrency/constant";
 
-const options: {
-  value: CurrencyCode;
-  label: {
-    img: string;
-    text: string;
-  };
-}[] = [
-  {
-    value: "IRR",
-    label: { text: "تومان", img: Rial },
-  },
-
-  {
-    value: "TRY",
-    label: { text: "لیر", img: Lira },
-  },
-  {
-    value: "USDT",
-    label: { text: "تتر", img: tetter },
-  },
-];
 export default function ExchangeSection() {
   const navigate = useNavigate();
 
@@ -77,14 +53,14 @@ export default function ExchangeSection() {
                 <CurrencyInput
                   thousandSeparator=","
                   value={source.amount}
-                  onBlur={() => {
+                  onKeyUp={() => {
                     const amount =
                       source.currency === "IRR"
                         ? source.amount * 10
                         : source.amount;
                     const res =
                       destination.currency === "IRR"
-                        ? Number(currencyRes?.rate) * amount * 10
+                        ? (Number(currencyRes?.rate) * amount) / 10
                         : Number(currencyRes?.rate) * amount;
                     setDestination({
                       ...destination,
@@ -108,7 +84,7 @@ export default function ExchangeSection() {
                     });
 
                     if (option.value === destination.currency) {
-                      const filter = options.find(
+                      const filter = currencyOptions.find(
                         (item) => item.value !== option.value,
                       );
                       filter &&
@@ -156,7 +132,7 @@ export default function ExchangeSection() {
                 <CurrencyInput
                   thousandSeparator=","
                   value={destination.amount}
-                  onBlur={() => {
+                  onKeyUp={() => {
                     const amount =
                       destination.currency === "IRR"
                         ? destination.amount * 10
@@ -188,7 +164,7 @@ export default function ExchangeSection() {
                     });
 
                     if (option.value === source.currency) {
-                      const filter = options.find(
+                      const filter = currencyOptions.find(
                         (item) => item.value !== option.value,
                       );
                       filter &&
