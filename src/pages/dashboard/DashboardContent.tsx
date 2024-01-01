@@ -18,8 +18,6 @@ import EasyAccess from "./EasyAccess";
 import LatestDeals from "./LatestDeals";
 import LastTransactions from "./LastTransactions";
 
-import dashboard from "assets/scss/dashboard/dashboard.module.scss";
-
 const DashboardContent = () => {
   const user = useAppSelector((state) => state.user);
 
@@ -31,11 +29,8 @@ const DashboardContent = () => {
 
       {!user?.secondTierVerified && (
         <section className="mb-4">
-          <Card
-            className="custom-card  auth-jumbotron "
-            style={{ backgroundColor: "#111bff08" }}
-          >
-            <CardHeader>
+          <Card style={{ backgroundColor: "#111bff08" }}>
+            <CardHeader style={{ backgroundColor: "transparent" }}>
               <CardTitle tag="h5">احراز هویت</CardTitle>
             </CardHeader>
             <CardBody>
@@ -47,8 +42,14 @@ const DashboardContent = () => {
                       احراز هویت را تکمیل کنید، زمان بررسی و تایید اطلاعات ۱
                       ساعت &zwnj;می&zwnj;باشد.{" "}
                     </p>
-                    <Button outline color="primary">
-                      شروع احراز هویت سطح دو
+                    <Button
+                      className="px-3 py-2"
+                      outline
+                      color="primary"
+                      tag="a"
+                      href="/dashboard/profile"
+                    >
+                      احراز هویت سطح دو
                     </Button>
                   </div>
                 </Col>
