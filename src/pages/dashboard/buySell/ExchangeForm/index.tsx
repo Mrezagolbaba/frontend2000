@@ -198,7 +198,7 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
           </Row>
           <Row>
             <Col xs={12}>
-              <WageTable isLoading={isLoading} />
+              {/* <WageTable isLoading={isLoading} /> */}
             </Col>
           </Row>
           <div className={buy.currencyExchangeAction}>
