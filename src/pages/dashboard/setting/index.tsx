@@ -270,15 +270,11 @@ const Setting = () => {
                     </FormGroup>
                   </Col> */}
                 </Row>
-                {/* {securitySelection === "AUTHENTICATOR" && !isInitial && <Authenticator initialMethod={user.otpMethod} />} */}
-                {/* {securitySelection === "PHONE" && !isInitial && user.otpMethod === 'PHONE' && <PhoneVerification />}
-                {securitySelection === "EMAIL" && !isInitial && user.otpMethod === 'EMAIL' && <EmailVerification />} */}
                 <ChangePassword />
               </form>
             </CardBody>
           </Card>
         </Col>
-
         <Col xl={6} lg={6}>
           <Card>
             <CardHeader>
