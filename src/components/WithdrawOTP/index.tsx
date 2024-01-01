@@ -10,13 +10,12 @@ import { IoIosClose } from "react-icons/io";
 interface Props {
     securitySelection: string
     section?: string
-    handleGetCode: (code: string) => void
+    handleGetCode: ({ code }: { code: string }) => void
     handleResend: () => void
-    handleSendOtp: () => void
     onClose: () => void
     title?: string
 }
-const WithdrawOTP = ({ securitySelection, section, handleGetCode, handleResend, handleSendOtp, onClose,title }: Props) => {
+const WithdrawOTP = ({ securitySelection, section, handleGetCode, handleResend, onClose, title }: Props) => {
     const [timeInSeconds, setTimeInSeconds] = useState(120);
     const user = useAppSelector((state) => state.user);
     useEffect(() => {
@@ -48,26 +47,25 @@ const WithdrawOTP = ({ securitySelection, section, handleGetCode, handleResend, 
         const maskedStr = str.substring(0, start) + "*".repeat(maskLength) + str.substring(end);
         return maskedStr;
     }
-
     return (
         <div className={otp["otp-container"]}>
-            <div className={otp["otp-header"]} onClick={() => onClose}>
+            <div className={otp["otp-header"]}>
+                <h5 >{title}</h5>
                 <IoIosClose color="#c6d2d9" size={40} onClick={() => onClose()} />
             </div>
             <div className={otp["otp-content"]}>
                 <div className={otp["otp-title"]}>
-                    <h5 >{title}</h5>
-                    {user.otpMethod === "PHONE" &&
+                    {securitySelection === "PHONE" &&
                         <h6 className={otp["otp-title-text"]}>یک کد ۶ رقمی به شماره
-                            <span>{" "} {PhoneNumberMask({ phoneNumber: user.phoneNumber})} {" "}</span>
+                            <span>{" "} {PhoneNumberMask({ phoneNumber: user.phoneNumber })} {" "}</span>
                             ارسال شد لطفا کد را اینجا وارد کنید
                         </h6>}
-                    {user.otpMethod === "EMAIL" &&
+                    {securitySelection === "EMAIL" &&
                         <h6 className={otp["otp-title-text"]}>یک کد ۶ رقمی به ایمیل
                             <span>{" "} {maskingString(user.email, 1, 14)}{" "}</span>
                             ارسال شد لطفا کد را اینجا وارد کنید
                         </h6>}
-                    {user.otpMethod === 'AUTHENTICATOR' &&
+                    {securitySelection === 'AUTHENTICATOR' &&
                         <h6 className={otp["otp-title-text"]}>یک کد ۶ رقمی به اپلیکیشن احراز هویت ارسال شد لطفا کد را اینجا وارد کنید</h6>
                     }
                 </div>
@@ -76,9 +74,8 @@ const WithdrawOTP = ({ securitySelection, section, handleGetCode, handleResend, 
                     value={otpCode}
                     onChange={(code) => {
                         setOtpCode(code);
-                        if (code.length === 6) {
-                            handleGetCode(code)
-                        }
+                        code.length === 6 && handleGetCode({ code })
+                       
 
                     }}
                     inputStyle={otp["otp-input"]}

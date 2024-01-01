@@ -82,12 +82,12 @@ const settingSlice = createSlice({
             .addCase(getAuthenticatorData.rejected, (state, action: any) => {
                 return state;
             })
-            .addCase(setAuthenticatorData.fulfilled, (state, action) => {
+            .addCase(setAuthenticatorData.fulfilled, (state, action: any) => {
                 return { ...state, authenticator: action.payload };
             })
             .addCase(setAuthenticatorData.rejected, (state, action: any) => {
-                return state; 
-            });
+                return state;
+            })
 
     },
 });

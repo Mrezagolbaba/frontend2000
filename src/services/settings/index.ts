@@ -32,8 +32,8 @@ export const getAuthenticator = async () => {
 }
 export const setAuthenticator = async (data: any) => {
     try {
-        const response = await request.post("/auth/setup-authenticator", data);
-        return response.data;
+        const response =await request.post("/auth/setup-authenticator", data);
+        return response;
     } catch (error: any) {
         throw new Error(
             error.response?.data?.message || "Notification settings failed. Please try again."
