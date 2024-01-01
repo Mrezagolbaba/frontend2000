@@ -125,18 +125,20 @@ export default function Withdraw({ onClose, stock }: Props) {
   };
 
   useEffect(() => {
-    isSuccessWithdraw &&
+    if (isSuccessWithdraw) {
       toast.success(
         "درخواست برداشت با موفقیت ثبت شد. لطفا منتظر تایید پشتیبانی بمانید.",
       );
+      onClose?.();
+    }
 
     isErrorWithdraw &&
       toast.error(
         "در ثبت درخواست مشکلی پیش آمده است لطفا در صورت هرگونه ابهام با پشتیبانی ارتباط برقرار کنید.",
       );
 
-    onClose?.();
-  }, [isSuccessWithdraw, isErrorWithdraw, onClose]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccessWithdraw, isErrorWithdraw]);
   console.log(hasAccount);
 
   return hasAccount ? (

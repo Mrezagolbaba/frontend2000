@@ -202,6 +202,21 @@ export default function NewExchangeForm({ setIsOpenDialog }: Props) {
                     </span>
                   </div>
                 )}
+                {isLoading ? (
+                  <div className="text-center placeholder-glow d-flex justify-content-between w-100">
+                    <div className="placeholder col-11 bg-secondary rounded py-2" />
+                  </div>
+                ) : (
+                  <div>
+                    <BsTag />
+                    <span className="title">
+                      نرخ {convertText(source.currency, "enToFa")} :
+                    </span>
+                    <span className="value">
+                      {handleRate(destination.currency)}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
             <div className={exchange.divider}>
@@ -289,21 +304,6 @@ export default function NewExchangeForm({ setIsOpenDialog }: Props) {
 
                     <span className="value">
                       {handleStock(destination.currency)}
-                    </span>
-                  </div>
-                )}
-                {isLoading ? (
-                  <div className="text-center placeholder-glow d-flex justify-content-between w-100">
-                    <div className="placeholder col-11 bg-secondary rounded py-2" />
-                  </div>
-                ) : (
-                  <div>
-                    <BsTag />
-                    <span className="title">
-                      نرخ {convertText(destination.currency, "enToFa")} :
-                    </span>
-                    <span className="value">
-                      {handleRate(destination.currency)}
                     </span>
                   </div>
                 )}
