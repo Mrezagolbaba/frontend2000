@@ -278,7 +278,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
       >
         <WithdrawCrypto
           setTransactionId={(id) => setTransactionId(id)}
-          setShowOtp={()=>{
+          setShowOtp={() => {
             setShowOtp(true)
           }}
           onCloseModal={() => setWithdrawForm({ isOpen: false, currency: "", stock: 0 })}
@@ -291,6 +291,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
       </Dialog>
       <Modal isOpen={showOtp} toggle={() => setShowOtp(false)} >
         <WithdrawOTP
+          title="تایید برداشت"
           onClose={() => setShowOtp(false)}
           handleSendOtp={handleSendOtp}
           securitySelection={user.otpMethod}

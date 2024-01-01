@@ -7,7 +7,11 @@
   border-radius: 10px;
   margin-bottom: 20px;
   .otp-header{
-    margin-left: auto;
+    width: 100%;
+    padding: 15px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   .otp-content {
     padding: 30px 20px;
