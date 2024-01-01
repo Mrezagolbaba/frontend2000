@@ -58,6 +58,7 @@ const Authenticator = (initialMethod) => {
                         <BsGooglePlay />{" "}
                         گوگل پلی{" "}
                     </a>
+
                     یا
                     <a href="https://apps.apple.com/tr/app/google-authenticator/id388497605" target="_blank" type="button" className={s["btn-apple"]}>
                         <BsApple />{" "}
@@ -66,6 +67,7 @@ const Authenticator = (initialMethod) => {
                     دانلود نمایید.
                 </div>
             </div>
+           
         )
     }
     const Step2 = () => {

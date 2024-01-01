@@ -216,13 +216,21 @@ export function getDate18YearsAgo(): { year: number; month: number; day: number 
 
   const year18YearsAgo: number = jalaliDate18YearsAgo.jYear();
   const month18YearsAgo: number = jalaliDate18YearsAgo.jMonth() + 1;
-  const date18YearsAgo: number = jalaliDate18YearsAgo.jDate(); 
+  const date18YearsAgo: number = jalaliDate18YearsAgo.jDate();
 
   return { year: year18YearsAgo, month: month18YearsAgo, day: date18YearsAgo };
 }
 export function convertPersianToGregorian(persianDate: string): string {
   const gregorianDate = moment(persianDate, 'jYYYY/jMM/jDD').format('YYYY-MM-DD');
   return gregorianDate;
+}
+export function maskingString(str, start, end) {
+  if (!str || start < 0 || start >= str.length || end < 0 || end > str.length || start >= end) {
+    return str;
+  }
+  const maskLength = end - start;
+  const maskedStr = str.substring(0, start) + "*".repeat(maskLength) + str.substring(end);
+  return maskedStr;
 }
 
 

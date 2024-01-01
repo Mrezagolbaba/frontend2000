@@ -1,7 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { AlertWarning } from "components/AlertWidget";
-import OtpInput from "react-otp-input";
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import { Controller, useForm } from "react-hook-form";
 import Currency from "components/Input/CurrencyInput";
@@ -30,9 +29,6 @@ import lirFlag from "assets/img/coins/lira.png";
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import { useAppSelector } from "store/hooks";
 import toast from "react-hot-toast";
-import WithdrawOTP from "components/WithdrawOTP";
-import Dialog from "components/Dialog";
-import { set } from "lodash";
 
 type Props = {
   onClose: () => void;
