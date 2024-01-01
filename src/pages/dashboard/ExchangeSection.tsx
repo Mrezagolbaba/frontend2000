@@ -178,7 +178,11 @@ export default function ExchangeSection() {
 
           <div className="mt-5 mb-4 d-flex align-items-center justify-content-center">
             <button
-              onClick={() => navigate(`/dashboard/buy-sell`, {})}
+              onClick={() =>
+                navigate(`/dashboard/buy-sell`, {
+                  state: { source, destination },
+                })
+              }
               type="button"
               className="btn btn-primary"
               style={{ padding: "18px 70px" }}

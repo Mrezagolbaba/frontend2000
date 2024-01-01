@@ -19,6 +19,8 @@ import ExchangeContextProvider from "./ContextProvider";
 import ExchangeForm from "./ExchangeForm";
 import DepositFiat from "../wallet/Fiat/Deposit";
 import Deposit from "../wallet/Rial/Deposit";
+import NewExchangeForm from "./NewExchangeForm";
+import { CurrencyCode } from "types/wallet";
 const accordionData = [
   {
     id: "1",
@@ -60,7 +62,7 @@ const accordionData = [
 export default function BuySell() {
   const [configDialog, setConfigdialog] = useState<{
     isOpen: boolean;
-    currency: "IRR" | "USDT" | "TRY";
+    currency: CurrencyCode;
   }>({ isOpen: false, currency: "IRR" });
 
   const [open, setOpen] = useState("");
@@ -94,7 +96,7 @@ export default function BuySell() {
       <section className="page page-wallet">
         <Row className="g-4">
           <Col xxl={7} xs={12}>
-            <ExchangeForm setIsOpenDialog={setConfigdialog} />
+            <NewExchangeForm setIsOpenDialog={setConfigdialog} />
           </Col>
           <Col xxl={5} xs={12}>
             <Card>
