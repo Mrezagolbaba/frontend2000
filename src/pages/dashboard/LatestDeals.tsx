@@ -130,7 +130,7 @@ function LatestDeals() {
                   </tbody>
                 ) : (
                   <tbody>
-                    {transActions?.map((item) => (
+                    {transActions.slice(0, 7)?.map((item) => (
                       <tr>
                         <td>
                           <span

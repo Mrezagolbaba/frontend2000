@@ -59,13 +59,13 @@ export default function WageTable({ source, destination }: Props) {
         destinationAmount:
           destination.currency === "IRR"
             ? convertIRRToToman(
-                Number(data?.transactions[1]?.amount) -
-                  Number(data?.transactions[1]?.fee),
-              )
+              Number(data?.transactions[1]?.amount) -
+              Number(data?.transactions[1]?.fee),
+            )
             : Number(
-                Number(data?.transactions[1]?.amount) -
-                  Number(data?.transactions[1]?.fee),
-              ).toLocaleString(),
+              Number(data?.transactions[1]?.amount) -
+              Number(data?.transactions[1]?.fee),
+            ).toLocaleString(),
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,8 +92,8 @@ export default function WageTable({ source, destination }: Props) {
             <tr>
               <td className="text-center">
                 <Row>
-                  <Col lg={4} xs={6}>
-                    <div className="radio-toggle-control">
+                  <Col lg={5} xs={6}>
+                    <div className={buy.radioToggleControl}>
                       <Input
                         type="radio"
                         name="rtc"
@@ -108,7 +108,7 @@ export default function WageTable({ source, destination }: Props) {
                     </div>
                   </Col>
                   <Col lg={5} xs={6}>
-                    <div className="radio-toggle-control">
+                    <div className={buy.radioToggleControl}>
                       <Input
                         type="radio"
                         name="rtc"
@@ -130,12 +130,10 @@ export default function WageTable({ source, destination }: Props) {
                 <>
                   <td className="text-center">
                     {feeCurrency === source.currency
-                      ? `${resultData.sourceFeePercent}٪ معادل ${
-                          resultData.sourceFee
-                        } ${convertText(source.currency, "enToFa")}`
-                      : `${resultData.destinationFeePercent}٪ معادل ${
-                          resultData.destinationFee
-                        } ${convertText(destination.currency, "enToFa")}`}
+                      ? `${resultData.sourceFeePercent}٪ معادل ${resultData.sourceFee
+                      } ${convertText(source.currency, "enToFa")}`
+                      : `${resultData.destinationFeePercent}٪ معادل ${resultData.destinationFee
+                      } ${convertText(destination.currency, "enToFa")}`}
                   </td>
                   <td className="text-center">
                     {`${resultData.destinationAmount} ${convertText(
