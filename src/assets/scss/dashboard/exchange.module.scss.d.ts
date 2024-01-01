@@ -1,6 +1,7 @@
 declare const classNames: {
   readonly "currency-controls": "currency-controls";
   readonly "currency-controls__group": "currency-controls__group";
+  readonly detail: "detail";
   readonly dropdown: "dropdown";
   readonly "dropdown-btn": "dropdown-btn";
   readonly selected: "selected";
