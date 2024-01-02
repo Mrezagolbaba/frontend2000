@@ -41,7 +41,7 @@ export default function LastTransactions() {
             <tbody>
               {data &&
                 data?.length > 0 &&
-                data.map((item, index) => (
+                data.slice(0, 7).map((item, index) => (
                   <tr key={index}>
                     <td>
                       <span className="text-success">

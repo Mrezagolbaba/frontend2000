@@ -21,6 +21,7 @@ import DepositFiat from "../wallet/Fiat/Deposit";
 import Deposit from "../wallet/Rial/Deposit";
 import NewExchangeForm from "./NewExchangeForm";
 import { CurrencyCode } from "types/wallet";
+import s from  './styles.module.scss'
 const accordionData = [
   {
     id: "1",
@@ -74,14 +75,14 @@ export default function BuySell() {
     }
   };
   const accordionItems = accordionData.map((item) => (
-    <AccordionItem key={item.id}>
+    <AccordionItem key={item.id} >
       <AccordionHeader
+        className={s["accordion-header"]}
         targetId={item.id}
-        className="flex flex-row items-center justify-between"
       >
         {item.question}
       </AccordionHeader>
-      <AccordionBody accordionId={item.id}>
+      <AccordionBody accordionId={item.id} className={s["accordion-body"]}>
         <strong>{item.answer}</strong>
       </AccordionBody>
     </AccordionItem>
@@ -112,6 +113,7 @@ export default function BuySell() {
                   flush
                   className="border-less"
                   open={open}
+                  //@ts-ignore
                   toggle={toggle}
                 >
                   {accordionItems}

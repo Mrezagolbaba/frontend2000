@@ -93,8 +93,8 @@ export default function NewExchangeForm({ setIsOpenDialog }: Props) {
 
       const stock =
         currency === "IRR"
-          ? rialToToman(currentWallet.availableBalance)
-          : currentWallet.availableBalance;
+          ? rialToToman(currentWallet?.availableBalance)
+          : currentWallet?.availableBalance;
       return (
         Number(stock).toLocaleString() + " " + convertText(currency, "enToFa")
       );

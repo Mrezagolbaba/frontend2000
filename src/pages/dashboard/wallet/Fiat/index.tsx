@@ -208,10 +208,7 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
           onClose={() => setShowOtp(false)}
           securitySelection={user.otpMethod}
           handleResend={handleReSendOtp}
-          handleGetCode={(data) => {
-            setOtpCode(data.code);
-            data.code.length === 6 && handleSendOtp()
-          }}
+          handleGetCode={handleSendOtp}
         />
       </Modal>
 
