@@ -29,16 +29,21 @@ export default function WageTable({ source, destination }: Props) {
   });
 
   useEffect(() => {
-    const data = {
-      sourceCurrencyCode: source.currency,
-      sourceAmount:
-        source.currency === "IRR"
-          ? (Number(source.amount) * 10).toString()
-          : source.amount.toString(),
-      destinationCurrencyCode: destination.currency,
-      feeCurrencyCode: feeCurrency,
-    };
-    currencySwap({ isDry: true, data });
+    console.log("here", source.amount);
+
+    if (Number(source.amount) > 0) {
+      const data = {
+        sourceCurrencyCode: source.currency,
+        sourceAmount:
+          source.currency === "IRR"
+            ? (Number(source.amount) * 10).toString()
+            : Number(source.amount).toString(),
+        destinationCurrencyCode: destination.currency,
+        feeCurrencyCode: feeCurrency,
+      };
+
+      currencySwap({ isDry: true, data });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [source, destination]);
 
@@ -47,25 +52,26 @@ export default function WageTable({ source, destination }: Props) {
       setResultData({
         sourceFee:
           source.currency === "IRR"
-            ? convertIRRToToman(data?.transactions[0]?.fee)
-            : Number(data?.transactions[0]?.fee).toLocaleString(),
-        sourceFeePercent: Number(data?.transactions[0]?.fees[0]?.value) * 100,
+            ? convertIRRToToman(data?.transactions[0]?.fee || 0)
+            : Number(data?.transactions[0]?.fee || 0).toLocaleString(),
+        sourceFeePercent:
+          Number(data?.transactions[0]?.fees?.[0]?.value || 0) * 100,
         destinationFee:
           destination.currency === "IRR"
-            ? convertIRRToToman(data?.transactions[1]?.fee)
-            : Number(data?.transactions[1]?.fee).toLocaleString(),
-        destinationFeePercent: 0,
-        // Number(data?.transactions[1]?.fees[1]?.value) * 100,
+            ? convertIRRToToman(data?.transactions?.[1]?.fee || 0)
+            : Number(data?.transactions[1]?.fee || 0).toLocaleString(),
+        destinationFeePercent:
+          Number(data?.transactions[1]?.fees?.[1]?.value || 0) * 100,
         destinationAmount:
           destination.currency === "IRR"
             ? convertIRRToToman(
-              Number(data?.transactions[1]?.amount) -
-              Number(data?.transactions[1]?.fee),
-            )
+                Number(data?.transactions[1]?.amount) -
+                  Number(data?.transactions[1]?.fee || 0),
+              )
             : Number(
-              Number(data?.transactions[1]?.amount) -
-              Number(data?.transactions[1]?.fee),
-            ).toLocaleString(),
+                Number(data?.transactions[1]?.amount) -
+                  Number(data?.transactions[1]?.fee || 0),
+              ).toLocaleString(),
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

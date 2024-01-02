@@ -11,6 +11,7 @@ import {
   Label,
   Row,
   Spinner,
+  Tooltip,
 } from "reactstrap";
 import { CurrencyCode } from "types/wallet";
 
@@ -42,8 +43,6 @@ type Props = {
 export default function NewExchangeForm({ setIsOpenDialog }: Props) {
   const { state } = useLocation();
 
-  console.log(state);
-
   const [source, setSource] = useState<{
     amount: number;
     currency: CurrencyCode;
@@ -59,9 +58,15 @@ export default function NewExchangeForm({ setIsOpenDialog }: Props) {
     currency: state?.destination?.currency || "TRY",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [tooltipOpen1, setTooltipOpen1] = useState<boolean>(false);
+  const toggleTooltip1 = () => setTooltipOpen1((prevState) => !prevState);
+
+  const [tooltipOpen2, setTooltipOpen2] = useState<boolean>(false);
+  const toggleTooltip2 = () => setTooltipOpen2((prevState) => !prevState);
 
   const { data: wallets, isLoading: isLoadingWallet } = useWalletsQuery();
   const [getRate, { data: exchangeRate }] = useLazyRatesQuery();
+  const [getReverseRate, { data: exchangeReverseRate }] = useLazyRatesQuery();
   const [currencySwap, { isLoading: isLoadingSwap, isSuccess }] =
     useCreateCurrencySwapMutation();
 
@@ -73,6 +78,10 @@ export default function NewExchangeForm({ setIsOpenDialog }: Props) {
     getRate({
       sourceCurrencyCode: source.currency,
       targetCurrencyCode: destination.currency,
+    });
+    getReverseRate({
+      sourceCurrencyCode: destination.currency,
+      targetCurrencyCode: source.currency,
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,7 +106,19 @@ export default function NewExchangeForm({ setIsOpenDialog }: Props) {
     const rate =
       currency === "IRR"
         ? rialToToman(exchangeRate?.rate as string)
-        : exchangeRate?.rate;
+        : currency === "TRY"
+          ? parseFloat(exchangeRate?.rate as string)
+          : exchangeRate?.rate;
+    return rate?.toLocaleString() + " " + convertText(currency, "enToFa");
+  };
+
+  const handleReverseRate = (currency: CurrencyCode) => {
+    const rate =
+      currency === "IRR"
+        ? rialToToman(exchangeReverseRate?.rate as string)
+        : currency === "TRY"
+          ? parseFloat(exchangeReverseRate?.rate as string)
+          : exchangeReverseRate?.rate;
     return rate?.toLocaleString() + " " + convertText(currency, "enToFa");
   };
 
@@ -155,9 +176,16 @@ export default function NewExchangeForm({ setIsOpenDialog }: Props) {
                         : Number(exchangeRate?.rate) * amount;
                     setDestination({
                       ...destination,
-                      amount: Math.round(res),
+                      amount: res,
                     });
                   }}
+                  decimalScale={
+                    destination.currency === "IRR"
+                      ? 0
+                      : destination.currency === "TRY"
+                        ? 3
+                        : 6
+                  }
                   onValueChange={(values) => {
                     const value = values.floatValue as number;
                     setSource({
@@ -207,15 +235,30 @@ export default function NewExchangeForm({ setIsOpenDialog }: Props) {
                     <div className="placeholder col-11 bg-secondary rounded py-2" />
                   </div>
                 ) : (
-                  <div>
-                    <BsTag />
-                    <span className="title">
-                      نرخ {convertText(source.currency, "enToFa")} :
-                    </span>
-                    <span className="value">
-                      {handleRate(destination.currency)}
-                    </span>
-                  </div>
+                  <>
+                    <div id="currency-detail1">
+                      <BsTag />
+                      <span className="title">
+                        نرخ {convertText(source.currency, "enToFa")} :
+                      </span>
+                      <span className="value">
+                        {handleRate(destination.currency)}
+                      </span>
+                    </div>
+                    <Tooltip
+                      isOpen={tooltipOpen1}
+                      target="currency-detail1"
+                      toggle={toggleTooltip1}
+                    >
+                      {`ارزش ${convertText(
+                        source.currency,
+                        "enToFa",
+                      )} در برابر ${convertText(
+                        destination.currency,
+                        "enToFa",
+                      )}`}
+                    </Tooltip>
+                  </>
                 )}
               </div>
             </div>
@@ -262,9 +305,16 @@ export default function NewExchangeForm({ setIsOpenDialog }: Props) {
                         : amount / Number(exchangeRate?.rate);
                     setSource({
                       ...source,
-                      amount: Math.round(res),
+                      amount: res,
                     });
                   }}
+                  decimalScale={
+                    destination.currency === "IRR"
+                      ? 0
+                      : destination.currency === "TRY"
+                        ? 3
+                        : 6
+                  }
                   onValueChange={(values) => {
                     const value = values.floatValue as number;
 
@@ -306,6 +356,33 @@ export default function NewExchangeForm({ setIsOpenDialog }: Props) {
                       {handleStock(destination.currency)}
                     </span>
                   </div>
+                )}
+                {isLoading ? (
+                  <div className="text-center placeholder-glow d-flex justify-content-between w-100">
+                    <div className="placeholder col-11 bg-secondary rounded py-2" />
+                  </div>
+                ) : (
+                  <>
+                    <div id="currency-detail2">
+                      <BsTag />
+                      <span className="title">
+                        نرخ {convertText(destination.currency, "enToFa")} :
+                      </span>
+                      <span className="value">
+                        {handleReverseRate(source.currency)}
+                      </span>
+                    </div>
+                    <Tooltip
+                      isOpen={tooltipOpen2}
+                      target="currency-detail2"
+                      toggle={toggleTooltip2}
+                    >
+                      {`ارزش ${convertText(
+                        destination.currency,
+                        "enToFa",
+                      )} در برابر ${convertText(source.currency, "enToFa")}`}
+                    </Tooltip>
+                  </>
                 )}
               </div>
             </div>
