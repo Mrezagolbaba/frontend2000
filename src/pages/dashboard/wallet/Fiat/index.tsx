@@ -22,6 +22,7 @@ import WithdrawOTP from "components/WithdrawOTP";
 import { useAppSelector } from "store/hooks";
 import toast from "react-hot-toast";
 import { useResendOtpWithdrawMutation, useVerifyOtpWithdrawMutation } from "store/api/wallet-management";
+import { TransactionResponse } from "types/wallet";
 
 export default function Fiat({ TRY, isLoading, isSuccess }: any) {
   const user = useAppSelector((state) => state.user);
@@ -41,17 +42,18 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
   const [showOtp, setShowOtp] = useState<boolean>(false);
   const [transactionId, setTransactionId] = useState<string>('');
 
-  const handleSendOtp = async () => {
-    if (otpCode.length > 6) return toast.error('لطفا کد را وارد کنید', { position: 'bottom-left' })
-    const data = {
+  const handleSendOtp = async (data: { code: string }) => {
+    if (data.code.length > 6) return toast.error('لطفا کد را وارد کنید', { position: 'bottom-left' })
+    const newData = {
       transactionId,
-      code: otpCode
+      code: data.code
     }
-    await verifyOtpWithdraw(data).then(() => {
-      if (isVerifySuccess) {
+    await verifyOtpWithdraw(newData).then((res:any) => {
+      if (res) {
+        handleCloseModal()
         toast.success('برداشت با موفقیت انجام شد', { position: 'bottom-left' })
-        setShowOtp(false)
-      } else {
+        window.location.reload()
+      } else if(res.id === null) {
         toast.error('کد وارد شده صحیح نمی باشد', { position: 'bottom-left' })
       }
     })
@@ -63,6 +65,9 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
         toast.success('کد مجددا ارسال شد', { position: 'bottom-left' })
       }
     })
+  }
+  const handleCloseModal = () => {
+    setShowOtp(false)
   }
   return (
     <Card className="mb-4 h-100">
@@ -203,9 +208,9 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
           }
         />
       </Dialog>
-      <Modal isOpen={showOtp} toggle={() => setShowOtp(false)} >
+      <Modal isOpen={showOtp} toggle={handleCloseModal} >
         <WithdrawOTP
-          onClose={() => setShowOtp(false)}
+          onClose={handleCloseModal}
           securitySelection={user.otpMethod}
           handleResend={handleReSendOtp}
           handleGetCode={handleSendOtp}
