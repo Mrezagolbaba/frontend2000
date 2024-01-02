@@ -23,7 +23,7 @@ const axiosBaseQuery =
   async (args: AxiosRequestConfig, api: any, extraOptions: any) => {
     try {
       axiosInstance.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
-        "token"
+        "token",
       )}`;
       const res = await axiosInstance(args);
       const data = res.data;
@@ -31,8 +31,7 @@ const axiosBaseQuery =
       const status = res.status;
 
       if (method !== "get" && status >= 200 && status < 300)
-        toast(data.message, { position: "bottom-left" });
-
+        data.message && toast(data.message, { position: "bottom-left" });
       return { data };
     } catch (error: any) {
       const response = error.response;
@@ -66,7 +65,7 @@ const axiosBaseQuery =
 
 export const api = createApi({
   baseQuery: axiosBaseQuery(),
-  tagTypes: ["bank-accounts","settings","user"],
+  tagTypes: ["bank-accounts", "settings", "user"],
   endpoints: () => ({}),
 });
 

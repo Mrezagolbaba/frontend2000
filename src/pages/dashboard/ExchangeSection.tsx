@@ -27,15 +27,15 @@ export default function ExchangeSection() {
   const [getRate, { data: currencyRes }] = useLazyRatesQuery();
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      getRate({
-        sourceCurrencyCode: source.currency,
-        targetCurrencyCode: destination.currency,
-      });
-    }, 5000); // 5 seconds in milliseconds
+    // const intervalId = setInterval(() => {
+    getRate({
+      sourceCurrencyCode: source.currency,
+      targetCurrencyCode: destination.currency,
+    });
+    // }, 5000); // 5 seconds in milliseconds
 
-    // Clean up the interval when the component is unmounted
-    return () => clearInterval(intervalId);
+    // // Clean up the interval when the component is unmounted
+    // return () => clearInterval(intervalId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [source.currency, destination.currency]);
 
@@ -53,7 +53,8 @@ export default function ExchangeSection() {
                 <CurrencyInput
                   thousandSeparator=","
                   value={source.amount}
-                  onKeyUp={() => {
+                  onKeyUp={(e) => {
+                    e.preventDefault();
                     const amount =
                       source.currency === "IRR"
                         ? source.amount * 10
@@ -64,9 +65,16 @@ export default function ExchangeSection() {
                         : Number(currencyRes?.rate) * amount;
                     setDestination({
                       ...destination,
-                      amount: Math.round(res),
+                      amount: res,
                     });
                   }}
+                  decimalScale={
+                    source.currency === "IRR"
+                      ? 0
+                      : source.currency === "TRY"
+                        ? 3
+                        : 6
+                  }
                   onValueChange={(values) => {
                     const value = values.floatValue as number;
                     setSource({
@@ -132,7 +140,8 @@ export default function ExchangeSection() {
                 <CurrencyInput
                   thousandSeparator=","
                   value={destination.amount}
-                  onKeyUp={() => {
+                  onKeyUp={(e) => {
+                    e.preventDefault();
                     const amount =
                       destination.currency === "IRR"
                         ? destination.amount * 10
@@ -143,9 +152,16 @@ export default function ExchangeSection() {
                         : amount / Number(currencyRes?.rate);
                     setSource({
                       ...source,
-                      amount: Math.round(res),
+                      amount: res,
                     });
                   }}
+                  decimalScale={
+                    destination.currency === "IRR"
+                      ? 0
+                      : destination.currency === "TRY"
+                        ? 3
+                        : 6
+                  }
                   onValueChange={(values) => {
                     const value = values.floatValue as number;
 
