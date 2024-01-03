@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "reactstrap";
@@ -8,8 +7,13 @@ import Logo from "assets/img/dark lands.png";
 
 import home from "assets/scss/landing/home.module.scss";
 
-
-const LightHeader = () => {
+const LightHeader = ({
+  className,
+  HasRemoveAuthButton = false,
+}: {
+  className?: string;
+  HasRemoveAuthButton?: boolean;
+}) => {
   const [openOverlayMenu, setOpenOverlayMenu] = useState<boolean>(false);
   return (
     <>
@@ -19,7 +23,7 @@ const LightHeader = () => {
           openOverlayMenu ? home.show : ""
         }`}
       />
-      <header className={home.header__page}>
+      <header className={`${home.header__page} ${className}`}>
         <div className={home.header__top}>
           <div className={home.header__logo}>
             <Link to="/">
@@ -63,9 +67,7 @@ const LightHeader = () => {
                 <Link to="/dashboard">خرید و فروش آنی</Link>
               </li>
               <li className={home.page__navitem}>
-              <Link to="https://help.arsonex.com/">
-                  مرکز راهنمایی
-                </Link>
+                <Link to="https://help.arsonex.com/">مرکز راهنمایی</Link>
               </li>
               <li className={home.page__navitem}>
                 <Link to="/about-us">درباره ما</Link>
@@ -89,23 +91,25 @@ const LightHeader = () => {
             </ul>
           </nav>
 
-          <div className={home.header__auth}>
-            <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
-              <li className={home.navbar__item}>
-                <Link to="/login">ورود</Link>
-              </li>
-              <li className={home.header__auth__register}>
-                <Button
-                  tag="a"
-                  href="/register"
-                  color="page-primary"
-                  className={home["rounded-button"]}
-                >
-                  ثبت نام
-                </Button>
-              </li>
-            </ul>
-          </div>
+          {!HasRemoveAuthButton && (
+            <div className={home.header__auth}>
+              <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
+                <li className={home.navbar__item}>
+                  <Link to="/login">ورود</Link>
+                </li>
+                <li className={home.header__auth__register}>
+                  <Button
+                    tag="a"
+                    href="/register"
+                    color="page-primary"
+                    className={home["rounded-button"]}
+                  >
+                    ثبت نام
+                  </Button>
+                </li>
+              </ul>
+            </div>
+          )}
           <div className={home.header__hamburger}>
             {/* <button type="button" onclick="respMenu.open()"> */}
             <button type="button" onClick={() => setOpenOverlayMenu(true)}>
