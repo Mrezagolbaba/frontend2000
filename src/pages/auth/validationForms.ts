@@ -50,6 +50,25 @@ export const registerSchema = Yup.object().shape({
     .required(),
   codeReference: Yup.string().required("لطفا کد معرف خود را وارد کنید."),
 });
+export const changePassSchema = Yup.object().shape({
+  oldPassword: Yup.string().required("رمز عبور الزامی است."),
+  newPassword: Yup.string()
+    .min(8, "رمز عبور باید حداقل شامل 8 کاراکتر باشد.")
+    .matches(/[a-z]/, "رمز عبور حداقل باید شامل یک حرف کوچک انگلیسی باشد.")
+    .matches(/[A-Z]/, "رمز عبور باید حداقل شامل یک حرف بزرگ انگلیسی باشد.")
+    .matches(/[0-9]/, "رمز عبور حداقل باید شامل یک عدد باشد.")
+    .matches(
+      /[!@#$%^&*()\-_=+[\]{}|;:',.<>/?\\]/,
+      "رمز عبور باید حداقل شامل یک کاراکتر ویژه باشد (!@#$%^&*()-+).",
+    )
+    .required("رمز عبور الزامی است."),
+  rePassword: Yup.string()
+    .oneOf(
+      [Yup.ref("newPassword")],
+      "رمز عبور و تکرار رمز عبور با هم مطابقت ندارند.",
+    )
+    .required("تکرار رمز عبور الزامی می باشد."),
+});
 
 export const OtpSchema = Yup.object().shape({
   code: Yup.string().required("کد ارسالی به درستی وارد نشده است."),
