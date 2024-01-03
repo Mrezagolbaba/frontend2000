@@ -62,7 +62,7 @@ const Header = ({ disableBanner = false }: Props) => {
                 <Link to="/">صفحه اصلی</Link>
               </li>
               <li className={home.navbar__item}>
-                <Link to="/market">قیمت لحظه ای</Link>
+                <Link to="/coins">قیمت لحظه ای</Link>
               </li>
               <li className={home.navbar__item}>
                 <Link to="/dashboard">خرید و فروش آنی</Link>

@@ -61,7 +61,7 @@ const LightHeader = ({
                 <Link to="/">صفحه اصلی</Link>
               </li>
               <li className={home.page__navitem}>
-                <Link to="/market">قیمت لحظه ای</Link>
+                <Link to="/coins">قیمت لحظه ای</Link>
               </li>
               <li className={home.page__navitem}>
                 <Link to="/dashboard">خرید و فروش آنی</Link>
