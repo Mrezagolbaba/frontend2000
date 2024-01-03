@@ -81,7 +81,7 @@ export default function CoinPage() {
           <Container>
             <Breadcrumb>
               <BreadcrumbItem>
-                <Link to="/">بازارها</Link>
+                <Link to="/">آرسونیکس</Link>
               </BreadcrumbItem>
               <BreadcrumbItem active>نرخ لحظه ای ارزها</BreadcrumbItem>
             </Breadcrumb>
