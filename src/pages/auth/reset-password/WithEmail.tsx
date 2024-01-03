@@ -34,7 +34,7 @@ const WithEmail = () => {
     Object.entries(errors).map(([fieldName, error]: any) =>
       toast.error(error?.message, {
         position: "bottom-left",
-      })
+      }),
     );
   const handleResetPassword = async (data) => {
     setIsLoading(true);
@@ -60,7 +60,7 @@ const WithEmail = () => {
         <Card className={auth.card}>
           <CardBody className={auth["card-body"]}>
             <h4 className={auth.title}>فراموشی رمز عبور</h4>
-            <p className={auth.text}>شماره تلفن همراه خود را وارد کنید</p>
+            <p className={auth.text}>ایمیل خود را وارد کنید</p>
             <form
               className={auth.form}
               onSubmit={handleSubmit(handleResetPassword, handleErrors)}

@@ -33,7 +33,7 @@ const SpotRate = () => {
   const [exchangeRates, setExchangeRates] = useState<{
     [key: string]: { IRR: number | string; USD: number | string };
   }>({});
-  const [activeTab, setActiveTab] = useState("tab1");
+  const [activeTab, setActiveTab] = useState("tab2");
 
   const currencyPairs = [
     { code: "USDT", name: "تتر", imgSrc: USDT },

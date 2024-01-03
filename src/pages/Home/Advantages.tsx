@@ -108,7 +108,7 @@ const Advantages = () => {
               >
                 <div className={home["feature__box__caption"]}>
                   <h4 className={home["feature__box__title"]}>
-                    25% درصد کارمزد، برای شما
+                    35% درصد کارمزد، برای شما (بزودی)
                   </h4>
                   <h5 className={home["feature__box__subtitle"]}>
                     فقط از دوستان خود دعوت کنید، 35% کارمزد بعد از هر معامله

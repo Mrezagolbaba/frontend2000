@@ -11,7 +11,7 @@ const AuthLayout = ({ children }: Props) => {
   return (
     <div className={auth.wrapper}>
       <main>
-        <LightHeader />
+        <LightHeader HasRemoveAuthButton className={auth["custom-header"]} />
         {/* <HeadAuth /> */}
         {/* <header className={auth.header}>
           <div className={auth.logo}>
