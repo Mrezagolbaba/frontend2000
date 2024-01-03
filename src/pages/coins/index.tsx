@@ -25,7 +25,7 @@ interface ExchangeRateData {
 }
 
 export default function CoinPage() {
-  const [activeTab, setActiveTab] = useState("tab1");
+  const [activeTab, setActiveTab] = useState("tab2");
 
   const [exchangeRates, setExchangeRates] = useState<{
     [key: string]: { IRR: number | string; USD: number | string };
