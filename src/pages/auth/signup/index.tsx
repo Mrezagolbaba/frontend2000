@@ -7,7 +7,7 @@ import { PiShieldCheckeredFill } from "react-icons/pi";
 import toast from "react-hot-toast";
 
 import Auth from "layouts/auth";
-import { registerSchema } from "pages/auth/validationForms";
+import { registerSchema, inviteCodes } from "pages/auth/validationForms";
 import { RegisterFormData } from "pages/auth/types";
 import { useCreateUser } from "services/auth";
 import SelectCountry from "components/SelectCountry";
@@ -46,42 +46,53 @@ const SignupPage: React.FC = () => {
       password: "",
       selectedCountry: "98",
       terms: false,
+      codeReference: "",
     },
     resolver,
   });
 
   const handleRegister = async (data: RegisterFormData) => {
     setIsLoading(true);
-
-    const phoneNumber = formatPhoneNumber(
-      persianToEnglishNumbers(data.phoneNumber),
-      data.selectedCountry
+    const findReference = inviteCodes.findIndex(
+      (RFCode) => RFCode === data.codeReference.toUpperCase(),
     );
-    const userData = {
-      phoneNumber,
-      password: data.password,
-    };
-    await registerRequest
-      .mutateAsync(userData)
-      .then((res) => {
-        if (res) {
-          navigate("/mobile-otp", {
-            state: {
-              phoneNumber: userData.phoneNumber,
-            },
-          });
+
+    if (findReference > 0) {
+      const phoneNumber = formatPhoneNumber(
+        persianToEnglishNumbers(data.phoneNumber),
+        data.selectedCountry,
+      );
+      const userData = {
+        phoneNumber,
+        password: data.password,
+      };
+      await registerRequest
+        .mutateAsync(userData)
+        .then((res) => {
+          if (res) {
+            navigate("/mobile-otp", {
+              state: {
+                phoneNumber: userData.phoneNumber,
+              },
+            });
+            setIsLoading(false);
+          }
+        })
+        .catch(() => {
           setIsLoading(false);
-        }
-      })
-      .catch(() => {
-        setIsLoading(false);
+        });
+    } else {
+      setIsLoading(false);
+      toast.error("کد معرف اشتباه است.", {
+        position: "bottom-left",
       });
+    }
   };
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>
       toast.error(error?.message, {
         position: "bottom-left",
-      })
+      }),
     );
 
   return (
@@ -92,7 +103,6 @@ const SignupPage: React.FC = () => {
             <h4 className={auth.title}> ثبت نام در آرسونیکس</h4>
 
             <div className={auth.confidence}>
-
               <p>از یکسان بودن آدرس صفحه با آدرس زیر مطمئن شوید.</p>
               <div className="d-ltr">
                 <label>
@@ -152,12 +162,30 @@ const SignupPage: React.FC = () => {
                       )}
                     />
                   </Col>
+                  <Controller
+                    name="codeReference"
+                    control={control}
+                    render={({ field: { name, value, onChange, ref } }) => (
+                      <div className="mb-3">
+                        <Label htmlFor={name}>کد معرف:</Label>
+                        <Input
+                          type="text"
+                          id={name}
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          ref={ref}
+                          status={errors?.[name]?.message ? "error" : undefined}
+                        />
+                      </div>
+                    )}
+                  />
                   <Col xs={12} className={auth.terms}>
                     <Controller
                       name="terms"
                       control={control}
                       render={({ field: { name, value, onChange, ref } }) => (
-                        <div>
+                        <div className="my-3">
                           <Input
                             style={{ marginRight: "4px" }}
                             checked={value}
@@ -171,7 +199,7 @@ const SignupPage: React.FC = () => {
                               errors?.[name]?.message ? "error" : undefined
                             }
                           />
-                          <Label htmlFor={name} style={{fontSize:'13px'}}>
+                          <Label htmlFor={name} style={{ fontSize: "13px" }}>
                             <Link to="#"> مقررات آرسونیکس</Link> را خوانده‌ام و
                             با آن موافقم.
                           </Label>

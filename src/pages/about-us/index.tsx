@@ -13,7 +13,7 @@ export default function AboutUs() {
           <Container>
             <div className={home["section-holder__title"]}>
               <h3>
-                همراه ارز دیجیتال شما{" "}
+                همراه ارز دیجیتال شما،{" "}
                 <span className="text-primary">آرسونیکس</span>
               </h3>
               <p className={home["section-holder__subtitle"]}>

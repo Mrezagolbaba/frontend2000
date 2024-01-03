@@ -12,6 +12,7 @@ export interface RegisterFormData {
   password: string;
   selectedCountry: string;
   terms: boolean;
+  codeReference: string;
 }
 
 export interface InformationFormData {
