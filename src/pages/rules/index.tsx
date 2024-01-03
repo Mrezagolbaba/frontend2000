@@ -1,4 +1,4 @@
-import LandingPage from "layouts/headPage";
+import LandingLayout from "layouts/Landing";
 import { BreadcrumbItem, Container, Breadcrumb } from "reactstrap";
 
 import home from "assets/scss/landing/home.module.scss";
@@ -6,7 +6,7 @@ import rules from "assets/scss/landing/rules.module.scss";
 
 export default function RulesPage() {
   return (
-    <LandingPage>
+    <LandingLayout disableBanner={true}>
       <main className={home["main-wrapper"]}>
         <Container className={`${rules["page"]}`}>
           <Breadcrumb>
@@ -388,6 +388,6 @@ export default function RulesPage() {
           </div>
         </Container>
       </main>
-    </LandingPage>
+    </LandingLayout>
   );
 }

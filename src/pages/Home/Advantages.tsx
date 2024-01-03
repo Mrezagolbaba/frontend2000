@@ -89,7 +89,7 @@ const Advantages = () => {
       <section className={home["features__slide"]}>
         <div className={home["features__slide__container"]}>
           <Row className="g-4">
-            <Col md={6}>
+            <Col md={6} tag="a" href="https://help.arsonex.com/">
               <div className={`${home["feature__box"]} ${home["box--blue"]}`}>
                 <div className={home["feature__box__caption"]}>
                   <h4 className={home["feature__box__title"]}>
@@ -111,7 +111,7 @@ const Advantages = () => {
                     25% درصد کارمزد، برای شما
                   </h4>
                   <h5 className={home["feature__box__subtitle"]}>
-                    فقط از دوستان خود دعوت کنید، 25% کارمزد بعد از هر معامله
+                    فقط از دوستان خود دعوت کنید، 35% کارمزد بعد از هر معامله
                     بصورت آنی دریافت کنید.
                   </h5>
                 </div>

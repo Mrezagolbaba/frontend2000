@@ -1,9 +1,10 @@
 import LandingLayout from "layouts/Landing";
 import home from "assets/scss/landing/home.module.scss";
 
-import contact from "assets/scss/landing/contactUs.module.scss";
 import { Card, CardBody, Container } from "reactstrap";
 import BottomBanner from "pages/Home/BottomBanner";
+
+import contact from "assets/scss/landing/contactUs.module.scss";
 
 export default function ContactUs() {
   return (
