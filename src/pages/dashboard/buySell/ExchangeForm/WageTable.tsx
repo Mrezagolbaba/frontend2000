@@ -1,4 +1,4 @@
-import { Col, Input, Row } from "reactstrap";
+import { Col, Input, Label, Row } from "reactstrap";
 import { convertIRRToToman, convertText } from "helpers";
 
 import buy from "assets/scss/dashboard/buy-sell.module.scss";
@@ -110,7 +110,7 @@ export default function WageTable({ source, destination }: Props) {
                           setFeeCurrency(source.currency);
                         }}
                       />
-                      <label>{convertText(source.currency, "enToFa")}</label>
+                      <Label htmlFor="rtc1">{convertText(source.currency, "enToFa")}</Label>
                     </div>
                   </Col>
                   <Col lg={5} xs={6}>
@@ -125,9 +125,9 @@ export default function WageTable({ source, destination }: Props) {
                           setFeeCurrency(destination.currency);
                         }}
                       />
-                      <label>
+                      <Label htmlFor="rtc2">
                         {convertText(destination.currency, "enToFa")}
-                      </label>
+                      </Label>
                     </div>
                   </Col>
                 </Row>
