@@ -68,7 +68,7 @@ const LightHeader = () => {
                 </Link>
               </li>
               <li className={home.page__navitem}>
-                <Link to="/aboutUs">درباره ما</Link>
+                <Link to="/about-us">درباره ما</Link>
               </li>
               <li className={home.page__navitem}>
                 <Link to="/contact-us">تماس با ما</Link>

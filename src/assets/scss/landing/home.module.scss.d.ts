@@ -98,6 +98,9 @@ declare const classNames: {
   readonly header__page__hamburger: "header__page__hamburger";
   readonly header__page__intro: "header__page__intro";
   readonly page__navitem: "page__navitem";
+  readonly "section-holder": "section-holder";
+  readonly "section-holder__title": "section-holder__title";
+  readonly "section-holder__subtitle": "section-holder__subtitle";
   readonly "navbar__item--active": "navbar__item--active";
 };
 export = classNames;

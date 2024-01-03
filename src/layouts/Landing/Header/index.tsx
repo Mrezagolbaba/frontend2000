@@ -73,7 +73,7 @@ const Header = ({ disableBanner = false }: Props) => {
                 </Link>
               </li>
               <li className={home.navbar__item}>
-                <Link to="/aboutUs">درباره ما</Link>
+                <Link to="/about-us">درباره ما</Link>
               </li>
               <li className={home.navbar__item}>
                 <Link to="/contact-us">تماس با ما</Link>
