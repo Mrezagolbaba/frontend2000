@@ -17,10 +17,10 @@ const Footer = (): React.JSX.Element => {
               <p className={home["footer-text"]}>support@arsonex.com</p>
 
               <p className={home["footer-text"]}>021-92004581</p>
-              <p className={home["footer-text"]}>
+              {/* <p className={home["footer-text"]}>
                 {" "}
                 خیابان ۱۵ خرداد بازار بین الحرمین کوچه شیخ رضا پلاک ۴۶{" "}
-              </p>
+              </p> */}
               <p className={home["footer-text"]}>
                 ۲۴ ساعت شبانه روز پاسخگوی شما هستیم
               </p>

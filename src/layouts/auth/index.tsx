@@ -6,7 +6,7 @@ import { PiShieldCheckeredFill } from "react-icons/pi";
 
 import auth from "assets/scss/auth/auth.module.scss";
 import HeadAuth from "layouts/headAuth";
-import NormalHeader from "layouts/headPage/NormalHeader";
+import NormalHeader from "layouts/LightHeader/NormalHeader";
 
 type Props = {
   children: ReactNode;

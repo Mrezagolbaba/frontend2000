@@ -65,18 +65,18 @@ const Header = ({ disableBanner = false }: Props) => {
                 <Link to="/market">قیمت لحظه ای</Link>
               </li>
               <li className={home.navbar__item}>
-                <Link to="/terms">خرید و فروش آنی</Link>
+                <Link to="/dashboard">خرید و فروش آنی</Link>
               </li>
               <li className={home.navbar__item}>
-                <Link to="https://www.arsonex.com/blog" target="_blank">
-                  بلاگ
+                <Link to="https://help.arsonex.com/">
+                  مرکز راهنمایی
                 </Link>
               </li>
               <li className={home.navbar__item}>
                 <Link to="/aboutUs">درباره ما</Link>
               </li>
               <li className={home.navbar__item}>
-                <Link to="/contact">تماس با ما</Link>
+                <Link to="/contact-us">تماس با ما</Link>
               </li>
               <li>
                 <div className={home.navbar__close}>
