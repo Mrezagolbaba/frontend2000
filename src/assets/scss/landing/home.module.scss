@@ -933,6 +933,39 @@ img.avatar {
   font-weight: 100;
 }
 
+.section-holder {
+  padding-bottom: 100px;
+  &__title {
+    max-width: 640px;
+    margin: 0 auto 65px;
+    text-align: center;
+    & > h3 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 26px;
+      color: #040f4a;
+      &::after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 17px;
+        margin-top: 8px;
+        background-image: url(/src/assets/img/lay/title-border.png);
+        background-repeat: no-repeat;
+        background-position: 45% 0;
+        background-size: 230px 17px;
+      }
+    }
+  }
+  &__subtitle {
+    font-size: 1.25em;
+    font-weight: 500;
+    color: #040f4a;
+    margin: 0 auto;
+    max-width: 84%;
+  }
+}
+
 @media screen and (max-width: 1199px) {
   .features {
     &__slide {
@@ -1027,6 +1060,10 @@ img.avatar {
 
   .page__navitem > a {
     color: rgba(4, 15, 74, 0.6);
+  }
+
+  .section-holder__title > h3 {
+    font-size: 2rem;
   }
 }
 @media screen and (max-width: 767px) {

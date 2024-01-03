@@ -1,12 +1,7 @@
 import { ReactNode } from "react";
 
-import logo from "assets/img/logo-arsonex.png";
-import { Link } from "react-router-dom";
-import { PiShieldCheckeredFill } from "react-icons/pi";
-
 import auth from "assets/scss/auth/auth.module.scss";
-import HeadAuth from "layouts/headAuth";
-import NormalHeader from "layouts/LightHeader/NormalHeader";
+import LightHeader from "layouts/Landing/LightHeader";
 
 type Props = {
   children: ReactNode;
@@ -16,7 +11,7 @@ const AuthLayout = ({ children }: Props) => {
   return (
     <div className={auth.wrapper}>
       <main>
-        <NormalHeader />
+        <LightHeader />
         {/* <HeadAuth /> */}
         {/* <header className={auth.header}>
           <div className={auth.logo}>
