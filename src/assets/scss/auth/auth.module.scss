@@ -19,8 +19,15 @@
 .confidence {
   flex: 0 0 calc(100% - 172px);
   text-align: center;
-  & > div > span {
-    vertical-align: top;
+  & > div {
+    border: 1px solid #cccccc2e;
+    margin-bottom: 35px;
+    border-radius: 10px;
+    padding: 10px;
+    display: inline-block;
+    & > span {
+      vertical-align: top;
+    }
   }
   p {
     margin-bottom: 12px;

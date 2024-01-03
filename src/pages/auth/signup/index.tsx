@@ -103,7 +103,7 @@ const SignupPage: React.FC = () => {
                 </span>
               </div>
             </div>
-            <p className={auth.text}> شماره تلفن خود را وارد کنید.</p>
+            {/* <p className={auth.text}> شماره تلفن خود را وارد کنید.</p> */}
 
             <form
               className={auth.form}
