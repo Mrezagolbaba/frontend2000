@@ -1,3 +1,6 @@
+import moment from "jalali-moment";
+import jalaliMoment from "jalali-moment";
+
 export function generateLabelValueArray(start: number, end: number) {
   const resultArray: { label: string; value: string }[] = [];
   for (let i = start; i <= end; i++) {
@@ -87,11 +90,11 @@ export const persianToEnglishNumbers = (persianNumber: string) => {
 
 export const passwordListValidation = [
   {
-    title: "حداقل یک کاراکتر ویژه از قبیل: !@#$%^&*()-+",
-    isCheck: false,
+    title: "حداقل یک عدد",
+    isCheck: true,
   },
   {
-    title: "حداقل یک کاراکتر با حرف کوچک",
+    title: "حداقل 8 کاراکتر",
     isCheck: true,
   },
   {
@@ -99,13 +102,12 @@ export const passwordListValidation = [
     isCheck: false,
   },
   {
-    title: "حداقل 8 کاراکتر",
+    title: "حداقل یک کاراکتر با حرف کوچک",
     isCheck: true,
   },
-
   {
-    title: "حداقل یک عدد",
-    isCheck: true,
+    title: "حداقل یک کاراکتر ویژه از قبیل: !@#$%^&*()-+",
+    isCheck: false,
   },
 ];
 
@@ -135,15 +137,15 @@ export const isPasswordValid = (password: string) => {
   return isValid;
 };
 export function convertIRRToToman(number: number) {
-   // 1 toman is equal to 10 rials
-   const tomanAmount = Math.trunc( number ) / 10;
-   // Format the result to include commas for thousands
-   const formattedTomanAmount = new Intl.NumberFormat('fa-IR', {
+  // 1 toman is equal to 10 rials
+  const tomanAmount = Math.trunc(number) / 10;
+  // Format the result to include commas for thousands
+  const formattedTomanAmount = new Intl.NumberFormat('fa-IR', {
     useGrouping: true,
     style: 'decimal'
   }).format(tomanAmount);
- 
-   return formattedTomanAmount;
+
+  return formattedTomanAmount;
 }
 export const rialToToman = (rialAmount: number | string): number => {
   // Assuming 1 Toman is equal to 10 Rials
@@ -195,5 +197,40 @@ export const convertTextSingle = (text) => {
 export function extractLeftSide(baseString) {
   return baseString.includes("/") ? baseString.split("/")[0] : baseString;
 }
+export const LabeLText = {
+  EMAIL: "ایمیل",
+  PHONE: "تلفن همراه",
+  AUTHENTICATOR: 'google Authenticator'
+}
+export const LabeLTextTransaction = {
+  DARAFT: 'ناموفق',
+  SUCCESSFUL: 'موفق',
+}
 
-      
+export function getDate18YearsAgo(): { year: number; month: number; day: number } {
+  const currentDate: Date = new Date();
+  const eighteenYearsAgo: Date = new Date(currentDate);
+  eighteenYearsAgo.setFullYear(currentDate.getFullYear() - 18);
+
+  const jalaliDate18YearsAgo = jalaliMoment(eighteenYearsAgo);
+
+  const year18YearsAgo: number = jalaliDate18YearsAgo.jYear();
+  const month18YearsAgo: number = jalaliDate18YearsAgo.jMonth() + 1;
+  const date18YearsAgo: number = jalaliDate18YearsAgo.jDate();
+
+  return { year: year18YearsAgo, month: month18YearsAgo, day: date18YearsAgo };
+}
+export function convertPersianToGregorian(persianDate: string): string {
+  const gregorianDate = moment(persianDate, 'jYYYY/jMM/jDD').format('YYYY-MM-DD');
+  return gregorianDate;
+}
+export function maskingString(str, start, end) {
+  if (!str || start < 0 || start >= str.length || end < 0 || end > str.length || start >= end) {
+    return str;
+  }
+  const maskLength = end - start;
+  const maskedStr = str.substring(0, start) + "*".repeat(maskLength) + str.substring(end);
+  return maskedStr;
+}
+
+

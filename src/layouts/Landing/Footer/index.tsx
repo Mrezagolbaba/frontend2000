@@ -17,10 +17,10 @@ const Footer = (): React.JSX.Element => {
               <p className={home["footer-text"]}>support@arsonex.com</p>
 
               <p className={home["footer-text"]}>021-92004581</p>
-              <p className={home["footer-text"]}>
+              {/* <p className={home["footer-text"]}>
                 {" "}
                 خیابان ۱۵ خرداد بازار بین الحرمین کوچه شیخ رضا پلاک ۴۶{" "}
-              </p>
+              </p> */}
               <p className={home["footer-text"]}>
                 ۲۴ ساعت شبانه روز پاسخگوی شما هستیم
               </p>
@@ -31,16 +31,19 @@ const Footer = (): React.JSX.Element => {
               <h3 className={home["footer-widget-title"]}>آرسونیکس</h3>
               <ul className={home["footer-links"]}>
                 <li>
-                  <Link to="/aboutUs">درباره ما</Link>
+                  <Link to="/about-us">درباره ما</Link>
                 </li>
                 <li>
-                  <Link to="/contact">تماس با ما</Link>
+                  <Link to="/contact-us">تماس با ما</Link>
                 </li>
                 <li>
-                  <Link to="#">کارمزد&zwnj;ها</Link>
+                  <Link to="https://help.arsonex.com/fast-fee/">
+                    کارمزد&zwnj;ها
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/coming-soon">بروزرسانی‌ها</Link>
+                  <Link to="#">بروزرسانی‌ها</Link>
+                  <Badge className={home["badge-custom"]}> بزودی</Badge>
                 </li>
                 <li>
                   <Link to="/rules">قوانین و مقررات</Link>
@@ -53,20 +56,24 @@ const Footer = (): React.JSX.Element => {
               <h3 className={home["footer-widget-title"]}>امکانات</h3>
               <ul className={home["footer-links"]}>
                 <li>
-                  <a href="https://help.arsonex.com">معامله سریع تک نرخی</a>
+                  <Link to="/dashboard/by-sell">
+                    خرید و فروش سریع
+                  </Link>
                 </li>
                 <li>
-                  <a href="https://help.arsonex.com">
-                    واریز و برداشت بین‌المللی
-                  </a>
+                  <Link to="https://help.arsonex.com/withdraw-fiat/">
+                    برداشت بین‌المللی
+                  </Link>
                 </li>
                 <li>
-                  <a href="#">آرسونیکس کارت</a>
-                  <Badge className={home["badge-custom"]}>بزودی</Badge>
+                  <Link to="https://help.arsonex.com/deposit-fiat/">
+                    {" "}
+                    واریز بین المللی
+                  </Link>
                 </li>
                 <li>
-                  <a href="#">کسب درآمد</a>
-                  <Badge className={home["badge-custom"]}>تا سقف 30%</Badge>
+                  <Link to="#">کسب درآمد</Link>
+                  <Badge className={home["badge-custom"]}> بزودی</Badge>
                 </li>
               </ul>
             </div>
@@ -79,13 +86,21 @@ const Footer = (): React.JSX.Element => {
                   <a href="https://help.arsonex.com">مرکز راهنمایی</a>
                 </li>
                 <li>
-                  <a href="https://help.arsonex.com">معامله ارز دیجیتال</a>
+                  <a href="https://help.arsonex.com/transaction/">
+                    {" "}
+                    روش های معاملاتی
+                  </a>
                 </li>
                 <li>
-                  <a href="https://help.arsonex.com">معامله فیات دیجیتال</a>
+                  <a href="https://help.arsonex.com/security/">
+                    {" "}
+                    امنیت کاربران
+                  </a>
                 </li>
                 <li>
-                  <a href="https://help.arsonex.com">احراز هویت فوری</a>
+                  <a href="https://help.arsonex.com/authentication-process/">
+                    احراز هویت فوری
+                  </a>
                 </li>
               </ul>
             </div>
@@ -94,8 +109,7 @@ const Footer = (): React.JSX.Element => {
 
         <div className={home["footer-bottom"]}>
           <div className={home["footer-copyright"]}>
-            © 1399 تا امروز، تمامی حقوق (مادی و معنوی) این وب سایت برای
-            آرسونیکس محفوظ است.
+            © 1399 تا امروز، تمامی حقوق این وب سایت برای آرسونیکس محفوظ است.
           </div>
           <ul className={home["social-media"]}>
             <li>
@@ -136,7 +150,6 @@ const Footer = (): React.JSX.Element => {
                 </span>
               </a>
             </li>
-
             <li>
               <a href="https://www.instagram.com/Arsonexchange/">
                 <span className="icon">

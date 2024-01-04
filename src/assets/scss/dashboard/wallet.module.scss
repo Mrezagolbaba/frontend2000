@@ -52,6 +52,11 @@
   }
 }
 
+.little-label {
+  font-size: 12px;
+  margin-top: 0.25rem;
+}
+
 .items-credit {
   display: flex;
   flex-direction: row;
@@ -189,6 +194,11 @@
 
 .lir-icon {
   width: 20px !important;
+}
+
+.english-number,
+.english-number button {
+  font-family: arial !important;
 }
 
 @media screen and (max-width: 1399px) {

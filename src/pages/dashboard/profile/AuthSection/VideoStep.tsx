@@ -7,6 +7,9 @@ import { useAppSelector } from "store/hooks";
 import { Button, Col, Container, Row, Spinner } from "reactstrap";
 
 import profile from "assets/scss/dashboard/profile.module.scss";
+import { useUploadDocMutation } from "store/api/profile-management";
+import toast from "react-hot-toast";
+import { ErrorType, errorNormalizer } from "components/ErrorHandler";
 
 export default function VideoStep({
   onClick,
@@ -16,7 +19,8 @@ export default function VideoStep({
   const { firstName, lastName, nationalId } = user;
   const recordingTimerRef = useRef<any>(null);
   const videoPlayRef = useRef<HTMLVideoElement>(null);
-  const uploadDoc = useUploadDoc();
+  const [uploadDoc, { isLoading, isSuccess, isError, error }] =
+    useUploadDocMutation();
   const {
     status,
     startRecording,
@@ -32,7 +36,6 @@ export default function VideoStep({
   const maxRecordingDuration = 60; // Maximum recording duration in seconds (1 minutes)
   const [recordingTime, setRecordingTime] = useState(0);
   const [hasCameraAccess, setHasCameraAccess] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   //constants
   const remainingTime = maxRecordingDuration - recordingTime;
@@ -50,19 +53,9 @@ export default function VideoStep({
     }
   };
   const uploadVideo = async () => {
-    setIsLoading(true);
     const response = await fetch(mediaBlobUrl as string);
     const blob = await response.blob();
-    await uploadDoc
-      .mutateAsync({ docType: "SELFIE_VIDEO", file: blob, fileName: "file" })
-      .then((res) => {
-        setIsLoading(false);
-        onClick?.(6);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.error(err);
-      });
+    uploadDoc({ docType: "SELFIE_VIDEO", file: blob, fileName: "file" });
   };
 
   //life-cycles
@@ -90,6 +83,14 @@ export default function VideoStep({
       }
     };
   }, [recordingTime, status, stopRecording]);
+
+  useEffect(() => {
+    isSuccess && onClick?.(4);
+  }, [isSuccess, onClick]);
+
+  useEffect(() => {
+    isError && error && toast.error(errorNormalizer(error as ErrorType));
+  }, [error, isError]);
 
   //DOM-rendered functions
   function renderRecordVideo(): React.JSX.Element {

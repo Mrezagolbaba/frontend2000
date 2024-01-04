@@ -14,11 +14,11 @@ import { useBankAccountsQuery } from "store/api/profile-management";
 import { isEmpty } from "lodash";
 import { useCheckVerificationsQuery } from "store/api/user";
 import Dialog from "components/Dialog";
-import ConfirmInternationalService from "pages/dashboard/profile/AuthSection/ConfirmInternationalService";
-import ResidencyCardStep from "pages/dashboard/profile/AuthSection/ResidencyCardStep";
+import InternationalVerification from "pages/dashboard/profile/InternationalVerification";
 
 const DepositFiat = ({ onClose }: { onClose: () => void }) => {
-  const { firstNameEn, lastNameEn } = useAppSelector((state) => state.user);
+  const { firstNameEn, lastNameEn, internationalServicesVerified } =
+    useAppSelector((state) => state.user);
 
   const [isVerified, setIsVerified] = useState<1 | 2 | 3>(1);
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
@@ -31,9 +31,6 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
     ownerName: "",
     code: "",
   });
-
-  const { data: verifications, isSuccess: successVerification } =
-    useCheckVerificationsQuery();
   const { data, isLoading, isSuccess } = useDepositInfoQuery("TRY");
   const { data: accounts, isSuccess: getSuccessAccounts } =
     useBankAccountsQuery({
@@ -82,32 +79,19 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
   }, [data, isSuccess]);
 
   useEffect(() => {
-    if (successVerification) {
-      setIsVerified(
-        verifications?.[2] === "PROCESSING"
-          ? 2
-          : verifications?.[2] === "VERIFIED"
-          ? 3
-          : 1
-      );
-    } else setIsVerified(1);
-  }, [successVerification, verifications]);
-
-  useEffect(() => {
     accounts &&
       depositRequest({
         currencyCode: "TRY",
         amount: "1",
         flow: "MANUAL_WITH_PAYMENT_IDENTIFIER",
-        bankAccountId: accounts[0].id,
+        bankAccountId: accounts[0]?.id,
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, getSuccessAccounts]);
-  console.log("vert", isVerified);
 
   return (
     <div className="px-2">
-      {isVerified===1 ? (
+      {!internationalServicesVerified ? (
         <>
           <AlertInfo
             hasIcon
@@ -127,13 +111,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
             </Col>
           </Row>
         </>
-      ) :isVerified===2? <>
-      <AlertInfo
-        hasIcon
-        text="مدارک ارسالی شما در حال بررسی است. لطفا تا زمان تایید، منتظر بمانید."
-        key="passport-alert"
-      />
-    </>:(
+      ) : (
         <Form>
           {!isEmpty(firstNameEn) && !isEmpty(lastNameEn) && (
             <AlertWarning
@@ -143,6 +121,11 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
               }   عودت مبلغ بعد از 72 ساعت با کسر کارمزد بانکی انجام می‌شود.`}
             />
           )}
+          <AlertWarning
+            hasIcon
+            text="در هنگام واریز حتما شناسه واریز را  در بخش Description یا Aciklama به طور دقیق وارد کنید، در صورت رعایت نکردن این مساله مبلغ به حساب کاربری شما واریز نمی‌شود و بعد از ۷۲ ساعت کاری به حساب شما پس از کسر کارمزد بانکی عودت داده می‌شود."
+          />
+
           <Row>
             <Col xs={12} md={6}>
               <FormGroup>
@@ -172,7 +155,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
             </Col>
             <Col xs={12} md={6}>
               <FormGroup>
-                <Label htmlFor="iban"> شماره iban:</Label>
+                <Label htmlFor="iban"> شماره IBAN:</Label>
                 <CopyInput text={selectedBank || ""} key="iban-account" />
               </FormGroup>
             </Col>
@@ -196,7 +179,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
         hasCloseButton={true}
         onClose={() => setIsOpenDialog(false)}
       >
-        <ResidencyCardStep onClick={() => {}} />
+        <InternationalVerification />
       </Dialog>
     </div>
   );

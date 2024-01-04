@@ -10,6 +10,8 @@
   .ant-list-item
     font-family: var(--bs-font-iranyekaneFa)
     border-block-end: none
+    display: flex
+    flex-direction: row-reverse
 
   .check.ant-list-item-meta
     .ant-list-item-meta-content>h4,.ant-list-item-meta-avatar
@@ -19,5 +21,19 @@
     .ant-list-item-meta-content>h4,.ant-list-item-meta-avatar
       color: #f5222d
 
-:where(.css-dev-only-do-not-override-1vr7spz).ant-list .ant-list-item
-  padding: 5px 0
+.ant-list .ant-list-item
+  padding: 1px 0
+:where(.css-dev-only-do-not-override-1vr7spz).ant-list .ant-list-item .ant-list-item-meta .ant-list-item-meta-avatar
+  margin-inline-end: 8px
+
+:where(.css-dev-only-do-not-override-17sses9).ant-list
+  box-sizing: border-box
+  margin: 0
+  padding: 0
+  color: rgba(0, 0, 0, 0.88)
+  font-size: 14px
+  line-height: 1.5714285714285714
+  list-style: none
+  font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji'
+  position: relative
+  margin-bottom: 20px

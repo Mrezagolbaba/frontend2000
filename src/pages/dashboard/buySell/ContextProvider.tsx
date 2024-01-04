@@ -7,7 +7,7 @@ import React, {
   ReactElement,
 } from "react";
 
-type CurrencyType = "IRR" | "TRY" | "USDT" | "TRX";
+type CurrencyType = "IRR" | "TRY" | "USDT";
 
 type ExchangeContextType = {
   source: {

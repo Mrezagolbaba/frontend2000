@@ -1,4 +1,11 @@
+import LogoPrimary from "assets/img/logo-primary.png";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import home from "assets/scss/landing/home.module.scss";
+import { Button } from "reactstrap";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 const HeadAuth: React.FC = () => {
+  const [openOverlayMenu, setOpenOverlayMenu] = useState<boolean>(false);
   return (
     <header className="auth-header auth-header--bg">
       <div className="auth-logo">
@@ -6,28 +13,77 @@ const HeadAuth: React.FC = () => {
           <img src="assets/img/logo-arsonex.png" alt="" />
         </a>
       </div>
-      <div className="auth-gain-confidence">
-        <p>از یکسان بودن آدرس صفحه با آدرس زیر مطمئن شوید.</p>
+      <nav style={{
+        borderBottom: "1px solid #e2e2e2",
+        paddingBottom: "20px",
+        marginBottom: "50px",
+      }}>
+        <ul
+          className={`${home.navbar} navbar--simple ${openOverlayMenu ? home.expanded : ""
+            }`}
+          id="navbar"
+        >
+          <li>
+            <div className={home.header__auth}>
+              <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
+                <li className={home.navbar__item}>
+                  <Link to="/login">ورود</Link>
+                </li>
+                <li className={home.header__auth__register}>
+                  <Button
+                    tag="a"
+                    href="/register"
+                    color="primary"
+                    className={home["rounded-button"]}
+                  >
+                    ثبت نام
+                  </Button>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li className={`${home.navbar__item} ${home.active}`}>
+            <Link to="/">صفحه اصلی</Link>
+          </li>
+          <li className={home.navbar__item}>
+            <Link to="/market">قیمت لحظه ای</Link>
+          </li>
+          <li className={home.navbar__item}>
+            <Link to="/terms">خرید و فروش آنی</Link>
+          </li>
+          <li className={home.navbar__item}>
+            <Link to="https://www.arsonex.com/blog" target="_blank">
+              بلاگ
+            </Link>
+          </li>
+          <li className={home.navbar__item}>
+            <Link to="/aboutUs">درباره ما</Link>
+          </li>
+          <li className={home.navbar__item}>
+            <Link to="/contact">تماس با ما</Link>
+          </li>
+          <li>
+            <div className={home.navbar__close}>
+              {/* <button type="button" onclick={()=>respMenu.dismiss()}> */}
+              <button
+                type="button"
+                onClick={() => setOpenOverlayMenu(false)}
+              >
+                <span className="icon">
+                  <IoIosCloseCircleOutline />
+                </span>
+              </button>
+            </div>
+          </li>
+        </ul>
+      </nav>
+      {/* <div className="auth-gain-confidence">
         <div className="d-ltr">
           <span className="icon">
-            <svg
-              width="12"
-              height="16"
-              viewBox="0 0 12 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M6 0.666656L0 3.33332V7.33332C0 11.0333 2.56 14.4933 6 15.3333C9.44 14.4933 12 11.0333 12 7.33332V3.33332L6 0.666656ZM6 7.99332H10.6667C10.3133 10.74 8.48 13.1867 6 13.9533V7.99999H1.33333V4.19999L6 2.12666V7.99332Z"
-                fill="#39D98A"
-              />
-            </svg>
+            <img src={LogoPrimary} alt='logo' />
           </span>
-          <label>
-            <span>https://</span>arsonex.com
-          </label>
         </div>
-      </div>
+      </div> */}
     </header>
   );
 };

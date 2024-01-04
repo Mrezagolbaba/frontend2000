@@ -19,19 +19,24 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { convertText } from "helpers";
 
 import buy from "assets/scss/dashboard/buy-sell.module.scss";
+import { useNavigate } from "react-router-dom";
+import { setInvoice } from "store/reducers/features/invoice/invoiceSlice";
+import { AlertDanger } from "components/AlertWidget";
 
 type Props = {
-  setIsOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpenDialog: React.Dispatch<
+    React.SetStateAction<{
+      isOpen: boolean;
+      currency: "IRR" | "USDT" | "TRY";
+    }>
+  >;
 };
 
 export default function ExchangeForm({ setIsOpenDialog }: Props) {
+  const redirect = useNavigate();
   const { exchangeContext, setExchangeContext } = useExchangeContext();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const { data: wallets, refetch } = useList({
-    resource: `wallets`,
-  });
 
   const onSubmit = async (dry: boolean) => {
     const currencyReference = exchangeContext.commission.currencyReference;
@@ -44,8 +49,17 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
       destinationCurrencyCode: exchangeContext.destination.currency,
       feeCurrencyCode: exchangeContext[currencyReference].currency,
     };
-
-    if (Number(exchangeContext.source.amount) > 0) {
+    if (
+      exchangeContext.source.currency === exchangeContext.destination.currency
+    ) {
+      toast.error("دو ارز یکسان قابل معامله نیستند", {
+        position: "bottom-left",
+      });
+    }
+    if (
+      Number(exchangeContext.source.amount) > 0 ||
+      Number(exchangeContext.destination.amount) > 0
+    ) {
       setIsLoading(true);
       try {
         const res = await exchangeReq({ ...data, dry_run: dry });
@@ -69,11 +83,12 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
             },
           });
         } else {
-          refetch();
           toast.success("تبدیل ارز با موفقیت انجام شد.", {
             position: "bottom-left",
           });
           setExchangeContext(initExchangeContext);
+          redirect("/dashboard/invoice", { state: res });
+          setInvoice(res);
         }
         setIsLoading(false);
       } catch (error) {}
@@ -108,36 +123,15 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
 
   useEffect(() => {
     handleRate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [exchangeContext.source.currency, exchangeContext.destination.currency]);
-
-  useEffect(() => {
-    if (wallets && wallets.data) {
-      const source = wallets.data.find(
-        (wallet) => wallet.currencyCode === exchangeContext.source.currency
-      );
-      const destination = wallets.data.find(
-        (wallet) => wallet.currencyCode === exchangeContext.destination.currency
-      );
-
-      setExchangeContext({
-        ...exchangeContext,
-        source: {
-          ...exchangeContext.source,
-          stock: source?.availableBalance,
-        },
-        destination: {
-          ...exchangeContext.destination,
-          stock: destination?.availableBalance,
-        },
+    if (
+      exchangeContext.source.currency === exchangeContext.destination.currency
+    ) {
+      toast.error("دو ارز یکسان قابل معامله نیستند", {
+        position: "bottom-left",
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    wallets,
-    exchangeContext.source.currency,
-    exchangeContext.destination.currency,
-  ]);
+  }, [exchangeContext.source.currency, exchangeContext.destination.currency]);
 
   return (
     <Card className="card-secondary currency-exchange">
@@ -161,7 +155,12 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
               outline
               className="px-4 "
               size="sm"
-              onClick={() => setIsOpenDialog(true)}
+              onClick={() =>
+                setIsOpenDialog({
+                  isOpen: true,
+                  currency: exchangeContext.source.currency,
+                })
+              }
             >
               واریز {convertText(exchangeContext.source.currency, "enToFa")}
             </Button>
@@ -170,24 +169,13 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
       </CardHeader>
       <CardBody>
         <Form className={buy["formContainer"]}>
-          {/* <Row>
-                  {errors.pay && (
-                    <Col xs={12}>
-                      <AlertDanger
-                        hasIcon
-                        text={errors?.pay?.message}
-                        key="amount-error"
-                      />
-                    </Col>
-                  )}
-                </Row> */}
           <Row style={{ justifyContent: "center" }}>
             <Col xs={6}>
               <div className="currency-exchange__control-group">
                 <label className="form-label">پرداخت می‌کنید:</label>
                 <ExchangeInput
                   name="source"
-                  isLoading={isLoading}
+                  otherSide="destination"
                   onChange={() => {
                     onSubmit(true);
                   }}
@@ -200,7 +188,7 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
                 <label className="form-label">دریافت می‌کنید:</label>
                 <ExchangeInput
                   name="destination"
-                  isLoading={isLoading}
+                  otherSide="source"
                   onChange={() => {
                     onSubmit(true);
                   }}
@@ -210,7 +198,7 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
           </Row>
           <Row>
             <Col xs={12}>
-              <WageTable isLoading={isLoading} />
+              {/* <WageTable isLoading={isLoading} /> */}
             </Col>
           </Row>
           <div className={buy.currencyExchangeAction}>

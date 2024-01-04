@@ -10,14 +10,14 @@ export const userApi = enhancedApi.injectEndpoints({
       query(data) {
         return {
           method: "POST",
-          url: "/v1/users/update-password",
+          url: "/users/update-password",
           data,
         };
       },
       invalidatesTags: ["user"],
     }),
 
-    checkVerifications: builder.query<CheckVerificationsResponse, void>({
+    checkVerifications: builder.query<CheckVerificationsResponse[], void>({
       query() {
         return {
           method: "GET",
@@ -37,5 +37,8 @@ export const userApi = enhancedApi.injectEndpoints({
   }),
 });
 
-export const { useUpdatePasswordMutation, useCheckVerificationsQuery,useEnglishNamesMutation } =
-  userApi;
+export const {
+  useUpdatePasswordMutation,
+  useCheckVerificationsQuery,
+  useEnglishNamesMutation,
+} = userApi;

@@ -3,7 +3,7 @@ import Lira from "assets/img/coins/lira.png";
 import Rial from "assets/img/icons/flag-iran.svg";
 import tetter from "assets/img/coins/tether.svg";
 import TRX from "assets/img/coins/trx.png";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Dropdown,
   DropdownItem,
@@ -17,7 +17,7 @@ import { BsTag } from "react-icons/bs";
 import { useExchangeContext } from "../ContextProvider";
 
 import exchange from "assets/scss/dashboard/buy-sell.module.scss";
-import { useLocation } from "react-router-dom";
+import { useWalletsQuery } from "store/api/exchange-management";
 
 const options = [
   {
@@ -30,10 +30,6 @@ const options = [
     label: { text: "لیر", img: Lira },
   },
   {
-    value: "TRX",
-    label: { text: "ترون", img: TRX },
-  },
-  {
     value: "USDT",
     label: { text: "تتر", img: tetter },
   },
@@ -41,13 +37,13 @@ const options = [
 
 type Props = {
   name: "source" | "destination";
+  otherSide: "source" | "destination";
   placeholder?: string;
   decimalsLimit?: number;
   error?: any;
   onError?: (text: string | null) => void;
   handleRate?: () => Promise<number | string>;
   onChange: () => void;
-  isLoading?: boolean;
 };
 
 export default function ExchangeInput({
@@ -55,16 +51,16 @@ export default function ExchangeInput({
   decimalsLimit = 0,
   placeholder = "مبلغ به",
   onChange,
-  isLoading = false,
+  otherSide,
 }: Props) {
-  const { state } = useLocation();
+  const { data: wallets, isLoading } = useWalletsQuery();
   const { exchangeContext, setExchangeContext } = useExchangeContext();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState({
-    value: options[0],
-    amount: 0,
-  });
+  const [selected, setSelected] = useState(
+    options.find((option) => option.value === exchangeContext[name].currency) ||
+      options[0],
+  );
   const [error, setError] = useState<string | undefined>(undefined);
 
   const handleChange = (val: string | number) => {
@@ -94,45 +90,6 @@ export default function ExchangeInput({
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [exchangeContext.source.amount]);
-
-  useEffect(() => {
-    if (state && state?.[name] && !state.destination) {
-      const result = options.find((option) => option.value === state[name]);
-      result && setSelected({
-        ...selected,
-        value: result,
-      });
-      setExchangeContext({
-        ...exchangeContext,
-        [name]: {
-          ...exchangeContext[name],
-          currency: state[name],
-        },
-      });
-    } else if (exchangeContext[name].currency && !state.destination) {
-      const result = options.find(
-        (option) => option.value === exchangeContext[name].currency
-      );
-      result && setSelected({
-        ...selected,
-        value: result,
-      });
-    } else if (state && state?.source && state?.destination) {
-      const result = options.find((option) => option.value === state[name].currency);
-      result && setSelected({
-        value: result,
-        amount: state[name].amount,
-      });
-      setExchangeContext({
-        ...exchangeContext,
-        [name]: {
-          ...exchangeContext[name],
-          currency: state[name].currency,
-          amount: state[name].amount,
-        },
-      });
-    }
-  }, []);
 
   const toggle = () => setIsOpen((prevState) => !prevState);
 
@@ -175,6 +132,10 @@ export default function ExchangeInput({
               <DropdownItem
                 key={index}
                 onClick={() => {
+                  const currentWallet =
+                    wallets &&
+                    wallets.find((item) => item.currencyCode === option.value);
+
                   setError(undefined);
                   setExchangeContext({
                     ...exchangeContext,
@@ -182,6 +143,7 @@ export default function ExchangeInput({
                       ...exchangeContext[name],
                       amount: 0,
                       currency: option.value,
+                      stock: currentWallet.availableBalance,
                     },
                   });
                   setSelected({
@@ -216,14 +178,14 @@ export default function ExchangeInput({
           <div>
             <CiWallet />
             <span className="title">موجودی: </span>
+
             <span className="value">
               {exchangeContext[name].currency === "IRR"
                 ? rialToToman(exchangeContext[name].stock).toLocaleString()
                 : Number(
-                  exchangeContext[name].stock || 0
-                ).toLocaleString()}{" "}
+                    exchangeContext[name].stock || 0,
+                  ).toLocaleString()}{" "}
               {convertText(exchangeContext[name].currency, "enToFa")}
-              {exchangeContext[name].currency}
             </span>
           </div>
         )}

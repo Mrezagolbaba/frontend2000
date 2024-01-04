@@ -23,10 +23,7 @@ import profile from "assets/scss/dashboard/profile.module.scss";
 import { BankAccountsResponse } from "types/profile";
 import { MdClose } from "react-icons/md";
 import { LuCheck, LuPencil } from "react-icons/lu";
-import {
-  useBanksQuery,
-  useCreateBankAccountMutation,
-} from "store/api/profile-management";
+import { useCreateBankAccountMutation } from "store/api/profile-management";
 import DeleteModal from "./DeleteModal";
 import IBANNumber from "components/Input/IBANNumber";
 import { persianToEnglishNumbers } from "helpers";
@@ -65,7 +62,7 @@ export default function International({ accounts, isLoading }: Props) {
       ownerFullName: Yup.string(),
       iban: Yup.string().required(),
       bankId: Yup.string().required(),
-    })
+    }),
   );
 
   const {
@@ -106,7 +103,7 @@ export default function International({ accounts, isLoading }: Props) {
   }, [accounts]);
 
   const submitHandler = (data) => {
-    createAccount({ ...data, iban: persianToEnglishNumbers(data.iban) });
+    createAccount({ ...data, iban: "TR" + persianToEnglishNumbers(data.iban) });
   };
 
   return (
@@ -144,7 +141,7 @@ export default function International({ accounts, isLoading }: Props) {
                             <IBANNumber
                               name={name}
                               value={value}
-                              onChange={onChange}
+                              onChange={(value) => setValue(name, value)}
                               setBankId={(id) => {
                                 setValue("bankId", id);
                               }}
@@ -274,7 +271,11 @@ export default function International({ accounts, isLoading }: Props) {
                           <div className={profile["iban-input-control"]}>
                             <IBANNumber
                               name={account.iban}
-                              value={account.iban}
+                              value={
+                                account.iban.includes("TR")
+                                  ? account.iban.replace("TR", "")
+                                  : account.iban
+                              }
                               disabled={true}
                             />
                           </div>
@@ -289,6 +290,7 @@ export default function International({ accounts, isLoading }: Props) {
                             type="text"
                             id={account?.ownerFullName}
                             disabled
+                            dir="ltr"
                           />
                         </FormGroup>
                       </Col>
@@ -314,7 +316,7 @@ export default function International({ accounts, isLoading }: Props) {
                     >
                       <CiTrash />
                     </Button>
-                    <Button
+                    {/* <Button
                       type="button"
                       color="icon-secondary"
                       disabled
@@ -332,10 +334,10 @@ export default function International({ accounts, isLoading }: Props) {
                       }}
                     >
                       <LuPencil />
-                    </Button>
+                    </Button> */}
                   </Col>
                 </Row>
-              )
+              ),
             )
           )}
 

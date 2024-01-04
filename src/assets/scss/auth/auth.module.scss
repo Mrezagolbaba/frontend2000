@@ -19,8 +19,15 @@
 .confidence {
   flex: 0 0 calc(100% - 172px);
   text-align: center;
-  & > div > span {
-    vertical-align: top;
+  & > div {
+    border: 1px solid #cccccc2e;
+    margin-bottom: 35px;
+    border-radius: 10px;
+    padding: 10px;
+    display: inline-block;
+    & > span {
+      vertical-align: top;
+    }
   }
   p {
     margin-bottom: 12px;
@@ -41,12 +48,12 @@
     border: none;
     width: 100%;
     max-width: 517px;
-    min-height: 670px;
+    min-height: 536px;
     margin: 0 auto;
-    box-shadow: 0 4px 34px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 34px #0000000a;
   }
   .card-body {
-    padding: 25px 100px;
+    padding: 40px 50px;
   }
 }
 
@@ -140,7 +147,28 @@
       box-shadow 0.15s ease-in-out;
   }
 }
-
+.custom-header {
+  position: relative;
+  padding-top: 20px;
+  margin-bottom: 50px;
+  background-repeat: no-repeat;
+  background-size:
+    209px 203px,
+    216px 210px,
+    129px 126px,
+    111px 107px,
+    1173px 520px,
+    100% 862px;
+  background-position:
+    calc(100% - 100px) 525px,
+    50px 326px,
+    293.5px 527px,
+    calc(100% - 203px) 317px,
+    0 263px,
+    0 0;
+  border-bottom: 1px solid #cccccc6b;
+  padding-bottom: 20px;
+}
 @media screen and (max-width: 767px) {
   .header {
     flex-wrap: wrap;

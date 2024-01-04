@@ -12,20 +12,32 @@ import {
   FormGroup,
   FormText,
   Label,
+  Modal,
   Row,
+  Spinner,
 } from "reactstrap";
 import { useBankAccountsQuery } from "store/api/profile-management";
 import { useEffect, useState } from "react";
-import { useWithdrawMutation } from "store/api/wallet-management";
-
+import {
+  useResendOtpWithdrawMutation,
+  useVerifyOtpWithdrawMutation,
+  useWithdrawMutation,
+} from "store/api/wallet-management";
 import turkeyFlag from "assets/img/icons/flag-turkey.png";
+import lirFlag from "assets/img/coins/lira.png";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
+import { useAppSelector } from "store/hooks";
+import toast from "react-hot-toast";
 
 type Props = {
   onClose: () => void;
   stock: number;
   currency: string;
+  open: boolean;
+  onCloseModal: () => void;
+  setTransactionId: (id: string) => void;
+  setShowOtp: () => void;
 };
 type FiatFormType = {
   network: string;
@@ -35,8 +47,22 @@ type FiatFormType = {
   destinationCountry: string;
 };
 
-const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
+const WithdrawFiat = ({
+  onClose,
+  stock,
+  currency,
+  open,
+  onCloseModal,
+  setTransactionId,
+  setShowOtp,
+}: Props) => {
   const [accountOptions, setAccountOptions] = useState<OptionType[] | []>([]);
+  const [otpCode, setOtpCode] = useState("");
+  const [verifyOtpWithdraw, { isSuccess: isVerifySuccess }] =
+    useVerifyOtpWithdrawMutation();
+  const [resendOtpWithdraw, { isSuccess: isResendSuccess }] =
+    useResendOtpWithdrawMutation();
+  const user = useAppSelector((state) => state.user);
   const { data: accounts, isSuccess: getSuccessAccounts } =
     useBankAccountsQuery({
       filters: "currencyCode||$eq||TRY",
@@ -52,7 +78,7 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
       iban: Yup.string().required(),
       amount: Yup.string().required(),
       destinationCountry: Yup.string().required(),
-    })
+    }),
   );
 
   const {
@@ -73,10 +99,19 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
   });
 
   const onSubmit = async (data: FiatFormType) => {
+    if (Number(data.amount) > stock)
+      return toast.error("موجودی شما کافی نمی باشد", {
+        position: "bottom-left",
+      });
+
     withdrawRequest({
       currencyCode: "TRY",
       amount: data.amount,
       destination: data.destination,
+    }).then((res: any) => {
+      setTransactionId(res.data?.id);
+      setShowOtp();
+      onCloseModal();
     });
   };
 
@@ -94,7 +129,11 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
                   dangerouslySetInnerHTML={{ __html: bank.logo }}
                 />
               </span> */}
-            <span dir="ltr">{"TR" + item.iban}</span>
+            <span dir="ltr">
+              {(item.iban.includes("TR") ? item.iban : "TR" + item.iban) +
+                " - " +
+                item.ownerFullName}
+            </span>
           </div>
         ),
       }));
@@ -102,6 +141,13 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
     setAccountOptions(list.filter((item) => !item.value.includes("IR")));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, getSuccessAccounts]);
+
+  useEffect(() => {
+    if (accountOptions.length > 0) {
+      setValue("iban", accountOptions[0].value);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountOptions]);
 
   return (
     <div className="px-2">
@@ -131,7 +177,7 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
                             <span className={wallet["items-credit__icon"]}>
                               <img
                                 className={wallet["lir-icon"]}
-                                src={turkeyFlag}
+                                src={lirFlag}
                                 alt="lir"
                               />
                             </span>
@@ -154,12 +200,12 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
               render={({ field: { name, value } }) => (
                 <FormGroup className="position-relative">
                   <div className="d-flex flex-row justify-content-between">
-                    <Label htmlFor={name}>مبلغ واریز: </Label>
+                    <Label htmlFor={name}>مبلغ برداشت: </Label>
                     {/* <a href="#">
-                      <span className="full-withraw mt-1">
-                        حداکثر مبلغ واریز
-                      </span>
-                    </a> */}
+                          <span className="full-withraw mt-1">
+                            حداکثر مبلغ واریز
+                          </span>
+                        </a> */}
                   </div>
                   <Currency
                     name={name}
@@ -172,8 +218,7 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
                     <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                   )}
                   <FormText>
-                    موجودی شما:
-                    {stock} {currency}
+                    {` موجودی در دسترس: ${stock} ${currency}`}
                   </FormText>
                 </FormGroup>
               )}
@@ -202,7 +247,7 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
                                 alt="lir"
                               />
                             </span>
-                            <span dir="ltr"> ترکیه - TL</span>
+                            <span dir="ltr"> ترکیه</span>
                           </div>
                         ),
                       },
@@ -224,6 +269,7 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
                   <DropdownInput
                     id={name}
                     value={value}
+                    className={wallet["english-number"]}
                     onChange={(val, otherOption) => {
                       setValue(name, val);
                       setValue("destination", otherOption.accountId);
@@ -239,7 +285,11 @@ const WithdrawFiat = ({ onClose, stock, currency }: Props) => {
         <Row className="mt-4">
           <div className="text-center">
             <Button className="px-5 py-3" color="primary" outline type="submit">
-              ثبت درخواست برداشت
+              {isLoading ? (
+                <Spinner style={{ color: "white" }} />
+              ) : (
+                "  ثبت درخواست برداشت"
+              )}
             </Button>
           </div>
         </Row>

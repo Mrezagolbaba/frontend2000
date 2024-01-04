@@ -1,7 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { AiOutlineEdit } from "react-icons/ai";
 import {
   Card,
   CardBody,
@@ -29,7 +28,8 @@ export default function PersonalInformation() {
     phoneNumber,
     firstTierVerified,
     secondTierVerified,
-  }  = useAppSelector((state) => state.user);
+    irPhoneNumber,
+  } = useAppSelector((state) => state.user);
 
   const resolver = yupResolver(
     Yup.object().shape({
@@ -39,7 +39,7 @@ export default function PersonalInformation() {
       birthDate: Yup.string(),
       nationalPhone: Yup.string(),
       iranianPhone: Yup.string(),
-    })
+    }),
   );
 
   const {
@@ -65,9 +65,18 @@ export default function PersonalInformation() {
       lastName: lastName,
       nationalCode: nationalId,
       birthDate: new Date(birthDate).toLocaleDateString("fa-IR"),
-      iranianPhone: phoneNumber,
+      iranianPhone: phoneNumber.includes("+98") ? phoneNumber : irPhoneNumber,
+      nationalPhone: !phoneNumber.includes("+98") ? phoneNumber : "",
     });
-  }, [birthDate, firstName, lastName, nationalId, phoneNumber, reset]);
+  }, [
+    birthDate,
+    firstName,
+    irPhoneNumber,
+    lastName,
+    nationalId,
+    phoneNumber,
+    reset,
+  ]);
 
   return (
     <Card className="mb-4">
@@ -81,18 +90,15 @@ export default function PersonalInformation() {
             key="failed-tier"
             text="احراز هویت شما با مشکل مواجه شده است. لطفا با پشتیبانی تماس بگیرید."
           />
-        ) : firstTierVerified && !secondTierVerified ? (
-          <AlertSuccess
-            hasIcon
-            key="success-tier1"
-            text="احراز هویت شما با موفقیت انجام شد و هم اکنون به سطح یک کاربری ارتقا پیدا کرده‌اید. حالا می‌توانید با افزودن حساب‌های بانکی خود اقدام به واریز و برداشت نمایید، همچنین برای افزایش میزان واریز و برداشت می‌توانید احراز هویت سطح دو را انجام دهید."
-          />
         ) : (
-          <AlertSuccess
-            hasIcon
-            key="success-tier2"
-            text="احراز هویت سطح یک و دو شما با موفقیت انجام شده است."
-          />
+          firstTierVerified &&
+          !secondTierVerified && (
+            <AlertSuccess
+              hasIcon
+              key="success-tier1"
+              text="احراز هویت شما با موفقیت انجام شد و هم اکنون به سطح یک کاربری ارتقا پیدا کرده‌اید. حالا می‌توانید با افزودن حساب‌های بانکی خود اقدام به واریز و برداشت نمایید، همچنین برای افزایش میزان واریز و برداشت می‌توانید احراز هویت سطح دو را انجام دهید."
+            />
+          )
         )}
 
         <Form className="container">
@@ -195,12 +201,12 @@ export default function PersonalInformation() {
             </Col>
             <Col xs={12} lg={5}>
               <Controller
-                name="nationalPhone"
+                name="iranianPhone"
                 control={control}
                 render={({ field: { name, value, onChange, ref } }) => (
                   <FormGroup row>
-                    <Label sm={3} for="input1">
-                      شماره ثابت:
+                    <Label sm={3} htmlFor={name}>
+                      شماره ایران:
                     </Label>
                     <Col sm={9}>
                       <Input
@@ -211,6 +217,8 @@ export default function PersonalInformation() {
                         ref={ref}
                         value={value}
                         type="text"
+                        dir="ltr"
+                        style={{ textAlign: "right" }}
                         onChange={onChange}
                       />
                       {errors?.[name] && (
@@ -225,12 +233,12 @@ export default function PersonalInformation() {
             </Col>
             <Col xs={12} lg={5}>
               <Controller
-                name="iranianPhone"
+                name="nationalPhone"
                 control={control}
                 render={({ field: { name, value, onChange, ref } }) => (
                   <FormGroup row>
-                    <Label sm={3} for="input1">
-                      شماره موبایل:
+                    <Label sm={3} htmlFor={name}>
+                      شماره بین المللی:
                     </Label>
                     <Col sm={9}>
                       <Input
@@ -241,6 +249,8 @@ export default function PersonalInformation() {
                         ref={ref}
                         value={value}
                         type="text"
+                        dir="ltr"
+                        style={{ textAlign: "right" }}
                         onChange={onChange}
                       />
                       {errors?.[name] && (

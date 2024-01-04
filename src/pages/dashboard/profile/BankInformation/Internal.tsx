@@ -41,7 +41,7 @@ import DeleteModal from "./DeleteModal";
 const resolver = yupResolver(
   Yup.object().shape({
     iban: Yup.string(),
-    cardNumber: Yup.string().required(),
+    cardNumber: Yup.string().required().max(16,"فرمت شماره کارت اشتباه است."),
     bankId: Yup.string().required(),
   })
 );
@@ -102,6 +102,10 @@ export default function Internal({ accounts, isLoading }: Props) {
       bankId: "",
     });
   };
+
+  console.log(errors);
+  
+
 
   useEffect(() => {
     if (isSuccess) {

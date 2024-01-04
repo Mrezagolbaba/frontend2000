@@ -16,12 +16,16 @@ import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import Currency from "components/Input/CurrencyInput";
 import { AlertInfo } from "components/AlertWidget";
 
-import wallet from "assets/scss/dashboard/wallet.module.scss";
 import { formatShowAccount, searchIranianBanks } from "helpers/filesManagement";
 import { useBankAccountsQuery } from "store/api/profile-management";
-import { useDepositMutation } from "store/api/wallet-management";
-import { useNavigate } from "react-router-dom";
+import {
+  useDepositMutation,
+  useTransactionFeeQuery,
+} from "store/api/wallet-management";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "store/hooks";
+
+import wallet from "assets/scss/dashboard/wallet.module.scss";
 
 type CreditCardForm = {
   accountNumber: string;
@@ -31,12 +35,13 @@ type CreditCardForm = {
 
 const CreditCardForm = () => {
   const { firstName, lastName, secondTierVerified } = useAppSelector(
-    (state) => state.user
+    (state) => state.user,
   );
   const navigate = useNavigate();
   const [hasAccount, setHasAccount] = useState<boolean>(true);
   const [optionList, setOptionList] = useState<OptionType[] | any[]>([]);
 
+  const { data: fee } = useTransactionFeeQuery("IRR");
   const { data, isSuccess } = useBankAccountsQuery({});
 
   const [
@@ -49,7 +54,7 @@ const CreditCardForm = () => {
       accountNumber: Yup.string().required(),
       amount: Yup.string().required(),
       accountId: Yup.string().required(),
-    })
+    }),
   );
   const {
     handleSubmit,
@@ -80,32 +85,38 @@ const CreditCardForm = () => {
       if (data.length <= 0) {
         setHasAccount(false);
       } else {
-        setOptionList(
-          data.map((account) => {
-            const bank =
-              account.cardNumber && searchIranianBanks(account.cardNumber);
-            return {
-              content: (
-                <div className={wallet["items-credit"]}>
-                  {bank && bank.logo && (
-                    <span className={wallet["items-credit__icon"]}>
-                      <span
-                        className="mx-3"
-                        dangerouslySetInnerHTML={{ __html: bank.logo }}
-                      />
-                    </span>
-                  )}
+        const accounts = data.filter((account) => {
+          if (account.cardNumber !== null) return account;
+        });
 
-                  <span dir="ltr">
-                    {account?.cardNumber &&
-                      formatShowAccount(account?.cardNumber)}
-                  </span>
-                </div>
-              ),
-              otherOptions: { accountId: account?.id },
-              value: account?.cardNumber ? account?.cardNumber : "",
-            };
-          })
+        setOptionList(
+          accounts.map((account) => {
+            if (account.cardNumber) {
+              const bank =
+                account.cardNumber && searchIranianBanks(account.cardNumber);
+              return {
+                content: (
+                  <div className={wallet["items-credit"]}>
+                    {bank && bank.logo && (
+                      <span className={wallet["items-credit__icon"]}>
+                        <span
+                          className="mx-3"
+                          dangerouslySetInnerHTML={{ __html: bank.logo }}
+                        />
+                      </span>
+                    )}
+
+                    <span dir="ltr">
+                      {account?.cardNumber &&
+                        formatShowAccount(account?.cardNumber)}
+                    </span>
+                  </div>
+                ),
+                otherOptions: { accountId: account?.id },
+                value: account?.cardNumber,
+              };
+            }
+          }),
         );
         setHasAccount(true);
         reset({
@@ -135,9 +146,11 @@ const CreditCardForm = () => {
               <FormGroup className="position-relative">
                 <div className="d-flex flex-row justify-content-between">
                   <Label htmlFor={name}>کارت واریزی: </Label>
-                  <a href="#">
-                    <span className="full-withraw mt-1">افزودن حساب جدید</span>
-                  </a>
+                  <Link to="/dashboard/profile" target="blank">
+                    <span className={wallet?.["little-label"]}>
+                      افزودن حساب جدید
+                    </span>
+                  </Link>
                 </div>
                 <DropdownInput
                   id={name}
@@ -153,9 +166,9 @@ const CreditCardForm = () => {
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
                 <FormText>
-                  {`سقف واریز: ${
+                  {/* {`سقف واریز: ${
                     secondTierVerified ? "نامحدود" : "ا میلیون تومان"
-                  }`}
+                  }`} */}
                 </FormText>
               </FormGroup>
             )}
@@ -169,9 +182,11 @@ const CreditCardForm = () => {
               <FormGroup className="position-relative">
                 <div className="d-flex flex-row justify-content-between">
                   <Label htmlFor={name}>مبلغ واریز: </Label>
-                  <a href="#">
-                    <span className="full-withraw mt-1">حداکثر مبلغ واریز</span>
-                  </a>
+                  {/* <a href="#">
+                    <span className={wallet?.["little-label"]}>
+                      حداکثر مبلغ واریز
+                    </span>
+                  </a> */}
                 </div>
                 <Currency
                   name={name}
@@ -183,7 +198,11 @@ const CreditCardForm = () => {
                 {errors?.[name] && (
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
-                <FormText>کارمزد واریز: صفر تومان </FormText>
+                {fee && (
+                  <FormText>
+                    کارمزد واریز: {fee.depositFeeStatic} تومان{" "}
+                  </FormText>
+                )}
               </FormGroup>
             )}
           />

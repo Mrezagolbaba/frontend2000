@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
   Col,
+  Modal,
   Row,
   Table,
 } from "reactstrap";
@@ -13,14 +14,25 @@ import { useState } from "react";
 import DepositCrypto from "./Deposit";
 import WithdrawCrypto from "./Withdraw";
 
-import teter from "assets/img/coins/tether.png";
+import teter from "assets/img/coins/tether.svg";
 import trx from "assets/img/coins/trx.png";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import { useNavigate } from "react-router-dom";
+import WithdrawOTP from "components/WithdrawOTP";
+import { useResendOtpWithdrawMutation, useVerifyOtpWithdrawMutation } from "store/api/wallet-management";
+import { useAppSelector } from "store/hooks";
+import toast from "react-hot-toast";
 
 export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
+  const user = useAppSelector((state) => state.user);
+
   const navigate = useNavigate();
+  const [otpCode, setOtpCode] = useState("");
+  const [verifyOtpWithdraw, { isSuccess: isVerifySuccess }] = useVerifyOtpWithdrawMutation()
+  const [resendOtpWithdraw, { isSuccess: isResendSuccess }] = useResendOtpWithdrawMutation()
+  const [showOtp, setShowOtp] = useState<boolean>(false);
+  const [transactionId, setTransactionId] = useState<string>('');
   const [depositForm, setDepositForm] = useState<{
     isOpen: boolean;
     currency: string;
@@ -31,6 +43,33 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
     stock: number;
   }>({ isOpen: false, currency: "", stock: 0 });
 
+  const handleSendOtp = async (data: { code: string }) => {
+    if (data.code.length > 6) return toast.error('لطفا کد را وارد کنید', { position: 'bottom-left' })
+    const newData = {
+      transactionId,
+      code: otpCode
+    }
+    await verifyOtpWithdraw(newData).then((res: any) => {
+      if (res) {
+        handleCloseModal()
+        toast.success('برداشت با موفقیت انجام شد', { position: 'bottom-left' })
+        window.location.reload()
+      } else if(res.id === null) {
+        toast.error('کد وارد شده صحیح نمی باشد', { position: 'bottom-left' })
+      }
+    })
+  }
+
+  const handleReSendOtp = async () => {
+    await resendOtpWithdraw(transactionId).then(() => {
+      if (isResendSuccess) {
+        toast.success('کد مجددا ارسال شد', { position: 'bottom-left' })
+      }
+    })
+  }
+  const handleCloseModal = () => {
+    setShowOtp(false)
+  }
   return (
     <Card className="mb-4 h-100">
       <CardHeader>
@@ -43,8 +82,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
               <thead>
                 <tr>
                   <th>ارز</th>
-                  <th className="text-center">موجودی</th>
-                  <th className="text-center"> ارزش تخمینی</th>
+                  <th className="text-center">موجودی در دسترس</th>
                   <th className="text-center" />
                   <th className="text-center" />
                   <th className="text-center" />
@@ -55,9 +93,6 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                   <>
                     <tr>
                       <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="text-center placeholder-glow">
                         <div className="placeholder col-12 rounded" />
                       </td>
                       <td className="text-center placeholder-glow">
@@ -89,16 +124,13 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                       <td className="text-center placeholder-glow">
                         <div className="placeholder col-12 rounded" />
                       </td>
-                      <td className="text-center placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
                     </tr>
                   </>
                 ) : isSuccess ? (
                   <>
                     <tr key={0}>
                       <td>
-                        <div>
+                        <div className="d-flex">
                           <img
                             src={teter}
                             alt=""
@@ -108,10 +140,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                         </div>
                       </td>
                       <td className="text-center">
-                        {Number(USDT.balance | 0)}
-                      </td>
-                      <td className="text-center">
-                        {Number(USDT.availableBalance | 0)}
+                        {Number(USDT.availableBalance || 0).toLocaleString()}
                       </td>
                       <td className="text-center">
                         <Button
@@ -161,7 +190,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                         </Button>
                       </td>
                     </tr>
-                    <tr key={1}>
+                    {/* <tr key={1}>
                       <td>
                         <div>
                           <img
@@ -222,7 +251,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                           معامله
                         </Button>
                       </td>
-                    </tr>
+                    </tr> */}
                   </>
                 ) : (
                   <tr>دیتایی موجود نیست</tr>
@@ -252,6 +281,11 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
         hasCloseButton
       >
         <WithdrawCrypto
+          setTransactionId={(id) => setTransactionId(id)}
+          setShowOtp={() => {
+            setShowOtp(true)
+          }}
+          onCloseModal={() => setWithdrawForm({ isOpen: false, currency: "", stock: 0 })}
           currency={withdrawForm.currency}
           stock={withdrawForm.stock}
           onClose={() =>
@@ -259,6 +293,15 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
           }
         />
       </Dialog>
+      <Modal isOpen={showOtp} toggle={handleCloseModal} >
+        <WithdrawOTP
+          title="تایید برداشت"
+          onClose={handleCloseModal}
+          securitySelection={user.otpMethod}
+          handleResend={handleReSendOtp}
+          handleGetCode={handleSendOtp}
+        />
+      </Modal>
     </Card>
   );
 }

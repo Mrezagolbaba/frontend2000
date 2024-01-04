@@ -1,5 +1,4 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { AuthenticationLevel2Props } from "./types";
 import { BsCheck, BsFileEarmarkPlus } from "react-icons/bs";
 import {
   Button,
@@ -17,16 +16,15 @@ import { useInitialVerification, useUploadDoc } from "services/verification";
 
 import toast from "react-hot-toast";
 import { useEnglishNamesMutation } from "store/api/user";
-export default function ResidencyCardStep({
-  onClick,
-}: AuthenticationLevel2Props) {
-  const uploadDoc = useUploadDoc();
-  const initRequest = useInitialVerification();
+import {
+  useInitialInternationalMutation,
+  useUploadDocMutation,
+} from "store/api/profile-management";
+export default function InternationalVerification() {
   const inputRef1 = useRef<HTMLInputElement>(null);
   const inputRef2 = useRef<HTMLInputElement>(null);
 
   const [counter, setCounter] = useState<0 | 1>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [imgUrl, setImgUrl] = useState<{ 1: string | null; 2: string | null }>({
     1: null,
     2: null,
@@ -39,6 +37,9 @@ export default function ResidencyCardStep({
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
 
+  const [uploadDoc, { isLoading, isSuccess, isError, error }] =
+    useUploadDocMutation();
+  const [initRequest] = useInitialInternationalMutation();
   const [
     namesRequest,
     { data, isLoading: isLoadingNames, isSuccess: successPublish },
@@ -64,24 +65,11 @@ export default function ResidencyCardStep({
     }
     return null;
   };
-  const finalRequestHandler = async (useInternationalServices: boolean) => {
-    await initRequest
-      .mutateAsync(useInternationalServices)
-      .then(async (res) => {
-        console.log(res);
-        setIsLoading(false);
-        onClick?.(6);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.error(err);
-      });
+  const finalRequestHandler = () => {
+    initRequest();
   };
 
   const handleSubmit = async (fileNumber: number) => {
-    setIsLoading(true);
-    // console.log(file[fileNumber], fileNumber);
-
     const body = {
       docType:
         fileNumber === 1 ? "RESIDENCE_PERMIT_FRONT" : "RESIDENCE_PERMIT_BACK",
@@ -89,24 +77,15 @@ export default function ResidencyCardStep({
       fileName: "file",
     };
 
-    await uploadDoc
-      .mutateAsync({ ...body })
-      .then(async (res) => {
-        setIsLoading(false);
-        console.log(res);
-        if (counter === 1) {
-          finalRequestHandler(true);
-        } else setCounter(1);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.error(err);
-      });
+    await uploadDoc({ ...body });
   };
 
   useEffect(() => {
-    successPublish &&
+    if (successPublish) {
+        finalRequestHandler();
       toast.success("اطلاعات با موفقیت ثبت شد.", { position: "bottom-right" });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [successPublish]);
 
   return (

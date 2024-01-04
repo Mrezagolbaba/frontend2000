@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import Logo from "assets/img/logo-light.png";
-import LogoPrimary from "assets/img/logo-primary.png"
+import { Link, useLocation } from "react-router-dom";
+import Logo from "assets/img/arsonex.png";
+import LogoPrimary from "assets/img/logo-primary.png";
 
 import home from "assets/scss/landing/home.module.scss";
 import { Button, Container } from "reactstrap";
@@ -13,6 +13,8 @@ type Props = {
 };
 const Header = ({ disableBanner = false }: Props) => {
   const [openOverlayMenu, setOpenOverlayMenu] = useState<boolean>(false);
+
+  const { pathname } = useLocation();
 
   return (
     <>
@@ -28,7 +30,7 @@ const Header = ({ disableBanner = false }: Props) => {
         <div className={home.header__top}>
           <div className={home.header__logo}>
             <Link to="/">
-              <img src={!disableBanner ?Logo:LogoPrimary} className="logo" />
+              <img src={!disableBanner ? Logo : LogoPrimary} className="logo" />
             </Link>
           </div>
 
@@ -58,25 +60,43 @@ const Header = ({ disableBanner = false }: Props) => {
                   </ul>
                 </div>
               </li>
-              <li className={`${home.navbar__item} ${home.active}`}>
+              <li
+                className={`${home.navbar__item} ${
+                  pathname === "/" ? home.active : ""
+                }`}
+              >
                 <Link to="/">صفحه اصلی</Link>
               </li>
-              <li className={home.navbar__item}>
-                <Link to="/market">قیمت لحظه ای</Link>
+              <li
+                className={`${home.navbar__item} ${
+                  pathname === "/coins" ? home.active : ""
+                }`}
+              >
+                <Link to="/coins">قیمت لحظه ای</Link>
               </li>
-              <li className={home.navbar__item}>
-                <Link to="/terms">خرید و فروش آنی</Link>
+              <li
+                className={`${home.navbar__item} ${
+                  pathname === "/dashboard" ? home.active : ""
+                }`}
+              >
+                <Link to="/dashboard">خرید و فروش آنی</Link>
               </li>
-              <li className={home.navbar__item}>
-                <Link to="https://www.arsonex.com/blog" target="_blank">
-                  بلاگ
-                </Link>
+              <li className={`${home.navbar__item}`}>
+                <Link to="https://help.arsonex.com/">مرکز راهنمایی</Link>
               </li>
-              <li className={home.navbar__item}>
-                <Link to="/aboutUs">درباره ما</Link>
+              <li
+                className={`${home.navbar__item} ${
+                  pathname === "/about-us" ? home.active : ""
+                }`}
+              >
+                <Link to="/about-us">درباره ما</Link>
               </li>
-              <li className={home.navbar__item}>
-                <Link to="/contact">تماس با ما</Link>
+              <li
+                className={`${home.navbar__item} ${
+                  pathname === "/contact-us" ? home.active : ""
+                }`}
+              >
+                <Link to="/contact-us">تماس با ما</Link>
               </li>
               <li>
                 <div className={home.navbar__close}>

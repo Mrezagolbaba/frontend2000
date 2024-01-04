@@ -6,6 +6,7 @@ declare const classNames: {
   readonly "deposit-form__nav": "deposit-form__nav";
   readonly "nav-link": "nav-link";
   readonly active: "active";
+  readonly "little-label": "little-label";
   readonly "items-credit": "items-credit";
   readonly "items-credit__icon": "items-credit__icon";
   readonly "bank-name-input": "bank-name-input";
@@ -19,5 +20,6 @@ declare const classNames: {
   readonly "silver-button": "silver-button";
   readonly "transaction-button": "transaction-button";
   readonly "lir-icon": "lir-icon";
+  readonly "english-number": "english-number";
 };
 export = classNames;

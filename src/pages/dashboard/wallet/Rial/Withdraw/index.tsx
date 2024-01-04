@@ -20,7 +20,7 @@ import { useBankAccountsQuery } from "store/api/profile-management";
 import { formatShowAccount, searchIranianBanks } from "helpers/filesManagement";
 import { useWithdrawMutation } from "store/api/wallet-management";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "store/hooks";
 
 type WithdrawType = {
@@ -31,10 +31,14 @@ type WithdrawType = {
 
 type Props = {
   onClose?: () => void;
+  stock: string | number;
 };
 
-export default function Withdraw({ onClose }: Props) {
-  const { firstName, lastName } = useAppSelector((state) => state.user);
+export default function Withdraw({ onClose, stock }: Props) {
+  const { firstName, lastName, secondTierVerified } = useAppSelector(
+    (state) => state.user,
+  );
+
   const navigate = useNavigate();
   const [hasAccount, setHasAccount] = useState<boolean>(true);
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
@@ -55,7 +59,7 @@ export default function Withdraw({ onClose }: Props) {
       iban: Yup.string().required(),
       amount: Yup.string().required(),
       accountId: Yup.string().required(),
-    })
+    }),
   );
   const {
     handleSubmit,
@@ -78,9 +82,12 @@ export default function Withdraw({ onClose }: Props) {
       if (data.length <= 0) {
         setHasAccount(false);
       } else {
+        const accounts = data.filter((account) => {
+          if (account.cardNumber !== null) return account;
+        });
         setHasAccount(true);
         setOptionList(
-          data.map((account) => {
+          accounts.map((account) => {
             // const bank = searchIranianBanks(account?.cardNumber);
             return {
               content: (
@@ -97,7 +104,7 @@ export default function Withdraw({ onClose }: Props) {
               otherOptions: { accountId: account?.id },
               value: account?.iban,
             };
-          })
+          }),
         );
         reset({
           iban: data[0]?.iban,
@@ -118,24 +125,31 @@ export default function Withdraw({ onClose }: Props) {
   };
 
   useEffect(() => {
-    isSuccessWithdraw &&
+    if (isSuccessWithdraw) {
       toast.success(
-        "درخواست برداشت با موفقیت ثبت شد. لطفا منتظر تایید پشتیبانی بمانید."
+        "درخواست برداشت با موفقیت ثبت شد. لطفا منتظر تایید پشتیبانی بمانید.",
       );
+      onClose?.();
+    }
+
     isErrorWithdraw &&
       toast.error(
-        "در ثبت درخواست مشکلی پیش آمده است لطفا در صورت هرگونه ابهام با پشتیبانی ارتباط برقرار کنید."
+        "در ثبت درخواست مشکلی پیش آمده است لطفا در صورت هرگونه ابهام با پشتیبانی ارتباط برقرار کنید.",
       );
 
-    onClose?.();
-  }, [isSuccessWithdraw, isErrorWithdraw, onClose]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccessWithdraw, isErrorWithdraw]);
+  console.log(hasAccount);
+
   return hasAccount ? (
     <form className="px-3" onSubmit={handleSubmit(onSubmit)}>
       <Row>
-        <AlertInfo
-          hasIcon
-          text="برای افزایش میزان برداشت، احراز هویت سطح دو را تکمیل نمایید."
-        />
+        {!secondTierVerified && (
+          <AlertInfo
+            hasIcon
+            text="برای افزایش میزان برداشت، احراز هویت سطح دو را تکمیل نمایید."
+          />
+        )}
         <AlertInfo
           hasIcon
           text="تسویه حساب با بانک‌های سامان، صادرات، کشاورزی، پارسیان، سپه، شهر، ملی، اقتصادنوین، آینده، پاسارگارد، ملت و تجارت سریع‌تر انجام می‌شود."
@@ -154,9 +168,11 @@ export default function Withdraw({ onClose }: Props) {
               <FormGroup className="position-relative">
                 <div className="d-flex flex-row justify-content-between">
                   <Label htmlFor={name}> واریز به شبا: </Label>
-                  <a href="#">
-                    <span className="full-withraw mt-1">افزودن حساب جدید</span>
-                  </a>
+                  <Link to="/dashboard/profile" target="blank">
+                    <span className={wallet?.["little-label"]}>
+                      افزودن حساب جدید
+                    </span>
+                  </Link>
                 </div>
                 <DropdownInput
                   id={name}
@@ -169,13 +185,8 @@ export default function Withdraw({ onClose }: Props) {
                   hasError={Boolean(errors?.[name])}
                 />
                 {errors?.[name] && (
-                  <FormFeedback tooltip>
-                    {errors[name]?.message}sdfsdfsfd
-                  </FormFeedback>
+                  <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
-                <FormText>
-                  سقف باقی مانده برداشت روزانه این حساب: 100,000,000 تومان
-                </FormText>
               </FormGroup>
             )}
           />
@@ -188,11 +199,11 @@ export default function Withdraw({ onClose }: Props) {
               <FormGroup className="position-relative">
                 <div className="d-flex flex-row justify-content-between">
                   <Label htmlFor={name}>مبلغ برداشت: </Label>
-                  <a href="#">
-                    <span className="full-withraw mt-1">
+                  {/* <a href="#">
+                    <span className={wallet?.["little-label"]}>
                       حداکثر قابل برداشت
                     </span>
-                  </a>
+                  </a> */}
                 </div>
                 <Currency
                   name={name}
@@ -205,8 +216,10 @@ export default function Withdraw({ onClose }: Props) {
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
                 <span className="d-flex flex-row justify-content-between">
-                  <FormText>موجودی شما: 12,000,000 تومان</FormText>
-                  <FormText>کارمزد برداشت بانکی: 2,000 هزارتومان</FormText>
+                  <FormText>{`موجودی شما: ${(
+                    Number(stock) / 10
+                  ).toLocaleString()} تومان`}</FormText>
+                  {/* <FormText>کارمزد برداشت بانکی: هزارتومان</FormText> */}
                 </span>
               </FormGroup>
             )}

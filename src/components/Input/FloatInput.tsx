@@ -9,7 +9,7 @@ interface Props {
   value: string;
   type?: string;
   required?: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputProps: any;
   disabled?: boolean;
 }

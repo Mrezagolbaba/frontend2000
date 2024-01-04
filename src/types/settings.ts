@@ -15,3 +15,8 @@ export interface IAuthenticator {
     secret: string;
   
 }
+export interface IChangePassword {
+    oldPassword: string;
+    newPassword: string;
+    rePassword: string;
+}

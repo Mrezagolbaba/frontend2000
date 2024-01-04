@@ -15,6 +15,8 @@ import CoinPage from "pages/coins";
 import DashboardRouter from "./DashboardRouter";
 import ComingSoon from "pages/ComingSoon";
 import ContactUs from "pages/contact-us";
+import RulesPage from "pages/rules";
+import AboutUs from "pages/about-us";
 
 export default function AppRouter() {
   return useRoutes([
@@ -24,20 +26,22 @@ export default function AppRouter() {
       children: [
         { path: "", element: <HomePage /> },
         { path: "login", element: <LoginPage /> },
-        { path: "/login-email", element: <LoginEmailPage /> },
+        { path: "login-email", element: <LoginEmailPage /> },
         { path: "register", element: <SignupPage /> },
         { path: "mobile-otp", element: <OtpMobile /> },
         { path: "email-otp", element: <OtpEmail /> },
-        { path: "/forget-password", element: <ForgetPasswordWithMobile /> },
+        { path: "forget-password", element: <ForgetPasswordWithMobile /> },
         {
-          path: "/forget-password-with-email",
+          path: "forget-password-with-email",
           element: <ForgetPasswordWithEmail />,
         },
-        { path: "/reset-password", element: <ResetPassword /> },
+        { path: "reset-password", element: <ResetPassword /> },
         { path: "coins", element: <CoinPage /> },
         { path: "information", element: <Information /> },
-        { path: "/coming-soon", element: <ComingSoon /> },
+        { path: "coming-soon", element: <ComingSoon /> },
         { path: "contact-us", element: <ContactUs /> },
+        { path: "about-us", element: <AboutUs /> },
+        { path: "terms", element: <RulesPage /> },
         DashboardRouter,
       ],
     },
