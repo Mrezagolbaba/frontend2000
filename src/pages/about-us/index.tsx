@@ -3,7 +3,8 @@ import BottomBanner from "pages/Home/BottomBanner";
 
 import home from "assets/scss/landing/home.module.scss";
 import about from "assets/scss/landing/about-us.module.scss";
-import { Container } from "reactstrap";
+import { Breadcrumb, BreadcrumbItem, Container } from "reactstrap";
+import { Link } from "react-router-dom";
 
 export default function AboutUs() {
   return (
@@ -11,6 +12,12 @@ export default function AboutUs() {
       <main className={home["main-wrapper"]}>
         <section className={home["section-holder"]}>
           <Container>
+            <Breadcrumb>
+              <BreadcrumbItem>
+                <Link to="/">آرسونیکس</Link>
+              </BreadcrumbItem>
+              <BreadcrumbItem active> درباره ما </BreadcrumbItem>
+            </Breadcrumb>
             <div className={home["section-holder__title"]}>
               <h3>
                 همراه ارز دیجیتال شما،{" "}
@@ -26,7 +33,7 @@ export default function AboutUs() {
               <div className={about.summary__card}>
                 <div className={about["summary__card-body"]}>
                   <p className={about.summary__text}>
-                    همراه کمبود یک پلتفرم که قابلیت که علاوه بر تومان از
+                    همواره کمبود یک پلتفرم که قابلیت که علاوه بر تومان از
                     فیات‌های بین‌المللی دیگری پشتیبانی کند در ایران حس می‌شد،
                     آرسونیکس (هور تابان تجارت الکترونیک) با استفاده از تمام
                     ظرفیت‌های قانونی که ایرانیان می‌توانند از آن بهره‌مند شوند
@@ -39,7 +46,7 @@ export default function AboutUs() {
                 </div>
               </div>
             </div>
-            <ul className={about["counter-list"]}>
+            {/* <ul className={about["counter-list"]}>
               <li>
                 <div>
                   <h5>تعداد کاربران فعال</h5>
@@ -58,7 +65,7 @@ export default function AboutUs() {
                   </span>
                 </div>
               </li>
-            </ul>
+            </ul> */}
           </Container>
         </section>
         <BottomBanner />

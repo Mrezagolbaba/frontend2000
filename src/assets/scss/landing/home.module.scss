@@ -906,21 +906,29 @@ img.avatar {
   }
 }
 .page__navitem {
-  display: inline-block;
-  color: #000000;
-  background-color: transparent;
-  font-size: 1em;
-  font-weight: 500;
-  padding: 0 12px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  min-width: 100px;
-  text-align: center;
-  height: 36px;
-  line-height: 34px;
-}
-.page__navitem > a {
-  color: #040f4a;
+  & > a {
+    display: inline-block;
+    color: #000000;
+    background-color: transparent;
+    font-size: 1em;
+    font-weight: 500;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    min-width: 100px;
+    text-align: center;
+    height: 36px;
+    line-height: 34px;
+    color: #040f4a;
+  }
+  &.active > a {
+    border-color: #335ffc;
+    color: #335ffc;
+    font-weight: 700;
+  }
+  &:not(.active):hover > a {
+    color: #2d59e8;
+  }
 }
 
 .header__page .header__hamburger button span > svg {
