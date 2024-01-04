@@ -316,7 +316,7 @@ export default function International({ accounts, isLoading }: Props) {
                     >
                       <CiTrash />
                     </Button>
-                    <Button
+                    {/* <Button
                       type="button"
                       color="icon-secondary"
                       disabled
@@ -334,7 +334,7 @@ export default function International({ accounts, isLoading }: Props) {
                       }}
                     >
                       <LuPencil />
-                    </Button>
+                    </Button> */}
                   </Col>
                 </Row>
               ),
