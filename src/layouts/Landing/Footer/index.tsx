@@ -57,7 +57,7 @@ const Footer = (): React.JSX.Element => {
               <ul className={home["footer-links"]}>
                 <li>
                   <Link to="/dashboard/by-sell">
-                    خرید و فروش سریع و تک نرخی
+                    خرید و فروش سریع
                   </Link>
                 </li>
                 <li>

@@ -25,6 +25,7 @@ export default function ExchangeSection() {
   });
 
   const [getRate, { data: currencyRes }] = useLazyRatesQuery();
+  const [getReverseRate, { data: currencyReverseRes }] = useLazyRatesQuery();
 
   useEffect(() => {
     // const intervalId = setInterval(() => {
@@ -32,6 +33,11 @@ export default function ExchangeSection() {
       sourceCurrencyCode: source.currency,
       targetCurrencyCode: destination.currency,
     });
+
+    getReverseRate({
+      sourceCurrencyCode: destination.currency,
+      targetCurrencyCode: source.currency,
+    })
     // }, 5000); // 5 seconds in milliseconds
 
     // // Clean up the interval when the component is unmounted
@@ -148,8 +154,8 @@ export default function ExchangeSection() {
                         : destination.amount;
                     const res =
                       source.currency === "IRR"
-                        ? amount / Number(currencyRes?.rate) / 10
-                        : amount / Number(currencyRes?.rate);
+                        ? (amount * Number(currencyReverseRes?.rate)) / 10
+                        : amount * Number(currencyReverseRes?.rate);
                     setSource({
                       ...source,
                       amount: res,

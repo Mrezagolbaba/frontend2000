@@ -57,7 +57,7 @@ const SignupPage: React.FC = () => {
       (RFCode) => RFCode === data.codeReference.toUpperCase(),
     );
 
-    if (findReference > 0) {
+    if (findReference >= 0) {
       const phoneNumber = formatPhoneNumber(
         persianToEnglishNumbers(data.phoneNumber),
         data.selectedCountry,
@@ -187,7 +187,7 @@ const SignupPage: React.FC = () => {
                       render={({ field: { name, value, onChange, ref } }) => (
                         <div className="my-3">
                           <Input
-                            style={{ marginRight: "4px" }}
+                            style={{ marginRight: "4px", marginTop: "2px" }}
                             checked={value}
                             className="form-check-input"
                             type="checkbox"
@@ -200,8 +200,8 @@ const SignupPage: React.FC = () => {
                             }
                           />
                           <Label htmlFor={name} style={{ fontSize: "13px" }}>
-                            <Link to="#"> مقررات آرسونیکس</Link> را خوانده‌ام و
-                            با آن موافقم.
+                            <Link to="/terms"> مقررات آرسونیکس</Link> را
+                            خوانده‌ام و با آن موافقم.
                           </Label>
                         </div>
                       )}

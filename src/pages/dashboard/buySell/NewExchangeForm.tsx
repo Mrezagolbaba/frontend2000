@@ -301,8 +301,8 @@ export default function NewExchangeForm({ setIsOpenDialog }: Props) {
                         : destination.amount;
                     const res =
                       source.currency === "IRR"
-                        ? amount / Number(exchangeRate?.rate) / 10
-                        : amount / Number(exchangeRate?.rate);
+                        ? (amount * Number(exchangeReverseRate?.rate)) / 10
+                        : amount * Number(exchangeReverseRate?.rate);
                     setSource({
                       ...source,
                       amount: res,
