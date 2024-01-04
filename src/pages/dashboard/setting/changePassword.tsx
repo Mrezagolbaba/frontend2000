@@ -27,23 +27,19 @@ const ChangePassword = () => {
   });
 
   const handleChangePassword = async (data: IChangePassword) => {
-    console.log("data", data);
-
-    // e.preventDefault();
-    // e.stopPropagation();
-    // const formData = {
-    //   oldPassword: data.oldPassword,
-    //   newPassword: data.newPassword,
-    // };
-    // await updatePassword(formData)
-    //   .then((res) => {
-    //     if (res) {
-    //       toast.success("رمز عبور با موفقیت تغییر کرد");
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    const formData = {
+      oldPassword: data.oldPassword,
+      newPassword: data.newPassword,
+    };
+    await updatePassword(formData)
+      .then((res) => {
+        if (res) {
+          toast.success("رمز عبور با موفقیت تغییر کرد");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>
@@ -53,7 +49,7 @@ const ChangePassword = () => {
     );
 
   return (
-    <form onSubmit={handleSubmit(handleChangePassword)}>
+    <form onSubmit={handleSubmit(handleChangePassword, handleErrors)}>
       <h5 className="mb-4 text-center">تغییر رمز عبور</h5>
       <Row className="mb-2">
         <Controller
@@ -175,7 +171,7 @@ const ChangePassword = () => {
       </div>
       <div className="text-center mt-4">
         <Button color="primary" type="submit" outline className="px-3 py-2">
-          ذخیره222
+          ذخیره
         </Button>
       </div>
     </form>
