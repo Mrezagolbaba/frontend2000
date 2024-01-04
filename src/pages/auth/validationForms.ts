@@ -51,7 +51,7 @@ export const registerSchema = Yup.object().shape({
   codeReference: Yup.string().required("لطفا کد معرف خود را وارد کنید."),
 });
 export const changePassSchema = Yup.object().shape({
-  oldPassword: Yup.string().required("رمز عبور الزامی است."),
+  oldPassword: Yup.string().required("رمز عبور قبلی الزامی است."),
   newPassword: Yup.string()
     .min(8, "رمز عبور باید حداقل شامل 8 کاراکتر باشد.")
     .matches(/[a-z]/, "رمز عبور حداقل باید شامل یک حرف کوچک انگلیسی باشد.")
