@@ -157,7 +157,7 @@ export default function CoinPage() {
                             <div className="table-crypto-actions">
                               <Link
                                 to="/dashboard"
-                                className="btn btn-outline-success "
+                                className="btn btn-outline-primary "
                               >
                                 خرید و فروش
                               </Link>
