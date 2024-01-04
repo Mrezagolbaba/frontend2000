@@ -7,12 +7,52 @@ import toast from "react-hot-toast";
 
 type methodType = "get" | "post" | "put" | "patch" | "delete";
 
+const accessTokenExpires =
+  typeof window !== "undefined"
+    ? window.localStorage.getItem("accessTokenExpires")
+    : null;
+
+const refreshTokenExpires =
+  typeof window !== "undefined"
+    ? window.localStorage.getItem("refreshTokenExpires")
+    : null;
+
 export const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
   validateStatus: function (status: any) {
     return status >= 200 && status < 300;
   },
 });
+
+const isTokenExpired = () => {
+  const expirationDate = new Date(accessTokenExpires as string);
+  const currentTime = new Date();
+  return currentTime >= expirationDate;
+};
+
+const isRefreshTokenExpired = () => {
+  const expirationDate = new Date(refreshTokenExpires as string);
+  const currentTime = new Date();
+  return currentTime >= expirationDate;
+};
+
+const refreshAccessToken = async () => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  if (refreshToken) {
+    try {
+      const response = await axios.post("/refresh-token", {
+        refreshToken: refreshToken,
+      });
+      const newAccessToken = response.data.access_token;
+      // Update the access token in local storage
+      localStorage.setItem("token", newAccessToken);
+    } catch (error) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("refreshToken");
+      // Handle refresh token error (e.g., log out the user)
+    }
+  }
+};
 
 const axiosBaseQuery =
   (): BaseQueryFn<
@@ -36,18 +76,23 @@ const axiosBaseQuery =
     } catch (error: any) {
       const response = error.response;
       const status = response.status;
-      const isLoginReq = response.config.url.includes("sign-in");
+      const url = response.config.url;
 
       if (status === 500 || status > 500) {
         toast.error("مشکلی در ارتباط با سرور بوجود آمده است", {
           position: "bottom-left",
         });
-      } else if (!isLoginReq && status === 401) {
+      } else if ((status === 401 && url !== "/login") || isTokenExpired()) {
+        await refreshAccessToken();
+        axiosInstance.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
+          "token",
+        )}`;
+        return axiosBaseQuery()(args, api, extraOptions);
+      } else if (isRefreshTokenExpired()) {
         delete axiosInstance.defaults.headers.common.Authorization;
         localStorage.removeItem("token");
-        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("refreshToken");
         window.location.replace("/login");
-        return axiosBaseQuery()(args, api, extraOptions);
       } else {
         toast.error(errorNormalizer(response as ErrorType), {
           position: "bottom-left",

@@ -41,7 +41,7 @@ export default function AppRouter() {
         { path: "coming-soon", element: <ComingSoon /> },
         { path: "contact-us", element: <ContactUs /> },
         { path: "about-us", element: <AboutUs /> },
-        { path: "rules", element: <RulesPage /> },
+        { path: "terms", element: <RulesPage /> },
         DashboardRouter,
       ],
     },

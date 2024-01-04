@@ -1,10 +1,11 @@
 import LandingLayout from "layouts/Landing";
 
-import { Card, CardBody, Container } from "reactstrap";
+import { Breadcrumb, BreadcrumbItem, Card, CardBody, Container } from "reactstrap";
 import BottomBanner from "pages/Home/BottomBanner";
 
 import home from "assets/scss/landing/home.module.scss";
 import contact from "assets/scss/landing/contactUs.module.scss";
+import { Link } from "react-router-dom";
 
 export default function ContactUs() {
   return (
@@ -12,9 +13,15 @@ export default function ContactUs() {
       <main className={home["main-wrapper"]}>
         <section className={home["section-holder"]}>
           <Container>
+          <Breadcrumb>
+              <BreadcrumbItem>
+                <Link to="/">آرسونیکس</Link>
+              </BreadcrumbItem>
+              <BreadcrumbItem active> تماس با آرسونیکس </BreadcrumbItem>
+            </Breadcrumb>
             <div className={home["section-holder__title"]}>
               <h3>
-                <span className="text-primary">تماس با ما</span>
+                <span className="text-primary">تماس با آرسونیکس</span>
               </h3>
             </div>
             <div>

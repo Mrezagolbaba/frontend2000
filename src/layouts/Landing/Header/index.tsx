@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import Logo from "assets/img/logo-light.png";
+import { Link, useLocation } from "react-router-dom";
+import Logo from "assets/img/arsonex.png";
 import LogoPrimary from "assets/img/logo-primary.png";
 
 import home from "assets/scss/landing/home.module.scss";
@@ -13,6 +13,8 @@ type Props = {
 };
 const Header = ({ disableBanner = false }: Props) => {
   const [openOverlayMenu, setOpenOverlayMenu] = useState<boolean>(false);
+
+  const { pathname } = useLocation();
 
   return (
     <>
@@ -58,24 +60,42 @@ const Header = ({ disableBanner = false }: Props) => {
                   </ul>
                 </div>
               </li>
-              <li className={`${home.navbar__item} ${home.active}`}>
+              <li
+                className={`${home.navbar__item} ${
+                  pathname === "/" ? home.active : ""
+                }`}
+              >
                 <Link to="/">صفحه اصلی</Link>
               </li>
-              <li className={home.navbar__item}>
+              <li
+                className={`${home.navbar__item} ${
+                  pathname === "/coins" ? home.active : ""
+                }`}
+              >
                 <Link to="/coins">قیمت لحظه ای</Link>
               </li>
-              <li className={home.navbar__item}>
+              <li
+                className={`${home.navbar__item} ${
+                  pathname === "/dashboard" ? home.active : ""
+                }`}
+              >
                 <Link to="/dashboard">خرید و فروش آنی</Link>
               </li>
-              <li className={home.navbar__item}>
-                <Link to="https://help.arsonex.com/">
-                  مرکز راهنمایی
-                </Link>
+              <li className={`${home.navbar__item}`}>
+                <Link to="https://help.arsonex.com/">مرکز راهنمایی</Link>
               </li>
-              <li className={home.navbar__item}>
+              <li
+                className={`${home.navbar__item} ${
+                  pathname === "/about-us" ? home.active : ""
+                }`}
+              >
                 <Link to="/about-us">درباره ما</Link>
               </li>
-              <li className={home.navbar__item}>
+              <li
+                className={`${home.navbar__item} ${
+                  pathname === "/contact-us" ? home.active : ""
+                }`}
+              >
                 <Link to="/contact-us">تماس با ما</Link>
               </li>
               <li>
