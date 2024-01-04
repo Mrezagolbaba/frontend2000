@@ -149,9 +149,8 @@ const SpotRate = () => {
                             <Link
                               to="/dashboard"
                               className="btn btn-outline-primary "
-                              
                             >
-                              خرید و فروش
+                              معامله
                             </Link>
                           </div>
                         </td>
