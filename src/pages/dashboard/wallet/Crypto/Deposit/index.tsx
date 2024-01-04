@@ -1,4 +1,3 @@
-import { useForm } from "@refinedev/core";
 import { AlertInfo, AlertWarning } from "components/AlertWidget";
 import * as Yup from "yup";
 
@@ -20,21 +19,26 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
-import Currency from "components/Input/CurrencyInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CopyInput from "components/Input/CopyInput";
+import {
+  useCancelTransactionMutation,
+  useDepositMutation,
+  useTransactionFeeQuery,
+} from "store/api/wallet-management";
+import { success } from "assets/scss/components/Alert/style.module.scss";
+import CountdownTimer from "components/Input/CountDownInput";
 type CryptoFormType = {
   network: string;
-  amount: string;
 };
 
-const DepositCrypto = ({
-  onClose,
-  currency,
-}: {
+type Props = {
   onClose: () => void;
-  currency: string;
-}) => {
+  currency: any;
+};
+
+const DepositCrypto = ({ onClose, currency }: Props) => {
+  const { data: fee } = useTransactionFeeQuery(currency);
   const [showResult, setShowResult] = useState<boolean>(false);
   const [result, setResult] = useState({
     networkName: "",
@@ -43,24 +47,8 @@ const DepositCrypto = ({
     endTime: "",
   });
 
-  // const { data, isSuccess } = useList<CurrencyType>({
-  //   resource: "currencies",
-  // });
-
-  const { formLoading, onFinish } = useForm({
-    action: "create",
-    resource: "transactions/deposit",
-    onMutationSuccess: (data, variables, context, isAutoSave) => {
-      setShowResult(true);
-      setResult({
-        networkName: data.data.currencyCode,
-        walletAddress: data.data.providerData.flowWalletAddress,
-        amount: data.data.amount,
-        endTime: new Date(data.data.expiresAt).toLocaleDateString("fa-IR"),
-      });
-      console.log("looooooooooog", { data, variables, context, isAutoSave });
-    },
-  });
+  const [depositRequest, { data, isLoading, isSuccess }] = useDepositMutation();
+  const [cancelTransaction] = useCancelTransactionMutation();
 
   const optionList: OptionType[] = [
     {
@@ -78,9 +66,8 @@ const DepositCrypto = ({
 
   const resolver = yupResolver(
     Yup.object().shape({
-      amount: Yup.string().required(),
       network: Yup.string().required(),
-    })
+    }),
   );
 
   const {
@@ -93,21 +80,20 @@ const DepositCrypto = ({
     mode: "onChange",
     defaultValues: {
       network: "TRC20",
-      amount: "",
     },
     resolver,
   });
   const onSubmit = (data: CryptoFormType) => {
-    onFinish({
+    depositRequest({
       currencyCode: currency,
-      amount: data.amount,
+      amount: "1",
+      flow: "MANUAL_WITH_WALLET_ADDRESS",
     });
   };
 
   const handleClose = () => {
     reset({
       network: "TRC20",
-      amount: "",
     });
     setResult({
       networkName: "",
@@ -116,8 +102,21 @@ const DepositCrypto = ({
       endTime: "",
     });
     setShowResult(false);
+    data && cancelTransaction(data.id);
     onClose?.();
   };
+
+  useEffect(() => {
+    if (success && data) {
+      setShowResult(true);
+      setResult({
+        networkName: data.currencyCode,
+        walletAddress: data.providerData.flowWalletAddress,
+        amount: data.amount,
+        endTime: data.expiresAt as string,
+      });
+    }
+  }, [data, isSuccess]);
 
   return (
     <div className="px-2">
@@ -132,11 +131,6 @@ const DepositCrypto = ({
         text=" برای امنیت شما در مقابل تهدید های (تحریم شهروندان ایرانی)
           بین المللی، آرسونیکس در هر واریز کیف پول کابران را به طور کامل
           تغییر می دهد."
-      />
-      <AlertInfo
-        hasIcon
-        text="در صورت واریز مبلغ متفاوت از عدد مشخص شده باید مبلغ واریز را تغییر
-          دهید."
       />
       {!showResult ? (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -162,38 +156,6 @@ const DepositCrypto = ({
                         {errors[name]?.message}
                       </FormFeedback>
                     )}
-                    <FormText>سقف واریز</FormText>
-                  </FormGroup>
-                )}
-              />
-            </Col>
-            <Col xs={12} lg={6}>
-              <Controller
-                name="amount"
-                control={control}
-                render={({ field: { name, value } }) => (
-                  <FormGroup className="position-relative">
-                    <div className="d-flex flex-row justify-content-between">
-                      <Label htmlFor={name}>مبلغ واریز: </Label>
-                      <a href="#">
-                        <span className="full-withraw mt-1">
-                          حداکثر مبلغ واریز
-                        </span>
-                      </a>
-                    </div>
-                    <Currency
-                      name={name}
-                      value={value}
-                      onChange={(val) => setValue(name, val)}
-                      // placeholder="مبلغ را به تومان وارد کنید"
-                      hasError={Boolean(errors?.[name])}
-                    />
-                    {errors?.[name] && (
-                      <FormFeedback tooltip>
-                        {errors[name]?.message}
-                      </FormFeedback>
-                    )}
-                    <FormText>کارمزد دریافت تتر: صفر {currency} </FormText>
                   </FormGroup>
                 )}
               />
@@ -205,10 +167,10 @@ const DepositCrypto = ({
                 color="primary"
                 outline
                 type="submit"
-                disabled={formLoading}
+                disabled={isLoading}
                 className="px-5 py-3"
               >
-                {formLoading ? <Spinner /> : "ساخت کیف پول"}
+                {isLoading ? <Spinner /> : "ساخت کیف پول"}
               </Button>
             </div>
           </Row>
@@ -257,6 +219,7 @@ const DepositCrypto = ({
                   id="endTime"
                   value={result.endTime}
                 />
+                <CountdownTimer targetDate={result.endTime} />
               </FormGroup>
             </Col>
           </Row>

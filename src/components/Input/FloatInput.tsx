@@ -9,8 +9,9 @@ interface Props {
   value: string;
   type?: string;
   required?: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputProps: any;
+  disabled?: boolean;
 }
 
 const FloatInput = (props: Props) => {
@@ -23,6 +24,7 @@ const FloatInput = (props: Props) => {
     required = false,
     onChange,
     inputProps,
+    disabled = false,
   } = props;
 
   const isOccupied = focus || (value && value.length !== 0);
@@ -43,6 +45,7 @@ const FloatInput = (props: Props) => {
         type={type}
         value={value}
         onChange={onChange}
+        disabled={disabled}
         {...inputProps}
       />
       <label htmlFor={name} className={`${labelClass} ${isPrefix}`}>

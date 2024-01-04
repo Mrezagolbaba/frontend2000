@@ -3,7 +3,9 @@ import { Input } from "reactstrap";
 
 import accountNumber from "assets/scss/components/Input/accountNumber.module.scss";
 import { searchIranianBanks } from "helpers/filesManagement";
-import arsonexMark from "assets/img/icons/Arsonex Mark.svg";
+import arsonexMark from "assets/img/icons/bankDefault.svg";
+import { useBanksQuery } from "store/api/profile-management";
+import { persianToEnglishNumbers } from "helpers";
 
 type Props = {
   value: string;
@@ -25,21 +27,25 @@ export default function AccountNumberInput({
   setBankId,
 }: Props) {
   const [logo, setLogo] = useState<string>(arsonexMark);
+  const { data: banks, isSuccess } = useBanksQuery({
+    filters: "currencyCode||$eq||IRR",
+  });
 
   useEffect(() => {
     if (value?.length >= 6) {
-      const result = searchIranianBanks(value);
+      const result = searchIranianBanks(persianToEnglishNumbers(value), banks);
       if (result) {
         setLogo(result.logo);
         setBankId?.(result.bankId);
       } else setLogo(arsonexMark);
     } else setLogo(arsonexMark);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
 
   const handleChange = (e) => {
     const value = e.target.value;
-    if (value?.length === 6) {
-      const result = searchIranianBanks(value);
+    if (value?.length >= 6) {
+      const result = searchIranianBanks(persianToEnglishNumbers(value), banks);
       if (result) {
         setLogo(result.logo);
         setBankId?.(result.bankId);

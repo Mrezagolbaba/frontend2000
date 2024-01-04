@@ -1,20 +1,30 @@
-import { ChangeEvent, useRef, useState } from "react";
-import { AuthenticationLevel2Props } from "./types";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { BsCheck, BsFileEarmarkPlus } from "react-icons/bs";
-import { Button, Col, Container, Row, Spinner } from "reactstrap";
+import {
+  Button,
+  Col,
+  Container,
+  FormGroup,
+  Input,
+  Label,
+  Row,
+  Spinner,
+} from "reactstrap";
 
 import profile from "assets/scss/dashboard/profile.module.scss";
 import { useInitialVerification, useUploadDoc } from "services/verification";
-export default function ResidencyCardStep({
-  onClick,
-}: AuthenticationLevel2Props) {
-  const uploadDoc = useUploadDoc();
-  const initRequest = useInitialVerification();
+
+import toast from "react-hot-toast";
+import { useEnglishNamesMutation } from "store/api/user";
+import {
+  useInitialInternationalMutation,
+  useUploadDocMutation,
+} from "store/api/profile-management";
+export default function InternationalVerification() {
   const inputRef1 = useRef<HTMLInputElement>(null);
   const inputRef2 = useRef<HTMLInputElement>(null);
 
   const [counter, setCounter] = useState<0 | 1>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [imgUrl, setImgUrl] = useState<{ 1: string | null; 2: string | null }>({
     1: null,
     2: null,
@@ -24,6 +34,16 @@ export default function ResidencyCardStep({
     2: null,
   });
 
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+
+  const [uploadDoc, { isLoading, isSuccess, isError, error }] =
+    useUploadDocMutation();
+  const [initRequest] = useInitialInternationalMutation();
+  const [
+    namesRequest,
+    { data, isLoading: isLoadingNames, isSuccess: successPublish },
+  ] = useEnglishNamesMutation();
   const renderPreview = () => {
     if (file) {
       return (
@@ -45,24 +65,11 @@ export default function ResidencyCardStep({
     }
     return null;
   };
-  const finalRequestHandler = async (useInternationalServices: boolean) => {
-    await initRequest
-      .mutateAsync(useInternationalServices)
-      .then(async (res) => {
-        console.log(res);
-        setIsLoading(false);
-        onClick?.(6);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.error(err);
-      });
+  const finalRequestHandler = () => {
+    initRequest();
   };
 
   const handleSubmit = async (fileNumber: number) => {
-    setIsLoading(true);
-    // console.log(file[fileNumber], fileNumber);
-
     const body = {
       docType:
         fileNumber === 1 ? "RESIDENCE_PERMIT_FRONT" : "RESIDENCE_PERMIT_BACK",
@@ -70,20 +77,16 @@ export default function ResidencyCardStep({
       fileName: "file",
     };
 
-    await uploadDoc
-      .mutateAsync({ ...body })
-      .then(async (res) => {
-        setIsLoading(false);
-        console.log(res);
-        if (counter === 1) {
-          finalRequestHandler(true);
-        } else setCounter(1);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.error(err);
-      });
+    await uploadDoc({ ...body });
   };
+
+  useEffect(() => {
+    if (successPublish) {
+        finalRequestHandler();
+      toast.success("اطلاعات با موفقیت ثبت شد.", { position: "bottom-right" });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [successPublish]);
 
   return (
     <Container>
@@ -211,14 +214,40 @@ export default function ResidencyCardStep({
         </Col>
       </Row>
 
-      <Row>
-        <Col className="mt-3 text-center">
+      <Row className="mt-5">
+        <Col xs={12} md={6}>
+          <FormGroup>
+            <Label htmlFor="">{`نام (انگلیسی):`}</Label>
+            <Input
+              dir="ltr"
+              type="text"
+              onChange={(e) => setFirstName(e.target.value)}
+              value={firstName}
+            />
+          </FormGroup>
+        </Col>
+        <Col xs={12} md={6}>
+          <FormGroup>
+            <Label htmlFor="">{`نام خانوادگی (انگلیسی):`}</Label>
+            <Input
+              dir="ltr"
+              type="text"
+              onChange={(e) => setLastName(e.target.value)}
+              value={lastName}
+            />
+          </FormGroup>
+        </Col>
+        <Col xs={12} className="text-center mt-2">
           <Button
-            className="py-3 px-5"
             color="primary"
-            onClick={() => finalRequestHandler(false)}
+            type="button"
+            disabled={isLoadingNames}
+            className="px-5 py-3"
+            onClick={() => {
+              namesRequest({ firstName: firstName, lastName: lastName });
+            }}
           >
-            قصد استفاده از خدمات بین المللی آرسونیکس را ندارم
+            {isLoadingNames ? <Spinner /> : "ارسال"}
           </Button>
         </Col>
       </Row>

@@ -1,0 +1,156 @@
+.currency-controls {
+  display: flex;
+  align-items: center;
+  &__group {
+    flex: 0 1 50%;
+    label {
+      font-size: 0.75em;
+      color: rgba(3, 4, 27, 0.4);
+    }
+    & > div {
+      position: relative;
+      border: 1px solid rgb(217 217 217);
+      display: flex;
+      align-items: center;
+      border-radius: 10px;
+      padding: 10px;
+    }
+    input {
+      padding: 0 12px;
+      border: none;
+      height: 34px;
+      line-height: 34px;
+      text-align: center;
+      font-size: 0.75em;
+      font-weight: 400;
+      box-shadow: none;
+      color: #03041b;
+      &:focus {
+        outline: 0;
+        box-shadow: none;
+      }
+    }
+    .detail {
+      display: flex;
+      flex-direction: row;
+      font-size: 12px;
+      border-radius: 10px;
+      border: none;
+      justify-content: space-between;
+      background-color: #f8f8f8;
+      margin-top: 10px;
+      padding: 10px;
+      svg {
+        margin-left: 5px;
+        font-size: 1.2rem;
+        color: #03041b;
+      }
+    }
+  }
+}
+
+.dropdown {
+  width: 100%;
+  font-size: 1em;
+  border: none;
+  height: 34px;
+  line-height: 34px;
+  text-align: center;
+  position: static !important;
+  font-weight: 400;
+  float: none;
+  display: inline-block;
+  margin-left: 0;
+  margin-bottom: 0;
+  padding: 0;
+  background-color: #fff;
+  background-clip: padding-box;
+  box-shadow: none;
+  color: #03041b;
+  appearance: none;
+  border-radius: 10px;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+
+  .dropdown-btn {
+    background-color: rgba(3, 4, 27, 0.1);
+    border: none;
+    height: 34px;
+    line-height: 34px;
+    font-size: 0.75em;
+    font-weight: 400;
+    padding: 0 12px;
+    background-image: url(../../../img/icons/angle-down.svg);
+    background-repeat: no-repeat;
+    background-size: 12px 6px;
+    background-position: 12px 50%;
+    position: relative;
+    width: 100%;
+    text-align: right;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #03041b;
+    border-radius: 10px;
+    transition:
+      color 0.15s ease-in-out,
+      background-color 0.15s ease-in-out,
+      border-color 0.15s ease-in-out,
+      box-shadow 0.15s ease-in-out;
+    &::after {
+      content: none;
+    }
+  }
+  .selected {
+    left: unset;
+    right: 0;
+    float: right;
+    text-align: right;
+    height: auto;
+    position: static;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    flex: 0 1 auto;
+    &__item {
+      overflow: hidden;
+      text-align: right;
+    }
+    img {
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+  }
+  .dropdown-menu {
+    font-size: 1em;
+    top: -42px !important;
+    left: -10px !important;
+    border: none;
+    box-shadow: -10px 4px 64px rgba(0, 0, 0, 0.03);
+    min-width: 100%;
+    box-sizing: border-box;
+    text-align: right;
+    font-size: 1em;
+  }
+}
+
+.divider {
+  span {
+    display: block;
+    margin-top: 25px;
+    width: 66px;
+    padding-right: 20px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .currency-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+    &__group {
+      flex: 0 0 100%;
+    }
+  }
+}

@@ -15,7 +15,7 @@ export default function HomePage() {
         <Advantages />
 
         {/* <UserComments /> */}
-        <LastBlogs />
+        {/* <LastBlogs /> */}
         <BottomBanner />
       </main>
     </LandingLayout>

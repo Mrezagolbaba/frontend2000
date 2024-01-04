@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 export interface AuthenticationLevel2Props {
-  onClick: Dispatch<SetStateAction<1 | 2 | 3 | 4 | 5 | 6>>;
+  onClick: Dispatch<SetStateAction<1 | 2 | 3 | 4>>;
 }
 
 export enum VERIFICATION_DOC_TYPE {

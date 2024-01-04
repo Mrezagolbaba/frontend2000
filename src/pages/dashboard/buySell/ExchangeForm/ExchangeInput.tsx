@@ -3,7 +3,7 @@ import Lira from "assets/img/coins/lira.png";
 import Rial from "assets/img/icons/flag-iran.svg";
 import tetter from "assets/img/coins/tether.svg";
 import TRX from "assets/img/coins/trx.png";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Dropdown,
   DropdownItem,
@@ -17,6 +17,7 @@ import { BsTag } from "react-icons/bs";
 import { useExchangeContext } from "../ContextProvider";
 
 import exchange from "assets/scss/dashboard/buy-sell.module.scss";
+import { useWalletsQuery } from "store/api/exchange-management";
 
 const options = [
   {
@@ -29,10 +30,6 @@ const options = [
     label: { text: "لیر", img: Lira },
   },
   {
-    value: "TRX",
-    label: { text: "ترون", img: TRX },
-  },
-  {
     value: "USDT",
     label: { text: "تتر", img: tetter },
   },
@@ -40,13 +37,13 @@ const options = [
 
 type Props = {
   name: "source" | "destination";
+  otherSide: "source" | "destination";
   placeholder?: string;
   decimalsLimit?: number;
   error?: any;
   onError?: (text: string | null) => void;
   handleRate?: () => Promise<number | string>;
   onChange: () => void;
-  isLoading?: boolean;
 };
 
 export default function ExchangeInput({
@@ -54,14 +51,15 @@ export default function ExchangeInput({
   decimalsLimit = 0,
   placeholder = "مبلغ به",
   onChange,
-  isLoading = false,
+  otherSide,
 }: Props) {
+  const { data: wallets, isLoading } = useWalletsQuery();
   const { exchangeContext, setExchangeContext } = useExchangeContext();
 
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(
     options.find((option) => option.value === exchangeContext[name].currency) ||
-      options[0]
+      options[0],
   );
   const [error, setError] = useState<string | undefined>(undefined);
 
@@ -69,7 +67,7 @@ export default function ExchangeInput({
     setExchangeContext({
       ...exchangeContext,
       [name]: {
-        amount: val,
+        amount: selected.amount ?? val,
         currency: selected.value,
         stock: exchangeContext[name].stock,
       },
@@ -103,9 +101,8 @@ export default function ExchangeInput({
         <CurrencyInput
           id={name}
           name={name}
-          className={`form-control ${error ? "is-invalid" : ""} ${
-            exchange.input
-          }`}
+          className={`form-control ${error ? "is-invalid" : ""} ${exchange.input
+            }`}
           type="text"
           value={exchangeContext[name].amount}
           decimalsLimit={decimalsLimit}
@@ -120,12 +117,12 @@ export default function ExchangeInput({
               <div className={exchange["selected__inner"]}>
                 <div className={exchange["selected__item"]}>
                   <img
-                    src={selected.label.img}
+                    src={selected.value.label.img}
                     alt="currency-icon"
                     width={20}
                     height={20}
                   />
-                  {selected.label.text}
+                  {selected.value.label.text}
                 </div>
               </div>
             </div>
@@ -135,6 +132,10 @@ export default function ExchangeInput({
               <DropdownItem
                 key={index}
                 onClick={() => {
+                  const currentWallet =
+                    wallets &&
+                    wallets.find((item) => item.currencyCode === option.value);
+
                   setError(undefined);
                   setExchangeContext({
                     ...exchangeContext,
@@ -142,9 +143,14 @@ export default function ExchangeInput({
                       ...exchangeContext[name],
                       amount: 0,
                       currency: option.value,
+                      stock: currentWallet.availableBalance,
                     },
                   });
-                  setSelected(option);
+                  setSelected({
+                    ...selected,
+                    value: option,
+                   
+                  });
                 }}
               >
                 <div>
@@ -172,11 +178,12 @@ export default function ExchangeInput({
           <div>
             <CiWallet />
             <span className="title">موجودی: </span>
+
             <span className="value">
               {exchangeContext[name].currency === "IRR"
                 ? rialToToman(exchangeContext[name].stock).toLocaleString()
                 : Number(
-                    exchangeContext[name].stock || 0
+                    exchangeContext[name].stock || 0,
                   ).toLocaleString()}{" "}
               {convertText(exchangeContext[name].currency, "enToFa")}
             </span>
@@ -196,10 +203,10 @@ export default function ExchangeInput({
               <span className="value">
                 {exchangeContext.source.currency === "IRR"
                   ? rialToToman(exchangeContext.rate).toLocaleString() +
-                    " تومان"
+                  " تومان"
                   : parseFloat(exchangeContext.rate).toLocaleString() +
-                    " " +
-                    convertText(exchangeContext.source.currency, "enToFa")}
+                  " " +
+                  convertText(exchangeContext.source.currency, "enToFa")}
               </span>
             </div>
           ))}

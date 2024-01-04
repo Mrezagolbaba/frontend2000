@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Button, Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 import Dialog from "components/Dialog";
 import Deposit from "./Deposit";
+import Withdraw from "./Withdraw";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
-import Withdraw from "./Withdraw";
 
 type Props = {
   stock: any;
@@ -33,7 +33,7 @@ export default function RialCard({ stock, isLoading }: Props) {
             ) : (
               <strong className="d-inline-block">
                 {(Number(stock.availableBalance || 0) / 10).toLocaleString(
-                  "IRR"
+                  "IRR",
                 )}
                 <small>تومان</small>
               </strong>
@@ -74,7 +74,8 @@ export default function RialCard({ stock, isLoading }: Props) {
         hasCloseButton
       >
         <Withdraw
-        // onClose={() => setIsOpenWithdraw(false)}
+          stock={stock?.availableBalance}
+          onClose={() => setIsOpenWithdraw(false)}
         />
       </Dialog>
     </Card>

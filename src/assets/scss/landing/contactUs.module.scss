@@ -1,0 +1,95 @@
+.section {
+  padding-bottom: 100px;
+}
+
+.card {
+  max-width: 752px;
+  margin: 0 auto;
+  background: #fff;
+  box-shadow: 0 34px 44px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  border: none;
+  & > div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px;
+  }
+  h5 {
+    font-weight: 700;
+    margin: 0;
+  }
+  a {
+    font-size: 1.25em;
+    font-weight: 500;
+  }
+}
+.card + .card {
+  margin-top: 20px;
+}
+
+.social {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: -24px -12px 0;
+  margin-bottom: 150px;
+  margin-top: 226px;
+  & > li {
+    padding: 0 12px;
+    margin-top: 24px;
+    & > a {
+      display: block;
+      border-radius: 20px;
+    }
+  }
+}
+
+.social-tile {
+  border-radius: 20px;
+  width: 267px;
+  height: 182px;
+  padding: 24px 32px;
+  display: flex;
+  align-items: baseline;
+  background-color: #dae2ff;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  .tile-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 100%;
+    background-color: #fff;
+    text-align: center;
+    line-height: 58px;
+    margin-left: 24px;
+    box-shadow: 0 24px 34px rgba(51, 95, 252, 0.19);
+    & > span > svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+  .tile-title {
+    font-weight: 700;
+    margin: 0;
+    color: #040f4a;
+  }
+}
+
+.social-telegram {
+  background-image: url(/src/assets/img/social/tile-telegram.png);
+}
+.social-instagram {
+  background-image: url(/src/assets/img/social/tile-instagram.png);
+}
+.social-twitter {
+  background-image: url(/src/assets/img/social/tile-twitter.png);
+}
+
+@media screen and (max-width: 991px) {
+  .social {
+    margin-bottom: 0;
+    margin-top: 76px;
+  }
+}

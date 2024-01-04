@@ -63,24 +63,24 @@ const EmailVerification = () => {
         }
     ) => {
         let code = data.email ?? data.phone
-        // try {
-        //     verifySwitchOtpMethod({ code: code }).then((res) => {
-        //         // @ts-ignore
-        //         if (res.data) {
-        //             toast.success('نحوه تایید هویت دو مرحله ای با موفقیت تغییر کرد', { position: 'bottom-left' })
-        //             setShowInput(false)
-        //             getMe.mutateAsync(null).then((res) => {
-        //                 res && dispatch(setUser(res));
-        //             });
-        //         } else {
-        //             // @ts-ignore
-        //             toast.error(res?.error?.data.message, { position: 'bottom-left' })
-        //         }
-        //     });
-        // } catch (error) {
-        //     toast.error('خطایی رخ داده است')
+        try {
+            verifySwitchOtpMethod({ code: code }).then((res) => {
+                // @ts-ignore
+                if (res.data) {
+                    toast.success('نحوه تایید هویت دو مرحله ای با موفقیت تغییر کرد', { position: 'bottom-left' })
+                    setShowInput(false)
+                    getMe.mutateAsync(null).then((res) => {
+                        res && dispatch(setUser(res));
+                    });
+                } else {
+                    // @ts-ignore
+                    toast.error(res?.error?.data.message, { position: 'bottom-left' })
+                }
+            });
+        } catch (error) {
+            toast.error('خطایی رخ داده است')
 
-        // };
+        };
     }
 
 

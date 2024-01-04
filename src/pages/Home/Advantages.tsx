@@ -29,8 +29,9 @@ const Advantages = () => {
                 <div className={home["feature__body"]}>
                   <h3 className={home["feature__title"]}>پشتیبانی آنلاین</h3>
                   <p className={home["feature__text"]}>
-                    پشتیبانی آرسونیکس به تمام مشکلات شما در ۲۴ ساعت شبانه روز از
-                    طریق تیکت، چت آنلاین یا تماس تلفنی کمک می&zwnj;کند.{" "}
+                    شما می‌توانید در ۲۴ ساعت شبانه‌روز از پشتیبانی آرسونیکس که
+                    در ایران و خارج از ایران فعالیت می‌کند سوالات خود را بپرسید
+                    و به سرعت به پاسخ برسید.
                   </p>
                 </div>
               </div>
@@ -43,8 +44,9 @@ const Advantages = () => {
                 <div className={home["feature__body"]}>
                   <h3 className={home["feature__title"]}>کارمزد منصفانه</h3>
                   <p className={home["feature__text"]}>
-                    ما به شما تضمین کمترین کارمزد را در بین تمامی صرافی&zwnj;های
-                    داخل و خارج ایران می&zwnj;دهیم.{" "}
+                    کارمزد معاملات فیات‌های مختلف در آرسونیکس در کمترین سطح ممکن
+                    قرار دارند. همچنین با توجه به معامله تک‌ نرخی ارزهای دیجیتال
+                    شما ارزان‌ترین معاملات را در آرسونیکس تجربه می‌کنید.
                   </p>
                 </div>
               </div>
@@ -59,9 +61,9 @@ const Advantages = () => {
                     خرید و فروش سریع و تک نرخی
                   </h3>
                   <p className={home["feature__text"]}>
-                    در آرسونیکس تمام ارزها یک نرخ دارند، با یک نرخ
-                    می&zwnj;فروشید و با همان نرخ می&zwnj;توانید بخرید؛ در
-                    سریع&zwnj;ترین زمان ممکن.
+                    اختلاف نرخ و کارمزد زیاد در خرید و فروش سریع صرافی‌ها همیشه
+                    یک چالش برای کاربران بوده، در آرسونیکس با یک نرخ کوین،
+                    میم‌کوین‌ یا فیات‌ دیجیتال را معامله کنید.
                   </p>
                 </div>
               </div>
@@ -74,9 +76,9 @@ const Advantages = () => {
                 <div className={home["feature__body"]}>
                   <h3 className={home["feature__title"]}>امنیت</h3>
                   <p className={home["feature__text"]}>
-                    اطلاعات و دارایی&zwnj;های شما در امن&zwnj;ترین حالت ممکن
-                    نگهداری می&zwnj;شوند و هیچ ارگان و دولتی به آن&zwnj;ها
-                    دسترسی نخواهد داشت.
+                    مهم‌ترین هدف فنی آرسونیکس، حفظ دارایی مشتریان و انجام
+                    معاملات در محیطی کاملا امن می‌باشد. تیم امنیت ما همواره در
+                    حال رصد و بروزرسانی‌های بخش‌های امنیتی پلتفرم هستند.
                   </p>
                 </div>
               </div>
@@ -87,7 +89,7 @@ const Advantages = () => {
       <section className={home["features__slide"]}>
         <div className={home["features__slide__container"]}>
           <Row className="g-4">
-            <Col md={6}>
+            <Col md={6} tag="a" href="https://help.arsonex.com/">
               <div className={`${home["feature__box"]} ${home["box--blue"]}`}>
                 <div className={home["feature__box__caption"]}>
                   <h4 className={home["feature__box__title"]}>
@@ -106,10 +108,10 @@ const Advantages = () => {
               >
                 <div className={home["feature__box__caption"]}>
                   <h4 className={home["feature__box__title"]}>
-                    25% درصد کارمزد، برای شما
+                    35% درصد کارمزد، برای شما (بزودی)
                   </h4>
                   <h5 className={home["feature__box__subtitle"]}>
-                    فقط از دوستان خود دعوت کنید، 25% کارمزد بعد از هر معامله
+                    فقط از دوستان خود دعوت کنید، 35% کارمزد بعد از هر معامله
                     بصورت آنی دریافت کنید.
                   </h5>
                 </div>

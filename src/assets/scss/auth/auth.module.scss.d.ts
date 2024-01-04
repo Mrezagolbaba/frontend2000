@@ -17,5 +17,6 @@ declare const classNames: {
   readonly "phone-number": "phone-number";
   readonly "otp-container": "otp-container";
   readonly "otp-input": "otp-input";
+  readonly "custom-header": "custom-header";
 };
 export = classNames;

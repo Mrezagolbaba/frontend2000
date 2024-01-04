@@ -1,13 +1,17 @@
 import Dialog from "components/Dialog";
 import { ErrorType, errorNormalizer } from "components/ErrorHandler";
-import { formatShowAccount } from "helpers/filesManagement";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { formatShowAccount, searchIranianBanks } from "helpers/filesManagement";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { CiTrash } from "react-icons/ci";
 import { FaExclamation } from "react-icons/fa";
 import { PiCreditCardLight } from "react-icons/pi";
 import { Button, Row, Spinner } from "reactstrap";
-import { useDeleteBankAccountMutation } from "store/api/profile-management";
+import {
+  useBanksQuery,
+  useDeleteBankAccountMutation,
+} from "store/api/profile-management";
+import arsonexMark from "assets/img/icons/Arsonex Mark.svg";
 
 type Props = {
   deleteOptions: any;
@@ -26,6 +30,12 @@ export default function DeleteModal({
   deleteOptions,
   setDeleteOptions,
 }: Props) {
+  const { data: banks, isSuccess: successGetBanks } = useBanksQuery({
+    filters: "currencyCode||$eq||IRR",
+  });
+
+  const [logo, setLogo] = useState<string>("");
+
   const [deleteAccount, { isLoading, isSuccess, isError, error }] =
     useDeleteBankAccountMutation();
 
@@ -45,6 +55,15 @@ export default function DeleteModal({
     } else if (isError) toast.error(errorNormalizer(error as ErrorType));
   }, [isSuccess, isError, error, setDeleteOptions]);
 
+  useEffect(() => {
+    if (deleteOptions.accountNumber) {
+      const result = searchIranianBanks(deleteOptions.accountNumber, banks);
+      if (result) {
+        setLogo(result.logo);
+      }
+    }
+  }, [banks, deleteOptions, successGetBanks]);
+
   return (
     <Dialog
       isOpen={deleteOptions.isOpen}
@@ -53,7 +72,6 @@ export default function DeleteModal({
           isOpen: false,
           id: undefined,
           accountNumber: "",
-          logo: undefined,
         })
       }
       hasCloseButton={true}
@@ -67,13 +85,10 @@ export default function DeleteModal({
               ? formatShowAccount(deleteOptions.accountNumber)
               : deleteOptions?.iban}
           </span>
-          {deleteOptions?.logo ? (
-            <span
-              className="mx-3"
-              dangerouslySetInnerHTML={{ __html: deleteOptions.logo }}
-            />
+          {logo !== arsonexMark ? (
+            <span className="mx-3" dangerouslySetInnerHTML={{ __html: logo }} />
           ) : (
-            <PiCreditCardLight className="mx-3" />
+            <img className="mx-3" width="20px" src={arsonexMark} alt="card" />
           )}
           {")"}
         </div>

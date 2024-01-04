@@ -217,3 +217,14 @@
     color: #03041b;
   }
 }
+.radioToggleControl {
+  font-size: 1em;
+  font-weight: 500;
+  color: #000;
+  padding: 0 6px 0 16px;
+  line-height: 30px;
+  cursor: pointer;
+  border: 1px solid rgba(3,4,27,.1);
+  border-radius: 5px;
+  transition: all 180ms ease-in-out;
+}

@@ -66,6 +66,7 @@ const Authenticator = (initialMethod) => {
                     دانلود نمایید.
                 </div>
             </div>
+           
         )
     }
     const Step2 = () => {

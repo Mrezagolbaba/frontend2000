@@ -53,9 +53,7 @@ export default function International({ accounts, isLoading }: Props) {
     logo: undefined,
     iban: "",
   });
-  // const { data: bakList } = useBanksQuery({
-  //   filters: "currencyCode||$eq||TRY",
-  // });
+
   const [createAccount, { isLoading: formLoading, isSuccess }] =
     useCreateBankAccountMutation();
 
@@ -64,7 +62,7 @@ export default function International({ accounts, isLoading }: Props) {
       ownerFullName: Yup.string(),
       iban: Yup.string().required(),
       bankId: Yup.string().required(),
-    })
+    }),
   );
 
   const {
@@ -105,7 +103,7 @@ export default function International({ accounts, isLoading }: Props) {
   }, [accounts]);
 
   const submitHandler = (data) => {
-    createAccount({ ...data, iban: persianToEnglishNumbers(data.iban) });
+    createAccount({ ...data, iban: "TR" + persianToEnglishNumbers(data.iban) });
   };
 
   return (
@@ -133,7 +131,26 @@ export default function International({ accounts, isLoading }: Props) {
               <Row>
                 <Col xs={10}>
                   <Row>
-                    <Col xs={12} xl={6}>
+                    <Col xs={12} xl={7}>
+                      <Controller
+                        name="iban"
+                        control={control}
+                        render={({ field: { name, value, onChange, ref } }) => (
+                          <FormGroup className={profile["accounts-field"]}>
+                            <Label> شماره IBAN:</Label>
+                            <IBANNumber
+                              name={name}
+                              value={value}
+                              onChange={(value) => setValue(name, value)}
+                              setBankId={(id) => {
+                                setValue("bankId", id);
+                              }}
+                            />
+                          </FormGroup>
+                        )}
+                      />
+                    </Col>
+                    <Col xs={12} xl={5}>
                       <Controller
                         name="ownerFullName"
                         control={control}
@@ -148,22 +165,6 @@ export default function International({ accounts, isLoading }: Props) {
                               type="text"
                               className="form-control d-rtl"
                               id={`input23_001`}
-                            />
-                          </FormGroup>
-                        )}
-                      />
-                    </Col>
-                    <Col xs={12} xl={6}>
-                      <Controller
-                        name="iban"
-                        control={control}
-                        render={({ field: { name, value, onChange, ref } }) => (
-                          <FormGroup className={profile["accounts-field"]}>
-                            <Label> شماره IBAN:</Label>
-                            <IBANNumber
-                              name={name}
-                              value={value}
-                              onChange={onChange}
                             />
                           </FormGroup>
                         )}
@@ -264,7 +265,23 @@ export default function International({ accounts, isLoading }: Props) {
                 <Row>
                   <Col xs={10}>
                     <Row className="px-2">
-                      <Col xs={12} xl={6}>
+                      <Col xs={12} xl={7}>
+                        <FormGroup className={profile["accounts-field"]}>
+                          <Label>شماره IBAN:</Label>
+                          <div className={profile["iban-input-control"]}>
+                            <IBANNumber
+                              name={account.iban}
+                              value={
+                                account.iban.includes("TR")
+                                  ? account.iban.replace("TR", "")
+                                  : account.iban
+                              }
+                              disabled={true}
+                            />
+                          </div>
+                        </FormGroup>
+                      </Col>
+                      <Col xs={12} xl={5}>
                         <FormGroup className={profile["accounts-field"]}>
                           <Label> صاحب حساب:</Label>
                           <Input
@@ -273,21 +290,8 @@ export default function International({ accounts, isLoading }: Props) {
                             type="text"
                             id={account?.ownerFullName}
                             disabled
+                            dir="ltr"
                           />
-                        </FormGroup>
-                      </Col>
-                      <Col xs={12} xl={6}>
-                        <FormGroup className={profile["accounts-field"]}>
-                          <Label>شماره IBAN:</Label>
-                          <div className={profile["iban-input-control"]}>
-                            <Input
-                              type="text"
-                              value={account.iban}
-                              name={account.iban}
-                              id={account.iban}
-                              disabled
-                            />
-                          </div>
                         </FormGroup>
                       </Col>
                     </Row>
@@ -312,7 +316,7 @@ export default function International({ accounts, isLoading }: Props) {
                     >
                       <CiTrash />
                     </Button>
-                    <Button
+                    {/* <Button
                       type="button"
                       color="icon-secondary"
                       disabled
@@ -330,10 +334,10 @@ export default function International({ accounts, isLoading }: Props) {
                       }}
                     >
                       <LuPencil />
-                    </Button>
+                    </Button> */}
                   </Col>
                 </Row>
-              )
+              ),
             )
           )}
 
@@ -344,6 +348,7 @@ export default function International({ accounts, isLoading }: Props) {
                 className="btn-simple"
                 disabled={isOpenForm}
                 style={{ flex: "none" }}
+                onClick={() => setIsOpenForm(true)}
               >
                 اضافه کردن حساب جدید
               </Button>

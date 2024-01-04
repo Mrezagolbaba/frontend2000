@@ -4,14 +4,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { LiaIdCardSolid } from "react-icons/lia";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CiMobile2, CiUser, CiMail } from "react-icons/ci";
+import { CiMobile2, CiUser, CiMail, CiCalendarDate } from "react-icons/ci";
+import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
+import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
 
 import Auth from "layouts/auth";
 import { InformationFormData } from "../types";
 import { InformationSchema } from "pages/auth/validationForms";
-import DatePicker from "components/DatePicker";
 import { useSubmitInformation } from "services/auth";
-import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
+import { convertPersianToGregorian, formatPhoneNumber, getDate18YearsAgo, persianToEnglishNumbers } from "helpers";
 import FloatInput from "components/Input/FloatInput";
 
 import auth from "assets/scss/auth/auth.module.scss";
@@ -24,11 +25,20 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
+type Day = {
+  year: number;
+  month: number;
+  day: number;
+};
+type DayValue = Day | null | undefined;
 
 const Information = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const submitInformation = useSubmitInformation();
+  const minimumDate = getDate18YearsAgo();
+
+  const [selectedDay, setSelectedDay] = useState<DayValue>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { phoneNumber } = location.state;
@@ -38,6 +48,8 @@ const Information = () => {
     handleSubmit,
     control,
     setValue,
+    getValues,
+    setError,
     formState: { errors },
   } = useForm<InformationFormData>({
     mode: "onChange",
@@ -45,8 +57,7 @@ const Information = () => {
       firstName: "",
       lastName: "",
       nationalCode: "",
-      birthDate: "",
-      phoneNumber: "",
+      phoneNumber: phoneNumber.includes("+98") ? phoneNumber : "",
       email: "",
     },
     resolver,
@@ -55,13 +66,25 @@ const Information = () => {
   const handleInfo = async (data: InformationFormData) => {
     setIsLoading(true);
     const nationalCode = persianToEnglishNumbers(data.nationalCode);
+    const birthDate = convertPersianToGregorian(selectedDay?.year + "/" + selectedDay?.month + "/" + selectedDay?.day);
+    if (birthDate === undefined) {
+      toast.error("تاریخ تولد الزامی می باشد.", {
+        position: "bottom-left",
+      })
+
+      setIsLoading(false);
+      return;
+    }
     await submitInformation
       .mutateAsync({
         ...data,
-        phoneNumber: data.phoneNumber
-          ? formatPhoneNumber(persianToEnglishNumbers(data.phoneNumber), "98")
-          : undefined,
+        phoneNumber: phoneNumber.includes("+98")
+          ? phoneNumber
+          : data.phoneNumber
+            ? formatPhoneNumber(persianToEnglishNumbers(data.phoneNumber), "98")
+            : undefined,
         nationalCode,
+        birthDate,
       })
       .then((res) => {
         navigate("/email-otp", {
@@ -82,7 +105,6 @@ const Information = () => {
         position: "bottom-left",
       })
     );
-
   return (
     <Auth>
       <section className={auth.container}>
@@ -169,40 +191,63 @@ const Information = () => {
                     <Controller
                       name="birthDate"
                       control={control}
-                      render={({ field: { name } }) => (
+                      render={({ field: { name, value, onChange, ref } }) => (
                         <DatePicker
-                          label="تاریخ تولد"
-                          onChange={(date) => setValue("birthDate", date)}
-                          error={errors?.[name]?.message}
+                          value={selectedDay}
+                          onChange={(date) => setSelectedDay(date as any)}
+                          shouldHighlightWeekends
+                          locale="fa"
+                          wrapperClassName="w-100"
+                          maximumDate={minimumDate}
+                          colorPrimary="#111bff"
+                          renderInput={({ ref }) => (
+                            <FloatInput
+                              type="text"
+                              name={name}
+                              label="تاریخ تولد"
+                              value={selectedDay !== undefined ? selectedDay?.year + "-" + selectedDay?.month + "-" + selectedDay?.day : ""}
+                              onChange={onChange}
+                              inputProps={{
+                                ref: ref,
+                                size: "large",
+                                prefix: <CiCalendarDate size={20} />,
+                                status: errors?.['birthDate']?.message
+                                  ? "error"
+                                  : undefined,
+                              }}
+                            />
+                          )}
                         />
                       )}
                     />
                   </Col>
-                  {!phoneNumber.includes("+98") && (
-                    <Col xs={12}>
-                      <Controller
-                        name="phoneNumber"
-                        control={control}
-                        render={({ field: { name, value, onChange, ref } }) => (
-                          <FloatInput
-                            type="text"
-                            name={name}
-                            label="شماره تلفن ایران"
-                            value={value as string}
-                            onChange={onChange}
-                            inputProps={{
-                              ref: ref,
-                              size: "large",
-                              prefix: <CiMobile2 size={20} />,
-                              status: errors?.[name]?.message
-                                ? "error"
-                                : undefined,
-                            }}
-                          />
-                        )}
-                      />
-                    </Col>
-                  )}
+
+                  <Col xs={12}>
+                    <Controller
+                      name="phoneNumber"
+                      control={control}
+                      render={({ field: { name, value, onChange, ref } }) => (
+                        <FloatInput
+                          type="text"
+                          name={name}
+                          label="شماره تلفن ایران"
+                          value={value as string}
+                          onChange={onChange}
+                          disabled={phoneNumber.includes("+98")}
+                          inputProps={{
+                            dir: "ltr",
+                            ref: ref,
+                            size: "large",
+                            prefix: <CiMobile2 size={20} />,
+                            status: errors?.[name]?.message
+                              ? "error"
+                              : undefined,
+                          }}
+                        />
+                      )}
+                    />
+                  </Col>
+
                   <Col xs={12}>
                     <Controller
                       name="email"

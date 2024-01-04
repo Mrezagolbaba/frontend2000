@@ -1,10 +1,7 @@
 import { ReactNode } from "react";
 
-import logo from "assets/img/logo-arsonex.png";
-import { Link } from "react-router-dom";
-import { PiShieldCheckeredFill } from "react-icons/pi";
-
 import auth from "assets/scss/auth/auth.module.scss";
+import LightHeader from "layouts/Landing/LightHeader";
 
 type Props = {
   children: ReactNode;
@@ -14,7 +11,9 @@ const AuthLayout = ({ children }: Props) => {
   return (
     <div className={auth.wrapper}>
       <main>
-        <header className={auth.header}>
+        <LightHeader HasRemoveAuthButton className={auth["custom-header"]} />
+        {/* <HeadAuth /> */}
+        {/* <header className={auth.header}>
           <div className={auth.logo}>
             <Link to="/">
               <img src={logo} alt="arsonex-logo" />
@@ -31,7 +30,7 @@ const AuthLayout = ({ children }: Props) => {
               </span>
             </div>
           </div>
-        </header>
+        </header> */}
         {children}
       </main>
     </div>
