@@ -47,7 +47,7 @@ const OtpMobile: React.FC = () => {
   });
 
   const handleResend = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     setIsLoading(true);
     e.preventDefault();
@@ -55,7 +55,10 @@ const OtpMobile: React.FC = () => {
       type: "AUTH",
       method: "PHONE",
     };
-    await resendOtp(data).then(() => setIsLoading(false));
+    await resendOtp(data).then(() => {
+      setTimeInSeconds(120);
+      setIsLoading(false);
+    });
   };
 
   const handleOTP = async (data: { code: string }) => {

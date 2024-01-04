@@ -140,7 +140,7 @@ export default function CryptoCard({ USDT, TRX, isLoading, isSuccess }: any) {
                         </div>
                       </td>
                       <td className="text-center">
-                        {Number(USDT.availableBalance | 0).toLocaleString()}
+                        {Number(USDT.availableBalance || 0).toLocaleString()}
                       </td>
                       <td className="text-center">
                         <Button

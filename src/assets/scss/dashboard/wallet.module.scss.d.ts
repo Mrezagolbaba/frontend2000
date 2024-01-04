@@ -20,5 +20,6 @@ declare const classNames: {
   readonly "silver-button": "silver-button";
   readonly "transaction-button": "transaction-button";
   readonly "lir-icon": "lir-icon";
+  readonly "english-number": "english-number";
 };
 export = classNames;

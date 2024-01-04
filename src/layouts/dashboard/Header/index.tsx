@@ -33,7 +33,7 @@ const Header = ({ onSidebarToggle }: Props) => {
               <a href="/dashboard/wallet">واریز و برداشت</a>
             </li>
             <li>
-              <a href="/blog"> وبلاگ </a>
+              <a href="https://help.arsonex.com/"> مرکز راهنمایی </a>
             </li>
           </ul>
           <div className={dashboard.header__support}>

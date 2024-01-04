@@ -119,7 +119,7 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
                       </div>
                     </td>
                     <td className="text-center">
-                      {Number(TRY.availableBalance | 0).toLocaleString()}
+                      {Number(TRY.availableBalance || 0).toLocaleString()}
                     </td>
                     <td className="text-center">
                       <Button

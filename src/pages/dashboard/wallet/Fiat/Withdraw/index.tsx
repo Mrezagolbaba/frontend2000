@@ -130,7 +130,9 @@ const WithdrawFiat = ({
                 />
               </span> */}
             <span dir="ltr">
-              {item.iban.includes("TR") ? item.iban : "TR" + item.iban}
+              {(item.iban.includes("TR") ? item.iban : "TR" + item.iban) +
+                " - " +
+                item.ownerFullName}
             </span>
           </div>
         ),
@@ -139,6 +141,14 @@ const WithdrawFiat = ({
     setAccountOptions(list.filter((item) => !item.value.includes("IR")));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, getSuccessAccounts]);
+
+  useEffect(() => {
+    if (accountOptions.length > 0) {
+      setValue("iban", accountOptions[0].value);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountOptions]);
+
   return (
     <div className="px-2">
       <AlertWarning
@@ -259,6 +269,7 @@ const WithdrawFiat = ({
                   <DropdownInput
                     id={name}
                     value={value}
+                    className={wallet["english-number"]}
                     onChange={(val, otherOption) => {
                       setValue(name, val);
                       setValue("destination", otherOption.accountId);

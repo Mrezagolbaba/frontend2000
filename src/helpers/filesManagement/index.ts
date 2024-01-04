@@ -56,7 +56,7 @@ export function searchTurkishBanks(
 
 export function formatShowAccount(accountNumber: string) {
   const n = 4; // insert a character after every 5 characters
-  const insertChar = "-";
+  const insertChar = " ";
   let outputString = "";
   for (let i = 0; i < accountNumber.length; i = i + n) {
     const slice = accountNumber.slice(i, i + n);

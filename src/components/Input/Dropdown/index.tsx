@@ -23,6 +23,7 @@ type Props = {
   hasError?: boolean;
   disabled?: boolean;
   label?: string;
+  className?: string;
 };
 
 const DropdownInput = ({
@@ -34,6 +35,7 @@ const DropdownInput = ({
   label,
   hasError = false,
   disabled = false,
+  className,
 }: Props) => {
   const [isOpenDrop, setIsOpenDrop] = useState(false);
   const [selectedOption, setSelectedOption] = useState<OptionType>();
@@ -59,7 +61,7 @@ const DropdownInput = ({
     <Dropdown
       className={`${dropdown["custom-dropdown"]} ${
         hasError ? dropdown["invalid"] : ""
-      } bootstrap-select bs-select-control bs-form-select`}
+      } ${className} bootstrap-select bs-select-control bs-form-select`}
       isOpen={isOpenDrop}
       id={id}
       toggle={toggleDropdown}

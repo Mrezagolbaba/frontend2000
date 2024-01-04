@@ -196,6 +196,11 @@
   width: 20px !important;
 }
 
+.english-number,
+.english-number button {
+  font-family: arial !important;
+}
+
 @media screen and (max-width: 1399px) {
   .table-view tbody td {
     min-width: 140px;
