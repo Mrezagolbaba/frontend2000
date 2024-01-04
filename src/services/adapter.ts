@@ -1,4 +1,9 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError, AxiosInstance } from "axios";
+import axios, {
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosError,
+  AxiosInstance,
+} from "axios";
 
 // Replace with your base API URL
 const API_BASE_URL = "https://dev-api.arsonex.market/v1/";
@@ -9,18 +14,29 @@ const request: AxiosInstance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
   // You can add more default configurations here, like headers, timeouts, etc.
 });
-const accessTokenExpires = typeof window !== 'undefined' ? window.localStorage.getItem('accessTokenExpires') : null;
+const accessTokenExpires =
+  typeof window !== "undefined"
+    ? window.localStorage.getItem("accessTokenExpires")
+    : null;
+const refreshTokenExpires =
+  typeof window !== "undefined"
+    ? window.localStorage.getItem("refreshTokenExpires")
+    : null;
 
 // Function to refresh the access token
 const refreshAccessToken = async () => {
   const refreshToken = localStorage.getItem("refreshToken");
   if (refreshToken) {
     try {
-      const response = await axios.post('/refresh-token', { refreshToken: refreshToken });
+      const response = await axios.post("/refresh-token", {
+        refreshToken: refreshToken,
+      });
       const newAccessToken = response.data.access_token;
       // Update the access token in local storage
       localStorage.setItem("token", newAccessToken);
     } catch (error) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("refreshToken");
       // Handle refresh token error (e.g., log out the user)
     }
   }
@@ -28,6 +44,12 @@ const refreshAccessToken = async () => {
 // Function to check if the access token has expired
 const isTokenExpired = () => {
   const expirationDate = new Date(accessTokenExpires as string);
+  const currentTime = new Date();
+  return currentTime >= expirationDate;
+};
+
+const isRefreshTokenExpired = () => {
+  const expirationDate = new Date(refreshTokenExpires as string);
   const currentTime = new Date();
   return currentTime >= expirationDate;
 };
@@ -41,7 +63,14 @@ request.interceptors.request.use(
     }
     if (!token || isTokenExpired()) {
       await refreshAccessToken();
-      config.headers["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
+      config.headers["Authorization"] = `Bearer ${localStorage.getItem(
+        "token",
+      )}`;
+    } else if (isRefreshTokenExpired()) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("refreshToken");
+      config.headers["Authorization"] = "";
+      window.location.replace("/login");
     }
     return config;
   },

@@ -35,6 +35,8 @@ const SpotRate = () => {
   }>({});
   const [activeTab, setActiveTab] = useState("tab2");
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const currencyPairs = [
     { code: "USDT", name: "تتر", imgSrc: USDT },
     { code: "EUR", name: "یورو", imgSrc: EUR },
@@ -45,6 +47,7 @@ const SpotRate = () => {
   ];
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchExchangeRates = async () => {
       const rates: {
         [key: string]: { IRR: number | string; USD: number | string };
@@ -61,6 +64,7 @@ const SpotRate = () => {
           const data1 = response1.data;
           const data2 = response2.data;
           rates[currencyPair.code] = { IRR: data1.rate, USD: data2.rate };
+          setIsLoading(false);
         } catch (error: any) {
           console.error(`Error fetching ${currencyPair}: ${error.message}`);
           rates[currencyPair.code] = { IRR: "-", USD: "-" };
@@ -108,50 +112,101 @@ const SpotRate = () => {
                     <th>معامله</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {currencyPairs.map((currencyPair: any, index: number) => (
-                    <tr key={index}>
-                      <td>
-                        <div className={home["currency-rates__table__title"]}>
-                          <img
-                            src={currencyPair.imgSrc}
-                            alt={currencyPair.code}
-                          />
-                          <h6>{currencyPair.name}</h6>
-                          <span>{currencyPair.code}</span>
-                        </div>
-                      </td>
-                      {activeTab === "tab1" ? (
+                {!isLoading ? (
+                  <tbody>
+                    {currencyPairs.map((currencyPair: any, index: number) => (
+                      <tr key={index}>
                         <td>
-                          <span className="d-inline-block d-ltr">
-                            {`${Number(
-                              exchangeRates[currencyPair.code]?.USD,
-                            ).toLocaleString()} $`}
-                          </span>
+                          <div className={home["currency-rates__table__title"]}>
+                            <img
+                              src={currencyPair.imgSrc}
+                              alt={currencyPair.code}
+                            />
+                            <h6>{currencyPair.name}</h6>
+                            <span>{currencyPair.code}</span>
+                          </div>
                         </td>
-                      ) : (
+                        {activeTab === "tab1" ? (
+                          <td>
+                            <span className="d-inline-block d-ltr">
+                              {`${Number(
+                                exchangeRates[currencyPair.code]?.USD || 0,
+                              ).toLocaleString()} $`}
+                            </span>
+                          </td>
+                        ) : (
+                          <td>
+                            <span className="fs-md">
+                              {`${Math.floor(
+                                Number(exchangeRates[currencyPair.code]?.IRR) /
+                                  10 || 0,
+                              ).toLocaleString()} تومان`}
+                            </span>
+                          </td>
+                        )}
                         <td>
-                          <span className="fs-md">
-                            {`${Math.floor(
-                              Number(exchangeRates[currencyPair.code]?.IRR) /
-                                10,
-                            ).toLocaleString()} تومان`}
-                          </span>
+                          <div className="table-crypto-actions">
+                            <Link
+                              to="/dashboard"
+                              className="btn btn-outline-primary "
+                            >
+                              معامله
+                            </Link>
+                          </div>
                         </td>
-                      )}
-                      <td>
-                        <div className="table-crypto-actions">
-                          <Link
-                            to="/dashboard"
-                            className="btn btn-outline-success "
-                          >
-                            خرید و فروش
-                          </Link>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+                      </tr>
+                    ))}
+                  </tbody>
+                ) : (
+                  <tbody>
+                    <>
+                      <tr>
+                        <td className="placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                        <td className="text-center placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                        <td className="text-center placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row" className="placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </th>
+                        <td className="text-center placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                        <td className="text-center placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row" className="placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </th>
+                        <td className="text-center placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                        <td className="text-center placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row" className="placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </th>
+                        <td className="text-center placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                        <td className="text-center placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                      </tr>
+                    </>
+                  </tbody>
+                )}
               </table>
             </div>
           </div>

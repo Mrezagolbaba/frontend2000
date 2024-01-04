@@ -251,7 +251,7 @@ const Setting = () => {
               <CardTitle>تنظیمات امنیتی</CardTitle>
             </CardHeader>
             <CardBody>
-              <form action="" className="security-form ">
+              <div className="security-form ">
                 <h6 className=" mb-4 mt-4">
                   نحوه تایید هویت دو مرحله ای جهت ورود به حساب کاربری و درخواست
                   برداشت
@@ -302,7 +302,7 @@ const Setting = () => {
                   </Col> */}
                 </Row>
                 <ChangePassword />
-              </form>
+              </div>
             </CardBody>
           </Card>
         </Col>

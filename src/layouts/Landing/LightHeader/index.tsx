@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "reactstrap";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { TbMenu } from "react-icons/tb";
@@ -14,6 +14,7 @@ const LightHeader = ({
   className?: string;
   HasRemoveAuthButton?: boolean;
 }) => {
+  const { pathname } = useLocation();
   const [openOverlayMenu, setOpenOverlayMenu] = useState<boolean>(false);
   return (
     <>
@@ -57,22 +58,42 @@ const LightHeader = ({
                   </ul>
                 </div>
               </li>
-              <li className={`${home.navbar__item} ${home.active}`}>
+              <li
+                className={`${home.page__navitem} ${
+                  pathname === "/" ? home.active : ""
+                }`}
+              >
                 <Link to="/">صفحه اصلی</Link>
               </li>
-              <li className={home.page__navitem}>
+              <li
+                className={`${home.page__navitem} ${
+                  pathname === "/coins" ? home.active : ""
+                }`}
+              >
                 <Link to="/coins">قیمت لحظه ای</Link>
               </li>
-              <li className={home.page__navitem}>
+              <li
+                className={`${home.page__navitem} ${
+                  pathname === "/dashboard" ? home.active : ""
+                }`}
+              >
                 <Link to="/dashboard">خرید و فروش آنی</Link>
               </li>
               <li className={home.page__navitem}>
                 <Link to="https://help.arsonex.com/">مرکز راهنمایی</Link>
               </li>
-              <li className={home.page__navitem}>
+              <li
+                className={`${home.page__navitem} ${
+                  pathname === "/about-us" ? home.active : ""
+                }`}
+              >
                 <Link to="/about-us">درباره ما</Link>
               </li>
-              <li className={home.page__navitem}>
+              <li
+                className={`${home.page__navitem} ${
+                  pathname === "/contact-us" ? home.active : ""
+                }`}
+              >
                 <Link to="/contact-us">تماس با ما</Link>
               </li>
               <li>
