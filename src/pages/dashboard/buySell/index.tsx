@@ -116,6 +116,22 @@ export default function BuySell() {
               </CardBody>
             </Card>
           </Col>
+          <Col xxl={5} xs={12}>
+            <Card>
+              <CardHeader className="d-flex flex-row justify-content-between align-items-center">
+                <CardTitle tag="h5"> سوالات متداول</CardTitle>
+                <div className="card-action">
+                  <a href="#">مرکز راهنمایی  </a>
+                </div>
+              </CardHeader>
+
+              <CardBody>
+                <Accordion flush className="border-less" open={open}
+                  //@ts-ignore
+                  toggle={toggle}>{accordionItems}</Accordion>
+              </CardBody>
+            </Card>
+          </Col>
         </Row>
         <Dialog
           title={

@@ -72,7 +72,7 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
   return (
     <Card className="mb-4 h-100">
       <CardHeader>
-        <CardTitle tag="h5">موجودی فیات دیجیتال</CardTitle>
+        <CardTitle tag="h5">موجودی ارز دیجیتال</CardTitle>
       </CardHeader>
       <CardBody>
         <Row>

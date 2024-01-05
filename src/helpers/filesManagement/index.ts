@@ -68,3 +68,13 @@ export function formatShowAccount(accountNumber: string) {
 
   return outputString;
 }
+
+// export function searchTurkishBanks(query: string) {
+//   const headAccountNumber = query.slice(2, 7);
+//   const entity = turkishBanks.filter(
+//     (bank) =>
+//       Number(bank.code) === Number(persianToEnglishNumbers(headAccountNumber))
+//   );
+
+//   return entity[0] || null;
+// }

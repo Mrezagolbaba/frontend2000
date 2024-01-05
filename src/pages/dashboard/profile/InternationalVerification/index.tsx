@@ -44,7 +44,6 @@ export default function InternationalVerification() {
     namesRequest,
     { data, isLoading: isLoadingNames, isSuccess: successPublish },
   ] = useEnglishNamesMutation();
-
   const renderPreview = () => {
     if (file) {
       return (

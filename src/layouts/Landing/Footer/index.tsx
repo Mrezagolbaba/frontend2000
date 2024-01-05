@@ -46,7 +46,7 @@ const Footer = (): React.JSX.Element => {
                   <Badge className={home["badge-custom"]}> بزودی</Badge>
                 </li>
                 <li>
-                  <Link to="/terms">قوانین و مقررات</Link>
+                  <Link to="/rules">قوانین و مقررات</Link>
                 </li>
               </ul>
             </div>
@@ -150,6 +150,7 @@ const Footer = (): React.JSX.Element => {
                 </span>
               </a>
             </li>
+          
             <li>
               <a href="https://www.instagram.com/Arsonexchange/">
                 <span className="icon">
