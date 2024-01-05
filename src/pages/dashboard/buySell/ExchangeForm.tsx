@@ -28,7 +28,7 @@ import {
   useLazyRatesQuery,
   useWalletsQuery,
 } from "store/api/exchange-management";
-import WageTable from "./ExchangeForm/WageTable";
+import WageTable from "./WageTable";
 import { useLocation } from "react-router-dom";
 
 type Props = {

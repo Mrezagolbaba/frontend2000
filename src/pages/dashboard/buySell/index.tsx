@@ -19,9 +19,8 @@ import ExchangeContextProvider from "./ContextProvider";
 import ExchangeForm from "./ExchangeForm";
 import DepositFiat from "../wallet/Fiat/Deposit";
 import Deposit from "../wallet/Rial/Deposit";
-import NewExchangeForm from "./NewExchangeForm";
 import { CurrencyCode } from "types/wallet";
-import s from  './styles.module.scss'
+import s from "./styles.module.scss";
 const accordionData = [
   {
     id: "1",
@@ -75,11 +74,8 @@ export default function BuySell() {
     }
   };
   const accordionItems = accordionData.map((item) => (
-    <AccordionItem key={item.id} >
-      <AccordionHeader
-        className={s["accordion-header"]}
-        targetId={item.id}
-      >
+    <AccordionItem key={item.id}>
+      <AccordionHeader className={s["accordion-header"]} targetId={item.id}>
         {item.question}
       </AccordionHeader>
       <AccordionBody accordionId={item.id} className={s["accordion-body"]}>
@@ -96,10 +92,10 @@ export default function BuySell() {
     <ExchangeContextProvider>
       <section className="page page-wallet">
         <Row className="g-4">
-          <Col xxl={7} xs={12}>
-            <NewExchangeForm setIsOpenDialog={setConfigdialog} />
+          <Col xs={12}>
+            <ExchangeForm setIsOpenDialog={setConfigdialog} />
           </Col>
-          <Col xxl={5} xs={12}>
+          <Col xs={12}>
             <Card>
               <CardHeader className="d-flex flex-row justify-content-between align-items-center">
                 <CardTitle tag="h5"> سوالات متداول</CardTitle>
@@ -113,7 +109,6 @@ export default function BuySell() {
                   flush
                   className="border-less"
                   open={open}
-                  //@ts-ignore
                   toggle={toggle}
                 >
                   {accordionItems}
