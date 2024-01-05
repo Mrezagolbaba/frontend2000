@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "reactstrap";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { TbMenu } from "react-icons/tb";
-import Logo from "assets/img/dark lands.png";
+import Logo from "assets/img/logo/dark.png";
 
 import home from "assets/scss/landing/home.module.scss";
 

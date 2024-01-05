@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Logo from "assets/img/arsonex.png";
+import Logo from "assets/img/logo/light.png";
 import LogoPrimary from "assets/img/logo-primary.png";
 
 import home from "assets/scss/landing/home.module.scss";
