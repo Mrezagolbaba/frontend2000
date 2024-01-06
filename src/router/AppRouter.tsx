@@ -1,4 +1,4 @@
-import { useRoutes } from "react-router-dom";
+import { useLocation, useRoutes } from "react-router-dom";
 import LoginPage from "pages/auth/signin";
 import LoginEmailPage from "pages/auth/signin/EmailSignin";
 import SignupPage from "pages/auth/signup";
@@ -17,8 +17,15 @@ import ComingSoon from "pages/ComingSoon";
 import ContactUs from "pages/contact-us";
 import RulesPage from "pages/rules";
 import AboutUs from "pages/about-us";
+import { useEffect } from "react";
+import { getTitlePage } from "helpers";
 
 export default function AppRouter() {
+  const location = useLocation();
+
+  useEffect(() => {
+    document.title = getTitlePage(location.pathname);
+  }, [location.pathname]);
   return useRoutes([
     {
       path: "/",

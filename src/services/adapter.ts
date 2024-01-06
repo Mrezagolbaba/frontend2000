@@ -69,7 +69,7 @@ request.interceptors.request.use(
     } else if (isRefreshTokenExpired()) {
       localStorage.removeItem("token");
       localStorage.removeItem("refreshToken");
-      config.headers["Authorization"] = "";
+      delete config.headers["Authorization"];
       window.location.replace("/login");
     }
     return config;
