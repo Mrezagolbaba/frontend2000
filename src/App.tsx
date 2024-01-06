@@ -12,7 +12,7 @@ function App() {
 
   useEffect(()=>{
     const tagManagerArgs = {
-      gtmId: "GTM-WRSW3TKG",
+      gtmId: "G-3RD1XMTEYX",
     };
     TagManager.initialize(tagManagerArgs);
   },[])
