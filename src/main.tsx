@@ -6,6 +6,7 @@ import App from "./App.tsx";
 import { Provider } from "react-redux";
 import * as Sentry from "@sentry/react";
 import { store } from "store/store.ts";
+import TagManager from 'react-gtm-module';
 
 import "assets/scss/index.scss";
 
@@ -33,6 +34,13 @@ Sentry.init({
   replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
   autoSessionTracking: true,
 });
+
+const tagManagerArgs = {
+  gtmId: 'GTM-WRSW3TKG', // Replace with your GTM container ID
+};
+
+TagManager.initialize(tagManagerArgs);
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
