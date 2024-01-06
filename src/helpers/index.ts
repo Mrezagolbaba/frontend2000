@@ -81,7 +81,7 @@ export const persianToEnglishNumbers = (persianNumber: string) => {
     .map((char) =>
       persianDigits.includes(char)
         ? englishDigits[persianDigits.indexOf(char)]
-        : char
+        : char,
     )
     .join("");
 
@@ -140,9 +140,9 @@ export function convertIRRToToman(number: number) {
   // 1 toman is equal to 10 rials
   const tomanAmount = Math.trunc(number) / 10;
   // Format the result to include commas for thousands
-  const formattedTomanAmount = new Intl.NumberFormat('fa-IR', {
+  const formattedTomanAmount = new Intl.NumberFormat("fa-IR", {
     useGrouping: true,
-    style: 'decimal'
+    style: "decimal",
   }).format(tomanAmount);
 
   return formattedTomanAmount;
@@ -175,22 +175,22 @@ export const convertText = (text, direction) => {
 };
 export const convertTextSingle = (text) => {
   const currencyMap = {
-    'enToFa': {
-      'USDT': 'تتر',
-      'TRY': 'لیر',
-      'IRR': 'تومان',
-      'TRX': 'ترون',
+    enToFa: {
+      USDT: "تتر",
+      TRY: "لیر",
+      IRR: "تومان",
+      TRX: "ترون",
     },
-    'faToEn': {
-      'تتر': 'USDT',
-      'لیر': 'TRY',
-      'تومان': 'IRR',
-      'ترون': 'TRX',
+    faToEn: {
+      تتر: "USDT",
+      لیر: "TRY",
+      تومان: "IRR",
+      ترون: "TRX",
     },
   };
 
-  if (text in currencyMap['enToFa']) {
-    return currencyMap['enToFa'][text];
+  if (text in currencyMap["enToFa"]) {
+    return currencyMap["enToFa"][text];
   }
   return text;
 };
@@ -200,14 +200,18 @@ export function extractLeftSide(baseString) {
 export const LabeLText = {
   EMAIL: "ایمیل",
   PHONE: "تلفن همراه",
-  AUTHENTICATOR: 'google Authenticator'
-}
+  AUTHENTICATOR: "google Authenticator",
+};
 export const LabeLTextTransaction = {
-  DARAFT: 'ناموفق',
-  SUCCESSFUL: 'موفق',
-}
+  DARAFT: "ناموفق",
+  SUCCESSFUL: "موفق",
+};
 
-export function getDate18YearsAgo(): { year: number; month: number; day: number } {
+export function getDate18YearsAgo(): {
+  year: number;
+  month: number;
+  day: number;
+} {
   const currentDate: Date = new Date();
   const eighteenYearsAgo: Date = new Date(currentDate);
   eighteenYearsAgo.setFullYear(currentDate.getFullYear() - 18);
@@ -221,16 +225,51 @@ export function getDate18YearsAgo(): { year: number; month: number; day: number 
   return { year: year18YearsAgo, month: month18YearsAgo, day: date18YearsAgo };
 }
 export function convertPersianToGregorian(persianDate: string): string {
-  const gregorianDate = moment(persianDate, 'jYYYY/jMM/jDD').format('YYYY-MM-DD');
+  const gregorianDate = moment(persianDate, "jYYYY/jMM/jDD").format(
+    "YYYY-MM-DD",
+  );
   return gregorianDate;
 }
 export function maskingString(str, start, end) {
-  if (!str || start < 0 || start >= str.length || end < 0 || end > str.length || start >= end) {
+  if (
+    !str ||
+    start < 0 ||
+    start >= str.length ||
+    end < 0 ||
+    end > str.length ||
+    start >= end
+  ) {
     return str;
   }
   const maskLength = end - start;
-  const maskedStr = str.substring(0, start) + "*".repeat(maskLength) + str.substring(end);
+  const maskedStr =
+    str.substring(0, start) + "*".repeat(maskLength) + str.substring(end);
   return maskedStr;
 }
 
+export function getTitlePage(path: string) {
+  const pages = [
+    { path: "/", name: "آرسونیکس - همراه ارز دیجیتال شما" },
+    { path: "/coins", name: "قیمت لحظه‌ای ارز و ارز دیجیتال - آرسونیکس" },
+    { path: "/about-us", name: "درباره ما - آرسونیکس" },
+    { path: "/contact-us", name: "تماس با ما - آرسونیکس" },
+    { path: "/terms", name: "قوانین و مقررات - آرسونیکس" },
+    { path: "/dashboard", name: "داشبورد کاربری - آرسونیکس" },
+    { path: "/dashboard/buy-sell", name: "خرید و فروش سریع - آرسونیکس" },
+    { path: "/dashboard/wallet", name: "کیف پول - آرسونیکس" },
+    { path: "/dashboard/setting", name: "تنظیمات - آرسونیکس" },
+    { path: "/dashboard/market", name: "بازارها - آرسونیکس" },
+    { path: "/dashboard/orders", name: "سفارشات - آرسونیکس" },
+    { path: "/dashboards/history", name: "تاریخچه - آرسونیکس" },
+    { path: "/dashboard/support", name: "پشتیبانی - آرسونیکس" },
+    { path: "/login", name: "آرسونیکس - ورود به حساب کاربری" },
+    { path: "/register", name: "آرسونیکس - ثبت نام" },
+    { path: "/forget-password", name: "آرسونیکس - فراموشی رمز عبور" },
+    { path: "/information", name: "آرسونیکس - احراز هویت" },
+  ];
 
+  const findTitle = pages.find((page) => page.path === path);
+
+  if (findTitle) return findTitle.name;
+  else return "آرسونیکس";
+}
