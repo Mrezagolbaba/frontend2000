@@ -43,7 +43,7 @@ export default function UserInformation() {
       <CardBody className={dashboard["user-summary__body"]}>
         <ul>
           <li className={dashboard["user-summary__avatar"]}>
-            <span>{firstName[0]}</span>
+            <span>{firstName?.[0]}</span>
           </li>
           <li className={dashboard["user-summary__edit"]}>
             <h6>{firstName + " " + lastName}</h6>

@@ -4,6 +4,7 @@ import { Refine } from "@refinedev/core";
 import dataProvider from "@refinedev/simple-rest";
 import routerProvider from "@refinedev/react-router-v6";
 import request from "services/adapter";
+import { useEffect } from "react";
 
 const Dashboard = () => {
   return (

@@ -1,4 +1,4 @@
-import LogoArsonex from "assets/img/logo-arsonex.png";
+import LogoArsonex from "assets/img/logo/dark.png";
 import Home from "assets/img/icons/home.svg";
 import Wallet from "assets/img/icons/wallet.svg";
 import Order from "assets/img/icons/paper.svg";
