@@ -46,7 +46,7 @@ const Footer = (): React.JSX.Element => {
                   <Badge className={home["badge-custom"]}> بزودی</Badge>
                 </li>
                 <li>
-                  <Link to="/rules">قوانین و مقررات</Link>
+                  <Link to="/terms">قوانین و مقررات</Link>
                 </li>
               </ul>
             </div>
