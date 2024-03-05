@@ -10,7 +10,7 @@ import * as path from "path";
 export default defineConfig({
   define: {
     "process.env.REACT_APP_BASE_URL": JSON.stringify(
-      process.env.REACT_APP_BASE_URL,
+     "https://api.arsonex.com/v1/",
     ),
   },
   plugins: [
