@@ -4,6 +4,9 @@ import { BrowserRouter } from "react-router-dom";
 import ErrorBoundary from "./utils/error";
 import TagManager from "react-gtm-module";
 import { useEffect } from "react";
+import ReactDOM from "react-dom";
+import AddToHomeScreenPrompt from "components/AddToHomeScreenPrompt";
+
 
 const queryClient = new QueryClient();
 
@@ -12,7 +15,7 @@ function App() {
 
   useEffect(()=>{
     const tagManagerArgs = {
-      gtmId: "GTM-5QXC3XK3",
+      gtmId: "GTM-WRSW3TKG",
     };
     TagManager.initialize(tagManagerArgs);
   },[])

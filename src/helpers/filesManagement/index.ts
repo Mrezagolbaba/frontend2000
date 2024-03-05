@@ -2,6 +2,8 @@ import { persianToEnglishNumbers } from "helpers";
 import { iranianBanks, turkishBanks } from "./banksList";
 import { BanksResponse } from "types/profile";
 import { isEmpty } from "lodash";
+import axios from "axios";
+import { axiosInstance } from "store/api";
 
 export function searchIranianBanks(
   query: string,
@@ -9,12 +11,10 @@ export function searchIranianBanks(
 ) {
   const headAccountNumber = query.slice(0, 6);
 
-  
-
   let findBank: BanksResponse[] | [] = [];
   if (!isEmpty(headAccountNumber) && banks) {
-    findBank = banks.filter(
-      (bank) => bank?.meta.codes.find((code) => code === headAccountNumber),
+    findBank = banks.filter((bank) =>
+      bank?.meta.codes.find((code) => code === headAccountNumber),
     );
   }
   const entity = iranianBanks.filter(
@@ -25,33 +25,37 @@ export function searchIranianBanks(
     return { bankId: findBank[0]?.id, logo: entity[0]?.logo } || null;
   else return { bankId: "", logo: entity[0]?.logo };
 }
-
 export function searchTurkishBanks(
   query: string,
-  banks: BanksResponse[] | undefined,
+  banks?: BanksResponse[] | undefined,
   isSearchId: boolean | undefined = true,
 ) {
   let headAccountNumber = query.slice(4, 7);
   if (query.includes("TR")) {
     headAccountNumber = query.slice(6, 9);
   }
-
   let findBank: BanksResponse[] | [] = [];
-  if (!isEmpty(query) && banks) {
-    findBank = banks.filter(
-      (bank) =>
-        bank?.meta.codes.find(
-          (code) => Number(code) === Number(headAccountNumber),
-        ),
-    );
-  }
+  try {
+    axiosInstance
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/banks?filter=currencyCode||$eq||TRY`,
+      )
+      .then((res: any) => {
+        findBank = res.data.filter((bank) =>
+          bank?.meta.codes.find(
+            (code) => Number(code) === Number(headAccountNumber),
+          ),
+        );
+      })
+      .catch((err) => {});
+  } catch (err) {}
 
   const entity = turkishBanks.filter(
     (bank) =>
       Number(bank.code) === Number(persianToEnglishNumbers(headAccountNumber)),
   );
 
-  return { bankId: findBank[0]?.id, logo: entity[0].logo } || null;
+  return { bankId: findBank[0]?.id, logo: entity[0]?.logo } || null;
 }
 
 export function formatShowAccount(accountNumber: string) {

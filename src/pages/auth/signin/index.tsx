@@ -24,10 +24,16 @@ import {
 } from "reactstrap";
 
 import auth from "assets/scss/auth/auth.module.scss";
+import { useGetMe } from "services/auth/user";
+import { useAppDispatch } from "store/hooks";
+import { IUser } from "types/user";
+import { PiShieldCheckeredFill } from "react-icons/pi";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const loginMutation = useLogin();
+  const getMe = useGetMe();
+  const dispatch = useAppDispatch();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -50,7 +56,7 @@ const LoginPage: React.FC = () => {
     setIsLoading(true);
     const phoneNumber = formatPhoneNumber(
       persianToEnglishNumbers(data.phoneNumber),
-      data.selectedCountry
+      data.selectedCountry,
     );
     const userData = {
       phoneNumber,
@@ -63,10 +69,19 @@ const LoginPage: React.FC = () => {
       .then((res) => {
         if (res) {
           setIsLoading(false);
-          navigate("/mobile-otp", {
-            state: {
-              phoneNumber: userData.phoneNumber,
-            },
+          getMe.mutateAsync(null).then((res: IUser) => {
+            res && res.otpMethod === "EMAIL"
+              ? navigate("/email-otp", {
+                  state: {
+                    email: res.email,
+                    page: "login",
+                  },
+                })
+              : navigate("/mobile-otp", {
+                  state: {
+                    phoneNumber: userData.phoneNumber,
+                  },
+                });
           });
         }
       })
@@ -79,7 +94,7 @@ const LoginPage: React.FC = () => {
     Object.entries(errors).map(([fieldName, error]: any) =>
       toast.error(error?.message, {
         position: "bottom-left",
-      })
+      }),
     );
 
   return (
@@ -88,7 +103,17 @@ const LoginPage: React.FC = () => {
         <Card className={auth.card}>
           <CardBody className={auth["card-body"]}>
             <h4 className={auth.title}>ورود به حساب کاربری</h4>
-            <p className={auth.text}> شماره تلفن خود را وارد کنید</p>
+            <div className={auth.confidence}>
+              <p>از یکسان بودن آدرس صفحه با آدرس زیر مطمئن شوید.</p>
+              <div className="d-ltr">
+                <label>
+                  <span>https://</span>arsonex.com
+                </label>
+                <span className="icon">
+                  <PiShieldCheckeredFill />
+                </span>
+              </div>
+            </div>
 
             <form
               className={auth.form}

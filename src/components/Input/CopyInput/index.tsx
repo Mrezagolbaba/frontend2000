@@ -2,14 +2,23 @@ import { useRef } from "react";
 import { LuCopy } from "react-icons/lu";
 import ClipboardJS from "clipboard";
 import toast from "react-hot-toast";
+import BanksWrapper from "components/BanksWrapper";
 
 import style from "assets/scss/components/Input/copyInput.module.scss";
 
 type Props = {
   text: string;
+  isIban?: boolean;
+  hasBox?: boolean;
+  maxCharacter?: number;
 };
 
-export default function CopyInput({ text }: Props) {
+export default function CopyInput({
+  text,
+  isIban = false,
+  hasBox = true,
+  maxCharacter,
+}: Props) {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const handleCopy = () => {
@@ -33,10 +42,10 @@ export default function CopyInput({ text }: Props) {
     }
   };
 
-  return (
+  return text ? (
     <button
       type="button"
-      className={`${style["copy-btn"]} d-ltr iban-copy`}
+      className={`${style["copy-btn"]} ${hasBox ? style["btn-with-box"] : style["btn-without-box"]} d-ltr iban-copy`}
       onClick={handleCopy}
       ref={buttonRef}
       data-clipboard-text={text}
@@ -44,7 +53,11 @@ export default function CopyInput({ text }: Props) {
       <span className={style["copy-btn__icon"]}>
         <LuCopy />
       </span>
-      <span className={style["copy-btn__text"]}>{text}</span>
+      <span className={style["copy-btn__text"]}>
+        {maxCharacter && text?.length > maxCharacter
+          ? text.slice(0, maxCharacter) + "..."
+          : text}
+      </span>
     </button>
-  );
+  ) : null;
 }

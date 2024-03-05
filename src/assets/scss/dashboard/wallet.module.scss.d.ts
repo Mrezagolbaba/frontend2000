@@ -1,4 +1,7 @@
 declare const classNames: {
+  readonly "mobile-view": "mobile-view";
+  readonly "crypto-name": "crypto-name";
+  readonly "crypto-img": "crypto-img";
   readonly balance: "balance";
   readonly balance__value: "balance__value";
   readonly balance__action: "balance__action";
@@ -15,11 +18,15 @@ declare const classNames: {
   readonly input: "input";
   readonly "iban-text": "iban-text";
   readonly "table-view": "table-view";
-  readonly "crypto-img": "crypto-img";
-  readonly "crypto-name": "crypto-name";
   readonly "silver-button": "silver-button";
   readonly "transaction-button": "transaction-button";
   readonly "lir-icon": "lir-icon";
+  readonly "bank-icon": "bank-icon";
   readonly "english-number": "english-number";
+  readonly "font-small": "font-small";
+  readonly "data-tab-container": "data-tab-container";
+  readonly "data-tab": "data-tab";
+  readonly "data-tab__item": "data-tab__item";
+  readonly "desktop-view": "desktop-view";
 };
 export = classNames;

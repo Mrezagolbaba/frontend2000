@@ -8,6 +8,7 @@ type Props = {
   title: string | ReactElement;
   hasCloseButton?: boolean;
   children: React.ReactNode;
+  size?: "xs" | "sm" | "lg" | "md" | "xl";
 };
 
 function Dialog({
@@ -16,13 +17,14 @@ function Dialog({
   title,
   hasCloseButton = false,
   children,
+  size = "lg",
 }: Props) {
   return (
     <Modal
       className={dialog["modal"]}
       isOpen={isOpen}
       toggle={onClose}
-      size="lg"
+      size={size}
       backdrop
       fade
     >

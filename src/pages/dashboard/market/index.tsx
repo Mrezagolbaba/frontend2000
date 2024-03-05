@@ -22,7 +22,7 @@ const Market = () => {
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <h5 className="card-title">بازارهای معاملاتی</h5>
             <div className="card-action">
-              <a href="/dashboard/buy-sell" className="btn-simple">
+              <a href="/dashboard/exchange" className="btn-simple">
                 معامله سریع
               </a>
             </div>
@@ -104,7 +104,7 @@ const Market = () => {
                       <td className="text-center">
                         <div className="market-data">
                           <a
-                            href="/dashboard/buy-sell"
+                            href="/dashboard/exchange"
                             className="btn-simple tm__actions"
                           >
                             شروع معامله

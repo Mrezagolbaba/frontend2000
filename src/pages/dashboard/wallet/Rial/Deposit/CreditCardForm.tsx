@@ -15,8 +15,6 @@ import {
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import Currency from "components/Input/CurrencyInput";
 import { AlertInfo } from "components/AlertWidget";
-
-import { formatShowAccount, searchIranianBanks } from "helpers/filesManagement";
 import { useBankAccountsQuery } from "store/api/profile-management";
 import {
   useDepositMutation,
@@ -24,6 +22,8 @@ import {
 } from "store/api/wallet-management";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "store/hooks";
+import { tomanShow } from "helpers";
+import BanksWrapper from "components/BanksWrapper";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 
@@ -43,12 +43,10 @@ const CreditCardForm = () => {
 
   const { data: fee } = useTransactionFeeQuery("IRR");
   const { data, isSuccess } = useBankAccountsQuery({});
-
   const [
     depositRequest,
     { data: response, isLoading, isSuccess: isSubmitSuccess },
   ] = useDepositMutation();
-
   const resolver = yupResolver(
     Yup.object().shape({
       accountNumber: Yup.string().required(),
@@ -62,6 +60,7 @@ const CreditCardForm = () => {
     setValue,
     reset,
     formState: { errors },
+    setError,
   } = useForm<CreditCardForm>({
     mode: "onChange",
     defaultValues: {
@@ -72,12 +71,23 @@ const CreditCardForm = () => {
     resolver,
   });
   const onSubmit = async (data: CreditCardForm) => {
-    depositRequest({
-      currencyCode: "IRR",
-      amount: (Number(data.amount) * 10).toString(),
-      bankAccountId: data.accountId,
-      flow: "REDIRECT",
-    });
+    if (Number(data.amount) < fee?.depositMinAmount / 10)
+      setError("amount", {
+        type: "manual",
+        message: `مبلغ وارد شده نمی تواند کمتر از ${tomanShow({ value: fee?.depositMinAmount, currency: "IRR" })} باشد.`,
+      });
+    else if (Number(data.amount) >= fee?.depositMaxAmount)
+      setError("amount", {
+        type: "manual",
+        message: `مبلغ وارد شده نمی تواند بیشتر از ${tomanShow({ value: fee.depositMaxAmount, currency: "IRR" })} باشد.`,
+      });
+    else
+      depositRequest({
+        currencyCode: "IRR",
+        amount: (Number(data.amount) * 10).toString(),
+        bankAccountId: data.accountId,
+        flow: "REDIRECT",
+      });
   };
 
   useEffect(() => {
@@ -92,24 +102,16 @@ const CreditCardForm = () => {
         setOptionList(
           accounts.map((account) => {
             if (account.cardNumber) {
-              const bank =
-                account.cardNumber && searchIranianBanks(account.cardNumber);
               return {
                 content: (
                   <div className={wallet["items-credit"]}>
-                    {bank && bank.logo && (
-                      <span className={wallet["items-credit__icon"]}>
-                        <span
-                          className="mx-3"
-                          dangerouslySetInnerHTML={{ __html: bank.logo }}
-                        />
-                      </span>
-                    )}
-
-                    <span dir="ltr">
-                      {account?.cardNumber &&
-                        formatShowAccount(account?.cardNumber)}
-                    </span>
+                    <BanksWrapper
+                      type="IRR"
+                      value={account?.cardNumber}
+                      iconClassName={wallet["items-credit__icon"]}
+                    >
+                      <span dir="ltr">{account?.cardNumber}</span>
+                    </BanksWrapper>
                   </div>
                 ),
                 otherOptions: { accountId: account?.id },
@@ -120,8 +122,8 @@ const CreditCardForm = () => {
         );
         setHasAccount(true);
         reset({
-          accountNumber: data[0]?.cardNumber,
-          accountId: data[0]?.id,
+          accountNumber: accounts[0]?.cardNumber,
+          accountId: accounts[0]?.id,
           amount: "",
         });
       }
@@ -165,11 +167,7 @@ const CreditCardForm = () => {
                 {errors?.[name] && (
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
-                <FormText>
-                  {/* {`سقف واریز: ${
-                    secondTierVerified ? "نامحدود" : "ا میلیون تومان"
-                  }`} */}
-                </FormText>
+                <FormText></FormText>
               </FormGroup>
             )}
           />
@@ -182,11 +180,6 @@ const CreditCardForm = () => {
               <FormGroup className="position-relative">
                 <div className="d-flex flex-row justify-content-between">
                   <Label htmlFor={name}>مبلغ واریز: </Label>
-                  {/* <a href="#">
-                    <span className={wallet?.["little-label"]}>
-                      حداکثر مبلغ واریز
-                    </span>
-                  </a> */}
                 </div>
                 <Currency
                   name={name}
@@ -200,7 +193,11 @@ const CreditCardForm = () => {
                 )}
                 {fee && (
                   <FormText>
-                    کارمزد واریز: {fee.depositFeeStatic} تومان{" "}
+                    کارمزد واریز:{" "}
+                    {tomanShow({
+                      value: fee.depositFeeStatic,
+                      currency: "IRR",
+                    })}
                   </FormText>
                 )}
               </FormGroup>
@@ -208,7 +205,7 @@ const CreditCardForm = () => {
           />
         </Col>
       </Row>
-      <Row className="mt-4">
+      <Row className="mt-5">
         <div className="d-flex flex-row justify-content-evenly">
           <Button
             className="px-5 py-3"

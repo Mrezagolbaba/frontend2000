@@ -1,16 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration.tsx";
 import App from "./App.tsx";
 import { Provider } from "react-redux";
 import * as Sentry from "@sentry/react";
-import { store } from "store/store.ts";
+import { persister, store } from "store/store.ts";
+import TagManager from 'react-gtm-module';
 
 import "assets/scss/index.scss";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { PersistGate } from "redux-persist/integration/react";
 
 Sentry.init({
   dsn: "https://471c3edaafc4ceda011aec9a5263fc88@o208701.ingest.sentry.io/4505642858119168",
@@ -34,10 +36,18 @@ Sentry.init({
   autoSessionTracking: true,
 });
 
+const tagManagerArgs = {
+  gtmId: 'GTM-WRSW3TKG', // Replace with your GTM container ID
+};
+
+TagManager.initialize(tagManagerArgs);
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <PersistGate persistor={persister}>
+        <App />
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );

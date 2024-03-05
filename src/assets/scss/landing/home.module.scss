@@ -67,7 +67,8 @@
     padding-left: 12px;
   }
   &__logo img {
-    width: 150px;
+    max-width: 150px;
+    max-height: 36px;
   }
   &__auth {
     .navbar .navbar__item a {

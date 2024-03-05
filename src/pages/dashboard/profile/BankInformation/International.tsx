@@ -16,17 +16,19 @@ import {
   Input,
   Label,
   Row,
+  Spinner,
 } from "reactstrap";
 import { useEffect, useState } from "react";
 
-import profile from "assets/scss/dashboard/profile.module.scss";
 import { BankAccountsResponse } from "types/profile";
 import { MdClose } from "react-icons/md";
-import { LuCheck, LuPencil } from "react-icons/lu";
+import { LuCheck } from "react-icons/lu";
 import { useCreateBankAccountMutation } from "store/api/profile-management";
 import DeleteModal from "./DeleteModal";
 import IBANNumber from "components/Input/IBANNumber";
 import { persianToEnglishNumbers } from "helpers";
+
+import profile from "assets/scss/dashboard/profile.module.scss";
 
 type Props = {
   accounts: BankAccountsResponse[];
@@ -59,7 +61,7 @@ export default function International({ accounts, isLoading }: Props) {
 
   const resolver = yupResolver(
     Yup.object().shape({
-      ownerFullName: Yup.string(),
+      ownerFullName: Yup.string().required(),
       iban: Yup.string().required(),
       bankId: Yup.string().required(),
     }),
@@ -103,8 +105,12 @@ export default function International({ accounts, isLoading }: Props) {
   }, [accounts]);
 
   const submitHandler = (data) => {
-    createAccount({ ...data, iban: "TR" + persianToEnglishNumbers(data.iban) });
+    const ibanNumber = persianToEnglishNumbers(data.iban);
+
+    createAccount({ ...data, iban: "TR" + ibanNumber });
   };
+
+  console.log(errors);
 
   return (
     <>
@@ -112,7 +118,7 @@ export default function International({ accounts, isLoading }: Props) {
         <CardHeader>
           <CardTitle>اطلاعات بانکی بین&zwnj;المللی</CardTitle>
         </CardHeader>
-        <CardBody>
+        <CardBody id="international-accounts">
           <AlertWarning
             hasIcon
             key="warning-international-account"
@@ -145,6 +151,8 @@ export default function International({ accounts, isLoading }: Props) {
                               setBankId={(id) => {
                                 setValue("bankId", id);
                               }}
+                              disabled={formLoading}
+                              invalid={Boolean(errors.ownerFullName)}
                             />
                           </FormGroup>
                         )}
@@ -158,6 +166,7 @@ export default function International({ accounts, isLoading }: Props) {
                           <FormGroup className={profile["accounts-field"]}>
                             <Label> صاحب حساب:</Label>
                             <Input
+                              disabled={formLoading}
                               value={value}
                               ref={ref}
                               onChange={onChange}
@@ -165,6 +174,7 @@ export default function International({ accounts, isLoading }: Props) {
                               type="text"
                               className="form-control d-rtl"
                               id={`input23_001`}
+                              invalid={Boolean(errors.ownerFullName)}
                             />
                           </FormGroup>
                         )}
@@ -179,17 +189,12 @@ export default function International({ accounts, isLoading }: Props) {
                     disabled={accounts.length <= 0}
                     onClick={() => {
                       setIsOpenForm(false);
-                      //   resetForm();
-                      //   setEditOption({
-                      //     isEdit: false,
-                      //     bankId: "",
-                      //   });
                     }}
                   >
                     <MdClose />
                   </Button>
                   <Button type="submit" color="icon-success">
-                    <LuCheck />
+                    {formLoading ? <Spinner size="sm" /> : <LuCheck />}
                   </Button>
                 </Col>
               </Row>
@@ -304,7 +309,6 @@ export default function International({ accounts, isLoading }: Props) {
                         // const logo = searchIranianBanks(
                         //   account?.cardNumber
                         // ).logo;
-                        console.log(account);
 
                         setDeleteOptions({
                           isOpen: true,
@@ -357,6 +361,7 @@ export default function International({ accounts, isLoading }: Props) {
         </CardBody>
       </Card>
       <DeleteModal
+        type="TRY"
         setDeleteOptions={setDeleteOptions}
         deleteOptions={deleteOptions}
       />

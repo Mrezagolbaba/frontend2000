@@ -17,6 +17,7 @@ export const walletManagement = enhancedApi.injectEndpoints({
           data,
         };
       },
+      invalidatesTags: ["wallets"],
     }),
     withdraw: builder.mutation<TransactionResponse, WithdrawRequest>({
       query(data) {
@@ -26,6 +27,7 @@ export const walletManagement = enhancedApi.injectEndpoints({
           data,
         };
       },
+      invalidatesTags: ["wallets"],
     }),
     depositInfo: builder.query<DepositInfoResponse[], CurrencyCode>({
       query(currencyCode) {
@@ -74,15 +76,28 @@ export const walletManagement = enhancedApi.injectEndpoints({
         };
       },
     }),
-
+    transaction: builder.query<TransactionResponse, string>({
+      query(id) {
+        return {
+          method: "GET",
+          url: `/transactions/${id}`,
+        };
+      },
+    }),
     transactions: builder.query<TransactionResponse[], any>({
-      query({filters}) {
+      query(params) {
         return {
           method: "GET",
           url: `/transactions`,
-          params: {
-            filter: filters,
-          },
+          params: params,
+        };
+      },
+    }),
+    wallets: builder.query<any, void>({
+      query() {
+        return {
+          method: "GET",
+          url: "/wallets",
         };
       },
     }),
@@ -98,5 +113,8 @@ export const {
   useResendOtpWithdrawMutation,
   useCancelTransactionMutation,
   useTransactionFeeQuery,
+  useLazyTransactionQuery,
+  useTransactionQuery,
   useTransactionsQuery,
+  useWalletsQuery,
 } = walletManagement;

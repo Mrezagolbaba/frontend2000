@@ -3,25 +3,26 @@ import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 import { useCurrencySwapQuery } from "store/api/exchange-management";
-import { convertTextSingle } from "helpers";
 import moment from "jalali-moment";
 
 import Deposit from "assets/img/icons/depositIcon.svg";
+import { tomanShow } from "helpers";
 
 export default function LastTransactions() {
-  const { data, isLoading } = useCurrencySwapQuery({
-    params: {
-      join: "transactions",
-    },
+  const { data } = useCurrencySwapQuery({
+    sort: "createdAt,DESC",
+    join: "transactions",
   });
-
   return (
     <Card className="h-100">
       <CardHeader className="d-flex flex-row justify-content-between align-items-center">
-        <CardTitle tag="h5"> تراکنش های اخیر </CardTitle>
-        <a className={dashboard["sub-link"]} href="/dashboard/orders">
-          سفارشات من
-        </a>
+        <CardTitle tag="h5"> آخرین معاملات</CardTitle>
+        <div className="card-action">
+          <a className={dashboard["sub-link"]} href="/dashboard/orders">
+            سفارشات من
+          </a>
+        </div>
+       
       </CardHeader>
       <CardBody>
         <div className={dashboard["table-responsive"]}>
@@ -33,7 +34,7 @@ export default function LastTransactions() {
                 <tr>
                   <th scope="col">بازار</th>
                   <th scope="col">مقدار</th>
-                  <th scope="col">قیمت </th>
+                  <th scope="col">مفدار دریافتی </th>
                   <th scope="col">زمان</th>
                 </tr>
               </thead>
@@ -41,7 +42,7 @@ export default function LastTransactions() {
             <tbody>
               {data &&
                 data?.length > 0 &&
-                data.slice(0, 7).map((item, index) => (
+                data.slice(-7).map((item, index) => (
                   <tr key={index}>
                     <td>
                       <span className="text-success">
@@ -62,7 +63,16 @@ export default function LastTransactions() {
                         ? (Number(item?.sourceAmount) / 10).toLocaleString()
                         : Number(item?.sourceAmount).toLocaleString()}
                     </td>
-                    <td>{item?.exchangeRate.substring(0, 5)}</td>
+                    <td>
+                      <span style={{ fontSize: "10px" }}>
+                        {item.destinationCurrencyCode === "IRR"
+                          ? "TMN"
+                          : item.destinationCurrencyCode}
+                      </span>{" "}
+                      {item.destinationCurrencyCode === "IRR"
+                        ? tomanShow({ value: item?.destinationAmount })
+                        : item?.destinationAmount}
+                    </td>
                     <td>
                       <span className="d-ltr d-block">
                         {moment(item?.createdAt)

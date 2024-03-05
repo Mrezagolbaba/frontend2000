@@ -6,7 +6,7 @@
   width: 100%;
   border-radius: 10px;
   margin-bottom: 20px;
-  .otp-header{
+  .otp-header {
     width: 100%;
     padding: 15px 15px;
     display: flex;
@@ -16,17 +16,18 @@
   .otp-content {
     padding: 30px 20px;
     display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     .otp-title {
-      margin-left: auto;
       .otp-title-text {
+        text-align: center;
+        line-height: 26px;
         color: #03041b66;
         font-size: 14px;
         span {
-          text-align: center;
-          direction: rtl;
+          direction: ltr;
+          padding: 0 5px;
         }
       }
     }

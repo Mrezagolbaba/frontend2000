@@ -12,7 +12,7 @@ export interface RegisterFormData {
   password: string;
   selectedCountry: string;
   terms: boolean;
-  codeReference: string;
+  inviteCode: string;
 }
 
 export interface InformationFormData {

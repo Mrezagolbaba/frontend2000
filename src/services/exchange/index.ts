@@ -5,7 +5,6 @@ type RequestType = {
   userId: string;
 };
 export const getCurrencySwap = async ({ userId }: RequestType) => {
-  console.log(userId);
   try {
     const response = await request.get(`/currency-swaps?join=transactions`);
     return response.data;

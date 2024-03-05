@@ -24,7 +24,7 @@ const Header = ({ onSidebarToggle }: Props) => {
           </div>
           <ul className={dashboard.header__navbar}>
             <li>
-              <a href="/dashboard/buy-sell">خرید و فروش سریع</a>
+              <a href="/dashboard/exchange">خرید و فروش سریع</a>
             </li>
             <li>
               <a href="/dashboard/market">بازارها</a>
@@ -150,13 +150,13 @@ const Header = ({ onSidebarToggle }: Props) => {
                 </button>
               </li>
               <li>
-                <a href="#">بازارها</a>
+                <a href="/dashboard/market">بازارها</a>
               </li>
-              <li>
+              {/* <li>
                 <a href="#">خرید و فروش پیشرفته</a>
-              </li>
+              </li> */}
               <li>
-                <a href="/dashboard/buy-sell">خرید و فروش سریع</a>
+                <a href="/dashboard/exchange">خرید و فروش سریع</a>
               </li>
             </ul>
           </div>

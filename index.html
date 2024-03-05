@@ -7,38 +7,23 @@
     <link
       rel="manifest"
       crossorigin="use-credentials"
-      href="public/manifest.json"
+      href="./public/manifest.json"
     />
     <link rel="apple-touch-icon" href="maskble.png" />
     <meta name="theme-color" content="#317EFB" />
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=GTM-5QXC3XK3"
-    ></script>
+    <!-- Google Tag Manager -->
     <script>
-      !(function (e, t, a, n, g) {
-        (e[n] = e[n] || []),
-          e[n].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-        var m = t.getElementsByTagName(a)[0],
-          r = t.createElement(a);
-        (r.async = !0),
-          (r.src = "https://www.googletagmanager.com/gtm.js?id=GTM-5QXC3XK3"),
-          m.parentNode.insertBefore(r, m);
-      })(window, document, "script", "dataLayer");
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "GTM-WRSW3TKG");
     </script>
+    <!-- End Google Tag Manager -->
   </head>
   <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript
-      ><iframe
-        src="https://www.googletagmanager.com/ns.html?id=GTM-5QXC3XK3"
-        height="0"
-        width="0"
-        style="display: none; visibility: hidden"
-      ></iframe
-    ></noscript>
-    <!-- End Google Tag Manager (noscript) -->
     <div id="root"></div>
     <script type="module" src="./src/main.tsx"></script>
   </body>

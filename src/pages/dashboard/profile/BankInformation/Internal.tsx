@@ -1,9 +1,8 @@
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { AlertInfo, AlertWarning } from "components/AlertWidget";
+import { AlertWarning } from "components/AlertWidget";
 import { Controller, useForm } from "react-hook-form";
 import { CiTrash } from "react-icons/ci";
-import { FaExclamation } from "react-icons/fa";
 import {
   Button,
   ButtonGroup,
@@ -19,31 +18,24 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
-import { LuCheck, LuPencil } from "react-icons/lu";
+import { LuCheck } from "react-icons/lu";
 import { useAppSelector } from "store/hooks";
-
-import profile from "assets/scss/dashboard/profile.module.scss";
 import AccountNumberInput from "components/Input/AccountNumber";
-import Dialog from "components/Dialog";
 import { useEffect, useState } from "react";
-import { formatShowAccount, searchIranianBanks } from "helpers/filesManagement";
-import { PiCreditCardLight } from "react-icons/pi";
-import toast from "react-hot-toast";
 import { BankAccountsResponse, FormBankAccountRequest } from "types/profile";
-import {
-  useCreateBankAccountMutation,
-  useDeleteBankAccountMutation,
-  useEditBankAccountMutation,
-} from "store/api/profile-management";
+import { useCreateBankAccountMutation } from "store/api/profile-management";
 import { MdClose } from "react-icons/md";
 import DeleteModal from "./DeleteModal";
+import { persianToEnglishNumbers } from "helpers";
+
+import profile from "assets/scss/dashboard/profile.module.scss";
 
 const resolver = yupResolver(
   Yup.object().shape({
     iban: Yup.string(),
-    cardNumber: Yup.string().required().max(16,"فرمت شماره کارت اشتباه است."),
+    cardNumber: Yup.string().required().max(16, "فرمت شماره کارت اشتباه است."),
     bankId: Yup.string().required(),
-  })
+  }),
 );
 
 type Props = {
@@ -55,17 +47,11 @@ export default function Internal({ accounts, isLoading }: Props) {
   const { firstName, lastName } = useAppSelector((state) => state.user);
 
   const [isOpenForm, setIsOpenForm] = useState<boolean>(false);
-  const [editOption, setEditOption] = useState<{
-    isEdit: boolean;
-    bankId: string;
-  }>({
-    isEdit: false,
-    bankId: "",
-  });
   const [deleteOptions, setDeleteOptions] = useState<{
     isOpen: boolean;
     id?: string;
     accountNumber?: string;
+    iban?: string;
   }>({
     isOpen: false,
     id: undefined,
@@ -75,25 +61,21 @@ export default function Internal({ accounts, isLoading }: Props) {
   const [createAccount, { isLoading: formLoading, isSuccess }] =
     useCreateBankAccountMutation();
 
-  const [editAccount] = useEditBankAccountMutation();
-
-  const {
-    handleSubmit,
-    control,
-    reset,
-    setValue,
-    formState: { errors },
-  } = useForm<FormBankAccountRequest>({
-    mode: "onChange",
-    defaultValues: {
-      cardNumber: "",
-      bankId: "",
-    },
-    resolver,
-  });
+  const { handleSubmit, control, reset, setValue } =
+    useForm<FormBankAccountRequest>({
+      mode: "onChange",
+      defaultValues: {
+        cardNumber: "",
+        bankId: "",
+      },
+      resolver,
+    });
 
   const submitHandler = (data) => {
-    editOption.isEdit ? editAccount(data) : createAccount(data);
+    createAccount({
+      ...data,
+      cardNumber: persianToEnglishNumbers(data.cardNumber),
+    });
   };
 
   const resetForm = () => {
@@ -102,10 +84,6 @@ export default function Internal({ accounts, isLoading }: Props) {
       bankId: "",
     });
   };
-
-  console.log(errors);
-  
-
 
   useEffect(() => {
     if (isSuccess) {
@@ -146,11 +124,10 @@ export default function Internal({ accounts, isLoading }: Props) {
                           <FormGroup className={profile["accounts-field"]}>
                             <Label>شماره کارت:</Label>
                             <AccountNumberInput
+                              disabled={formLoading}
                               value={value}
                               onChange={onChange}
                               setBankId={(val) => {
-                                console.log("bankId", val);
-
                                 setValue("bankId", val);
                               }}
                               name={name}
@@ -168,16 +145,12 @@ export default function Internal({ accounts, isLoading }: Props) {
                         onClick={() => {
                           setIsOpenForm(false);
                           resetForm();
-                          setEditOption({
-                            isEdit: false,
-                            bankId: "",
-                          });
                         }}
                       >
                         <MdClose />
                       </Button>
                       <Button type="submit" color="icon-success">
-                        <LuCheck />
+                        {formLoading ? <Spinner size="sm" /> : <LuCheck />}
                       </Button>
                     </Col>
                   </Row>
@@ -249,80 +222,58 @@ export default function Internal({ accounts, isLoading }: Props) {
             </>
           ) : (
             accounts.length > 0 &&
-            accounts.map((account) => {
-              if (editOption.isEdit && editOption.bankId === account.bankId)
-                return null;
-              else
-                return (
-                  <Row>
-                    <Col xs={11}>
-                      <Row className="px-2">
-                        <Col xs={12} xl={6}>
-                          <FormGroup className={profile["accounts-field"]}>
-                            <Label>شماره کارت:</Label>
-                            <AccountNumberInput
-                              value={account?.cardNumber}
-                              name={account?.cardNumber}
-                              id={account?.id}
-                              disabled={true}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col xs={12} xl={6}>
-                          <FormGroup className={profile["accounts-field"]}>
-                            <Label>شماره شبا:</Label>
-                            <div className={profile["iban-input-control"]}>
-                              <span id={`sheba_${account?.id}`}>IR</span>
-                              <Input
-                                value={account?.iban}
-                                name={account?.iban}
-                                type="text"
-                                id={`input23_${account?.id}`}
-                                placeholder=""
-                                disabled={true}
-                              />
-                            </div>
-                          </FormGroup>
-                        </Col>
-                      </Row>
+            accounts.map((account) => (
+              <Row>
+                <Col xs={11}>
+                  <Row className="px-2">
+                    <Col xs={12} xl={6}>
+                      <FormGroup className={profile["accounts-field"]}>
+                        <Label>شماره کارت:</Label>
+                        <AccountNumberInput
+                          value={account?.cardNumber}
+                          name={account?.cardNumber}
+                          id={account?.id}
+                          disabled={true}
+                        />
+                      </FormGroup>
                     </Col>
-                    <Col sm={1} className="align-self-center">
-                      <Button
-                        type="button"
-                        color="icon-danger"
-                        onClick={() => {
-                          setDeleteOptions({
-                            isOpen: true,
-                            id: account?.id,
-                            accountNumber: account?.cardNumber,
-                          });
-                        }}
-                      >
-                        <CiTrash />
-                      </Button>
-                      {/* <Button
-                        type="button"
-                        color="icon-secondary"
-                        disabled
-                        onClick={() => {
-                          setIsOpenForm(true);
-                          reset({
-                            bankId: account.bankId,
-                            cardNumber: account.cardNumber,
-                            iban: account.iban,
-                          });
-                          setEditOption({
-                            isEdit: true,
-                            bankId: account?.bankId,
-                          });
-                        }}
-                      >
-                        <LuPencil />
-                      </Button> */}
+                    <Col xs={12} xl={6}>
+                      <FormGroup className={profile["accounts-field"]}>
+                        <Label>شماره شبا:</Label>
+                        <div className={profile["iban-input-control"]}>
+                          <span id={`sheba_${account?.id}`}>IR</span>
+                          <Input
+                            value={account?.iban}
+                            name={account?.iban}
+                            type="text"
+                            id={`input23_${account?.id}`}
+                            placeholder=""
+                            disabled={true}
+                            className="latin-font"
+                          />
+                        </div>
+                      </FormGroup>
                     </Col>
                   </Row>
-                );
-            })
+                </Col>
+                <Col sm={1} className="align-self-center">
+                  <Button
+                    type="button"
+                    color="icon-danger"
+                    onClick={() => {
+                      setDeleteOptions({
+                        isOpen: true,
+                        id: account?.id,
+                        iban: account?.iban,
+                        accountNumber: account?.cardNumber,
+                      });
+                    }}
+                  >
+                    <CiTrash />
+                  </Button>
+                </Col>
+              </Row>
+            ))
           )}
           <Row>
             <Col xs={12}>
@@ -344,6 +295,7 @@ export default function Internal({ accounts, isLoading }: Props) {
       </Card>
 
       <DeleteModal
+        type="IRR"
         setDeleteOptions={setDeleteOptions}
         deleteOptions={deleteOptions}
       />

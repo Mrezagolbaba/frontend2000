@@ -7,7 +7,7 @@ import { PiShieldCheckeredFill } from "react-icons/pi";
 import toast from "react-hot-toast";
 
 import Auth from "layouts/auth";
-import { registerSchema, inviteCodes } from "pages/auth/validationForms";
+import { registerSchema } from "pages/auth/validationForms";
 import { RegisterFormData } from "pages/auth/types";
 import { useCreateUser } from "services/auth";
 import SelectCountry from "components/SelectCountry";
@@ -46,18 +46,13 @@ const SignupPage: React.FC = () => {
       password: "",
       selectedCountry: "98",
       terms: false,
-      codeReference: "",
+      inviteCode: "",
     },
     resolver,
   });
 
   const handleRegister = async (data: RegisterFormData) => {
     setIsLoading(true);
-    const findReference = inviteCodes.findIndex(
-      (RFCode) => RFCode === data.codeReference.toUpperCase(),
-    );
-
-    if (findReference >= 0) {
       const phoneNumber = formatPhoneNumber(
         persianToEnglishNumbers(data.phoneNumber),
         data.selectedCountry,
@@ -65,6 +60,7 @@ const SignupPage: React.FC = () => {
       const userData = {
         phoneNumber,
         password: data.password,
+        inviteCode:  data.inviteCode.toUpperCase()
       };
       await registerRequest
         .mutateAsync(userData)
@@ -81,12 +77,6 @@ const SignupPage: React.FC = () => {
         .catch(() => {
           setIsLoading(false);
         });
-    } else {
-      setIsLoading(false);
-      toast.error("کد معرف اشتباه است.", {
-        position: "bottom-left",
-      });
-    }
   };
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>
@@ -163,7 +153,7 @@ const SignupPage: React.FC = () => {
                     />
                   </Col>
                   <Controller
-                    name="codeReference"
+                    name="inviteCode"
                     control={control}
                     render={({ field: { name, value, onChange, ref } }) => (
                       <div className="mb-3">

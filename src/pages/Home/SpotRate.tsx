@@ -22,6 +22,7 @@ import graphR from "assets/img/graph-r.png";
 import home from "assets/scss/landing/home.module.scss";
 import { Link } from "react-router-dom";
 import { convertIRRToToman } from "helpers";
+import { useAppSelector } from "store/hooks";
 
 interface ExchangeRateData {
   expiresAt: string;
@@ -30,6 +31,7 @@ interface ExchangeRateData {
 }
 
 const SpotRate = () => {
+  const { id } = useAppSelector((state) => state.user);
   const [exchangeRates, setExchangeRates] = useState<{
     [key: string]: { IRR: number | string; USD: number | string };
   }>({});
@@ -39,10 +41,10 @@ const SpotRate = () => {
 
   const currencyPairs = [
     { code: "USDT", name: "تتر", imgSrc: USDT },
-    { code: "EUR", name: "یورو", imgSrc: EUR },
-    { code: "CAD", name: "دلار کانادا", imgSrc: CAD },
-    { code: "GBP", name: "پوند", imgSrc: GBP },
-    { code: "TRY", name: "لیر", imgSrc: lira },
+    // { code: "EUR", name: "یورو", imgSrc: EUR },
+    // { code: "CAD", name: "دلار کانادا", imgSrc: CAD },
+    // { code: "GBP", name: "پوند", imgSrc: GBP },
+    // { code: "TRY", name: "لیر", imgSrc: lira },
     // Add more currency pairs as needed
   ];
 
@@ -90,12 +92,12 @@ const SpotRate = () => {
             نرخ لحظه ای <span className="text-primary">ارزها</span>
           </h3>
         </div>
-        <div className={home["currency-rates__tabs"]}>
+        {/* <div className={home["currency-rates__tabs"]}>
           <FilterNavCoin
             activeTab={activeTab}
             handleTabClick={handleTabClick}
           />
-        </div>
+        </div> */}
         <div className={home["tab-content"]} id="myTabContent">
           <div
             className={`${home.fade} ${home.show} ${home.active}}`}
@@ -147,7 +149,7 @@ const SpotRate = () => {
                         <td>
                           <div className="table-crypto-actions">
                             <Link
-                              to="/dashboard"
+                              to={id ? "/dashboard/exchange" : "/login"}
                               className="btn btn-outline-primary "
                             >
                               معامله
@@ -211,14 +213,14 @@ const SpotRate = () => {
             </div>
           </div>
         </div>
-        <div className={home["more-section-button"]}>
+        {/* <div className={home["more-section-button"]}>
           <a href="/coins">
             دیدن همه
             <span className="icon">
               <HiOutlineChevronLeft />
             </span>
           </a>
-        </div>
+        </div> */}
       </Container>
     </section>
   );

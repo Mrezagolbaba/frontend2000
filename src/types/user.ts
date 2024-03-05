@@ -1,9 +1,11 @@
+import { OTPType } from "./settings";
+
 export interface IUser {
   id: string;
   email: string;
   emailVerified: boolean;
   password: string;
-  otpMethod: string;
+  otpMethod: OTPType;
   firstTierVerified: boolean;
   secondTierVerified: boolean;
   internationalServicesVerified: boolean;

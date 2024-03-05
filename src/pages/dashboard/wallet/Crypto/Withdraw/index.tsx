@@ -13,20 +13,19 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import Currency from "components/Input/CurrencyInput";
+import { useEffect } from "react";
+
+import tron from "assets/img/network/tron.svg";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 
-// import eth from "assets/img/network/eth.svg";
-import tron from "assets/img/network/tron.svg";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
-import Currency from "components/Input/CurrencyInput";
-import { useState } from "react";
-import { useForm } from "@refinedev/core";
-import toast from "react-hot-toast";
 import {
-  useResendOtpWithdrawMutation,
-  useVerifyOtpWithdrawMutation,
+  useTransactionFeeQuery,
+  useWithdrawMutation,
 } from "store/api/wallet-management";
+import { coinShow } from "helpers";
 
 type CryptoFormType = {
   network: string;
@@ -49,6 +48,35 @@ const WithdrawCrypto = ({
   setShowOtp: () => void;
   setTransactionId: (id: string) => void;
 }) => {
+  //hooks
+  const { data: fee } = useTransactionFeeQuery("USDT");
+  const [withdraw, { data: response, isLoading: formLoading, isSuccess }] =
+    useWithdrawMutation();
+  const resolver = yupResolver(
+    Yup.object().shape({
+      network: Yup.string().required(),
+      amount: Yup.string().required("مبلغ برداشت را وارد کنید."),
+      destination: Yup.string().required("آدرس کیف پول را وارد کنید."),
+    }),
+  );
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors },
+    setError,
+    clearErrors,
+  } = useRHF<CryptoFormType>({
+    mode: "onChange",
+    defaultValues: {
+      network: "TRC20",
+      amount: "",
+      destination: "",
+    },
+    resolver,
+  });
+
+  //constants
   const optionList: OptionType[] = [
     {
       content: (
@@ -63,53 +91,45 @@ const WithdrawCrypto = ({
     },
   ];
 
-  const resolver = yupResolver(
-    Yup.object().shape({
-      network: Yup.string().required(),
-      amount: Yup.string().required(),
-      destination: Yup.string().required(),
-    }),
-  );
-  const { formLoading, onFinish } = useForm({
-    action: "create",
-    resource: "transactions/withdraw",
-    onMutationSuccess: (data, variables, context, isAutoSave) => {
-      setShowOtp();
-      onCloseModal();
-    },
-  });
-
-  const {
-    handleSubmit,
-    control,
-    setValue,
-    formState: { errors },
-  } = useRHF<CryptoFormType>({
-    mode: "onChange",
-    defaultValues: {
-      network: "TRC20",
-      amount: "",
-      destination: "",
-    },
-    resolver,
-  });
+  //handlers
   const onSubmit = async (data: CryptoFormType) => {
-    if (Number(data.amount) > stock)
-      toast.error("مبلغ انتخابی بیش تر از موجودی شما می باشد.", {
-        position: "bottom-left",
+    if (data.destination.length < 34)
+      setError("destination", {
+        type: "manual",
+        message: "آدرس کیف پول وارد شده صحیح نمی باشد.",
+      });
+    else if (Number(data.amount) < fee?.withdrawMinAmount)
+      setError("amount", {
+        type: "manual",
+        message: `مبلغ وارد شده نمی تواند کمتر از ${coinShow(fee?.withdrawMinAmount, "USDT")} باشد.`,
+      });
+    else if (Number(data.amount) > stock)
+      setError("amount", {
+        type: "manual",
+        message: "موجودی کیف پول شما کافی نیست.",
       });
     else
-      onFinish({
+      withdraw({
         currencyCode: currency,
         amount: data.amount,
         destination: data.destination,
-      }).then((res: any) => {
-        if (res) {
-          setTransactionId(res.data?.id);
-        }
       });
   };
 
+  //life-cycle
+  useEffect(() => {
+    if (isSuccess) {
+      setTransactionId(response?.id as string);
+      setShowOtp();
+      onCloseModal();
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess, response]);
+
+  console.log(errors);
+
+  //render
   return (
     <div className="px-2">
       <AlertWarning
@@ -159,15 +179,17 @@ const WithdrawCrypto = ({
                   <Currency
                     name={name}
                     value={value}
-                    onChange={(val) => setValue(name, val)}
-                    // placeholder="مبلغ را به تومان وارد کنید"
-                    hasError={Boolean(errors?.[name])}
+                    onChange={(val) => {
+                      clearErrors(name);
+                      setValue(name, val);
+                    }}
+                    hasError={Boolean(errors?.amount)}
                   />
                   {errors?.[name] && (
                     <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                   )}
                   <FormText>
-                    موجودی شما: {stock} {currency}
+                    موجودی شما: {coinShow(stock.toString(), "USDT")}
                   </FormText>
                 </FormGroup>
               )}
@@ -185,9 +207,12 @@ const WithdrawCrypto = ({
                   <Input
                     name={name}
                     value={value}
-                    onChange={onChange}
-                    placeholder="آدرس کیف پول خود را وارد کنید"
-                    // hasError={Boolean(errors?.[name])}
+                    onChange={(e) => {
+                      clearErrors(name);
+                      onChange(e);
+                    }}
+                    className="latin-font"
+                    invalid={Boolean(errors?.destination)}
                   />
                   {errors?.[name] && (
                     <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>

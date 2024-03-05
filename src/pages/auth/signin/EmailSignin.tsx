@@ -59,6 +59,7 @@ const EmailSignin = () => {
           navigate("/email-otp", {
             state: {
               email: userData.email,
+              page: "login",
             },
           });
         }
@@ -125,7 +126,7 @@ const EmailSignin = () => {
                       <Button
                         color="link"
                         tag="a"
-                        href="/forget-password-with-email"
+                        href="/forget-password"
                       >
                         رمز عبور را فراموش کرده&zwnj;ام!
                       </Button>

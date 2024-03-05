@@ -3,6 +3,7 @@ import { Button, Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 import Dialog from "components/Dialog";
 import Deposit from "./Deposit";
 import Withdraw from "./Withdraw";
+import { tomanShow } from "helpers";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 
@@ -32,9 +33,7 @@ export default function RialCard({ stock, isLoading }: Props) {
               </div>
             ) : (
               <strong className="d-inline-block">
-                {(Number(stock.availableBalance || 0) / 10).toLocaleString(
-                  "IRR",
-                )}
+                {tomanShow({ value: stock.availableBalance })}
                 <small>تومان</small>
               </strong>
             )}

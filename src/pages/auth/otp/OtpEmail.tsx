@@ -6,7 +6,6 @@ import { toast } from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { resendOtp, sendOtp } from "services/auth";
 
-import auth from "assets/scss/auth/auth.module.scss";
 import {
   Button,
   Card,
@@ -17,12 +16,17 @@ import {
   Spinner,
 } from "reactstrap";
 import { useEffect, useState } from "react";
-import { persianToEnglishNumbers } from "helpers";
+import { maskingString, persianToEnglishNumbers } from "helpers";
 import OTPInput from "react-otp-input";
+import { AlertWarning } from "components/AlertWidget";
+
+import auth from "assets/scss/auth/auth.module.scss";
+import otpStyle from "assets/scss/components/Input/OTPInput.module.scss";
+
 const OtpEmail = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const email = location.state.email;
+  const { email, page, method } = location.state;
 
   const [timeInSeconds, setTimeInSeconds] = useState(120);
 
@@ -45,7 +49,7 @@ const OtpEmail = () => {
     });
   };
   const handleResend = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
     const data = {
@@ -62,7 +66,7 @@ const OtpEmail = () => {
   const handleOTP = async (data: { code: string }) => {
     const formData = {
       code: persianToEnglishNumbers(data.code),
-      type: "VERIFY_EMAIL",
+      type: page === "login" ? "AUTH" : "VERIFY_EMAIL",
       method: "EMAIL",
     };
     await sendOtp(formData)
@@ -96,9 +100,17 @@ const OtpEmail = () => {
           <CardBody className={auth["card-body"]}>
             <h4 className={auth.title}>تایید ایمیل</h4>
             <div className="auth-summary">
+              {page !== "login" && (
+                <AlertWarning
+                  hasIcon
+                  text="ایمیل شما تایید نشده است. برای ادامه فعالیت خود لطفا کد تایید ارسال شده به ایمیل خود را وارد کنید."
+                />
+              )}
               <p className={auth.text}>
                 کد تایید ارسال شده به
-                <span className="d-inline-block">{email}</span>
+                <span className="d-inline-block">
+                  {page === "login" ? maskingString(email, 1, 14) : email}
+                </span>
                 را وارد کنید.
               </p>
             </div>
@@ -113,12 +125,15 @@ const OtpEmail = () => {
                     <Controller
                       name="code"
                       control={control}
-                      render={({field:{value}}) => (
+                      render={({ field: { value } }) => (
                         <OTPInput
-                          containerStyle={auth["otp-container"]}
+                          containerStyle={otpStyle["otp-container"]}
                           value={value}
-                          onChange={(code) => setValue("code", code)}
-                          inputStyle={auth["otp-input"]}
+                          onChange={(code) => {
+                            setValue("code", code);
+                            code.length === 6 && handleOTP({ code });
+                          }}
+                          inputStyle={otpStyle["otp-input"]}
                           numInputs={6}
                           renderSeparator={undefined}
                           placeholder="-"

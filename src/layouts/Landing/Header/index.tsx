@@ -7,12 +7,14 @@ import home from "assets/scss/landing/home.module.scss";
 import { Button, Container } from "reactstrap";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { TbMenu } from "react-icons/tb";
+import { useAppSelector } from "store/hooks";
 
 type Props = {
   disableBanner?: boolean;
 };
 const Header = ({ disableBanner = false }: Props) => {
   const [openOverlayMenu, setOpenOverlayMenu] = useState<boolean>(false);
+  const user = useAppSelector((state) => state.user);
 
   const { pathname } = useLocation();
 
@@ -43,21 +45,34 @@ const Header = ({ disableBanner = false }: Props) => {
             >
               <li>
                 <div className={home.header__auth}>
-                  <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
-                    <li className={home.navbar__item}>
-                      <Link to="/login">ورود</Link>
-                    </li>
-                    <li className={home.header__auth__register}>
+                  {user.id ? (
+                    <div>
                       <Button
                         tag="a"
-                        href="/register"
-                        color="primary"
+                        href="/dashboard/profile"
+                        color="landing-primary"
                         className={home["rounded-button"]}
                       >
-                        ثبت نام
+                        {user.firstName + " " + user.lastName}
                       </Button>
-                    </li>
-                  </ul>
+                    </div>
+                  ) : (
+                    <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
+                      <li className={home.navbar__item}>
+                        <Link to="/login">ورود</Link>
+                      </li>
+                      <li className={home.header__auth__register}>
+                        <Button
+                          tag="a"
+                          href="/register"
+                          color="primary"
+                          className={home["rounded-button"]}
+                        >
+                          ثبت نام
+                        </Button>
+                      </li>
+                    </ul>
+                  )}
                 </div>
               </li>
               <li
@@ -115,21 +130,34 @@ const Header = ({ disableBanner = false }: Props) => {
           </nav>
 
           <div className={home.header__auth}>
-            <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
-              <li className={home.navbar__item}>
-                <Link to="/login">ورود</Link>
-              </li>
-              <li className={home.header__auth__register}>
+            {user.id ? (
+              <div>
                 <Button
                   tag="a"
-                  href="/register"
+                  href="/dashboard/profile"
                   color="landing-primary"
                   className={home["rounded-button"]}
                 >
-                  ثبت نام
+                  {user.firstName + " " + user.lastName}
                 </Button>
-              </li>
-            </ul>
+              </div>
+            ) : (
+              <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
+                <li className={home.navbar__item}>
+                  <Link to="/login">ورود</Link>
+                </li>
+                <li className={home.header__auth__register}>
+                  <Button
+                    tag="a"
+                    href="/register"
+                    color="landing-primary"
+                    className={home["rounded-button"]}
+                  >
+                    ثبت نام
+                  </Button>
+                </li>
+              </ul>
+            )}
           </div>
           <div className={home.header__hamburger}>
             {/* <button type="button" onclick="respMenu.open()"> */}
@@ -151,11 +179,11 @@ const Header = ({ disableBanner = false }: Props) => {
             <div className={home.header__intro}>
               <h1>آرسونیکس، همراه ارز دیجیتال شما</h1>
               <p>
-              تسویه آنی تومان و بیش از 30 واحد پول دیگر       
+                ارز دیجیتال، تومان یا فیات؛ بدون محدودیت، به سرعت معامله کنید
               </p>
               <Button
                 tag="a"
-                href="/register"
+                href={user.id ? "/dashboard" : "/register"}
                 color="landing-primary"
                 className={home["rounded-button"]}
               >

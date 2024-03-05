@@ -10,9 +10,14 @@ import exchangeReducer from "store/reducers/features/exchange/exchangeSlice";
 import rateReducer from "store/reducers/features/rates/rateSlice";
 
 import { api } from "store/api";
+import storage from 'redux-persist/lib/storage';
+import { persistReducer } from "redux-persist";
 // ==============================|| COMBINE REDUCERS ||============================== //
 
-const reducers = combineReducers({
+
+
+
+const rootReducers = combineReducers({
   user: userReducer,
   setting: settingReducer,
   invoice: invoiceReducer,
@@ -21,5 +26,13 @@ const reducers = combineReducers({
   rates: rateReducer,
   [api.reducerPath]: api.reducer,
 });
+
+//persist reducers
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['user']
+}
+const reducers = persistReducer(persistConfig, rootReducers)
 
 export default reducers;

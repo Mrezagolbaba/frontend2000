@@ -3,5 +3,11 @@ declare const classNames: {
   readonly steps: "steps";
   readonly "btn-apple": "btn-apple";
   readonly "btn-google": "btn-google";
+  readonly "change-password-form": "change-password-form";
+  readonly "password-container": "password-container";
+  readonly "notices-row": "notices-row";
+  readonly "switch-input": "switch-input";
+  readonly "switch-toggle": "switch-toggle";
+  readonly "authenticator-select": "authenticator-select";
 };
 export = classNames;

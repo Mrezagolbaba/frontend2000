@@ -1,4 +1,3 @@
-import { useList } from "@refinedev/core";
 
 import Internal from "./BankInformation/Internal";
 import International from "./BankInformation/International";

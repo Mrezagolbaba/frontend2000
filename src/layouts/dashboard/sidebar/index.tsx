@@ -1,10 +1,10 @@
-import LogoArsonex from "assets/img/logo/dark.png";
+import LogoArsonex from "assets/img/logo-arsonex.png";
 import Home from "assets/img/icons/home.svg";
 import Wallet from "assets/img/icons/wallet.svg";
 import Order from "assets/img/icons/paper.svg";
 import History from "assets/img/icons/time-circle.svg";
 import AddFriend from "assets/img/icons/add-user.svg";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { Button, Nav, NavItem } from "reactstrap";
 
@@ -18,10 +18,10 @@ import { useAppSelector } from "store/hooks";
 
 type Props = {
   isOpen: boolean;
-  onSidebarToggle: () => void;
+  setIsSidebarOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
+export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
   const { firstName, lastName } = useAppSelector((state) => state.user);
   const [activeItem, setActiveItem] = useState("");
   const logout = useLogout();
@@ -31,6 +31,7 @@ export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
   React.useEffect(() => {
     const path = location.pathname;
     setActiveItem(path);
+    setIsSidebarOpen(false);
   }, [location]);
 
   const handleClick = (key: string) => {
@@ -73,7 +74,7 @@ export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
     <div className={`${dashboard.sidebar} ${isOpen ? dashboard.expanded : ""}`}>
       <button
         className={dashboard.sidebar__close}
-        onClick={() => onSidebarToggle()}
+        onClick={() => setIsSidebarOpen(false)}
       >
         <span className="icon">
           <svg
@@ -146,10 +147,9 @@ export default function Sidebar({ isOpen, onSidebarToggle }: Props) {
         <NavItem
           key="logout"
           className={`${dashboard.sidebar__navbar__item} ${dashboard["item-logout"]}`}
-          onClick={() => {}}
         >
           <a
-            onClick={handleLogout}
+            onClick={() => handleLogout()}
             style={{
               cursor: "pointer",
             }}

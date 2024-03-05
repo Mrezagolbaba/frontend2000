@@ -1,5 +1,7 @@
 import moment from "jalali-moment";
 import jalaliMoment from "jalali-moment";
+import { isEmpty } from "lodash";
+import { CurrencyCode, TransactionStatus } from "types/wallet";
 
 export function generateLabelValueArray(start: number, end: number) {
   const resultArray: { label: string; value: string }[] = [];
@@ -74,18 +76,18 @@ export const persianToEnglishNumbers = (persianNumber: string) => {
 
   if (!containsPersianDigits) {
     return persianNumber; // Return the original string if no Persian digits are found
+  } else {
+    const englishNumber = persianNumber
+      .split("")
+      .map((char) =>
+        persianDigits.includes(char)
+          ? englishDigits[persianDigits.indexOf(char)]
+          : char,
+      )
+      .join("");
+
+    return englishNumber;
   }
-
-  const englishNumber = persianNumber
-    .split("")
-    .map((char) =>
-      persianDigits.includes(char)
-        ? englishDigits[persianDigits.indexOf(char)]
-        : char,
-    )
-    .join("");
-
-  return englishNumber;
 };
 
 export const passwordListValidation = [
@@ -147,10 +149,10 @@ export function convertIRRToToman(number: number) {
 
   return formattedTomanAmount;
 }
-export const rialToToman = (rialAmount: number | string): number => {
+export const rialToToman = (rialAmount: number | string): string => {
   // Assuming 1 Toman is equal to 10 Rials
   const tomanAmount = Math.floor(Number(rialAmount) / 10);
-  return tomanAmount;
+  return tomanAmount.toString();
 };
 export const convertText = (text, direction) => {
   const currencyMap = {
@@ -255,7 +257,7 @@ export function getTitlePage(path: string) {
     { path: "/contact-us", name: "تماس با ما - آرسونیکس" },
     { path: "/terms", name: "قوانین و مقررات - آرسونیکس" },
     { path: "/dashboard", name: "داشبورد کاربری - آرسونیکس" },
-    { path: "/dashboard/buy-sell", name: "خرید و فروش سریع - آرسونیکس" },
+    { path: "/dashboard/exchange", name: "خرید و فروش سریع - آرسونیکس" },
     { path: "/dashboard/wallet", name: "کیف پول - آرسونیکس" },
     { path: "/dashboard/setting", name: "تنظیمات - آرسونیکس" },
     { path: "/dashboard/market", name: "بازارها - آرسونیکس" },
@@ -273,3 +275,87 @@ export function getTitlePage(path: string) {
   if (findTitle) return findTitle.name;
   else return "آرسونیکس";
 }
+export const convertStatus = (value: TransactionStatus) => {
+  switch (value) {
+    case "INITIATED":
+      return "ایجاد شده";
+    case "PROCESSING":
+      return "در حال پردازش";
+    case "SUCCESSFUL":
+      return "موفق";
+    case "REFUND":
+      return "بازگشت";
+    case "FAILED":
+      return "ناموفق";
+    case "EXPIRED":
+      return "تمام شده";
+    case "CANCELED":
+      return "لغو شده";
+    case "DRAFT":
+    default:
+      return "پیش نویس";
+  }
+};
+export const convertCoins = (value) => {
+  switch (value) {
+    case "USDT":
+      return "تتر";
+    case "TRX":
+      return "ترون";
+    case "TRY":
+      return "لیر ترکیه";
+    case "IRR":
+    default:
+      return "تومان";
+  }
+};
+
+type CurrencyProps = {
+  value: string;
+  currency?: CurrencyCode;
+  justFix?: boolean;
+};
+
+export const tomanShow = ({
+  value,
+  currency,
+  justFix = false,
+}: CurrencyProps): string => {
+  const intValue = parseInt(value);
+  const newValue = (intValue / 10).toFixed(0);
+  if (Number.isNaN(intValue) || newValue === "NaN") {
+    return "0";
+  }
+  if (justFix) return (Math.round(intValue * 100) / 1000).toFixed(0);
+  else if (!isEmpty(currency))
+    return `${Number(newValue).toLocaleString("IRR")} ${convertText(currency, "enToFa")}`;
+  else return Number(newValue).toLocaleString("IRR");
+};
+
+export const lirShow = ({
+  value,
+  currency,
+  justFix = false,
+}: CurrencyProps): string => {
+  const intValue = Number(value);
+  const newValue = intValue.toFixed(2);
+  if (Number.isNaN(intValue) || newValue === "NaN") {
+    return "0";
+  }
+  if (justFix) return (Math.round(intValue * 100) / 100).toFixed(2);
+  else if (!isEmpty(currency))
+    return `${Number(newValue).toLocaleString("IRR")} ${convertText(currency, "enToFa")}`;
+  else return Number(newValue).toLocaleString("IRR");
+};
+
+export const coinShow = (value: string, currency?: CurrencyCode): string => {
+  const newValue = Number(value).toFixed(6);
+
+  if (Number.isNaN(newValue) || newValue == "NaN") {
+    return "0";
+  }
+  if (!isEmpty(currency))
+    return `${Number(newValue).toLocaleString("IRR")} ${convertText(currency, "enToFa")}`;
+
+  return Number(newValue).toLocaleString("IRR");
+};

@@ -111,7 +111,7 @@ export default function TradingMarkets() {
 "
                     >
                       <a
-                        href="/dashboard/buy-sell"
+                        href="/dashboard/exchange"
                         className={dashboard["sub-link"]}
                       >
                         شروع معامله

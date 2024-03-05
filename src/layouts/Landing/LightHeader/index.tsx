@@ -6,6 +6,7 @@ import { TbMenu } from "react-icons/tb";
 import Logo from "assets/img/logo/dark.png";
 
 import home from "assets/scss/landing/home.module.scss";
+import { useAppSelector } from "store/hooks";
 
 const LightHeader = ({
   className,
@@ -16,13 +17,13 @@ const LightHeader = ({
 }) => {
   const { pathname } = useLocation();
   const [openOverlayMenu, setOpenOverlayMenu] = useState<boolean>(false);
+  const user = useAppSelector((state) => state.user);
   return (
     <>
       <div
         id="menuOverlay"
-        className={`${home["menu-overlay"]} ${
-          openOverlayMenu ? home.show : ""
-        }`}
+        className={`${home["menu-overlay"]} ${openOverlayMenu ? home.show : ""
+          }`}
       />
       <header className={`${home.header__page} ${className}`}>
         <div className={home.header__top}>
@@ -34,48 +35,56 @@ const LightHeader = ({
 
           <nav>
             <ul
-              className={`${home.navbar} navbar--light ${
-                openOverlayMenu ? home.expanded : ""
-              }`}
+              className={`${home.navbar} navbar--light ${openOverlayMenu ? home.expanded : ""
+                }`}
               id="navbar"
             >
               <li>
                 <div className={home.header__auth}>
-                  <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
-                    <li className={home.navbar__item}>
-                      <Link to="/login">ورود</Link>
-                    </li>
-                    <li className={home.header__auth__register}>
+                  {user.id ?
+                    <div>
                       <Button
                         tag="a"
-                        href="/register"
-                        color="page-primary"
+                        href="/dashboard/profile"
+                        color="landing-primary"
                         className={home["rounded-button"]}
                       >
-                        ثبت نام
+                        {user.firstName + " " + user.lastName}
                       </Button>
-                    </li>
-                  </ul>
+                    </div>
+                    :
+                    <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
+                      <li className={home.navbar__item}>
+                        <Link to="/login">ورود</Link>
+                      </li>
+                      <li className={home.header__auth__register}>
+                        <Button
+                          tag="a"
+                          href="/register"
+                          color="page-primary"
+                          className={home["rounded-button"]}
+                        >
+                          ثبت نام
+                        </Button>
+                      </li>
+                    </ul>}
                 </div>
               </li>
               <li
-                className={`${home.page__navitem} ${
-                  pathname === "/" ? home.active : ""
-                }`}
+                className={`${home.page__navitem} ${pathname === "/" ? home.active : ""
+                  }`}
               >
                 <Link to="/">صفحه اصلی</Link>
               </li>
               <li
-                className={`${home.page__navitem} ${
-                  pathname === "/coins" ? home.active : ""
-                }`}
+                className={`${home.page__navitem} ${pathname === "/coins" ? home.active : ""
+                  }`}
               >
                 <Link to="/coins">قیمت لحظه ای</Link>
               </li>
               <li
-                className={`${home.page__navitem} ${
-                  pathname === "/dashboard" ? home.active : ""
-                }`}
+                className={`${home.page__navitem} ${pathname === "/dashboard" ? home.active : ""
+                  }`}
               >
                 <Link to="/dashboard">خرید و فروش آنی</Link>
               </li>
@@ -83,16 +92,14 @@ const LightHeader = ({
                 <Link to="https://help.arsonex.com/">مرکز راهنمایی</Link>
               </li>
               <li
-                className={`${home.page__navitem} ${
-                  pathname === "/about-us" ? home.active : ""
-                }`}
+                className={`${home.page__navitem} ${pathname === "/about-us" ? home.active : ""
+                  }`}
               >
                 <Link to="/about-us">درباره ما</Link>
               </li>
               <li
-                className={`${home.page__navitem} ${
-                  pathname === "/contact-us" ? home.active : ""
-                }`}
+                className={`${home.page__navitem} ${pathname === "/contact-us" ? home.active : ""
+                  }`}
               >
                 <Link to="/contact-us">تماس با ما</Link>
               </li>
@@ -114,21 +121,32 @@ const LightHeader = ({
 
           {!HasRemoveAuthButton && (
             <div className={home.header__auth}>
-              <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
-                <li className={home.navbar__item}>
-                  <Link to="/login">ورود</Link>
-                </li>
-                <li className={home.header__auth__register}>
+              {user.id ?
+                <div>
                   <Button
-                    tag="a"
-                    href="/register"
-                    color="page-primary"
+                    href="/dashboard/profile"
+                    color="landing-primary"
                     className={home["rounded-button"]}
                   >
-                    ثبت نام
+                    {user.firstName + " " + user.lastName}
                   </Button>
-                </li>
-              </ul>
+                </div>
+                :
+                <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
+                  <li className={home.navbar__item}>
+                    <Link to="/login">ورود</Link>
+                  </li>
+                  <li className={home.header__auth__register}>
+                    <Button
+                      tag="a"
+                      href="/register"
+                      color="page-primary"
+                      className={home["rounded-button"]}
+                    >
+                      ثبت نام
+                    </Button>
+                  </li>
+                </ul>}
             </div>
           )}
           <div className={home.header__hamburger}>

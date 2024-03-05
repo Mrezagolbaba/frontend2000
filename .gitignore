@@ -27,5 +27,7 @@ dist-ssr
 # Sentry Auth Token
 .env.sentry-build-plugin
 .env
-.env.sample
+.env.dev
+.env.prod
+.env.stage
 vite.config.ts

@@ -1,5 +1,20 @@
-export interface BankAccountsRequest {
-  filters?: any;
+export interface VerificationResponse {
+  id: string;
+  type: "KYC_TIER_1" | "KYC_TIER_2" | "KYC_INTERNATIONAL_SERVICES";
+  status:
+    | "DRAFT"
+    | "INITIATED"
+    | "PROCESSING"
+    | "VERIFIED"
+    | "REJECTED"
+    | "EXPIRED";
+  userId: string;
+  data: any;
+  rejectReasons: string[];
+  expiresAt: string;
+  createdAt: string;
+  updatedAt?: string;
+  deletedAt?: string;
 }
 
 export interface BankAccountsResponse {

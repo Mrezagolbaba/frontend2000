@@ -16,11 +16,14 @@ export const exchangeManagement = enhancedApi.injectEndpoints({
       },
     }),
     currencySwap: builder.query<any, any>({
-      query({ params }) {
+      query({ join, sort }) {
         return {
           method: "GET",
           url: `/currency-swaps`,
-          params: params,
+          params: {
+            join,
+            sort,
+          },
         };
       },
     }),
@@ -28,9 +31,10 @@ export const exchangeManagement = enhancedApi.injectEndpoints({
       query() {
         return {
           method: "GET",
-          url: "/wallets",
+          url: "wallets",
         };
       },
+      providesTags: ["wallets"],
     }),
     createCurrencySwap: builder.mutation<any, { isDry: boolean; data: any }>({
       query({ isDry, data }) {
@@ -44,6 +48,17 @@ export const exchangeManagement = enhancedApi.injectEndpoints({
         };
       },
     }),
+    getCurrencySwap: builder.query<any, string>({
+      query(id) {
+        return {
+          method: "GET",
+          url: `/currency-swaps/${id}`,
+          params: {
+            join: "transactions",
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -52,4 +67,5 @@ export const {
   useCurrencySwapQuery,
   useWalletsQuery,
   useCreateCurrencySwapMutation,
+  useGetCurrencySwapQuery,
 } = exchangeManagement;

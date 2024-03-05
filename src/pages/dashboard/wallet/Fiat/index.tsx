@@ -21,15 +21,25 @@ import WithdrawFiat from "./Withdraw";
 import WithdrawOTP from "components/WithdrawOTP";
 import { useAppSelector } from "store/hooks";
 import toast from "react-hot-toast";
-import { useResendOtpWithdrawMutation, useVerifyOtpWithdrawMutation } from "store/api/wallet-management";
-import { TransactionResponse } from "types/wallet";
+import {
+  useResendOtpWithdrawMutation,
+  useVerifyOtpWithdrawMutation,
+} from "store/api/wallet-management";
+import { InitiateCurrency } from "types/wallet";
+import { lirShow } from "helpers";
 
-export default function Fiat({ TRY, isLoading, isSuccess }: any) {
+interface FiatProps {
+  TRY: InitiateCurrency;
+  isLoading: boolean;
+  isSuccess: boolean;
+}
+
+export default function Fiat({ TRY, isLoading, isSuccess }: FiatProps) {
   const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
-  const [otpCode, setOtpCode] = useState("");
-  const [verifyOtpWithdraw, { isSuccess: isVerifySuccess }] = useVerifyOtpWithdrawMutation()
-  const [resendOtpWithdraw, { isSuccess: isResendSuccess }] = useResendOtpWithdrawMutation()
+  const [verifyOtpWithdraw] = useVerifyOtpWithdrawMutation();
+  const [resendOtpWithdraw, { isSuccess: isResendSuccess }] =
+    useResendOtpWithdrawMutation();
   const [depositForm, setDepositForm] = useState<{
     isOpen: boolean;
     currency: string;
@@ -40,47 +50,48 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
     stock: number;
   }>({ isOpen: false, currency: "", stock: 0 });
   const [showOtp, setShowOtp] = useState<boolean>(false);
-  const [transactionId, setTransactionId] = useState<string>('');
+  const [transactionId, setTransactionId] = useState<string>("");
 
+  const handleCloseModal = () => {
+    setShowOtp(false);
+  };
   const handleSendOtp = async (data: { code: string }) => {
-    if (data.code.length > 6) return toast.error('لطفا کد را وارد کنید', { position: 'bottom-left' })
+    if (data.code.length > 6)
+      return toast.error("لطفا کد را وارد کنید", { position: "bottom-left" });
     const newData = {
       transactionId,
-      code: data.code
-    }
-    await verifyOtpWithdraw(newData).then((res:any) => {
+      code: data.code,
+    };
+    await verifyOtpWithdraw(newData).then((res: any) => {
       if (res) {
-        handleCloseModal()
-        toast.success('برداشت با موفقیت انجام شد', { position: 'bottom-left' })
-        window.location.reload()
-      } else if(res.id === null) {
-        toast.error('کد وارد شده صحیح نمی باشد', { position: 'bottom-left' })
+        handleCloseModal();
+        toast.success("برداشت با موفقیت انجام شد", { position: "bottom-left" });
+        window.location.reload();
       }
-    })
-  }
+    });
+  };
 
   const handleReSendOtp = async () => {
     await resendOtpWithdraw(transactionId).then(() => {
       if (isResendSuccess) {
-        toast.success('کد مجددا ارسال شد', { position: 'bottom-left' })
+        toast.success("کد مجددا ارسال شد", { position: "bottom-left" });
       }
-    })
-  }
-  const handleCloseModal = () => {
-    setShowOtp(false)
-  }
+    });
+  };
+
   return (
     <Card className="mb-4 h-100">
       <CardHeader>
-        <CardTitle tag="h5">موجودی ارز دیجیتال</CardTitle>
+        <CardTitle tag="h5">موجودی فیات دیجیتال</CardTitle>
       </CardHeader>
       <CardBody>
-        <Row>
+        <Row className={wallet["desktop-view"]}>
           <Col xs={12} className="table-responsive">
             <Table borderless className={wallet["table-view"]}>
               <thead>
                 <tr>
                   <th>ارز</th>
+                  <th className="text-center">موجودی</th>
                   <th className="text-center">موجودی در دسترس</th>
                   <th className="text-center" />
                   <th className="text-center" />
@@ -90,6 +101,9 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
               <tbody>
                 {isLoading ? (
                   <tr>
+                    <td className="placeholder-glow">
+                      <div className="placeholder col-12 rounded" />
+                    </td>
                     <td className="placeholder-glow">
                       <div className="placeholder col-12 rounded" />
                     </td>
@@ -119,7 +133,10 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
                       </div>
                     </td>
                     <td className="text-center">
-                      {Number(TRY.availableBalance || 0).toLocaleString()}
+                      {lirShow({ value: TRY.balance })}
+                    </td>
+                    <td className="text-center">
+                      {lirShow({ value: TRY.availableBalance })}
                     </td>
                     <td className="text-center">
                       <Button
@@ -139,12 +156,12 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
                       <Button
                         color="secondary"
                         className="px-4 py-1"
-                        disabled={TRY.balance <= 0}
+                        disabled={Number(TRY.balance) <= 0}
                         onClick={() =>
                           setWithdrawForm({
                             isOpen: true,
                             currency: "TRY",
-                            stock: TRY.availableBalance,
+                            stock: Number(TRY.availableBalance),
                           })
                         }
                       >
@@ -157,7 +174,7 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
                         className="px-4 py-1"
                         outline
                         onClick={() =>
-                          navigate("/dashboard/buy-sell", {
+                          navigate("/dashboard/exchange", {
                             state: {
                               source: "TRY",
                             },
@@ -173,6 +190,69 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
                 )}
               </tbody>
             </Table>
+          </Col>
+        </Row>
+        <Row className={wallet["mobile-view"]}>
+          <Col xs={12}>
+            <div className="d-flex flex-column">
+              <span className={wallet["crypto-name"]}>لیر</span>
+              <img src={lirFlag} alt="" className={wallet["crypto-img"]} />
+            </div>
+          </Col>
+          <Col xs={12} sm={6} className="text-center my-3">
+            موجودی: {lirShow({ value: TRY.balance })}
+          </Col>
+
+          <Col xs={12} sm={6} className="text-center my-3">
+            موجودی در دسترس:
+            {lirShow({ value: TRY.availableBalance })}
+          </Col>
+          <Col xs={12} sm={4} className="text-center my-3">
+            <Button
+              color="secondary"
+              className="px-5 py-3"
+              onClick={() => {
+                setDepositForm({
+                  isOpen: true,
+                  currency: "TRY",
+                });
+              }}
+            >
+              واریز
+            </Button>
+          </Col>
+          <Col xs={12} sm={4} className="text-center my-3">
+            <Button
+              color="secondary"
+              className="px-5 py-3"
+              disabled={Number(TRY.balance) <= 0}
+              onClick={() =>
+                setWithdrawForm({
+                  isOpen: true,
+                  currency: "TRY",
+                  stock: Number(TRY.availableBalance),
+                })
+              }
+            >
+              برداشت
+            </Button>
+          </Col>
+          <Col xs={12} sm={4} className="text-center my-3">
+            <Button
+              color="primary"
+              className="px-5 py-3"
+              outline
+              disabled={false}
+              onClick={() =>
+                navigate("/dashboard/exchange", {
+                  state: {
+                    source: "TRY",
+                  },
+                })
+              }
+            >
+              معامله
+            </Button>
           </Col>
         </Row>
       </CardBody>
@@ -196,10 +276,12 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
       >
         <WithdrawFiat
           setShowOtp={() => {
-            setShowOtp(true)
+            setShowOtp(true);
           }}
           setTransactionId={(id) => setTransactionId(id)}
-          onCloseModal={() => setWithdrawForm({ isOpen: false, currency: "", stock: 0 })}
+          onCloseModal={() =>
+            setWithdrawForm({ isOpen: false, currency: "", stock: 0 })
+          }
           open={withdrawForm.isOpen}
           stock={withdrawForm.stock}
           currency={withdrawForm.currency}
@@ -208,7 +290,7 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
           }
         />
       </Dialog>
-      <Modal isOpen={showOtp} toggle={handleCloseModal} >
+      <Modal isOpen={showOtp} toggle={handleCloseModal}>
         <WithdrawOTP
           onClose={handleCloseModal}
           securitySelection={user.otpMethod}
@@ -216,7 +298,6 @@ export default function Fiat({ TRY, isLoading, isSuccess }: any) {
           handleGetCode={handleSendOtp}
         />
       </Modal>
-
     </Card>
   );
 }

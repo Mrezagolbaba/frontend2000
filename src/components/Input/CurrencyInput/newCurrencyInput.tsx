@@ -13,9 +13,7 @@ interface CustomNumeralNumericFormatProps extends NumericFormatProps {
   // Add any additional props specific to CustomNumeralNumericFormat
 }
 
-export default function CurrencyInput(
-  props: CustomNumeralNumericFormatProps,
-) {
+export default function CurrencyInput(props: CustomNumeralNumericFormatProps) {
   const {
     format = (val: string) => val, // Provide a default function if not defined
     removeFormatting = (val: string) => val, // Provide a default function if not defined

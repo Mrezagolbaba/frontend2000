@@ -2,6 +2,7 @@
   position: relative;
   background-color: #fbfbfb;
   display: flex;
+  height: 100vh;
 
   .main-wrapper {
     width: calc(100% - 236px);
@@ -445,9 +446,84 @@
   }
 }
 
+div.user-tier-card {
+  background-color: #111bff08;
+  box-shadow: none;
+  &__header {
+    background-color: transparent;
+    padding-bottom: 0;
+    border: none;
+  }
+  &__body {
+    padding: 10px 25px 50px;
+  }
+}
+.user-tier-summary {
+  color: rgba(3, 4, 27, 0.5);
+  font-size: 1em;
+  margin-top: 15px;
+  max-width: 440px;
+  text-align: justify;
+  & > a {
+    height: 42px;
+    line-height: 38px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+.user-tier-advantages {
+  h5 {
+    font-size: 1em;
+    margin-bottom: 20px;
+  }
+  & > li:not(:first-child) {
+    font-size: 0.75em;
+    font-weight: 400;
+    color: rgba(3, 4, 27, 0.5);
+    & + li {
+      margin-top: 8px;
+    }
+    svg {
+      margin-left: 5px;
+    }
+    strong {
+      font-weight: 500;
+      color: #03041b;
+      margin-right: 5px;
+    }
+  }
+}
+.user-tier-second-button {
+  display: none;
+}
+.level-now {
+  display: flex;
+  align-items: baseline;
+  flex-direction: row;
+  span {
+    margin-right: 10px;
+    border-radius: 5px;
+  }
+}
+
 @media screen and (max-width: 1399px) {
   .data-table tbody td {
     min-width: 140px;
+  }
+  div.user-tier-card {
+    &__body {
+      padding-bottom: 25px;
+    }
+  }
+  .user-tier-first-button .user-tier-summary {
+    max-width: 100%;
+    margin-bottom: 0;
+    & > a {
+      display: none;
+    }
+  }
+  .user-tier-second-button {
+    display: block;
   }
 }
 
@@ -514,10 +590,10 @@
   }
 }
 
-@media screen and (max-width:978px) {
+@media screen and (max-width: 978px) {
   .main-wrapper {
-    margin-right: 0!important;
-  } 
+    margin-right: 0 !important;
+  }
 }
 
 @media screen and (max-width: 767px) {

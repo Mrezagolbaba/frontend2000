@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { setupListeners } from "@reduxjs/toolkit/query";
 import {
   persistStore,
   FLUSH,
@@ -26,6 +27,8 @@ const store = configureStore({
       },
     }).concat(api.middleware),
 });
+
+setupListeners(store.dispatch);
 
 export type RootState = ReturnType<typeof reducers>;
 

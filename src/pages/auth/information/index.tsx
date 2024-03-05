@@ -90,6 +90,7 @@ const Information = () => {
         navigate("/email-otp", {
           state: {
             email: data.email,
+            page: "information",
           },
         });
         setIsLoading(false);

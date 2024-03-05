@@ -14,7 +14,8 @@ export type TransactionStatus =
   | "SUCCESSFUL"
   | "FAILED"
   | "EXPIRED"
-  | "CANCELED";
+  | "CANCELED"
+  | "REFUND";
 
 export type ProviderType =
   | "ARSONEX"
@@ -87,4 +88,14 @@ export interface DepositInfoResponse {
   accountOwnerName: string;
   bankName: string;
   iban: string;
+}
+
+export  interface InitiateCurrency {
+  availableBalance: string;
+  balance: string;
+  createdAt: string;
+  currencyCode: string;
+  id: string;
+  updatedAt: string;
+  userId: string;
 }

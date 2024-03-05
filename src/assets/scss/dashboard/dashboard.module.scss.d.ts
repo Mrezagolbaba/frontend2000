@@ -41,6 +41,14 @@ declare const classNames: {
   readonly trading: "trading";
   readonly "trading-up": "trading-up";
   readonly "table-striped": "table-striped";
+  readonly "user-tier-card": "user-tier-card";
+  readonly "user-tier-card__header": "user-tier-card__header";
+  readonly "user-tier-card__body": "user-tier-card__body";
+  readonly "user-tier-summary": "user-tier-summary";
+  readonly "user-tier-advantages": "user-tier-advantages";
+  readonly "user-tier-second-button": "user-tier-second-button";
+  readonly "level-now": "level-now";
+  readonly "user-tier-first-button": "user-tier-first-button";
   readonly __navbar: "__navbar";
   readonly expanded: "expanded";
 };

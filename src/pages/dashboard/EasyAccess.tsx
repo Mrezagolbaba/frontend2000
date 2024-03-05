@@ -23,7 +23,7 @@ export default function EasyAccess() {
         </h6>
       </Col>
       <Col xs={6} sm={3} xxl={2}>
-        <Link className={dashboard["easy-box"]} to="/dashboard/buy-sell">
+        <Link className={dashboard["easy-box"]} to="/dashboard/exchange">
           <span className="icon">
             <svg
               fill="#000000"

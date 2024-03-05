@@ -1,14 +1,22 @@
 import {
-  BankAccountsRequest,
   BankAccountsResponse,
   BanksResponse,
   BanksRequest,
   FormBankAccountRequest,
+  VerificationResponse,
 } from "types/profile";
 import { enhancedApi } from ".";
 
 export const profileManagement = enhancedApi.injectEndpoints({
   endpoints: (builder) => ({
+    getVerifications: builder.query<VerificationResponse[], void>({
+      query() {
+        return {
+          method: "GET",
+          url: `verifications`,
+        };
+      },
+    }),
     uploadDoc: builder.mutation<any, any>({
       query({ docType, fileName, file }) {
         const formData = new FormData();
@@ -50,14 +58,12 @@ export const profileManagement = enhancedApi.injectEndpoints({
         };
       },
     }),
-    bankAccounts: builder.query<BankAccountsResponse[], BankAccountsRequest>({
-      query(filters) {
+    bankAccounts: builder.query<BankAccountsResponse[], any>({
+      query({ params }) {
         return {
           method: "GET",
           url: "/bank-accounts",
-          params: {
-            filter: filters,
-          },
+          params: { ...params },
         };
       },
       providesTags: ["bank-accounts"],
@@ -67,17 +73,10 @@ export const profileManagement = enhancedApi.injectEndpoints({
         return {
           method: "POST",
           url: "/bank-accounts",
-          data,
-        };
-      },
-      invalidatesTags: ["bank-accounts"],
-    }),
-    editBankAccount: builder.mutation<any, FormBankAccountRequest>({
-      query(data) {
-        return {
-          method: "PUT",
-          url: "/bank-accounts",
-          data,
+          data: {
+            ...data,
+            cardNumber: data.cardNumber,
+          },
         };
       },
       invalidatesTags: ["bank-accounts"],
@@ -103,5 +102,5 @@ export const {
   useBankAccountsQuery,
   useCreateBankAccountMutation,
   useDeleteBankAccountMutation,
-  useEditBankAccountMutation,
+  useGetVerificationsQuery,
 } = profileManagement;

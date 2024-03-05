@@ -1,9 +1,9 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent } from "react";
 import { Input } from "reactstrap";
+import BanksWrapper from "components/BanksWrapper";
+
 import style from "assets/scss/components/Input/ibanNumber.module.scss";
-import { searchTurkishBanks } from "helpers/filesManagement";
-import arsonexMark from "assets/img/icons/bankDefault.svg";
-import { useBanksQuery } from "store/api/profile-management";
+
 type Props = {
   name: string;
   value: string;
@@ -11,6 +11,7 @@ type Props = {
   onChange?: (value: string) => void;
   className?: string;
   setBankId?: (string) => void;
+  invalid?: boolean;
 };
 
 export default function IBANNumber({
@@ -20,56 +21,33 @@ export default function IBANNumber({
   disabled = false,
   className,
   setBankId,
+  invalid = false,
 }: Props) {
-  const [logo, setLogo] = useState<string>(arsonexMark);
-
-  const { data: banks, isSuccess } = useBanksQuery({
-    filters: "currencyCode||$eq||TRY",
-  });
-
-  useEffect(() => {
-    if (value?.length >= 6) {
-      const result = searchTurkishBanks(value, banks);
-      if (result) {
-        setLogo(result.logo);
-        setBankId?.(result.bankId);
-      } else setLogo(arsonexMark);
-    } else setLogo(arsonexMark);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace("TR", "").replace(/\s/g, '') ;
-
-    console.log("value", value);
-
-    if (value.length >= 7) {
-      const result = searchTurkishBanks(value, banks);
-      if (result) {
-        setLogo(result.logo);
-        setBankId?.(result.bankId);
-      } else setLogo(arsonexMark);
-    } else setLogo(arsonexMark);
+    const value = e.target.value.replace("TR", "").replace(/\s/g, "");
     onChange?.(value);
   };
   return (
     <div className={style["iban-input-control"]}>
-      {logo === arsonexMark ? (
-        <img src={arsonexMark} alt="card" />
-      ) : (
-        <div dangerouslySetInnerHTML={{ __html: logo }} />
-      )}
-      <span>TR</span>
-      <Input
+      <BanksWrapper
         value={value}
-        onChange={handleChange}
-        name={name}
-        type="text"
-        className={`account-number-input ${className}`}
-        id={`ibanNumber-${name}`}
-        disabled={disabled}
-        placeholder=""
-      />
+        type="TRY"
+        iconClassName={style["iban-icon-holder"]}
+        idHandler={(id) => setBankId?.(id)}
+      >
+        <span>TR</span>
+        <Input
+          value={value}
+          onChange={handleChange}
+          name={name}
+          type="text"
+          className={`account-number-input ${className} latin-font`}
+          id={`ibanNumber-${name}`}
+          disabled={disabled}
+          placeholder=""
+          invalid={invalid}
+        />
+      </BanksWrapper>
     </div>
   );
 }

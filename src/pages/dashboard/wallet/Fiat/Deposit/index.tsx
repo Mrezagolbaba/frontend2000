@@ -1,4 +1,4 @@
-import { AlertInfo, AlertWarning } from "components/AlertWidget";
+import { AlertDanger, AlertInfo, AlertWarning } from "components/AlertWidget";
 import CopyInput from "components/Input/CopyInput";
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import { useEffect, useState } from "react";
@@ -7,20 +7,18 @@ import {
   useDepositInfoQuery,
   useDepositMutation,
 } from "store/api/wallet-management";
-
-import wallet from "assets/scss/dashboard/wallet.module.scss";
 import { useAppSelector } from "store/hooks";
 import { useBankAccountsQuery } from "store/api/profile-management";
 import { isEmpty } from "lodash";
-import { useCheckVerificationsQuery } from "store/api/user";
 import Dialog from "components/Dialog";
 import InternationalVerification from "pages/dashboard/profile/InternationalVerification";
+import BanksWrapper from "components/BanksWrapper";
+
+import wallet from "assets/scss/dashboard/wallet.module.scss";
 
 const DepositFiat = ({ onClose }: { onClose: () => void }) => {
   const { firstNameEn, lastNameEn, internationalServicesVerified } =
     useAppSelector((state) => state.user);
-
-  const [isVerified, setIsVerified] = useState<1 | 2 | 3>(1);
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
   const [selectedBank, setSelectedBank] = useState<string>("");
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
@@ -31,19 +29,15 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
     ownerName: "",
     code: "",
   });
-  const { data, isLoading, isSuccess } = useDepositInfoQuery("TRY");
+  const { data, isSuccess } = useDepositInfoQuery("TRY");
   const { data: accounts, isSuccess: getSuccessAccounts } =
     useBankAccountsQuery({
-      filters: "currencyCode||$eq||TRY",
+      filter: "currencyCode||$eq||TRY",
     });
 
   const [
     depositRequest,
-    {
-      data: depResponse,
-      isLoading: isLoadingDeposit,
-      isSuccess: isSubmitSuccess,
-    },
+    { data: depResponse, isLoading: LoadingDeposit, isSuccess: depositSuccess },
   ] = useDepositMutation();
 
   useEffect(() => {
@@ -54,8 +48,6 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
         ownerName: data[0].accountOwnerName,
       });
       list = data.map((item) => {
-        const ibanValue = item.iban.replace("TR", "");
-        // const bank = searchTurkishBanks(ibanValue);
         return {
           value: item.iban,
           otherOptions: {
@@ -69,7 +61,13 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
                   dangerouslySetInnerHTML={{ __html: bank.logo }}
                 />
               </span> */}
-              <span dir="ltr">{item.bankName}</span>
+              <BanksWrapper
+                value={item.iban}
+                type={"TRY"}
+                iconClassName={wallet["items-credit__icon"]}
+              >
+                <span dir="ltr">{item.bankName}</span>
+              </BanksWrapper>
             </div>
           ),
         };
@@ -88,6 +86,103 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, getSuccessAccounts]);
+
+  const renderUI = () => {
+    if (LoadingDeposit) {
+      return (
+        <Row className="placeholder-glow">
+          <Col xs={12} lg={6}>
+            <div
+              className="placeholder rounded mt-3 py-2 w-100"
+              style={{ height: "30px" }}
+            />
+          </Col>
+          <Col xs={12} lg={6}>
+            <div
+              className="placeholder rounded mt-3 py-2 w-100"
+              style={{ height: "30px" }}
+            />
+          </Col>
+          <Col xs={12} lg={4}>
+            <div
+              className="placeholder rounded mt-3 py-2 w-100"
+              style={{ height: "30px" }}
+            />
+          </Col>
+          <Col xs={12} lg={8}>
+            <div
+              className="placeholder rounded mt-3 py-2 w-100"
+              style={{ height: "30px" }}
+            />
+          </Col>
+        </Row>
+      );
+    } else {
+      if (depositSuccess) {
+        return (
+          <Row>
+            <Col xs={12} md={6}>
+              <FormGroup>
+                <Label htmlFor="bank-name"> بانک مقصد:</Label>
+                <DropdownInput
+                  id="bank-name"
+                  value={selectedBank}
+                  onChange={(val, otherOption) => {
+                    setSelectedBank(val);
+                    setOtherInfo({
+                      ownerName: otherOption.ownerName,
+                    });
+                  }}
+                  options={optionList}
+                  // hasError={Boolean(errors?.[name])}
+                />
+              </FormGroup>
+            </Col>
+            <Col xs={12} md={6}>
+              <FormGroup>
+                <Label htmlFor="iban"> شماره IBAN:</Label>
+
+                <CopyInput
+                  text={selectedBank || ""}
+                  key="iban-account"
+                  isIban={false}
+                />
+              </FormGroup>
+            </Col>
+            {depResponse && (
+              <Col xs={12} md={4}>
+                <FormGroup>
+                  <Label htmlFor="ownerAccount"> شناسه واریز :</Label>
+                  <CopyInput
+                    text={depResponse.providerData.flowPaymentIdentifier || ""}
+                    key="number-account"
+                  />
+                </FormGroup>
+              </Col>
+            )}
+            <Col xs={12} md={8}>
+              <FormGroup>
+                <Label htmlFor="ownerAccount">نام صاحب حساب:</Label>
+                <CopyInput
+                  text={otherInfo.ownerName || ""}
+                  key="owner-account"
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+        );
+      } else {
+        return (
+          <Row>
+            <AlertDanger
+              hasIcon
+              text="متاسفانه مشکلی در برقراری ارتباط با سرور پیش آمده است. لطفا از وصل بودن شبکه اینترنت خود اطمینان حاصل نمایید."
+            />
+          </Row>
+        );
+      }
+    }
+  };
 
   return (
     <div className="px-2">
@@ -125,52 +220,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
             hasIcon
             text="در هنگام واریز حتما شناسه واریز را  در بخش Description یا Aciklama به طور دقیق وارد کنید، در صورت رعایت نکردن این مساله مبلغ به حساب کاربری شما واریز نمی‌شود و بعد از ۷۲ ساعت کاری به حساب شما پس از کسر کارمزد بانکی عودت داده می‌شود."
           />
-
-          <Row>
-            <Col xs={12} md={6}>
-              <FormGroup>
-                <Label htmlFor="bank-name"> بانک مقصد:</Label>
-                <DropdownInput
-                  id="bank-name"
-                  value={selectedBank}
-                  onChange={(val, otherOption) => {
-                    setSelectedBank(val);
-                    setOtherInfo({
-                      ownerName: otherOption.ownerName,
-                    });
-                  }}
-                  options={optionList}
-                  // hasError={Boolean(errors?.[name])}
-                />
-              </FormGroup>
-            </Col>
-            <Col xs={12} md={6}>
-              <FormGroup>
-                <Label htmlFor="ownerAccount">نام صاحب حساب:</Label>
-                <CopyInput
-                  text={otherInfo.ownerName || ""}
-                  key="owner-account"
-                />
-              </FormGroup>
-            </Col>
-            <Col xs={12} md={6}>
-              <FormGroup>
-                <Label htmlFor="iban"> شماره IBAN:</Label>
-                <CopyInput text={selectedBank || ""} key="iban-account" />
-              </FormGroup>
-            </Col>
-            {depResponse && (
-              <Col xs={12} md={6}>
-                <FormGroup>
-                  <Label htmlFor="ownerAccount"> شناسه واریز :</Label>
-                  <CopyInput
-                    text={depResponse.providerData.flowPaymentIdentifier || ""}
-                    key="number-account"
-                  />
-                </FormGroup>
-              </Col>
-            )}
-          </Row>
+          {renderUI()}
         </Form>
       )}
       <Dialog

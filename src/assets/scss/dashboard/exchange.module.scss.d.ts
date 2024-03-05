@@ -1,6 +1,15 @@
 declare const classNames: {
+  readonly "accordion-header": "accordion-header";
+  readonly "accordion-body": "accordion-body";
+  readonly "accordion-button": "accordion-button";
+  readonly collapsed: "collapsed";
+  readonly _wage: "_wage";
+  readonly _table: "_table";
+  readonly "form-check-input": "form-check-input";
   readonly "currency-controls": "currency-controls";
   readonly "currency-controls__group": "currency-controls__group";
+  readonly "input-holder": "input-holder";
+  readonly "is-invalid": "is-invalid";
   readonly detail: "detail";
   readonly dropdown: "dropdown";
   readonly "dropdown-btn": "dropdown-btn";
@@ -8,5 +17,8 @@ declare const classNames: {
   readonly selected__item: "selected__item";
   readonly "dropdown-menu": "dropdown-menu";
   readonly divider: "divider";
+  readonly wage: "wage";
+  readonly table: "table";
+  readonly "radio-toggle-control": "radio-toggle-control";
 };
 export = classNames;

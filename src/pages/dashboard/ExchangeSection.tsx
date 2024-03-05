@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardBody, CardHeader, CardTitle, Form, Label } from "reactstrap";
 
-import exchange from "assets/scss/dashboard/exchange.module.scss";
 import { useLazyRatesQuery } from "store/api/exchange-management";
 import { CurrencyCode } from "types/wallet";
 import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
 import SelectCurrency from "components/Input/CurrencyInput/SelectCurrency";
 import { currencyOptions } from "components/Input/CurrencyInput/SelectCurrency/constant";
+
+import exchange from "assets/scss/dashboard/exchange.module.scss";
 
 export default function ExchangeSection() {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ export default function ExchangeSection() {
     getReverseRate({
       sourceCurrencyCode: destination.currency,
       targetCurrencyCode: source.currency,
-    })
+    });
     // }, 5000); // 5 seconds in milliseconds
 
     // // Clean up the interval when the component is unmounted
@@ -55,7 +56,7 @@ export default function ExchangeSection() {
           <div className={exchange["currency-controls"]}>
             <div className={exchange["currency-controls__group"]}>
               <Label htmlFor="source">پرداخت می‌کنید:</Label>
-              <div>
+              <div className={exchange["input-holder"]}>
                 <CurrencyInput
                   thousandSeparator=","
                   value={source.amount}
@@ -142,7 +143,7 @@ export default function ExchangeSection() {
               >
                 دریافت می‌کنید:
               </Label>
-              <div>
+              <div className={exchange["input-holder"]}>
                 <CurrencyInput
                   thousandSeparator=","
                   value={destination.amount}
@@ -201,7 +202,7 @@ export default function ExchangeSection() {
           <div className="mt-5 mb-4 d-flex align-items-center justify-content-center">
             <button
               onClick={() =>
-                navigate(`/dashboard/buy-sell`, {
+                navigate(`/dashboard/exchange`, {
                   state: { source, destination },
                 })
               }

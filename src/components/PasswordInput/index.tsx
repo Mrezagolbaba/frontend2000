@@ -15,12 +15,13 @@ import { isPasswordValid, passwordListValidation } from "helpers";
 
 interface Props {
   onChange: (...event: any[]) => void;
-  onBlur: (...event: any[]) => void;
+  onBlur?: (...event: any[]) => void;
   value: string;
   name: string;
   ref: RefCallBack;
   errors?: FieldErrors;
   hasShowHint?: boolean;
+  label?: string;
 }
 
 const PasswordInput = ({
@@ -30,6 +31,7 @@ const PasswordInput = ({
   onChange,
   errors,
   hasShowHint = false,
+  label = "رمز عبور",
 }: Props) => {
   const [passValid, setPassValid] = useState<boolean[] | []>([]);
   const [hasShowPass, setHasShowPass] = useState<boolean>(false);
@@ -45,7 +47,7 @@ const PasswordInput = ({
         type={hasShowPass ? "text" : "password"}
         name={name}
         value={value}
-        label="رمز عبور"
+        label={label}
         onChange={handleChange}
         inputProps={{
           ref: ref,

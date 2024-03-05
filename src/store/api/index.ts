@@ -2,10 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { BaseQueryFn, createApi } from "@reduxjs/toolkit/dist/query/react";
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { ErrorType, errorNormalizer } from "components/ErrorHandler";
 import toast from "react-hot-toast";
-
-type methodType = "get" | "post" | "put" | "patch" | "delete";
 
 export const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
@@ -23,15 +20,10 @@ const axiosBaseQuery =
   async (args: AxiosRequestConfig, api: any, extraOptions: any) => {
     try {
       axiosInstance.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
-        "token"
+        "token",
       )}`;
       const res = await axiosInstance(args);
       const data = res.data;
-      const method = res.config.method as methodType;
-      const status = res.status;
-
-      if (method !== "get" && status >= 200 && status < 300)
-        toast(data.message, { position: "bottom-left" });
 
       return { data };
     } catch (error: any) {
@@ -49,8 +41,8 @@ const axiosBaseQuery =
         localStorage.removeItem("isLoggedIn");
         window.location.replace("/login");
         return axiosBaseQuery()(args, api, extraOptions);
-      } else {
-        toast.error(errorNormalizer(response as ErrorType), {
+      } else if (response?.data?.translatedMessage) {
+        toast.error(response.data.translatedMessage, {
           position: "bottom-left",
         });
       }
@@ -66,7 +58,16 @@ const axiosBaseQuery =
 
 export const api = createApi({
   baseQuery: axiosBaseQuery(),
-  tagTypes: ["bank-accounts","settings","user"],
+  tagTypes: [
+    "bank-accounts",
+    "settings",
+    "user",
+    "notices-settings",
+    "wallets",
+    "ticket",
+  ],
+  keepUnusedDataFor: 30,
+  refetchOnMountOrArgChange: 30,
   endpoints: () => ({}),
 });
 

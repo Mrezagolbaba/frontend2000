@@ -1,3 +1,21 @@
+.mobile-view {
+  display: none !important;
+  .crypto-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .crypto-img {
+    width: 64px;
+    object-fit: cover;
+    margin: auto;
+  }
+  button {
+    width: 150px;
+  }
+}
+
 .balance {
   display: flex;
   flex-wrap: wrap;
@@ -65,8 +83,9 @@
     margin-left: 20px;
     & > img,
     svg {
-      width: 32px;
+      width: 24px;
       height: auto;
+      border-radius: 50%;
       object-fit: contain;
     }
   }
@@ -196,13 +215,109 @@
   width: 20px !important;
 }
 
+.bank-icon {
+  img {
+    width: 24px;
+    border-radius: 50%;
+    margin: 0 5px;
+  }
+}
+
 .english-number,
 .english-number button {
   font-family: arial !important;
 }
 
+.font-small * {
+  font-size: 0.7rem;
+}
+
+.data-tab-container {
+  display: flex;
+  flex-direction: column;
+  .data-tab {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: nowrap;
+    border-bottom: 1px solid rgba(3, 4, 27, 0.03);
+    &__item {
+      border: none;
+      color: #03041b;
+      font-size: 0.875em;
+      font-weight: 400;
+      padding: 14px 0;
+      margin: 0 25px;
+      white-space: nowrap;
+      background: 0 0;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      &.active {
+        color: #111bff;
+        font-weight: 500;
+        background-color: #fff;
+        border-color: #dee2e6 #dee2e6 #fff;
+        border-bottom: 2px solid #111bff;
+      }
+    }
+  }
+}
 @media screen and (max-width: 1399px) {
   .table-view tbody td {
     min-width: 140px;
+  }
+}
+
+@media screen and (max-width: 978px) {
+  td,
+  th,
+  tr {
+    font-size: 0.9em;
+  }
+  .data-tab-container {
+    flex-direction: row;
+    .data-tab {
+      flex-direction: column;
+      padding-left: 16px;
+      &__item {
+        font-size: 0.78em;
+        margin: auto;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .desktop-view {
+    display: none !important;
+  }
+  .mobile-view {
+    display: flex !important;
+  }
+  .balance {
+    &__action {
+      & > .btn {
+        padding: 13px 30px;
+      }
+    }
+    &__value strong {
+      font-size: 1.5em;
+    }
+  }
+}
+@media screen and (max-width: 575px) {
+  .balance {
+    &__action {
+      flex: 0 0 100%;
+      margin-top: 15px;
+      & > .btn {
+        display: block;
+        width: 100%;
+      }
+      .btn + .btn {
+        margin-right: 0;
+        margin-top: 8px;
+      }
+    }
   }
 }

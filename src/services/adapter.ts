@@ -1,13 +1,4 @@
-import axios, {
-  AxiosRequestConfig,
-  AxiosResponse,
-  AxiosError,
-  AxiosInstance,
-} from "axios";
-
-// Replace with your base API URL
-const API_BASE_URL = "https://dev-api.arsonex.market/v1/";
-const API_BASE_DEV_URL = "http://localhost:3000/v1/";
+import axios, { AxiosResponse, AxiosError, AxiosInstance } from "axios";
 
 // Create and configure the Axios instance
 const request: AxiosInstance = axios.create({
@@ -17,10 +8,6 @@ const request: AxiosInstance = axios.create({
 const accessTokenExpires =
   typeof window !== "undefined"
     ? window.localStorage.getItem("accessTokenExpires")
-    : null;
-const refreshTokenExpires =
-  typeof window !== "undefined"
-    ? window.localStorage.getItem("refreshTokenExpires")
     : null;
 
 // Function to refresh the access token
@@ -35,8 +22,6 @@ const refreshAccessToken = async () => {
       // Update the access token in local storage
       localStorage.setItem("token", newAccessToken);
     } catch (error) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("refreshToken");
       // Handle refresh token error (e.g., log out the user)
     }
   }
@@ -44,12 +29,6 @@ const refreshAccessToken = async () => {
 // Function to check if the access token has expired
 const isTokenExpired = () => {
   const expirationDate = new Date(accessTokenExpires as string);
-  const currentTime = new Date();
-  return currentTime >= expirationDate;
-};
-
-const isRefreshTokenExpired = () => {
-  const expirationDate = new Date(refreshTokenExpires as string);
   const currentTime = new Date();
   return currentTime >= expirationDate;
 };
@@ -63,14 +42,8 @@ request.interceptors.request.use(
     }
     if (!token || isTokenExpired()) {
       await refreshAccessToken();
-      config.headers["Authorization"] = `Bearer ${localStorage.getItem(
-        "token",
-      )}`;
-    } else if (isRefreshTokenExpired()) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("refreshToken");
-      delete config.headers["Authorization"];
-      window.location.replace("/login");
+      config.headers["Authorization"] =
+        `Bearer ${localStorage.getItem("token")}`;
     }
     return config;
   },
@@ -85,8 +58,24 @@ request.interceptors.response.use(
     // Add your logic for successful response interception
     return response;
   },
-  (error: AxiosError) => {
+  async (error: AxiosError) => {
     // Handle response errors, e.g., displaying a notification for specific error status codes
+    const { response } = error;
+
+    if (response) {
+      // Response received with an error status code
+      const { status } = response;
+
+      if (status === 401 || status === 500) {
+        // Unauthorized or Internal Server Error
+        localStorage.removeItem("token");
+        localStorage.removeItem("isLoggedIn");
+        window.location.replace("/login");
+      }
+
+      // You can add more specific error handling logic here if needed
+    }
+
     return Promise.reject(error);
   },
 );

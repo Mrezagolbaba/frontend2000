@@ -1,33 +1,31 @@
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
-import { IUser } from 'types/user';
-
-
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { IUser } from "types/user";
 
 const initialState: IUser = {
-  id: '',
-  email: '',
+  id: "",
+  email: "",
   emailVerified: false,
-  password: '',
-  otpMethod: '',
+  password: "",
+  otpMethod: "PHONE",
   firstTierVerified: false,
   secondTierVerified: false,
   internationalServicesVerified: false,
-  firstName: '',
-  lastName: '',
-  firstNameEn: '',
-  lastNameEn: '',
-  birthDate: '',
-  countryCode: '',
-  nationalId: '',
-  phoneNumber: '',
-  createdAt: '',
-  updatedAt: '',
-  deletedAt: '',
+  firstName: "",
+  lastName: "",
+  firstNameEn: "",
+  lastNameEn: "",
+  birthDate: "",
+  countryCode: "",
+  nationalId: "",
+  phoneNumber: "",
+  createdAt: "",
+  updatedAt: "",
+  deletedAt: "",
 };
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<IUser>) => {
@@ -41,8 +39,3 @@ const userSlice = createSlice({
 
 export const { setUser, clearUser } = userSlice.actions;
 export default userSlice.reducer;
-
-
-
-
-

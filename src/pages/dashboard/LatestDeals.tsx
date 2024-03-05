@@ -2,11 +2,12 @@ import Deposit from "assets/img/icons/depositIcon.svg";
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 import { useTransactionsQuery } from "store/api/wallet-management";
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
-import { TransactionStatus } from "types/wallet";
-import moment from "jalali-moment";
+import { convertCoins, convertIRRToToman, convertStatus } from "helpers";
 
 function LatestDeals() {
-  const { data, isLoading } = useTransactionsQuery({});
+  const { data, isLoading } = useTransactionsQuery({
+    sort: "createdAt,DESC",
+  });
   const transActions = data?.filter(
     (item) =>
       item.status !== "EXPIRED" &&
@@ -14,49 +15,14 @@ function LatestDeals() {
       item.status !== "DRAFT" &&
       (item.type === "DEPOSIT" || item.type === "WITHDRAW"),
   );
-  const convertCoins = (value) => {
-    switch (value) {
-      case "USDT":
-        return "تتر";
-      case "TRX":
-        return "ترون";
-      case "TRY":
-        return "لیر ترکیه";
-      case "IRR":
-      default:
-        return "تومان";
-    }
-  };
 
-  const convertStatus = (value: TransactionStatus) => {
-    switch (value) {
-      case "INITIATED":
-        return "ایجاد شده";
-      case "PROCESSING":
-        return "در حال پردازش";
-      case "SUCCESSFUL":
-        return "موفق";
-
-      case "FAILED":
-        return "ناموفق";
-      case "EXPIRED":
-        return "تمام شده";
-      case "CANCELED":
-        return "لغو شده";
-      case "DRAFT":
-      default:
-        return "پیش نویس";
-    }
-  };
   return (
     <Card className="h-100">
       <CardHeader className="d-flex flex-row justify-content-between align-items-center">
-        <CardTitle tag="h5">آخرین معاملات</CardTitle>
-        <div className="card-action">
-          <a className={dashboard["sub-link"]} href="/dashboard/history">
-            تاریخچه
-          </a>
-        </div>
+        <CardTitle tag="h5"> تراکنش های اخیر</CardTitle>
+        <a className={dashboard["sub-link"]} href="/dashboard/history">
+          تاریخچه
+        </a>
       </CardHeader>
       <CardBody>
         <div className={dashboard["table-responsive"]}>
@@ -130,8 +96,8 @@ function LatestDeals() {
                   </tbody>
                 ) : (
                   <tbody>
-                    {transActions.slice(0, 7)?.map((item) => (
-                      <tr>
+                    {transActions.slice(-7)?.map((item,index) => (
+                      <tr key={index}>
                         <td>
                           <span
                             className={
@@ -144,27 +110,28 @@ function LatestDeals() {
                           </span>
                         </td>
                         <td>{convertCoins(item.currencyCode)}</td>
-                        <td>{Number(item.amount).toLocaleString()}</td>
+                        {
+                          item.currencyCode === "IRR" ? <td>{convertIRRToToman(Number(item.amount)).toLocaleString()}</td> : <td>{Number(item.amount).toLocaleString()}</td>
+                        }
                         <td>
                           <span
-                            className={`${
-                              item.status === "CANCELED" ||
+                            className={`${item.status === "CANCELED" ||
                               item.status === "FAILED" ||
                               item.status === "EXPIRED"
-                                ? "text-danger"
-                                : item.status === "SUCCESSFUL"
-                                  ? "text-success"
-                                  : "text-secondary"
-                            }`}
+                              ? "text-danger"
+                              : item.status === "SUCCESSFUL"
+                                ? "text-success"
+                                : "text-secondary"
+                              }`}
                           >
                             {convertStatus(item.status)}
                           </span>
                         </td>
                         <td>
                           <span className="d-ltr d-block">
-                            {moment(item?.createdAt)
-                              .locale("fa")
-                              .format("HH:MM YYYY/MM/DD")}
+                            {`${new Date(item?.createdAt).toLocaleTimeString("fa-IR")} ${new Date(
+                              item?.createdAt,
+                            ).toLocaleDateString("fa-IR")}`}
                           </span>
                         </td>
                       </tr>
@@ -189,72 +156,6 @@ function LatestDeals() {
                 </td>
               </tr>
             )}
-
-            {/* <tbody>
-              {data?.map((data, index) => {
-                return (
-                  <tr key={index}>
-                    <td>
-                      <span
-                        className={
-                          data.type === "DEPOSIT"
-                            ? "text-success"
-                            : "text-danger"
-                        }
-                      >
-                        {convertType(data.type)}
-                      </span>
-                    </td>
-                    <td className={`text-center`}>
-                      <span>
-                        <span style={{ fontSize: "10px" }}>
-                          {data.currencyCode === "IRR"
-                            ? "TMN"
-                            : data.currencyCode}
-                        </span>{" "}
-                        {data.amount}
-                      </span>
-                    </td>
-                    <td className={`text-center`}>
-                      <span>{convertTextSingle(data.currencyCode)}</span>
-                    </td>
-                    <td className={`text-center`}>
-                      <span>
-                        {moment(data?.createdAt)
-                          .locale("fa")
-                          .format("DD MMMM YYYY")}
-                      </span>
-                    </td>
-                    <td className={`text-center`}>
-                      <span
-                        className={
-                          data.status === "SUCCESSFUL"
-                            ? "text-success"
-                            : "text-danger"
-                        }
-                      >
-                        {data.status === "SUCCESSFUL" ? " موفق" : "ناموفق"}
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })}
-              {filteredData?.length === 0 && (
-                <tr>
-                  <td colSpan={4} className="text-center">
-                    <img
-                      src={Exchange}
-                      style={{
-                        height: "50px",
-                        width: "50px",
-                        marginBottom: "10px",
-                      }}
-                    />
-                    <p>اولین معامله خود را با آرسونیکس تجربه کنید</p>
-                  </td>
-                </tr>
-              )}
-            </tbody> */}
           </table>
         </div>
       </CardBody>

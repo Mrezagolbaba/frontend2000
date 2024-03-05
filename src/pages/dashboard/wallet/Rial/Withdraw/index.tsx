@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { AlertInfo } from "components/AlertWidget";
 import {
@@ -14,14 +14,18 @@ import {
 } from "reactstrap";
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import Currency from "components/Input/CurrencyInput";
-
-import wallet from "assets/scss/dashboard/wallet.module.scss";
 import { useBankAccountsQuery } from "store/api/profile-management";
-import { formatShowAccount, searchIranianBanks } from "helpers/filesManagement";
-import { useWithdrawMutation } from "store/api/wallet-management";
+import {
+  useTransactionFeeQuery,
+  useWithdrawMutation,
+} from "store/api/wallet-management";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "store/hooks";
+import { tomanShow } from "helpers";
+import BanksWrapper from "components/BanksWrapper";
+
+import wallet from "assets/scss/dashboard/wallet.module.scss";
 
 type WithdrawType = {
   iban: string;
@@ -43,16 +47,9 @@ export default function Withdraw({ onClose, stock }: Props) {
   const [hasAccount, setHasAccount] = useState<boolean>(true);
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
   const { data, isSuccess } = useBankAccountsQuery({});
-
-  const [
-    withdrawRequest,
-    {
-      data: response,
-      isLoading,
-      isSuccess: isSuccessWithdraw,
-      isError: isErrorWithdraw,
-    },
-  ] = useWithdrawMutation();
+  const { data: fee } = useTransactionFeeQuery("IRR");
+  const [withdrawRequest, { isSuccess: isSuccessWithdraw }] =
+    useWithdrawMutation();
 
   const resolver = yupResolver(
     Yup.object().shape({
@@ -67,6 +64,8 @@ export default function Withdraw({ onClose, stock }: Props) {
     setValue,
     reset,
     formState: { errors },
+    setError,
+    clearErrors,
   } = useForm<WithdrawType>({
     mode: "onChange",
     defaultValues: {
@@ -88,17 +87,17 @@ export default function Withdraw({ onClose, stock }: Props) {
         setHasAccount(true);
         setOptionList(
           accounts.map((account) => {
-            // const bank = searchIranianBanks(account?.cardNumber);
             return {
               content: (
                 <div className={wallet["items-credit"]}>
-                  {/* <span className={wallet["items-credit__icon"]}>
-                    <span
-                      className="mx-3"
-                      dangerouslySetInnerHTML={{ __html: bank.logo }}
-                    />
-                  </span> */}
-                  <span dir="ltr">{formatShowAccount(account?.iban)}</span>
+                  <BanksWrapper
+                    type="IRR"
+                    value={account.iban}
+                    isSheba={true}
+                    iconClassName={wallet["items-credit__icon"]}
+                  >
+                    <span dir="ltr">{account?.iban}</span>
+                  </BanksWrapper>
                 </div>
               ),
               otherOptions: { accountId: account?.id },
@@ -107,8 +106,8 @@ export default function Withdraw({ onClose, stock }: Props) {
           }),
         );
         reset({
-          iban: data[0]?.iban,
-          accountId: data[0]?.id,
+          iban: accounts[0]?.iban,
+          accountId: accounts[0]?.id,
           amount: "",
         });
       }
@@ -117,11 +116,27 @@ export default function Withdraw({ onClose, stock }: Props) {
   }, [data, isSuccess]);
 
   const onSubmit = async (data: WithdrawType) => {
-    await withdrawRequest({
-      destination: data.accountId,
-      currencyCode: "IRR",
-      amount: (Number(data.amount) * 10).toString(),
-    });
+    if (Number(data.amount) < fee?.withdrawMinAmount / 10)
+      setError("amount", {
+        type: "manual",
+        message: `مبلغ وارد شده نمی تواند کمتر از ${tomanShow({ value: fee?.withdrawMinAmount, currency: "IRR" })} باشد.`,
+      });
+    else if (Number(data.amount) > fee?.withdrawMaxAmount / 10)
+      setError("amount", {
+        type: "manual",
+        message: `مبلغ وارد شده نمی تواند بیشتر از ${tomanShow({ value: fee.withdrawMaxAmount, currency: "IRR" })} باشد.`,
+      });
+    else if (Number(data.amount) > Number(stock) / 10)
+      setError("amount", {
+        type: "manual",
+        message: "موجودی کیف پول شما کافی نیست.",
+      });
+    else
+      withdrawRequest({
+        destination: data.accountId,
+        currencyCode: "IRR",
+        amount: (Number(data.amount) * 10).toString(),
+      });
   };
 
   useEffect(() => {
@@ -132,15 +147,8 @@ export default function Withdraw({ onClose, stock }: Props) {
       onClose?.();
     }
 
-    isErrorWithdraw &&
-      toast.error(
-        "در ثبت درخواست مشکلی پیش آمده است لطفا در صورت هرگونه ابهام با پشتیبانی ارتباط برقرار کنید.",
-      );
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccessWithdraw, isErrorWithdraw]);
-  console.log(hasAccount);
-
+  }, [isSuccessWithdraw]);
   return hasAccount ? (
     <form className="px-3" onSubmit={handleSubmit(onSubmit)}>
       <Row>
@@ -199,16 +207,17 @@ export default function Withdraw({ onClose, stock }: Props) {
               <FormGroup className="position-relative">
                 <div className="d-flex flex-row justify-content-between">
                   <Label htmlFor={name}>مبلغ برداشت: </Label>
-                  {/* <a href="#">
-                    <span className={wallet?.["little-label"]}>
-                      حداکثر قابل برداشت
-                    </span>
-                  </a> */}
+                  <span className="d-flex flex-row justify-content-between">
+                    <FormText>{`موجودی شما: ${tomanShow({ value: stock.toString(), currency: "IRR" })}`}</FormText>
+                  </span>
                 </div>
                 <Currency
                   name={name}
                   value={value}
-                  onChange={(val) => setValue(name, val)}
+                  onChange={(val) => {
+                    clearErrors("amount");
+                    setValue(name, val);
+                  }}
                   placeholder="مبلغ را به تومان وارد کنید"
                   hasError={Boolean(errors?.[name])}
                 />
@@ -216,17 +225,22 @@ export default function Withdraw({ onClose, stock }: Props) {
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
                 <span className="d-flex flex-row justify-content-between">
-                  <FormText>{`موجودی شما: ${(
-                    Number(stock) / 10
-                  ).toLocaleString()} تومان`}</FormText>
-                  {/* <FormText>کارمزد برداشت بانکی: هزارتومان</FormText> */}
+                  {fee && (
+                    <FormText>
+                      کارمزد برداشت :{" "}
+                      {tomanShow({
+                        value: fee.withdrawFeeStatic,
+                        currency: "IRR",
+                      })}
+                    </FormText>
+                  )}
                 </span>
               </FormGroup>
             )}
           />
         </Col>
       </Row>
-      <Row className="mt-4">
+      <Row className="mt-5">
         <div className="text-center">
           <Button className="px-5 py-3" color="primary" outline type="submit">
             ثبت درخواست برداشت

@@ -15,6 +15,8 @@ import { useAppDispatch } from "store/hooks";
 import { setUser } from "store/reducers/features/user/userSlice";
 
 import auth from "assets/scss/auth/auth.module.scss";
+import otpStyle from "assets/scss/components/Input/OTPInput.module.scss";
+
 import {
   Button,
   Card,
@@ -65,7 +67,7 @@ const OtpMobile: React.FC = () => {
     setIsLoading(true);
     const formData = {
       code: persianToEnglishNumbers(data.code),
-      type: "AUTH",
+      type: redirectTo === "/reset-password" ? "RESET_PASSWORD" : "AUTH",
       method: "PHONE",
     };
     await sendOtp.mutateAsync(formData).then((res: any) => {
@@ -78,19 +80,32 @@ const OtpMobile: React.FC = () => {
               navigate(redirectTo, { state: { token } });
             }
             // if (res?.firstTierVerified) navigate("/dashboard");
-            else if (res?.firstTierVerified) navigate("/dashboard");
-            else
+            else if (!res?.firstTierVerified)
               navigate("/information", {
                 state: {
                   phoneNumber,
                 },
               });
+            else if (!res?.emailVerified) {
+              resendOtp({
+                type: "VERIFY_EMAIL",
+                method: "EMAIL",
+              });
+              navigate("/email-otp", {
+                state: {
+                  email: res?.email,
+                  method: "VERIFY_EMAIL",
+                },
+              });
+            } else navigate("/dashboard");
             setIsLoading(false);
           })
           .catch(() => {
             navigate("/information");
             setIsLoading(false);
           });
+      } else {
+        setIsLoading(false);
       }
     });
   };
@@ -148,13 +163,13 @@ const OtpMobile: React.FC = () => {
                       control={control}
                       render={({ field: { value } }) => (
                         <OtpInput
-                          containerStyle={auth["otp-container"]}
+                          containerStyle={otpStyle["otp-container"]}
                           value={value}
                           onChange={(code) => {
                             setValue("code", code);
                             code.length === 6 && handleOTP({ code });
                           }}
-                          inputStyle={auth["otp-input"]}
+                          inputStyle={otpStyle["otp-input"]}
                           numInputs={6}
                           renderSeparator={undefined}
                           placeholder="-"
@@ -170,9 +185,12 @@ const OtpMobile: React.FC = () => {
                     <div className="auth-footer">
                       <div className="mb-3">
                         {timeInSeconds > 0 ? (
-                          <span className="auth-counter text-start d-ltr">
-                            {formatTime()}
-                          </span>
+                          <div className="d-flex justify-content-center">
+                            <span className="auth-counter text-start d-ltr">
+                              {formatTime()}
+                            </span>
+                          </div>
+
                         ) : (
                           <Button
                             color="link"

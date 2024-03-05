@@ -26,6 +26,7 @@ export default function PersonalInformation() {
     nationalId,
     birthDate,
     phoneNumber,
+    email,
     firstTierVerified,
     secondTierVerified,
     irPhoneNumber,
@@ -33,8 +34,8 @@ export default function PersonalInformation() {
 
   const resolver = yupResolver(
     Yup.object().shape({
-      firstName: Yup.string(),
-      lastName: Yup.string(),
+      name: Yup.string(),
+      email: Yup.string(),
       nationalCode: Yup.string(),
       birthDate: Yup.string(),
       nationalPhone: Yup.string(),
@@ -45,12 +46,13 @@ export default function PersonalInformation() {
   const {
     control,
     reset,
+    getValues,
     formState: { errors },
   } = useForm({
     mode: "onChange",
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      name: "",
+      email: "",
       nationalCode: "",
       birthDate: "",
       nationalPhone: "",
@@ -61,8 +63,8 @@ export default function PersonalInformation() {
 
   useEffect(() => {
     reset({
-      firstName: firstName,
-      lastName: lastName,
+      name: firstName + " " + lastName,
+      email: email,
       nationalCode: nationalId,
       birthDate: new Date(birthDate).toLocaleDateString("fa-IR"),
       iranianPhone: phoneNumber.includes("+98") ? phoneNumber : irPhoneNumber,
@@ -70,6 +72,7 @@ export default function PersonalInformation() {
     });
   }, [
     birthDate,
+    email,
     firstName,
     irPhoneNumber,
     lastName,
@@ -103,16 +106,16 @@ export default function PersonalInformation() {
 
         <Form className="container">
           <Row className="justify-content-center">
-            <Col xs={12} lg={5}>
+            <Col xs={12} lg={6}>
               <Controller
-                name="firstName"
+                name="name"
                 control={control}
                 render={({ field: { name, value, onChange, ref } }) => (
                   <FormGroup row>
-                    <Label sm={3} htmlFor={name}>
-                      نام:
+                    <Label sm={4} htmlFor={name}>
+                      نام کامل:
                     </Label>
-                    <Col sm={9}>
+                    <Col sm={8}>
                       <Input
                         disabled
                         id={name}
@@ -127,23 +130,23 @@ export default function PersonalInformation() {
                 )}
               />
             </Col>
-            <Col xs={12} lg={5}>
+            <Col xs={12} lg={6}>
               <Controller
-                name="lastName"
+                name="email"
                 control={control}
                 render={({ field: { name, value, onChange, ref } }) => (
                   <FormGroup row>
-                    <Label sm={3} htmlFor={name}>
-                      نام خانوادگی:
+                    <Label sm={4} htmlFor={name}>
+                      ایمیل:
                     </Label>
-                    <Col sm={9}>
+                    <Col sm={8}>
                       <Input
                         disabled
                         id={name}
                         name={name}
                         ref={ref}
                         value={value}
-                        type="text"
+                        type="email"
                         onChange={onChange}
                       />
                     </Col>
@@ -151,16 +154,16 @@ export default function PersonalInformation() {
                 )}
               />
             </Col>
-            <Col xs={12} lg={5}>
+            <Col xs={12} lg={6}>
               <Controller
                 name="nationalCode"
                 control={control}
                 render={({ field: { name, value, onChange, ref } }) => (
                   <FormGroup row>
-                    <Label sm={3} htmlFor={name}>
+                    <Label sm={4} htmlFor={name}>
                       کدملی:
                     </Label>
-                    <Col sm={9}>
+                    <Col sm={8}>
                       <Input
                         disabled
                         id={name}
@@ -175,16 +178,16 @@ export default function PersonalInformation() {
                 )}
               />
             </Col>
-            <Col xs={12} lg={5}>
+            <Col xs={12} lg={6}>
               <Controller
                 name="birthDate"
                 control={control}
                 render={({ field: { name, value, onChange, ref } }) => (
                   <FormGroup row>
-                    <Label sm={3} htmlFor={name}>
+                    <Label sm={4} htmlFor={name}>
                       تاریخ تولد:
                     </Label>
-                    <Col sm={9}>
+                    <Col sm={8}>
                       <Input
                         disabled
                         id={name}
@@ -199,16 +202,16 @@ export default function PersonalInformation() {
                 )}
               />
             </Col>
-            <Col xs={12} lg={5}>
+            <Col xs={12} lg={6}>
               <Controller
                 name="iranianPhone"
                 control={control}
                 render={({ field: { name, value, onChange, ref } }) => (
                   <FormGroup row>
-                    <Label sm={3} htmlFor={name}>
+                    <Label sm={4} htmlFor={name}>
                       شماره ایران:
                     </Label>
-                    <Col sm={9}>
+                    <Col sm={8}>
                       <Input
                         invalid={Boolean(errors?.[name])}
                         disabled
@@ -231,37 +234,39 @@ export default function PersonalInformation() {
                 )}
               />
             </Col>
-            <Col xs={12} lg={5}>
-              <Controller
-                name="nationalPhone"
-                control={control}
-                render={({ field: { name, value, onChange, ref } }) => (
-                  <FormGroup row>
-                    <Label sm={3} htmlFor={name}>
-                      شماره بین المللی:
-                    </Label>
-                    <Col sm={9}>
-                      <Input
-                        invalid={Boolean(errors?.[name])}
-                        disabled
-                        id={name}
-                        name={name}
-                        ref={ref}
-                        value={value}
-                        type="text"
-                        dir="ltr"
-                        style={{ textAlign: "right" }}
-                        onChange={onChange}
-                      />
-                      {errors?.[name] && (
-                        <FormFeedback tooltip>
-                          {errors?.[name]?.message}
-                        </FormFeedback>
-                      )}
-                    </Col>
-                  </FormGroup>
-                )}
-              />
+            <Col xs={12} lg={6}>
+              {getValues("nationalPhone") !== "" && (
+                <Controller
+                  name="nationalPhone"
+                  control={control}
+                  render={({ field: { name, value, onChange, ref } }) => (
+                    <FormGroup row>
+                      <Label sm={4} htmlFor={name}>
+                        شماره بین المللی:
+                      </Label>
+                      <Col sm={8}>
+                        <Input
+                          invalid={Boolean(errors?.[name])}
+                          disabled
+                          id={name}
+                          name={name}
+                          ref={ref}
+                          value={value}
+                          type="text"
+                          dir="ltr"
+                          style={{ textAlign: "right" }}
+                          onChange={onChange}
+                        />
+                        {errors?.[name] && (
+                          <FormFeedback tooltip>
+                            {errors?.[name]?.message}
+                          </FormFeedback>
+                        )}
+                      </Col>
+                    </FormGroup>
+                  )}
+                />
+              )}
             </Col>
           </Row>
         </Form>

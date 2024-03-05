@@ -5,7 +5,7 @@ import { PiInfo, PiWarning, PiCheckCircle } from "react-icons/pi";
 import alert from "assets/scss/components/Alert/style.module.scss";
 
 type Props = {
-  text: string;
+  text: string | ReactElement;
   hasIcon?: boolean;
   icon: ReactElement;
   className: string;

@@ -1,17 +1,18 @@
 import ProtectedRoute from "./ProtectedRoute";
-import { WalletList } from "pages/dashboard/wallet";
+import Wallet from "pages/dashboard/wallet";
 import Setting from "pages/dashboard/setting";
 import DashboardContent from "pages/dashboard/DashboardContent";
 import Dashboard from "pages/dashboard";
-import BuySell from "pages/dashboard/buySell";
+import Exchange from "pages/dashboard/exchange";
 import Profile from "pages/dashboard/profile";
 import Invoice from "pages/dashboard/invoice";
 import Orders from "pages/dashboard/orders";
-import { TransactionList } from "pages/dashboard/transactions";
+import Transactions from "pages/dashboard/transactions";
 import Support from "pages/dashboard/support";
 import Market from "pages/dashboard/market";
 import History from "pages/dashboard/history";
 import PaymentRecipt from "pages/dashboard/payment-receipt";
+import SupportDetails from "pages/dashboard/support/details";
 
 const DashboardRouter = {
   path: "dashboard",
@@ -27,18 +28,18 @@ const DashboardRouter = {
     },
     {
       path: "wallet",
-      element: <ProtectedRoute children={<WalletList />} />,
+      element: <ProtectedRoute children={<Wallet />} />,
     },
     {
       path: "setting",
       element: <ProtectedRoute children={<Setting />} />,
     },
     {
-      path: "buy-sell",
-      element: <ProtectedRoute children={<BuySell />} />,
+      path: "exchange",
+      element: <ProtectedRoute children={<Exchange />} />,
     },
     {
-      path: "invoice",
+      path: "invoice/:id",
       element: <ProtectedRoute children={<Invoice />} />,
     },
     {
@@ -47,11 +48,15 @@ const DashboardRouter = {
     },
     {
       path: "transactions",
-      element: <ProtectedRoute children={<TransactionList />} />,
+      element: <ProtectedRoute children={<Transactions />} />,
     },
     {
       path: "support",
       element: <ProtectedRoute children={<Support />} />,
+    },
+    {
+      path: "support/details/:id",
+      element: <ProtectedRoute children={<SupportDetails />} />,
     },
     {
       path: "market",
@@ -62,9 +67,9 @@ const DashboardRouter = {
       element: <ProtectedRoute children={<History />} />,
     },
     {
-      path:"payment-receipt/:id",
-      element:<ProtectedRoute children={<PaymentRecipt />} />
-    }
+      path: "payment-receipt/:id",
+      element: <ProtectedRoute children={<PaymentRecipt />} />,
+    },
   ],
 };
 
