@@ -9,7 +9,7 @@ const BottomBanner = () => {
       <Container>
         <div className={home["bottom-banner__container"]}>
           <h2 className={home["bottom-banner__title"]}>
-            آرسونیکس یعنی؛ بهترین نرخ و کمترین کارمزد
+            آرسونیکس ، بهترین نرخ و کمترین کارمزد
           </h2>
           <p className={home["bottom-banner__desc"]}>
             در کمتر از دو دقیقه بدون ارسال هیچ مدرکی اولین معامله را انجام
