@@ -40,10 +40,10 @@ export default function CoinPage() {
 
   const currencyPairs = [
     { code: "USDT", name: "تتر", imgSrc: USDT },
-    { code: "EUR", name: "یورو", imgSrc: EUR },
-    { code: "CAD", name: "دلار کانادا", imgSrc: CAD },
-    { code: "GBP", name: "پوند", imgSrc: GBP },
-    { code: "TRY", name: "لیر", imgSrc: lira },
+    // { code: "EUR", name: "یورو", imgSrc: EUR },
+    // { code: "CAD", name: "دلار کانادا", imgSrc: CAD },
+    // { code: "GBP", name: "پوند", imgSrc: GBP },
+    // { code: "TRY", name: "لیر", imgSrc: lira },
     // Add more currency pairs as needed
   ];
 
@@ -101,12 +101,12 @@ export default function CoinPage() {
                 </button>
               </form> */}
             </div>
-            <div className={home["currency-rates__tabs"]}>
+{/*             <div className={home["currency-rates__tabs"]}>
               <FilterNavCoin
                 activeTab={activeTab}
                 handleTabClick={handleTabClick}
               />
-            </div>
+            </div> */}
             <div className={home["tab-content"]} id="myTabContent">
               <div
                 className={`${home.fade} ${home.show} ${home.active}}`}
