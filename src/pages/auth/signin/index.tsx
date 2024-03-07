@@ -141,6 +141,7 @@ export default function LoginPage() {
                 </span>
               </div>
             </div>
+            <div className="text-center">ورود با</div>
             <div className={auth["login-type"]}>
               <div>
                 <button
@@ -149,7 +150,7 @@ export default function LoginPage() {
                   }
                   onClick={() => setLoginType("PHONE")}
                 >
-                  ورود با شماره همراه
+                  شماره همراه
                 </button>
                 <button
                   className={
@@ -157,7 +158,7 @@ export default function LoginPage() {
                   }
                   onClick={() => setLoginType("EMAIL")}
                 >
-                  ورود با ایمیل
+                  ایمیل
                 </button>
               </div>
             </div>

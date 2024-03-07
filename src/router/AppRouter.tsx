@@ -1,6 +1,6 @@
 import { useLocation, useRoutes } from "react-router-dom";
-import LoginPage from "pages/auth/signin";
-import SignupPage from "pages/auth/signup";
+import Login from "pages/auth/signin";
+import Register from "pages/auth/signup";
 import OTP from "pages/auth/otp/index";
 import ForgetPassword from "pages/auth/forget-password";
 import ResetPassword from "pages/auth/forget-password/ResetPassword";
@@ -29,8 +29,8 @@ export default function AppRouter() {
       // element: <HomePage />,
       children: [
         { path: "", element: <HomePage /> },
-        { path: "login", element: <LoginPage /> },
-        { path: "register", element: <SignupPage /> },
+        { path: "login", element: <Login /> },
+        { path: "register", element: <Register /> },
         { path: "otp", element: <OTP /> },
         { path: "forget-password", element: <ForgetPassword /> },
         { path: "reset-password", element: <ResetPassword /> },

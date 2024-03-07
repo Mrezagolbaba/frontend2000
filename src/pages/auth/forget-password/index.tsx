@@ -99,6 +99,7 @@ export default function ForgetPassword() {
         <Card className={auth.card}>
           <CardBody className={auth["card-body"]}>
             <h4 className={auth.title}>فراموشی رمز عبور</h4>
+            <div className="text-center">بازیابی رمز عبور با</div>
             <div className={auth["login-type"]}>
               <div>
                 <button
@@ -107,7 +108,7 @@ export default function ForgetPassword() {
                   }
                   onClick={() => setForgotType("PHONE")}
                 >
-                  ورود با شماره همراه
+                  شماره همراه
                 </button>
                 <button
                   className={
@@ -115,7 +116,7 @@ export default function ForgetPassword() {
                   }
                   onClick={() => setForgotType("EMAIL")}
                 >
-                  ورود با ایمیل
+                  ایمیل
                 </button>
               </div>
             </div>
