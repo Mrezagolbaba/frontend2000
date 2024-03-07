@@ -1,7 +1,6 @@
 import { useLocation, useRoutes } from "react-router-dom";
 import LoginPage from "pages/auth/signin";
 import SignupPage from "pages/auth/signup";
-import OtpEmail from "pages/auth/otp/OtpEmail";
 import OTP from "pages/auth/otp/index";
 import ForgetPassword from "pages/auth/forget-password";
 import ResetPassword from "pages/auth/forget-password/ResetPassword";
@@ -33,7 +32,6 @@ export default function AppRouter() {
         { path: "login", element: <LoginPage /> },
         { path: "register", element: <SignupPage /> },
         { path: "otp", element: <OTP /> },
-        { path: "email-otp", element: <OtpEmail /> },
         { path: "forget-password", element: <ForgetPassword /> },
         { path: "reset-password", element: <ResetPassword /> },
         { path: "coins", element: <CoinPage /> },
