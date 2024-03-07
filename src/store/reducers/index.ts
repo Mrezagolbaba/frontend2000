@@ -10,14 +10,13 @@ import exchangeReducer from "store/reducers/features/exchange/exchangeSlice";
 import rateReducer from "store/reducers/features/rates/rateSlice";
 
 import { api } from "store/api";
-import storage from 'redux-persist/lib/storage';
+import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
+import authReducer from "./jwtAuth";
 // ==============================|| COMBINE REDUCERS ||============================== //
 
-
-
-
 const rootReducers = combineReducers({
+  auth: authReducer,
   user: userReducer,
   setting: settingReducer,
   invoice: invoiceReducer,
@@ -29,10 +28,10 @@ const rootReducers = combineReducers({
 
 //persist reducers
 const persistConfig = {
-  key: 'root',
+  key: "root",
   storage,
-  whitelist: ['user']
-}
-const reducers = persistReducer(persistConfig, rootReducers)
+  whitelist: ["user"],
+};
+const reducers = persistReducer(persistConfig, rootReducers);
 
 export default reducers;

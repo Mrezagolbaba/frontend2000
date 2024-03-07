@@ -22,9 +22,8 @@ const Header = ({ disableBanner = false }: Props) => {
     <>
       <div
         id="menuOverlay"
-        className={`${home["menu-overlay"]} ${
-          openOverlayMenu ? home.show : ""
-        }`}
+        className={`${home["menu-overlay"]} ${openOverlayMenu ? home.show : ""
+          }`}
       />
       <header
         className={`${home.header} ${disableBanner ? home.withoutBg : ""}`}
@@ -38,14 +37,13 @@ const Header = ({ disableBanner = false }: Props) => {
 
           <nav>
             <ul
-              className={`${home.navbar} navbar--light ${
-                openOverlayMenu ? home.expanded : ""
-              }`}
+              className={`${home.navbar} navbar--light ${openOverlayMenu ? home.expanded : ""
+                }`}
               id="navbar"
             >
               <li>
                 <div className={home.header__auth}>
-                  {user.id ? (
+                  {user.id ?
                     <div>
                       <Button
                         tag="a"
@@ -76,23 +74,20 @@ const Header = ({ disableBanner = false }: Props) => {
                 </div>
               </li>
               <li
-                className={`${home.navbar__item} ${
-                  pathname === "/" ? home.active : ""
-                }`}
+                className={`${home.navbar__item} ${pathname === "/" ? home.active : ""
+                  }`}
               >
                 <Link to="/">صفحه اصلی</Link>
               </li>
               <li
-                className={`${home.navbar__item} ${
-                  pathname === "/coins" ? home.active : ""
-                }`}
+                className={`${home.navbar__item} ${pathname === "/coins" ? home.active : ""
+                  }`}
               >
                 <Link to="/coins">قیمت لحظه ای</Link>
               </li>
               <li
-                className={`${home.navbar__item} ${
-                  pathname === "/dashboard" ? home.active : ""
-                }`}
+                className={`${home.navbar__item} ${pathname === "/dashboard" ? home.active : ""
+                  }`}
               >
                 <Link to="/dashboard">خرید و فروش آنی</Link>
               </li>
@@ -100,16 +95,14 @@ const Header = ({ disableBanner = false }: Props) => {
                 <Link to="https://help.arsonex.com/">مرکز راهنمایی</Link>
               </li>
               <li
-                className={`${home.navbar__item} ${
-                  pathname === "/about-us" ? home.active : ""
-                }`}
+                className={`${home.navbar__item} ${pathname === "/about-us" ? home.active : ""
+                  }`}
               >
                 <Link to="/about-us">درباره ما</Link>
               </li>
               <li
-                className={`${home.navbar__item} ${
-                  pathname === "/contact-us" ? home.active : ""
-                }`}
+                className={`${home.navbar__item} ${pathname === "/contact-us" ? home.active : ""
+                  }`}
               >
                 <Link to="/contact-us">تماس با ما</Link>
               </li>
@@ -179,7 +172,7 @@ const Header = ({ disableBanner = false }: Props) => {
             <div className={home.header__intro}>
               <h1>آرسونیکس، همراه ارز دیجیتال شما</h1>
               <p>
-              تسویه آنی تومان و بیش از 30 واحد پول دیگر
+                ارز دیجیتال، تومان یا فیات؛ بدون محدودیت، به سرعت معامله کنید
               </p>
               <Button
                 tag="a"

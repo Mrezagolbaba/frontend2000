@@ -15,9 +15,7 @@ const refreshAccessToken = async () => {
   const refreshToken = localStorage.getItem("refreshToken");
   if (refreshToken) {
     try {
-      const response = await axios.post("/refresh-token", {
-        refreshToken: refreshToken,
-      });
+      const response = await axios.post('/refresh-token', { refreshToken: refreshToken });
       const newAccessToken = response.data.access_token;
       // Update the access token in local storage
       localStorage.setItem("token", newAccessToken);
@@ -66,12 +64,12 @@ request.interceptors.response.use(
       // Response received with an error status code
       const { status } = response;
 
-      if (status === 401 || status === 500) {
-        // Unauthorized or Internal Server Error
-        localStorage.removeItem("token");
-        localStorage.removeItem("isLoggedIn");
-        window.location.replace("/login");
-      }
+      // if (status === 401 || status === 500) {
+      //   // Unauthorized or Internal Server Error
+      //   localStorage.removeItem("token");
+      //   localStorage.removeItem("isLoggedIn");
+      //   window.location.replace("/login");
+      // }
 
       // You can add more specific error handling logic here if needed
     }

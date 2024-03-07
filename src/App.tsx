@@ -1,30 +1,31 @@
-import AppRouter from "./router/AppRouter";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { BrowserRouter } from "react-router-dom";
-import ErrorBoundary from "./utils/error";
-import TagManager from "react-gtm-module";
+//imports
 import { useEffect } from "react";
-import ReactDOM from "react-dom";
-import AddToHomeScreenPrompt from "components/AddToHomeScreenPrompt";
+import TagManager from "react-gtm-module";
+import { BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+//third-party
+import AppRouter from "router/AppRouter";
+import ErrorBoundary from "utils/error";
+import { JWTProvider as AuthProvider } from "contexts/JWTContext";
 
 
 const queryClient = new QueryClient();
 
-
 function App() {
-
-  useEffect(()=>{
+  useEffect(() => {
     const tagManagerArgs = {
       gtmId: "GTM-WRSW3TKG",
     };
     TagManager.initialize(tagManagerArgs);
-  },[])
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary>
         <BrowserRouter>
-          <AppRouter />
+          <AuthProvider>
+            <AppRouter />
+          </AuthProvider>
         </BrowserRouter>
       </ErrorBoundary>
     </QueryClientProvider>

@@ -19,9 +19,9 @@ const axiosBaseQuery =
   > =>
   async (args: AxiosRequestConfig, api: any, extraOptions: any) => {
     try {
-      axiosInstance.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
-        "token",
-      )}`;
+      // axiosInstance.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
+      //   "token",
+      // )}`;
       const res = await axiosInstance(args);
       const data = res.data;
 
@@ -35,13 +35,15 @@ const axiosBaseQuery =
         toast.error("مشکلی در ارتباط با سرور بوجود آمده است", {
           position: "bottom-left",
         });
-      } else if (!isLoginReq && status === 401) {
-        delete axiosInstance.defaults.headers.common.Authorization;
-        localStorage.removeItem("token");
-        localStorage.removeItem("isLoggedIn");
-        window.location.replace("/login");
-        return axiosBaseQuery()(args, api, extraOptions);
-      } else if (response?.data?.translatedMessage) {
+      }
+      // else if (!isLoginReq && status === 401) {
+      //   delete axiosInstance.defaults.headers.common.Authorization;
+      //   localStorage.removeItem("token");
+      //   localStorage.removeItem("isLoggedIn");
+      //   window.location.replace("/login");
+      //   return axiosBaseQuery()(args, api, extraOptions);
+      // } 
+      else if (response?.data?.translatedMessage) {
         toast.error(response.data.translatedMessage, {
           position: "bottom-left",
         });
@@ -64,7 +66,6 @@ export const api = createApi({
     "user",
     "notices-settings",
     "wallets",
-    "ticket",
   ],
   keepUnusedDataFor: 30,
   refetchOnMountOrArgChange: 30,

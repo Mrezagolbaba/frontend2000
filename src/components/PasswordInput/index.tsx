@@ -1,6 +1,6 @@
 import FloatInput from "components/Input/FloatInput";
 import React, { useState } from "react";
-import { FieldErrors, RefCallBack } from "react-hook-form";
+import { FieldErrors } from "react-hook-form";
 import {
   BsCheckCircle,
   BsExclamationCircle,
@@ -15,10 +15,8 @@ import { isPasswordValid, passwordListValidation } from "helpers";
 
 interface Props {
   onChange: (...event: any[]) => void;
-  onBlur?: (...event: any[]) => void;
   value: string;
   name: string;
-  ref: RefCallBack;
   errors?: FieldErrors;
   hasShowHint?: boolean;
   label?: string;
@@ -27,7 +25,6 @@ interface Props {
 const PasswordInput = ({
   name,
   value,
-  ref,
   onChange,
   errors,
   hasShowHint = false,
@@ -50,7 +47,6 @@ const PasswordInput = ({
         label={label}
         onChange={handleChange}
         inputProps={{
-          ref: ref,
           size: "large",
           prefix: <CiLock />,
           suffix: !hasShowPass ? (

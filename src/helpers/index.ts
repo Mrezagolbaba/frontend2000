@@ -1,7 +1,9 @@
+import { JWT_DECODE_KEY, REF_TOKEN_OBJ_NAME, REF_TOKEN_OBJ_TIME } from "config";
 import moment from "jalali-moment";
 import jalaliMoment from "jalali-moment";
 import { isEmpty } from "lodash";
 import { CurrencyCode, TransactionStatus } from "types/wallet";
+import CryptoJS from 'crypto-js';
 
 export function generateLabelValueArray(start: number, end: number) {
   const resultArray: { label: string; value: string }[] = [];
@@ -359,3 +361,20 @@ export const coinShow = (value: string, currency?: CurrencyCode): string => {
 
   return Number(newValue).toLocaleString("IRR");
 };
+
+export const getEncryptedObject = (data: string) => {
+  try {
+    return CryptoJS.DES.encrypt(data, JWT_DECODE_KEY).toString();
+  } catch (e) {
+    return null;
+  }
+};
+
+export const setRefToken = (refreshToken: string,expiredAt:string) => {
+  const hashedTokenString = getEncryptedObject(refreshToken);
+  if (window && hashedTokenString != null) {
+    window.localStorage.setItem(REF_TOKEN_OBJ_NAME, hashedTokenString);
+    window.localStorage.setItem(REF_TOKEN_OBJ_TIME, expiredAt);
+  }
+};
+
