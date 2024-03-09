@@ -48,10 +48,17 @@ export interface AuthProps {
 export type JWTContextType = {
   isLoggedIn: boolean;
   isInitialized?: boolean;
-  // logout: () => void;
   login: (data: LoginRequest) => Promise<AuthResponse>;
   register: (data: RegisterRequest) => Promise<AuthResponse>;
   forgotPassword: (data: ForgotPasswordRequest) => Promise<AuthResponse>;
+  logout: () => Promise<void>;
+  otp: ({
+    data,
+    isLoggedIn,
+  }: {
+    data: OTPRequest;
+    isLoggedIn?: boolean;
+  }) => Promise<void>;
 };
 
 export interface OTPRequest {

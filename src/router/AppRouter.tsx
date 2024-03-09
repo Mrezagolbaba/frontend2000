@@ -16,6 +16,7 @@ import RulesPage from "pages/rules";
 import AboutUs from "pages/about-us";
 import { useEffect } from "react";
 import { getTitlePage } from "helpers";
+import AuthRouter from "./AuthRouter";
 
 export default function AppRouter() {
   const location = useLocation();
@@ -29,13 +30,22 @@ export default function AppRouter() {
       // element: <HomePage />,
       children: [
         { path: "", element: <HomePage /> },
-        { path: "login", element: <Login /> },
-        { path: "register", element: <Register /> },
-        { path: "otp", element: <OTP /> },
-        { path: "forget-password", element: <ForgetPassword /> },
-        { path: "reset-password", element: <ResetPassword /> },
+        { path: "login", element: <AuthRouter children={<Login />} /> },
+        { path: "register", element: <AuthRouter children={<Register />} /> },
+        { path: "otp", element: <AuthRouter children={<OTP />} /> },
+        {
+          path: "forget-password",
+          element: <AuthRouter children={<ForgetPassword />} />,
+        },
+        {
+          path: "reset-password",
+          element: <AuthRouter children={<ResetPassword />} />,
+        },
+        {
+          path: "information",
+          element: <AuthRouter children={<Information />} />,
+        },
         { path: "coins", element: <CoinPage /> },
-        { path: "information", element: <Information /> },
         { path: "coming-soon", element: <ComingSoon /> },
         { path: "contact-us", element: <ContactUs /> },
         { path: "about-us", element: <AboutUs /> },

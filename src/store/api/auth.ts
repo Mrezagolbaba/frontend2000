@@ -74,6 +74,14 @@ export const authApi = enhancedApi.injectEndpoints({
         };
       },
     }),
+    logout: builder.mutation<void, void>({
+      query() {
+        return {
+          method: "POST",
+          url: "/auth/logout",
+        };
+      },
+    }),
   }),
 });
 export const {
@@ -84,4 +92,5 @@ export const {
   useForgotPasswordMutation,
   useSetPasswordMutation,
   useGetSessionQuery,
+  useLogoutMutation,
 } = authApi;

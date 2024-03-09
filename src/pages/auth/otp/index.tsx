@@ -22,11 +22,12 @@ import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useGetMeQuery } from "store/api/user";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useOtpMutation, useResendOtpMutation } from "store/api/auth";
+import { useResendOtpMutation } from "store/api/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import auth from "assets/scss/auth/auth.module.scss";
 import otpStyle from "assets/scss/components/Input/OTPInput.module.scss";
+import useAuth from "hooks/useAuth";
 
 export default function Otp() {
   // ==============|| Validation ||================= //
@@ -35,25 +36,29 @@ export default function Otp() {
   });
   const resolver = yupResolver(OtpSchema);
 
+  // ==============|| States ||================= //
+  const [timeInSeconds, setTimeInSeconds] = useState(120);
+
   // ==============|| Hooks ||================= //
-  const [otpRequest, { isLoading: otpLoading, isSuccess: otpSuccess }] =
-    useOtpMutation();
+  const { otp } = useAuth();
   const [resendOtpRequest, { isLoading: resendLoading }] =
     useResendOtpMutation();
   const { data: user, isLoading, isSuccess } = useGetMeQuery();
   const navigate = useNavigate();
   const location = useLocation();
   const { phoneNumber, type } = location.state;
-  const { handleSubmit, setValue, control } = useForm<{ code: string }>({
+  const {
+    handleSubmit,
+    setValue,
+    control,
+    formState: { isSubmitting },
+  } = useForm<{ code: string }>({
     mode: "onChange",
     defaultValues: {
       code: "",
     },
     resolver,
   });
-
-  // ==============|| States ||================= //
-  const [timeInSeconds, setTimeInSeconds] = useState(120);
 
   // ==============|| Handlers ||================= //
   const handleResend = () => {
@@ -65,14 +70,32 @@ export default function Otp() {
       resendOtpRequest(data);
     }
   };
-  const handleOTP = (data: { code: string }) => {
+  const handleOTP = async (data: { code: string }) => {
     if (isSuccess && user) {
       const body: OTPRequest = {
         code: persianToEnglishNumbers(data.code),
         type,
         method: type === "VERIFY_EMAIL" ? "EMAIL" : user.otpMethod,
       };
-      otpRequest(body);
+      await otp({
+        data: body,
+        isLoggedIn: type !== "VERIFY_EMAIL",
+      }).then(() => {
+        if (!user?.firstTierVerified && type === "AUTH")
+          navigate("/information");
+        else if (!user?.emailVerified && type === "AUTH") {
+          resendOtpRequest({
+            type: "VERIFY_EMAIL",
+            method: "EMAIL",
+          });
+          navigate("/otp", {
+            state: {
+              type: "VERIFY_EMAIL",
+            },
+          });
+        } else if (type === "RESET_PASSWORD") navigate("/reset-password");
+        else navigate("/dashboard");
+      });
     }
   };
   const handleErrors = (errors: any) => {
@@ -105,24 +128,6 @@ export default function Otp() {
   };
 
   // ==============|| Life Cycle ||================= //
-  useEffect(() => {
-    if (otpSuccess && user) {
-      if (!user.firstTierVerified && type === "AUTH") navigate("/information");
-      else if (!user.emailVerified && type === "AUTH") {
-        resendOtpRequest({
-          type: "VERIFY_EMAIL",
-          method: "EMAIL",
-        });
-        navigate("/otp", {
-          state: {
-            type: "VERIFY_EMAIL",
-          },
-        });
-      } else if (type === "RESET_PASSWORD") navigate("/reset-password");
-      else navigate("/dashboard");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [otpSuccess]);
   useEffect(() => {
     const timerInterval = setInterval(() => {
       if (timeInSeconds > 0) {
@@ -197,7 +202,9 @@ export default function Otp() {
                           <Button
                             color="link"
                             className={auth.link}
-                            disabled={resendLoading || isLoading || otpLoading}
+                            disabled={
+                              resendLoading || isLoading || isSubmitting
+                            }
                             onClick={handleResend}
                           >
                             ارسال مجدد کد
@@ -210,11 +217,11 @@ export default function Otp() {
                             timeInSeconds <= 0 ||
                             isLoading ||
                             resendLoading ||
-                            otpLoading
+                            isSubmitting
                           }
                           className={auth.submit}
                         >
-                          {otpLoading ? (
+                          {isSubmitting ? (
                             <Spinner style={{ color: "white" }} />
                           ) : (
                             "ارسال"

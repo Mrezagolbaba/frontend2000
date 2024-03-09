@@ -23,8 +23,10 @@ const auth = createSlice({
       const { token, expiredAt } = action.payload;
       state.token = token;
       state.expiredAt = expiredAt;
-      state.isLoggedIn = true;
-      state.isInitialized = true;
+    },
+    // OTP
+    setOtp(state) {
+      (state.isLoggedIn = true), (state.isInitialized = true);
     },
     // setToken(state, action) {
     //   const { token } = action.payload;
@@ -33,20 +35,19 @@ const auth = createSlice({
     //   state.realm_access = data["realm_access"];
     //   state.resource_access = data["resource_access"];
     // },
-    // // LOGOUT
-    // setLogout(state, action) {
-    //   state.token = "";
-    //   state.isLoggedIn = false;
-    //   state.isInitialized = true;
-    //   state.realm_access = undefined;
-    //   state.resource_access = undefined;
-    // },
+    // LOGOUT
+    setLogout(state) {
+      state.token = "";
+      state.expiredAt = "";
+      state.isLoggedIn = false;
+      state.isInitialized = true;
+    },
   },
 });
 
 export default auth.reducer;
 
 // export const { setLogin, setToken, setLogout } = auth.actions;
-export const { setLogin } = auth.actions;
+export const { setLogin, setOtp, setLogout } = auth.actions;
 
 export const selectAuth = (state: RootState) => state.auth;

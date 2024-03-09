@@ -3,6 +3,8 @@ import { BaseQueryFn, createApi } from "@reduxjs/toolkit/dist/query/react";
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import toast from "react-hot-toast";
+import { getRefToken } from "helpers";
+import { setSession } from "contexts/JWTContext";
 
 export const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
@@ -10,6 +12,30 @@ export const axiosInstance = axios.create({
     return status >= 200 && status < 300;
   },
 });
+
+let _refPromise: Promise<{ token: string; expiredAt: string }> | null;
+export function refreshTokenPromise(): Promise<{
+  token: string;
+  expiredAt: string;
+}> {
+  if (!_refPromise) {
+    const refresh_token = getRefToken();
+    if (!refresh_token) return Promise.reject("No RefreshToken");
+    _refPromise = axiosInstance
+      .post(`/auth/refresh-token`, { refreshToken: refresh_token })
+      .then(({ data }) => {
+        setSession(data);
+        return {
+          token: data.accessToken,
+          expiredAt: data.accessTokenExpiresAt,
+        };
+      })
+      .finally(() => {
+        _refPromise = null;
+      });
+  }
+  return _refPromise;
+}
 
 const axiosBaseQuery =
   (): BaseQueryFn<
@@ -27,6 +53,7 @@ const axiosBaseQuery =
 
       return { data };
     } catch (error: any) {
+      console.log(error);
       const response = error.response;
       const status = response.status;
       const isLoginReq = response.config.url.includes("sign-in");
@@ -42,7 +69,7 @@ const axiosBaseQuery =
       //   localStorage.removeItem("isLoggedIn");
       //   window.location.replace("/login");
       //   return axiosBaseQuery()(args, api, extraOptions);
-      // } 
+      // }
       else if (response?.data?.translatedMessage) {
         toast.error(response.data.translatedMessage, {
           position: "bottom-left",

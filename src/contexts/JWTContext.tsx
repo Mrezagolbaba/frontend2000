@@ -1,22 +1,29 @@
-// import { selectAuth, setLogin, setLogout } from "store/reducers/jwtAuth";
 import {
   ForgotPasswordRequest,
   JWTContextType,
   LoginRequest,
+  OTPRequest,
   RegisterRequest,
 } from "types/auth";
 import {
   useForgotPasswordMutation,
   useLoginMutation,
+  useLogoutMutation,
+  useOtpMutation,
   useRegisterMutation,
 } from "store/api/auth";
-import { REF_TOKEN_OBJ_NAME, REF_TOKEN_OBJ_TIME } from "config";
-import { axiosInstance } from "store/api";
-import { createContext, useEffect } from "react";
-import { selectAuth, setLogin } from "store/reducers/jwtAuth";
-import { setRefToken } from "helpers";
+import { ReactElement, createContext, useEffect } from "react";
+import { axiosInstance, refreshTokenPromise } from "store/api";
+import { removeRefToken, setRefToken } from "helpers";
+import {
+  selectAuth,
+  setLogin,
+  setOtp,
+  setLogout,
+} from "store/reducers/jwtAuth";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const setSession = (
   serviceToken?: {
     access_token: string;
@@ -31,8 +38,7 @@ export const setSession = (
     );
     axiosInstance.defaults.headers.common.Authorization = `Bearer ${serviceToken.access_token}`;
   } else {
-    window.localStorage.removeItem(REF_TOKEN_OBJ_NAME);
-    window.localStorage.removeItem(REF_TOKEN_OBJ_TIME);
+    removeRefToken();
     delete axiosInstance.defaults.headers.common.Authorization;
   }
 };
@@ -41,33 +47,28 @@ export const setSession = (
 
 const JWTContext = createContext<JWTContextType | null>(null);
 
-export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
+export const JWTProvider = ({ children }: { children: ReactElement }) => {
   const dispatch = useAppDispatch();
   //step1
   const [loginRequest] = useLoginMutation();
+  const [otpRequest] = useOtpMutation();
   const [registerRequest] = useRegisterMutation();
   const [forgotPasswordRequest] = useForgotPasswordMutation();
-  // const [forgotPasswordPost] = useForgotPasswordMutation();
+  const [logoutRequest] = useLogoutMutation();
 
   const { isInitialized, isLoggedIn } = useAppSelector(selectAuth);
 
   useEffect(() => {
     const init = async () => {
       try {
-        // const token = await refreshTokenPromise();
-        // dispatch(setLogin({ token }));
-        // dispatch(
-        //   setLogin({
-        //     token:
-        //       "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY3MzA1MTQ2MSwiaWF0IjoxNjczMDUxNDYxfQ.nee3mWuVCZibtt5F7N1qJWybNpQzhHmH0YNHZCsZVDU",
-        //   }),
-        // );
+        const { token, expiredAt } = await refreshTokenPromise();
+        dispatch(setLogin({ token, expiredAt }));
       } catch (e) {
-        // localStorage.removeItem(REF_TOKEN_OBJ_NAME);
-        // dispatch(setLogout({}));
+        setSession(null);
       }
     };
     init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const login = async (data: LoginRequest) =>
@@ -86,6 +87,19 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
           }),
         );
         return res;
+      });
+
+  const otp = async ({
+    data,
+    isLoggedIn = true,
+  }: {
+    data: OTPRequest;
+    isLoggedIn?: boolean;
+  }) =>
+    otpRequest(data)
+      .unwrap()
+      .then(() => {
+        if (isLoggedIn) dispatch(setOtp());
       });
 
   const register = async (data: RegisterRequest) =>
@@ -124,10 +138,13 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
         return res;
       });
 
-  // const logout = () => {
-  //   setSession(null);
-  //   dispatch(setLogout({}));
-  // };
+  const logout = () =>
+    logoutRequest()
+      .unwrap()
+      .then(() => {
+        setSession(null);
+        dispatch(setLogout());
+      });
 
   // if (!isInitialized) {
   //   return <Loader />;
@@ -141,8 +158,8 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
         login,
         register,
         forgotPassword,
-        // logout,
-        // forgotPassword,
+        logout,
+        otp,
       }}
     >
       {children}
