@@ -47,7 +47,6 @@ export default function CoinPage() {
     { code: "BTC", name: "Bitcoin", imgSrc: BTC },
     { code: "َUSDT", name: "Tether", imgSrc: USDT },
     { code: "TRX", name: "Tron", imgSrc: TRX },
-    { code: "BTC", name: "Bitcoin", imgSrc: BTC },
     { code: "ETH", name: "Ethereum", imgSrc: ETH },
     { code: "SOL", name: "Solana", imgSrc: SOL },
     { code: "XRP", name: "Ripple", imgSrc: XRP },
