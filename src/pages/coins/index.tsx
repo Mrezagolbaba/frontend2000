@@ -114,12 +114,12 @@ export default function CoinPage() {
                 </button>
               </form> */}
             </div>
-            <div className={home["currency-rates__tabs"]}>
+{/*             <div className={home["currency-rates__tabs"]}>
               <FilterNavCoin
                 activeTab={activeTab}
                 handleTabClick={handleTabClick}
               />
-            </div>
+            </div> */}
             <div className={home["tab-content"]} id="myTabContent">
               <div
                 className={`${home.fade} ${home.show} ${home.active}}`}
