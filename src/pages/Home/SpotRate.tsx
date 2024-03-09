@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
 import { Container } from "reactstrap";
-import { HiOutlineChevronLeft } from "react-icons/hi";
-//components
-import { FilterNavCoin } from "components/FilterNavCoin";
-import request from "services/adapter";
 
 //images
 import USDT from "assets/img/coins/USDT.png";
@@ -23,6 +19,7 @@ import home from "assets/scss/landing/home.module.scss";
 import { Link } from "react-router-dom";
 import { convertIRRToToman } from "helpers";
 import { useAppSelector } from "store/hooks";
+import { useLazyGetCoinsQuery } from "store/api/publices";
 
 interface ExchangeRateData {
   expiresAt: string;
@@ -31,13 +28,12 @@ interface ExchangeRateData {
 }
 
 const SpotRate = () => {
+  const [getCurrency1, { isLoading }] = useLazyGetCoinsQuery();
   const { id } = useAppSelector((state) => state.user);
   const [exchangeRates, setExchangeRates] = useState<{
     [key: string]: { IRR: number | string; USD: number | string };
   }>({});
   const [activeTab, setActiveTab] = useState("tab2");
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const currencyPairs = [
     { code: "USDT", name: "تتر", imgSrc: USDT },
@@ -49,24 +45,24 @@ const SpotRate = () => {
   ];
 
   useEffect(() => {
-    setIsLoading(true);
     const fetchExchangeRates = async () => {
       const rates: {
         [key: string]: { IRR: number | string; USD: number | string };
       } = {};
 
       for (const currencyPair of currencyPairs) {
+        // let data1, data2;
         try {
-          const response1 = await request.get<ExchangeRateData>(
-            `rates/${currencyPair.code}-IRR`,
-          );
-          const response2 = await request.get<ExchangeRateData>(
-            `rates/${currencyPair.code}-USD`,
-          );
-          const data1 = response1.data;
-          const data2 = response2.data;
-          rates[currencyPair.code] = { IRR: data1.rate, USD: data2.rate };
-          setIsLoading(false);
+          const data1 = await getCurrency1({
+            source: currencyPair.code,
+            destination: "IRR",
+          })
+            .unwrap()
+            .then((res) => {
+              return res.rate;
+            });
+
+          rates[currencyPair.code] = { IRR: data1, USD: "-" };
         } catch (error: any) {
           console.error(`Error fetching ${currencyPair}: ${error.message}`);
           rates[currencyPair.code] = { IRR: "-", USD: "-" };

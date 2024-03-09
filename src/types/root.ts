@@ -1,5 +1,5 @@
 // types
-import { AuthProps } from './auth';
+import { AuthProps } from "./auth";
 
 // ==============================|| ROOT TYPES  ||============================== //
 
@@ -10,4 +10,3 @@ export type RootStateProps = {
 export type KeyedObject = {
   [key: string]: string | number | KeyedObject | any;
 };
-

@@ -5,9 +5,6 @@ import { useEffect, useState } from "react";
 import { Breadcrumb, BreadcrumbItem, Container } from "reactstrap";
 import BottomBanner from "pages/Home/BottomBanner";
 import { Link } from "react-router-dom";
-import request from "services/adapter";
-
-import { CiSearch } from "react-icons/ci";
 
 import USDT from "assets/img/coins/USDT.png";
 import lira from "assets/img/coins/lira.png";
@@ -17,17 +14,11 @@ import GBP from "assets/img/coins/GBP.png";
 
 import home from "assets/scss/landing/home.module.scss";
 import coins from "assets/scss/landing/coins.module.scss";
-
-interface ExchangeRateData {
-  expiresAt: string;
-  pair: string;
-  rate: string;
-}
+import { useLazyGetCoinsQuery } from "store/api/publices";
 
 export default function CoinPage() {
+  const [getCurrency1,{isLoading}] = useLazyGetCoinsQuery();
   const [activeTab, setActiveTab] = useState("tab2");
-
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [exchangeRates, setExchangeRates] = useState<{
     [key: string]: { IRR: number | string; USD: number | string };
@@ -40,32 +31,28 @@ export default function CoinPage() {
 
   const currencyPairs = [
     { code: "USDT", name: "تتر", imgSrc: USDT },
-    { code: "EUR", name: "یورو", imgSrc: EUR },
-    { code: "CAD", name: "دلار کانادا", imgSrc: CAD },
-    { code: "GBP", name: "پوند", imgSrc: GBP },
-    { code: "TRY", name: "لیر", imgSrc: lira },
     // Add more currency pairs as needed
   ];
 
   useEffect(() => {
-    setIsLoading(true);
     const fetchExchangeRates = async () => {
       const rates: {
         [key: string]: { IRR: number | string; USD: number | string };
       } = {};
 
       for (const currencyPair of currencyPairs) {
+        // let data1, data2;
         try {
-          const response1 = await request.get<ExchangeRateData>(
-            `rates/${currencyPair.code}-IRR`,
-          );
-          const response2 = await request.get<ExchangeRateData>(
-            `rates/${currencyPair.code}-USD`,
-          );
-          const data1 = response1.data;
-          const data2 = response2.data;
-          rates[currencyPair.code] = { IRR: data1.rate, USD: data2.rate };
-          setIsLoading(false);
+          const data1 = await getCurrency1({
+            source: currencyPair.code,
+            destination: "IRR",
+          })
+            .unwrap()
+            .then((res) => {
+              return res.rate;
+            });
+
+          rates[currencyPair.code] = { IRR: data1, USD: "-" };
         } catch (error: any) {
           console.error(`Error fetching ${currencyPair}: ${error.message}`);
           rates[currencyPair.code] = { IRR: "-", USD: "-" };
@@ -101,12 +88,12 @@ export default function CoinPage() {
                 </button>
               </form> */}
             </div>
-            <div className={home["currency-rates__tabs"]}>
+            {/* <div className={home["currency-rates__tabs"]}>
               <FilterNavCoin
                 activeTab={activeTab}
                 handleTabClick={handleTabClick}
               />
-            </div>
+            </div> */}
             <div className={home["tab-content"]} id="myTabContent">
               <div
                 className={`${home.fade} ${home.show} ${home.active}}`}
