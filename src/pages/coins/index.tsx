@@ -7,13 +7,18 @@ import BottomBanner from "pages/Home/BottomBanner";
 import { Link } from "react-router-dom";
 import request from "services/adapter";
 
-import { CiSearch } from "react-icons/ci";
-
 import USDT from "assets/img/coins/USDT.png";
-import lira from "assets/img/coins/lira.png";
-import CAD from "assets/img/coins/CAD.svg";
-import EUR from "assets/img/coins/Euro.png";
-import GBP from "assets/img/coins/GBP.png";
+import TRX from "assets/img/coins/trx.png";
+import BTC from "assets/img/coins/BTC.png";
+import ETH from "assets/img/coins/ETH.png";
+import SOL from "assets/img/coins/Solana_logo.png";
+import XRP from "assets/img/coins/xrp-xrp-logo.png";
+import DOGE from "assets/img/coins/dogecoin-doge-logo-625F9D262A-seeklogo.com.png";
+import PEPE from "assets/img/coins/pepecoin.jpeg";
+import SHIP from "assets/img/coins/shipchain-coin.jpeg";
+import BONK from "assets/img/coins/bonk-coin.png";
+import APEX from "assets/img/coins/apex-coin.jpg";
+import ARB from "assets/img/coins/arb-coin.jpeg";
 
 import home from "assets/scss/landing/home.module.scss";
 import coins from "assets/scss/landing/coins.module.scss";
@@ -39,11 +44,19 @@ export default function CoinPage() {
   };
 
   const currencyPairs = [
-    { code: "USDT", name: "تتر", imgSrc: USDT },
-    { code: "EUR", name: "یورو", imgSrc: EUR },
-    { code: "CAD", name: "دلار کانادا", imgSrc: CAD },
-    { code: "GBP", name: "پوند", imgSrc: GBP },
-    { code: "TRY", name: "لیر", imgSrc: lira },
+    { code: "BTC", name: "Bitcoin", imgSrc: BTC },
+    { code: "َUSDT", name: "Tether", imgSrc: USDT },
+    { code: "TRX", name: "Tron", imgSrc: TRX },
+    { code: "BTC", name: "Bitcoin", imgSrc: BTC },
+    { code: "ETH", name: "Ethereum", imgSrc: ETH },
+    { code: "SOL", name: "Solana", imgSrc: SOL },
+    { code: "XRP", name: "Ripple", imgSrc: XRP },
+    { code: "DOGE", name: "Doge coin", imgSrc: DOGE },
+    { code: "PEPE", name: "Pepe coin", imgSrc: PEPE },
+    { code: "SHIP", name: "Ship coin", imgSrc: SHIP },
+    { code: "BONK", name: "Bonk token", imgSrc: BONK },
+    { code: "ARB", name: "ARBITRAGE", imgSrc: ARB },
+    { code: "APEX", name: "Apex Token", imgSrc: APEX },
     // Add more currency pairs as needed
   ];
 

@@ -7,21 +7,20 @@ import request from "services/adapter";
 
 //images
 import USDT from "assets/img/coins/USDT.png";
-import lira from "assets/img/coins/lira.png";
-import CAD from "assets/img/coins/CAD.svg";
-import EUR from "assets/img/coins/Euro.png";
-import GBP from "assets/img/coins/GBP.png";
+import TRX from "assets/img/coins/trx.png";
 import BTC from "assets/img/coins/BTC.png";
 import ETH from "assets/img/coins/ETH.png";
-import LTC from "assets/img/coins/LTC.png";
-import shib from "assets/img/coins/SHIB.png";
-import ADA from "assets/img/coins/ADA.png";
-import graphG from "assets/img/graph-g.png";
-import graphR from "assets/img/graph-r.png";
+import SOL from "assets/img/coins/Solana_logo.png";
+import XRP from "assets/img/coins/xrp-xrp-logo.png";
+import DOGE from "assets/img/coins/dogecoin-doge-logo-625F9D262A-seeklogo.com.png";
+import PEPE from "assets/img/coins/pepecoin.jpeg";
+import SHIP from "assets/img/coins/shipchain-coin.jpeg";
+import BONK from "assets/img/coins/bonk-coin.png";
+import APEX from "assets/img/coins/apex-coin.jpg";
+import ARB from "assets/img/coins/arb-coin.jpeg";
 
 import home from "assets/scss/landing/home.module.scss";
 import { Link } from "react-router-dom";
-import { convertIRRToToman } from "helpers";
 import { useAppSelector } from "store/hooks";
 
 interface ExchangeRateData {
@@ -40,16 +39,24 @@ const SpotRate = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const currencyPairs = [
-    { code: "USDT", name: "تتر", imgSrc: USDT },
-    // { code: "EUR", name: "یورو", imgSrc: EUR },
-    // { code: "CAD", name: "دلار کانادا", imgSrc: CAD },
-    // { code: "GBP", name: "پوند", imgSrc: GBP },
-    // { code: "TRY", name: "لیر", imgSrc: lira },
+    { code: "BTC", name: "Bitcoin", imgSrc: BTC },
+    { code: "َUSDT", name: "Tether", imgSrc: USDT },
+    { code: "TRX", name: "Tron", imgSrc: TRX },
+    { code: "BTC", name: "Bitcoin", imgSrc: BTC },
+    { code: "ETH", name: "Ethereum", imgSrc: ETH },
+    { code: "SOL", name: "Solana", imgSrc: SOL },
+    { code: "XRP", name: "Ripple", imgSrc: XRP },
+    { code: "DOGE", name: "Doge coin", imgSrc: DOGE },
+    { code: "PEPE", name: "Pepe coin", imgSrc: PEPE },
+    { code: "SHIP", name: "Ship coin", imgSrc: SHIP },
+    // { code: "BONK", name: "Bonk token", imgSrc: BONK },
+    // { code: "ARB", name: "ARBITRAGE", imgSrc: ARB },
+    // { code: "APEX", name: "Apex Token", imgSrc: APEX },
     // Add more currency pairs as needed
   ];
 
   useEffect(() => {
-    setIsLoading(true);
+    // setIsLoading(true);
     const fetchExchangeRates = async () => {
       const rates: {
         [key: string]: { IRR: number | string; USD: number | string };
@@ -92,12 +99,12 @@ const SpotRate = () => {
             نرخ لحظه ای <span className="text-primary">ارزها</span>
           </h3>
         </div>
-        {/* <div className={home["currency-rates__tabs"]}>
+        <div className={home["currency-rates__tabs"]}>
           <FilterNavCoin
             activeTab={activeTab}
             handleTabClick={handleTabClick}
           />
-        </div> */}
+        </div>
         <div className={home["tab-content"]} id="myTabContent">
           <div
             className={`${home.fade} ${home.show} ${home.active}}`}
@@ -213,14 +220,14 @@ const SpotRate = () => {
             </div>
           </div>
         </div>
-        {/* <div className={home["more-section-button"]}>
+        <div className={home["more-section-button"]}>
           <a href="/coins">
             دیدن همه
             <span className="icon">
               <HiOutlineChevronLeft />
             </span>
           </a>
-        </div> */}
+        </div>
       </Container>
     </section>
   );
