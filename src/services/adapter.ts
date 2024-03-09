@@ -2,7 +2,7 @@ import axios, { AxiosResponse, AxiosError, AxiosInstance } from "axios";
 
 // Create and configure the Axios instance
 const request: AxiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL,
   // You can add more default configurations here, like headers, timeouts, etc.
 });
 const accessTokenExpires =
