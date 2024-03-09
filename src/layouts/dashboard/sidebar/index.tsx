@@ -13,7 +13,7 @@ import { CiEdit, CiLogout } from "react-icons/ci";
 import personIcon from "assets/img/icons/profile.png";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
-import useLogout from "services/auth/logout";
+// import useLogout from "services/auth/logout";
 import { useAppSelector } from "store/hooks";
 
 type Props = {
@@ -24,7 +24,7 @@ type Props = {
 export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
   const { firstName, lastName } = useAppSelector((state) => state.user);
   const [activeItem, setActiveItem] = useState("");
-  const logout = useLogout();
+  // const logout = useLogout();
 
   const location = useLocation();
 
@@ -39,10 +39,10 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
   };
   const handleLogout = async () => {
     try {
-      await logout.mutateAsync({}).then((res) => {
-        localStorage.removeItem("token");
-        window.location.href = "/login";
-      });
+      // await logout.mutateAsync({}).then((res) => {
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+      // });
     } catch (error) {
       console.log(error);
     }

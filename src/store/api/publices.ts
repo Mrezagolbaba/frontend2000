@@ -14,7 +14,15 @@ export const publicApi = enhancedApi.injectEndpoints({
         };
       },
     }),
+    getRates: builder.query<any, any>({
+      query() {
+        return {
+          method: "GET",
+          url: `/rates`,
+        };
+      },
+    }),
   }),
 });
 
-export const { useLazyGetCoinsQuery } = publicApi;
+export const { useLazyGetCoinsQuery, useGetRatesQuery } = publicApi;

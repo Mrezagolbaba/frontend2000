@@ -3,8 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // types
 import { AuthProps } from "types/auth";
-import { jwtDecode } from "jwt-decode";
-import { KeyedObject } from "types/root";
 import { RootState } from "store/store";
 
 // ----------------------------------------------------------------------

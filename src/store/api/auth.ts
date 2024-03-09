@@ -66,6 +66,14 @@ export const authApi = enhancedApi.injectEndpoints({
         };
       },
     }),
+    getSession: builder.query<any, any>({
+      query() {
+        return {
+          method: "GET",
+          url: "/auth/sessions",
+        };
+      },
+    }),
   }),
 });
 export const {
@@ -75,4 +83,5 @@ export const {
   useResendOtpMutation,
   useForgotPasswordMutation,
   useSetPasswordMutation,
+  useGetSessionQuery,
 } = authApi;

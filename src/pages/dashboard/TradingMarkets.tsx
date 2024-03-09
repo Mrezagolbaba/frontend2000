@@ -1,19 +1,12 @@
-import { convertIRRToToman, convertTextSingle, extractLeftSide } from "helpers";
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
-import { useAppDispatch, useAppSelector } from "store/hooks";
-import USDT from "assets/img/coins/usdt.svg";
-import Turkey from "assets/img/coins/try.svg";
+import { convertTextSingle, extractLeftSide, tomanShow } from "helpers";
+import { useGetRatesQuery } from "store/api/publices";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
-import { useEffect } from "react";
-import { getRates } from "store/reducers/features/rates/rateSlice";
-import { parseInt } from "lodash";
+
 export default function TradingMarkets() {
-  const dispatch = useAppDispatch();
-  const rates = useAppSelector((state) => state.rates);
-  useEffect(() => {
-    dispatch(getRates());
-  }, []);
+  const { data } = useGetRatesQuery({});
+
   return (
     <Card className="h-100">
       <CardHeader className="d-flex flex-row justify-content-between align-items-center">
@@ -36,13 +29,13 @@ export default function TradingMarkets() {
               </tr>
             </thead>
             <tbody>
-              {rates?.data?.length > 0 &&
-                rates?.data.map((data, index) => (
-                  <tr className="tr-responsive">
+              {data?.length > 0 &&
+                data.map((record, index) => (
+                  <tr className="tr-responsive" key={index}>
                     <td className="text-center" data-th="نام ارز">
                       <div>
                         <span className="icon">
-                          {data.pair === "USDT/IRR" ? (
+                          {record.pair === "USDT/IRR" ? (
                             <svg
                               viewBox="0 0 32 32"
                               xmlns="http://www.w3.org/2000/svg"
@@ -95,13 +88,13 @@ export default function TradingMarkets() {
                           )}
                         </span>
                         <span className={dashboard["text-50"]}>
-                          {convertTextSingle(extractLeftSide(data.pair))}
+                          {convertTextSingle(extractLeftSide(record.pair))}
                         </span>
                       </div>
                     </td>
                     <td className="text-center" data-th="قیمت واحد (تومان)">
                       <span className="td-responsive">
-                        {Math.floor(Number(data?.rate) / 10).toLocaleString()}
+                        {tomanShow({ value: record?.rate })}
                       </span>
                     </td>
 

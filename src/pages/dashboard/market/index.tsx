@@ -1,20 +1,14 @@
-import { convertTextSingle, extractLeftSide } from "helpers";
-import { useEffect } from "react";
-import { Card, CardBody, CardHeader } from "reactstrap";
-import { getRates } from "store/reducers/features/rates/rateSlice";
-import { useAppDispatch, useAppSelector } from "store/hooks";
-import USDT from "assets/img/coins/usdt.svg";
 import Turkey from "assets/img/coins/try.svg";
+import USDT from "assets/img/coins/usdt.svg";
+import { Card, CardBody, CardHeader } from "reactstrap";
+import { convertTextSingle, extractLeftSide, tomanShow } from "helpers";
+import { useGetRatesQuery } from "store/api/publices";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 
 const Market = () => {
-  const dispatch = useAppDispatch();
-  const rates = useAppSelector((state) => state.rates);
+  const { data } = useGetRatesQuery({});
 
-  useEffect(() => {
-    dispatch(getRates());
-  }, []);
   return (
     <section className="page page-market">
       <Card>
@@ -29,31 +23,6 @@ const Market = () => {
           </div>
         </CardHeader>
         <CardBody>
-          {/* <div className="table-filters">
-                        <div className="table-filter">
-                            <select className="bs-select-control bs-select-dropdown">
-                                <option value="11">نوع ارز</option>
-                                <option value="12">ارز دیجیتال</option>
-                                <option value="13">فیات دیجیتال</option>
-                            </select>
-                        </div>
-                        <div className="table-filter">
-                            <select className="bs-select-control bs-select-dropdown">
-                                <option value="1">پایه بازار</option>
-                                <option value="4">تومان</option>
-                                <option value="2">لیر</option>
-                                <option value="3">تتر</option>
-                                <option value="5">دلار</option>
-                            </select>
-                        </div>
-                        <div className="table-filter">
-                            <select className="bs-select-control bs-select-dropdown">
-                                <option value="6">محبوب‌ترین‌ها</option>
-                                <option value="7">جدید‌ترین‌ها</option>
-                                <option value="8">بیشترین تغییر (24h)</option>
-                            </select>
-                        </div>
-                    </div> */}
           <div className={dashboard["table-responsive"]}>
             <table id="responsive" className={dashboard["data-table"]}>
               <thead>
@@ -62,14 +31,12 @@ const Market = () => {
                   <th scope="col" className="text-center">
                     آخرین قیمت(تومان)
                   </th>
-                  {/* <th scope="col" className="text-center">کمترین قیمت (24h)</th> */}
-                  {/* <th scope="col" className="text-center">تغییرات (24h)</th> */}
                 </tr>
               </thead>
               <tbody>
-                {rates &&
-                  rates.data.map((data) => (
-                    <tr>
+                {data &&
+                  data.map((record, index) => (
+                    <tr key={index}>
                       <td style={{ display: "flex", alignItems: "center" }}>
                         <div style={{ marginRight: "10px" }}>
                           <span className="icon">
@@ -88,16 +55,14 @@ const Market = () => {
                             )}
                           </span>
                           <span className="text-50 m-fa">
-                            {convertTextSingle(extractLeftSide(data.pair))}
+                            {convertTextSingle(extractLeftSide(record.pair))}
                           </span>
                         </div>
                       </td>
                       <td className="text-center">
                         <div className="market-data">
                           <span className="m-fa">
-                            {Math.floor(
-                              Number(data?.rate) / 10,
-                            ).toLocaleString()}
+                            {tomanShow({ value: record.rate })}
                           </span>
                         </div>
                       </td>
