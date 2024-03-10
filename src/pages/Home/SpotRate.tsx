@@ -3,93 +3,61 @@ import { Container } from "reactstrap";
 import { HiOutlineChevronLeft } from "react-icons/hi";
 //components
 import { FilterNavCoin } from "components/FilterNavCoin";
-import request from "services/adapter";
 
 //images
-import USDT from "assets/img/coins/USDT.png";
 import TRX from "assets/img/coins/trx.png";
 import BTC from "assets/img/coins/BTC.png";
 import ETH from "assets/img/coins/ETH.png";
 import SOL from "assets/img/coins/Solana_logo.png";
 import XRP from "assets/img/coins/xrp-xrp-logo.png";
-import DOGE from "assets/img/coins/dogecoin-doge-logo-625F9D262A-seeklogo.com.png";
-import PEPE from "assets/img/coins/pepecoin.jpeg";
-import SHIP from "assets/img/coins/shipchain-coin.jpeg";
-import BONK from "assets/img/coins/bonk-coin.png";
-import APEX from "assets/img/coins/apex-coin.jpg";
-import ARB from "assets/img/coins/arb-coin.jpeg";
+import CoinRecord from "components/CoinRecord";
+import { get24hChanges } from "helpers";
+import { CryptoData } from "types/exchange";
 
 import home from "assets/scss/landing/home.module.scss";
-import { Link } from "react-router-dom";
-import { useAppSelector } from "store/hooks";
-
-interface ExchangeRateData {
-  expiresAt: string;
-  pair: string;
-  rate: string;
-}
 
 const SpotRate = () => {
-  const { id } = useAppSelector((state) => state.user);
-  const [exchangeRates, setExchangeRates] = useState<{
-    [key: string]: { IRR: number | string; USD: number | string };
-  }>({});
-  const [activeTab, setActiveTab] = useState("tab2");
-
+  const [activeTab, setActiveTab] = useState<"IRR" | "USDT">("IRR");
+  const [coinChanges, setCoinChanges] = useState<CryptoData[] | []>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const currencyPairs = [
-    { code: "BTC", name: "Bitcoin", imgSrc: BTC },
-    { code: "َUSDT", name: "Tether", imgSrc: USDT },
-    { code: "TRX", name: "Tron", imgSrc: TRX },
-    { code: "BTC", name: "Bitcoin", imgSrc: BTC },
-    { code: "ETH", name: "Ethereum", imgSrc: ETH },
-    { code: "SOL", name: "Solana", imgSrc: SOL },
-    { code: "XRP", name: "Ripple", imgSrc: XRP },
-    { code: "DOGE", name: "Doge coin", imgSrc: DOGE },
-    { code: "PEPE", name: "Pepe coin", imgSrc: PEPE },
-    { code: "SHIP", name: "Ship coin", imgSrc: SHIP },
-    // { code: "BONK", name: "Bonk token", imgSrc: BONK },
-    // { code: "ARB", name: "ARBITRAGE", imgSrc: ARB },
-    // { code: "APEX", name: "Apex Token", imgSrc: APEX },
+    { code: "BTC", name: "بیت کوین", originName: "bitcoin", imgSrc: BTC },
+    { code: "TRX", name: "ترون", originName: "tron", imgSrc: TRX },
+    { code: "ETH", name: "اتریوم", originName: "ethereum", imgSrc: ETH },
+    { code: "SOL", name: "سولانا", originName: "solana", imgSrc: SOL },
+    { code: "XRP", name: "ریپل", originName: "ripple", imgSrc: XRP },
     // Add more currency pairs as needed
   ];
 
-  useEffect(() => {
-    // setIsLoading(true);
-    const fetchExchangeRates = async () => {
-      const rates: {
-        [key: string]: { IRR: number | string; USD: number | string };
-      } = {};
-
-      for (const currencyPair of currencyPairs) {
-        try {
-          const response1 = await request.get<ExchangeRateData>(
-            `rates/${currencyPair.code}-IRR`,
-          );
-          const response2 = await request.get<ExchangeRateData>(
-            `rates/${currencyPair.code}-USD`,
-          );
-          const data1 = response1.data;
-          const data2 = response2.data;
-          rates[currencyPair.code] = { IRR: data1.rate, USD: data2.rate };
-          setIsLoading(false);
-        } catch (error: any) {
-          console.error(`Error fetching ${currencyPair}: ${error.message}`);
-          rates[currencyPair.code] = { IRR: "-", USD: "-" };
-        }
-      }
-
-      setExchangeRates(rates);
-    };
-
-    fetchExchangeRates();
-  }, []);
-
   const handleTabClick = (e: any, tabId: string) => {
     e.preventDefault();
-    setActiveTab(tabId);
+    setActiveTab(tabId === "tab2" ? "IRR" : "USDT");
   };
+
+  useEffect(() => {
+    const cryptoIds: string[] = [
+      "bitcoin",
+      "tron",
+      "ethereum",
+      "solana",
+      "ripple",
+    ]; // List of cryptocurrency IDs
+    get24hChanges(cryptoIds)
+      .then((changes) => {
+        if (changes) {
+          setCoinChanges(changes);
+          changes.forEach((crypto) => {
+            console.log(
+              `${crypto.name}: ${crypto.price_change_percentage_24h}%`,
+            );
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }, []);
 
   return (
     <section className={`${home["currency-rates"]} ${home["section-gap"]}`}>
@@ -117,53 +85,29 @@ const SpotRate = () => {
                 <thead>
                   <tr>
                     <th>ارز</th>
-                    <th>قیمت ارز</th>
-                    <th>معامله</th>
+                    <th className="text-center">قیمت ارز</th>
+                    <th className="text-center"> تغییرات ۲۴ ساعته</th>
+                    <th className="text-center">معامله</th>
                   </tr>
                 </thead>
                 {!isLoading ? (
                   <tbody>
                     {currencyPairs.map((currencyPair: any, index: number) => (
-                      <tr key={index}>
-                        <td>
-                          <div className={home["currency-rates__table__title"]}>
-                            <img
-                              src={currencyPair.imgSrc}
-                              alt={currencyPair.code}
-                            />
-                            <h6>{currencyPair.name}</h6>
-                            <span>{currencyPair.code}</span>
-                          </div>
-                        </td>
-                        {activeTab === "tab1" ? (
-                          <td>
-                            <span className="d-inline-block d-ltr">
-                              {`${Number(
-                                exchangeRates[currencyPair.code]?.USD || 0,
-                              ).toLocaleString()} $`}
-                            </span>
-                          </td>
-                        ) : (
-                          <td>
-                            <span className="fs-md">
-                              {`${Math.floor(
-                                Number(exchangeRates[currencyPair.code]?.IRR) /
-                                  10 || 0,
-                              ).toLocaleString()} تومان`}
-                            </span>
-                          </td>
-                        )}
-                        <td>
-                          <div className="table-crypto-actions">
-                            <Link
-                              to={id ? "/dashboard/exchange" : "/login"}
-                              className="btn btn-outline-primary "
-                            >
-                              معامله
-                            </Link>
-                          </div>
-                        </td>
-                      </tr>
+                      <CoinRecord
+                        key={index}
+                        destinationCode={activeTab}
+                        source={{
+                          imgSrc: currencyPair.imgSrc,
+                          currencyCode: currencyPair.code,
+                          name: currencyPair.name,
+                          originName: currencyPair.originName,
+                        }}
+                        changesLog={
+                          coinChanges.find(
+                            (coin) => coin.id === currencyPair.originName,
+                          ) as CryptoData
+                        }
+                      />
                     ))}
                   </tbody>
                 ) : (
