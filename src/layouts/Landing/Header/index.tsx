@@ -179,7 +179,7 @@ const Header = ({ disableBanner = false }: Props) => {
             <div className={home.header__intro}>
               <h1>آرسونیکس، همراه ارز دیجیتال شما</h1>
               <p>
-              تسویه آنی تومان و بیش از 30 واحد پول دیگر
+              خريد و فروش ارزديجيتال به آساني
               </p>
               <Button
                 tag="a"

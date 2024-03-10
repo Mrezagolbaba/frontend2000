@@ -1,6 +1,8 @@
+import axios from "axios";
 import moment from "jalali-moment";
 import jalaliMoment from "jalali-moment";
 import { isEmpty } from "lodash";
+import { CryptoData } from "types/exchange";
 import { CurrencyCode, TransactionStatus } from "types/wallet";
 
 export function generateLabelValueArray(start: number, end: number) {
@@ -359,3 +361,28 @@ export const coinShow = (value: string, currency?: CurrencyCode): string => {
 
   return Number(newValue).toLocaleString("IRR");
 };
+
+
+
+
+
+export async function get24hChanges(ids: string[], vsCurrency: string = 'usd'): Promise<CryptoData[] | null> {
+  try {
+      const url = 'https://api.coingecko.com/api/v3/coins/markets';
+      const params = {
+          ids: ids.join(','),
+          vs_currency: vsCurrency,
+          price_change_percentage: '24h'
+      };
+      const response = await axios.get(url, { params });
+      if (response.status === 200) {
+          return response.data;
+      } else {
+          console.error(`Error: ${response.status}`);
+          return null;
+      }
+  } catch (error) {
+      console.error('Error fetching data:', error);
+      return null;
+  }
+}
