@@ -4,10 +4,9 @@ import { coinShow, tomanShow } from "helpers";
 import { useGetRateQuery } from "store/api/publics";
 import greenChart from "assets/img/graph-g.png";
 import redChart from "assets/img/graph-r.png";
+import { useAppSelector } from "store/hooks";
 
 import style from "assets/scss/components/CoinRecord/style.module.scss";
-import { GiDividedSpiral } from "react-icons/gi";
-import { useAppSelector } from "store/hooks";
 
 type Props = {
   destinationCode: "IRR" | "USDT";
@@ -25,7 +24,7 @@ export default function CoinRecord({
   source,
   changesLog,
 }: Props) {
-  const { id } = useAppSelector((state) => state.user);
+  const { id, firstTierVerified } = useAppSelector((state) => state.user);
   const { data, isLoading, isSuccess } = useGetRateQuery({
     sourceCurrencyCode: source.currencyCode,
     targetCurrencyCode: destinationCode,
@@ -96,7 +95,7 @@ export default function CoinRecord({
               color="primary"
               outline
               tag="a"
-              href={id ? "/dashboard/exchange" : "/login"}
+              href={id && firstTierVerified ? "/dashboard/exchange" : "/login"}
             >
               معامله
             </Button>

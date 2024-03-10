@@ -19,7 +19,6 @@ import home from "assets/scss/landing/home.module.scss";
 const SpotRate = () => {
   const [activeTab, setActiveTab] = useState<"IRR" | "USDT">("IRR");
   const [coinChanges, setCoinChanges] = useState<CryptoData[] | []>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   const currencyPairs = [
     { code: "BTC", name: "بیت کوین", originName: "bitcoin", imgSrc: BTC },
@@ -90,76 +89,25 @@ const SpotRate = () => {
                     <th className="text-center">معامله</th>
                   </tr>
                 </thead>
-                {!isLoading ? (
-                  <tbody>
-                    {currencyPairs.map((currencyPair: any, index: number) => (
-                      <CoinRecord
-                        key={index}
-                        destinationCode={activeTab}
-                        source={{
-                          imgSrc: currencyPair.imgSrc,
-                          currencyCode: currencyPair.code,
-                          name: currencyPair.name,
-                          originName: currencyPair.originName,
-                        }}
-                        changesLog={
-                          coinChanges.find(
-                            (coin) => coin.id === currencyPair.originName,
-                          ) as CryptoData
-                        }
-                      />
-                    ))}
-                  </tbody>
-                ) : (
-                  <tbody>
-                    <>
-                      <tr>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="text-center placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="text-center placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row" className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </th>
-                        <td className="text-center placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="text-center placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row" className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </th>
-                        <td className="text-center placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="text-center placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row" className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </th>
-                        <td className="text-center placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="text-center placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                      </tr>
-                    </>
-                  </tbody>
-                )}
+                <tbody>
+                  {currencyPairs.map((currencyPair: any, index: number) => (
+                    <CoinRecord
+                      key={index}
+                      destinationCode={activeTab}
+                      source={{
+                        imgSrc: currencyPair.imgSrc,
+                        currencyCode: currencyPair.code,
+                        name: currencyPair.name,
+                        originName: currencyPair.originName,
+                      }}
+                      changesLog={
+                        coinChanges.find(
+                          (coin) => coin.id === currencyPair.originName,
+                        ) as CryptoData
+                      }
+                    />
+                  ))}
+                </tbody>
               </table>
             </div>
           </div>

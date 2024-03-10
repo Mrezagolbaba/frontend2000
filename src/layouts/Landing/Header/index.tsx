@@ -14,7 +14,9 @@ type Props = {
 };
 const Header = ({ disableBanner = false }: Props) => {
   const [openOverlayMenu, setOpenOverlayMenu] = useState<boolean>(false);
-  const user = useAppSelector((state) => state.user);
+  const { id, firstTierVerified, firstName, lastName } = useAppSelector(
+    (state) => state.user,
+  );
 
   const { pathname } = useLocation();
 
@@ -45,7 +47,7 @@ const Header = ({ disableBanner = false }: Props) => {
             >
               <li>
                 <div className={home.header__auth}>
-                  {user.id ? (
+                  {id && firstTierVerified ? (
                     <div>
                       <Button
                         tag="a"
@@ -53,7 +55,7 @@ const Header = ({ disableBanner = false }: Props) => {
                         color="landing-primary"
                         className={home["rounded-button"]}
                       >
-                        {user.firstName + " " + user.lastName}
+                        {firstName + " " + lastName}
                       </Button>
                     </div>
                   ) : (
@@ -130,7 +132,7 @@ const Header = ({ disableBanner = false }: Props) => {
           </nav>
 
           <div className={home.header__auth}>
-            {user.id ? (
+            {id && firstTierVerified ? (
               <div>
                 <Button
                   tag="a"
@@ -138,7 +140,7 @@ const Header = ({ disableBanner = false }: Props) => {
                   color="landing-primary"
                   className={home["rounded-button"]}
                 >
-                  {user.firstName + " " + user.lastName}
+                  {firstName + " " + lastName}
                 </Button>
               </div>
             ) : (
@@ -178,12 +180,10 @@ const Header = ({ disableBanner = false }: Props) => {
             </div>
             <div className={home.header__intro}>
               <h1>آرسونیکس، همراه ارز دیجیتال شما</h1>
-              <p>
-              خريد و فروش ارزديجيتال به آساني
-              </p>
+              <p>خريد و فروش ارزديجيتال به آساني</p>
               <Button
                 tag="a"
-                href={user.id ? "/dashboard" : "/register"}
+                href={id && firstTierVerified ? "/dashboard" : "/register"}
                 color="landing-primary"
                 className={home["rounded-button"]}
               >
