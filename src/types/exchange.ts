@@ -45,3 +45,7 @@ export interface RateResponse {
   rate: string;
   expiresAt: string;
 }
+
+export interface CryptoData {
+  [key: string]: number;
+}
