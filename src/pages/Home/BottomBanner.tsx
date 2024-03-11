@@ -3,7 +3,7 @@ import home from "assets/scss/landing/home.module.scss";
 import { useAppSelector } from "store/hooks";
 
 const BottomBanner = () => {
-  const { id } = useAppSelector((state) => state.user);
+  const { id, firstTierVerified } = useAppSelector((state) => state.user);
   return (
     <section className={home["bottom-banner"]}>
       <Container>
@@ -16,7 +16,7 @@ const BottomBanner = () => {
             اولین معامله را انجام خواهید داد
           </p>
           <Button
-            href={id ? "/dashboard" : "/register"}
+            href={id && firstTierVerified ? "/dashboard" : "/register"}
             tag="a"
             color="light"
             className={home["bottom-banner__button"]}

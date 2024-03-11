@@ -1,68 +1,85 @@
 import { FilterNavCoin } from "components/FilterNavCoin";
 import LandingLayout from "layouts/Landing";
 import { useEffect, useState } from "react";
-
 import { Breadcrumb, BreadcrumbItem, Container } from "reactstrap";
 import BottomBanner from "pages/Home/BottomBanner";
 import { Link } from "react-router-dom";
-
-import USDT from "assets/img/coins/USDT.png";
-import lira from "assets/img/coins/lira.png";
-import CAD from "assets/img/coins/CAD.svg";
-import EUR from "assets/img/coins/Euro.png";
-import GBP from "assets/img/coins/GBP.png";
+import TRX from "assets/img/coins/trx.png";
+import BTC from "assets/img/coins/BTC.png";
+import ETH from "assets/img/coins/ETH.png";
+import SOL from "assets/img/coins/Solana_logo.png";
+import XRP from "assets/img/coins/xrp-xrp-logo.png";
+import DOGE from "assets/img/coins/dogecoin-doge-logo-625F9D262A-seeklogo.com.png";
+import PEPE from "assets/img/coins/pepecoin.jpeg";
+import SHIP from "assets/img/coins/shipchain-coin.jpeg";
+import BONK from "assets/img/coins/bonk-coin.png";
+import APEX from "assets/img/coins/apex-coin.jpg";
+import ARB from "assets/img/coins/arb-coin.jpeg";
 
 import home from "assets/scss/landing/home.module.scss";
 import coins from "assets/scss/landing/coins.module.scss";
-import { useLazyGetCoinsQuery } from "store/api/publices";
+import { CryptoData } from "types/exchange";
+import { get24hChanges } from "helpers";
+import CoinRecord from "components/CoinRecord";
+
+interface ExchangeRateData {
+  expiresAt: string;
+  pair: string;
+  rate: string;
+}
 
 export default function CoinPage() {
-  const [getCurrency1,{isLoading}] = useLazyGetCoinsQuery();
-  const [activeTab, setActiveTab] = useState("tab2");
-
-  const [exchangeRates, setExchangeRates] = useState<{
-    [key: string]: { IRR: number | string; USD: number | string };
-  }>({});
+  const [activeTab, setActiveTab] = useState<"IRR" | "USDT">("IRR");
+  const [coinChanges, setCoinChanges] = useState<CryptoData[] | []>([]);
 
   const handleTabClick = (e: any, tabId: string) => {
     e.preventDefault();
-    setActiveTab(tabId);
+    setActiveTab(tabId === "tab2" ? "IRR" : "USDT");
   };
 
   const currencyPairs = [
-    { code: "USDT", name: "تتر", imgSrc: USDT },
+    { code: "BTC", name: "بیت کوین", originName: "bitcoin", imgSrc: BTC },
+    { code: "TRX", name: "ترون", originName: "tron", imgSrc: TRX },
+    { code: "ETH", name: "اتریوم", originName: "ethereum", imgSrc: ETH },
+    { code: "SOL", name: "سولانا", originName: "solana", imgSrc: SOL },
+    { code: "XRP", name: "ریپل", originName: "ripple", imgSrc: XRP },
+    { code: "DOGE", name: "دوج کوین", originName: "dogecoin", imgSrc: DOGE },
+    { code: "PEPE", name: "پپه", originName: "pepe", imgSrc: PEPE },
+    { code: "SHIP", name: "شیپ", originName: "ship", imgSrc: SHIP },
+    { code: "BONK", name: "بونک", originName: "bonk", imgSrc: BONK },
+    { code: "ARB", name: "آربیتروم", originName: "arbitrum", imgSrc: ARB },
+    { code: "APEX", name: "اپکس", originName: "apex", imgSrc: APEX },
     // Add more currency pairs as needed
   ];
 
   useEffect(() => {
-    const fetchExchangeRates = async () => {
-      const rates: {
-        [key: string]: { IRR: number | string; USD: number | string };
-      } = {};
-
-      for (const currencyPair of currencyPairs) {
-        // let data1, data2;
-        try {
-          const data1 = await getCurrency1({
-            source: currencyPair.code,
-            destination: "IRR",
-          })
-            .unwrap()
-            .then((res) => {
-              return res.rate;
-            });
-
-          rates[currencyPair.code] = { IRR: data1, USD: "-" };
-        } catch (error: any) {
-          console.error(`Error fetching ${currencyPair}: ${error.message}`);
-          rates[currencyPair.code] = { IRR: "-", USD: "-" };
+    const cryptoIds: string[] = [
+      "bitcoin",
+      "tron",
+      "ethereum",
+      "solana",
+      "ripple",
+      "dogecoin",
+      "pepe",
+      "bonk",
+      "ship",
+      "arbitrum ",
+      "apex",
+    ]; // List of cryptocurrency IDs
+    get24hChanges(cryptoIds)
+      .then((changes) => {
+        if (changes) {
+          setCoinChanges(changes);
+          changes.forEach((crypto) => {
+            console.log(
+              `${crypto.name}: ${crypto.price_change_percentage_24h}%`,
+            );
+          });
         }
-      }
-
-      setExchangeRates(rates);
-    };
-
-    fetchExchangeRates();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   }, []);
 
   return (
@@ -106,113 +123,30 @@ export default function CoinPage() {
                     <thead>
                       <tr>
                         <th>ارز</th>
-                        <th>قیمت ارز</th>
-                        <th>معامله</th>
+                        <th className="text-center">قیمت ارز</th>
+                        <th className="text-center"> تغییرات ۲۴ ساعته</th>
+                        <th className="text-center">معامله</th>
                       </tr>
                     </thead>
-                    {!isLoading ? (
-                      <tbody>
-                        {currencyPairs.map(
-                          (currencyPair: any, index: number) => (
-                            <tr key={index}>
-                              <td>
-                                <div
-                                  className={
-                                    home["currency-rates__table__title"]
-                                  }
-                                >
-                                  <img
-                                    src={currencyPair.imgSrc}
-                                    alt={currencyPair.code}
-                                  />
-                                  <h6>{currencyPair.name}</h6>
-                                  <span>{currencyPair.code}</span>
-                                </div>
-                              </td>
-                              {activeTab === "tab1" ? (
-                                <td>
-                                  <span className="d-inline-block d-ltr">
-                                    {`${Number(
-                                      exchangeRates[currencyPair.code]?.USD ||
-                                        0,
-                                    ).toLocaleString()} $`}
-                                  </span>
-                                </td>
-                              ) : (
-                                <td>
-                                  <span className="fs-md">
-                                    {`${Math.floor(
-                                      Number(
-                                        exchangeRates[currencyPair.code]?.IRR,
-                                      ) / 10 || 0,
-                                    ).toLocaleString()} تومان`}
-                                  </span>
-                                </td>
-                              )}
-                              <td>
-                                <div className="table-crypto-actions">
-                                  <Link
-                                    to="/dashboard"
-                                    className="btn btn-outline-primary "
-                                  >
-                                    خرید و فروش
-                                  </Link>
-                                </div>
-                              </td>
-                            </tr>
-                          ),
-                        )}
-                      </tbody>
-                    ) : (
-                      <tbody>
-                        <>
-                          <tr>
-                            <td className="placeholder-glow">
-                              <div className="placeholder col-12 rounded" />
-                            </td>
-                            <td className="text-center placeholder-glow">
-                              <div className="placeholder col-12 rounded" />
-                            </td>
-                            <td className="text-center placeholder-glow">
-                              <div className="placeholder col-12 rounded" />
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row" className="placeholder-glow">
-                              <div className="placeholder col-12 rounded" />
-                            </th>
-                            <td className="text-center placeholder-glow">
-                              <div className="placeholder col-12 rounded" />
-                            </td>
-                            <td className="text-center placeholder-glow">
-                              <div className="placeholder col-12 rounded" />
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row" className="placeholder-glow">
-                              <div className="placeholder col-12 rounded" />
-                            </th>
-                            <td className="text-center placeholder-glow">
-                              <div className="placeholder col-12 rounded" />
-                            </td>
-                            <td className="text-center placeholder-glow">
-                              <div className="placeholder col-12 rounded" />
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row" className="placeholder-glow">
-                              <div className="placeholder col-12 rounded" />
-                            </th>
-                            <td className="text-center placeholder-glow">
-                              <div className="placeholder col-12 rounded" />
-                            </td>
-                            <td className="text-center placeholder-glow">
-                              <div className="placeholder col-12 rounded" />
-                            </td>
-                          </tr>
-                        </>
-                      </tbody>
-                    )}
+                    <tbody>
+                      {currencyPairs.map((currencyPair: any, index: number) => (
+                        <CoinRecord
+                          key={index}
+                          destinationCode={activeTab}
+                          source={{
+                            imgSrc: currencyPair.imgSrc,
+                            currencyCode: currencyPair.code,
+                            name: currencyPair.name,
+                            originName: currencyPair.originName,
+                          }}
+                          changesLog={
+                            coinChanges.find(
+                              (coin) => coin.id === currencyPair.originName,
+                            ) as CryptoData
+                          }
+                        />
+                      ))}
+                    </tbody>
                   </table>
                 </div>
               </div>

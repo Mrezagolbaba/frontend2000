@@ -7,7 +7,7 @@ import { getRefToken } from "helpers";
 import { setSession } from "contexts/JWTContext";
 
 export const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL,
   validateStatus: function (status: any) {
     return status >= 200 && status < 300;
   },

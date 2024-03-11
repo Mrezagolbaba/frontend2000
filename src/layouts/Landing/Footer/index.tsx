@@ -17,10 +17,9 @@ const Footer = (): React.JSX.Element => {
               <p className={home["footer-text"]}>support@arsonex.com</p>
 
               <p className={home["footer-text"]}>021-92004581</p>
-              {/* <p className={home["footer-text"]}>
-                {" "}
-                خیابان ۱۵ خرداد بازار بین الحرمین کوچه شیخ رضا پلاک ۴۶{" "}
-              </p> */}
+              <p className={home["footer-text"]}>
+                خیابان ۱۵ خرداد بازار بین الحرمین کوچه شیخ رضا پلاک ۴۶
+              </p>
               <p className={home["footer-text"]}>
                 ۲۴ ساعت شبانه روز پاسخگوی شما هستیم
               </p>
@@ -56,21 +55,19 @@ const Footer = (): React.JSX.Element => {
               <h3 className={home["footer-widget-title"]}>امکانات</h3>
               <ul className={home["footer-links"]}>
                 <li>
-                  <Link to="/dashboard/by-sell">
-                    خرید و فروش سریع
-                  </Link>
+                  <Link to="/dashboard/by-sell">خرید و فروش سریع</Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link to="https://help.arsonex.com/withdraw-fiat/">
                     برداشت بین‌المللی
                   </Link>
-                </li>
-                <li>
+                </li> */}
+                {/* <li>
                   <Link to="https://help.arsonex.com/deposit-fiat/">
                     {" "}
                     واریز بین المللی
                   </Link>
-                </li>
+                </li> */}
                 <li>
                   <Link to="#">کسب درآمد</Link>
                   <Badge className={home["badge-custom"]}> بزودی</Badge>
@@ -150,7 +147,7 @@ const Footer = (): React.JSX.Element => {
                 </span>
               </a>
             </li>
-          
+
             <li>
               <a href="https://www.instagram.com/Arsonexchange/">
                 <span className="icon">
