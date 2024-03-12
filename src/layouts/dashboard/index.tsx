@@ -27,9 +27,11 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <div className={dashboard.wrapper}>
       <div id="menuOverlay" className={dashboard["menu-overlay"]} />
       <Sidebar isOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      <Container fluid className={dashboard["main-wrapper"]}>
-        <Header onSidebarToggle={handleSidebarToggle} />
-        {children}
+      <Container fluid>
+        <div className={dashboard["main-wrapper"]}>
+          <Header onSidebarToggle={handleSidebarToggle} />
+          {children}
+        </div>
       </Container>
     </div>
   );

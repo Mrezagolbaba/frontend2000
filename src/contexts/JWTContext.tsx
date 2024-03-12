@@ -18,7 +18,7 @@ import { removeRefToken, setRefToken } from "helpers";
 import {
   selectAuth,
   setLogin,
-  setOtp,
+  setVerifyLogin,
   setLogout,
 } from "store/reducers/jwtAuth";
 import { useAppDispatch, useAppSelector } from "store/hooks";
@@ -63,6 +63,7 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
       try {
         const { token, expiredAt } = await refreshTokenPromise();
         dispatch(setLogin({ token, expiredAt }));
+        dispatch(setVerifyLogin());
       } catch (e) {
         setSession(null);
       }
@@ -99,7 +100,7 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
     otpRequest(data)
       .unwrap()
       .then(() => {
-        if (isLoggedIn) dispatch(setOtp());
+        if (isLoggedIn) dispatch(setVerifyLogin());
       });
 
   const register = async (data: RegisterRequest) =>

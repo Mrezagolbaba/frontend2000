@@ -381,39 +381,37 @@ export const getDecryptedObject = (data: string) => {
 };
 
 export const setRefToken = (refreshToken: string, expiredAt: string) => {
-  const hashedTokenString = getEncryptedObject(refreshToken);
-  if (window && hashedTokenString != null) {
-    Cookies.set(REF_TOKEN_OBJ_NAME, hashedTokenString, {
+  if (window && refreshToken != null) {
+    Cookies.set(REF_TOKEN_OBJ_NAME, refreshToken, {
       expiredAt: expiredAt,
       secure: true,
     });
   }
 };
-export const getRefToken = () =>
-  getDecryptedObject(Cookies.get(REF_TOKEN_OBJ_NAME));
+export const getRefToken = () => Cookies.get(REF_TOKEN_OBJ_NAME);
 
 export const removeRefToken = () => Cookies.remove(REF_TOKEN_OBJ_NAME);
 
-
-
-
-export async function get24hChanges(ids: string[], vsCurrency: string = 'usd'): Promise<CryptoData[] | null> {
+export async function get24hChanges(
+  ids: string[],
+  vsCurrency: string = "usd",
+): Promise<CryptoData[] | null> {
   try {
-      const url = 'https://api.coingecko.com/api/v3/coins/markets';
-      const params = {
-          ids: ids.join(','),
-          vs_currency: vsCurrency,
-          price_change_percentage: '24h'
-      };
-      const response = await axios.get(url, { params });
-      if (response.status === 200) {
-          return response.data;
-      } else {
-          console.error(`Error: ${response.status}`);
-          return null;
-      }
-  } catch (error) {
-      console.error('Error fetching data:', error);
+    const url = "https://api.coingecko.com/api/v3/coins/markets";
+    const params = {
+      ids: ids.join(","),
+      vs_currency: vsCurrency,
+      price_change_percentage: "24h",
+    };
+    const response = await axios.get(url, { params });
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      console.error(`Error: ${response.status}`);
       return null;
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null;
   }
 }
