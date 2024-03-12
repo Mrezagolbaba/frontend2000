@@ -59,12 +59,11 @@ const ChangePassword = () => {
           <Controller
             name="oldPassword"
             control={control}
-            render={({ field: { name, value, onChange, ref } }) => (
+            render={({ field: { name, value, onChange } }) => (
               <PasswordInput
                 name={name}
                 value={value}
                 onChange={onChange}
-                ref={ref}
                 errors={errors}
                 label="رمز عبور قبلی"
               />
@@ -75,12 +74,11 @@ const ChangePassword = () => {
           <Controller
             name="newPassword"
             control={control}
-            render={({ field: { name, value, onChange, ref } }) => (
+            render={({ field: { name, value, onChange } }) => (
               <PasswordInput
                 name={name}
                 value={value}
                 onChange={onChange}
-                ref={ref}
                 errors={errors}
                 label="رمز عبور"
               />
@@ -91,12 +89,11 @@ const ChangePassword = () => {
           <Controller
             name="rePassword"
             control={control}
-            render={({ field: { name, value, onChange, ref } }) => (
+            render={({ field: { name, value, onChange } }) => (
               <PasswordInput
                 name={name}
                 value={value}
                 onChange={onChange}
-                ref={ref}
                 errors={errors}
                 label="تکرار رمز عبور"
               />
