@@ -105,7 +105,7 @@ export default function CoinPage() {
                 </button>
               </form> */}
             </div>
-            {/* <div className={home["currency-rates__tabs"]}>
+{/*             <div className={home["currency-rates__tabs"]}>
               <FilterNavCoin
                 activeTab={activeTab}
                 handleTabClick={handleTabClick}
