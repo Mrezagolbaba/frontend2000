@@ -1,11 +1,10 @@
-import LandingLayout from "layouts/Landing";
-
-import { Breadcrumb, BreadcrumbItem, Card, CardBody, Container } from "reactstrap";
 import BottomBanner from "pages/Home/BottomBanner";
+import LandingLayout from "layouts/Landing";
+import { Breadcrumb, BreadcrumbItem, Card, CardBody, Container } from "reactstrap";
+import { Link } from "react-router-dom";
 
 import home from "assets/scss/landing/home.module.scss";
 import contact from "assets/scss/landing/contactUs.module.scss";
-import { Link } from "react-router-dom";
 
 export default function ContactUs() {
   return (
@@ -28,17 +27,17 @@ export default function ContactUs() {
               <Card className={contact.card}>
                 <CardBody>
                   <h5>تلفن تماس</h5>
-                  <a href="#" className="text-primary d-ltr">
+                  <Link to="/" className="text-primary d-ltr">
                     021-92004581
-                  </a>
+                  </Link>
                 </CardBody>
               </Card>
               <Card className={contact.card}>
                 <CardBody>
                   <h5>پست الکترونیکی</h5>
-                  <a href="#" className="text-primary d-ltr">
+                  <Link to="#" className="text-primary d-ltr">
                     support@arsonex.com
-                  </a>
+                  </Link>
                 </CardBody>
               </Card>
               <Card className={contact.card}>
@@ -52,7 +51,7 @@ export default function ContactUs() {
             </div>
             <ul className={contact.social}>
               <li>
-                <a href="https://t.me/Arsonexchange">
+                <Link to="https://t.me/Arsonexchange">
                   <div
                     className={`${contact["social-tile"]} ${contact["social-telegram"]}`}
                   >
@@ -74,10 +73,10 @@ export default function ContactUs() {
                     </div>
                     <h5 className={contact["tile-title"]}>تلگرام</h5>
                   </div>
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="https://twitter.com/Arsonexchange">
+                <Link to="https://twitter.com/Arsonexchange">
                   <div
                     className={`${contact["social-tile"]} ${contact["social-twitter"]}`}
                   >
@@ -99,10 +98,10 @@ export default function ContactUs() {
                     </div>
                     <h5 className={contact["tile-title"]}>توییتر</h5>
                   </div>
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="https://www.instagram.com/Arsonexchange/">
+                <Link to="https://www.instagram.com/Arsonexchange/">
                   <div
                     className={`${contact["social-tile"]} ${contact["social-instagram"]}`}
                   >
@@ -139,7 +138,7 @@ export default function ContactUs() {
                     </div>
                     <h5 className={contact["tile-title"]}>اینستاگرام</h5>
                   </div>
-                </a>
+                </Link>
               </li>
             </ul>
           </Container>

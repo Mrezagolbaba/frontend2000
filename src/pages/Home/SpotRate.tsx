@@ -15,6 +15,7 @@ import { get24hChanges } from "helpers";
 import { CryptoData } from "types/exchange";
 
 import home from "assets/scss/landing/home.module.scss";
+import { Link } from "react-router-dom";
 
 const SpotRate = () => {
   const [activeTab, setActiveTab] = useState<"IRR" | "USDT">("IRR");
@@ -113,12 +114,12 @@ const SpotRate = () => {
           </div>
         </div>
         <div className={home["more-section-button"]}>
-          <a href="/coins">
+          <Link to="/coins">
             دیدن همه
             <span className="icon">
               <HiOutlineChevronLeft />
             </span>
-          </a>
+          </Link>
         </div>
       </Container>
     </section>

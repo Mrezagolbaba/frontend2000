@@ -19,9 +19,9 @@
 .confidence {
   flex: 0 0 calc(100% - 172px);
   text-align: center;
+  margin-bottom: 35px;
   & > div {
     border: 1px solid #cccccc2e;
-    margin-bottom: 35px;
     border-radius: 10px;
     padding: 10px;
     display: inline-block;
@@ -199,5 +199,38 @@
   }
   .text {
     font-size: 0.75em;
+  }
+}
+
+.login-type {
+  display: flex;
+  flex-direction: row;
+  width: auto;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  transition: all ease-in 400ms;
+  & > div {
+    background-color: #eee;
+    padding: 2px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+  }
+  button {
+    background-color: transparent;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    margin: 0 3px;
+    transition: all ease-in 400ms;
+    &:hover {
+      color: #111bff;
+    }
+  }
+  &__active {
+    background-color: #111bff !important;
+    color: #fff !important;
+    &:hover {
+      color: #fff !important;
+    }
   }
 }

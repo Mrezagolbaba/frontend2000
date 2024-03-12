@@ -21,6 +21,7 @@ import Deposit from "../wallet/Rial/Deposit";
 import { CurrencyCode } from "types/wallet";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
+import { Link } from "react-router-dom";
 
 const accordionData = [
   {
@@ -106,7 +107,7 @@ export default function Exchange() {
             <CardHeader className="d-flex flex-row justify-content-between align-items-center">
               <CardTitle tag="h5"> سوالات متداول</CardTitle>
               <div className="card-action">
-                <a href="#">مرکز راهنمایی </a>
+                <Link to="/">مرکز راهنمایی </Link>
               </div>
             </CardHeader>
 

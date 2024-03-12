@@ -3,6 +3,7 @@ import { BreadcrumbItem, Container, Breadcrumb } from "reactstrap";
 
 import home from "assets/scss/landing/home.module.scss";
 import rules from "assets/scss/landing/rules.module.scss";
+import { Link } from "react-router-dom";
 
 export default function RulesPage() {
   return (
@@ -11,7 +12,7 @@ export default function RulesPage() {
         <Container className={`${rules["page"]}`}>
           <Breadcrumb>
             <BreadcrumbItem>
-              <a href="#">آرسونیکس</a>
+              <Link to="/">آرسونیکس</Link>
             </BreadcrumbItem>
             <BreadcrumbItem active className={rules["breadcrumb-item-custom"]}>
               قوانین و مقررارت

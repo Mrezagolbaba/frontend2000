@@ -1,5 +1,8 @@
 import * as Yup from "yup";
 
+export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const phoneRegex = /^\+?[0-9]{1,3}?[- .]?\(?[0-9]{3}\)?[- .]?[0-9]{3}[- .]?[0-9]{4}$/;
+
 export const loginSchema = Yup.object().shape({
   phoneNumber: Yup.string().required("شماره همراه الزامی می باشد."),
   password: Yup.string()

@@ -67,3 +67,12 @@ export interface SetEnglishNamesRequest {
   firstName: string;
   lastName: string;
 }
+
+export interface FirstTierRequest {
+  email: string;
+  nationalCode: string;
+  birthDate: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+}

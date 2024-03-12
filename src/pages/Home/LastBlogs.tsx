@@ -8,6 +8,7 @@ import {
   HiOutlineArrowNarrowLeft,
   HiOutlineArrowNarrowRight,
 } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 const blogSettings = {
   dots: false,
@@ -78,7 +79,7 @@ const LastBlogs = () => {
                       <GiNotebook />
                     </span>
                     <h3 className={home["blog__carousel__title"]}>
-                      <a href="#">{slide.title}</a>
+                      <Link to="/">{slide.title}</Link>
                     </h3>
                     <span className={home["blog__carousel__date"]}>
                       {slide.date}
@@ -88,7 +89,7 @@ const LastBlogs = () => {
                     <p className={home["blog__carousel__text"]}>{slide.text}</p>
                   </div>
                   <div className={home["blog__carousel__footer"]}>
-                    <a href="#">خواندن</a>
+                    <Link to="/">خواندن</Link>
                   </div>
                 </article>
               </div>
@@ -107,7 +108,7 @@ const LastBlogs = () => {
             </span>
           </button>
           <div className={home["carousel-buttons__all"]}>
-            <a href="#">همه مطالب</a>
+            <Link to="/">همه مطالب</Link>
           </div>
           <button
             type="button"

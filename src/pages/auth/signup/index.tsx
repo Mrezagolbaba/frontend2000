@@ -1,21 +1,3 @@
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { CiMobile2 } from "react-icons/ci";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { PiShieldCheckeredFill } from "react-icons/pi";
-import toast from "react-hot-toast";
-
-import Auth from "layouts/auth";
-import { registerSchema } from "pages/auth/validationForms";
-import { RegisterFormData } from "pages/auth/types";
-import { useCreateUser } from "services/auth";
-import SelectCountry from "components/SelectCountry";
-import PasswordInput from "components/PasswordInput";
-import FloatInput from "components/Input/FloatInput";
-import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
-import React, { useState } from "react";
-import auth from "assets/scss/auth/auth.module.scss";
 import {
   Button,
   Card,
@@ -27,18 +9,60 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
+import * as Yup from "yup";
+import Auth from "layouts/auth";
+import FloatInput from "components/Input/FloatInput";
+import PasswordInput from "components/PasswordInput";
+import SelectCountry from "components/SelectCountry";
+import toast from "react-hot-toast";
+import useAuth from "hooks/useAuth";
+import { CiMobile2 } from "react-icons/ci";
+import { Controller, useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { PiShieldCheckeredFill } from "react-icons/pi";
+import { RegisterFormData } from "pages/auth/types";
+import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
+import { useNavigate } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-const SignupPage: React.FC = () => {
-  const navigate = useNavigate();
-  const registerRequest = useCreateUser();
+import auth from "assets/scss/auth/auth.module.scss";
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
+export default function Register() {
+  // ==============|| Validation ||================= //
+  const registerSchema = Yup.object().shape({
+    phoneNumber: Yup.string()
+      .matches(/^[0-9]+$/, "شماره همراه اشتباه است")
+      .length(10, "لطفا شماره همراه خود را بدون کد کشور و یا ۰ وارد کنید")
+      .required("شماره همراه الزامی می باشد."),
+    password: Yup.string()
+      .min(8, "رمز عبور باید حداقل شامل 8 کاراکتر باشد.")
+      .matches(/[a-z]/, "رمز عبور حداقل باید شامل یک حرف کوچک انگلیسی باشد.")
+      .matches(/[A-Z]/, "رمز عبور باید حداقل شامل یک حرف بزرگ انگلیسی باشد.")
+      .matches(/[0-9]/, "رمز عبور حداقل باید شامل یک عدد باشد.")
+      .matches(
+        /[!@#$%^&*()\-_=+[\]{}|;:',.<>/?\\]/,
+        "رمز عبور باید حداقل شامل یک کاراکتر ویژه باشد (!@#$%^&*()-+).",
+      )
+      .required("رمز عبور الزامی است."),
+    selectedCountry: Yup.string().required("کد کشور الزامی می باشد."),
+    terms: Yup.boolean()
+      .test(
+        "required",
+        "لطفا قوانین را مطالعه کنید و تایید کنید",
+        (value) => value === true,
+      )
+      .required(),
+    inviteCode: Yup.string().required("لطفا کد معرف خود را وارد کنید."),
+  });
   const resolver = yupResolver(registerSchema);
+
+  // ==============|| Hooks ||================= //
+  const { register } = useAuth();
+  const navigate = useNavigate();
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     mode: "onChange",
     defaultValues: {
@@ -51,32 +75,20 @@ const SignupPage: React.FC = () => {
     resolver,
   });
 
+  // ==============|| Handlers ||================= //
   const handleRegister = async (data: RegisterFormData) => {
-    setIsLoading(true);
-      const phoneNumber = formatPhoneNumber(
-        persianToEnglishNumbers(data.phoneNumber),
-        data.selectedCountry,
-      );
-      const userData = {
-        phoneNumber,
-        password: data.password,
-        inviteCode:  data.inviteCode.toUpperCase()
-      };
-      await registerRequest
-        .mutateAsync(userData)
-        .then((res) => {
-          if (res) {
-            navigate("/mobile-otp", {
-              state: {
-                phoneNumber: userData.phoneNumber,
-              },
-            });
-            setIsLoading(false);
-          }
-        })
-        .catch(() => {
-          setIsLoading(false);
-        });
+    const phoneNumber = formatPhoneNumber(
+      persianToEnglishNumbers(data.phoneNumber),
+      data.selectedCountry,
+    );
+    const userData = {
+      phoneNumber,
+      password: data.password,
+      inviteCode: data.inviteCode.toUpperCase(),
+    };
+    await register(userData).then(() =>
+      navigate("/otp", { state: { type: "AUTH" } }),
+    );
   };
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>
@@ -85,6 +97,7 @@ const SignupPage: React.FC = () => {
       }),
     );
 
+  // ==============|| Render ||================= //
   return (
     <Auth>
       <section className={auth.container}>
@@ -103,8 +116,6 @@ const SignupPage: React.FC = () => {
                 </span>
               </div>
             </div>
-            {/* <p className={auth.text}> شماره تلفن خود را وارد کنید.</p> */}
-
             <form
               className={auth.form}
               onSubmit={handleSubmit(handleRegister, handleErrors)}
@@ -206,9 +217,9 @@ const SignupPage: React.FC = () => {
                           color="primary"
                           type="submit"
                           className={auth.submit}
-                          disabled={isLoading}
+                          disabled={isSubmitting}
                         >
-                          {isLoading ? (
+                          {isSubmitting ? (
                             <Spinner style={{ color: "white" }} />
                           ) : (
                             "ثبت نام"
@@ -231,6 +242,4 @@ const SignupPage: React.FC = () => {
       </section>
     </Auth>
   );
-};
-
-export default SignupPage;
+}

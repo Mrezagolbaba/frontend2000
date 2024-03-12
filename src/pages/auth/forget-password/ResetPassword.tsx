@@ -1,6 +1,3 @@
-import Auth from "layouts/auth";
-import toast from "react-hot-toast";
-import auth from "assets/scss/auth/auth.module.scss";
 import {
   Button,
   Card,
@@ -10,22 +7,46 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { forgetPassSchema2 } from "../validationForms";
+import * as Yup from "yup";
+import Auth from "layouts/auth";
 import PasswordInput from "components/PasswordInput";
-import { useSetPassword } from "services/auth";
-import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { Controller, useForm } from "react-hook-form";
+import { setVerifyLogin } from "store/reducers/jwtAuth";
+import { useDispatch } from "store/store";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSetPasswordMutation } from "store/api/auth";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-const ResetPassword = () => {
-  const navigate = useNavigate();
-  const setPassword = useSetPassword();
-  const location = useLocation();
-  const { token } = location.state;
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+import auth from "assets/scss/auth/auth.module.scss";
 
+export default function ResetPassword() {
+  // ==============|| Validation ||================= //
+  const forgetPassSchema2 = Yup.object().shape({
+    password: Yup.string()
+      .min(8, "رمز عبور باید حداقل شامل 8 کاراکتر باشد.")
+      .matches(/[a-z]/, "رمز عبور حداقل باید شامل یک حرف کوچک انگلیسی باشد.")
+      .matches(/[A-Z]/, "رمز عبور باید حداقل شامل یک حرف بزرگ انگلیسی باشد.")
+      .matches(/[0-9]/, "رمز عبور حداقل باید شامل یک عدد باشد.")
+      .matches(
+        /[!@#$%^&*()\-_=+[\]{}|;:',.<>/?\\]/,
+        "رمز عبور باید حداقل شامل یک کاراکتر ویژه باشد (!@#$%^&*()-+).",
+      )
+      .required("رمز عبور الزامی است."),
+    rePassword: Yup.string()
+      .oneOf(
+        [Yup.ref("password")],
+        "رمز عبور و تکرار رمز عبور با هم مطابقت ندارند.",
+      )
+      .required("تکرار رمز عبور الزامی می باشد."),
+  });
   const resolver = yupResolver(forgetPassSchema2);
+
+  // ==============|| Hooks ||================= //
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [setPassword, { isLoading, isSuccess }] = useSetPasswordMutation();
   const {
     handleSubmit,
     control,
@@ -39,27 +60,25 @@ const ResetPassword = () => {
     resolver,
   });
 
-  const onSubmit = async (data: any) => {
-    setIsLoading(true);
-    try {
-      await setPassword
-        .mutateAsync({ password: data.password, token: token })
-        .then((res) => {
-          navigate("/login");
-          setIsLoading(false);
-        });
-    } catch (error) {
-      setIsLoading(false);
-    }
-  };
-
+  // ==============|| Handlers ||================= //
+  const onSubmit = async (data: any) => setPassword(data.password);
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>
       toast.error(error?.message, {
         position: "bottom-left",
-      })
+      }),
     );
 
+  // ==============|| Life Cycle ||================= //
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(setVerifyLogin());
+      navigate("/dashboard");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
+
+  // ==============|| Render ||================= //
   return (
     <Auth>
       <section className={auth.container}>
@@ -127,6 +146,4 @@ const ResetPassword = () => {
       </section>
     </Auth>
   );
-};
-
-export default ResetPassword;
+}

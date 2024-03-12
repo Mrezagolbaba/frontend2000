@@ -6,6 +6,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { useState } from "react";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import { Link } from "react-router-dom";
 
 interface Props {
   onSidebarToggle: () => void;
@@ -18,45 +19,45 @@ const Header = ({ onSidebarToggle }: Props) => {
       <Card className={dashboard.card}>
         <CardBody className={dashboard["card-body"]}>
           <div className={dashboard.header__logo}>
-            <a href="#">
+            <Link to="/dashboard">
               <img src={Wallet} alt="" className="logo" />
-            </a>
+            </Link>
           </div>
           <ul className={dashboard.header__navbar}>
             <li>
-              <a href="/dashboard/exchange">خرید و فروش سریع</a>
+              <Link to="/dashboard/exchange">خرید و فروش سریع</Link>
             </li>
             <li>
-              <a href="/dashboard/market">بازارها</a>
+              <Link to="/dashboard/market">بازارها</Link>
             </li>
             <li>
-              <a href="/dashboard/wallet">واریز و برداشت</a>
+              <Link to="/dashboard/wallet">واریز و برداشت</Link>
             </li>
             <li>
-              <a href="https://help.arsonex.com/"> مرکز راهنمایی </a>
+              <Link to="https://help.arsonex.com/"> مرکز راهنمایی </Link>
             </li>
           </ul>
           <div className={dashboard.header__support}>
-            <a href="/dashboard/support" className="">
+            <Link to="/dashboard/support" className="">
               <span className="icon">
                 <img src={Support} alt="support" />
               </span>
               <span style={{ marginRight: "10px" }}>پشتیبانی</span>
-            </a>
+            </Link>
           </div>
           <div>
-            <a href="/dashboard/setting">
+            <Link to="/dashboard/setting">
               <span className="icon">
                 <img src={Setting} alt="setting" />
               </span>
-            </a>
+            </Link>
           </div>
           {/* <div className={dashboard.header__notification}>
-            <a href="/dashboard/notification">
+            <Link to="/dashboard/notification">
               <span className="icon">
                 <img src={Notifications} alt="notification" />
               </span>
-            </a>
+            </Link>
           </div> */}
 
           {/* <div className={dashboard.header__subheader}>
@@ -83,32 +84,32 @@ const Header = ({ onSidebarToggle }: Props) => {
                   <li className={dashboard.header__navbar__close}>
                     <button onClick={() => setIsLefMenuOpen(false)}>
                       <li>
-                        <a href="/dashboard/buy-sell">خرید و فروش سریع</a>
+                        <Link to="/dashboard/buy-sell">خرید و فروش سریع</Link>
                       </li>
                     </button>
                   </li>
                 </ul>
                 <div className={dashboard.header__support}>
-                  <a href="/support" className="">
+                  <Link to="/support" className="">
                     <span className="icon">
                       <img src={Support} alt="support" />
                     </span>
                     پشتیبانی
-                  </a>
+                  </Link>
                 </div>
                 <div>
-                  <a href="/setting">
+                  <Link to="/setting">
                     <span className="icon">
                       <img src={Setting} alt="setting" />
                     </span>
-                  </a>
+                  </Link>
                 </div>
                 <div className={dashboard.header__notification}>
-                  <a href="/notification">
+                  <Link to="/notification">
                     <span className="icon">
                       <img src={Notifications} alt="notification" />
                     </span>
-                  </a>
+                  </Link>
                 </div>
               </div> */}
           <div className={dashboard.header__subheader}>
@@ -150,13 +151,13 @@ const Header = ({ onSidebarToggle }: Props) => {
                 </button>
               </li>
               <li>
-                <a href="/dashboard/market">بازارها</a>
+                <Link to="/dashboard/market">بازارها</Link>
               </li>
               {/* <li>
-                <a href="#">خرید و فروش پیشرفته</a>
+                <Link to="#">خرید و فروش پیشرفته</Link>
               </li> */}
               <li>
-                <a href="/dashboard/exchange">خرید و فروش سریع</a>
+                <Link to="/dashboard/exchange">خرید و فروش سریع</Link>
               </li>
             </ul>
           </div>
