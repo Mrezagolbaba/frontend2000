@@ -52,13 +52,7 @@ export type JWTContextType = {
   register: (data: RegisterRequest) => Promise<AuthResponse>;
   forgotPassword: (data: ForgotPasswordRequest) => Promise<AuthResponse>;
   logout: () => Promise<void>;
-  otp: ({
-    data,
-    isLoggedIn,
-  }: {
-    data: OTPRequest;
-    isLoggedIn?: boolean;
-  }) => Promise<void>;
+  otp: (data: OTPRequest) => Promise<void>;
 };
 
 export interface OTPRequest {

@@ -15,10 +15,13 @@ import {
 import * as Yup from "yup";
 import Auth from "layouts/auth";
 import OtpInput from "react-otp-input";
+import useAuth from "hooks/useAuth";
 import { AlertWarning } from "components/AlertWidget";
 import { Controller, useForm } from "react-hook-form";
 import { OTPRequest, ResendOTPRequest } from "types/auth";
+import { setVerifyLogin } from "store/reducers/jwtAuth";
 import { toast } from "react-hot-toast";
+import { useDispatch } from "store/store";
 import { useEffect, useState } from "react";
 import { useGetMeQuery } from "store/api/user";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -27,7 +30,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import auth from "assets/scss/auth/auth.module.scss";
 import otpStyle from "assets/scss/components/Input/OTPInput.module.scss";
-import useAuth from "hooks/useAuth";
 
 export default function Otp() {
   // ==============|| Validation ||================= //
@@ -40,13 +42,13 @@ export default function Otp() {
   const [timeInSeconds, setTimeInSeconds] = useState(120);
 
   // ==============|| Hooks ||================= //
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { otp } = useAuth();
   const [resendOtpRequest, { isLoading: resendLoading }] =
     useResendOtpMutation();
   const { data: user, isLoading, isSuccess } = useGetMeQuery();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { phoneNumber, type } = location.state;
   const {
     handleSubmit,
     setValue,
@@ -59,6 +61,9 @@ export default function Otp() {
     },
     resolver,
   });
+
+  // ==============|| Variables ||================= //
+  const { phoneNumber, type } = location.state;
 
   // ==============|| Handlers ||================= //
   const handleResend = () => {
@@ -77,11 +82,9 @@ export default function Otp() {
         type,
         method: type === "VERIFY_EMAIL" ? "EMAIL" : user.otpMethod,
       };
-      await otp({
-        data: body,
-        isLoggedIn: type !== "VERIFY_EMAIL",
-      }).then(() => {
-        if (!user?.firstTierVerified && type === "AUTH")
+      await otp(body).then(() => {
+        if (type === "RESET_PASSWORD") navigate("/reset-password");
+        else if (!user?.firstTierVerified && type === "AUTH")
           navigate("/information");
         else if (!user?.emailVerified && type === "AUTH") {
           resendOtpRequest({
@@ -93,8 +96,10 @@ export default function Otp() {
               type: "VERIFY_EMAIL",
             },
           });
-        } else if (type === "RESET_PASSWORD") navigate("/reset-password");
-        else navigate("/dashboard");
+        } else {
+          dispatch(setVerifyLogin());
+          navigate("/dashboard");
+        }
       });
     }
   };

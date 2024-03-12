@@ -1,5 +1,3 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { BsCheck, BsFileEarmarkPlus } from "react-icons/bs";
 import {
   Button,
   Col,
@@ -10,16 +8,17 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
-
-import profile from "assets/scss/dashboard/profile.module.scss";
-import { useInitialVerification, useUploadDoc } from "services/verification";
-
-import toast from "react-hot-toast";
-import { useEnglishNamesMutation } from "store/api/user";
 import {
   useInitialInternationalMutation,
   useUploadDocMutation,
 } from "store/api/profile-management";
+import toast from "react-hot-toast";
+import { BsCheck, BsFileEarmarkPlus } from "react-icons/bs";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useEnglishNamesMutation } from "store/api/user";
+
+import profile from "assets/scss/dashboard/profile.module.scss";
+
 export default function InternationalVerification() {
   const inputRef1 = useRef<HTMLInputElement>(null);
   const inputRef2 = useRef<HTMLInputElement>(null);
@@ -82,10 +81,10 @@ export default function InternationalVerification() {
 
   useEffect(() => {
     if (successPublish) {
-        finalRequestHandler();
+      finalRequestHandler();
       toast.success("اطلاعات با موفقیت ثبت شد.", { position: "bottom-right" });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [successPublish]);
 
   return (
