@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { CardBody, Card } from "reactstrap";
 import { TransactionResponse } from "types/wallet";
 
@@ -32,9 +33,9 @@ const FailedPayment = ({ data }: any) => {
           صورت خودکار بازگردانده می&zwnj;شود.
         </p>
         <div className="text-center mt-4 mb-4">
-          <a href="/dashboard/wallet" className="btn btn-outline-primary mb-2">
+          <Link to="/dashboard/wallet" className="btn btn-outline-primary mb-2">
             بازگشت به کیف پول
-          </a>
+          </Link>
         </div>
       </CardBody>
   );

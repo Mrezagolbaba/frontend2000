@@ -1,4 +1,5 @@
 import { convertIRRToToman } from "helpers";
+import { Link } from "react-router-dom";
 import { Card, CardBody } from "reactstrap";
 import { TransactionResponse } from "types/wallet";
 
@@ -54,9 +55,9 @@ const SuccessfullPyment = ({ data }: any) => {
         کد رهگیری: {data?.providerRef} واریز شد.
       </p>
       <div className="text-center ">
-        <a href="/dashboard/wallet" className="btn btn-outline-primary mb-2">
+        <Link to="/dashboard/wallet" className="btn btn-outline-primary mb-2">
           بازگشت به کیف پول
-        </a>
+        </Link>
       </div>
     </CardBody>
   );

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 
 export default function Transactions() {
@@ -24,14 +25,14 @@ export default function Transactions() {
               >
                 واریز تومان{" "}
               </button>
-              <a
-                href="#"
+              <Link
+                to="/"
                 className="btn btn-outline-primary"
                 data-bs-toggle="modal"
                 data-bs-target="#onlineWithdraw"
               >
                 برداشت تومان
-              </a>
+              </Link>
             </div>
           </div>
         </CardBody>
@@ -91,9 +92,9 @@ export default function Transactions() {
                     >
                       برداشت
                     </button>
-                    <a href="#" className="btn btn-outline-primary">
+                    <Link to="/" className="btn btn-outline-primary">
                       معامله
-                    </a>
+                    </Link>
                   </td>
                 </tr>
                 <tr>
@@ -112,15 +113,15 @@ export default function Transactions() {
                   <td className="text-center">17,232.32</td>
                   <td className="text-center">فیات</td>
                   <td className="text-start tm__nowrap">
-                    <a href="#" className="btn btn-silver">
+                    <Link to="/" className="btn btn-silver">
                       واریز
-                    </a>
-                    <a href="#" className="btn btn-silver">
+                    </Link>
+                    <Link to="/" className="btn btn-silver">
                       برداشت
-                    </a>
-                    <a href="#" className="btn btn-outline-primary">
+                    </Link>
+                    <Link to="/" className="btn btn-outline-primary">
                       معامله
-                    </a>
+                    </Link>
                   </td>
                 </tr>
               </tbody>
@@ -418,9 +419,9 @@ export default function Transactions() {
                         <span className="text-success">پرداخت شده</span>
                       </td>
                       <td className="text-center">
-                        <a href="#" className="btn-simple">
+                        <Link to="/" className="btn-simple">
                           مشاهده جزئیات
-                        </a>
+                        </Link>
                       </td>
                     </tr>
                     <tr>
@@ -485,9 +486,9 @@ export default function Transactions() {
                         <span className="text-success">پرداخت شده</span>
                       </td>
                       <td className="text-center">
-                        <a href="#" className="btn-simple">
+                        <Link to="/" className="btn-simple">
                           مشاهده جزئیات
-                        </a>
+                        </Link>
                       </td>
                     </tr>
                     <tr>
@@ -552,9 +553,9 @@ export default function Transactions() {
                         <span className="text-success">پرداخت شده</span>
                       </td>
                       <td className="text-center">
-                        <a href="#" className="btn-simple">
+                        <Link to="/" className="btn-simple">
                           مشاهده جزئیات
-                        </a>
+                        </Link>
                       </td>
                     </tr>
                   </tbody>

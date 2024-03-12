@@ -1,28 +1,20 @@
-import { ReactNode, useEffect, useState } from "react";
 import Header from "./Header";
+import Sidebar from "./sidebar";
+import { Container } from "reactstrap";
+import { ReactNode, useState } from "react";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 
-import Sidebar from "./sidebar";
-import { Container } from "reactstrap";
-import { useAppDispatch } from "store/hooks";
-import { setUser } from "store/reducers/features/user/userSlice";
-import { useGetMeQuery } from "store/api/user";
-
-const Layout = ({ children }: { children: ReactNode }) => {
+export default function Layout({ children }: { children: ReactNode }) {
+  // ==============|| States ||================= //
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
+  // ==============|| Handlers ||================= //
   const handleSidebarToggle = () => {
     setIsSidebarOpen((prevStat) => !prevStat);
   };
 
-  const dispatch = useAppDispatch();
-  const { data, isSuccess } = useGetMeQuery();
-
-  useEffect(() => {
-    if (isSuccess && data) dispatch(setUser(data));
-  }, [data, dispatch, isSuccess]);
-
+  // ==============|| Render ||================= //
   return (
     <div className={dashboard.wrapper}>
       <div id="menuOverlay" className={dashboard["menu-overlay"]} />
@@ -35,5 +27,4 @@ const Layout = ({ children }: { children: ReactNode }) => {
       </Container>
     </div>
   );
-};
-export default Layout;
+}

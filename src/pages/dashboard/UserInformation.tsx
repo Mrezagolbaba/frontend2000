@@ -9,6 +9,7 @@ import { useAppSelector } from "store/hooks";
 import { useGetSessionQuery } from "store/api/auth";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import { Link } from "react-router-dom";
 
 export default function UserInformation() {
   // ==============|| States ||================= //
@@ -78,9 +79,9 @@ export default function UserInformation() {
               ) : (
                 <span>
                   <span>سطح یک</span>{" "}
-                  <a href="/dashboard/profile" style={{ color: "#111bff" }}>
+                  <Link to="/dashboard/profile" style={{ color: "#111bff" }}>
                     ارتقا سطح
-                  </a>
+                  </Link>
                 </span>
               )}
             </div>

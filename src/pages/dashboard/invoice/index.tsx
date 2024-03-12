@@ -5,7 +5,7 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import "./styles.module.scss";
 import { coinShow, convertText, lirShow, tomanShow } from "helpers";
 import moment from "jalali-moment";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useGetCurrencySwapQuery } from "store/api/exchange-management";
@@ -58,11 +58,11 @@ const Invoice = () => {
       <Card>
         <CardHeader>
           <div className="card-back">
-            <a href="#">
+            <Link to="/">
               <span className="icon">
                 <MdOutlineKeyboardArrowRight color="black" />
               </span>
-            </a>
+            </Link>
           </div>
         </CardHeader>
         <CardBody>

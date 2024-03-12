@@ -1,10 +1,10 @@
-import React from "react";
+import { ReactElement } from "react";
 import { Badge, Col, Container, Row } from "reactstrap";
 import { Link } from "react-router-dom";
 
 import home from "assets/scss/landing/home.module.scss";
 
-const Footer = (): React.JSX.Element => {
+const Footer = (): ReactElement => {
   return (
     <footer className={home.footer}>
       <Container>
@@ -80,24 +80,24 @@ const Footer = (): React.JSX.Element => {
               <h3 className={home["footer-widget-title"]}>راهنمای استفاده</h3>
               <ul className={home["footer-links"]}>
                 <li>
-                  <a href="https://help.arsonex.com">مرکز راهنمایی</a>
+                  <Link to="https://help.arsonex.com">مرکز راهنمایی</Link>
                 </li>
                 <li>
-                  <a href="https://help.arsonex.com/transaction/">
+                  <Link to="https://help.arsonex.com/transaction/">
                     {" "}
                     روش های معاملاتی
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="https://help.arsonex.com/security/">
+                  <Link to="https://help.arsonex.com/security/">
                     {" "}
                     امنیت کاربران
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="https://help.arsonex.com/authentication-process/">
+                  <Link to="https://help.arsonex.com/authentication-process/">
                     احراز هویت فوری
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -110,7 +110,7 @@ const Footer = (): React.JSX.Element => {
           </div>
           <ul className={home["social-media"]}>
             <li>
-              <a href="https://t.me/Arsonexchange">
+              <Link to="https://t.me/Arsonexchange">
                 <span className="icon">
                   <svg
                     width="24"
@@ -126,10 +126,10 @@ const Footer = (): React.JSX.Element => {
                     ></path>
                   </svg>
                 </span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="https://twitter.com/Arsonexchange">
+              <Link to="https://twitter.com/Arsonexchange">
                 <span className="icon">
                   <svg
                     width="24"
@@ -145,11 +145,11 @@ const Footer = (): React.JSX.Element => {
                     ></path>
                   </svg>
                 </span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a href="https://www.instagram.com/Arsonexchange/">
+              <Link to="https://www.instagram.com/Arsonexchange/">
                 <span className="icon">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                     <path
@@ -159,7 +159,7 @@ const Footer = (): React.JSX.Element => {
                     ></path>
                   </svg>
                 </span>
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

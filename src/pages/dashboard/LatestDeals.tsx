@@ -1,8 +1,10 @@
-import Deposit from "assets/img/icons/depositIcon.svg";
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
-import { useTransactionsQuery } from "store/api/wallet-management";
-import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import { Link } from "react-router-dom";
 import { convertCoins, convertIRRToToman, convertStatus } from "helpers";
+import { useTransactionsQuery } from "store/api/wallet-management";
+
+import Deposit from "assets/img/icons/depositIcon.svg";
+import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 
 function LatestDeals() {
   const { data, isLoading } = useTransactionsQuery({
@@ -20,9 +22,9 @@ function LatestDeals() {
     <Card className="h-100">
       <CardHeader className="d-flex flex-row justify-content-between align-items-center">
         <CardTitle tag="h5"> تراکنش های اخیر</CardTitle>
-        <a className={dashboard["sub-link"]} href="/dashboard/history">
+        <Link className={dashboard["sub-link"]} to="/dashboard/history">
           تاریخچه
-        </a>
+        </Link>
       </CardHeader>
       <CardBody>
         <div className={dashboard["table-responsive"]}>
