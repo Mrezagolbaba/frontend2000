@@ -90,18 +90,7 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
         return res;
       });
 
-  const otp = async ({
-    data,
-    isLoggedIn = true,
-  }: {
-    data: OTPRequest;
-    isLoggedIn?: boolean;
-  }) =>
-    otpRequest(data)
-      .unwrap()
-      .then(() => {
-        if (isLoggedIn) dispatch(setVerifyLogin());
-      });
+  const otp = async (data: OTPRequest) => otpRequest(data).unwrap();
 
   const register = async (data: RegisterRequest) =>
     registerRequest(data)

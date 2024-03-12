@@ -12,6 +12,8 @@ import Auth from "layouts/auth";
 import PasswordInput from "components/PasswordInput";
 import toast from "react-hot-toast";
 import { Controller, useForm } from "react-hook-form";
+import { setVerifyLogin } from "store/reducers/jwtAuth";
+import { useDispatch } from "store/store";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetPasswordMutation } from "store/api/auth";
@@ -42,8 +44,9 @@ export default function ResetPassword() {
   const resolver = yupResolver(forgetPassSchema2);
 
   // ==============|| Hooks ||================= //
-  const [setPassword, { isLoading, isSuccess }] = useSetPasswordMutation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [setPassword, { isLoading, isSuccess }] = useSetPasswordMutation();
   const {
     handleSubmit,
     control,
@@ -68,7 +71,10 @@ export default function ResetPassword() {
 
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
-    if (isSuccess) navigate("/dashboard");
+    if (isSuccess) {
+      dispatch(setVerifyLogin());
+      navigate("/dashboard");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
