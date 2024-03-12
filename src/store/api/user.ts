@@ -1,5 +1,6 @@
 import {
   CheckVerificationsResponse,
+  FirstTierRequest,
   IUser,
   SetEnglishNamesRequest,
 } from "types/user";
@@ -47,6 +48,15 @@ export const userApi = enhancedApi.injectEndpoints({
         };
       },
     }),
+    firstTier: builder.mutation<void, FirstTierRequest>({
+      query(data) {
+        return {
+          method: "POST",
+          url: "/verifications/verify-first-tier",
+          data,
+        };
+      },
+    }),
   }),
 });
 
@@ -55,4 +65,5 @@ export const {
   useUpdatePasswordMutation,
   useCheckVerificationsQuery,
   useEnglishNamesMutation,
+  useFirstTierMutation,
 } = userApi;

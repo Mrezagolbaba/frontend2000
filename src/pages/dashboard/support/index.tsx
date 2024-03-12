@@ -2,9 +2,10 @@ import Layout from "layouts/dashboard";
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 import TicketModal from "./addModal";
 import { useState } from "react";
-import { useGetTicketsQuery } from 'store/api/ticket'
+import { useGetTicketsQuery } from "store/api/ticket";
 import { ITicket } from "types/ticket";
 import moment from "jalali-moment";
+import { Link } from "react-router-dom";
 
 const Support = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,16 +46,24 @@ const Support = () => {
                 {data?.map((item: ITicket) => (
                   <tr>
                     <td className="text-center">
-                      <span className="d-ltr d-block">{moment(item?.createdAt)
-                        .locale("fa")
-                        .format("DD MMMM YYYY")}</span>
+                      <span className="d-ltr d-block">
+                        {moment(item?.createdAt)
+                          .locale("fa")
+                          .format("DD MMMM YYYY")}
+                      </span>
                     </td>
                     <td className="text-center">{item.subject}</td>
                     <td className="text-center">
-                      {item.status === 'OPEN' ? <span className="text-success">	در دست بررسی </span> : <span className="text-danger">خاتمه یافته</span>}
+                      {item.status === "OPEN" ? (
+                        <span className="text-success"> در دست بررسی </span>
+                      ) : (
+                        <span className="text-danger">خاتمه یافته</span>
+                      )}
                     </td>
                     <td className="text-center table-new__actions">
-                      <a href={`/dashboard/support/details/${item.id}`}>مشاهده جزئیات</a>
+                      <Link to={`/dashboard/support/details/${item.id}`}>
+                        مشاهده جزئیات
+                      </Link>
                     </td>
                   </tr>
                 ))}
@@ -122,7 +131,6 @@ const Support = () => {
         isModalOpen={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         onOk={() => setIsModalOpen(false)}
-
       />
     </section>
   );

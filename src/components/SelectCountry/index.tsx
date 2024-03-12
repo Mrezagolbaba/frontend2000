@@ -1,5 +1,5 @@
 import { Select } from "antd";
-import { FieldErrors, RefCallBack } from "react-hook-form";
+import { FieldErrors } from "react-hook-form";
 
 import "./style.sass";
 
@@ -11,14 +11,12 @@ import turkey from "assets/img/flags/Turkey.svg";
 
 type Props = {
   onChange: (...event: any[]) => void;
-  onBlur: (...event: any[]) => void;
   value: string;
   name: string;
-  ref: RefCallBack;
   errors?: FieldErrors;
 };
 
-const SelectCountry = ({ name, ref, value, onChange, errors }: Props) => {
+const SelectCountry = ({ name, value, onChange, errors }: Props) => {
   const options = [
     {
       value: "90",
@@ -71,7 +69,6 @@ const SelectCountry = ({ name, ref, value, onChange, errors }: Props) => {
     <Select
       className="dropdown bootstrap-select bs-select-control bs-form-select select-country-input"
       id={name}
-      ref={ref}
       value={value}
       options={options}
       labelInValue

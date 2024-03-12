@@ -1,21 +1,3 @@
-import { useState } from "react";
-import { toast } from "react-hot-toast";
-import { useLocation, useNavigate } from "react-router-dom";
-import { LiaIdCardSolid } from "react-icons/lia";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { CiMobile2, CiUser, CiMail, CiCalendarDate } from "react-icons/ci";
-import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
-import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
-
-import Auth from "layouts/auth";
-import { InformationFormData } from "../types";
-import { InformationSchema } from "pages/auth/validationForms";
-import { useSubmitInformation } from "services/auth";
-import { convertPersianToGregorian, formatPhoneNumber, getDate18YearsAgo, persianToEnglishNumbers } from "helpers";
-import FloatInput from "components/Input/FloatInput";
-
-import auth from "assets/scss/auth/auth.module.scss";
 import {
   Button,
   Card,
@@ -25,6 +7,28 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
+import {
+  convertPersianToGregorian,
+  formatPhoneNumber,
+  getDate18YearsAgo,
+  persianToEnglishNumbers,
+} from "helpers";
+import "@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css";
+import * as Yup from "yup";
+import Auth from "layouts/auth";
+import DatePicker from "@hassanmojab/react-modern-calendar-datepicker";
+import FloatInput from "components/Input/FloatInput";
+import { CiMobile2, CiUser, CiMail, CiCalendarDate } from "react-icons/ci";
+import { Controller, useForm } from "react-hook-form";
+import { LiaIdCardSolid } from "react-icons/lia";
+import { toast } from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { useFirstTierMutation, useGetMeQuery } from "store/api/user";
+import { useNavigate } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import auth from "assets/scss/auth/auth.module.scss";
+
 type Day = {
   year: number;
   month: number;
@@ -32,80 +36,89 @@ type Day = {
 };
 type DayValue = Day | null | undefined;
 
-const Information = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const submitInformation = useSubmitInformation();
-  const minimumDate = getDate18YearsAgo();
-
+export default function Information() {
+  // ==============|| States ||================= //
   const [selectedDay, setSelectedDay] = useState<DayValue>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { phoneNumber } = location.state;
-
+  // ==============|| Validation ||================= //
+  const InformationSchema = Yup.object().shape({
+    firstName: Yup.string().required("درج نام الزامی است."),
+    lastName: Yup.string().required("درج نام خانوادگی الزامی است."),
+    nationalCode: Yup.string().required("کد ملی الزامی می باشد."),
+    phoneNumber: Yup.string(),
+    email: Yup.string().email().required("درج ایمیل الزامی می باشد."),
+    birthDate: Yup.string(),
+  });
   const resolver = yupResolver(InformationSchema);
+
+  // ==============|| Hooks ||================= //
+  const [
+    firstTierRequest,
+    { isLoading: loadingFirstTier, isSuccess: successFirstTier },
+  ] = useFirstTierMutation();
+  const navigate = useNavigate();
+  const { data: user, isLoading } = useGetMeQuery();
   const {
     handleSubmit,
     control,
-    setValue,
-    getValues,
-    setError,
     formState: { errors },
-  } = useForm<InformationFormData>({
+  } = useForm({
     mode: "onChange",
     defaultValues: {
       firstName: "",
       lastName: "",
       nationalCode: "",
-      phoneNumber: phoneNumber.includes("+98") ? phoneNumber : "",
+      birthDate: "",
+      phoneNumber: user?.phoneNumber.includes("+98") ? user?.phoneNumber : "",
       email: "",
     },
     resolver,
   });
 
-  const handleInfo = async (data: InformationFormData) => {
-    setIsLoading(true);
+  // ==============|| Handlers ||================= //
+  const minimumDate = getDate18YearsAgo();
+  const handleInfo = async (data) => {
     const nationalCode = persianToEnglishNumbers(data.nationalCode);
-    const birthDate = convertPersianToGregorian(selectedDay?.year + "/" + selectedDay?.month + "/" + selectedDay?.day);
+    const birthDate = convertPersianToGregorian(
+      selectedDay?.year + "/" + selectedDay?.month + "/" + selectedDay?.day,
+    );
     if (birthDate === undefined) {
       toast.error("تاریخ تولد الزامی می باشد.", {
         position: "bottom-left",
-      })
-
-      setIsLoading(false);
+      });
       return;
-    }
-    await submitInformation
-      .mutateAsync({
+    } else
+      firstTierRequest({
         ...data,
-        phoneNumber: phoneNumber.includes("+98")
-          ? phoneNumber
+        phoneNumber: user?.phoneNumber.includes("+98")
+          ? user?.phoneNumber
           : data.phoneNumber
             ? formatPhoneNumber(persianToEnglishNumbers(data.phoneNumber), "98")
             : undefined,
         nationalCode,
         birthDate,
-      })
-      .then((res) => {
-        navigate("/email-otp", {
-          state: {
-            email: data.email,
-            page: "information",
-          },
-        });
-        setIsLoading(false);
-      })
-      .catch(() => {
-        setIsLoading(false);
       });
   };
-
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>
       toast.error(error?.message, {
         position: "bottom-left",
-      })
+      }),
     );
+
+  // ==============|| Life Cycle ||================= //
+  useEffect(() => {
+    if (successFirstTier) {
+      navigate("/otp", {
+        state: {
+          type: "VERIFY_EMAIL",
+        },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [successFirstTier]);
+
+  // ==============|| Render ||================= //
   return (
     <Auth>
       <section className={auth.container}>
@@ -192,7 +205,7 @@ const Information = () => {
                     <Controller
                       name="birthDate"
                       control={control}
-                      render={({ field: { name, value, onChange, ref } }) => (
+                      render={({ field: { name, onChange } }) => (
                         <DatePicker
                           value={selectedDay}
                           onChange={(date) => setSelectedDay(date as any)}
@@ -206,13 +219,21 @@ const Information = () => {
                               type="text"
                               name={name}
                               label="تاریخ تولد"
-                              value={selectedDay !== undefined ? selectedDay?.year + "-" + selectedDay?.month + "-" + selectedDay?.day : ""}
+                              value={
+                                selectedDay !== undefined
+                                  ? selectedDay?.year +
+                                    "-" +
+                                    selectedDay?.month +
+                                    "-" +
+                                    selectedDay?.day
+                                  : ""
+                              }
                               onChange={onChange}
                               inputProps={{
                                 ref: ref,
                                 size: "large",
                                 prefix: <CiCalendarDate size={20} />,
-                                status: errors?.['birthDate']?.message
+                                status: errors?.["birthDate"]?.message
                                   ? "error"
                                   : undefined,
                               }}
@@ -234,7 +255,7 @@ const Information = () => {
                           label="شماره تلفن ایران"
                           value={value as string}
                           onChange={onChange}
-                          disabled={phoneNumber.includes("+98")}
+                          disabled={user?.phoneNumber.includes("+98")}
                           inputProps={{
                             dir: "ltr",
                             ref: ref,
@@ -280,9 +301,9 @@ const Information = () => {
                         type="submit"
                         color="primary"
                         className={auth.submit}
-                        disabled={isLoading}
+                        disabled={isLoading || loadingFirstTier}
                       >
-                        {isLoading ? (
+                        {loadingFirstTier ? (
                           <Spinner style={{ color: "white" }} />
                         ) : (
                           "ثبت اطلاعات"
@@ -298,5 +319,4 @@ const Information = () => {
       </section>
     </Auth>
   );
-};
-export default Information;
+}

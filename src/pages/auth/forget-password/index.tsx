@@ -10,118 +10,87 @@ import {
 import * as Yup from "yup";
 import Auth from "layouts/auth";
 import FloatInput from "components/Input/FloatInput";
-import PasswordInput from "components/PasswordInput";
 import SelectCountry from "components/SelectCountry";
+import toast from "react-hot-toast";
 import useAuth from "hooks/useAuth";
 import { CiMobile2 } from "react-icons/ci";
 import { Controller, useForm } from "react-hook-form";
+import { ForgotPasswordRequest } from "types/auth";
 import { HiOutlineMail } from "react-icons/hi";
-import { LoginRequest } from "types/auth";
-import { PiShieldCheckeredFill } from "react-icons/pi";
 import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
-import { toast } from "react-hot-toast";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import auth from "assets/scss/auth/auth.module.scss";
 
-export default function LoginPage() {
+export default function ForgetPassword() {
   // ==============|| States ||================= //
-  const [loginType, setLoginType] = useState<"PHONE" | "EMAIL">("PHONE");
+  const [forgotType, setForgotType] = useState<"PHONE" | "EMAIL">("PHONE");
 
   // ==============|| Validation ||================= //
   const getValidationSchema = () => {
-    const schema = {
-      password: Yup.string()
-        .min(8, "اطلاعات وارد شده اشتباه است.")
-        .matches(/[a-z]/, ",اطلاعات وارد شده اشتباه است.")
-        .matches(/[A-Z]/, "اطلاعات وارد شده اشتباه است.")
-        .matches(/[0-9]/, "اطلاعات وارد شده اشتباه است.")
-        .matches(
-          /[!@#$%^&*()\-_=+[\]{}|;:',.<>/?\\]/,
-          "اطلاعات وارد شده اشتباه است.",
-        )
-        .required("رمز عبور الزامی است."),
-    };
-    if (loginType === "PHONE") {
+    if (forgotType === "PHONE") {
       return Yup.object().shape({
         username: Yup.string()
           .matches(/^[0-9]+$/, "شماره همراه اشتباه است")
           .length(10, "لطفا شماره همراه خود را بدون کد کشور و یا ۰ وارد کنید")
           .required("شماره همراه الزامی می باشد."),
         selectedCountry: Yup.string().required("کد کشور الزامی می باشد."),
-        ...schema,
       });
     } else {
       return Yup.object().shape({
         username: Yup.string()
           .email("ایمیل اشتباه است")
           .required("ایمیل الزامی است"),
-        ...schema,
       });
     }
   };
   const resolver = yupResolver(getValidationSchema());
 
   // ==============|| Hooks ||================= //
-  const { login } = useAuth();
+  const { forgotPassword } = useAuth();
   const navigate = useNavigate();
   const {
     handleSubmit,
     control,
-    reset,
     formState: { errors, isSubmitting },
   } = useForm({
     mode: "onChange",
     defaultValues:
-      loginType === "PHONE"
+      forgotType === "PHONE"
         ? {
             username: "",
-            password: "",
             selectedCountry: "98",
           }
         : {
             username: "",
-            password: "",
           },
     resolver,
   });
 
   // ==============|| Handlers ||================= //
-  const handleLogin = async (data) => {
-    const body: LoginRequest = { password: data.password, type: loginType };
-    if (loginType === "EMAIL") body.email = data.username;
-    else {
-      const phoneNumber = formatPhoneNumber(
-        persianToEnglishNumbers(data.username),
-        data.selectedCountry,
-      );
-      body.phoneNumber = phoneNumber;
-    }
-
-    await login(body).then((res) => {
-      navigate("/otp", { state: { type: "AUTH" } });
-    });
-  };
-
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>
       toast.error(error?.message, {
         position: "bottom-left",
       }),
     );
+  const handleResetPassword = async (data) => {
+    const body: ForgotPasswordRequest = {
+      type: forgotType,
+    };
+    if (forgotType === "EMAIL") body.email = data.username;
+    else
+      body.phoneNumber = formatPhoneNumber(
+        persianToEnglishNumbers(data.username),
+        data.selectedCountry,
+      );
 
-  // ==============|| Life Cycle ||================= //
-  useEffect(() => {
-    if (loginType === "EMAIL")
-      reset({
-        username: "",
-        password: "",
-      });
-    else reset({ username: "", password: "", selectedCountry: "98" });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loginType]);
+    await forgotPassword(body).then(() =>
+      navigate("/otp", { state: { type: "RESET_PASSWORD" } }),
+    );
+  };
 
   // ==============|| Render ||================= //
   return (
@@ -129,34 +98,23 @@ export default function LoginPage() {
       <section className={auth.container}>
         <Card className={auth.card}>
           <CardBody className={auth["card-body"]}>
-            <h4 className={auth.title}>ورود به حساب کاربری</h4>
-            <div className={`${auth.confidence} mb-4`}>
-              <p>از یکسان بودن آدرس صفحه با آدرس زیر مطمئن شوید.</p>
-              <div className="d-ltr">
-                <label>
-                  <span>https://</span>arsonex.com
-                </label>
-                <span className="icon">
-                  <PiShieldCheckeredFill />
-                </span>
-              </div>
-            </div>
-            <div className="text-center">ورود با</div>
+            <h4 className={auth.title}>فراموشی رمز عبور</h4>
+            <div className="text-center">بازیابی رمز عبور با</div>
             <div className={auth["login-type"]}>
               <div>
                 <button
                   className={
-                    loginType === "PHONE" ? auth["login-type__active"] : ""
+                    forgotType === "PHONE" ? auth["login-type__active"] : ""
                   }
-                  onClick={() => setLoginType("PHONE")}
+                  onClick={() => setForgotType("PHONE")}
                 >
                   شماره همراه
                 </button>
                 <button
                   className={
-                    loginType === "EMAIL" ? auth["login-type__active"] : ""
+                    forgotType === "EMAIL" ? auth["login-type__active"] : ""
                   }
-                  onClick={() => setLoginType("EMAIL")}
+                  onClick={() => setForgotType("EMAIL")}
                 >
                   ایمیل
                 </button>
@@ -164,11 +122,11 @@ export default function LoginPage() {
             </div>
             <form
               className={auth.form}
-              onSubmit={handleSubmit(handleLogin, handleErrors)}
+              onSubmit={handleSubmit(handleResetPassword, handleErrors)}
             >
               <Container>
-                <Row className="gy-2 gx-0" style={{ position: "relative" }}>
-                  {loginType === "PHONE" ? (
+                <Row className="gy-2 gx-0">
+                  {forgotType === "PHONE" ? (
                     <>
                       <Col xs={8}>
                         <Controller
@@ -238,27 +196,6 @@ export default function LoginPage() {
                       />
                     </Col>
                   )}
-                  <Col xs={12}>
-                    <Controller
-                      name="password"
-                      control={control}
-                      render={({ field: { name, value, onChange } }) => (
-                        <PasswordInput
-                          name={name}
-                          value={value}
-                          onChange={onChange}
-                          errors={errors}
-                        />
-                      )}
-                    />
-                  </Col>
-                  <Col xs={12}>
-                    <div className={auth.forgotLink}>
-                      <Button color="link" tag="a" href="/forget-password">
-                        رمز عبور را فراموش کرده&zwnj;ام!
-                      </Button>
-                    </div>
-                  </Col>
                 </Row>
                 <Row>
                   <Col xs={12}>
@@ -267,20 +204,19 @@ export default function LoginPage() {
                         <Button
                           type="submit"
                           color="primary"
-                          className={auth.submit}
+                          className={`${auth.submit} mt-5`}
                           disabled={isSubmitting}
                         >
                           {isSubmitting ? (
                             <Spinner style={{ color: "white" }} />
                           ) : (
-                            "ورود به حساب"
+                            "ثبت درخواست"
                           )}
                         </Button>
                       </div>
-                      <div className={auth.already}>
-                        عضو نیستم:{" "}
-                        <Button color="link" tag="a" href="/register">
-                          ثبت نام
+                      <div className={`${auth.already} mt-1`}>
+                        <Button color="link" tag="a" href="/login">
+                          ورود به حساب کاربری
                         </Button>
                       </div>
                     </div>
