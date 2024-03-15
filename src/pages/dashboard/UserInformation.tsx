@@ -41,15 +41,13 @@ export default function UserInformation() {
           </li>
           <li className={dashboard["user-summary__edit"]}>
             <h6>{firstName + " " + lastName}</h6>
-            <Button
-              className="profile-btn"
-              outline
-              color="secondary"
-              href="/dashboard/profile"
+            <Link
+              className="btn btn-outline-secondary profile-btn"
+              to="/dashboard/profile"
             >
               <CiEdit />
               پروفایل کاربری
-            </Button>
+            </Link>
           </li>
           <li className={dashboard["user-summary__last-seen"]}>
             <h6>آخرین ورود</h6>

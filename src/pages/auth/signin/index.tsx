@@ -21,7 +21,7 @@ import { PiShieldCheckeredFill } from "react-icons/pi";
 import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
 import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import auth from "assets/scss/auth/auth.module.scss";
@@ -141,27 +141,6 @@ export default function LoginPage() {
                 </span>
               </div>
             </div>
-            <div className="text-center">ورود با</div>
-            <div className={auth["login-type"]}>
-              <div>
-                <button
-                  className={
-                    loginType === "PHONE" ? auth["login-type__active"] : ""
-                  }
-                  onClick={() => setLoginType("PHONE")}
-                >
-                  شماره همراه
-                </button>
-                <button
-                  className={
-                    loginType === "EMAIL" ? auth["login-type__active"] : ""
-                  }
-                  onClick={() => setLoginType("EMAIL")}
-                >
-                  ایمیل
-                </button>
-              </div>
-            </div>
             <form
               className={auth.form}
               onSubmit={handleSubmit(handleLogin, handleErrors)}
@@ -275,6 +254,22 @@ export default function LoginPage() {
                           ) : (
                             "ورود به حساب"
                           )}
+                        </Button>
+                      </div>
+                      <div className="mb3">
+                        <Button
+                          color="primary"
+                          outline
+                          className={auth.submit}
+                          onClick={() => {
+                            loginType === "EMAIL"
+                              ? setLoginType("PHONE")
+                              : setLoginType("EMAIL");
+                          }}
+                        >
+                          {loginType === "EMAIL"
+                            ? "ورود با استفاده از موبایل"
+                            : "ورود با استفاده از ایمیل"}
                         </Button>
                       </div>
                       <div className={auth.already}>
