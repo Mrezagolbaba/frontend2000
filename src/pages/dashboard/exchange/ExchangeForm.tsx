@@ -326,7 +326,7 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
               />
             </div>
             <div className={exchange.divider}>
-              <span className="mb-5">
+              <span>
                 <svg
                   width="19"
                   height="17"

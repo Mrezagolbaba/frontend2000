@@ -110,7 +110,15 @@ export default function ExchangeSection() {
               </div>
             </div>
             <div className={exchange.divider}>
-              <span>
+              <span
+                style={{
+                  display: "block",
+                  marginTop: "25px",
+                  width: "66px",
+                  paddingRight: "20px",
+                  marginBottom: "0",
+                }}
+              >
                 <svg
                   width="19"
                   height="17"
