@@ -110,15 +110,13 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
               <h6 className={dashboard.sidebar__user__name}>
                 {firstName + " " + lastName}
               </h6>
-              <Button
-                className="profile-btn"
-                outline
-                color="secondary"
-                href="/dashboard/profile"
+              <Link
+                className="btn btn-outline-secondary profile-btn"
+                to="/dashboard/profile"
               >
                 <CiEdit />
                 پروفایل کاربری
-              </Button>
+              </Link>
             </div>
           </div>
         )}

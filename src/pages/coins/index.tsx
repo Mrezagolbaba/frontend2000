@@ -45,7 +45,7 @@ export default function CoinPage() {
     { code: "XRP", name: "ریپل", originName: "ripple", imgSrc: XRP },
     { code: "DOGE", name: "دوج کوین", originName: "dogecoin", imgSrc: DOGE },
     { code: "PEPE", name: "پپه", originName: "pepe", imgSrc: PEPE },
-    { code: "SHIP", name: "شیپ", originName: "ship", imgSrc: SHIP },
+    { code: "SHIB", name: "شیب", originName: "shib", imgSrc: SHIP },
     { code: "BONK", name: "بونک", originName: "bonk", imgSrc: BONK },
     { code: "ARB", name: "آربیتروم", originName: "arbitrum", imgSrc: ARB },
     { code: "APEX", name: "اپکس", originName: "apex", imgSrc: APEX },
@@ -62,7 +62,7 @@ export default function CoinPage() {
       "dogecoin",
       "pepe",
       "bonk",
-      "ship",
+      "shib",
       "arbitrum ",
       "apex",
     ]; // List of cryptocurrency IDs
@@ -105,12 +105,12 @@ export default function CoinPage() {
                 </button>
               </form> */}
             </div>
-{/*             <div className={home["currency-rates__tabs"]}>
+            <div className={home["currency-rates__tabs"]}>
               <FilterNavCoin
                 activeTab={activeTab}
                 handleTabClick={handleTabClick}
               />
-            </div> */}
+            </div>
             <div className={home["tab-content"]} id="myTabContent">
               <div
                 className={`${home.fade} ${home.show} ${home.active}}`}
