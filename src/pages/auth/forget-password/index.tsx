@@ -99,27 +99,6 @@ export default function ForgetPassword() {
         <Card className={auth.card}>
           <CardBody className={auth["card-body"]}>
             <h4 className={auth.title}>فراموشی رمز عبور</h4>
-            <div className="text-center">بازیابی رمز عبور با</div>
-            <div className={auth["login-type"]}>
-              <div>
-                <button
-                  className={
-                    forgotType === "PHONE" ? auth["login-type__active"] : ""
-                  }
-                  onClick={() => setForgotType("PHONE")}
-                >
-                  شماره همراه
-                </button>
-                <button
-                  className={
-                    forgotType === "EMAIL" ? auth["login-type__active"] : ""
-                  }
-                  onClick={() => setForgotType("EMAIL")}
-                >
-                  ایمیل
-                </button>
-              </div>
-            </div>
             <form
               className={auth.form}
               onSubmit={handleSubmit(handleResetPassword, handleErrors)}
@@ -212,6 +191,22 @@ export default function ForgetPassword() {
                           ) : (
                             "ثبت درخواست"
                           )}
+                        </Button>
+                      </div>
+                      <div className="mb3">
+                        <Button
+                          color="primary"
+                          outline
+                          className={auth.submit}
+                          onClick={() => {
+                            forgotType === "EMAIL"
+                              ? setForgotType("PHONE")
+                              : setForgotType("EMAIL");
+                          }}
+                        >
+                          {forgotType === "EMAIL"
+                            ? "بازیابی رمز عبور با استفاده از موبایل"
+                            : "بازیابی رمز عبور با استفاده از ایمیل"}
                         </Button>
                       </div>
                       <div className={`${auth.already} mt-1`}>
