@@ -17,7 +17,11 @@ import {
 import { useAppSelector } from "store/hooks";
 import * as Yup from "yup";
 
-import { AlertDanger, AlertSuccess } from "components/AlertWidget";
+import {
+  AlertDanger,
+  AlertSuccess,
+  AlertWarning,
+} from "components/AlertWidget";
 
 export default function PersonalInformation() {
   const {
@@ -103,6 +107,11 @@ export default function PersonalInformation() {
             />
           )
         )}
+        <AlertWarning
+          hasIcon
+          key="warning-change-email"
+          text="برای تغییر شماره تلفن یا ایمیل خود به پشتیبانی مراجعه کنید."
+        />
 
         <Form className="container">
           <Row className="justify-content-center">
