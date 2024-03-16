@@ -1,4 +1,3 @@
-import Layout from "layouts/dashboard";
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 import TicketModal from "./addModal";
 import { useState } from "react";
