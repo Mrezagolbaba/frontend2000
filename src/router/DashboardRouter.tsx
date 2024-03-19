@@ -12,7 +12,7 @@ import Support from "pages/dashboard/support";
 import Market from "pages/dashboard/market";
 import History from "pages/dashboard/history";
 import PaymentRecipt from "pages/dashboard/payment-receipt";
-import SupportDetails from "pages/dashboard/support/details";
+import SupportDetails from "pages/dashboard/support/Detail";
 
 const DashboardRouter = {
   path: "dashboard",

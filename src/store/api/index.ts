@@ -97,6 +97,8 @@ export const api = createApi({
     "user",
     "notices-settings",
     "wallets",
+    "ticket",
+    "reply-ticket",
   ],
   keepUnusedDataFor: 30,
   refetchOnMountOrArgChange: 30,
