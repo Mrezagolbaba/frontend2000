@@ -22,6 +22,8 @@ import {
   setLogout,
 } from "store/reducers/jwtAuth";
 import { useAppDispatch, useAppSelector } from "store/hooks";
+import { useLazyGetMeQuery } from "store/api/user";
+import { setUser } from "store/reducers/features/user/userSlice";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const setSession = (
@@ -55,6 +57,7 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
   const [registerRequest] = useRegisterMutation();
   const [forgotPasswordRequest] = useForgotPasswordMutation();
   const [logoutRequest] = useLogoutMutation();
+  const [getMeReq, { data, isSuccess }] = useLazyGetMeQuery();
 
   const { isInitialized, isLoggedIn } = useAppSelector(selectAuth);
 
@@ -64,6 +67,7 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
         const { token, expiredAt } = await refreshTokenPromise();
         dispatch(setLogin({ token, expiredAt }));
         dispatch(setVerifyLogin());
+        getMeReq();
       } catch (e) {
         setSession(null);
       }
@@ -71,6 +75,13 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      dispatch(setUser(data));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, isSuccess]);
 
   const login = async (data: LoginRequest) =>
     loginRequest(data)

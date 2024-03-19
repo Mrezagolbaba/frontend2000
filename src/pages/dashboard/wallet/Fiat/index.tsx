@@ -224,7 +224,7 @@ export default function Fiat({ TRY, isLoading, isSuccess }: FiatProps) {
           <Col xs={12} sm={4} className="text-center my-3">
             <Button
               color="secondary"
-              className="px-5 py-3"
+              className="py-3"
               disabled={Number(TRY.balance) <= 0}
               onClick={() =>
                 setWithdrawForm({

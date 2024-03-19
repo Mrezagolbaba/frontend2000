@@ -62,6 +62,7 @@ export const userApi = enhancedApi.injectEndpoints({
 
 export const {
   useGetMeQuery,
+  useLazyGetMeQuery,
   useUpdatePasswordMutation,
   useCheckVerificationsQuery,
   useEnglishNamesMutation,
