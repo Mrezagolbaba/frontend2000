@@ -21,7 +21,7 @@ import { PiShieldCheckeredFill } from "react-icons/pi";
 import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
 import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import auth from "assets/scss/auth/auth.module.scss";
@@ -101,7 +101,7 @@ export default function LoginPage() {
     }
 
     await login(body).then((res) => {
-      navigate("/otp", { state: { type: "AUTH" } });
+      navigate("/otp", { state: { type: "AUTH", method: loginType } });
     });
   };
 

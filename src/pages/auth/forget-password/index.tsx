@@ -88,7 +88,9 @@ export default function ForgetPassword() {
       );
 
     await forgotPassword(body).then(() =>
-      navigate("/otp", { state: { type: "RESET_PASSWORD" } }),
+      navigate("/otp", {
+        state: { type: "RESET_PASSWORD", method: forgotType },
+      }),
     );
   };
 
