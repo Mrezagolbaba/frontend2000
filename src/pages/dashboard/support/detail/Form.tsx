@@ -23,11 +23,11 @@ export default function ReplyTicketForm({ id }: { id: string }) {
           onChange={({ target }) => setReply(target.value)}
         />
       </FormGroup>
-      <div className="text-right mt-4">
+      <div className="mt-4" style={{ textAlign: "left" }}>
         <Button
           color="primary"
           disabled={isLoading}
-          className="px-4 py-2"
+          className="px-5 py-3"
           outline
           onClick={handleSubmit}
         >

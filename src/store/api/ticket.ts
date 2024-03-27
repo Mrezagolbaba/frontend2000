@@ -45,10 +45,11 @@ export const ticketApi = enhancedApi.injectEndpoints({
     closeTicket: builder.mutation<any, { ticketId: string }>({
       query(data) {
         return {
-          method: "POST",
+          method: "PATCH",
           url: `/support-tickets/${data.ticketId}/close`,
         };
       },
+      invalidatesTags: ["ticket"],
     }),
     getReplies: builder.query<any, string>({
       query(id) {

@@ -1,10 +1,10 @@
-import { Button, Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 import TicketModal from "./AddModal";
-import { useState } from "react";
-import { useGetTicketsQuery } from "store/api/ticket";
-import { ITicket } from "types/ticket";
 import moment from "jalali-moment";
+import { Button, Card, CardBody, CardHeader, CardTitle } from "reactstrap";
+import { ITicket } from "types/ticket";
 import { Link } from "react-router-dom";
+import { useGetTicketsQuery } from "store/api/ticket";
+import { useState } from "react";
 
 const Support = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

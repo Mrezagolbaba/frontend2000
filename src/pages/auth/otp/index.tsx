@@ -63,14 +63,14 @@ export default function Otp() {
   });
 
   // ==============|| Variables ||================= //
-  const { phoneNumber, type } = location.state;
+  const { phoneNumber, type, method } = location.state;
 
   // ==============|| Handlers ||================= //
   const handleResend = () => {
     if (isSuccess && user) {
       const data: ResendOTPRequest = {
         type,
-        method: user.otpMethod,
+        method: method ? method : "PHONE",
       };
       resendOtpRequest(data);
     }
