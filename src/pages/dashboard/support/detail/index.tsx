@@ -1,5 +1,5 @@
-import Layout from "layouts/dashboard";
 import {
+  Button,
   Card,
   CardBody,
   CardHeader,
@@ -8,19 +8,13 @@ import {
   Container,
   Row,
 } from "reactstrap";
-import { useAppSelector } from "store/hooks";
-import support from "./styles.module.scss";
-import {
-  useCloseTicketMutation,
-  useGetRepliesQuery,
-  useGetTicketQuery,
-  useReplyTicketMutation,
-} from "store/api/ticket";
-import { useParams } from "react-router-dom";
-import { useState } from "react";
+import ReplyTickets from "./List";
+import TicketForm from "./Form";
 import moment from "jalali-moment";
-import ReplyTicket from "./ReplyTicketList";
-import ReplyTicketForm from "./ReplyTicketForm";
+import { useAppSelector } from "store/hooks";
+import { useCloseTicketMutation, useGetTicketQuery } from "store/api/ticket";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const categoryRender = (value) => {
   switch (value) {
@@ -39,39 +33,31 @@ const categoryRender = (value) => {
 };
 
 export default function Detail() {
-  const { firstName, lastName } = useAppSelector((state) => state.user);
   const { id } = useParams();
-  const [reply, setReplay] = useState("");
-  const [closeTicket] = useCloseTicketMutation();
+  const navigate = useNavigate();
   const { data, isLoading: loadingTicket } = useGetTicketQuery(id as string);
-  const [replyTicket] = useReplyTicketMutation();
+  const [closeTicket, { isSuccess }] = useCloseTicketMutation();
+
+  const { firstName, lastName } = useAppSelector((state) => state.user);
 
   const handleCloseTicket = () => {
     closeTicket({ ticketId: id as string });
   };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const data = {
-      ticketId: id as string,
-      content: reply,
-    };
-    replyTicket(data);
-  };
+  useEffect(() => {
+    isSuccess && navigate("/dashboard/support");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
+
   return (
     <section className="page page-support">
       <Card className="custom-card currencies-online-rates card-secondary">
         <CardHeader className="d-flex flex-row justify-content-between align-items-center">
           <CardTitle tag="h5">پشتیبانی</CardTitle>
           <div className="card-action">
-            <button
-              className="btn btn-outline-primary"
-              data-bs-toggle="modal"
-              onClick={handleCloseTicket}
-            >
+            <Button color="primary" outline onClick={handleCloseTicket}>
               بستن تیکت
-            </button>
+            </Button>
           </div>
         </CardHeader>
         <CardBody>
@@ -182,7 +168,7 @@ export default function Detail() {
                     )}
                   </table>
                 </div>
-                <ReplyTicket
+                <ReplyTickets
                   id={id as string}
                   description={data?.ticket.description}
                 />
@@ -190,7 +176,7 @@ export default function Detail() {
                 <h5 className="mb-30 padding-top-1x">
                   ارسال پاسخ برای این تیکت
                 </h5>
-                <ReplyTicketForm id={id as string} />
+                <TicketForm id={id as string} />
               </Col>
             </Row>
           </Container>
