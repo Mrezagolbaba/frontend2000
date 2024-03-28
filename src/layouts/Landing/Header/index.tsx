@@ -133,8 +133,7 @@ const Header = ({ disableBanner = false }: Props) => {
               <div>
                 <Link
                   to="/dashboard/profile"
-                  color="landing-primary"
-                  className={home["rounded-button"]}
+                  className={`btn btn-landing-primary ${home["rounded-button"]}`}
                 >
                   {firstName + " " + lastName}
                 </Link>
@@ -147,8 +146,7 @@ const Header = ({ disableBanner = false }: Props) => {
                 <li className={home.header__auth__register}>
                   <Link
                     to="/register"
-                    color="landing-primary"
-                    className={home["rounded-button"]}
+                    className={`btn btn-landing-primary ${home["rounded-button"]}`}
                   >
                     ثبت نام
                   </Link>
