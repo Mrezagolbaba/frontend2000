@@ -66,6 +66,7 @@
 }
 
 .upload-container {
+  height: 100%;
   border: 1px solid #dee2e6;
   border-radius: 10px;
   &.empty-upload {
@@ -73,9 +74,12 @@
     color: rgba(3, 4, 27, 0.5);
     font-size: 0.8rem;
     transition: ease-in all 100ms;
-    &:hover {
+    & > div:hover {
       color: #111bff;
       transition: ease-out all 100ms;
+    }
+    & > div:not(:last-child) {
+      border-left: 1px solid #dee2e6;
     }
     svg {
       font-size: 3rem;
