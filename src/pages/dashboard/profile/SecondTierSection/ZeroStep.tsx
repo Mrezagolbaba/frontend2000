@@ -103,7 +103,7 @@ function ZeroStep({
                         color="primary"
                         onClick={async () => {
                           uploadDoc({
-                            docType: "NATIONAL_CARD_FRONT",
+                            docType: "NATIONAL_CARD",
                             file: images?.[0]?.file,
                             fileName: "file",
                           });
