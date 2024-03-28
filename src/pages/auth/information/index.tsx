@@ -112,6 +112,7 @@ export default function Information() {
       navigate("/otp", {
         state: {
           type: "VERIFY_EMAIL",
+          method: "EMAIL",
         },
       });
     }
