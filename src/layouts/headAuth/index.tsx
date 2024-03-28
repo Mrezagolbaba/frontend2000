@@ -34,14 +34,12 @@ const HeadAuth: FC = () => {
                   <Link to="/login">ورود</Link>
                 </li>
                 <li className={home.header__auth__register}>
-                  <Button
-                    tag="a"
-                    href="/register"
-                    color="primary"
-                    className={home["rounded-button"]}
+                  <Link
+                    to="/register"
+                    className={`btn btn-primary ${home["rounded-button"]}`}
                   >
                     ثبت نام
-                  </Button>
+                  </Link>
                 </li>
               </ul>
             </div>

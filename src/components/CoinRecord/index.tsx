@@ -7,6 +7,7 @@ import redChart from "assets/img/graph-r.png";
 import { useAppSelector } from "store/hooks";
 
 import style from "assets/scss/components/CoinRecord/style.module.scss";
+import { Link } from "react-router-dom";
 
 type Props = {
   destinationCode: "IRR" | "USDT";
@@ -91,14 +92,12 @@ export default function CoinRecord({
         </td>
         <td className="text-center">
           <div className="table-crypto-actions">
-            <Button
-              color="primary"
-              outline
-              tag="a"
-              href={id && firstTierVerified ? "/dashboard/exchange" : "/login"}
+            <Link
+              className="btn btn-outline-primary"
+              to={id && firstTierVerified ? "/dashboard/exchange" : "/login"}
             >
               معامله
-            </Button>
+            </Link>
           </div>
         </td>
       </tr>

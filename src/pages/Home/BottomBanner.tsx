@@ -1,6 +1,7 @@
 import { Button, Container } from "reactstrap";
 import home from "assets/scss/landing/home.module.scss";
 import { useAppSelector } from "store/hooks";
+import { Link } from "react-router-dom";
 
 const BottomBanner = () => {
   const { id, firstTierVerified } = useAppSelector((state) => state.user);
@@ -15,14 +16,12 @@ const BottomBanner = () => {
             در کمتر از دو دقیقه، بدون ارسال هیچ مدرکی با احراز هویت خودکار؛
             اولین معامله را انجام خواهید داد
           </p>
-          <Button
-            href={id && firstTierVerified ? "/dashboard" : "/register"}
-            tag="a"
-            color="light"
-            className={home["bottom-banner__button"]}
+          <Link
+            to={id && firstTierVerified ? "/dashboard" : "/register"}
+            className={`btn btn-light ${home["bottom-banner__button"]}`}
           >
             شروع کنید
-          </Button>
+          </Link>
         </div>
       </Container>
     </section>
