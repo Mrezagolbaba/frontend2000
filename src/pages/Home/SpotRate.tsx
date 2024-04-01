@@ -1,26 +1,25 @@
-import { useEffect, useState } from "react";
-import { Container } from "reactstrap";
-import { HiOutlineChevronLeft } from "react-icons/hi";
-//components
-import { FilterNavCoin } from "components/FilterNavCoin";
-
-//images
-import TRX from "assets/img/coins/trx.png";
 import BTC from "assets/img/coins/BTC.png";
+import CoinRecord from "components/CoinRecord";
 import ETH from "assets/img/coins/ETH.png";
 import SOL from "assets/img/coins/Solana_logo.png";
+import TRX from "assets/img/coins/trx.png";
 import XRP from "assets/img/coins/xrp-xrp-logo.png";
-import CoinRecord from "components/CoinRecord";
-import { get24hChanges } from "helpers";
+import { Container } from "reactstrap";
 import { CryptoData } from "types/exchange";
+import { FilterNavCoin } from "components/FilterNavCoin";
+import { HiOutlineChevronLeft } from "react-icons/hi";
+import { Link } from "react-router-dom";
+import { get24hChanges } from "helpers";
+import { useEffect, useState } from "react";
 
 import home from "assets/scss/landing/home.module.scss";
-import { Link } from "react-router-dom";
 
 const SpotRate = () => {
+  // ==============|| States ||================= //
   const [activeTab, setActiveTab] = useState<"IRR" | "USDT">("IRR");
   const [coinChanges, setCoinChanges] = useState<CryptoData[] | []>([]);
 
+  // ==============|| Constants ||================= //
   const currencyPairs = [
     { code: "BTC", name: "بیت کوین", originName: "bitcoin", imgSrc: BTC },
     { code: "TRX", name: "ترون", originName: "tron", imgSrc: TRX },
@@ -30,11 +29,13 @@ const SpotRate = () => {
     // Add more currency pairs as needed
   ];
 
+  // ==============|| Handlers ||================= //
   const handleTabClick = (e: any, tabId: string) => {
     e.preventDefault();
     setActiveTab(tabId === "tab2" ? "IRR" : "USDT");
   };
 
+  // ==============|| Life Cycle ||================= //
   useEffect(() => {
     const cryptoIds: string[] = [
       "bitcoin",
@@ -47,11 +48,6 @@ const SpotRate = () => {
       .then((changes) => {
         if (changes) {
           setCoinChanges(changes);
-          changes.forEach((crypto) => {
-            console.log(
-              `${crypto.name}: ${crypto.price_change_percentage_24h}%`,
-            );
-          });
         }
       })
       .catch((error) => {
@@ -59,6 +55,7 @@ const SpotRate = () => {
       });
   }, []);
 
+  // ==============|| Render ||================= //
   return (
     <section className={`${home["currency-rates"]} ${home["section-gap"]}`}>
       <Container>
