@@ -27,9 +27,9 @@ export default function CoinRecord({
 }: Props) {
   // ==============|| Hooks ||================= //
   const { id, firstTierVerified } = useAppSelector((state) => state.user);
-  const [request, { data, isLoading, isFetching, isSuccess }] =
-    useLazyGetRateQuery();
+  const [request, { data, isLoading, isSuccess }] = useLazyGetRateQuery();
 
+  // ==============|| Handlers ||================= //
   const handleRequest = () => {
     request({
       sourceCurrencyCode: source.currencyCode,
@@ -38,7 +38,7 @@ export default function CoinRecord({
   };
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
-    const interval = setInterval(handleRequest, 10000);
+    const interval = setInterval(handleRequest, 15000);
 
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
