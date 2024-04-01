@@ -17,4 +17,4 @@ export const publicsApi = enhancedApi.injectEndpoints({
   }),
 });
 
-export const { useGetRateQuery } = publicsApi;
+export const { useGetRateQuery, useLazyGetRateQuery } = publicsApi;

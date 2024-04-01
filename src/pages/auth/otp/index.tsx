@@ -70,7 +70,7 @@ export default function Otp() {
     if (isSuccess && user) {
       const data: ResendOTPRequest = {
         type,
-        method: method ? method : "PHONE",
+        method: user.otpMethod,
       };
       resendOtpRequest(data);
     }
@@ -80,7 +80,7 @@ export default function Otp() {
       const body: OTPRequest = {
         code: persianToEnglishNumbers(data.code),
         type,
-        method: type === "VERIFY_EMAIL" ? "EMAIL" : user.otpMethod,
+        method: method,
       };
       await otp(body).then(() => {
         if (type === "RESET_PASSWORD") navigate("/reset-password");

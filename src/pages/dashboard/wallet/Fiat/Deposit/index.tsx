@@ -227,7 +227,10 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
         title="ارسال کارت اقامت"
         isOpen={isOpenDialog}
         hasCloseButton={true}
-        onClose={() => setIsOpenDialog(false)}
+        onClose={() => {
+          onClose?.();
+          setIsOpenDialog(false);
+        }}
       >
         <InternationalVerification />
       </Dialog>

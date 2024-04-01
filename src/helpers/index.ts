@@ -327,14 +327,14 @@ export const tomanShow = ({
   justFix = false,
 }: CurrencyProps): string => {
   const intValue = parseInt(value);
-  const newValue = (intValue / 10).toFixed(0);
-  if (Number.isNaN(intValue) || newValue === "NaN") {
+  const newValue = Math.trunc(intValue / 10);
+  if (Number.isNaN(intValue)) {
     return "0";
   }
-  if (justFix) return (Math.round(intValue * 100) / 1000).toFixed(0);
+  if (justFix) return Math.trunc(intValue / 10).toString();
   else if (!isEmpty(currency))
-    return `${Number(newValue).toLocaleString("IRR")} ${convertText(currency, "enToFa")}`;
-  else return Number(newValue).toLocaleString("IRR");
+    return `${newValue.toLocaleString("IRR")} ${convertText(currency, "enToFa")}`;
+  else return newValue.toLocaleString("IRR");
 };
 
 export const lirShow = ({
@@ -354,7 +354,7 @@ export const lirShow = ({
 };
 
 export const coinShow = (value: string, currency?: CurrencyCode): string => {
-  const newValue = Number(value).toFixed(6);
+  const newValue = Number(value).toPrecision(6);
 
   if (Number.isNaN(newValue) || newValue == "NaN") {
     return "0";

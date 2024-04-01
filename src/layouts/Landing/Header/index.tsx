@@ -49,14 +49,13 @@ const Header = ({ disableBanner = false }: Props) => {
                 <div className={home.header__auth}>
                   {id && firstTierVerified ? (
                     <div>
-                      <Button
-                        tag="a"
-                        href="/dashboard/profile"
+                      <Link
+                        to="/dashboard/profile"
                         color="landing-primary"
-                        className={home["rounded-button"]}
+                        className={`btn btn-landing-primary ${home["rounded-button"]}`}
                       >
                         {firstName + " " + lastName}
-                      </Button>
+                      </Link>
                     </div>
                   ) : (
                     <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
@@ -64,14 +63,12 @@ const Header = ({ disableBanner = false }: Props) => {
                         <Link to="/login">ورود</Link>
                       </li>
                       <li className={home.header__auth__register}>
-                        <Button
-                          tag="a"
-                          href="/register"
-                          color="primary"
-                          className={home["rounded-button"]}
+                        <Link
+                          to="/register"
+                          className={`btn btn-primary ${home["rounded-button"]}`}
                         >
                           ثبت نام
-                        </Button>
+                        </Link>
                       </li>
                     </ul>
                   )}
@@ -134,14 +131,12 @@ const Header = ({ disableBanner = false }: Props) => {
           <div className={home.header__auth}>
             {id && firstTierVerified ? (
               <div>
-                <Button
-                  tag="a"
-                  href="/dashboard/profile"
-                  color="landing-primary"
-                  className={home["rounded-button"]}
+                <Link
+                  to="/dashboard/profile"
+                  className={`btn btn-landing-primary ${home["rounded-button"]}`}
                 >
                   {firstName + " " + lastName}
-                </Button>
+                </Link>
               </div>
             ) : (
               <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
@@ -149,14 +144,12 @@ const Header = ({ disableBanner = false }: Props) => {
                   <Link to="/login">ورود</Link>
                 </li>
                 <li className={home.header__auth__register}>
-                  <Button
-                    tag="a"
-                    href="/register"
-                    color="landing-primary"
-                    className={home["rounded-button"]}
+                  <Link
+                    to="/register"
+                    className={`btn btn-landing-primary ${home["rounded-button"]}`}
                   >
                     ثبت نام
-                  </Button>
+                  </Link>
                 </li>
               </ul>
             )}
@@ -181,14 +174,12 @@ const Header = ({ disableBanner = false }: Props) => {
             <div className={home.header__intro}>
               <h1>آرسونیکس، همراه ارز دیجیتال شما</h1>
               <p>خريد و فروش ارزديجيتال به آساني</p>
-              <Button
-                tag="a"
-                href={id && firstTierVerified ? "/dashboard" : "/register"}
-                color="landing-primary"
-                className={home["rounded-button"]}
+              <Link
+                to={id && firstTierVerified ? "/dashboard" : "/register"}
+                className={`btn btn-landing-primary ${home["rounded-button"]}`}
               >
                 با آرسونیکس شروع کنید
-              </Button>
+              </Link>
             </div>
             <div className={`${home["img_top_left"]} position-absolute `}>
               <div className={home.i_t_l_img}></div>

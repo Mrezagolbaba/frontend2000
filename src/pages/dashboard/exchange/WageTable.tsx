@@ -21,23 +21,20 @@ export default function WageTable({
   destinationCode,
   feeCurrencyCode,
 }: Props) {
-  console.log(sourceCode, destinationCode, feeCurrencyCode);
-  console.log(data);
-
   const [feeCost, setFeeCost] = useState<string>("0");
   const [feeAmount, setFeeAmount] = useState<string>("0");
 
   const [finalAmount, setFinalAmount] = useState<string>("0");
 
   const handleDetails = (key: 0 | 1) => {
-    if (data?.transactions[key].fees[0].format === "STATIC") {
-      const coin = coinShow(
-        data?.transactions[key].fees[0].internalConvertedAmount,
-        "USDT",
-      );
+    const targetFee = data?.transactions[key].fees[0];
+    console.log(targetFee.value);
+
+    if (targetFee.format === "STATIC") {
+      const coin = coinShow(targetFee.internalConvertedAmount, "USDT");
       setFeeCost(coin);
     } else {
-      const coin = Number(data.transactions[key].fees[0].value) * 100;
+      const coin = (Number(targetFee.value) * 100).toPrecision(2);
       setFeeCost(`${coin}%`);
     }
     let feeTemp = 0;

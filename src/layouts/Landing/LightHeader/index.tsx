@@ -48,14 +48,12 @@ const LightHeader = ({
                     <div className={home.header__auth}>
                       {user.id ? (
                         <div>
-                          <Button
-                            tag="a"
-                            href="/dashboard/profile"
-                            color="landing-primary"
-                            className={home["rounded-button"]}
+                          <Link
+                            to="/dashboard/profile"
+                            className={`btn btn-landing-primary ${home["rounded-button"]}`}
                           >
                             {user.firstName + " " + user.lastName}
-                          </Button>
+                          </Link>
                         </div>
                       ) : (
                         <ul
@@ -65,14 +63,12 @@ const LightHeader = ({
                             <Link to="/login">ورود</Link>
                           </li>
                           <li className={home.header__auth__register}>
-                            <Button
-                              tag="a"
-                              href="/register"
-                              color="page-primary"
-                              className={home["rounded-button"]}
+                            <Link
+                              to="/register"
+                              className={`btn btn-page-primary ${home["rounded-button"]}`}
                             >
                               ثبت نام
-                            </Button>
+                            </Link>
                           </li>
                         </ul>
                       )}
@@ -151,14 +147,12 @@ const LightHeader = ({
                         <Link to="/login">ورود</Link>
                       </li>
                       <li className={home.header__auth__register}>
-                        <Button
-                          tag="a"
-                          href="/register"
-                          color="page-primary"
-                          className={home["rounded-button"]}
+                        <Link
+                          to="/register"
+                          className={`btn btn-page-primary ${home["rounded-button"]}`}
                         >
                           ثبت نام
-                        </Button>
+                        </Link>
                       </li>
                     </ul>
                   ))}
