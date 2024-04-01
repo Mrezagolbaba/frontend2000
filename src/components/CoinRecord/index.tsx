@@ -50,7 +50,7 @@ export default function CoinRecord({
   }, [destinationCode]);
 
   // ==============|| Render ||================= //
-  return isLoading || isFetching ? (
+  return isLoading ? (
     <tr>
       <td className="placeholder-glow">
         <div className="placeholder col-12 rounded" />
