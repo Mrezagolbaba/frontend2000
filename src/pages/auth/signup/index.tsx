@@ -87,7 +87,7 @@ export default function Register() {
       inviteCode: data.inviteCode.toUpperCase(),
     };
     await register(userData).then(() =>
-      navigate("/otp", { state: { type: "AUTH" } }),
+      navigate("/otp", { state: { type: "AUTH",method: "PHONE" } }),
     );
   };
   const handleErrors = (errors: any) =>
