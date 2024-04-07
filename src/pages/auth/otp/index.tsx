@@ -94,6 +94,7 @@ export default function Otp() {
           navigate("/otp", {
             state: {
               type: "VERIFY_EMAIL",
+              method:"EMAIL"
             },
           });
         } else {
