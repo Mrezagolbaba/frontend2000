@@ -21,6 +21,7 @@ export interface IUser {
   updatedAt: string;
   deletedAt: string;
   irPhoneNumber?: string;
+  gateways: any[];
 }
 export interface Isessions {
   id: string;
