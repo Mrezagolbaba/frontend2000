@@ -80,7 +80,7 @@ export default function CoinRecord({
         <td className="text-center">
           <div className={destinationCode === "USDT" ? "latin-font" : ""}>
             {destinationCode === "IRR"
-              ? tomanShow({ value: data.rate, currency: "IRR" })
+              ? (Number(data.rate) / 10).toLocaleString()
               : "USDT " + Number(data.rate).toLocaleString()}
           </div>
         </td>
