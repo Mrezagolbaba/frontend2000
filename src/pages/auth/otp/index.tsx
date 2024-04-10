@@ -83,6 +83,7 @@ export default function Otp() {
         method: method,
       };
       await otp(body).then(() => {
+        setValue("code", "");
         if (type === "RESET_PASSWORD") navigate("/reset-password");
         else if (!user?.firstTierVerified && type === "AUTH")
           navigate("/information");
@@ -94,7 +95,7 @@ export default function Otp() {
           navigate("/otp", {
             state: {
               type: "VERIFY_EMAIL",
-              method:"EMAIL"
+              method: "EMAIL",
             },
           });
         } else {
@@ -105,6 +106,7 @@ export default function Otp() {
     }
   };
   const handleErrors = (errors: any) => {
+    setValue("code", "");
     toast.error(errors?.code?.message, {
       position: "bottom-left",
     });
@@ -151,13 +153,17 @@ export default function Otp() {
       <section className={auth.container}>
         <Card className={auth.card}>
           <CardBody className={auth["card-body"]}>
-            <h4 className={auth.title}>تایید شماره همراه</h4>
+            <h4 className={auth.title}>
+              {method === "EMAIL" ? "تایید ایمیل" : "تایید شماره همراه"}
+            </h4>
             <div className="auth-summary">
               {type === "VERIFY_EMAIL" && (
-                <AlertWarning
-                  hasIcon
-                  text="ایمیل شما تایید نشده است. برای ادامه فعالیت خود لطفا کد تایید ارسال شده به ایمیل خود را وارد کنید."
-                />
+                <div className="text-center">
+                  <AlertWarning
+                    hasIcon
+                    text="ایمیل شما تایید نشده است. برای ادامه فعالیت خود لطفا کد تایید ارسال شده به ایمیل خود را وارد کنید."
+                  />
+                </div>
               )}
               <p className={auth.text}>
                 کد تایید ارسال شده به
