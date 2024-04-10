@@ -101,6 +101,15 @@ export const walletManagement = enhancedApi.injectEndpoints({
         };
       },
     }),
+    refCode: builder.mutation<any, { currencyCode: string; flow: string }>({
+      query(data) {
+        return {
+          method: "post",
+          url: "/transactions/deposit/ref_code",
+          data,
+        };
+      },
+    }),
   }),
 });
 
@@ -117,4 +126,5 @@ export const {
   useTransactionQuery,
   useTransactionsQuery,
   useWalletsQuery,
+  useRefCodeMutation,
 } = walletManagement;

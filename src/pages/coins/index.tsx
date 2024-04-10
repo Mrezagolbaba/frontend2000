@@ -11,7 +11,7 @@ import SOL from "assets/img/coins/Solana_logo.png";
 import XRP from "assets/img/coins/xrp-xrp-logo.png";
 import DOGE from "assets/img/coins/dogecoin-doge-logo-625F9D262A-seeklogo.com.png";
 import PEPE from "assets/img/coins/pepecoin.jpeg";
-import SHIP from "assets/img/coins/shipchain-coin.jpeg";
+import SHIB from "assets/img/coins/shiba.png";
 import BONK from "assets/img/coins/bonk-coin.png";
 import APEX from "assets/img/coins/apex-coin.jpg";
 import ARB from "assets/img/coins/arb-coin.jpeg";
@@ -45,7 +45,7 @@ export default function CoinPage() {
     { code: "XRP", name: "ریپل", originName: "ripple", imgSrc: XRP },
     { code: "DOGE", name: "دوج کوین", originName: "dogecoin", imgSrc: DOGE },
     { code: "PEPE", name: "پپه", originName: "pepe", imgSrc: PEPE },
-    { code: "SHIB", name: "شیب", originName: "shib", imgSrc: SHIP },
+    { code: "SHIB", name: "شیبا", originName: "shib", imgSrc: SHIB },
     { code: "BONK", name: "بونک", originName: "bonk", imgSrc: BONK },
     { code: "ARB", name: "آربیتروم", originName: "arbitrum", imgSrc: ARB },
     { code: "APEX", name: "اپکس", originName: "apex", imgSrc: APEX },

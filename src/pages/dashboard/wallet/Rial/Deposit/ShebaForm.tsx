@@ -17,7 +17,7 @@ import { AlertInfo } from "components/AlertWidget";
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import {
   useDepositInfoQuery,
-  useDepositMutation,
+  useRefCodeMutation,
   useTransactionFeeQuery,
 } from "store/api/wallet-management";
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
@@ -45,7 +45,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" }) => {
 
   const { data, isSuccess } = useDepositInfoQuery("IRR");
   const { data: fee } = useTransactionFeeQuery("IRR");
-  const [depositRequest, { data: depResponse }] = useDepositMutation();
+  const [initRefCode, { data: depResponse }] = useRefCodeMutation();
 
   const { data: accounts, isSuccess: getSuccessAccounts } =
     useBankAccountsQuery({
@@ -60,7 +60,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" }) => {
       bankName: Yup.string().required(),
     }),
   );
-  const { handleSubmit, control } = useForm<ShebaFormType>({
+  const { control } = useForm<ShebaFormType>({
     mode: "onChange",
     defaultValues: {
       accountName: "",
@@ -70,9 +70,6 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" }) => {
     },
     resolver,
   });
-  const onSubmit = async (data: ShebaFormType) => {
-    console.log(data);
-  };
 
   useEffect(() => {
     let list = [] as OptionType[] | [];
@@ -108,17 +105,15 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" }) => {
   useEffect(() => {
     activeTab === "2" &&
       accounts &&
-      depositRequest({
+      initRefCode({
         currencyCode: "IRR",
-        amount: fee?.depositMinAmount,
         flow: "MANUAL_WITH_PAYMENT_IDENTIFIER",
-        bankAccountId: accounts[0]?.id,
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, getSuccessAccounts, activeTab]);
 
   return hasLevel2 ? (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form>
       <Row>
         <Col xs={12} lg={6}>
           <FormGroup>
@@ -184,9 +179,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" }) => {
               render={({ field: { name, value } }) => (
                 <FormGroup>
                   <Label htmlFor={name}> شناسه واریز:</Label>
-                  <CopyInput
-                    text={depResponse.providerData.flowPaymentIdentifier || ""}
-                  />
+                  <CopyInput text={depResponse.refCode || ""} />
                   <FormText>کارمزد واریز بین بانکی: صفر تومان</FormText>
                 </FormGroup>
               )}

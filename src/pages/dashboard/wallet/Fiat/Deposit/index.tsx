@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Button, Col, Form, FormGroup, Label, Row } from "reactstrap";
 import {
   useDepositInfoQuery,
-  useDepositMutation,
+  useRefCodeMutation,
 } from "store/api/wallet-management";
 import { useAppSelector } from "store/hooks";
 import { useBankAccountsQuery } from "store/api/profile-management";
@@ -36,9 +36,9 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
     });
 
   const [
-    depositRequest,
+    initRefCode,
     { data: depResponse, isLoading: LoadingDeposit, isSuccess: depositSuccess },
-  ] = useDepositMutation();
+  ] = useRefCodeMutation();
 
   useEffect(() => {
     let list = [] as OptionType[] | [];
@@ -78,11 +78,9 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
 
   useEffect(() => {
     accounts &&
-      depositRequest({
+      initRefCode({
         currencyCode: "TRY",
-        amount: "1",
         flow: "MANUAL_WITH_PAYMENT_IDENTIFIER",
-        bankAccountId: accounts[0]?.id,
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, getSuccessAccounts]);
@@ -154,7 +152,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
                 <FormGroup>
                   <Label htmlFor="ownerAccount"> شناسه واریز :</Label>
                   <CopyInput
-                    text={depResponse.providerData.flowPaymentIdentifier || ""}
+                    text={depResponse.refCode || ""}
                     key="number-account"
                   />
                 </FormGroup>
