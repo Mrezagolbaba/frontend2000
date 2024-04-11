@@ -56,7 +56,8 @@ const TicketModal = ({ isModalOpen, onCancel, onOk }) => {
       toast.success("تیکت شما جهت بررسی به پشتیبانی ارسال شد.");
       onCancel?.();
     }
-  }, [isSuccess, onCancel]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
 
   return (
     <Dialog
