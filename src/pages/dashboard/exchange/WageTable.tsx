@@ -28,7 +28,6 @@ export default function WageTable({
 
   const handleDetails = (key: 0 | 1) => {
     const targetFee = data?.transactions[key].fees[0];
-    console.log(targetFee.value);
 
     if (targetFee.format === "STATIC") {
       const coin = coinShow(targetFee.internalConvertedAmount, "USDT");

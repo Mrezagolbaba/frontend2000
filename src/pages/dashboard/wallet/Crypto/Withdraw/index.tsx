@@ -127,8 +127,6 @@ const WithdrawCrypto = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess, response]);
 
-  console.log(errors);
-
   //render
   return (
     <div className="px-2">

@@ -13,9 +13,7 @@ const SelectComponent: React.FC<SelectProps> = ({
   style,
   className,
 }) => {
-  const onSearch = (value: string) => {
-    console.log("search:", value);
-  };
+  const onSearch = (value: string) => {};
   return (
     <Select
       className={`dropdown bootstrap-select bs-select-control bs-form-select ${className}`}

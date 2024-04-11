@@ -70,11 +70,7 @@ export default function CoinPage() {
       .then((changes) => {
         if (changes) {
           setCoinChanges(changes);
-          changes.forEach((crypto) => {
-            console.log(
-              `${crypto.name}: ${crypto.price_change_percentage_24h}%`,
-            );
-          });
+          changes.forEach((crypto) => {});
         }
       })
       .catch((error) => {

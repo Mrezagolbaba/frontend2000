@@ -16,15 +16,10 @@ type Props = {
   previewStream: any;
 };
 
-const FinalView = ({
-  mediaBlobUrl,
-  clearBlobUrl,
-  handleNextStep,
-}: Props) => {
+const FinalView = ({ mediaBlobUrl, clearBlobUrl, handleNextStep }: Props) => {
   //hooks
   const videoPlayRef = useRef<HTMLVideoElement>(null);
-  const [uploadDoc, { isLoading, isSuccess }] =
-    useUploadDocMutation();
+  const [uploadDoc, { isLoading, isSuccess }] = useUploadDocMutation();
 
   //states
   const [isPlayVideo, setIsPlayVideo] = useState<boolean>(false);
@@ -38,7 +33,6 @@ const FinalView = ({
       quality: 0.6, // Adjust the quality as needed
       success(result) {
         // Use the compressed video Blob (result) as needed
-        console.log(result);
       },
       error(err) {
         console.error(err.message);
