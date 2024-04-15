@@ -5,6 +5,8 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import toast from "react-hot-toast";
 import { getRefToken } from "helpers";
 import { setSession } from "contexts/JWTContext";
+import { isEmpty } from "lodash";
+import { setLogin } from "store/reducers/jwtAuth";
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
@@ -57,13 +59,16 @@ const axiosBaseQuery =
       console.log(error);
       const response = error.response;
       const status = response.status;
+      const isPrivate = !isEmpty(response?.config?.headers?.Authorization);
 
       if (status === 500 || status > 500) {
         toast.error("مشکلی در ارتباط با سرور بوجود آمده است", {
           position: "bottom-left",
         });
-      } else if (status === 401) {
-        console.log(response);
+      } else if (status === 401 && isPrivate) {
+        const { token, expiredAt } = await refreshTokenPromise();
+        api.dispatch(setLogin({ token, expiredAt }));
+        return axiosBaseQuery()(args, api, extraOptions);
       } else if (response?.data?.translatedMessage) {
         toast.error(response.data.translatedMessage, {
           position: "bottom-left",

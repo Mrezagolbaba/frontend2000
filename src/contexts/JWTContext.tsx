@@ -6,6 +6,12 @@ import {
   RegisterRequest,
 } from "types/auth";
 import {
+  selectAuth,
+  setLogin,
+  setLogout,
+  setVerifyLogin,
+} from "store/reducers/jwtAuth";
+import {
   useForgotPasswordMutation,
   useLoginMutation,
   useLogoutMutation,
@@ -14,16 +20,10 @@ import {
 } from "store/api/auth";
 import { ReactElement, createContext, useEffect } from "react";
 import { axiosInstance, refreshTokenPromise } from "store/api";
+import { clearUser, setUser } from "store/reducers/features/user/userSlice";
 import { removeRefToken, setRefToken } from "helpers";
-import {
-  selectAuth,
-  setLogin,
-  setVerifyLogin,
-  setLogout,
-} from "store/reducers/jwtAuth";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { useLazyGetMeQuery } from "store/api/user";
-import { clearUser, setUser } from "store/reducers/features/user/userSlice";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const setSession = (
@@ -50,17 +50,17 @@ export const setSession = (
 const JWTContext = createContext<JWTContextType | null>(null);
 
 export const JWTProvider = ({ children }: { children: ReactElement }) => {
+  // ==============|| Hooks ||================= //
   const dispatch = useAppDispatch();
-  //step1
   const [loginRequest] = useLoginMutation();
   const [otpRequest] = useOtpMutation();
   const [registerRequest] = useRegisterMutation();
   const [forgotPasswordRequest] = useForgotPasswordMutation();
   const [logoutRequest] = useLogoutMutation();
   const [getMeReq, { data, isSuccess }] = useLazyGetMeQuery();
-
   const { isInitialized, isLoggedIn } = useAppSelector(selectAuth);
 
+  // ==============|| Life Cycle ||================= //
   useEffect(() => {
     const init = async () => {
       try {
@@ -75,7 +75,6 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   useEffect(() => {
     if (isSuccess && data) {
       dispatch(setUser(data));
@@ -83,6 +82,7 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, isSuccess]);
 
+  // ==============|| Handlers ||================= //
   const login = async (data: LoginRequest) =>
     loginRequest(data)
       .unwrap()
@@ -152,6 +152,7 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
   //   return <Loader />;
   // }
 
+  // ==============|| Render ||================= //
   return (
     <JWTContext.Provider
       value={{
