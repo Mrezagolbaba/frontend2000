@@ -9,7 +9,6 @@ import { RootState } from "store/store";
 
 const initialState: AuthProps = {
   isLoggedIn: false,
-  isInitialized: false,
   token: "",
   expiredAt: "",
 };
@@ -26,14 +25,15 @@ const auth = createSlice({
     },
     // VERIFY_LOGIN
     setVerifyLogin(state) {
-      (state.isLoggedIn = true), (state.isInitialized = true);
+      state.isLoggedIn = true;
+      localStorage.setItem("isInitialized", "true");
     },
     // LOGOUT
     setLogout(state) {
       state.token = "";
       state.expiredAt = "";
       state.isLoggedIn = false;
-      state.isInitialized = true;
+      localStorage.setItem("isInitialized", "false");
     },
   },
 });

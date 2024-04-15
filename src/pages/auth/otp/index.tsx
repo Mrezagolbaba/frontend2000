@@ -19,6 +19,7 @@ import useAuth from "hooks/useAuth";
 import { AlertWarning } from "components/AlertWidget";
 import { Controller, useForm } from "react-hook-form";
 import { OTPRequest, ResendOTPRequest } from "types/auth";
+import { setUser } from "store/reducers/features/user/userSlice";
 import { setVerifyLogin } from "store/reducers/jwtAuth";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "store/store";
@@ -77,6 +78,7 @@ export default function Otp() {
   };
   const handleOTP = async (data: { code: string }) => {
     if (isSuccess && user) {
+      dispatch(setUser(user));
       const body: OTPRequest = {
         code: persianToEnglishNumbers(data.code),
         type,
