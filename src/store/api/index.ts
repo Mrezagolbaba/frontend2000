@@ -38,6 +38,7 @@ export function refreshTokenPromise(): Promise<{
       })
       .finally(() => {
         _refPromise = null;
+        localStorage.setItem("isInitialized", "false");
       });
   }
   return _refPromise;

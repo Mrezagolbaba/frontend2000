@@ -18,6 +18,7 @@ import {
   useOtpMutation,
   useRegisterMutation,
 } from "store/api/auth";
+import Loader from "components/Loader";
 import { ReactElement, createContext, useEffect } from "react";
 import { axiosInstance, refreshTokenPromise } from "store/api";
 import { clearUser, setUser } from "store/reducers/features/user/userSlice";
@@ -58,7 +59,9 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
   const [forgotPasswordRequest] = useForgotPasswordMutation();
   const [logoutRequest] = useLogoutMutation();
   const [getMeReq, { data, isSuccess }] = useLazyGetMeQuery();
-  const { isInitialized, isLoggedIn } = useAppSelector(selectAuth);
+  const { isLoggedIn } = useAppSelector(selectAuth);
+  const isInitialized =
+    localStorage.getItem("isInitialized") === "true" ? true : false;
 
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
@@ -148,11 +151,10 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
         dispatch(clearUser());
       });
 
-  // if (!isInitialized) {
-  //   return <Loader />;
-  // }
-
   // ==============|| Render ||================= //
+  if (isInitialized && !isLoggedIn) {
+    return <Loader />;
+  }
   return (
     <JWTContext.Provider
       value={{
