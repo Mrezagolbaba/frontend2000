@@ -5,7 +5,7 @@ import Order from "assets/img/icons/paper.svg";
 import Wallet from "assets/img/icons/wallet.svg";
 import useAuth from "hooks/useAuth";
 import { Button, Nav, NavItem } from "reactstrap";
-import { CiEdit, CiLogout, CiPower } from "react-icons/ci";
+import { CiEdit } from "react-icons/ci";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useAppSelector } from "store/hooks";
 import { useLocation, Link, useNavigate } from "react-router-dom";
