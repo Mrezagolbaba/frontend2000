@@ -49,9 +49,6 @@ const axiosBaseQuery =
   > =>
   async (args: AxiosRequestConfig, api: any, extraOptions: any) => {
     try {
-      // axiosInstance.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
-      //   "token",
-      // )}`;
       const res = await axiosInstance(args);
       const data = res.data;
 
@@ -60,21 +57,14 @@ const axiosBaseQuery =
       console.log(error);
       const response = error.response;
       const status = response.status;
-      const isLoginReq = response.config.url.includes("sign-in");
 
       if (status === 500 || status > 500) {
         toast.error("مشکلی در ارتباط با سرور بوجود آمده است", {
           position: "bottom-left",
         });
-      }
-      // else if (!isLoginReq && status === 401) {
-      //   delete axiosInstance.defaults.headers.common.Authorization;
-      //   localStorage.removeItem("token");
-      //   localStorage.removeItem("isLoggedIn");
-      //   window.location.replace("/login");
-      //   return axiosBaseQuery()(args, api, extraOptions);
-      // }
-      else if (response?.data?.translatedMessage) {
+      } else if (status === 401) {
+        console.log(response);
+      } else if (response?.data?.translatedMessage) {
         toast.error(response.data.translatedMessage, {
           position: "bottom-left",
         });

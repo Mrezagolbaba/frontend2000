@@ -23,7 +23,7 @@ import {
 } from "store/reducers/jwtAuth";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { useLazyGetMeQuery } from "store/api/user";
-import { setUser } from "store/reducers/features/user/userSlice";
+import { clearUser, setUser } from "store/reducers/features/user/userSlice";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const setSession = (
@@ -145,6 +145,7 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
       .then(() => {
         setSession(null);
         dispatch(setLogout());
+        dispatch(clearUser());
       });
 
   // if (!isInitialized) {
