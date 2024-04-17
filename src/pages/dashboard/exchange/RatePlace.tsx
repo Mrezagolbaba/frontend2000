@@ -72,7 +72,7 @@ export default function RatePlace({
           <div id="currency-detail">
             <BsTag />
             <span className="title">
-              نرخ {convertText("USDT", "enToFa")} :{" "}
+              نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
             </span>
             <span className="value">
               {tomanShow({ value: rate, currency: "IRR" })}
@@ -96,7 +96,7 @@ export default function RatePlace({
           <div id="currency-detail">
             <BsTag />
             <span className="title">
-              نرخ {convertText("USDT", "enToFa")} :{" "}
+              نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
             </span>
             <span className="value">
               {tomanShow({ value: reverseRate, currency: "IRR" })}
@@ -120,7 +120,7 @@ export default function RatePlace({
           <div id="currency-detail">
             <BsTag />
             <span className="title">
-              نرخ {convertText("USDT", "enToFa")} :{" "}
+              نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
             </span>
             <span className="value">
               {lirShow({ value: rate, currency: "TRY" })}
@@ -144,7 +144,7 @@ export default function RatePlace({
           <div id="currency-detail">
             <BsTag />
             <span className="title">
-              نرخ {convertText("USDT", "enToFa")} :{" "}
+              نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
             </span>
             <span className="value">
               {lirShow({ value: reverseRate, currency: "TRY" })}
@@ -167,7 +167,7 @@ export default function RatePlace({
         <>
           <div id="currency-detail">
             <BsTag />
-            <span className="title">نرخ {convertText("TRY", "enToFa")} : </span>
+            <span className="title">نرخ تقریبی {convertText("TRY", "enToFa")} : </span>
             <span className="value">
               {tomanShow({ value: rate, currency: "IRR" })}
             </span>
@@ -189,7 +189,7 @@ export default function RatePlace({
         <>
           <div id="currency-detail">
             <BsTag />
-            <span className="title">نرخ {convertText("TRY", "enToFa")} : </span>
+            <span className="title">نرخ تقریبی {convertText("TRY", "enToFa")} : </span>
             <span className="value">
               {tomanShow({ value: reverseRate, currency: "IRR" })}
             </span>
