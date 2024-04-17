@@ -5,7 +5,8 @@ const AuthRouter = ({ children }) => {
   const { isLoggedIn } = useAuth();
 
   if (isLoggedIn) {
-    return <Navigate to="/dashboard" />;
+    const route = localStorage.getItem("active-route") || "/dashboard";
+    return <Navigate to={route} />;
   }
   return children;
 };

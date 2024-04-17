@@ -68,7 +68,7 @@ const DropdownInput = ({
       disabled={disabled}
     >
       <DropdownToggle
-        className={`${dropdown["toggle-btn"]} ${
+        className={`${dropdown["toggle-btn"]} ${disabled ? dropdown.disabled : ""} ${
           isOpenDrop ? dropdown["show"] : ""
         }`}
         caret

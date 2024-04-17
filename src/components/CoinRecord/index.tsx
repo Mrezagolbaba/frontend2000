@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import { useLazyGetRateQuery } from "store/api/publics";
 
 import style from "assets/scss/components/CoinRecord/style.module.scss";
-import { tomanShow } from "helpers";
 
 type Props = {
   destinationCode: "IRR" | "USDT";
@@ -16,8 +15,9 @@ type Props = {
     currencyCode: string;
     name: string;
     originName: string;
+    activeDeal?: boolean;
   };
-  changesLog: CryptoData;
+  changesLog?: CryptoData;
 };
 
 export default function CoinRecord({
@@ -73,7 +73,9 @@ export default function CoinRecord({
             <img src={source.imgSrc} alt={source.currencyCode} />
           </div>
           <div className={style["coin-name"]}>
-            <span className={style["origin-name"]}>{source.name}</span>
+            <span className={style["persian-name"]}>
+              {destinationCode === "IRR" ? source.name : source.originName}
+            </span>
             <span className={style["nick-name"]}>{source.currencyCode}</span>
           </div>
         </td>
@@ -94,30 +96,32 @@ export default function CoinRecord({
                     : "text-danger"
                 }`}
               >
-                {changesLog.price_change_percentage_24h.toFixed(2)}
+                {changesLog.price_change_percentage_24h.toFixed(2)+"٪"}
               </div>
-              <img
+              {/*<img
                 src={
                   changesLog?.price_change_percentage_24h > 0
                     ? greenChart
                     : redChart
                 }
                 alt="graph"
-              />
+              /> */}
             </div>
           ) : (
             "-"
           )}
         </td>
         <td className="text-center">
-          <div className="table-crypto-actions">
-            <Link
-              className="btn btn-outline-primary"
-              to={id && firstTierVerified ? "/dashboard/exchange" : "/login"}
-            >
-              معامله
-            </Link>
-          </div>
+          {source.activeDeal && (
+            <div className="table-crypto-actions">
+              <Link
+                className="btn btn-outline-primary"
+                to={id && firstTierVerified ? "/dashboard/exchange" : "/login"}
+              >
+                معامله
+              </Link>
+            </div>
+          )}
         </td>
       </tr>
     )

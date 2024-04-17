@@ -39,6 +39,8 @@ export default function RatePlace({
 
   const handleStock = () => {
     const currency = type === "source" ? source.currency : destination.currency;
+    const currencyLabel =
+      currency === "IRR" ? "تومان" : currency === "TRY" ? "لیر" : "تتر";
     if (wallets && wallets.length > 0) {
       const currentWallet = wallets?.find((w) => w.currencyCode === currency);
 
@@ -60,7 +62,7 @@ export default function RatePlace({
         }
       }
     }
-    return 0;
+    return `${0} ${currencyLabel}`;
   };
 
   const handleRate = () => {
@@ -70,7 +72,7 @@ export default function RatePlace({
           <div id="currency-detail">
             <BsTag />
             <span className="title">
-              نرخ {convertText("USDT", "enToFa")} :{" "}
+              نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
             </span>
             <span className="value">
               {tomanShow({ value: rate, currency: "IRR" })}
@@ -94,7 +96,7 @@ export default function RatePlace({
           <div id="currency-detail">
             <BsTag />
             <span className="title">
-              نرخ {convertText("USDT", "enToFa")} :{" "}
+              نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
             </span>
             <span className="value">
               {tomanShow({ value: reverseRate, currency: "IRR" })}
@@ -118,7 +120,7 @@ export default function RatePlace({
           <div id="currency-detail">
             <BsTag />
             <span className="title">
-              نرخ {convertText("USDT", "enToFa")} :{" "}
+              نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
             </span>
             <span className="value">
               {lirShow({ value: rate, currency: "TRY" })}
@@ -142,7 +144,7 @@ export default function RatePlace({
           <div id="currency-detail">
             <BsTag />
             <span className="title">
-              نرخ {convertText("USDT", "enToFa")} :{" "}
+              نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
             </span>
             <span className="value">
               {lirShow({ value: reverseRate, currency: "TRY" })}
@@ -165,7 +167,7 @@ export default function RatePlace({
         <>
           <div id="currency-detail">
             <BsTag />
-            <span className="title">نرخ {convertText("TRY", "enToFa")} : </span>
+            <span className="title">نرخ تقریبی {convertText("TRY", "enToFa")} : </span>
             <span className="value">
               {tomanShow({ value: rate, currency: "IRR" })}
             </span>
@@ -187,7 +189,7 @@ export default function RatePlace({
         <>
           <div id="currency-detail">
             <BsTag />
-            <span className="title">نرخ {convertText("TRY", "enToFa")} : </span>
+            <span className="title">نرخ تقریبی {convertText("TRY", "enToFa")} : </span>
             <span className="value">
               {tomanShow({ value: reverseRate, currency: "IRR" })}
             </span>

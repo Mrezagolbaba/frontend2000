@@ -1,12 +1,12 @@
-import { tomanShow } from "helpers";
 import moment from "jalali-moment";
 import { useTransactionsQuery } from "store/api/wallet-management";
 import { RenderAmount, StatusHandler } from ".";
 import { useBankAccountsQuery } from "store/api/profile-management";
 import BanksWrapper from "components/BanksWrapper";
+import CopyInput from "components/Input/CopyInput";
+import Deposit from "assets/img/icons/depositIcon.svg";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
-import CopyInput from "components/Input/CopyInput";
 
 type Props = {
   type: "IRR" | "TRY" | "USDT";
@@ -44,38 +44,40 @@ export default function WithdrawsTable({ type }: Props) {
   return (
     <div className="table-responsive">
       <table className="table table-borderless table-striped">
-        <thead>
-          <tr>
-            <th
-              scope="col"
-              style={{ color: "#03041b66" }}
-              className="text-center"
-            >
-              مقدار
-            </th>
-            <th
-              scope="col"
-              style={{ color: "#03041b66" }}
-              className="text-center"
-            >
-              {type === "TRY" ? "IBAN" : "شماره شبا"}
-            </th>
-            <th
-              scope="col"
-              style={{ color: "#03041b66" }}
-              className="text-center"
-            >
-              تاریخ درخواست
-            </th>
-            <th
-              scope="col"
-              style={{ color: "#03041b66" }}
-              className="text-center"
-            >
-              وضعیت
-            </th>
-          </tr>
-        </thead>
+        {data && data?.length > 0 && (
+          <thead>
+            <tr>
+              <th
+                scope="col"
+                style={{ color: "#03041b66" }}
+                className="text-center"
+              >
+                مقدار
+              </th>
+              <th
+                scope="col"
+                style={{ color: "#03041b66" }}
+                className="text-center"
+              >
+                {type === "TRY" ? "IBAN" : "شماره شبا"}
+              </th>
+              <th
+                scope="col"
+                style={{ color: "#03041b66" }}
+                className="text-center"
+              >
+                تاریخ درخواست
+              </th>
+              <th
+                scope="col"
+                style={{ color: "#03041b66" }}
+                className="text-center"
+              >
+                وضعیت
+              </th>
+            </tr>
+          </thead>
+        )}
         <tbody>
           {isLoading || loadingAccount ? (
             <>
@@ -153,7 +155,23 @@ export default function WithdrawsTable({ type }: Props) {
               </tr>
             ))
           ) : (
-            <tr className="py-4">دیتایی وجود ندارد</tr>
+            <tr>
+              <td
+                colSpan={4}
+                className="text-center"
+                style={{ boxShadow: "none" }}
+              >
+                <img
+                  src={Deposit}
+                  style={{
+                    height: "50px",
+                    width: "50px",
+                    margin: "20px 0",
+                  }}
+                />
+                <p>اولین تراکنش خود را با آرسونیکس تجربه کنید</p>
+              </td>
+            </tr>
           )}
         </tbody>
       </table>

@@ -110,8 +110,6 @@ export default function International({ accounts, isLoading }: Props) {
     createAccount({ ...data, iban: "TR" + ibanNumber });
   };
 
-  console.log(errors);
-
   return (
     <>
       <Card className="mb-4">

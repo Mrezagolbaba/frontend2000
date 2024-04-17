@@ -9,6 +9,7 @@ import dashboard from "assets/img/lay/dashboard.png";
 
 import home from "assets/scss/landing/home.module.scss";
 import { Col, Container, Row } from "reactstrap";
+import { Link } from "react-router-dom";
 
 const Advantages = () => {
   return (
@@ -87,7 +88,11 @@ const Advantages = () => {
       <section className={home["features__slide"]}>
         <div className={home["features__slide__container"]}>
           <Row className="g-4">
-            <Col md={6} tag="a" href="https://help.arsonex.com/">
+            <Link
+              target="_blank"
+              className="col-md-6"
+              to="https://help.arsonex.com/"
+            >
               <div className={`${home["feature__box"]} ${home["box--blue"]}`}>
                 <div className={home["feature__box__caption"]}>
                   <h4 className={home["feature__box__title"]}>
@@ -99,7 +104,7 @@ const Advantages = () => {
                   </h5>
                 </div>
               </div>
-            </Col>
+            </Link>
             <Col md={6}>
               <div
                 className={`${home["feature__box"]} ${home["box--darkblue"]}`}

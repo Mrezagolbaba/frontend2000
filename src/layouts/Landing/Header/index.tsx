@@ -96,7 +96,7 @@ const Header = ({ disableBanner = false }: Props) => {
                 <Link to="/dashboard">خرید و فروش آنی</Link>
               </li>
               <li className={`${home.navbar__item}`}>
-                <Link to="https://help.arsonex.com/">مرکز راهنمایی</Link>
+                <Link target="_blank" to="https://help.arsonex.com/">مرکز راهنمایی</Link>
               </li>
               <li
                 className={`${home.navbar__item} ${

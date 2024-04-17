@@ -3,14 +3,16 @@ import Home from "assets/img/icons/home.svg";
 import LogoArsonex from "assets/img/logo-arsonex.png";
 import Order from "assets/img/icons/paper.svg";
 import Wallet from "assets/img/icons/wallet.svg";
+import AddFriend from "assets/img/icons/add-user.svg";
 import useAuth from "hooks/useAuth";
 import { Button, Nav, NavItem } from "reactstrap";
-import { CiEdit, CiLogout } from "react-icons/ci";
+import { CiEdit } from "react-icons/ci";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useAppSelector } from "store/hooks";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import { TbPower } from "react-icons/tb";
 
 type Props = {
   isOpen: boolean;
@@ -49,6 +51,11 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
       label: "تاریخچه",
       icon: <img src={History} alt="" />,
     },
+    {
+      path:"/dashboard/add-friends",
+      label: " دعوت دوستان",
+      icon: <img src={AddFriend} alt="" />,
+    }
   ];
 
   // ==============|| Handlers ||================= //
@@ -155,17 +162,18 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
       <div
         className={`${dashboard.sidebar__navbar__item} ${dashboard["item-logout"]}`}
       >
-        <a
+        <Button
+          color="danger"
+          outline
+          block
           onClick={() => handleLogout()}
-          style={{
-            cursor: "pointer",
-          }}
+          className="my-2"
         >
-          <span className="icon">
-            <CiLogout />
+          <span className="icon mx-2">
+            <TbPower />
           </span>
           <span>خروج از حساب</span>
-        </a>
+        </Button>
       </div>
     </div>
   );

@@ -36,7 +36,7 @@ const Footer = (): ReactElement => {
                   <Link to="/contact-us">تماس با ما</Link>
                 </li>
                 <li>
-                  <Link to="https://help.arsonex.com/fast-fee/">
+                  <Link target="_blank" to="https://help.arsonex.com/fast-fee/">
                     کارمزد&zwnj;ها
                   </Link>
                 </li>
@@ -80,22 +80,22 @@ const Footer = (): ReactElement => {
               <h3 className={home["footer-widget-title"]}>راهنمای استفاده</h3>
               <ul className={home["footer-links"]}>
                 <li>
-                  <Link to="https://help.arsonex.com">مرکز راهنمایی</Link>
+                  <Link target="_blank" to="https://help.arsonex.com">مرکز راهنمایی</Link>
                 </li>
                 <li>
-                  <Link to="https://help.arsonex.com/transaction/">
+                  <Link target="_blank" to="https://help.arsonex.com/transaction/">
                     {" "}
                     روش های معاملاتی
                   </Link>
                 </li>
                 <li>
-                  <Link to="https://help.arsonex.com/security/">
+                  <Link target="_blank" to="https://help.arsonex.com/security/">
                     {" "}
                     امنیت کاربران
                   </Link>
                 </li>
                 <li>
-                  <Link to="https://help.arsonex.com/authentication-process/">
+                  <Link target="_blank" to="https://help.arsonex.com/authentication-process/">
                     احراز هویت فوری
                   </Link>
                 </li>

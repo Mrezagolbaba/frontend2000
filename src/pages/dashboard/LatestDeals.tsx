@@ -2,8 +2,8 @@ import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 import { Link } from "react-router-dom";
 import { convertCoins, convertIRRToToman, convertStatus } from "helpers";
 import { useTransactionsQuery } from "store/api/wallet-management";
-
 import Deposit from "assets/img/icons/depositIcon.svg";
+
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 
 function LatestDeals() {
@@ -98,7 +98,7 @@ function LatestDeals() {
                   </tbody>
                 ) : (
                   <tbody>
-                    {transActions.slice(-7)?.map((item,index) => (
+                    {transActions.slice(-7)?.map((item, index) => (
                       <tr key={index}>
                         <td>
                           <span
@@ -112,19 +112,26 @@ function LatestDeals() {
                           </span>
                         </td>
                         <td>{convertCoins(item.currencyCode)}</td>
-                        {
-                          item.currencyCode === "IRR" ? <td>{convertIRRToToman(Number(item.amount)).toLocaleString()}</td> : <td>{Number(item.amount).toLocaleString()}</td>
-                        }
+                        {item.currencyCode === "IRR" ? (
+                          <td>
+                            {convertIRRToToman(
+                              Number(item.amount),
+                            ).toLocaleString()}
+                          </td>
+                        ) : (
+                          <td>{Number(item.amount).toLocaleString()}</td>
+                        )}
                         <td>
                           <span
-                            className={`${item.status === "CANCELED" ||
+                            className={`${
+                              item.status === "CANCELED" ||
                               item.status === "FAILED" ||
                               item.status === "EXPIRED"
-                              ? "text-danger"
-                              : item.status === "SUCCESSFUL"
-                                ? "text-success"
-                                : "text-secondary"
-                              }`}
+                                ? "text-danger"
+                                : item.status === "SUCCESSFUL"
+                                  ? "text-success"
+                                  : "text-secondary"
+                            }`}
                           >
                             {convertStatus(item.status)}
                           </span>

@@ -96,7 +96,7 @@ const LightHeader = ({
                     <Link to="/dashboard">خرید و فروش آنی</Link>
                   </li>
                   <li className={home.page__navitem}>
-                    <Link to="https://help.arsonex.com/">مرکز راهنمایی</Link>
+                    <Link target="_blank" to="https://help.arsonex.com/">مرکز راهنمایی</Link>
                   </li>
                   <li
                     className={`${home.page__navitem} ${
