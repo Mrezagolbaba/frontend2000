@@ -1,9 +1,3 @@
-import BTC from "assets/img/coins/BTC.png";
-import CoinRecord from "components/CoinRecord";
-import ETH from "assets/img/coins/ETH.png";
-import SOL from "assets/img/coins/Solana_logo.png";
-import TRX from "assets/img/coins/trx.png";
-import XRP from "assets/img/coins/xrp-xrp-logo.png";
 import { Container } from "reactstrap";
 import { CryptoData } from "types/exchange";
 import { FilterNavCoin } from "components/FilterNavCoin";
@@ -11,6 +5,14 @@ import { HiOutlineChevronLeft } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { get24hChanges } from "helpers";
 import { useEffect, useState } from "react";
+
+import BTC from "assets/img/coins/BTC.png";
+import CoinRecord from "components/CoinRecord";
+import ETH from "assets/img/coins/ETH.png";
+import SOL from "assets/img/coins/Solana_logo.png";
+import TRX from "assets/img/coins/trx.png";
+import XRP from "assets/img/coins/xrp-xrp-logo.png";
+import USDT from "assets/img/coins/USDT.png";
 
 import home from "assets/scss/landing/home.module.scss";
 
@@ -22,6 +24,13 @@ const SpotRate = () => {
   // ==============|| Constants ||================= //
   const currencyPairs = [
     { code: "BTC", name: "بیت کوین", originName: "bitcoin", imgSrc: BTC },
+    {
+      code: "USDT",
+      name: "تتر",
+      originName: "tether",
+      imgSrc: USDT,
+      activeDeal: true,
+    },
     { code: "TRX", name: "ترون", originName: "tron", imgSrc: TRX },
     { code: "ETH", name: "اتریوم", originName: "ethereum", imgSrc: ETH },
     { code: "SOL", name: "سولانا", originName: "solana", imgSrc: SOL },
@@ -39,6 +48,7 @@ const SpotRate = () => {
   useEffect(() => {
     const cryptoIds: string[] = [
       "bitcoin",
+      "tether",
       "tron",
       "ethereum",
       "solana",
@@ -88,23 +98,29 @@ const SpotRate = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currencyPairs.map((currencyPair: any, index: number) => (
-                    <CoinRecord
-                      key={index}
-                      destinationCode={activeTab}
-                      source={{
-                        imgSrc: currencyPair.imgSrc,
-                        currencyCode: currencyPair.code,
-                        name: currencyPair.name,
-                        originName: currencyPair.originName,
-                      }}
-                      changesLog={
-                        coinChanges.find(
-                          (coin) => coin.id === currencyPair.originName,
-                        ) as CryptoData
-                      }
-                    />
-                  ))}
+                  {currencyPairs.map((currencyPair: any, index: number) => {
+                    if (currencyPair.code === "USDT" && activeTab === "USDT")
+                      return null;
+                    else
+                      return (
+                        <CoinRecord
+                          key={index}
+                          destinationCode={activeTab}
+                          source={{
+                            imgSrc: currencyPair.imgSrc,
+                            currencyCode: currencyPair.code,
+                            name: currencyPair.name,
+                            originName: currencyPair.originName,
+                            activeDeal: currencyPair?.activeDeal,
+                          }}
+                          changesLog={
+                            coinChanges.find(
+                              (coin) => coin.id === currencyPair.originName,
+                            ) as CryptoData
+                          }
+                        />
+                      );
+                  })}
                 </tbody>
               </table>
             </div>
