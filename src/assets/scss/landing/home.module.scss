@@ -413,6 +413,10 @@ img.avatar {
 
   &__tabs {
     margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    flex-direction: row;
   }
   .tab-content {
     .active {

@@ -17,7 +17,7 @@ type Props = {
     originName: string;
     activeDeal?: boolean;
   };
-  changesLog: CryptoData;
+  changesLog?: CryptoData;
 };
 
 export default function CoinRecord({
@@ -96,16 +96,16 @@ export default function CoinRecord({
                     : "text-danger"
                 }`}
               >
-                {changesLog.price_change_percentage_24h.toFixed(2)}
+                {changesLog.price_change_percentage_24h.toFixed(2)+"٪"}
               </div>
-              <img
+              {/*<img
                 src={
                   changesLog?.price_change_percentage_24h > 0
                     ? greenChart
                     : redChart
                 }
                 alt="graph"
-              />
+              /> */}
             </div>
           ) : (
             "-"

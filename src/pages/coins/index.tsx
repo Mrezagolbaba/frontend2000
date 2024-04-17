@@ -20,6 +20,10 @@ import SHIB from "assets/img/coins/shiba.png";
 import BONK from "assets/img/coins/bonk-coin.png";
 import APEX from "assets/img/coins/apex-coin.jpg";
 import ARB from "assets/img/coins/arb-coin.jpeg";
+import lira from "assets/img/coins/lira.png";
+import CAD from "assets/img/coins/CAD.svg";
+import EUR from "assets/img/coins/Euro.png";
+import GBP from "assets/img/coins/GBP.png";
 
 import home from "assets/scss/landing/home.module.scss";
 import coins from "assets/scss/landing/coins.module.scss";
@@ -27,11 +31,17 @@ import coins from "assets/scss/landing/coins.module.scss";
 export default function CoinPage() {
   const [activeTab, setActiveTab] = useState<"IRR" | "USDT">("IRR");
   const [coinChanges, setCoinChanges] = useState<CryptoData[] | []>([]);
+  const [mode, setMode] = useState<"crypto" | "fiat">("crypto")
+  const [fiatChanges, setFiatChanges] = useState<CryptoData[] | []>([]);
 
   const handleTabClick = (e: any, tabId: string) => {
     e.preventDefault();
     setActiveTab(tabId === "tab2" ? "IRR" : "USDT");
   };
+  const handleModeClick = (e: any, tabId: string) => {
+    e.preventDefault();
+    setMode(tabId === "tab1" ? "crypto" : "fiat");
+  }
 
   const currencyPairs = [
     {
@@ -39,6 +49,7 @@ export default function CoinPage() {
       name: "بیت کوین",
       originName: "bitcoin",
       imgSrc: BTC,
+      activeDeal: true,
     },
     {
       code: "USDT",
@@ -52,61 +63,78 @@ export default function CoinPage() {
       name: "ترون",
       originName: "tron",
       imgSrc: TRX,
+      activeDeal: true,
     },
     {
       code: "ETH",
       name: "اتریوم",
       originName: "ethereum",
       imgSrc: ETH,
+      activeDeal: true,
     },
     {
       code: "SOL",
       name: "سولانا",
       originName: "solana",
       imgSrc: SOL,
+      activeDeal: true,
     },
     {
       code: "XRP",
       name: "ریپل",
       originName: "ripple",
       imgSrc: XRP,
+      activeDeal: true,
     },
     {
       code: "DOGE",
       name: "دوج کوین",
       originName: "dogecoin",
       imgSrc: DOGE,
+      activeDeal: true,
     },
     {
       code: "PEPE",
       name: "پپه",
       originName: "pepe",
       imgSrc: PEPE,
+      activeDeal: true,
     },
     {
       code: "SHIB",
       name: "شیبا",
       originName: "shiba",
       imgSrc: SHIB,
+      activeDeal: true,
     },
     {
       code: "BONK",
       name: "بونک",
       originName: "bonk",
       imgSrc: BONK,
+      activeDeal: true,
     },
     {
       code: "ARB",
       name: "آربیتروم",
       originName: "arbitrum",
       imgSrc: ARB,
+      activeDeal: true,
     },
     {
       code: "APEX",
       name: "اپکس",
       originName: "apex",
       imgSrc: APEX,
+      activeDeal: true,
     },
+    // Add more currency pairs as needed
+  ];
+  const fiatPairs = [
+    { code: "TRY", name: "لیر", imgSrc: lira, activeDeal: true },
+    { code: "EUR", name: "یورو", imgSrc: EUR, activeDeal: true },
+    { code: "CAD", name: "دلار کانادا", imgSrc: CAD, activeDeal: true },
+    { code: "GBP", name: "پوند", imgSrc: GBP, activeDeal: true },
     // Add more currency pairs as needed
   ];
 
@@ -129,7 +157,7 @@ export default function CoinPage() {
       .then((changes) => {
         if (changes) {
           setCoinChanges(changes);
-          changes.forEach((crypto) => {});
+          changes.forEach((crypto) => { });
         }
       })
       .catch((error) => {
@@ -162,9 +190,18 @@ export default function CoinPage() {
             </div>
             <div className={home["currency-rates__tabs"]}>
               <FilterNavCoin
-                activeTab={activeTab}
-                handleTabClick={handleTabClick}
+                activeTab={mode}
+                handleTabClick={handleModeClick}
+                leftTitle=" ارزهای دیجیتال"
+                rightTitle="  فیات دیجیتال"
               />
+              {mode === "crypto" &&
+                <FilterNavCoin
+                  activeTab={activeTab}
+                  handleTabClick={handleTabClick}
+                  leftTitle=" تتر USDT"
+                  rightTitle="تومان IRT"
+                />}
             </div>
             <div className={home["tab-content"]} id="myTabContent">
               <div
@@ -183,7 +220,7 @@ export default function CoinPage() {
                         <th className="text-center">معامله</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    {mode === 'crypto' && <tbody>
                       {currencyPairs.map((currencyPair: any, index: number) => {
                         if (
                           currencyPair.code === "USDT" &&
@@ -210,7 +247,30 @@ export default function CoinPage() {
                             />
                           );
                       })}
-                    </tbody>
+                    </tbody>}
+                    {mode === 'fiat' && <tbody>
+                      {fiatPairs.map((currencyPair: any, index: number) => {
+                        return (
+                          <CoinRecord
+                            key={index}
+                            destinationCode={"IRR"}
+                            source={{
+                              imgSrc: currencyPair.imgSrc,
+                              currencyCode: currencyPair.code,
+                              name: currencyPair.name,
+                              originName: currencyPair.name,
+                              activeDeal: currencyPair?.activeDeal,
+                            }}
+                            changesLog={
+                              fiatChanges.find(
+                                (fiat) => fiat.id === currencyPair.name,
+                              ) as CryptoData
+                            }
+                          />
+                        );
+                      }
+                      )}
+                    </tbody>}
                   </table>
                 </div>
               </div>

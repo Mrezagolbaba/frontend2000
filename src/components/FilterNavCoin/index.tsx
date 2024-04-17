@@ -2,7 +2,14 @@ import { useState } from "react";
 import { Button, ButtonGroup, Nav, NavItem, NavLink } from "reactstrap";
 import "./styles.scss";
 
-export const FilterNavCoin = ({ activeTab, handleTabClick }: any) => {
+interface FilterNavCoinProps {
+  activeTab: string;
+  handleTabClick: (e: any, tabId: string) => void;
+  rightTitle: string;
+  leftTitle: string;
+}
+
+export const FilterNavCoin = ({ activeTab, handleTabClick,rightTitle,leftTitle }: FilterNavCoinProps) => {
   const [rSelected, setRSelected] = useState(1);
 
   return (
@@ -21,7 +28,7 @@ export const FilterNavCoin = ({ activeTab, handleTabClick }: any) => {
               setRSelected(1);
             }}
           >
-            تومان IRT
+            {rightTitle}
           </Button>
           <Button
             color="secondary"
@@ -31,7 +38,7 @@ export const FilterNavCoin = ({ activeTab, handleTabClick }: any) => {
               setRSelected(2);
             }}
           >
-            تتر USDT
+            {leftTitle} 
           </Button>
         </ButtonGroup>
       </NavItem>
