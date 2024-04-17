@@ -1,6 +1,6 @@
 import moment from "jalali-moment";
 import { DepositTypes, RenderAmount, StatusHandler } from ".";
-
+import Deposit from "assets/img/icons/depositIcon.svg";
 import { useTransactionsQuery } from "store/api/wallet-management";
 import CopyInput from "components/Input/CopyInput";
 
@@ -18,45 +18,47 @@ export default function DepositsTable({ type }: Props) {
   return (
     <div className="table-responsive">
       <table className="table table-borderless table-striped">
-        <thead>
-          <tr>
-            <th
-              scope="col"
-              style={{ color: "#03041b66" }}
-              className="text-center"
-            >
-              نوع واریزی
-            </th>
-            <th
-              scope="col"
-              style={{ color: "#03041b66" }}
-              className="text-center"
-            >
-              مقدار واریزی
-            </th>
-            <th
-              scope="col"
-              style={{ color: "#03041b66" }}
-              className="text-center"
-            >
-              {type !== "USDT" ? "شناسه پرداخت" : "آدرس ولت"}
-            </th>
-            <th
-              scope="col"
-              style={{ color: "#03041b66" }}
-              className="text-center"
-            >
-              تاریخ پرداخت
-            </th>
-            <th
-              scope="col"
-              style={{ color: "#03041b66" }}
-              className="text-center"
-            >
-              وضعیت پرداخت
-            </th>
-          </tr>
-        </thead>
+        {data && data?.length > 0 && (
+          <thead>
+            <tr>
+              <th
+                scope="col"
+                style={{ color: "#03041b66" }}
+                className="text-center"
+              >
+                نوع واریزی
+              </th>
+              <th
+                scope="col"
+                style={{ color: "#03041b66" }}
+                className="text-center"
+              >
+                مقدار واریزی
+              </th>
+              <th
+                scope="col"
+                style={{ color: "#03041b66" }}
+                className="text-center"
+              >
+                {type !== "USDT" ? "شناسه پرداخت" : "آدرس ولت"}
+              </th>
+              <th
+                scope="col"
+                style={{ color: "#03041b66" }}
+                className="text-center"
+              >
+                تاریخ پرداخت
+              </th>
+              <th
+                scope="col"
+                style={{ color: "#03041b66" }}
+                className="text-center"
+              >
+                وضعیت پرداخت
+              </th>
+            </tr>
+          </thead>
+        )}
         <tbody>
           {isLoading ? (
             <>
@@ -143,7 +145,23 @@ export default function DepositsTable({ type }: Props) {
               </tr>
             ))
           ) : (
-            <tr className="py-4">دیتایی وجود ندارد</tr>
+            <tr>
+              <td
+                colSpan={4}
+                className="text-center"
+                style={{ boxShadow: "none" }}
+              >
+                <img
+                  src={Deposit}
+                  style={{
+                    height: "50px",
+                    width: "50px",
+                    margin: "20px 0",
+                  }}
+                />
+                <p>اولین تراکنش خود را با آرسونیکس تجربه کنید</p>
+              </td>
+            </tr>
           )}
         </tbody>
       </table>

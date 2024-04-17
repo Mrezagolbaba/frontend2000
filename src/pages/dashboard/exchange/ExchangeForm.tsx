@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import { isEmpty } from "lodash";
 import toast from "react-hot-toast";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CurrencyCode } from "types/wallet";
 import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
 import SelectCurrency from "components/Input/CurrencyInput/SelectCurrency";
@@ -224,12 +224,12 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
       <CardHeader>
         <Row>
           <div className="card-back col-lg-6">
-            <a className="">
+            <Link className="btn btn-link" to="/dashboard/wallet">
               <span className="icon">
                 <MdOutlineKeyboardArrowRight color="black" />
               </span>
               معامله سریع
-            </a>
+            </Link>
           </div>
           <Col
             xs={12}

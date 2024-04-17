@@ -39,6 +39,8 @@ export default function RatePlace({
 
   const handleStock = () => {
     const currency = type === "source" ? source.currency : destination.currency;
+    const currencyLabel =
+      currency === "IRR" ? "تومان" : currency === "TRY" ? "لیر" : "تتر";
     if (wallets && wallets.length > 0) {
       const currentWallet = wallets?.find((w) => w.currencyCode === currency);
 
@@ -60,7 +62,7 @@ export default function RatePlace({
         }
       }
     }
-    return 0;
+    return `${0} ${currencyLabel}`;
   };
 
   const handleRate = () => {
