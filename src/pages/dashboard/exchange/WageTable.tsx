@@ -21,10 +21,10 @@ export default function WageTable({
   destinationCode,
   feeCurrencyCode,
 }: Props) {
-  const [feeCost, setFeeCost] = useState<string>("0");
-  const [feeAmount, setFeeAmount] = useState<string>("0");
+  const [feeCost, setFeeCost] = useState<string | null>(null);
+  const [feeAmount, setFeeAmount] = useState<string | null>(null);
 
-  const [finalAmount, setFinalAmount] = useState<string>("0");
+  const [finalAmount, setFinalAmount] = useState<string | null>(null);
 
   const handleDetails = (key: 0 | 1) => {
     const targetFee = data?.transactions[key].fees[0];
@@ -151,8 +151,12 @@ export default function WageTable({
                   </div>
                 </fieldset>
               </td>
-              <td className="text-center">{`${feeCost} معادل ${feeAmount}`}</td>
-              <td className="text-center">{finalAmount}</td>
+              <td className="text-center">
+                {feeCost === null ? "-" : `${feeCost} معادل ${feeAmount}`}
+              </td>
+              <td className="text-center">
+                {finalAmount === null ? "-" : finalAmount}
+              </td>
             </tr>
           )}
         </tbody>
