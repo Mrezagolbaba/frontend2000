@@ -73,6 +73,8 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
         getMeReq();
       } catch (e) {
         setSession(null);
+        dispatch(setLogout());
+        dispatch(clearUser());
       }
     };
     init();
@@ -154,22 +156,22 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
   // ==============|| Render ||================= //
   if (isInitialized && !isLoggedIn) {
     return <Loader />;
-  }
-  return (
-    <JWTContext.Provider
-      value={{
-        isInitialized,
-        isLoggedIn,
-        login,
-        register,
-        forgotPassword,
-        logout,
-        otp,
-      }}
-    >
-      {children}
-    </JWTContext.Provider>
-  );
+  } else
+    return (
+      <JWTContext.Provider
+        value={{
+          isInitialized,
+          isLoggedIn,
+          login,
+          register,
+          forgotPassword,
+          logout,
+          otp,
+        }}
+      >
+        {children}
+      </JWTContext.Provider>
+    );
 };
 
 export default JWTContext;
