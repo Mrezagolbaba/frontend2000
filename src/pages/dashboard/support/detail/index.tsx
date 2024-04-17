@@ -55,9 +55,11 @@ export default function Detail() {
         <CardHeader className="d-flex flex-row justify-content-between align-items-center">
           <CardTitle tag="h5">پشتیبانی</CardTitle>
           <div className="card-action">
-            <Button color="primary" outline onClick={handleCloseTicket}>
-              بستن تیکت
-            </Button>
+            {data?.ticket.status !== "CLOSE" && !loadingTicket && (
+              <Button color="primary" outline onClick={handleCloseTicket}>
+                بستن تیکت
+              </Button>
+            )}
           </div>
         </CardHeader>
         <CardBody>

@@ -148,7 +148,10 @@ const CreditCardForm = () => {
               <FormGroup className="position-relative">
                 <div className="d-flex flex-row justify-content-between">
                   <Label htmlFor={name}>کارت واریزی: </Label>
-                  <Link to="/dashboard/profile" target="blank">
+                  <Link
+                    to="/dashboard/profile#iranian-accounts"
+                    target="_blank"
+                  >
                     <span className={wallet?.["little-label"]}>
                       افزودن حساب جدید
                     </span>

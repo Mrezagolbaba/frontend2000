@@ -104,7 +104,7 @@ export default function Internal({ accounts, isLoading }: Props) {
         <CardHeader>
           <CardTitle tag="h5">اطلاعات بانکی</CardTitle>
         </CardHeader>
-        <CardBody>
+        <CardBody id="iranian-accounts">
           <AlertWarning
             hasIcon
             key="account-warning"

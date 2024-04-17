@@ -15,17 +15,16 @@ const Support = () => {
         <CardHeader className="d-flex flex-row justify-content-between align-items-center">
           <CardTitle tag="h5">پشتیبانی</CardTitle>
           <div className="card-action">
-            <Button
-              className="mx-2 px-4"
-              color="primary"
-              size="sm"
+            <Link
+              className="mx-2 px-4 btn btn-primary btn-sm"
               style={{
                 fontSize: ".87rem",
               }}
-              onClick={() => setIsModalOpen(true)}
+              target="_blank"
+              to="https://help.arsonex.com/"
             >
               مرکز راهنمایی
-            </Button>
+            </Link>
             <Button
               color="primary"
               outline
