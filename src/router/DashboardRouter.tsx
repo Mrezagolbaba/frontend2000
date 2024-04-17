@@ -13,6 +13,7 @@ import Market from "pages/dashboard/market";
 import History from "pages/dashboard/history";
 import PaymentRecipt from "pages/dashboard/payment-receipt";
 import SupportDetails from "pages/dashboard/support/detail";
+import AddFriends from "pages/dashboard/add-friends";
 
 const DashboardRouter = {
   path: "dashboard",
@@ -70,6 +71,10 @@ const DashboardRouter = {
       path: "payment-receipt/:id",
       element: <ProtectedRoute children={<PaymentRecipt />} />,
     },
+    {
+      path: "add-friends",
+      element: <ProtectedRoute children={<AddFriends />} />,
+    }
   ],
 };
 

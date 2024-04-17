@@ -150,6 +150,7 @@ export default function Otp() {
   }, [timeInSeconds]);
 
   // ==============|| Render ||================= //
+
   return (
     <Auth>
       <section className={auth.container}>
@@ -167,11 +168,19 @@ export default function Otp() {
                   />
                 </div>
               )}
-              <p className={auth.text}>
-                کد تایید ارسال شده به
-                <span className="d-inline-block">{renderCaption()}</span>
-                را وارد کنید.
-              </p>
+              {user?.otpMethod === "AUTHENTICATOR" ? (
+                <p className={auth.text}>
+                  کد تایید ساخته شده با
+                  <span className="d-inline-block">{renderCaption()}</span>
+                  را وارد کنید.
+                </p>
+              ) : (
+                <p className={auth.text}>
+                  کد تایید ارسال شده به
+                  <span className="d-inline-block">{renderCaption()}</span>
+                  را وارد کنید.
+                </p>
+              )}
             </div>
 
             <form
@@ -248,7 +257,9 @@ export default function Otp() {
                           color="link"
                           onClick={() => navigate(-1)}
                         >
-                          ویرایش شماره همراه
+                          {
+                            method === "EMAIL" ? "ویرایش ایمیل" : "ویرایش شماره همراه"
+                          }
                         </Button>
                       </div>
                     </div>
