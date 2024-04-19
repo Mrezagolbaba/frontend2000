@@ -1,12 +1,11 @@
-import greenChart from "assets/img/graph-g.png";
-import redChart from "assets/img/graph-r.png";
 import { CryptoData } from "types/exchange";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "store/hooks";
 import { useEffect } from "react";
 import { useLazyGetRateQuery } from "store/api/publics";
 
 import style from "assets/scss/components/CoinRecord/style.module.scss";
+import { Button } from "reactstrap";
 
 type Props = {
   destinationCode: "IRR" | "USDT";
@@ -17,6 +16,7 @@ type Props = {
     originName: string;
     activeDeal?: boolean;
   };
+  mode: "fiat" | "crypto";
   changesLog?: CryptoData;
 };
 
@@ -24,10 +24,12 @@ export default function CoinRecord({
   destinationCode,
   source,
   changesLog,
+  mode,
 }: Props) {
   // ==============|| Hooks ||================= //
   const { id, firstTierVerified } = useAppSelector((state) => state.user);
   const [request, { data, isLoading, isSuccess }] = useLazyGetRateQuery();
+  const navigate = useNavigate();
 
   // ==============|| Handlers ||================= //
   const handleRequest = () => {
@@ -58,9 +60,11 @@ export default function CoinRecord({
       <td className="placeholder-glow">
         <div className="placeholder col-12 rounded" />
       </td>
-      <td className="placeholder-glow">
-        <div className="placeholder col-12 rounded" />
-      </td>
+      {mode === "crypto" && (
+        <td className="placeholder-glow">
+          <div className="placeholder col-12 rounded" />
+        </td>
+      )}
       <td className="placeholder-glow">
         <div className="placeholder col-12 rounded" />
       </td>
@@ -82,23 +86,29 @@ export default function CoinRecord({
         <td className="text-center">
           <div className={destinationCode === "USDT" ? "latin-font" : ""}>
             {destinationCode === "IRR"
-              ? (Number(data.rate) / 10).toLocaleString()
-              : "USDT " + Number(data.rate).toLocaleString()}
+              ? (Number(data.rate) / 10).toLocaleString("IRR", {
+                  maximumFractionDigits: 6,
+                })
+              : "USDT " +
+                Number(data.rate).toLocaleString("en-US", {
+                  maximumFractionDigits: 6,
+                })}
           </div>
         </td>
-        <td className="text-center">
-          {changesLog ? (
-            <div className={style["graph-wrapper"]}>
-              <div
-                className={` ${destinationCode === "USDT" ? "latin-font" : "ltr-tag"} ${
-                  changesLog.price_change_percentage_24h > 0
-                    ? "text-success"
-                    : "text-danger"
-                }`}
-              >
-                {changesLog.price_change_percentage_24h.toFixed(2)+"٪"}
-              </div>
-              {/*<img
+        {mode === "crypto" && (
+          <td className="text-center">
+            {changesLog ? (
+              <div className={style["graph-wrapper"]}>
+                <div
+                  className={` ${destinationCode === "USDT" ? "latin-font" : "ltr-tag"} ${
+                    changesLog.price_change_percentage_24h > 0
+                      ? "text-success"
+                      : "text-danger"
+                  }`}
+                >
+                  {changesLog.price_change_percentage_24h.toFixed(2) + "٪"}
+                </div>
+                {/*<img
                 src={
                   changesLog?.price_change_percentage_24h > 0
                     ? greenChart
@@ -106,22 +116,27 @@ export default function CoinRecord({
                 }
                 alt="graph"
               /> */}
-            </div>
-          ) : (
-            "-"
-          )}
-        </td>
+              </div>
+            ) : (
+              "-"
+            )}
+          </td>
+        )}
         <td className="text-center">
-          {source.activeDeal && (
-            <div className="table-crypto-actions">
-              <Link
-                className="btn btn-outline-primary"
-                to={id && firstTierVerified ? "/dashboard/exchange" : "/login"}
-              >
-                معامله
-              </Link>
-            </div>
-          )}
+          <div className="table-crypto-actions">
+            <Button
+              color="primary"
+              outline
+              onClick={() =>
+                id && firstTierVerified
+                  ? navigate("/dashboard/exchange")
+                  : navigate("/login")
+              }
+              disabled={!source.activeDeal}
+            >
+              {source.activeDeal ? "معامله" : "به زودی"}
+            </Button>
+          </div>
         </td>
       </tr>
     )
