@@ -136,7 +136,9 @@ const SpotRate = () => {
                   <tr>
                     <th>ارز</th>
                     <th className="text-center">قیمت ارز</th>
-                    <th className="text-center"> تغییرات ۲۴ ساعته</th>
+                    {mode === "crypto" && (
+                      <th className="text-center"> تغییرات ۲۴ ساعته</th>
+                    )}
                     <th className="text-center">معامله</th>
                   </tr>
                 </thead>
@@ -148,6 +150,7 @@ const SpotRate = () => {
                       return (
                         <CoinRecord
                           key={index}
+                          mode="crypto"
                           destinationCode={activeTab}
                           source={{
                             imgSrc: currencyPair.imgSrc,
@@ -170,6 +173,7 @@ const SpotRate = () => {
                     return (
                       <CoinRecord
                         key={index}
+                        mode="fiat"
                         destinationCode={"IRR"}
                         source={{
                           imgSrc: currencyPair.imgSrc,

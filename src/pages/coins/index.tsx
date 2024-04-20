@@ -216,7 +216,9 @@ export default function CoinPage() {
                       <tr>
                         <th>ارز</th>
                         <th className="text-center">قیمت ارز</th>
-                        <th className="text-center"> تغییرات ۲۴ ساعته</th>
+                        {mode === "crypto" && (
+                          <th className="text-center"> تغییرات ۲۴ ساعته</th>
+                        )}
                         <th className="text-center">معامله</th>
                       </tr>
                     </thead>
@@ -231,6 +233,7 @@ export default function CoinPage() {
                           return (
                             <CoinRecord
                               key={index}
+                              mode="crypto"
                               destinationCode={activeTab}
                               source={{
                                 imgSrc: currencyPair.imgSrc,
@@ -253,6 +256,7 @@ export default function CoinPage() {
                         return (
                           <CoinRecord
                             key={index}
+                            mode="fiat"
                             destinationCode={"IRR"}
                             source={{
                               imgSrc: currencyPair.imgSrc,

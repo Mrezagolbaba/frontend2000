@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, ButtonGroup, Nav, NavItem, NavLink } from "reactstrap";
+import { Button, ButtonGroup, Nav, NavItem } from "reactstrap";
 import "./styles.scss";
 
 interface FilterNavCoinProps {
@@ -38,7 +38,7 @@ export const FilterNavCoin = ({ activeTab, handleTabClick,rightTitle,leftTitle }
               setRSelected(2);
             }}
           >
-            {leftTitle} 
+            {leftTitle}
           </Button>
         </ButtonGroup>
       </NavItem>
