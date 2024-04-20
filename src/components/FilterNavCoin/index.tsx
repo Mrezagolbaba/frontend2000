@@ -10,7 +10,7 @@ interface FilterNavCoinProps {
 }
 
 export const FilterNavCoin = ({ activeTab, handleTabClick,rightTitle,leftTitle }: FilterNavCoinProps) => {
-  const [rSelected, setRSelected] = useState(1);
+  const [rSelected, setRSelected] = useState(activeTab === "IRR" ? 1 : 2);
 
   return (
     <Nav
