@@ -22,7 +22,6 @@ export interface RegisterRequest {
   phoneNumber: string;
   password: string;
   referralCode?: string;
-  inviteCode: string;
 }
 export interface ForgotPasswordRequest {
   phoneNumber?: string;

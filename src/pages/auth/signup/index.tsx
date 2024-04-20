@@ -52,7 +52,7 @@ export default function Register() {
         (value) => value === true,
       )
       .required(),
-    inviteCode: Yup.string().required("لطفا کد معرف خود را وارد کنید."),
+      referralCode: Yup.string().required("لطفا کد معرف خود را وارد کنید."),
   });
   const resolver = yupResolver(registerSchema);
 
@@ -70,7 +70,7 @@ export default function Register() {
       password: "",
       selectedCountry: "98",
       terms: false,
-      inviteCode: "",
+      referralCode: "",
     },
     resolver,
   });
@@ -84,7 +84,7 @@ export default function Register() {
     const userData = {
       phoneNumber,
       password: data.password,
-      inviteCode: data.inviteCode.toUpperCase(),
+      referralCode: data.referralCode.toUpperCase(),
     };
     await register(userData).then(() =>
       navigate("/otp", { state: { type: "AUTH",method: "PHONE" } }),
@@ -164,7 +164,7 @@ export default function Register() {
                     />
                   </Col>
                   <Controller
-                    name="inviteCode"
+                    name="referralCode"
                     control={control}
                     render={({ field: { name, value, onChange, ref } }) => (
                       <div className="mb-3">
