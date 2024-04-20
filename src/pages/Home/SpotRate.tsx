@@ -23,56 +23,26 @@ import home from "assets/scss/landing/home.module.scss";
 const SpotRate = () => {
   // ==============|| States ||================= //
   const [activeTab, setActiveTab] = useState<"IRR" | "USDT">("IRR");
-  const [mode, setMode] = useState<"crypto" | "fiat">("crypto");
+  const [mode, setMode] = useState<"crypto" | "fiat">("crypto")
   const [coinChanges, setCoinChanges] = useState<CryptoData[] | []>([]);
+  const [fiatChanges, setFiatChanges] = useState<CryptoData[] | []>([]);
 
   // ==============|| Constants ||================= //
   const currencyPairs = [
-    {
-      code: "BTC",
-      name: "بیت کوین",
-      originName: "bitcoin",
-      imgSrc: BTC,
-    },
-    {
-      code: "USDT",
-      name: "تتر",
-      originName: "tether",
-      imgSrc: USDT,
-      activeDeal: true,
-    },
-    {
-      code: "TRX",
-      name: "ترون",
-      originName: "tron",
-      imgSrc: TRX,
-    },
-    {
-      code: "ETH",
-      name: "اتریوم",
-      originName: "ethereum",
-      imgSrc: ETH,
-    },
-    {
-      code: "SOL",
-      name: "سولانا",
-      originName: "solana",
-      imgSrc: SOL,
-    },
-    {
-      code: "XRP",
-      name: "ریپل",
-      originName: "ripple",
-      imgSrc: XRP,
-    },
+    { code: "BTC", name: "بیت کوین", originName: "bitcoin", imgSrc: BTC, activeDeal: true },
+    { code: "USDT", name: "تتر", originName: "tether", imgSrc: USDT, activeDeal: true },
+    { code: "TRX", name: "ترون", originName: "tron", imgSrc: TRX, activeDeal: true },
+    { code: "ETH", name: "اتریوم", originName: "ethereum", imgSrc: ETH, activeDeal: true },
+    { code: "SOL", name: "سولانا", originName: "solana", imgSrc: SOL, activeDeal: true },
+    { code: "XRP", name: "ریپل", originName: "ripple", imgSrc: XRP, activeDeal: true },
     // Add more currency pairs as needed
   ];
 
   const fiatPairs = [
     { code: "TRY", name: "لیر", imgSrc: lira, activeDeal: true },
-    { code: "EUR", name: "یورو", imgSrc: EUR },
-    { code: "CAD", name: "دلار کانادا", imgSrc: CAD },
-    { code: "GBP", name: "پوند", imgSrc: GBP },
+    { code: "EUR", name: "یورو", imgSrc: EUR, activeDeal: true },
+    { code: "CAD", name: "دلار کانادا", imgSrc: CAD, activeDeal: true },
+    { code: "GBP", name: "پوند", imgSrc: GBP, activeDeal: true },
     // Add more currency pairs as needed
   ];
 
@@ -83,32 +53,50 @@ const SpotRate = () => {
   };
   const handleModeClick = (e: any, tabId: string) => {
     e.preventDefault();
-    setMode(tabId === "tab2" ? "crypto" : "fiat");
-  };
+    setMode(tabId === "tab1" ? "crypto" : "fiat");
+  }
 
   // ==============|| Life Cycle ||================= //
+  const get24Changes = async () => {
+    const cryptoIds: string[] = [
+      "bitcoin",
+      "tether",
+      "tron",
+      "ethereum",
+      "solana",
+      "ripple",
+    ]; // List of cryptocurrency IDs
+    get24hChanges(cryptoIds)
+      .then((changes) => {
+        if (changes) {
+          setCoinChanges(changes);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+
+    const fiatIds: string[] = [
+      "TRY",
+      "EUR",
+      "CAD",
+      "GBP",
+    ]; // List of fiat IDs
+    get24hChanges(fiatIds)
+      .then((changes) => {
+        console.log(changes)
+        if (changes) {
+          setFiatChanges(changes);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
   useEffect(() => {
-    if (mode === "crypto") {
-      const cryptoIds: string[] = [
-        "bitcoin",
-        "tether",
-        "tron",
-        "ethereum",
-        "solana",
-        "ripple",
-      ]; // List of cryptocurrency IDs
-      get24hChanges(cryptoIds)
-        .then((changes) => {
-          if (changes) {
-            setCoinChanges(changes);
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    }
+    get24Changes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode]);
+  }, []);
 
   // ==============|| Render ||================= //
   return (
@@ -121,17 +109,19 @@ const SpotRate = () => {
         </div>
         <div className={home["currency-rates__tabs"]}>
           <FilterNavCoin
+            activeTab={mode}
             handleTabClick={handleModeClick}
-            leftTitle="فیات دیجیتال"
-            rightTitle="ارزهای دیجیتال"
+            leftTitle=" ارزهای دیجیتال"
+            rightTitle="  فیات دیجیتال"
           />
-          {mode === "crypto" && (
+          {mode === "crypto" &&
             <FilterNavCoin
+              activeTab={activeTab}
               handleTabClick={handleTabClick}
               leftTitle=" تتر USDT"
               rightTitle="تومان IRT"
-            />
-          )}
+            />}
+
         </div>
         <div className={home["tab-content"]} id="myTabContent">
           <div
@@ -152,54 +142,56 @@ const SpotRate = () => {
                     <th className="text-center">معامله</th>
                   </tr>
                 </thead>
-                {mode === "crypto" && (
-                  <tbody>
-                    {currencyPairs.map((currencyPair: any, index: number) => {
-                      if (currencyPair.code === "USDT" && activeTab === "USDT")
-                        return null;
-                      else
-                        return (
-                          <CoinRecord
-                            mode="crypto"
-                            key={index}
-                            destinationCode={activeTab}
-                            source={{
-                              imgSrc: currencyPair.imgSrc,
-                              currencyCode: currencyPair.code,
-                              name: currencyPair.name,
-                              originName: currencyPair.originName,
-                              activeDeal: currencyPair?.activeDeal,
-                            }}
-                            changesLog={
-                              coinChanges.find(
-                                (coin) => coin.id === currencyPair.originName,
-                              ) as CryptoData
-                            }
-                          />
-                        );
-                    })}
-                  </tbody>
-                )}
-                {mode === "fiat" && (
-                  <tbody>
-                    {fiatPairs.map((currencyPair: any, index: number) => {
+                {mode === 'crypto' && <tbody>
+                  {currencyPairs.map((currencyPair: any, index: number) => {
+                    if (currencyPair.code === "USDT" && activeTab === "USDT")
+                      return null;
+                    else
                       return (
                         <CoinRecord
-                          mode="fiat"
                           key={index}
-                          destinationCode={"IRR"}
+                          mode="crypto"
+                          destinationCode={activeTab}
                           source={{
                             imgSrc: currencyPair.imgSrc,
                             currencyCode: currencyPair.code,
                             name: currencyPair.name,
-                            originName: currencyPair.name,
+                            originName: currencyPair.originName,
                             activeDeal: currencyPair?.activeDeal,
                           }}
+                          changesLog={
+                            coinChanges.find(
+                              (coin) => coin.id === currencyPair.originName,
+                            ) as CryptoData
+                          }
                         />
                       );
-                    })}
-                  </tbody>
-                )}
+                  })}
+                </tbody>}
+                {mode === 'fiat' && <tbody>
+                  {fiatPairs.map((currencyPair: any, index: number) => {
+                    return (
+                      <CoinRecord
+                        key={index}
+                        mode="fiat"
+                        destinationCode={"IRR"}
+                        source={{
+                          imgSrc: currencyPair.imgSrc,
+                          currencyCode: currencyPair.code,
+                          name: currencyPair.name,
+                          originName: currencyPair.name,
+                          activeDeal: currencyPair?.activeDeal,
+                        }}
+                        changesLog={
+                          fiatChanges.find(
+                            (fiat) => fiat.id === currencyPair.name,
+                          ) as CryptoData
+                        }
+                      />
+                    );
+                  }
+                  )}
+                </tbody>}
               </table>
             </div>
           </div>
