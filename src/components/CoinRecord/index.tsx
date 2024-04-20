@@ -87,7 +87,7 @@ export default function CoinRecord({
           <div className={destinationCode === "USDT" ? "latin-font" : ""}>
             {destinationCode === "IRR"
               ? (Number(data.rate) / 10).toLocaleString("IRR", {
-                  maximumFractionDigits: 6,
+                  maximumFractionDigits: mode==="fiat" ? 0 : 6,
                 })
               : "USDT " +
                 Number(data.rate).toLocaleString("en-US", {
