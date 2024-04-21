@@ -15,6 +15,8 @@ interface IReferral {
 const AddFriends = () => {
   const { data } = useGetReferralCodeQuery();
   const { data: refferalFriends } = useGetFriendsListQuery();
+  console.log("AddFriends", refferalFriends);
+
   return (
     <section className="page page-add-friends">
       <Card className="mb-4">
@@ -35,12 +37,13 @@ const AddFriends = () => {
                     <CopyInput text={data ? (data as IReferral).code : ""} />
                   </FormGroup>
                 </Col>
-                <Col xs={12}>
+                {/*
+                  <Col xs={12}>
                   <FormGroup>
                     <Label htmlFor="walletAddress">لینک دعوت:</Label>
                     <CopyInput text={data ? `https://arsonex.com/register/${(data as IReferral).code}` : ""} />
                   </FormGroup>
-                </Col>
+                 </Col>*/}
               </Col>
               <Col xs={6} md={6}>
                 <div className="d-flex justify-content-center items-center">
@@ -59,7 +62,7 @@ const AddFriends = () => {
                       <span className="d-flex justify-content-center items-center">
                         <FaUsers size={50} color="gray" />
                       </span>
-                      <h6 className="text-center mt-2">{refferalFriends?.length} نفر</h6>
+                      <h6 className="text-center mt-2">{refferalFriends?.referredUsersCount} نفر</h6>
                     </div>
                   </div>
                 </div>
@@ -77,7 +80,7 @@ const AddFriends = () => {
         <CardBody>
           <div className="table-responsive">
             <table className="table table-borderless table-striped">
-              {refferalFriends && refferalFriends?.length > 0 &&
+              {refferalFriends && refferalFriends.briefs?.length > 0 &&
                 <thead>
                   <tr>
                     <th scope="col" style={{ color: "#03041b66" }} className="text-center">
@@ -94,7 +97,7 @@ const AddFriends = () => {
                   </tr>
                 </thead>}
               <tbody>
-                {refferalFriends?.map((item, index) => (
+                {refferalFriends && refferalFriends.briefs.length > 0 && refferalFriends.briefs?.map((item, index) => (
                   <tr key={index}>
                     <td className="text-center">{item.phoneNumber.replace("+", "")}</td>
                     <td className="text-center">{item.referrerCode}</td>
@@ -108,7 +111,7 @@ const AddFriends = () => {
                   </tr>
                 ))
                 }
-                {refferalFriends?.length === 0 && (
+                {refferalFriends && refferalFriends.briefs.length <=0 && (
                   <tr>
                     <td colSpan={3} className="text-center">
                       شما هنوز دوستی را دعوت نکرده اید.

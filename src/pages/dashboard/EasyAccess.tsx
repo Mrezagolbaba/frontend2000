@@ -203,7 +203,7 @@ export default function EasyAccess() {
         </Link>
       </Col>
       <Col xs={6} xxl={2} className="d-sm-none d-xxl-block">
-        <Link className={dashboard["easy-box"]} to="#">
+        <Link className={dashboard["easy-box"]} to="/dashboard/support">
           <span className="icon">
             <svg
               viewBox="0 0 24 24"

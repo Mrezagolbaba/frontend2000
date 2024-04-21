@@ -11,7 +11,7 @@ export const addFriendApi = enhancedApi.injectEndpoints({
           };
         },
       }),
-      getFriendsList: builder.query<IreferredUser[], void>({
+      getFriendsList: builder.query<IreferredUser, void>({
         query() {
           return {
             method: "GET",

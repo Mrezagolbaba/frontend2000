@@ -30,6 +30,7 @@ import { AlertWarning } from "components/AlertWidget";
 export default function LoginPage() {
   // ==============|| States ||================= //
   const [loginType, setLoginType] = useState<"PHONE" | "EMAIL">("PHONE");
+  const [loading, setLoading] = useState(false);
 
   // ==============|| Validation ||================= //
   const getValidationSchema = () => {
@@ -91,6 +92,7 @@ export default function LoginPage() {
 
   // ==============|| Handlers ||================= //
   const handleLogin = async (data) => {
+    setLoading(true);
     const body: LoginRequest = { password: data.password, type: loginType };
     if (loginType === "EMAIL") body.email = data.username;
     else {
@@ -102,6 +104,7 @@ export default function LoginPage() {
     }
 
     await login(body).then((res) => {
+      setLoading(false);
       navigate("/otp", { state: { type: "AUTH", method: loginType } });
     });
   };
@@ -248,9 +251,9 @@ export default function LoginPage() {
                           type="submit"
                           color="primary"
                           className={auth.submit}
-                          disabled={isSubmitting}
+                          disabled={loading}
                         >
-                          {isSubmitting ? (
+                          {loading ? (
                             <Spinner style={{ color: "white" }} />
                           ) : (
                             "ورود به حساب"
