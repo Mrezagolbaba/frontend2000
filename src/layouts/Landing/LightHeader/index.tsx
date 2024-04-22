@@ -36,7 +36,7 @@ const LightHeader = ({
                 </Link>
               </div>
             </Col>
-            <Col xs={8}>
+            <Col xs={7}>
               <nav>
                 <ul
                   className={`${home.navbar} navbar--light ${
@@ -128,7 +128,7 @@ const LightHeader = ({
                 </ul>
               </nav>
             </Col>
-            <Col xs={2}>
+            <Col xs={3}>
               <div className={home.header__auth}>
                 {!HasRemoveAuthButton &&
                   (user.id ? (

@@ -4,6 +4,7 @@ import BottomBanner from "pages/Home/BottomBanner";
 import home from "assets/scss/landing/home.module.scss";
 import about from "assets/scss/landing/about-us.module.scss";
 import { Breadcrumb, BreadcrumbItem, Container } from "reactstrap";
+import friends from "assets/img/unnamed.png";
 import { Link } from "react-router-dom";
 
 export default function AboutUs() {
@@ -35,6 +36,10 @@ export default function AboutUs() {
                   </p>
                 </div>
               </div>
+            </div>
+            <div className={home["section-holder__title"]} style={{marginBottom:'0px'}}>
+              <img src={friends} />
+
             </div>
             {/* <ul className={about["counter-list"]}>
               <li>
