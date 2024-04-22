@@ -149,7 +149,7 @@ const LightHeader = ({
                       <li className={home.header__auth__register}>
                         <Link
                           to="/register"
-                          className={`btn btn-page-primary ${home["rounded-button"]}`}
+                          className={`btn btn-page-primary ${home["rounded-button2"]}`}
                         >
                           ثبت نام
                         </Link>

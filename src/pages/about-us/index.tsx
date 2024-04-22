@@ -27,6 +27,10 @@ export default function AboutUs() {
               <p className={home["section-holder__subtitle"]}>از زمان ظهور دنیای ارز دیجیتال و ورود سریع کاربران ایرانی به این عرصه، همواره نیاز به یک  پلتفرم تک نرخی صرافی ارز دیجیتال در حالت معامله OTC  احساس می‌شد. نبودن چنین امکانی می‌تواند برای معامله‌گران، در مبادله و تبادل ارزهای دیجیتال اختلافی چشم گیر در مبلغ نهایی ایجاد کند.
               </p>
             </div>
+            <div className={home["section-holder__title"]} style={{marginBottom:'0px'}}>
+              <img src={friends} />
+
+            </div>
             <div className={about.summary}>
               <div className={about.summary__card}>
                 <div className={about["summary__card-body"]}>
@@ -36,10 +40,6 @@ export default function AboutUs() {
                   </p>
                 </div>
               </div>
-            </div>
-            <div className={home["section-holder__title"]} style={{marginBottom:'0px'}}>
-              <img src={friends} />
-
             </div>
             {/* <ul className={about["counter-list"]}>
               <li>
