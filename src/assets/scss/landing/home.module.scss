@@ -6,6 +6,12 @@
   border-radius: 28px !important;
   border-width: 2px !important;
 }
+.rounded-button2 {
+  font-weight: 700 !important;
+  padding: 0 30px !important;
+  height: 56px !important;
+  line-height: 34px !important;
+}
 
 .wrapper {
   position: relative;
@@ -262,7 +268,7 @@
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: start !important;
   justify-content: center;
   padding: 0;
   &:not(.navbar--simple).expanded {

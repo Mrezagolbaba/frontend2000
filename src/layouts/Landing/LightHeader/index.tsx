@@ -36,7 +36,7 @@ const LightHeader = ({
                 </Link>
               </div>
             </Col>
-            <Col xs={8}>
+            <Col xs={7}>
               <nav>
                 <ul
                   className={`${home.navbar} navbar--light ${
@@ -128,7 +128,7 @@ const LightHeader = ({
                 </ul>
               </nav>
             </Col>
-            <Col xs={2}>
+            <Col xs={3}>
               <div className={home.header__auth}>
                 {!HasRemoveAuthButton &&
                   (user.id ? (
@@ -149,7 +149,7 @@ const LightHeader = ({
                       <li className={home.header__auth__register}>
                         <Link
                           to="/register"
-                          className={`btn btn-page-primary ${home["rounded-button"]}`}
+                          className={`btn btn-page-primary ${home["rounded-button2"]}`}
                         >
                           ثبت نام
                         </Link>

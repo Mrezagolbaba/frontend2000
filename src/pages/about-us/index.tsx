@@ -4,6 +4,7 @@ import BottomBanner from "pages/Home/BottomBanner";
 import home from "assets/scss/landing/home.module.scss";
 import about from "assets/scss/landing/about-us.module.scss";
 import { Breadcrumb, BreadcrumbItem, Container } from "reactstrap";
+import friends from "assets/img/unnamed.png";
 import { Link } from "react-router-dom";
 
 export default function AboutUs() {
@@ -25,6 +26,10 @@ export default function AboutUs() {
               </h3>
               <p className={home["section-holder__subtitle"]}>از زمان ظهور دنیای ارز دیجیتال و ورود سریع کاربران ایرانی به این عرصه، همواره نیاز به یک  پلتفرم تک نرخی صرافی ارز دیجیتال در حالت معامله OTC  احساس می‌شد. نبودن چنین امکانی می‌تواند برای معامله‌گران، در مبادله و تبادل ارزهای دیجیتال اختلافی چشم گیر در مبلغ نهایی ایجاد کند.
               </p>
+            </div>
+            <div className={home["section-holder__title"]} style={{marginBottom:'0px'}}>
+              <img src={friends} />
+
             </div>
             <div className={about.summary}>
               <div className={about.summary__card}>

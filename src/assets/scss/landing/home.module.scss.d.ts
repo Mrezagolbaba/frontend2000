@@ -1,5 +1,6 @@
 declare const classNames: {
   readonly "rounded-button": "rounded-button";
+  readonly "rounded-button2": "rounded-button2";
   readonly wrapper: "wrapper";
   readonly "menu-overlay": "menu-overlay";
   readonly show: "show";

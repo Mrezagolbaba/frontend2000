@@ -20,10 +20,20 @@ import SHIB from "assets/img/coins/shiba.png";
 import BONK from "assets/img/coins/bonk-coin.png";
 import APEX from "assets/img/coins/apex-coin.jpg";
 import ARB from "assets/img/coins/arb-coin.jpeg";
+import BNB from "assets/img/coins/bnb.png";
+import TON from "assets/img/coins/ton.png";
+import MATIC from "assets/img/coins/matic.png";
+import DOT from "assets/img/coins/dot.png";
+import ADA from "assets/img/coins/ada.png";
+import BCH from "assets/img/coins/bch.png";
+import ETC from "assets/img/coins/etc.png";
+import UNI from "assets/img/coins/uni.png";
+
 import lira from "assets/img/coins/lira.png";
 import CAD from "assets/img/coins/CAD.svg";
 import EUR from "assets/img/coins/Euro.png";
 import GBP from "assets/img/coins/GBP.png";
+
 
 import home from "assets/scss/landing/home.module.scss";
 import coins from "assets/scss/landing/coins.module.scss";
@@ -42,15 +52,7 @@ export default function CoinPage() {
     e.preventDefault();
     setMode(tabId === "tab1" ? "crypto" : "fiat");
   }
-
   const currencyPairs = [
-    {
-      code: "BTC",
-      name: "بیت کوین",
-      originName: "bitcoin",
-      imgSrc: BTC,
-      activeDeal: true,
-    },
     {
       code: "USDT",
       name: "تتر",
@@ -59,12 +61,13 @@ export default function CoinPage() {
       activeDeal: true,
     },
     {
-      code: "TRX",
-      name: "ترون",
-      originName: "tron",
-      imgSrc: TRX,
+      code: "BTC",
+      name: "بیت کوین",
+      originName: "bitcoin",
+      imgSrc: BTC,
       activeDeal: true,
     },
+    
     {
       code: "ETH",
       name: "اتریوم",
@@ -73,10 +76,10 @@ export default function CoinPage() {
       activeDeal: true,
     },
     {
-      code: "SOL",
-      name: "سولانا",
-      originName: "solana",
-      imgSrc: SOL,
+      code: "BNB",
+      name: "بایننس کوین",
+      originName: "binancecoin",
+      imgSrc: BNB,
       activeDeal: true,
     },
     {
@@ -93,11 +96,18 @@ export default function CoinPage() {
       imgSrc: DOGE,
       activeDeal: true,
     },
+    /*{
+      code: "TON",
+      name: "تون",
+      originName: "ton",
+      imgSrc: TON,
+      activeDeal: true,
+    },*/
     {
-      code: "PEPE",
-      name: "پپه",
-      originName: "pepe",
-      imgSrc: PEPE,
+      code: "ADA",
+      name: "کاردانو",
+      originName: "cardano",
+      imgSrc: ADA,
       activeDeal: true,
     },
     {
@@ -108,26 +118,49 @@ export default function CoinPage() {
       activeDeal: true,
     },
     {
-      code: "BONK",
-      name: "بونک",
-      originName: "bonk",
-      imgSrc: BONK,
+      code: "TRX",
+      name: "ترون",
+      originName: "tron",
+      imgSrc: TRX,
       activeDeal: true,
     },
     {
-      code: "ARB",
-      name: "آربیتروم",
-      originName: "arbitrum",
-      imgSrc: ARB,
+      code: "BCH",
+      name: "بیت کوین کش",
+      originName: "bitcoincash",
+      imgSrc: BCH,
       activeDeal: true,
     },
+    /*{
+      code: "DOT",
+      name: "پولکادات",
+      originName: "polkadot",
+      imgSrc: DOT,
+      activeDeal: true,
+    },*/
     {
-      code: "APEX",
-      name: "اپکس",
-      originName: "apex",
-      imgSrc: APEX,
+      code: "ETC",
+      name: "اتریوم کلاسیک",
+      originName: "ethereumclassic",
+      imgSrc: ETC,
       activeDeal: true,
     },
+   /* {
+      code: "UNI",
+      name: "یونی سواپ",
+      originName: "uniswap",
+      imgSrc: UNI,
+      activeDeal: true,
+    }, */
+    /*{
+      code: "MATIC",
+      name: "متیک",
+      originName: "matic",
+      imgSrc: MATIC,
+      activeDeal: true,
+    } */
+
+   
     // Add more currency pairs as needed
   ];
   const fiatPairs = [
@@ -137,19 +170,32 @@ export default function CoinPage() {
     { code: "GBP", name: "پوند", imgSrc: GBP, activeDeal: true },
     // Add more currency pairs as needed
   ];
-
+ 
   useEffect(() => {
     const cryptoIds: string[] = [
-      "bitcoin",
       "tether",
-      "tron",
+      "bitcoin",
       "ethereum",
+      "binancecoin",
+      "xrp",
+      "ton",
+      "ada",
+      "shiba",
+      "tron",
+      "bitcoin-cash",
+      "polkadot",
+      "ethereum-classic",
+      "uniswap",
+      "matic",
+
+
+
+
       "solana",
       "ripple",
       "dogecoin",
       "pepe",
       "bonk",
-      "shiba",
       "arbitrum ",
       "apex",
     ]; // List of cryptocurrency IDs
