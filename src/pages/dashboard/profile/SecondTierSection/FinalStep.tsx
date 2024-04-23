@@ -3,17 +3,19 @@ import checkImg from "assets/img/profile/Graphicloads-Colorful-Long-Shadow-Check
 import { Col, Container, Row } from "reactstrap";
 
 import profile from "assets/scss/dashboard/profile.module.scss";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useInitialVerificationMutation } from "store/api/profile-management";
 
 export default function FinalStep({ onClick }: AuthenticationLevel2Props) {
+  const [initVerify] = useInitialVerificationMutation();
 
-  const [initVerify, { isSuccess }] = useInitialVerificationMutation();
+  const handleInit = useCallback(() => {
+    initVerify();
+  }, [initVerify]);
 
   useEffect(() => {
-    initVerify();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    handleInit();
+  }, [handleInit]);
 
   return (
     <Container>
