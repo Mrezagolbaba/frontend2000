@@ -36,9 +36,16 @@ export function refreshTokenPromise(): Promise<{
           expiredAt: data.accessTokenExpiresAt,
         };
       })
+      .catch((err) => {
+        localStorage.setItem("isInitialized", "false");
+        window.location.href = "/login";
+        return {
+          token: "",
+          expiredAt: "",
+        };
+      })
       .finally(() => {
         _refPromise = null;
-        localStorage.setItem("isInitialized", "false");
       });
   }
   return _refPromise;
@@ -57,10 +64,10 @@ const axiosBaseQuery =
 
       return { data };
     } catch (error: any) {
-      console.log(error);
       const response = error.response;
       const status = response.status;
       const isPrivate = !isEmpty(response?.config?.headers?.Authorization);
+      console.log(response?.config?.headers?.Authorization);
 
       if (status === 500 || status > 500) {
         toast.error("مشکلی در ارتباط با سرور بوجود آمده است", {

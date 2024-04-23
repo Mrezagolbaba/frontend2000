@@ -31,7 +31,7 @@ type ShebaFormType = {
   depositId: string;
   bankName: string;
 };
-const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" }) => {
+const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
   const [hasLevel2, setHasLevel2] = useState<boolean>(true);
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
   const [selectedBank, setSelectedBank] = useState<string>("");
@@ -103,7 +103,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" }) => {
   }, [data, isSuccess]);
 
   useEffect(() => {
-    activeTab === "2" &&
+    activeTab === "3" &&
       accounts &&
       initRefCode({
         currencyCode: "IRR",
