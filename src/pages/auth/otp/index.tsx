@@ -67,12 +67,21 @@ export default function Otp() {
   const { phoneNumber, type, method } = location.state;
 
   // ==============|| Handlers ||================= //
-  const handleResend = () => {
+  const handleResend = (sendWay?: "PHONE" | "EMAIL") => {
     if (isSuccess && user) {
+      setTimeInSeconds(120);
       const data: ResendOTPRequest = {
         type,
         method: user.otpMethod,
       };
+      if (sendWay) {
+        toast.success(
+          `کد تایید به ${sendWay === "EMAIL" ? "ایمیل" : "شماره همراه"} ارسال شد.`,
+          { position: "bottom-left" },
+        );
+        data.type = "AUTH";
+        data.method = sendWay;
+      }
       resendOtpRequest(data);
     }
   };
@@ -120,22 +129,117 @@ export default function Otp() {
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
   const renderCaption = () => {
-    if (type === "VERIFY_EMAIL") {
-      return maskingString(user?.email, 1, 14);
-    }
-    switch (user?.otpMethod) {
-      case "EMAIL":
-        return maskingString(user?.email, 1, 14);
+    if (
+      (type === "AUTH" && (user?.otpMethod === "PHONE" || !user?.otpMethod)) ||
+      (type === "RESET_PASSWORD" && method === "PHONE")
+    )
+      return (
+        <p className={auth.text}>
+          کد تایید ارسال شده به
+          <span className="d-inline-block">
+            {PhoneNumberMask({
+              phoneNumber: user?.phoneNumber || phoneNumber,
+            })}
+          </span>
+          را وارد کنید.
+        </p>
+      );
+    else if (type === "AUTH" && user?.otpMethod === "AUTHENTICATOR")
+      return (
+        <p className={auth.text}>
+          کد تایید ساخته شده با
+          <span className="d-inline-block">Google Authenticator</span>
+          را وارد کنید.
+        </p>
+      );
+    else
+      return (
+        <p className={auth.text}>
+          کد تایید ارسال شده به
+          <span className="d-inline-block">
+            {maskingString(user?.email, 1, 14)}
+          </span>
+          را وارد کنید.
+        </p>
+      );
+  };
 
-      case "AUTHENTICATOR":
-        return "Google Authenticator";
-
-      case "PHONE":
-      default:
-        return PhoneNumberMask({
-          phoneNumber: user?.phoneNumber || phoneNumber,
-        });
-    }
+  const renderResent = () => {
+    if (!phoneNumber && type === "AUTH") {
+      if (user?.otpMethod === "AUTHENTICATOR")
+        return (
+          <>
+            <Button
+              color="link"
+              className={auth.link}
+              disabled={resendLoading || isLoading || isSubmitting}
+              onClick={() => handleResend("PHONE")}
+            >
+              ارسال کد به شماره همراه
+            </Button>
+            <Button
+              color="link"
+              className={auth.link}
+              disabled={resendLoading || isLoading || isSubmitting}
+              onClick={() => handleResend("EMAIL")}
+            >
+              ارسال کد به ایمیل
+            </Button>
+          </>
+        );
+      else if (user?.otpMethod === "EMAIL")
+        return (
+          <>
+            <Button
+              color="link"
+              className={auth.link}
+              disabled={resendLoading || isLoading || isSubmitting}
+              onClick={() => handleResend()}
+            >
+              ارسال مجدد کد
+            </Button>
+            <Button
+              color="link"
+              className={auth.link}
+              disabled={resendLoading || isLoading || isSubmitting}
+              onClick={() => handleResend("PHONE")}
+            >
+              ارسال کد به شماره همراه
+            </Button>
+          </>
+        );
+      else
+        return (
+          <>
+            <Button
+              color="link"
+              className={auth.link}
+              disabled={resendLoading || isLoading || isSubmitting}
+              onClick={() => handleResend()}
+            >
+              ارسال مجدد کد
+            </Button>
+            <Button
+              color="link"
+              className={auth.link}
+              disabled={resendLoading || isLoading || isSubmitting}
+              onClick={() => handleResend("EMAIL")}
+            >
+              ارسال کد به ایمیل
+            </Button>
+          </>
+        );
+    } else
+      return (
+        <Button
+          color="link"
+          className={auth.link}
+          disabled={resendLoading || isLoading || isSubmitting}
+          onClick={() => handleResend()}
+        >
+          ارسال مجدد کد
+        </Button>
+      );
   };
 
   // ==============|| Life Cycle ||================= //
@@ -169,18 +273,15 @@ export default function Otp() {
                   />
                 </div>
               )}
-              {user?.otpMethod === "AUTHENTICATOR" ? (
-                <p className={auth.text}>
-                  کد تایید ساخته شده با
-                  <span className="d-inline-block">{renderCaption()}</span>
-                  را وارد کنید.
-                </p>
+              {isLoading ? (
+                <div className="placeholder-glow">
+                  <div
+                    className="placeholder col-12 rounded"
+                    style={{ height: "20px" }}
+                  />
+                </div>
               ) : (
-                <p className={auth.text}>
-                  کد تایید ارسال شده به
-                  <span className="d-inline-block">{renderCaption()}</span>
-                  را وارد کنید.
-                </p>
+                renderCaption()
               )}
             </div>
 
@@ -223,16 +324,7 @@ export default function Otp() {
                             </span>
                           </div>
                         ) : (
-                          <Button
-                            color="link"
-                            className={auth.link}
-                            disabled={
-                              resendLoading || isLoading || isSubmitting
-                            }
-                            onClick={handleResend}
-                          >
-                            ارسال مجدد کد
-                          </Button>
+                          renderResent()
                         )}
                         <Button
                           type="submit"
@@ -252,7 +344,7 @@ export default function Otp() {
                           )}
                         </Button>
                       </div>
-                      <div className="mt-5">
+                      {/* <div className="mt-5">
                         <Button
                           className={auth.link}
                           color="link"
@@ -262,7 +354,7 @@ export default function Otp() {
                             ? "ویرایش ایمیل"
                             : "ویرایش شماره همراه"}
                         </Button>
-                      </div>
+                      </div> */}
                     </div>
                   </Col>
                 </Row>
