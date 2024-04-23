@@ -45,7 +45,10 @@ export default function Information() {
     firstName: Yup.string().required("درج نام الزامی است."),
     lastName: Yup.string().required("درج نام خانوادگی الزامی است."),
     nationalCode: Yup.string().required("کد ملی الزامی می باشد."),
-    phoneNumber: Yup.string(),
+    phoneNumber: Yup.string()
+      .matches(/^[\u06F0-\u06F90-9]+$/, "شماره همراه اشتباه است")
+      .length(10, "لطفا شماره همراه خود را بدون کد کشور و یا ۰ وارد کنید")
+      .required("شماره تلفن ایران الزامی می باشد."),
     email: Yup.string().email().required("درج ایمیل الزامی می باشد."),
     birthDate: Yup.string(),
   });
