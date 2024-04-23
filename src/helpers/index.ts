@@ -98,11 +98,11 @@ export const persianToEnglishNumbers = (persianNumber: string) => {
 export const passwordListValidation = [
   {
     title: "حداقل یک عدد",
-    isCheck: true,
+    isCheck: false,
   },
   {
     title: "حداقل 8 کاراکتر",
-    isCheck: true,
+    isCheck: false,
   },
   {
     title: "حداقل یک کاراکتر با حرف بزرگ",
@@ -110,7 +110,7 @@ export const passwordListValidation = [
   },
   {
     title: "حداقل یک کاراکتر با حرف کوچک",
-    isCheck: true,
+    isCheck: false,
   },
   {
     title: "حداقل یک کاراکتر ویژه از قبیل: !@#$%^&*()-+",
@@ -126,17 +126,17 @@ export const isPasswordValid = (password: string) => {
   const hasSpecialChar = /[!@#$%^&*()\-_=+[\]{}|;:',.<>/?\\]/.test(password);
 
   const isValid: boolean[] = [];
-  if (password.length < minLength) isValid[0] = false;
-  else isValid[0] = true;
-
-  if (!hasLowerCase) isValid[1] = false;
+  if (password.length < minLength) isValid[1] = false;
   else isValid[1] = true;
+
+  if (!hasLowerCase) isValid[3] = false;
+  else isValid[3] = true;
 
   if (!hasUpperCase) isValid[2] = false;
   else isValid[2] = true;
 
-  if (!hasNumber) isValid[3] = false;
-  else isValid[3] = true;
+  if (!hasNumber) isValid[0] = false;
+  else isValid[0] = true;
 
   if (!hasSpecialChar) isValid[4] = false;
   else isValid[4] = true;

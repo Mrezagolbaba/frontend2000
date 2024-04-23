@@ -26,14 +26,12 @@ const auth = createSlice({
     // VERIFY_LOGIN
     setVerifyLogin(state) {
       state.isLoggedIn = true;
-      localStorage.setItem("isInitialized", "true");
     },
     // LOGOUT
     setLogout(state) {
       state.token = "";
       state.expiredAt = "";
       state.isLoggedIn = false;
-      localStorage.setItem("isInitialized", "false");
     },
   },
 });

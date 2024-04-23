@@ -7,9 +7,10 @@ import ShebaForm from "./ShebaForm";
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import { AlertInfo } from "components/AlertWidget";
 import { useAppSelector } from "store/hooks";
+import DirectDebit from "./DirectDebit";
 
-export default function Deposit() {
-  const [activeTab, setActiveTab] = useState<"1" | "2">("1");
+export default function Deposit({ onClose }: { onClose: () => void }) {
+  const [activeTab, setActiveTab] = useState<"1" | "2" | "3">("1");
   const { secondTierVerified, gateways } = useAppSelector(
     (state) => state.user,
   );
@@ -46,8 +47,19 @@ export default function Deposit() {
               activeTab === "2" ? wallet.active : ""
             }`}
             tag="button"
-            disabled={!secondTierVerified}
             onClick={() => toggleTab("2")}
+          >
+            برداشت مستقیم از حساب (شارژ سریع)
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className={`${wallet["nav-link"]} ${
+              activeTab === "3" ? wallet.active : ""
+            }`}
+            tag="button"
+            disabled={!secondTierVerified}
+            onClick={() => toggleTab("3")}
           >
             واریز بین بانکی (پایا، ساتنا و...)
           </NavLink>
@@ -57,7 +69,7 @@ export default function Deposit() {
         <TabPane tabId="1">
           <CreditCardForm />
         </TabPane>
-        <TabPane tabId="2">
+        <TabPane tabId="3">
           <AlertInfo
             hasIcon
             text=" از حساب‌هایی که در پروفایل خود وارد کرده‌اید امکان واریز وجود دارد."
@@ -71,6 +83,9 @@ export default function Deposit() {
             text=" تمامی روش‌های پرداخت بجز روش پل مورد تایید می‌باشد."
           />
           <ShebaForm activeTab={activeTab} />
+        </TabPane>
+        <TabPane tabId="2">
+          {activeTab === "2" && <DirectDebit onClose={onClose} />}
         </TabPane>
       </TabContent>
     </div>

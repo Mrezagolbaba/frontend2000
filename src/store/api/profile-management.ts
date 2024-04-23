@@ -1,7 +1,6 @@
 import {
   BankAccountsResponse,
   BanksResponse,
-  BanksRequest,
   FormBankAccountRequest,
   VerificationResponse,
 } from "types/profile";
@@ -47,14 +46,12 @@ export const profileManagement = enhancedApi.injectEndpoints({
         };
       },
     }),
-    banks: builder.query<BanksResponse[], BanksRequest>({
-      query({ filters }) {
+    banks: builder.query<BanksResponse[], any>({
+      query(params) {
         return {
           method: "GET",
           url: "/banks",
-          params: {
-            filter: filters,
-          },
+          params: params,
         };
       },
     }),
@@ -91,6 +88,30 @@ export const profileManagement = enhancedApi.injectEndpoints({
       },
       invalidatesTags: ["bank-accounts"],
     }),
+    getDebitAccount: builder.query<any, any>({
+      query() {
+        return {
+          method: "GET",
+          url: "/bank-accounts/debit-account",
+        };
+      },
+    }),
+    debitSubscription: builder.mutation<{ url: string }, string>({
+      query(bankId) {
+        return {
+          method: "PATCH",
+          url: `/bank-accounts/request-debit-subscription/${bankId}`,
+        };
+      },
+    }),
+    disconnectDebit: builder.mutation<any, { string }>({
+      query(id) {
+        return {
+          method: "PATCH",
+          url: `/bank-accounts/remove-debit-subscription/${id}`,
+        };
+      },
+    }),
   }),
 });
 
@@ -103,4 +124,7 @@ export const {
   useCreateBankAccountMutation,
   useDeleteBankAccountMutation,
   useGetVerificationsQuery,
+  useGetDebitAccountQuery,
+  useDebitSubscriptionMutation,
+  useDisconnectDebitMutation,
 } = profileManagement;

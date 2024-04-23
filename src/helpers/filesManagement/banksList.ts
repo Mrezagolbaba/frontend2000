@@ -1,3 +1,5 @@
+import arsonexMark from "assets/img/icons/bankDefault.svg";
+
 import eghtesadNovin from "assets/img/bank/iranian/EghtesatNovin.svg";
 import ansar from "assets/img/bank/iranian/Ansar.svg";
 import iranZamin from "assets/img/bank/iranian/Iranzamin.svg";
@@ -608,5 +610,152 @@ export const turkishBanks = [
     name: "Vakıf Katılım Bankası A.Ş",
     persianName: "وکیف کاتلیم بانک",
     logo: vakif,
+  },
+];
+
+export const iranianBankIcons = [
+  {
+    name: "bankDefault",
+    src: arsonexMark,
+  },
+  {
+    name: "EghtesatNovin",
+    src: eghtesadNovin,
+  },
+  {
+    name: "Ansar",
+    src: ansar,
+  },
+  {
+    name: "IranZamin",
+    src: iranZamin,
+  },
+  {
+    name: "Parsian",
+    src: parsian,
+  },
+  {
+    name: "Pasargad",
+    src: pasargad,
+  },
+  {
+    name: "Ayandeh",
+    src: ayandeh,
+  },
+  {
+    name: "Tejarat",
+    src: tejarat,
+  },
+  {
+    name: "ToseeTaavon",
+    src: toseeTaavon,
+  },
+  {
+    name: "ToseeSaderat",
+    src: toseeSaderat,
+  },
+  {
+    name: "Hekmat",
+    src: hekmat,
+  },
+  {
+    name: "Day",
+    src: day,
+  },
+  {
+    name: "Refah",
+    src: refah,
+  },
+  {
+    name: "Saman",
+    src: saman,
+  },
+  {
+    name: "Sepah",
+    src: sepah,
+  },
+  {
+    name: "Sarmayeh",
+    src: sarmayeh,
+  },
+  {
+    name: "Sina",
+    src: sina,
+  },
+  {
+    name: "Shahr",
+    src: shahr,
+  },
+  {
+    name: "Saderat",
+    src: saderat,
+  },
+  {
+    name: "Sanatvamadan",
+    src: sanatvamadan,
+  },
+  {
+    name: "Mehr",
+    src: mehr,
+  },
+  {
+    name: "Ghavamin",
+    src: ghavamin,
+  },
+  {
+    name: "Karafarin",
+    src: karafarin,
+  },
+  {
+    name: "Keshavarzi",
+    src: keshavarzi,
+  },
+  {
+    name: "Gardeshgari",
+    src: gardeshgari,
+  },
+  {
+    name: "Markazi",
+    src: markazi,
+  },
+  {
+    name: "Maskan",
+    src: maskan,
+  },
+  {
+    name: "Mellat",
+    src: mellat,
+  },
+  {
+    name: "Melli",
+    src: melli,
+  },
+  {
+    name: "MehrEghtesad",
+    src: mehrEghtesad,
+  },
+  {
+    name: "Post",
+    src: post,
+  },
+  {
+    name: "Tosee",
+    src: tosee,
+  },
+  {
+    name: "Kosar",
+    src: kosar,
+  },
+  {
+    name: "Mellal",
+    src: mellal,
+  },
+  {
+    name: "Noor",
+    src: noor,
+  },
+  {
+    name: "Resalat",
+    src: resalat,
   },
 ];

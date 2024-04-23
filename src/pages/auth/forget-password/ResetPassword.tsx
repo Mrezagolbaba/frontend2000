@@ -72,6 +72,7 @@ export default function ResetPassword() {
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
     if (isSuccess) {
+      localStorage.setItem("isInitialized", "true");
       dispatch(setVerifyLogin());
       navigate("/dashboard");
     }

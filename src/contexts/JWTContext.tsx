@@ -25,6 +25,7 @@ import { clearUser, setUser } from "store/reducers/features/user/userSlice";
 import { removeRefToken, setRefToken } from "helpers";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { useLazyGetMeQuery } from "store/api/user";
+import toast from "react-hot-toast";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const setSession = (
@@ -68,11 +69,13 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
     const init = async () => {
       try {
         const { token, expiredAt } = await refreshTokenPromise();
+        localStorage.setItem("isInitialized", "true");
         dispatch(setLogin({ token, expiredAt }));
         dispatch(setVerifyLogin());
         getMeReq();
       } catch (e) {
         setSession(null);
+        localStorage.setItem("isInitialized", "false");
         dispatch(setLogout());
         dispatch(clearUser());
       }
@@ -149,6 +152,7 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
       .unwrap()
       .then(() => {
         setSession(null);
+        localStorage.setItem("isInitialized", "false");
         dispatch(setLogout());
         dispatch(clearUser());
       });

@@ -20,12 +20,11 @@ import { LoginRequest } from "types/auth";
 import { PiShieldCheckeredFill } from "react-icons/pi";
 import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
 import { toast } from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import auth from "assets/scss/auth/auth.module.scss";
-import { AlertWarning } from "components/AlertWidget";
 
 export default function LoginPage() {
   // ==============|| States ||================= //
@@ -49,7 +48,7 @@ export default function LoginPage() {
     if (loginType === "PHONE") {
       return Yup.object().shape({
         username: Yup.string()
-          .matches(/^[0-9]+$/, "شماره همراه اشتباه است")
+          .matches(/^[\u06F0-\u06F90-9]+$/, "شماره همراه اشتباه است")
           .length(10, "لطفا شماره همراه خود را بدون کد کشور و یا ۰ وارد کنید")
           .required("شماره همراه الزامی می باشد."),
         selectedCountry: Yup.string().required("کد کشور الزامی می باشد."),
@@ -103,10 +102,17 @@ export default function LoginPage() {
       body.phoneNumber = phoneNumber;
     }
 
-    await login(body).then((res) => {
-      setLoading(false);
-      navigate("/otp", { state: { type: "AUTH", method: loginType } });
-    });
+    await login(body)
+      .then(() => {
+        navigate("/otp", { state: { type: "AUTH", method: loginType } });
+      })
+      .catch((error) => {
+        error.data.message.forEach((m) =>
+          toast.error(m, {
+            position: "bottom-left",
+          }),
+        );
+      });
   };
 
   const handleErrors = (errors: any) =>
@@ -115,17 +121,17 @@ export default function LoginPage() {
         position: "bottom-left",
       }),
     );
-
-  // ==============|| Life Cycle ||================= //
-  useEffect(() => {
+  const changeMethod = useCallback(() => {
     if (loginType === "EMAIL")
       reset({
         username: "",
         password: "",
       });
     else reset({ username: "", password: "", selectedCountry: "98" });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loginType]);
+  }, [loginType, reset]);
+
+  // ==============|| Life Cycle ||================= //
+  useEffect(() => changeMethod(), [changeMethod]);
 
   // ==============|| Render ||================= //
   return (
