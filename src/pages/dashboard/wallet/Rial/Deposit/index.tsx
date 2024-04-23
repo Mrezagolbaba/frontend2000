@@ -9,7 +9,7 @@ import { AlertInfo } from "components/AlertWidget";
 import { useAppSelector } from "store/hooks";
 import DirectDebit from "./DirectDebit";
 
-export default function Deposit({ onClose }: { onClose: () => void }) {
+export default function Deposit({ onClose }: { onClose?: () => void }) {
   const [activeTab, setActiveTab] = useState<"1" | "2" | "3">("1");
   const { secondTierVerified, gateways } = useAppSelector(
     (state) => state.user,
@@ -85,7 +85,7 @@ export default function Deposit({ onClose }: { onClose: () => void }) {
           <ShebaForm activeTab={activeTab} />
         </TabPane>
         <TabPane tabId="2">
-          {activeTab === "2" && <DirectDebit onClose={onClose} />}
+          {activeTab === "2" && <DirectDebit onClose={() => onClose?.()} />}
         </TabPane>
       </TabContent>
     </div>
