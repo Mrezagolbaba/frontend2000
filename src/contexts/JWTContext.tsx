@@ -81,6 +81,9 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
       }
     };
     init();
+
+    return () => localStorage.setItem("isInitialized", "false");
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
