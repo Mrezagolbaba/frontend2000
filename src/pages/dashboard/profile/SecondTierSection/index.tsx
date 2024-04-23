@@ -26,6 +26,7 @@ import { useGetVerificationsQuery } from "store/api/profile-management";
 
 //style
 import profile from "assets/scss/dashboard/profile.module.scss";
+import { useLocation } from "react-router-dom";
 
 export enum REJECTION_REASON {
   NOT_ACCEPTABLE_VIDEO = "NOT_ACCEPTABLE_VIDEO",
@@ -80,7 +81,8 @@ const dataLevel2 = [
 ];
 
 const AuthSection = () => {
-  //hooks
+  // ==============|| Hooks ||================= //
+  const { hash } = useLocation();
   const { firstTierVerified, secondTierVerified, id } = useAppSelector(
     (state) => state.user,
   );
@@ -90,8 +92,10 @@ const AuthSection = () => {
     isSuccess,
   } = useGetVerificationsQuery();
 
-  //states
-  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
+  // ==============|| States ||================= //
+  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(
+    hash.includes("#kyc-section") ? true : false,
+  );
   const [activeState, setActiveState] = useState<0 | 1 | 2 | 3 | 4 | 5>(0);
   const [allowStates, setAllowStates] = useState({
     nationalCard: false,
@@ -99,7 +103,7 @@ const AuthSection = () => {
     commitLetter: false,
   });
 
-  //handlers
+  // ==============|| Handlers ||================= //
   const renderSteps = () => {
     switch (activeState) {
       case 4:
@@ -120,46 +124,6 @@ const AuthSection = () => {
       }
     }
   };
-
-  useEffect(() => {
-    if (isSuccess && userVerifications) {
-      const docStatus = userVerifications[2].status;
-      if (docStatus === "REJECTED") {
-        userVerifications[2].rejectReasons.forEach((reason) => {
-          switch (reason) {
-            case REJECTION_REASON.VIDEO_AND_AUDIO_NOT_SYNCED:
-            case REJECTION_REASON.POOR_QUALITY_VIDEO:
-            case REJECTION_REASON.NOT_ACCEPTABLE_VIDEO: {
-              setAllowStates({ ...allowStates, video: true });
-              break;
-            }
-            case REJECTION_REASON.INVALID_NATIONAL_CARD:
-            case REJECTION_REASON.EXPIRED_NATIONAL_CARD: {
-              setAllowStates({ ...allowStates, nationalCard: true });
-              break;
-            }
-            case REJECTION_REASON.POOR_QUALITY_COMMITMENT_LETTER: {
-              setAllowStates({ ...allowStates, commitLetter: true });
-              break;
-            }
-          }
-        });
-      } else if (docStatus === "DRAFT")
-        setAllowStates({
-          nationalCard: true,
-          video: true,
-          commitLetter: true,
-        });
-      else
-        setAllowStates({
-          nationalCard: false,
-          video: false,
-          commitLetter: false,
-        });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
-
   const generateErrorReason = (reason, index) => {
     switch (reason) {
       case REJECTION_REASON.NOT_ACCEPTABLE_VIDEO:
@@ -221,13 +185,53 @@ const AuthSection = () => {
     }
   };
 
-  //render
+  // ==============|| Life Cycle ||================= //
+  useEffect(() => {
+    if (isSuccess && userVerifications) {
+      const docStatus = userVerifications[2].status;
+      if (docStatus === "REJECTED") {
+        userVerifications[2].rejectReasons.forEach((reason) => {
+          switch (reason) {
+            case REJECTION_REASON.VIDEO_AND_AUDIO_NOT_SYNCED:
+            case REJECTION_REASON.POOR_QUALITY_VIDEO:
+            case REJECTION_REASON.NOT_ACCEPTABLE_VIDEO: {
+              setAllowStates({ ...allowStates, video: true });
+              break;
+            }
+            case REJECTION_REASON.INVALID_NATIONAL_CARD:
+            case REJECTION_REASON.EXPIRED_NATIONAL_CARD: {
+              setAllowStates({ ...allowStates, nationalCard: true });
+              break;
+            }
+            case REJECTION_REASON.POOR_QUALITY_COMMITMENT_LETTER: {
+              setAllowStates({ ...allowStates, commitLetter: true });
+              break;
+            }
+          }
+        });
+      } else if (docStatus === "DRAFT")
+        setAllowStates({
+          nationalCard: true,
+          video: true,
+          commitLetter: true,
+        });
+      else
+        setAllowStates({
+          nationalCard: false,
+          video: false,
+          commitLetter: false,
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
+
+  // ==============|| Render ||================= //
   return (
-    <Card className="mb-4" id="kyc-section">
+    <Card className="mb-4">
       <CardHeader>
         <CardTitle tag="h5">احراز هویت</CardTitle>
       </CardHeader>
-      <CardBody>
+      <CardBody id="kyc-section">
         <Row>
           <Col xs={12} className="gutter-row">
             <Row>
