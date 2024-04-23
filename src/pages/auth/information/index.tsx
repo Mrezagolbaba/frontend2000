@@ -42,8 +42,15 @@ export default function Information() {
 
   // ==============|| Validation ||================= //
   const InformationSchema = Yup.object().shape({
-    firstName: Yup.string().required("درج نام الزامی است."),
-    lastName: Yup.string().required("درج نام خانوادگی الزامی است."),
+    firstName: Yup.string()
+      .matches(/^[\u0600-\u06FF\s]+$/, "لطفا نام خود را به فارسی درج کنید.")
+      .required("درج نام الزامی است."),
+    lastName: Yup.string()
+      .matches(
+        /^[\u0600-\u06FF\s]+$/,
+        "لطفا نام خانوادگی خود را به فارسی درج کنید.",
+      )
+      .required("درج نام خانوادگی الزامی است."),
     nationalCode: Yup.string().required("کد ملی الزامی می باشد."),
     phoneNumber: Yup.string().required("شماره تلفن ایران الزامی می باشد."),
     email: Yup.string().email().required("درج ایمیل الزامی می باشد."),
