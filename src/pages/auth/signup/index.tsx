@@ -84,7 +84,7 @@ export default function Register() {
     const userData = {
       phoneNumber,
       password: data.password,
-      referralCode: data.referralCode.toUpperCase(),
+      referralCode: data.referralCode,
     };
     await register(userData)
       .then(() =>
