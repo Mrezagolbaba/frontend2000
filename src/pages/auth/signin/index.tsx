@@ -20,7 +20,7 @@ import { LoginRequest } from "types/auth";
 import { PiShieldCheckeredFill } from "react-icons/pi";
 import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
 import { toast } from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -101,7 +101,7 @@ export default function LoginPage() {
     }
 
     await login(body)
-      .then((res) => {
+      .then(() => {
         navigate("/otp", { state: { type: "AUTH", method: loginType } });
       })
       .catch((error) => {
@@ -119,17 +119,17 @@ export default function LoginPage() {
         position: "bottom-left",
       }),
     );
-
-  // ==============|| Life Cycle ||================= //
-  useEffect(() => {
+  const changeMethod = useCallback(() => {
     if (loginType === "EMAIL")
       reset({
         username: "",
         password: "",
       });
     else reset({ username: "", password: "", selectedCountry: "98" });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loginType]);
+  }, [loginType, reset]);
+
+  // ==============|| Life Cycle ||================= //
+  useEffect(() => changeMethod(), [changeMethod]);
 
   // ==============|| Render ||================= //
   return (

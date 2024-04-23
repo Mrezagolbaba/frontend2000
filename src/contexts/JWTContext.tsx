@@ -69,11 +69,13 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
     const init = async () => {
       try {
         const { token, expiredAt } = await refreshTokenPromise();
+        localStorage.setItem("isInitialized", "true");
         dispatch(setLogin({ token, expiredAt }));
         dispatch(setVerifyLogin());
         getMeReq();
       } catch (e) {
         setSession(null);
+        localStorage.setItem("isInitialized", "false");
         dispatch(setLogout());
         dispatch(clearUser());
       }
@@ -150,6 +152,7 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
       .unwrap()
       .then(() => {
         setSession(null);
+        localStorage.setItem("isInitialized", "false");
         dispatch(setLogout());
         dispatch(clearUser());
       });

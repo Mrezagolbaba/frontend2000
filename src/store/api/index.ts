@@ -36,14 +36,6 @@ export function refreshTokenPromise(): Promise<{
           expiredAt: data.accessTokenExpiresAt,
         };
       })
-      .catch((err) => {
-        localStorage.setItem("isInitialized", "false");
-        window.location.href = "/login";
-        return {
-          token: "",
-          expiredAt: "",
-        };
-      })
       .finally(() => {
         _refPromise = null;
       });
