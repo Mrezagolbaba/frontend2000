@@ -224,7 +224,9 @@ const CreditCardForm = () => {
               className="px-5 py-3"
               color="primary"
               type="button"
-              onClick={() => {}}
+              onClick={() => {
+                navigate("/dashboard/profile#kyc-section");
+              }}
             >
               احراز هویت سطح دو
             </Button>
