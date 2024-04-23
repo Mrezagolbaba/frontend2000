@@ -42,8 +42,23 @@ const FinalView = ({ mediaBlobUrl, clearBlobUrl, handleNextStep }: Props) => {
     if (blob.size > MAX_DOC_SIZE) {
       toast.error(
         "متاسفانه حجم ویدیوی ضبط شده بیش تر از 10MB می باشد. لطفا دوباره تلاش کنید",
+        {
+          position: "bottom-left",
+        },
       );
-    } else uploadDoc({ docType: "SELFIE_VIDEO", file: blob, fileName: "file" });
+    } else
+      uploadDoc({
+        docType: "SELFIE_VIDEO",
+        file: blob,
+        fileName: "file",
+      })
+        .unwrap()
+        .catch((error) => {
+          if (error.data.message.includes("File should be"))
+            toast.error("حجم ویدیو ضبط شده پایین می باشد.", {
+              position: "bottom-left",
+            });
+        });
   };
 
   //life-cycles
