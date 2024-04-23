@@ -106,6 +106,7 @@ export default function LoginPage() {
         navigate("/otp", { state: { type: "AUTH", method: loginType } });
       })
       .catch((error) => {
+        setLoading(false);
         error.data.message.forEach((m) =>
           toast.error(m, {
             position: "bottom-left",
@@ -113,13 +114,14 @@ export default function LoginPage() {
         );
       });
   };
-
-  const handleErrors = (errors: any) =>
+  const handleErrors = (errors: any) => {
+    setLoading(false);
     Object.entries(errors).map(([fieldName, error]: any) =>
       toast.error(error?.message, {
         position: "bottom-left",
       }),
     );
+  };
   const changeMethod = useCallback(() => {
     if (loginType === "EMAIL")
       reset({
