@@ -25,6 +25,7 @@ import { clearUser, setUser } from "store/reducers/features/user/userSlice";
 import { removeRefToken, setRefToken } from "helpers";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { useLazyGetMeQuery } from "store/api/user";
+import toast from "react-hot-toast";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const setSession = (

@@ -31,7 +31,7 @@ export default function Register() {
   // ==============|| Validation ||================= //
   const registerSchema = Yup.object().shape({
     phoneNumber: Yup.string()
-      .matches(/^[0-9]+$/, "شماره همراه اشتباه است")
+      .matches(/^[\u06F0-\u06F90-9]+$/, "شماره همراه اشتباه است")
       .length(10, "لطفا شماره همراه خود را بدون کد کشور و یا ۰ وارد کنید")
       .required("شماره همراه الزامی می باشد."),
     password: Yup.string()
@@ -86,9 +86,26 @@ export default function Register() {
       password: data.password,
       inviteCode: data.inviteCode.toUpperCase(),
     };
-    await register(userData).then(() =>
-      navigate("/otp", { state: { type: "AUTH",method: "PHONE" } }),
-    );
+    await register(userData)
+      .then(() =>
+        navigate("/otp", { state: { type: "AUTH", method: "PHONE" } }),
+      )
+      .catch((error) => {
+        if (
+          error.data.message.includes(
+            "phoneNumber must be a valid phone number",
+          )
+        ) {
+          toast.error("شماره همراه وارد شده صحیح نمی باشد.", {
+            position: "bottom-left",
+          });
+        } else
+          error.data.message.forEach((m) =>
+            toast.error(m, {
+              position: "bottom-left",
+            }),
+          );
+      });
   };
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>

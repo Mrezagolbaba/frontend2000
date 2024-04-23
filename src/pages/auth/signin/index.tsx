@@ -47,7 +47,7 @@ export default function LoginPage() {
     if (loginType === "PHONE") {
       return Yup.object().shape({
         username: Yup.string()
-          .matches(/^[0-9]+$/, "شماره همراه اشتباه است")
+          .matches(/^[\u06F0-\u06F90-9]+$/, "شماره همراه اشتباه است")
           .length(10, "لطفا شماره همراه خود را بدون کد کشور و یا ۰ وارد کنید")
           .required("شماره همراه الزامی می باشد."),
         selectedCountry: Yup.string().required("کد کشور الزامی می باشد."),
@@ -100,9 +100,17 @@ export default function LoginPage() {
       body.phoneNumber = phoneNumber;
     }
 
-    await login(body).then((res) => {
-      navigate("/otp", { state: { type: "AUTH", method: loginType } });
-    });
+    await login(body)
+      .then((res) => {
+        navigate("/otp", { state: { type: "AUTH", method: loginType } });
+      })
+      .catch((error) => {
+        error.data.message.forEach((m) =>
+          toast.error(m, {
+            position: "bottom-left",
+          }),
+        );
+      });
   };
 
   const handleErrors = (errors: any) =>
