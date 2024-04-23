@@ -29,6 +29,7 @@ import auth from "assets/scss/auth/auth.module.scss";
 export default function LoginPage() {
   // ==============|| States ||================= //
   const [loginType, setLoginType] = useState<"PHONE" | "EMAIL">("PHONE");
+  const [loading, setLoading] = useState(false);
 
   // ==============|| Validation ||================= //
   const getValidationSchema = () => {
@@ -90,6 +91,7 @@ export default function LoginPage() {
 
   // ==============|| Handlers ||================= //
   const handleLogin = async (data) => {
+    setLoading(true);
     const body: LoginRequest = { password: data.password, type: loginType };
     if (loginType === "EMAIL") body.email = data.username;
     else {
@@ -255,9 +257,9 @@ export default function LoginPage() {
                           type="submit"
                           color="primary"
                           className={auth.submit}
-                          disabled={isSubmitting}
+                          disabled={loading}
                         >
-                          {isSubmitting ? (
+                          {loading ? (
                             <Spinner style={{ color: "white" }} />
                           ) : (
                             "ورود به حساب"

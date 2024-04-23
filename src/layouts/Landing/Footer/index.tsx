@@ -57,17 +57,17 @@ const Footer = (): ReactElement => {
                 <li>
                   <Link to="/dashboard/by-sell">خرید و فروش سریع</Link>
                 </li>
-                {/* <li>
+                 <li>
                   <Link to="https://help.arsonex.com/withdraw-fiat/">
                     برداشت بین‌المللی
                   </Link>
-                </li> */}
-                {/* <li>
+                </li> 
+                <li>
                   <Link to="https://help.arsonex.com/deposit-fiat/">
                     {" "}
                     واریز بین المللی
                   </Link>
-                </li> */}
+                </li>
                 <li>
                   <Link to="#">کسب درآمد</Link>
                   <Badge className={home["badge-custom"]}> بزودی</Badge>

@@ -51,7 +51,7 @@ export const registerSchema = Yup.object().shape({
       (value) => value === true,
     )
     .required(),
-    inviteCode: Yup.string().required("لطفا کد معرف خود را وارد کنید."),
+    referralCode: Yup.string().required("لطفا کد معرف خود را وارد کنید."),
 });
 export const changePassSchema = Yup.object().shape({
   oldPassword: Yup.string().required("رمز عبور قبلی الزامی است."),

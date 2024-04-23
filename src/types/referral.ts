@@ -1,7 +1,13 @@
 export interface IreferredUser {
-    phoneNumber:  string;
-    createdAt:    Date;
-    referrerCode: string;
+    referredUsersCount: number;
+    referredSecondTairUsersCount: number;
+    briefs: [
+        {
+            phoneNumber: string;
+            createdAt: Date;
+            referrerCode: string;
+        }
+    ]
 }
 export interface Ireferral {
     code:              string;

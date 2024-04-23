@@ -3,17 +3,14 @@ import { Button, ButtonGroup, Nav, NavItem } from "reactstrap";
 import "./styles.scss";
 
 interface FilterNavCoinProps {
+  activeTab: string;
   handleTabClick: (e: any, tabId: string) => void;
   rightTitle: string;
   leftTitle: string;
 }
 
-export const FilterNavCoin = ({
-  handleTabClick,
-  rightTitle,
-  leftTitle,
-}: FilterNavCoinProps) => {
-  const [rSelected, setRSelected] = useState(1);
+export const FilterNavCoin = ({ activeTab, handleTabClick,rightTitle,leftTitle }: FilterNavCoinProps) => {
+  const [rSelected, setRSelected] = useState(activeTab === "IRR" ? 1 : 2);
 
   return (
     <Nav
