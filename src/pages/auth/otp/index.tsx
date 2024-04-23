@@ -101,6 +101,7 @@ export default function Otp() {
             },
           });
         } else {
+          localStorage.setItem("isInitialized", "true");
           dispatch(setVerifyLogin());
           navigate("/dashboard");
         }
@@ -257,9 +258,9 @@ export default function Otp() {
                           color="link"
                           onClick={() => navigate(-1)}
                         >
-                          {
-                            method === "EMAIL" ? "ویرایش ایمیل" : "ویرایش شماره همراه"
-                          }
+                          {method === "EMAIL"
+                            ? "ویرایش ایمیل"
+                            : "ویرایش شماره همراه"}
                         </Button>
                       </div>
                     </div>

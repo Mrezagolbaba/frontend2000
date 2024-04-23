@@ -14,6 +14,7 @@ import History from "pages/dashboard/history";
 import PaymentRecipt from "pages/dashboard/payment-receipt";
 import SupportDetails from "pages/dashboard/support/detail";
 import AddFriends from "pages/dashboard/add-friends";
+import ResponsePage from "pages/dashboard/wallet/Rial/Deposit/DirectDebit/ResponsePage";
 
 const DashboardRouter = {
   path: "dashboard",
@@ -74,7 +75,11 @@ const DashboardRouter = {
     {
       path: "add-friends",
       element: <ProtectedRoute children={<AddFriends />} />,
-    }
+    },
+    {
+      path: "debit-subscription-finished/:status",
+      element: <ProtectedRoute children={<ResponsePage />} />,
+    },
   ],
 };
 

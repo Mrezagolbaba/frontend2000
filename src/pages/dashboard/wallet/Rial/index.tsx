@@ -64,7 +64,7 @@ export default function RialCard({ stock, isLoading }: Props) {
         onClose={() => setIsOpenDepositForm(false)}
         hasCloseButton
       >
-        <Deposit />
+        <Deposit onClose={() => setIsOpenDepositForm(false)} />
       </Dialog>
       <Dialog
         title="برداشت تومان"
