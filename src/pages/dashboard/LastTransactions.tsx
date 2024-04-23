@@ -17,11 +17,9 @@ export default function LastTransactions() {
     <Card className="h-100">
       <CardHeader className="d-flex flex-row justify-content-between align-items-center">
         <CardTitle tag="h5"> آخرین معاملات</CardTitle>
-        <div className="card-action">
-          <Link className={dashboard["sub-link"]} to="/dashboard/orders">
-            سفارشات من
-          </Link>
-        </div>
+        <Link className={dashboard["sub-link"]} to="/dashboard/orders">
+          سفارشات من
+        </Link>
       </CardHeader>
       <CardBody>
         <div className={dashboard["table-responsive"]}>
@@ -93,7 +91,7 @@ export default function LastTransactions() {
                           marginBottom: "10px",
                         }}
                       />
-                      <p>اولین تراکنش خود را با آرسونیکس تجربه کنید</p>
+                      <p>اولین معامله خود را با آرسونیکس تجربه کنید</p>
                     </td>
                   </tr>
                 ))}

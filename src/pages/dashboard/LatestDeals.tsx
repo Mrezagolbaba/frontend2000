@@ -149,21 +149,21 @@ function LatestDeals() {
                 )}
               </>
             ) : (
-              <tr>
-                <td colSpan={4} className="text-center">
-                  <img
-                    src={Deposit}
-                    style={{
-                      height: "50px",
-                      width: "50px",
-                      marginBottom: "10px",
-                    }}
-                  />
-                  <div className="text-dark">
-                    اولین معامله خود را با آرسونیکس تجربه کنید
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td colSpan={4} className="text-center bg-white">
+                    <img
+                      src={Deposit}
+                      style={{
+                        height: "50px",
+                        width: "50px",
+                        marginBottom: "10px",
+                      }}
+                    />
+                    <p>اولین تراکنش خود را با آرسونیکس تجربه کنید</p>
+                  </td>
+                </tr>
+              </tbody>
             )}
           </table>
         </div>
