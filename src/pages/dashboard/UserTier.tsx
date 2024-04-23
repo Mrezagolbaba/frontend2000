@@ -62,7 +62,7 @@ export default function UserTier() {
             </ul>
           </Col>
           <Col xxl={3} md={6}>
-            <ul className="auth-jumbotron__advantages">
+            <ul className={dashboard["user-tier-advantages"]}>
               <li>
                 <h5>احراز هویت سطح دو</h5>
               </li>
