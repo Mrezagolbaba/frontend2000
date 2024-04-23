@@ -101,7 +101,6 @@ export default function LoginPage() {
       );
       body.phoneNumber = phoneNumber;
     }
-
     await login(body)
       .then(() => {
         navigate("/otp", { state: { type: "AUTH", method: loginType } });
