@@ -36,7 +36,7 @@ const LightHeader = ({
                 </Link>
               </div>
             </Col>
-            <Col xs={7}>
+            <Col xs={7} className={user.id ? "align-self-center" : ""}>
               <nav>
                 <ul
                   className={`${home.navbar} navbar--light ${
