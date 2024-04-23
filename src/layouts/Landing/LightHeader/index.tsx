@@ -96,7 +96,9 @@ const LightHeader = ({
                     <Link to="/dashboard">خرید و فروش آنی</Link>
                   </li>
                   <li className={home.page__navitem}>
-                    <Link target="_blank" to="https://help.arsonex.com/">مرکز راهنمایی</Link>
+                    <Link target="_blank" to="https://help.arsonex.com/">
+                      مرکز راهنمایی
+                    </Link>
                   </li>
                   <li
                     className={`${home.page__navitem} ${
@@ -144,7 +146,12 @@ const LightHeader = ({
                   ) : (
                     <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
                       <li className={home.navbar__item}>
-                        <Link to="/login">ورود</Link>
+                        <Link
+                          className={`btn btn-page-primary ${home["rounded-button2"]}`}
+                          to="/login"
+                        >
+                          ورود
+                        </Link>
                       </li>
                       <li className={home.header__auth__register}>
                         <Link
