@@ -7,7 +7,7 @@ import { useUploadDocMutation } from "store/api/profile-management";
 
 //style
 import profile from "assets/scss/dashboard/profile.module.scss";
-import { MAX_DOC_SIZE } from "../types";
+import { MAX_DOC_SIZE, MIN_DOC_SIZE } from "../types";
 
 type Props = {
   mediaBlobUrl: string | undefined;
@@ -41,7 +41,14 @@ const FinalView = ({ mediaBlobUrl, clearBlobUrl, handleNextStep }: Props) => {
 
     if (blob.size > MAX_DOC_SIZE) {
       toast.error(
-        "متاسفانه حجم ویدیوی ضبط شده بیش تر از 10MB می باشد. لطفا دوباره تلاش کنید",
+        "متاسفانه حجم ویدیوی ضبط شده بیش تر از 60 می باشد. لطفا دوباره تلاش کنید",
+        {
+          position: "bottom-left",
+        },
+      );
+    } else if (blob.size < MIN_DOC_SIZE) {
+      toast.error(
+        "متاسفانه حجم ویدیوی ضبط شده کم تر از 10MB می باشد. لطفا دوباره تلاش کنید",
         {
           position: "bottom-left",
         },
