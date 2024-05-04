@@ -17,6 +17,7 @@ import AboutUs from "pages/about-us";
 import { useEffect } from "react";
 import { getTitlePage } from "helpers";
 import AuthRouter from "./AuthRouter";
+import ResponsePage from "pages/dashboard/wallet/Rial/Deposit/DirectDebit/ResponsePage";
 
 export default function AppRouter() {
   const location = useLocation();
@@ -50,6 +51,10 @@ export default function AppRouter() {
         { path: "contact-us", element: <ContactUs /> },
         { path: "about-us", element: <AboutUs /> },
         { path: "terms", element: <RulesPage /> },
+        {
+          path: "debit-subscription-finished/:status",
+          element: <ResponsePage />,
+        },
         DashboardRouter,
       ],
     },
