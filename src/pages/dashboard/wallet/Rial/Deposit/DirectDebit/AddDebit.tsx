@@ -73,6 +73,7 @@ export default function AddDebit() {
               content: (
                 <div>
                   <img
+                    width="25px"
                     src={bankIcon ? bankIcon?.src : iranianBankIcons[0].src}
                     alt={bank.name}
                   />
