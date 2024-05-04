@@ -5,6 +5,7 @@ import { ITicket } from "types/ticket";
 import { Link } from "react-router-dom";
 import { useGetTicketsQuery } from "store/api/ticket";
 import { useState } from "react";
+import Deposit from "assets/img/icons/depositIcon.svg";
 
 const Support = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,102 +50,120 @@ const Support = () => {
             <table
               className={`table table-borderless ${data?.length === 0 ? "table-modern" : "table-striped"}`}
             >
-              <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    style={{ color: "#03041b66" }}
-                    className="text-center"
-                  >
-                    تاریخ ارسال
-                  </th>
-                  <th
-                    scope="col"
-                    style={{ color: "#03041b66" }}
-                    className="text-center"
-                  >
-                    عنوان تیکت
-                  </th>
-                  <th
-                    scope="col"
-                    style={{ color: "#03041b66" }}
-                    className="text-center"
-                  >
-                    وضعیت
-                  </th>
-                  <th scope="col" className="text-center"></th>
-                </tr>
-              </thead>
-              {isLoading ? (
-                <tbody>
-                  <tr>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                  </tr>
-                </tbody>
-              ) : (
-                <tbody>
-                  {data?.map((item: ITicket, index: number) => (
-                    <tr key={index}>
-                      <td className="text-center">
-                        <span className="d-ltr d-block">
-                          {moment(item?.createdAt)
-                            .locale("fa")
-                            .format("DD MMMM YYYY")}
-                        </span>
-                      </td>
-                      <td className="text-center">{item.subject}</td>
-                      <td className="text-center">
-                        {item.status === "OPEN" ? (
-                          <span className="text-success"> باز</span>
-                        ) : (
-                          <span className="text-danger">بسته </span>
-                        )}
-                      </td>
-                      <td className="text-center table-new__actions">
-                        <Link to={`details/${item.id}`}>مشاهده جزئیات</Link>
-                      </td>
+              {data?.length > 0 ? (
+                <>
+                  <thead>
+                    <tr>
+                      <th
+                        scope="col"
+                        style={{ color: "#03041b66" }}
+                        className="text-center"
+                      >
+                        تاریخ ارسال
+                      </th>
+                      <th
+                        scope="col"
+                        style={{ color: "#03041b66" }}
+                        className="text-center"
+                      >
+                        عنوان تیکت
+                      </th>
+                      <th
+                        scope="col"
+                        style={{ color: "#03041b66" }}
+                        className="text-center"
+                      >
+                        وضعیت
+                      </th>
+                      <th scope="col" className="text-center"></th>
                     </tr>
-                  ))}
-                </tbody>
+                  </thead>
+                  {isLoading ? (
+                    <tbody>
+                      <tr>
+                        <td className="placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                        <td className="placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                        <td className="placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                        <td className="placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                        <td className="placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                        <td className="placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                        <td className="placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                        <td className="placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                        <td className="placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                        <td className="placeholder-glow">
+                          <div className="placeholder col-12 rounded" />
+                        </td>
+                      </tr>
+                    </tbody>
+                  ) : (
+                    <tbody>
+                      {data?.map((item: ITicket, index: number) => (
+                        <tr key={index}>
+                          <td className="text-center">
+                            <span className="d-ltr d-block">
+                              {moment(item?.createdAt)
+                                .locale("fa")
+                                .format("DD MMMM YYYY")}
+                            </span>
+                          </td>
+                          <td className="text-center">{item.subject}</td>
+                          <td className="text-center">
+                            {item.status === "OPEN" ? (
+                              <span className="text-success"> باز</span>
+                            ) : (
+                              <span className="text-danger">بسته </span>
+                            )}
+                          </td>
+                          <td className="text-center table-new__actions">
+                            <Link to={`details/${item.id}`}>مشاهده جزئیات</Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  )}
+                </>
+              ) : (
+                <tr>
+                  <td colSpan={4} className="text-center">
+                    <img
+                      src={Deposit}
+                      style={{
+                        height: "50px",
+                        width: "50px",
+                        marginBottom: "10px",
+                      }}
+                    />
+                    <div className="text-dark">هیچ تیکتی وجود ندارد</div>
+                  </td>
+                </tr>
               )}
             </table>
           </div>

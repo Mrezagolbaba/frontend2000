@@ -116,7 +116,7 @@ export default function Internal({ accounts, isLoading }: Props) {
               <Row className="justify-content-center">
                 <Col xs={12} xl={6}>
                   <Row className="px-2">
-                    <Col xs={9}>
+                    <Col xs={12} sm={9}>
                       <Controller
                         name="cardNumber"
                         control={control}
@@ -137,7 +137,7 @@ export default function Internal({ accounts, isLoading }: Props) {
                         )}
                       />
                     </Col>
-                    <Col xs={3} className="align-self-center">
+                    <Col xs={12} sm={3} className="align-self-center">
                       <Button
                         type="button"
                         color="icon-danger"
@@ -224,7 +224,7 @@ export default function Internal({ accounts, isLoading }: Props) {
             accounts.length > 0 &&
             accounts.map((account) => (
               <Row>
-                <Col xs={11}>
+                <Col xs={12} sm={11}>
                   <Row className="px-2">
                     <Col xs={12} xl={6}>
                       <FormGroup className={profile["accounts-field"]}>
@@ -256,10 +256,11 @@ export default function Internal({ accounts, isLoading }: Props) {
                     </Col>
                   </Row>
                 </Col>
-                <Col sm={1} className="align-self-center">
+                <Col xs={12} sm={1} className="align-self-center">
                   <Button
                     type="button"
                     color="icon-danger"
+                    className="w-100"
                     onClick={() => {
                       setDeleteOptions({
                         isOpen: true,

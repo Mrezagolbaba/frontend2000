@@ -133,7 +133,7 @@ export default function International({ accounts, isLoading }: Props) {
               onSubmit={handleSubmit(submitHandler)}
             >
               <Row>
-                <Col xs={10}>
+                <Col xs={12} sm={10}>
                   <Row>
                     <Col xs={12} xl={7}>
                       <Controller
@@ -180,7 +180,11 @@ export default function International({ accounts, isLoading }: Props) {
                     </Col>
                   </Row>
                 </Col>
-                <Col xs={2} className="align-self-center">
+                <Col
+                  xs={12}
+                  sm={2}
+                  className="d-flex align-self-center justify-content-center"
+                >
                   <Button
                     type="button"
                     color="icon-danger"
