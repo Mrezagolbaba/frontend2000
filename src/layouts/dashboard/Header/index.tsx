@@ -25,16 +25,19 @@ const Header = ({ onSidebarToggle }: Props) => {
           </div>
           <ul className={dashboard.header__navbar}>
             <li>
-              <Link to="/dashboard/exchange">خرید و فروش سریع</Link>
+              <Link to="/dashboard/orders">سفارشات من</Link>
             </li>
             <li>
-              <Link to="/dashboard/market">بازارها</Link>
+              <Link to="/dashboard/history">تاریخچه</Link>
             </li>
             <li>
               <Link to="/dashboard/wallet">واریز و برداشت</Link>
             </li>
             <li>
-              <Link target="_blank" to="https://help.arsonex.com/"> مرکز راهنمایی </Link>
+              <Link target="_blank" to="https://help.arsonex.com/">
+                {" "}
+                مرکز راهنمایی{" "}
+              </Link>
             </li>
           </ul>
           <div className={dashboard.header__support}>
