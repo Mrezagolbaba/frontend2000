@@ -15,6 +15,7 @@ import InternationalVerification from "pages/dashboard/profile/InternationalVeri
 import BanksWrapper from "components/BanksWrapper";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
+import { useCheckVerificationsQuery } from "store/api/user";
 
 const DepositFiat = ({ onClose }: { onClose: () => void }) => {
   const { firstNameEn, lastNameEn, internationalServicesVerified } =
@@ -39,6 +40,10 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
     initRefCode,
     { data: depResponse, isLoading: LoadingDeposit, isSuccess: depositSuccess },
   ] = useRefCodeMutation();
+
+  const { data: verifications } = useCheckVerificationsQuery();
+
+  console.log();
 
   useEffect(() => {
     let list = [] as OptionType[] | [];
@@ -185,25 +190,34 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
   return (
     <div className="px-2">
       {!internationalServicesVerified ? (
-        <>
+        verifications?.find((v) => v.type === "KYC_INTERNATIONAL_SERVICES")
+          ?.status === "DRAFT" ? (
+          <>
+            <AlertInfo
+              hasIcon
+              text="برای استفاده از خدمات لیر ترکیه، باید کارت اقامت ترکیه خود را ارسال نمایید."
+              key="passport-alert"
+            />
+            <Row>
+              <Col className="text-center">
+                <Button
+                  className="px-5 py-3"
+                  color="primary"
+                  outline
+                  onClick={() => setIsOpenDialog(true)}
+                >
+                  ارسال کارت اقامت
+                </Button>
+              </Col>
+            </Row>
+          </>
+        ) : (
           <AlertInfo
             hasIcon
-            text="برای استفاده از خدمات لیر ترکیه، باید کارت اقامت ترکیه خود را ارسال نمایید."
+            text="درخواست فعال سازی خدمات بین المللی شما در حال بررسی توسط پشتیبانی آرسونیکس می باشد."
             key="passport-alert"
           />
-          <Row>
-            <Col className="text-center">
-              <Button
-                className="px-5 py-3"
-                color="primary"
-                outline
-                onClick={() => setIsOpenDialog(true)}
-              >
-                ارسال کارت اقامت
-              </Button>
-            </Col>
-          </Row>
-        </>
+        )
       ) : (
         <Form>
           {!isEmpty(firstNameEn) && !isEmpty(lastNameEn) && (
