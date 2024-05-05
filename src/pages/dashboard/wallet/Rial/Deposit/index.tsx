@@ -11,9 +11,7 @@ import DirectDebit from "./DirectDebit";
 
 export default function Deposit({ onClose }: { onClose?: () => void }) {
   const [activeTab, setActiveTab] = useState<"1" | "2" | "3">("1");
-  const { secondTierVerified, gateways } = useAppSelector(
-    (state) => state.user,
-  );
+  const { gateways } = useAppSelector((state) => state.user);
 
   const toggleTab = (tab) => {
     if (activeTab !== tab) {
@@ -58,7 +56,6 @@ export default function Deposit({ onClose }: { onClose?: () => void }) {
               activeTab === "3" ? wallet.active : ""
             }`}
             tag="button"
-            disabled={!secondTierVerified}
             onClick={() => toggleTab("3")}
           >
             واریز بین بانکی (پایا، ساتنا و...)

@@ -32,7 +32,14 @@ export default function AppRouter() {
       children: [
         { path: "", element: <HomePage /> },
         { path: "login", element: <AuthRouter children={<Login />} /> },
-        { path: "register", element: <AuthRouter children={<Register />} /> },
+        {
+          path: "register",
+          element: <AuthRouter children={<Register />} />,
+        },
+        {
+          path: "register/:code",
+          element: <AuthRouter children={<Register />} />,
+        },
         { path: "otp", element: <AuthRouter children={<OTP />} /> },
         {
           path: "forget-password",

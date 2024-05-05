@@ -174,7 +174,7 @@ const DepositCrypto = ({ onClose, currency }: Props) => {
             <Row className="mt-4">
               <Col xs={12} lg={6}>
                 <FormGroup className="position-relative">
-                  <Label htmlFor="networkName">نام شبکه انتخابی:</Label>
+                  <Label htmlFor="networkName">شبکه انتخابی:</Label>
                   <Input
                     disabled
                     type="text"
@@ -185,27 +185,13 @@ const DepositCrypto = ({ onClose, currency }: Props) => {
                   />
                 </FormGroup>
               </Col>
-
-              {/* <Col xs={12} lg={6}>
-                <FormGroup className="position-relative">
-                  <Label htmlFor="amountResult"> مبلغ واریز:</Label>
-                  <Input
-                    disabled
-                    type="text"
-                    name="amountResult"
-                    id="amountResult"
-                    dir="ltr"
-                    value={result.amount}
-                  />
-                </FormGroup>
-              </Col> */}
               <Col xs={12} lg={6}>
                 <FormGroup className="position-relative">
                   <Label htmlFor="endTime"> زمان اتمام تراکنش:</Label>
                   <CountdownTimer targetDate={result.endTime} />
                 </FormGroup>
               </Col>
-              <Col xs={12}>
+              <Col xs={12} lg={6}>
                 <FormGroup>
                   <Label htmlFor="walletAddress"> آدرس کیف پول:</Label>
                   <CopyInput text={result.walletAddress} />

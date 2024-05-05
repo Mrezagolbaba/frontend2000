@@ -120,7 +120,7 @@ export default function International({ accounts, isLoading }: Props) {
           <AlertWarning
             hasIcon
             key="warning-international-account"
-            text="در صورتی که کارت اقامت کشوری که در آن ساکن هستید را از قسمت احراز هویت ارسال نکنید، فقط قابلیت برداشت فیات دیجیتال از آرسونیکس را خواهید داشت."
+            text="در صورتی که کارت اقامت کشوری که در آن ساکن هستید را در کیف پول بخش واریز فیات دیجیتال مورد نظر خود ارسال نکنید، فقط قابلیت برداشت فیات دیجیتال از آرسونیکس را خواهید داشت."
           />
           <AlertInfo
             hasIcon
@@ -206,7 +206,7 @@ export default function International({ accounts, isLoading }: Props) {
           {!accounts || isLoading ? (
             <>
               <Row>
-                <Col xs={10}>
+                <Col xs={12} sm={10}>
                   <Row className="px-2 my-1">
                     <Col xs={12} xl={6} className="placeholder-glow">
                       <div className={profile["accounts-field"]}>
@@ -270,7 +270,7 @@ export default function International({ accounts, isLoading }: Props) {
                 ""
               ) : (
                 <Row>
-                  <Col xs={10}>
+                  <Col xs={12} sm={10}>
                     <Row className="px-2">
                       <Col xs={12} xl={7}>
                         <FormGroup className={profile["accounts-field"]}>
@@ -303,10 +303,11 @@ export default function International({ accounts, isLoading }: Props) {
                       </Col>
                     </Row>
                   </Col>
-                  <Col sm={2} className="align-self-center">
+                  <Col xs={12} sm={2} className="align-self-center">
                     <Button
                       type="button"
                       color="icon-danger"
+                      className="w-100"
                       onClick={() => {
                         // const logo = searchIranianBanks(
                         //   account?.cardNumber

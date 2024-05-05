@@ -24,6 +24,8 @@ import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import { useBankAccountsQuery } from "store/api/profile-management";
 import BanksWrapper from "components/BanksWrapper";
 import { tomanShow } from "helpers";
+import { useAppSelector } from "store/hooks";
+import { useNavigate } from "react-router-dom";
 
 type ShebaFormType = {
   accountName: string;
@@ -32,7 +34,6 @@ type ShebaFormType = {
   bankName: string;
 };
 const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
-  const [hasLevel2, setHasLevel2] = useState<boolean>(true);
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
   const [selectedBank, setSelectedBank] = useState<string>("");
   const [otherInfo, setOtherInfo] = useState<{
@@ -42,6 +43,9 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
     ownerName: "",
     code: "",
   });
+
+  const navigate = useNavigate();
+  const { secondTierVerified } = useAppSelector((state) => state.user);
 
   const { data, isSuccess } = useDepositInfoQuery("IRR");
   const { data: fee } = useTransactionFeeQuery("IRR");
@@ -112,7 +116,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, getSuccessAccounts, activeTab]);
 
-  return hasLevel2 ? (
+  return secondTierVerified ? (
     <form>
       <Row>
         <Col xs={12} lg={6}>
@@ -195,8 +199,15 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
         hasIcon={true}
       />
       <div className="text-center mt-3">
-        <Button color="primary" type="button" onClick={() => {}} outline>
-          ارتقاع سطح کاربری
+        <Button
+          className="px-5 py-3"
+          color="primary"
+          type="button"
+          onClick={() => {
+            navigate("/dashboard/profile#kyc-section");
+          }}
+        >
+          ارتقاع به سطح دو
         </Button>
       </div>
     </Row>

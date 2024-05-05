@@ -1,4 +1,5 @@
 .copy-btn {
+  overflow: hidden;
   opacity: 1;
   font-size: 0.75rem;
   background-color: #fff;
@@ -20,6 +21,9 @@
   }
 }
 .btn-with-box {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
   color: #03041b;
   background-color: #fff;
   border: 1px solid rgba(3, 4, 27, 0.1);
@@ -42,4 +46,13 @@
   object-fit: cover;
   border-radius: 50%;
   margin-right: 5px;
+}
+
+@media screen and (max-width: 575px) {
+  .copy-btn {
+    &__icon,
+    &__text {
+      font-size: 10px;
+    }
+  }
 }

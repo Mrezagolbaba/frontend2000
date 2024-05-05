@@ -18,7 +18,7 @@ import toast from "react-hot-toast";
 import useAuth from "hooks/useAuth";
 import { CiMobile2 } from "react-icons/ci";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { PiShieldCheckeredFill } from "react-icons/pi";
 import { RegisterFormData } from "pages/auth/types";
 import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
@@ -26,8 +26,14 @@ import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import auth from "assets/scss/auth/auth.module.scss";
+import { useCallback, useEffect, useState } from "react";
+import { isEmpty } from "lodash";
+import { FaAngleUp } from "react-icons/fa";
 
 export default function Register() {
+  // ==============|| State ||================= //
+  const [openRefCode, setOpenRefCode] = useState(false);
+
   // ==============|| Validation ||================= //
   const registerSchema = Yup.object().shape({
     phoneNumber: Yup.string()
@@ -52,16 +58,21 @@ export default function Register() {
         (value) => value === true,
       )
       .required(),
-      referralCode: Yup.string().required("لطفا کد معرف خود را وارد کنید."),
+    referralCode: Yup.string().required("لطفا کد معرف خود را وارد کنید."),
   });
   const resolver = yupResolver(registerSchema);
 
   // ==============|| Hooks ||================= //
   const { register } = useAuth();
   const navigate = useNavigate();
+  const { code } = useParams();
+
+  console.log(code);
+
   const {
     handleSubmit,
     control,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     mode: "onChange",
@@ -113,6 +124,12 @@ export default function Register() {
         position: "bottom-left",
       }),
     );
+  const handleParams = useCallback(() => {
+    if (code && !isEmpty(code)) setValue("referralCode", code);
+  }, [code, setValue]);
+
+  // ==============|| Life Cycle ||================= //
+  useEffect(() => handleParams(), [handleParams]);
 
   // ==============|| Render ||================= //
   return (
@@ -184,8 +201,18 @@ export default function Register() {
                     name="referralCode"
                     control={control}
                     render={({ field: { name, value, onChange, ref } }) => (
-                      <div className="mb-3">
-                        <Label htmlFor={name}>کد معرف:</Label>
+                      <div
+                        className={`${auth["ref-code"]} ${!openRefCode ? auth.close : ""} mb-3`}
+                      >
+                        <Label
+                          htmlFor={name}
+                          onClick={() => setOpenRefCode((oldVal) => !oldVal)}
+                        >
+                          کد معرف:
+                        </Label>
+                        <span className="icon">
+                          <FaAngleUp />
+                        </span>
                         <Input
                           type="text"
                           id={name}

@@ -144,9 +144,9 @@ export default function LoginPage() {
             <div className={`${auth.confidence} mb-4`}>
               <p>از یکسان بودن آدرس صفحه با آدرس زیر مطمئن شوید.</p>
               <div className="d-ltr">
-                <label>
+                <span>
                   <span>https://</span>arsonex.com
-                </label>
+                </span>
                 <span className="icon">
                   <PiShieldCheckeredFill />
                 </span>
