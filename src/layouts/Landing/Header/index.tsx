@@ -173,7 +173,7 @@ const Header = ({ disableBanner = false }: Props) => {
             </div>
             <div className={home.header__intro}>
               <h1>آرسونیکس، همراه ارز دیجیتال شما</h1>
-              <p>خريد و فروش ارزديجيتال به آساني</p>
+              <p>ارز دیجیتال، تومان یا فیات دیجیتال؛ بدون محدودیت، به سرعت معامله کنید</p>
               <Link
                 to={id && firstTierVerified ? "/dashboard" : "/register"}
                 className={`btn btn-landing-primary ${home["rounded-button"]}`}

@@ -21,12 +21,14 @@
   text-align: center;
   margin-bottom: 35px;
   & > div {
-    border: 1px solid #cccccc2e;
-    border-radius: 10px;
-    padding: 10px;
+    border: 1px solid rgba(204, 204, 204, 0.1803921569);
+    border-radius: 6px;
+    padding: 6px;
     display: inline-block;
+    padding-right: 20px;
+    padding-left: 20px;
     & > span {
-      vertical-align: top;
+      vertical-align: middle;
     }
   }
   p {
@@ -149,7 +151,7 @@
 }
 .custom-header {
   position: relative;
-  padding: 40px 0;
+  padding: 25px 0 !important;
   margin-bottom: 50px;
   background-repeat: no-repeat;
   background-size:
@@ -168,6 +170,24 @@
     0 0;
   border-bottom: 1px solid #cccccc6b;
 }
+.ref-code {
+  label {
+    cursor: pointer;
+  }
+  input {
+    display: block;
+  }
+  &.close {
+    input {
+      display: none;
+      height: 0;
+    }
+    svg {
+      transform: rotate(180deg);
+    }
+  }
+}
+
 @media screen and (max-width: 767px) {
   .header {
     flex-wrap: wrap;

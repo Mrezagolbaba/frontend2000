@@ -162,7 +162,7 @@ export default function Internal({ accounts, isLoading }: Props) {
           {!accounts || isLoading ? (
             <>
               <Row>
-                <Col xs={10}>
+                <Col xs={12} sm={10}>
                   <Row className="px-2 my-1">
                     <Col xs={12} xl={6} className="placeholder-glow">
                       <div className={profile["accounts-field"]}>
