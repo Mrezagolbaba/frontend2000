@@ -1,0 +1,60 @@
+.phone-control {
+  direction: ltr;
+  &::after {
+    content: "";
+    display: flex;
+    align-self: center;
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 5px;
+    background-image: url(/src/assets/img/icons/phone-icon.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  &__input {
+    border-radius: 8px !important;
+    width: 100% !important;
+    height: 48px !important;
+    padding-left: 21% !important;
+    padding-right: 30px !important;
+  }
+  &__btn {
+    background-color: transparent !important;
+    border-radius: 8px 0 0 8px !important;
+    width: 15%;
+    z-index: 100;
+    & > div {
+      width: 100% !important;
+      border-radius: 8px 0 0 8px !important;
+    }
+    & > div > div {
+      left: 45%;
+    }
+    .arrow {
+      width: 8px !important;
+      height: 8px !important;
+      left: -12px !important;
+      border: none !important;
+      background-image: url(/src/assets/img/icons/angle-down-3.svg);
+      background-repeat: no-repeat;
+      background-size: contain;
+      &.up {
+        background-image: url(/src/assets/img/icons/angle-up-3.svg);
+      }
+    }
+  }
+  &__dropdown {
+    z-index: 1000 !important;
+  }
+  &:active {
+    &__btn {
+      & > div > div > div {
+        background-image: url(/src/assets/img/icons/angle-up-3.svg);
+      }
+    }
+  }
+}

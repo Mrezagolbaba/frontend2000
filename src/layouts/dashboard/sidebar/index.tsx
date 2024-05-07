@@ -1,9 +1,9 @@
-import History from "assets/img/icons/time-circle.svg";
+import Market from "assets/img/icons/market.svg";
 import Home from "assets/img/icons/home.svg";
 import LogoArsonex from "assets/img/logo-arsonex.png";
-import Order from "assets/img/icons/paper.svg";
 import Wallet from "assets/img/icons/wallet.svg";
-import AddFriend from "assets/img/icons/add-user.svg";
+import Exchange from "assets/img/icons/exchange-cha.svg";
+import AddFriend from "assets/img/icons/adduser.svg";
 import useAuth from "hooks/useAuth";
 import { Button, Nav, NavItem } from "reactstrap";
 import { CiEdit } from "react-icons/ci";
@@ -42,20 +42,20 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
       icon: <img src={Wallet} alt="" />,
     },
     {
-      path: "/dashboard/orders",
-      label: "سفارشات من",
-      icon: <img src={Order} alt="" />,
+      path: "/dashboard/exchange",
+      label: "خرید و فروش سریع",
+      icon: <img src={Exchange} alt="" />,
     },
     {
-      path: "/dashboard/history",
-      label: "تاریخچه",
-      icon: <img src={History} alt="" />,
+      path: "/dashboard/market",
+      label: "بازارها",
+      icon: <img src={Market} alt="" />,
     },
     {
-      path:"/dashboard/add-friends",
+      path: "/dashboard/add-friends",
       label: " دعوت دوستان",
       icon: <img src={AddFriend} alt="" />,
-    }
+    },
   ];
 
   // ==============|| Handlers ||================= //
@@ -147,7 +147,7 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
             >
               <Link to={item.path}>
                 <span className="icon">{item.icon}</span>
-                <span>{item.label}</span>
+                <span style={{ fontSize: "12px" }}>{item.label}</span>
               </Link>
             </NavItem>
           ))}

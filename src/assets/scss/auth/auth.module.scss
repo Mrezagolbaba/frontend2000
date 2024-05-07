@@ -101,6 +101,7 @@
       }
     }
   }
+
 }
 .already {
   word-spacing: 1px;
@@ -173,18 +174,6 @@
 .ref-code {
   label {
     cursor: pointer;
-  }
-  input {
-    display: block;
-  }
-  &.close {
-    input {
-      display: none;
-      height: 0;
-    }
-    svg {
-      transform: rotate(180deg);
-    }
   }
 }
 

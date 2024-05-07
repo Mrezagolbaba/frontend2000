@@ -328,26 +328,35 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
             <div className={exchange.divider}>
               <span>
                 <svg
-                  width="19"
-                  height="17"
-                  viewBox="0 0 19 17"
-                  fill="none"
+                  fill="#000000"
+                  viewBox="0 0 24 24"
+                  id="exchange-3"
                   xmlns="http://www.w3.org/2000/svg"
+                  className="icon flat-line"
                 >
-                  <path
-                    d="M18 5H1L5 1"
-                    stroke="#03041B"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
-                  <path
-                    d="M1 12L18 12L14 16"
-                    stroke="#03041B"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
+                  <polyline
+                    id="primary"
+                    points="20 10 4 10 7 7"
+                    style={{
+                      fill: "none",
+                      stroke: "rgb(0, 0, 0)",
+                      strokeLinecap: "round",
+                      strokeLinejoin: "round",
+                      strokeWidth: "2",
+                    }}
+                  />
+                  <polyline
+                    id="primary-2"
+                    data-name="primary"
+                    points="4 14 20 14 17 17"
+                    style={{
+                      fill: "none",
+                      stroke: "rgb(0, 0, 0)",
+                      strokeLinecap: "round",
+                      strokeLinejoin: "round",
+                      strokeWidth: "2",
+                    }}
+                  />
                 </svg>
               </span>
             </div>
