@@ -11,34 +11,31 @@ import {
 } from "reactstrap";
 import * as Yup from "yup";
 import Auth from "layouts/auth";
-import FloatInput from "components/Input/FloatInput";
 import PasswordInput from "components/PasswordInput";
-import SelectCountry from "components/SelectCountry";
 import toast from "react-hot-toast";
 import useAuth from "hooks/useAuth";
-import { CiMobile2 } from "react-icons/ci";
 import { Controller, useForm } from "react-hook-form";
+import { FaAngleUp } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 import { PiShieldCheckeredFill } from "react-icons/pi";
 import { RegisterFormData } from "pages/auth/types";
-import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
+import { isEmpty } from "lodash";
+import { motion } from "framer-motion";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 
+import "react-phone-input-2/lib/style.css";
 import auth from "assets/scss/auth/auth.module.scss";
-import { useCallback, useEffect, useState } from "react";
-import { isEmpty } from "lodash";
-import { FaAngleUp } from "react-icons/fa";
+import Phone from "components/Input/Phone";
 
 export default function Register() {
   // ==============|| State ||================= //
-  const [openRefCode, setOpenRefCode] = useState(false);
-
+  const [openRefCode, setOpenRefCode] = useState(true);
   // ==============|| Validation ||================= //
   const registerSchema = Yup.object().shape({
     phoneNumber: Yup.string()
-      .matches(/^[\u06F0-\u06F90-9]+$/, "شماره همراه اشتباه است")
-      .length(10, "لطفا شماره همراه خود را بدون کد کشور و یا ۰ وارد کنید")
+      // .matches(/^[\u06F0-\u06F90-9]+$/, "شماره همراه اشتباه است")
       .required("شماره همراه الزامی می باشد."),
     password: Yup.string()
       .min(8, "رمز عبور باید حداقل شامل 8 کاراکتر باشد.")
@@ -66,9 +63,6 @@ export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
   const { code } = useParams();
-
-  console.log(code);
-
   const {
     handleSubmit,
     control,
@@ -79,7 +73,6 @@ export default function Register() {
     defaultValues: {
       phoneNumber: "",
       password: "",
-      selectedCountry: "98",
       terms: false,
       referralCode: "",
     },
@@ -88,12 +81,8 @@ export default function Register() {
 
   // ==============|| Handlers ||================= //
   const handleRegister = async (data: RegisterFormData) => {
-    const phoneNumber = formatPhoneNumber(
-      persianToEnglishNumbers(data.phoneNumber),
-      data.selectedCountry,
-    );
     const userData = {
-      phoneNumber,
+      phoneNumber: "+" + data.phoneNumber,
       password: data.password,
       referralCode: data.referralCode,
     };
@@ -156,36 +145,16 @@ export default function Register() {
             >
               <Container>
                 <Row className="gy-2 gx-0">
-                  <Col xs={8}>
+                  <Col xs={12}>
                     <Controller
                       name="phoneNumber"
                       control={control}
-                      render={({ field: { name, value, onChange, ref } }) => (
-                        <FloatInput
-                          type="text"
-                          name={name}
+                      render={({ field: { name, value } }) => (
+                        <Phone
                           value={value}
-                          label="شماره همراه"
-                          onChange={onChange}
-                          inputProps={{
-                            ref: ref,
-                            size: "large",
-                            prefix: <CiMobile2 />,
-                            status: errors?.[name]?.message
-                              ? "error"
-                              : undefined,
-                            autoFocus: true,
-                            className: auth["phone-number"],
-                          }}
+                          onChange={(phone) => setValue(name, phone)}
                         />
                       )}
-                    />
-                  </Col>
-                  <Col xs={4}>
-                    <Controller
-                      name="selectedCountry"
-                      control={control}
-                      render={({ field }) => <SelectCountry {...field} />}
                     />
                   </Col>
                   <Col xs={12}>
@@ -193,38 +162,57 @@ export default function Register() {
                       name="password"
                       control={control}
                       render={({ field }) => (
-                        <PasswordInput hasShowHint={true} {...field} />
+                        <PasswordInput hasShowHint={true} label="" {...field} />
                       )}
                     />
                   </Col>
-                  <Controller
-                    name="referralCode"
-                    control={control}
-                    render={({ field: { name, value, onChange, ref } }) => (
-                      <div
-                        className={`${auth["ref-code"]} ${!openRefCode ? auth.close : ""} mb-3`}
-                      >
-                        <Label
-                          htmlFor={name}
-                          onClick={() => setOpenRefCode((oldVal) => !oldVal)}
-                        >
-                          کد معرف:
-                        </Label>
-                        <span className="icon">
-                          <FaAngleUp />
-                        </span>
-                        <Input
-                          type="text"
-                          id={name}
-                          name={name}
-                          value={value}
-                          onChange={onChange}
-                          ref={ref}
-                          status={errors?.[name]?.message ? "error" : undefined}
-                        />
-                      </div>
-                    )}
-                  />
+                  <Col xs={12}>
+                    <Controller
+                      name="referralCode"
+                      control={control}
+                      render={({ field: { name, value, onChange } }) => (
+                        <div className={`${auth["ref-code"]} mb-3`}>
+                          <motion.label
+                            htmlFor={name}
+                            onClick={() => setOpenRefCode((oldVal) => !oldVal)}
+                          >
+                            کد معرف:
+                          </motion.label>
+                          <div>
+                            <motion.span
+                              className="icon"
+                              initial={false}
+                              animate={{ rotate: openRefCode ? 0 : 180 }}
+                              transition={{ duration: 0.3 }}
+                            >
+                              <FaAngleUp />
+                            </motion.span>
+                          </div>
+                          <motion.div
+                            initial={false}
+                            animate={{ height: openRefCode ? "auto" : 0 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            style={{ overflow: "hidden" }}
+                          >
+                            <motion.input
+                              className="form-control ref-input"
+                              type="text"
+                              id={name}
+                              name={name}
+                              value={value}
+                              onChange={onChange}
+                              initial={{ opacity: 0, y: -10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.3 }}
+                              // status={
+                              //   errors?.[name]?.message ? "error" : undefined
+                              // }
+                            />
+                          </motion.div>
+                        </div>
+                      )}
+                    />
+                  </Col>
                   <Col xs={12} className={auth.terms}>
                     <Controller
                       name="terms"
