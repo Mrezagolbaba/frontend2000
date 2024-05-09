@@ -11,23 +11,24 @@ import {
 } from "reactstrap";
 import * as Yup from "yup";
 import Auth from "layouts/auth";
+import FloatInput from "components/Input/FloatInput";
 import PasswordInput from "components/PasswordInput";
+import SelectCountry from "components/SelectCountry";
+import auth from "assets/scss/auth/auth.module.scss";
 import toast from "react-hot-toast";
 import useAuth from "hooks/useAuth";
+import { CiMobile2 } from "react-icons/ci";
 import { Controller, useForm } from "react-hook-form";
 import { FaAngleUp } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 import { PiShieldCheckeredFill } from "react-icons/pi";
 import { RegisterFormData } from "pages/auth/types";
+import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
 import { isEmpty } from "lodash";
 import { motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
-
-import "react-phone-input-2/lib/style.css";
-import auth from "assets/scss/auth/auth.module.scss";
-import Phone from "components/Input/Phone";
 
 export default function Register() {
   // ==============|| State ||================= //
@@ -35,7 +36,8 @@ export default function Register() {
   // ==============|| Validation ||================= //
   const registerSchema = Yup.object().shape({
     phoneNumber: Yup.string()
-      // .matches(/^[\u06F0-\u06F90-9]+$/, "شماره همراه اشتباه است")
+      .matches(/^[\u06F0-\u06F90-9]+$/, "شماره همراه اشتباه است")
+      .length(10, "لطفا شماره همراه خود را بدون کد کشور و یا ۰ وارد کنید")
       .required("شماره همراه الزامی می باشد."),
     password: Yup.string()
       .min(8, "رمز عبور باید حداقل شامل 8 کاراکتر باشد.")
@@ -73,6 +75,7 @@ export default function Register() {
     defaultValues: {
       phoneNumber: "",
       password: "",
+      selectedCountry: "98",
       terms: false,
       referralCode: "",
     },
@@ -81,8 +84,12 @@ export default function Register() {
 
   // ==============|| Handlers ||================= //
   const handleRegister = async (data: RegisterFormData) => {
+    const phoneNumber = formatPhoneNumber(
+      persianToEnglishNumbers(data.phoneNumber),
+      data.selectedCountry,
+    );
     const userData = {
-      phoneNumber: "+" + data.phoneNumber,
+      phoneNumber,
       password: data.password,
       referralCode: data.referralCode,
     };
@@ -145,16 +152,36 @@ export default function Register() {
             >
               <Container>
                 <Row className="gy-2 gx-0">
-                  <Col xs={12}>
+                <Col xs={8}>
                     <Controller
                       name="phoneNumber"
                       control={control}
-                      render={({ field: { name, value } }) => (
-                        <Phone
+                      render={({ field: { name, value, onChange, ref } }) => (
+                        <FloatInput
+                          type="text"
+                          name={name}
                           value={value}
-                          onChange={(phone) => setValue(name, phone)}
+                          label="شماره همراه"
+                          onChange={onChange}
+                          inputProps={{
+                            ref: ref,
+                            size: "large",
+                            prefix: <CiMobile2 />,
+                            status: errors?.[name]?.message
+                              ? "error"
+                              : undefined,
+                            autoFocus: true,
+                            className: auth["phone-number"],
+                          }}
                         />
                       )}
+                    />
+                  </Col>
+                  <Col xs={4}>
+                    <Controller
+                      name="selectedCountry"
+                      control={control}
+                      render={({ field }) => <SelectCountry {...field} />}
                     />
                   </Col>
                   <Col xs={12}>
@@ -162,7 +189,7 @@ export default function Register() {
                       name="password"
                       control={control}
                       render={({ field }) => (
-                        <PasswordInput hasShowHint={true} label="" {...field} />
+                        <PasswordInput hasShowHint={true} {...field} />
                       )}
                     />
                   </Col>

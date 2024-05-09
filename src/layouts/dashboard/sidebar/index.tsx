@@ -1,18 +1,18 @@
-import Market from "assets/img/icons/market.svg";
-import Home from "assets/img/icons/home.svg";
+import AddFriend from "assets/img/icons/users.svg";
+import Exchange from "assets/img/icons/swap.svg";
+import Home from "assets/img/icons/house.svg";
 import LogoArsonex from "assets/img/logo-arsonex.png";
+import Market from "assets/img/icons/chart-simple.svg";
 import Wallet from "assets/img/icons/wallet.svg";
-import Exchange from "assets/img/icons/exchange-cha.svg";
-import AddFriend from "assets/img/icons/adduser.svg";
 import useAuth from "hooks/useAuth";
 import { Button, Nav, NavItem } from "reactstrap";
 import { CiEdit } from "react-icons/ci";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { TbPower } from "react-icons/tb";
 import { useAppSelector } from "store/hooks";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
-import { TbPower } from "react-icons/tb";
 
 type Props = {
   isOpen: boolean;
@@ -32,29 +32,34 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
   // ==============|| Variables ||================= //
   const items = [
     {
+      id: "home",
       path: "/dashboard",
       label: "پیشخوان",
-      icon: <img src={Home} alt="" />,
+      icon: Home,
     },
     {
+      id: "wallet",
       path: "/dashboard/wallet",
       label: "کیف پول",
-      icon: <img src={Wallet} alt="" />,
+      icon: Wallet,
     },
     {
+      id: "exchange",
       path: "/dashboard/exchange",
       label: "خرید و فروش سریع",
-      icon: <img src={Exchange} alt="" />,
+      icon: Exchange,
     },
     {
+      id: "market",
       path: "/dashboard/market",
       label: "بازارها",
-      icon: <img src={Market} alt="" />,
+      icon: Market,
     },
     {
+      id: "addFriends",
       path: "/dashboard/add-friends",
       label: " دعوت دوستان",
-      icon: <img src={AddFriend} alt="" />,
+      icon: AddFriend,
     },
   ];
 
@@ -146,7 +151,9 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
               onClick={() => handleClick(item.path)}
             >
               <Link to={item.path}>
-                <span className="icon">{item.icon}</span>
+                <span className="icon">
+                  <img src={item.icon} width={24} height={24} alt={item.id} />
+                </span>
                 <span style={{ fontSize: "12px" }}>{item.label}</span>
               </Link>
             </NavItem>

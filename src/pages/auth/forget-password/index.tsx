@@ -10,12 +10,14 @@ import {
 import * as Yup from "yup";
 import Auth from "layouts/auth";
 import FloatInput from "components/Input/FloatInput";
-import Phone from "components/Input/Phone";
+import SelectCountry from "components/SelectCountry";
 import toast from "react-hot-toast";
 import useAuth from "hooks/useAuth";
+import { CiMobile2 } from "react-icons/ci";
 import { Controller, useForm } from "react-hook-form";
 import { ForgotPasswordRequest } from "types/auth";
 import { HiOutlineMail } from "react-icons/hi";
+import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -56,9 +58,15 @@ export default function ForgetPassword() {
     formState: { errors, isSubmitting },
   } = useForm({
     mode: "onChange",
-    defaultValues: {
-      username: "",
-    },
+    defaultValues:
+      forgotType === "PHONE"
+        ? {
+            username: "",
+            selectedCountry: "98",
+          }
+        : {
+            username: "",
+          },
     resolver,
   });
 
@@ -74,7 +82,11 @@ export default function ForgetPassword() {
       type: forgotType,
     };
     if (forgotType === "EMAIL") body.email = data.username;
-    else body.phoneNumber = "+" + data.username;
+    else
+      body.phoneNumber = formatPhoneNumber(
+        persianToEnglishNumbers(data.username),
+        data.selectedCountry,
+      );
 
     await forgotPassword(body).then(() =>
       navigate("/otp", {
@@ -97,18 +109,49 @@ export default function ForgetPassword() {
               <Container>
                 <Row className="gy-2 gx-0">
                   {forgotType === "PHONE" ? (
-                    <Col xs={12}>
-                      <Controller
-                        name="username"
-                        control={control}
-                        render={({ field: { name, value } }) => (
-                          <Phone
-                            value={value}
-                            onChange={(phone) => setValue(name, phone)}
-                          />
-                        )}
-                      />
-                    </Col>
+                    <>
+                      <Col xs={8}>
+                        <Controller
+                          name="username"
+                          control={control}
+                          render={({
+                            field: { name, value, onChange, ref },
+                          }) => (
+                            <FloatInput
+                              type="text"
+                              name={name}
+                              value={value}
+                              label="شماره همراه"
+                              onChange={onChange}
+                              inputProps={{
+                                ref: ref,
+                                size: "large",
+                                prefix: <CiMobile2 />,
+                                status: errors?.[name]?.message
+                                  ? "error"
+                                  : undefined,
+                                autoFocus: true,
+                                className: auth["phone-number"],
+                              }}
+                            />
+                          )}
+                        />
+                      </Col>
+                      <Col xs={4}>
+                        <Controller
+                          name="selectedCountry"
+                          control={control}
+                          render={({ field: { name, value, onChange } }) => (
+                            <SelectCountry
+                              name={name}
+                              value={value as string}
+                              onChange={onChange}
+                              errors={errors}
+                            />
+                          )}
+                        />
+                      </Col>
+                    </>
                   ) : (
                     <Col xs={12}>
                       <Controller
