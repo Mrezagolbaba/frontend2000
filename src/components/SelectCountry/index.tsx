@@ -3,13 +3,10 @@ import { FieldErrors } from "react-hook-form";
 
 import "./style.sass";
 
-import england from "assets/img/flags/England.svg";
-import australia from "assets/img/flags/Australia.svg";
-import canada from "assets/img/flags/Canada.svg";
+import Russia from "assets/img/flags/Russia.svg";
+import UAE from "assets/img/flags/Emirates.png";
 import iran from "assets/img/flags/Iran.svg";
 import turkey from "assets/img/flags/Turkey.svg";
-import estonia from "assets/img/flags/estonia.png";
-import germany from "assets/img/flags/germany.png";
 
 type Props = {
   onChange: (...event: any[]) => void;
@@ -39,47 +36,20 @@ const SelectCountry = ({ name, value, onChange, errors }: Props) => {
       ),
     },
     {
-      value: "372",
+      value: "7",
       label: (
         <div className="flag-container">
-          <span>+372</span>
-          <img src={estonia} alt="Estonia-flag" />
+          <span>+7</span>
+          <img src={Russia} alt="Russia-flag" />
         </div>
       ),
     },
     {
-      value: "49",
+      value: "971",
       label: (
         <div className="flag-container">
-          <span>+49</span>
-          <img src={germany} alt="Germany-flag" />
-        </div>
-      ),
-    },
-    {
-      value: "1",
-      label: (
-        <div className="flag-container">
-          <span>+1</span>
-          <img src={canada} alt="Canada-flag" />
-        </div>
-      ),
-    },
-    {
-      value: "44",
-      label: (
-        <div className="flag-container">
-          <span>+44</span>
-          <img src={england} alt="England-flag" />
-        </div>
-      ),
-    },
-    {
-      value: "61",
-      label: (
-        <div className="flag-container">
-          <span>+61</span>
-          <img src={australia} alt="Australia-flag" />
+          <span>+971</span>
+          <img src={UAE} alt="UAE-flag" />
         </div>
       ),
     },
