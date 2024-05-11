@@ -59,7 +59,7 @@ const axiosBaseQuery =
       const response = error.response;
       const status = response.status;
       const isPrivate = !isEmpty(response?.config?.headers?.Authorization);
-      console.log(response?.config?.headers?.Authorization);
+      console.log(!isEmpty(response?.config?.headers?.Authorization));
 
       if (status === 500 || status > 500) {
         toast.error("مشکلی در ارتباط با سرور بوجود آمده است", {

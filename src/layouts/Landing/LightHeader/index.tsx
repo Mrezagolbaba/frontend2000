@@ -46,32 +46,39 @@ const LightHeader = ({
                 >
                   <li>
                     <div className={home.header__auth}>
-                      {user.id ? (
-                        <div>
-                          <Link
-                            to="/dashboard/profile"
-                            className={`btn btn-landing-primary ${home["rounded-button"]}`}
-                          >
-                            {user.firstName + " " + user.lastName}
-                          </Link>
-                        </div>
-                      ) : (
-                        <ul
-                          className={`${home.navbar} ${home["navbar--simple"]}`}
-                        >
-                          <li className={home.navbar__item}>
-                            <Link to="/login">ورود</Link>
-                          </li>
-                          <li className={home.header__auth__register}>
-                            <Link
-                              to="/register"
-                              className={`btn btn-page-primary ${home["rounded-button"]}`}
+                      {!HasRemoveAuthButton &&
+                        (user.id ? (
+                          <div>
+                            <Button
+                              href="/dashboard/profile"
+                              color="landing-primary"
+                              className={home["rounded-button"]}
                             >
-                              ثبت نام
-                            </Link>
-                          </li>
-                        </ul>
-                      )}
+                              {user.firstName + " " + user.lastName}
+                            </Button>
+                          </div>
+                        ) : (
+                          <ul
+                            className={`${home.navbar} ${home["navbar--simple"]}`}
+                          >
+                            <li className={home.navbar__item}>
+                              <Link
+                                className={`btn btn-page-primary ${home["rounded-button2"]}`}
+                                to="/login"
+                              >
+                                ورود
+                              </Link>
+                            </li>
+                            <li className={home.header__auth__register}>
+                              <Link
+                                to="/register"
+                                className={`btn btn-page-primary ${home["rounded-button2"]}`}
+                              >
+                                ثبت نام
+                              </Link>
+                            </li>
+                          </ul>
+                        ))}
                     </div>
                   </li>
                   <li

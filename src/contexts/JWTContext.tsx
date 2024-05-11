@@ -19,7 +19,7 @@ import {
   useRegisterMutation,
 } from "store/api/auth";
 import Loader from "components/Loader";
-import { ReactElement, createContext, useEffect } from "react";
+import { ReactElement, createContext, useEffect, useState } from "react";
 import { axiosInstance, refreshTokenPromise } from "store/api";
 import { clearUser, setUser } from "store/reducers/features/user/userSlice";
 import { removeRefToken, setRefToken } from "helpers";
@@ -61,8 +61,9 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
   const [logoutRequest] = useLogoutMutation();
   const [getMeReq, { data, isSuccess }] = useLazyGetMeQuery();
   const { isLoggedIn } = useAppSelector(selectAuth);
-  const isInitialized =
-    localStorage.getItem("isInitialized") === "true" ? true : false;
+  const [isInitialized, setIsInitialized] = useState(
+    localStorage.getItem("isInitialized") === "true" ? true : false,
+  );
 
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
@@ -70,12 +71,14 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
       try {
         const { token, expiredAt } = await refreshTokenPromise();
         localStorage.setItem("isInitialized", "true");
+        setIsInitialized(true);
         dispatch(setLogin({ token, expiredAt }));
         dispatch(setVerifyLogin());
         getMeReq();
       } catch (e) {
         setSession(null);
         localStorage.setItem("isInitialized", "false");
+        setIsInitialized(false);
         dispatch(setLogout());
         dispatch(clearUser());
       }
@@ -156,6 +159,7 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
       .then(() => {
         setSession(null);
         localStorage.setItem("isInitialized", "false");
+        setIsInitialized(false);
         dispatch(setLogout());
         dispatch(clearUser());
       });

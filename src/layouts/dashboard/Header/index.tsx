@@ -35,8 +35,7 @@ const Header = ({ onSidebarToggle }: Props) => {
             </li>
             <li>
               <Link target="_blank" to="https://help.arsonex.com/">
-                {" "}
-                مرکز راهنمایی{" "}
+                مرکز راهنمایی
               </Link>
             </li>
           </ul>
@@ -55,66 +54,6 @@ const Header = ({ onSidebarToggle }: Props) => {
               </span>
             </Link>
           </div>
-          {/* <div className={dashboard.header__notification}>
-            <Link to="/dashboard/notification">
-              <span className="icon">
-                <img src={Notifications} alt="notification" />
-              </span>
-            </Link>
-          </div> */}
-
-          {/* <div className={dashboard.header__subheader}>
-                <button
-                  className={dashboard["header__hamburger-btn"]}
-                  onClick={() => onSidebarToggle()}
-                >
-                  <span className="icon">
-                    <GiHamburgerMenu />
-                  </span>
-                </button>
-                <button
-                  className={dashboard["header__hamburger-btn"]}
-                  onClick={() => setIsLefMenuOpen(true)}
-                >
-                  <span className="icon">
-                    <GiHamburgerMenu />
-                  </span>
-                </button>
-                <ul
-                  className={`${dashboard.header__navbar} ${isLeftMenuOpen ? dashboard.expanded : ""
-                    }`}
-                >
-                  <li className={dashboard.header__navbar__close}>
-                    <button onClick={() => setIsLefMenuOpen(false)}>
-                      <li>
-                        <Link to="/dashboard/buy-sell">خرید و فروش سریع</Link>
-                      </li>
-                    </button>
-                  </li>
-                </ul>
-                <div className={dashboard.header__support}>
-                  <Link to="/support" className="">
-                    <span className="icon">
-                      <img src={Support} alt="support" />
-                    </span>
-                    پشتیبانی
-                  </Link>
-                </div>
-                <div>
-                  <Link to="/setting">
-                    <span className="icon">
-                      <img src={Setting} alt="setting" />
-                    </span>
-                  </Link>
-                </div>
-                <div className={dashboard.header__notification}>
-                  <Link to="/notification">
-                    <span className="icon">
-                      <img src={Notifications} alt="notification" />
-                    </span>
-                  </Link>
-                </div>
-              </div> */}
           <div className={dashboard.header__subheader}>
             <button
               className={dashboard["header__hamburger-btn"]}
@@ -154,13 +93,29 @@ const Header = ({ onSidebarToggle }: Props) => {
                 </button>
               </li>
               <li>
-                <Link to="/dashboard/market">بازارها</Link>
+                <Link
+                  to="/dashboard/orders"
+                  onClick={() => setIsLefMenuOpen(false)}
+                >
+                  سفارشات من
+                </Link>
               </li>
-              {/* <li>
-                <Link to="#">خرید و فروش پیشرفته</Link>
-              </li> */}
               <li>
-                <Link to="/dashboard/exchange">خرید و فروش سریع</Link>
+                <Link
+                  to="/dashboard/history"
+                  onClick={() => setIsLefMenuOpen(false)}
+                >
+                  تاریخچه
+                </Link>
+              </li>
+              <li>
+                <Link
+                  target="_blank"
+                  to="https://help.arsonex.com/"
+                  onClick={() => setIsLefMenuOpen(false)}
+                >
+                  مرکز راهنمایی
+                </Link>
               </li>
             </ul>
           </div>
