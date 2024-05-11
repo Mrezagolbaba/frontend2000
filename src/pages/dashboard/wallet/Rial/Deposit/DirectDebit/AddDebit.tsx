@@ -17,8 +17,11 @@ import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import { AlertInfo } from "components/AlertWidget";
 import { Controller, useForm } from "react-hook-form";
 import { iranianBankIcons } from "helpers/filesManagement/banksList";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { isEmpty } from "lodash";
+import { useAppSelector } from "store/hooks";
+import RenderBankItem from "./RenderBankItem";
 
 export default function AddDebit() {
   // ==============|| States ||================= //
@@ -33,6 +36,7 @@ export default function AddDebit() {
   );
 
   // ==============|| Hooks ||================= //
+  const { token } = useAppSelector((state) => state.auth);
   const { data, isSuccess, isLoading } = useBanksQuery({
     filter: ["currencyCode||$eq||IRR", "vandarDebitCode||$ne||'null'"],
   });
@@ -65,20 +69,14 @@ export default function AddDebit() {
       } else {
         setOptionList(
           data.map((bank) => {
-            const bankIcon = iranianBankIcons.find(
-              (item) => item.name === bank.logoPath,
-            );
-
             return {
               content: (
-                <div>
-                  <img
-                    width="25px"
-                    src={bankIcon ? bankIcon?.src : iranianBankIcons[0].src}
-                    alt={bank.name}
-                  />
-                  <span className="mx-2">{bank.website}</span>
-                </div>
+                <RenderBankItem
+                  id={bank.id}
+                  name={bank.name}
+                  website={bank.website}
+                  logoPath={bank.logoPath as string}
+                />
               ),
               value: bank.id,
             };

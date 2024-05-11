@@ -55,6 +55,14 @@ export const profileManagement = enhancedApi.injectEndpoints({
         };
       },
     }),
+    getBankLogo: builder.query<File, string>({
+      query(id) {
+        return {
+          method: "GET",
+          url: `/banks/logo/${id}`,
+        };
+      },
+    }),
     bankAccounts: builder.query<BankAccountsResponse[], any>({
       query({ params }) {
         return {
@@ -104,11 +112,11 @@ export const profileManagement = enhancedApi.injectEndpoints({
         };
       },
     }),
-    disconnectDebit: builder.mutation<any, { string }>({
-      query(id) {
+    disconnectDebit: builder.mutation<{ url: string }, string>({
+      query(bankId) {
         return {
           method: "PATCH",
-          url: `/bank-accounts/remove-debit-subscription/${id}`,
+          url: `/bank-accounts/remove-debit-subscription/${bankId}`,
         };
       },
     }),
@@ -120,6 +128,7 @@ export const {
   useInitialVerificationMutation,
   useInitialInternationalMutation,
   useBanksQuery,
+  useGetBankLogoQuery,
   useBankAccountsQuery,
   useCreateBankAccountMutation,
   useDeleteBankAccountMutation,

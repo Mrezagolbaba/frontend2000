@@ -18,6 +18,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useDepositMutation } from "store/api/wallet-management";
 import { useDisconnectDebitMutation } from "store/api/profile-management";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { isEmpty } from "lodash";
+import { useAppSelector } from "store/hooks";
 
 export default function DepositDebit({
   data,
@@ -41,6 +43,7 @@ export default function DepositDebit({
   );
 
   // ==============|| Hooks ||================= //
+  const { token } = useAppSelector((state) => state.auth);
   const [depositRequest, { isLoading: loadingDeposit, isSuccess }] =
     useDepositMutation();
   const [
@@ -76,16 +79,29 @@ export default function DepositDebit({
     } else {
       setOptions(
         data.map((bank) => {
-          const bankIcon = iranianBankIcons.find(
-            (item) => item.name === bank?.bank.logoPath,
-          );
+          let result = "";
+          try {
+            // Fetch the image data from your API
+            const response: any = fetch(
+              `${import.meta.env.VITE_BASE_URL}admin/banks/logo/${bank.id}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              },
+            );
+            const imageData = response.blob();
+            result = URL.createObjectURL(imageData);
+          } catch (error) {
+            console.error("Error fetching image:", error);
+          }
 
           return {
             content: (
               <div>
                 <img
                   width="28"
-                  src={bankIcon ? bankIcon?.src : iranianBankIcons[0].src}
+                  src={!isEmpty(result) ? result : iranianBankIcons[0].src}
                   alt={bank?.bank.name}
                 />
                 <span className="mx-2">{bank?.bank.website}</span>
@@ -181,7 +197,9 @@ export default function DepositDebit({
               color="primary"
               type="button"
               className="px-5 py-3 mx-2"
-              onClick={() => disconnect(data?.bankId)}
+              onClick={() => {
+                !isLoading && data && disconnect(data[0]?.id);
+              }}
             >
               {loadingDisconnect || isLoading ? (
                 <Spinner />

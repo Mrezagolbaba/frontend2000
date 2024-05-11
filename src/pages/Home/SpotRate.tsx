@@ -84,7 +84,6 @@ const SpotRate = () => {
     ]; // List of fiat IDs
     get24hChanges(fiatIds)
       .then((changes) => {
-        console.log(changes)
         if (changes) {
           setFiatChanges(changes);
         }

@@ -26,7 +26,6 @@ interface IReferral {
 const AddFriends = () => {
   const { data } = useGetReferralCodeQuery();
   const { data: refferalFriends } = useGetFriendsListQuery();
-  console.log("AddFriends", refferalFriends);
 
   return (
     <section className="page page-add-friends">

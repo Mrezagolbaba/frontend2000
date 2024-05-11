@@ -43,8 +43,6 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
 
   const { data: verifications } = useCheckVerificationsQuery();
 
-  console.log();
-
   useEffect(() => {
     let list = [] as OptionType[] | [];
     if (data && data?.length > 0) {
