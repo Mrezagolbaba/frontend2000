@@ -579,3 +579,11 @@ ul {
 .ltr-tag {
   direction: ltr !important;
 }
+
+.Calendar__monthYearContainer .Calendar__yearText,
+.Calendar__monthYearContainer .Calendar__monthText {
+  border: 1px solid #d9d9d9 !important;
+  border-radius: 8px !important;
+  line-height: 30px !important;
+  margin: 0 5px !important;
+}
