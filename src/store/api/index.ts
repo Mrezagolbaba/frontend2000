@@ -26,6 +26,8 @@ export function refreshTokenPromise(): Promise<{
     _refPromise = axiosInstance
       .post(`/auth/refresh-token`, { refreshToken: refresh_token })
       .then(({ data }) => {
+        console.log(data);
+
         setSession({
           access_token: data.accessToken,
           refresh_token: data.refreshToken,
@@ -59,7 +61,6 @@ const axiosBaseQuery =
       const response = error.response;
       const status = response.status;
       const isPrivate = !isEmpty(response?.config?.headers?.Authorization);
-      console.log(!isEmpty(response?.config?.headers?.Authorization));
 
       if (status === 500 || status > 500) {
         toast.error("مشکلی در ارتباط با سرور بوجود آمده است", {

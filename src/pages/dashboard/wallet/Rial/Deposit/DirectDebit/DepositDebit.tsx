@@ -70,9 +70,10 @@ export default function DepositDebit({
     depositRequest({
       currencyCode: "IRR",
       amount: (Number(data.amount) * 10).toString(),
-      bankAccountId: data.accountId,
+      bankAccountId: data.bankId,
       flow: "DEBIT",
     });
+
   const handleList = useCallback(() => {
     if (data.length <= 0) {
       setHasAccount(false);

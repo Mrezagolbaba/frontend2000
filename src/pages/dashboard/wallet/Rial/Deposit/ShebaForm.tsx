@@ -107,91 +107,115 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
   }, [data, isSuccess]);
 
   useEffect(() => {
-    activeTab === "3" &&
-      accounts &&
+    console.log(data);
+
+    if (
+      getSuccessAccounts &&
+      data &&
+      data?.length > 0 &&
+      activeTab === "3" &&
+      accounts
+    ) {
       initRefCode({
         currencyCode: "IRR",
         flow: "MANUAL_WITH_PAYMENT_IDENTIFIER",
       });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, getSuccessAccounts, activeTab]);
 
   return secondTierVerified ? (
-    <form>
-      <Row>
-        <Col xs={12} lg={6}>
-          <FormGroup>
-            <Label htmlFor="bank-name"> بانک مقصد:</Label>
-            <DropdownInput
-              id="bank-name"
-              value={selectedBank}
-              onChange={(val, otherOption) => {
-                setSelectedBank(val);
-                setOtherInfo({
-                  ownerName: otherOption.ownerName,
-                });
-              }}
-              options={optionList}
-            />
-          </FormGroup>
-        </Col>
-        <Col xs={12} lg={6}>
-          <Controller
-            name="accountName"
-            control={control}
-            render={({ field: { name, value, onChange, ref } }) => (
-              <FormGroup>
-                <Label htmlFor={name}>نام صاحب حساب:</Label>
-                <Input
-                  disabled
-                  type="text"
-                  name={name}
-                  value={otherInfo?.ownerName}
-                  onChange={onChange}
-                  ref={ref}
-                />
-              </FormGroup>
-            )}
-          />
-        </Col>
-        <Col xs={12} lg={6}>
-          <Controller
-            name="shebaNumber"
-            control={control}
-            render={({ field: { name, value } }) => (
-              <FormGroup>
-                <Label htmlFor={name}> شماره شبا:</Label>
-                <CopyInput text={selectedBank || ""} />
-                {fee && (
-                  <FormText>
-                    حداقل مبلغ واریز:{" "}
-                    {tomanShow({
-                      value: fee.depositMinAmount,
-                      currency: "IRR",
-                    })}
-                  </FormText>
-                )}
-              </FormGroup>
-            )}
-          />
-        </Col>
-        {depResponse && (
+    <>
+      <AlertInfo
+        hasIcon
+        text=" از حساب‌هایی که در پروفایل خود وارد کرده‌اید امکان واریز وجود دارد."
+      />
+      <AlertInfo
+        hasIcon
+        text=" شناسه واریز را در قسمت توضیحات یا شناسه واریز وارد نمایید."
+      />
+      <AlertInfo
+        hasIcon
+        text=" تمامی روش‌های پرداخت بجز روش پل مورد تایید می‌باشد."
+      />
+      <form>
+        <Row>
+          <Col xs={12} lg={6}>
+            <FormGroup>
+              <Label htmlFor="bank-name"> بانک مقصد:</Label>
+              <DropdownInput
+                id="bank-name"
+                value={selectedBank}
+                onChange={(val, otherOption) => {
+                  setSelectedBank(val);
+                  setOtherInfo({
+                    ownerName: otherOption.ownerName,
+                  });
+                }}
+                options={optionList}
+              />
+            </FormGroup>
+          </Col>
           <Col xs={12} lg={6}>
             <Controller
-              name="depositId"
+              name="accountName"
               control={control}
-              render={({ field: { name, value } }) => (
+              render={({ field: { name, value, onChange, ref } }) => (
                 <FormGroup>
-                  <Label htmlFor={name}> شناسه واریز:</Label>
-                  <CopyInput text={depResponse.refCode || ""} />
-                  <FormText>کارمزد واریز بین بانکی: صفر تومان</FormText>
+                  <Label htmlFor={name}>نام صاحب حساب:</Label>
+                  <Input
+                    disabled
+                    type="text"
+                    name={name}
+                    value={otherInfo?.ownerName}
+                    onChange={onChange}
+                    ref={ref}
+                  />
                 </FormGroup>
               )}
             />
           </Col>
-        )}
-      </Row>
-    </form>
+          {data && data.length > 0 && (
+            <Col xs={12} lg={6}>
+              <Controller
+                name="shebaNumber"
+                control={control}
+                render={({ field: { name, value } }) => (
+                  <FormGroup>
+                    <Label htmlFor={name}> شماره شبا:</Label>
+                    <CopyInput text={selectedBank || ""} />
+                    {fee && (
+                      <FormText>
+                        حداقل مبلغ واریز:
+                        {tomanShow({
+                          value: fee.depositMinAmount,
+                          currency: "IRR",
+                        })}
+                      </FormText>
+                    )}
+                  </FormGroup>
+                )}
+              />
+            </Col>
+          )}
+          {depResponse && (
+            <Col xs={12} lg={6}>
+              <Controller
+                name="depositId"
+                control={control}
+                render={({ field: { name, value } }) => (
+                  <FormGroup>
+                    <Label htmlFor={name}> شناسه واریز:</Label>
+                    <CopyInput text={depResponse.refCode || ""} />
+                    <FormText>کارمزد واریز بین بانکی: صفر تومان</FormText>
+                  </FormGroup>
+                )}
+              />
+            </Col>
+          )}
+        </Row>
+      </form>
+    </>
   ) : (
     <Row>
       <AlertInfo

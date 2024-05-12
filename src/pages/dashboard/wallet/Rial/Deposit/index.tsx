@@ -67,18 +67,6 @@ export default function Deposit({ onClose }: { onClose?: () => void }) {
           <CreditCardForm />
         </TabPane>
         <TabPane tabId="3">
-          <AlertInfo
-            hasIcon
-            text=" از حساب‌هایی که در پروفایل خود وارد کرده‌اید امکان واریز وجود دارد."
-          />
-          <AlertInfo
-            hasIcon
-            text=" شناسه واریز را در قسمت توضیحات یا شناسه واریز وارد نمایید."
-          />
-          <AlertInfo
-            hasIcon
-            text=" تمامی روش‌های پرداخت بجز روش پل مورد تایید می‌باشد."
-          />
           <ShebaForm activeTab={activeTab} />
         </TabPane>
         <TabPane tabId="2">
