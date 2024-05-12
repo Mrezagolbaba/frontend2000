@@ -8,6 +8,7 @@ import UAE from "assets/img/flags/Emirates.png";
 import iran from "assets/img/flags/Iran.svg";
 import turkey from "assets/img/flags/Turkey.svg";
 import canada from "assets/img/flags/Canada.svg";
+import estonia from "assets/img/flags/estonia.png";
 
 type Props = {
   onChange: (...event: any[]) => void;
@@ -60,6 +61,15 @@ const SelectCountry = ({ name, value, onChange, errors }: Props) => {
         <div className="flag-container">
           <span>+1</span>
           <img src={canada} alt="UAE-flag" />
+        </div>
+      ),
+    },
+    {
+      value: "372",
+      label: (
+        <div className="flag-container">
+          <span>+372</span>
+          <img src={estonia} alt="UAE-flag" />
         </div>
       ),
     },
