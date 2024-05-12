@@ -43,7 +43,7 @@ export default function UserInformation() {
             <h6>{firstName + " " + lastName}</h6>
             <Link
               className="btn btn-outline-secondary profile-btn"
-              to="/dashboard/profile"
+              to="/dashboard/profile#kyc-section"
             >
               <CiEdit />
               پروفایل کاربری
@@ -77,7 +77,10 @@ export default function UserInformation() {
               ) : (
                 <span>
                   <span>سطح یک</span>{" "}
-                  <Link to="/dashboard/profile" style={{ color: "#111bff" }}>
+                  <Link
+                    to="/dashboard/profile#kyc-section"
+                    style={{ color: "#111bff" }}
+                  >
                     ارتقا سطح
                   </Link>
                 </span>
