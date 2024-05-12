@@ -105,6 +105,12 @@
         font-weight: 100;
       }
     }
+    &.white-hamburger {
+      & > button > span > svg {
+        color: #040f4a;
+        border-color: #040f4a;
+      }
+    }
   }
   &__intro {
     text-align: center;
@@ -322,6 +328,16 @@
       span > svg {
         width: 48px;
         height: 48px;
+      }
+    }
+  }
+  &.navbar-light {
+    .navbar__item {
+      &:not(.active) > a {
+        color: #040f4a;
+      }
+      &:not(.active):hover > a {
+        color: #2d59e8;
       }
     }
   }
