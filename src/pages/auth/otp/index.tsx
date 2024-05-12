@@ -269,7 +269,7 @@ export default function Otp() {
                 <div className="text-center">
                   <AlertWarning
                     hasIcon
-                    text="ایمیل شما تایید نشده است. برای ادامه فعالیت خود لطفا کد تایید ارسال شده به ایمیل خود را وارد کنید."
+                    text="برای اتمام ثبت نام، ایمیل خود را تایید کنید، پوشه Spam را در صورت مشاهده نکردن ایمیل در Inbox بررسی کنید."
                   />
                 </div>
               )}

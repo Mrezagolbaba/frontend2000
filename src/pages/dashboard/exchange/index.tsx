@@ -112,7 +112,7 @@ export default function Exchange() {
                   className="btn btn-link"
                   to="https://help.arsonex.com/"
                 >
-                  مرکز راهنمایی{" "}
+                  مرکز راهنمایی
                 </Link>
               </div>
             </CardHeader>

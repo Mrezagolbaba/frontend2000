@@ -13,6 +13,7 @@ declare const classNames: {
   readonly navbar__item: "navbar__item";
   readonly header__auth__register: "header__auth__register";
   readonly header__hamburger: "header__hamburger";
+  readonly "white-hamburger": "white-hamburger";
   readonly header__intro: "header__intro";
   readonly img_bottom_right: "img_bottom_right";
   readonly img_top_right: "img_top_right";
@@ -26,6 +27,7 @@ declare const classNames: {
   readonly expanded: "expanded";
   readonly active: "active";
   readonly navbar__close: "navbar__close";
+  readonly "navbar-light": "navbar-light";
   readonly "main-wrapper": "main-wrapper";
   readonly "section-gap": "section-gap";
   readonly avatar: "avatar";

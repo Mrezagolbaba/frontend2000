@@ -1,5 +1,5 @@
 import { convertText, persianToEnglishNumbers } from "helpers";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import {
   Button,
@@ -40,7 +40,7 @@ type Props = {
 };
 
 export default function ExchangeForm({ setIsOpenDialog }: Props) {
-  //hooks
+  // ==============|| Hooks ||================= //
   const { state } = useLocation();
   const navigate = useNavigate();
   const { data: wallets, isLoading: isLoadingWallet } = useWalletsQuery();
@@ -61,7 +61,7 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
   const [getUsdtRate, { data: usdtRate, isSuccess: usdtRateSuccess }] =
     useLazyRatesQuery();
 
-  //states
+  // ==============|| States ||================= //
   const [source, setSource] = useState<{
     amount: number;
     currency: CurrencyCode;
@@ -81,7 +81,7 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
   const [transactions, setTransaction] = useState<any>(null);
   const [isSubmit, setIsSubmit] = useState(false);
 
-  //handlers
+  // ==============|| Handlers ||================= //
   const handleSwap = (type: "source" | "destination", value) => {
     if (isEmpty(value)) {
       setSource((prev) => ({ ...prev, amount: 0 }));
@@ -148,14 +148,33 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
       });
     }
   };
+  const initPageRout = useCallback(() => {
+    if (state?.source && state.source.amount > 0)
+      currencySwap({
+        isDry: true,
+        data: {
+          sourceCurrencyCode: state?.source?.currency,
+          sourceAmount:
+            state.source.currency === "IRR"
+              ? (Number(state?.source?.amount) * 10).toString()
+              : state?.source?.amount.toString(),
+          destinationCurrencyCode: state.destination.currency,
+          feeCurrencyCode: state.source.currency,
+        },
+      });
+  }, [currencySwap, state]);
 
+  // ==============|| Life Cycle ||================= //
   useEffect(() => {
     if (successSwap && isSubmit) {
       navigate(`/dashboard/invoice/${swap?.id}`);
     }
   }, [isSubmit, successSwap, navigate, swap?.id]);
 
-  //life-cycle
+  useEffect(() => {
+    initPageRout();
+  }, [initPageRout]);
+
   useEffect(() => {
     getRate({
       sourceCurrencyCode: source.currency,
@@ -218,7 +237,7 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
     setTransaction(reversSwap);
   }, [successReverseSwap, reversSwap]);
 
-  //render
+  // ==============|| Render ||================= //
   return (
     <Card className="card-secondary currency-exchange">
       <CardHeader>
