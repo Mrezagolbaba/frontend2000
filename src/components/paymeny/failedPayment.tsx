@@ -1,10 +1,7 @@
 import { Link } from "react-router-dom";
-import { CardBody, Card } from "reactstrap";
-import { TransactionResponse } from "types/wallet";
+import { CardBody } from "reactstrap";
 
 const FailedPayment = ({ data }: any) => {
-  console.log(data);
-
   return (
     <CardBody className="text-center p-4">
       <h4 className="auth-title mt-4 mb-4">پرداخت ناموفق</h4>

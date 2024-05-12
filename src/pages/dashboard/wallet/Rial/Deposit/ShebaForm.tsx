@@ -107,8 +107,6 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
   }, [data, isSuccess]);
 
   useEffect(() => {
-    console.log(data);
-
     if (
       getSuccessAccounts &&
       data &&

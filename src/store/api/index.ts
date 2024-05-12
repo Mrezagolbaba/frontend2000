@@ -6,7 +6,8 @@ import toast from "react-hot-toast";
 import { getRefToken } from "helpers";
 import { setSession } from "contexts/JWTContext";
 import { isEmpty } from "lodash";
-import { setLogin } from "store/reducers/jwtAuth";
+import { setLogin, setLogout } from "store/reducers/jwtAuth";
+import { clearUser } from "store/reducers/features/user/userSlice";
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
@@ -26,7 +27,7 @@ export function refreshTokenPromise(): Promise<{
     _refPromise = axiosInstance
       .post(`/auth/refresh-token`, { refreshToken: refresh_token })
       .then(({ data }) => {
-        console.log(data);
+        console.log("data", data);
 
         setSession({
           access_token: data.accessToken,
@@ -67,8 +68,21 @@ const axiosBaseQuery =
           position: "bottom-left",
         });
       } else if (status === 401 && isPrivate) {
-        const { token, expiredAt } = await refreshTokenPromise();
-        api.dispatch(setLogin({ token, expiredAt }));
+        try {
+          const { token, expiredAt } = await refreshTokenPromise();
+          api.dispatch(
+            setLogin({
+              token,
+              expiredAt,
+            }),
+          );
+        } catch (err) {
+          setSession(null);
+          localStorage.setItem("isInitialized", "false");
+          api.dispatch(setLogout());
+          api.dispatch(clearUser());
+          window.location.assign("/login");
+        }
         return axiosBaseQuery()(args, api, extraOptions);
       } else if (response?.data?.translatedMessage) {
         toast.error(response.data.translatedMessage, {

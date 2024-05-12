@@ -119,6 +119,7 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: `/bank-accounts/remove-debit-subscription/${bankId}`,
         };
       },
+      invalidatesTags: ["bank-accounts"],
     }),
   }),
 });
