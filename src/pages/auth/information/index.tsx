@@ -38,7 +38,11 @@ type DayValue = Day | null | undefined;
 
 export default function Information() {
   // ==============|| States ||================= //
-  const [selectedDay, setSelectedDay] = useState<DayValue>();
+  const [selectedDay, setSelectedDay] = useState<DayValue>({
+    year: 1368,
+    month: 8,
+    day: 26,
+  });
 
   // ==============|| Validation ||================= //
   const InformationSchema = Yup.object().shape({
