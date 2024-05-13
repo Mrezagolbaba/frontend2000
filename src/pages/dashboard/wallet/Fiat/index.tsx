@@ -35,11 +35,7 @@ interface FiatProps {
 }
 
 export default function Fiat({ TRY, isLoading, isSuccess }: FiatProps) {
-  const user = useAppSelector((state) => state.user);
-  const navigate = useNavigate();
-  const [verifyOtpWithdraw] = useVerifyOtpWithdrawMutation();
-  const [resendOtpWithdraw, { isSuccess: isResendSuccess }] =
-    useResendOtpWithdrawMutation();
+  // ==============|| States ||================= //
   const [depositForm, setDepositForm] = useState<{
     isOpen: boolean;
     currency: string;
@@ -52,6 +48,14 @@ export default function Fiat({ TRY, isLoading, isSuccess }: FiatProps) {
   const [showOtp, setShowOtp] = useState<boolean>(false);
   const [transactionId, setTransactionId] = useState<string>("");
 
+  // ==============|| Hooks ||================= //
+  const navigate = useNavigate();
+  const [resendOtpWithdraw, { isSuccess: isResendSuccess }] =
+  useResendOtpWithdrawMutation();
+  const [verifyOtpWithdraw] = useVerifyOtpWithdrawMutation();
+  const user = useAppSelector((state) => state.user);
+
+  // ==============|| Handlers ||================= //
   const handleCloseModal = () => {
     setShowOtp(false);
   };
@@ -70,7 +74,6 @@ export default function Fiat({ TRY, isLoading, isSuccess }: FiatProps) {
       }
     });
   };
-
   const handleReSendOtp = async () => {
     await resendOtpWithdraw(transactionId).then(() => {
       if (isResendSuccess) {
@@ -79,6 +82,7 @@ export default function Fiat({ TRY, isLoading, isSuccess }: FiatProps) {
     });
   };
 
+  // ==============|| Render ||================= //
   return (
     <Card className="mb-4 h-100">
       <CardHeader>

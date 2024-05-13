@@ -10,7 +10,11 @@ type Props = {
 
 export default function DepositsTable({ type }: Props) {
   const { data, isLoading } = useTransactionsQuery({
-    filter: [`currencyCode||eq||${type}`, "type||eq||DEPOSIT"],
+    filter: [
+      `currencyCode||eq||${type}`,
+      "type||eq||DEPOSIT",
+      "status||$ne||DRAFT",
+    ],
     sort: "createdAt,DESC",
     limit: 5,
   });

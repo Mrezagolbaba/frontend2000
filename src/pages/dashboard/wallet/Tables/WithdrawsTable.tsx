@@ -14,7 +14,11 @@ type Props = {
 
 export default function WithdrawsTable({ type }: Props) {
   const { data, isLoading } = useTransactionsQuery({
-    filter: [`currencyCode||eq||${type}`, "type||eq||WITHDRAW"],
+    filter: [
+      `currencyCode||eq||${type}`,
+      "type||eq||WITHDRAW",
+      "status||$ne||DRAFT",
+    ],
     sort: "createdAt,DESC",
     limit: 5,
   });
@@ -59,7 +63,11 @@ export default function WithdrawsTable({ type }: Props) {
                 style={{ color: "#03041b66" }}
                 className="text-center"
               >
-                {type === "TRY" ? "IBAN" : "شماره شبا"}
+                {type === "TRY"
+                  ? "IBAN"
+                  : type === "USDT"
+                    ? "آدرس ولت"
+                    : "شماره شبا"}
               </th>
               <th
                 scope="col"
@@ -130,20 +138,19 @@ export default function WithdrawsTable({ type }: Props) {
                 <td className="text-center">
                   <RenderAmount amount={record.amount} type={type} />
                 </td>
-                <td className="text-center">
-                  <RenderIban id={record.destinationId} />
-                  {/* <CopyInput
+                <td className="d-flex justify-content-center">
+                  {/* <RenderIban id={record.destinationId} /> */}
+                  <CopyInput
                     text={
                       type === "USDT"
-                        ? record.providerData.flowWalletAddress
-                        : record.providerData.flowPaymentIdentifier
+                        ? record?.providerRef
+                        : record.destinationType === "BANK_ACCOUNT"
+                          ? record?.destinationId
+                          : record?.providerData?.flowPaymentIdentifier
                     }
                     maxCharacter={10}
                     hasBox={false}
                   />
-                  {record.destinationType === "BANK_ACCOUNT"
-                    ? renderIban(record.destinationId)
-                    : "-"} */}
                 </td>
 
                 <td className="text-center">
