@@ -181,16 +181,13 @@ const Invoice = () => {
                             </span>
                           ) : (
                             <span className="px-2">
-                              تبدیل
-                              {convertText(
+                              {` تبدیل ${convertText(
                                 invoice.sourceCurrencyCode,
                                 "enToFa",
-                              )}
-                              به
-                              {convertText(
+                              )} به ${convertText(
                                 invoice.destinationCurrencyCode,
                                 "enToFa",
-                              )}
+                              )}`}
                             </span>
                           )}
                         </td>
@@ -217,7 +214,7 @@ const Invoice = () => {
                             <span className="px-2">
                               {renderAmount(
                                 invoice?.destinationAmount,
-                                invoice.destinationCurrencyCode,
+                                invoice?.destinationCurrencyCode,
                               )}
                             </span>
                           )}
