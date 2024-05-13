@@ -25,18 +25,19 @@ import {
 } from "store/api/wallet-management";
 import { useAppSelector } from "store/hooks";
 import toast from "react-hot-toast";
-import { coinShow } from "helpers";
+import { coinShow, persianToEnglishNumbers } from "helpers";
 
 export default function CryptoCard({ USDT, isLoading, isSuccess }: any) {
-  const user = useAppSelector((state) => state.user);
+  // ==============|| States ||================= //
+  const [showOtp, setShowOtp] = useState<boolean>(false);
+  const [transactionId, setTransactionId] = useState<string>("");
 
+  // ==============|| Hooks ||================= //
+  const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
-  const [otpCode, setOtpCode] = useState("");
   const [verifyOtpWithdraw] = useVerifyOtpWithdrawMutation();
   const [resendOtpWithdraw, { isSuccess: isResendSuccess }] =
     useResendOtpWithdrawMutation();
-  const [showOtp, setShowOtp] = useState<boolean>(false);
-  const [transactionId, setTransactionId] = useState<string>("");
   const [depositForm, setDepositForm] = useState<{
     isOpen: boolean;
     currency: string;
@@ -47,6 +48,7 @@ export default function CryptoCard({ USDT, isLoading, isSuccess }: any) {
     stock: number;
   }>({ isOpen: false, currency: "", stock: 0 });
 
+  // ==============|| Handlers ||================= //
   const handleCloseModal = () => {
     setShowOtp(false);
   };
@@ -55,17 +57,16 @@ export default function CryptoCard({ USDT, isLoading, isSuccess }: any) {
       return toast.error("لطفا کد را وارد کنید", { position: "bottom-left" });
     const newData = {
       transactionId,
-      code: otpCode,
+      code: persianToEnglishNumbers(data.code),
     };
     await verifyOtpWithdraw(newData).then((res: any) => {
       if (res) {
         handleCloseModal();
         toast.success("برداشت با موفقیت انجام شد", { position: "bottom-left" });
-        window.location.reload();
+        // window.location.reload();
       }
     });
   };
-
   const handleReSendOtp = async () => {
     await resendOtpWithdraw(transactionId).then(() => {
       if (isResendSuccess) {
@@ -73,6 +74,8 @@ export default function CryptoCard({ USDT, isLoading, isSuccess }: any) {
       }
     });
   };
+
+  // ==============|| Render ||================= //
   return (
     <Card className="mb-4 h-100">
       <CardHeader>
