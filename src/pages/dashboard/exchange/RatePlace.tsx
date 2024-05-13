@@ -22,6 +22,7 @@ type Props = {
   reverseRate: string;
   rate: string;
   isLoading: boolean;
+  setStock?: (string)=>void
 };
 
 export default function RatePlace({
@@ -33,6 +34,7 @@ export default function RatePlace({
   rate,
   reverseRate,
   isLoading = false,
+  setStock
 }: Props) {
   const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
   const toggleTooltip = () => setTooltipOpen((prevState) => !prevState);
@@ -43,7 +45,7 @@ export default function RatePlace({
       currency === "IRR" ? "تومان" : currency === "TRY" ? "لیر" : "تتر";
     if (wallets && wallets.length > 0) {
       const currentWallet = wallets?.find((w) => w.currencyCode === currency);
-
+      setStock?.(currentWallet?.availableBalance);
       switch (currency) {
         case "IRR": {
           return tomanShow({

@@ -40,6 +40,8 @@ type Props = {
 };
 
 export default function ExchangeForm({ setIsOpenDialog }: Props) {
+  // ==============|| States ||================= //
+  const [sourceStock, setSourceStock] = useState("0");
   // ==============|| Hooks ||================= //
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -82,40 +84,49 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
   const [isSubmit, setIsSubmit] = useState(false);
 
   // ==============|| Handlers ||================= //
-  const handleSwap = (type: "source" | "destination", value) => {
-    if (isEmpty(value)) {
-      setSource((prev) => ({ ...prev, amount: 0 }));
-      setDestination((prev) => ({ ...prev, amount: 0 }));
-    }
-    if (type === "source") {
-      currencySwap({
-        isDry: true,
-        data: {
-          sourceCurrencyCode: source.currency,
-          sourceAmount:
-            source.currency === "IRR"
-              ? (Number(value) * 10).toString()
-              : value.toString(),
-          destinationCurrencyCode: destination.currency,
-          feeCurrencyCode: feeCurrencyCode,
-        },
-      });
-    } else if (type === "destination") {
-      reversCurrencySwap({
-        isDry: true,
-        data: {
-          sourceCurrencyCode: destination.currency,
-          sourceAmount:
-            destination.currency === "IRR"
-              ? (Number(value) * 10).toString()
-              : value.toString(),
-          destinationCurrencyCode: source.currency,
-          feeCurrencyCode: feeCurrencyCode,
-        },
-      });
-    }
-  };
-  const handleSubmit = () => {
+  const handleSwap = useCallback(
+    (type: "source" | "destination", value) => {
+      if (isEmpty(value)) {
+        setSource((prev) => ({ ...prev, amount: 0 }));
+        setDestination((prev) => ({ ...prev, amount: 0 }));
+      }
+      if (type === "source") {
+        currencySwap({
+          isDry: true,
+          data: {
+            sourceCurrencyCode: source.currency,
+            sourceAmount:
+              source.currency === "IRR"
+                ? (Number(value) * 10).toString()
+                : value.toString(),
+            destinationCurrencyCode: destination.currency,
+            feeCurrencyCode: feeCurrencyCode,
+          },
+        });
+      } else if (type === "destination") {
+        reversCurrencySwap({
+          isDry: true,
+          data: {
+            sourceCurrencyCode: destination.currency,
+            sourceAmount:
+              destination.currency === "IRR"
+                ? (Number(value) * 10).toString()
+                : value.toString(),
+            destinationCurrencyCode: source.currency,
+            feeCurrencyCode: feeCurrencyCode,
+          },
+        });
+      }
+    },
+    [
+      currencySwap,
+      destination.currency,
+      feeCurrencyCode,
+      reversCurrencySwap,
+      source.currency,
+    ],
+  );
+  const handleSubmit = useCallback(() => {
     const sourceWalletWallet = wallets?.find(
       (w) => w.currencyCode === source.currency,
     );
@@ -126,10 +137,13 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
       toast.error("مبلغ مورد نظر شما از موجودی قابل برداشت تان بیشتر است.", {
         position: "bottom-left",
       });
-    } else if (!usdtRateSuccess || source.amount < Number(min)) {
+    } else if (
+      (!usdtRateSuccess && source.currency !== "USDT") ||
+      source.amount < Number(min)
+    ) {
       setError({ ...error, source: true });
       toast.error(
-        `حداقل مبلغ معامله ${Number(min).toLocaleString()}  می باشد.`,
+        `حداقل مبلغ معامله ${Number(min).toLocaleString()} ${convertText(source.currency, "enToFa")} می باشد.`,
         { position: "bottom-left" },
       );
     } else {
@@ -147,7 +161,16 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
         },
       });
     }
-  };
+  }, [
+    currencySwap,
+    destination.currency,
+    error,
+    feeCurrencyCode,
+    source,
+    usdtRate?.rate,
+    usdtRateSuccess,
+    wallets,
+  ]);
   const initPageRout = useCallback(() => {
     if (state?.source && state.source.amount > 0)
       currencySwap({
@@ -163,6 +186,27 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
         },
       });
   }, [currencySwap, state]);
+  const ratesHandler = useCallback(() => {
+    getRate({
+      sourceCurrencyCode: source.currency,
+      targetCurrencyCode: destination.currency,
+    });
+    getReverseRate({
+      sourceCurrencyCode: destination.currency,
+      targetCurrencyCode: source.currency,
+    });
+    source.currency !== "USDT" &&
+      getUsdtRate({
+        sourceCurrencyCode: "USDT",
+        targetCurrencyCode: source.currency,
+      });
+  }, [
+    destination.currency,
+    getRate,
+    getReverseRate,
+    getUsdtRate,
+    source.currency,
+  ]);
 
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
@@ -176,21 +220,8 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
   }, [initPageRout]);
 
   useEffect(() => {
-    getRate({
-      sourceCurrencyCode: source.currency,
-      targetCurrencyCode: destination.currency,
-    });
-    getReverseRate({
-      sourceCurrencyCode: destination.currency,
-      targetCurrencyCode: source.currency,
-    });
-    getUsdtRate({
-      sourceCurrencyCode: "USDT",
-      targetCurrencyCode: source.currency,
-    });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [source.currency, destination.currency]);
+    ratesHandler();
+  }, [ratesHandler]);
 
   useEffect(() => {
     if (successSwap) {
@@ -340,6 +371,7 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
                 showRate={true}
                 isLoading={isLoadingWallet}
                 wallets={wallets}
+                setStock={setSourceStock}
                 rate={exchangeRate?.rate as string}
                 reverseRate={exchangeReverseRate?.rate as string}
               />
@@ -447,6 +479,7 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
           <Row>
             <Col xs={12}>
               <WageTable
+                sourceStock={sourceStock}
                 isLoading={isLoadingSwap || isLoadingReverseSwap}
                 sourceCode={source.currency}
                 destinationCode={destination.currency}
