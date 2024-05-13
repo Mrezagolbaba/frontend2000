@@ -173,6 +173,9 @@ const WithdrawCrypto = ({
                 <FormGroup className="position-relative">
                   <div className="d-flex flex-row justify-content-between">
                     <Label htmlFor={name}>مبلغ برداشت: </Label>
+                    <span className="d-flex flex-row justify-content-between">
+                      <FormText>{`موجودی شما: ${coinShow(stock.toString(), "USDT")}`}</FormText>
+                    </span>
                   </div>
                   <Currency
                     name={name}
@@ -186,9 +189,14 @@ const WithdrawCrypto = ({
                   {errors?.[name] && (
                     <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                   )}
-                  <FormText>
-                    موجودی شما: {coinShow(stock.toString(), "USDT")}
-                  </FormText>
+                  <span className="d-flex flex-row justify-content-between">
+                    {fee && (
+                      <FormText>
+                        کارمزد برداشت :{" "}
+                        {coinShow(fee.withdrawFeeStatic, "USDT")}
+                      </FormText>
+                    )}
+                  </span>
                 </FormGroup>
               )}
             />

@@ -5,6 +5,7 @@ import { useAppSelector } from "store/hooks";
 import { IoIosClose } from "react-icons/io";
 
 import otp from "assets/scss/components/Input/otpContainer.module.scss";
+import { Button } from "reactstrap";
 
 interface Props {
   securitySelection: string;
@@ -100,22 +101,26 @@ const WithdrawOTP = ({
         />
 
         {timeInSeconds === 0 ? (
-          <button
-            className="btn btn-outline-primary mt-4 px-5 py-2"
+          <Button
+            color="primary"
+            outline
+            className="mt-4 px-5 py-2"
             style={{ width: "80%" }}
             onClick={handleResendClick}
           >
             ارسال مجدد کد
-          </button>
+          </Button>
         ) : (
-          <button
-            className="btn btn-outline-primary px-5 py-2 mt-4"
+          <Button
+            color="primary"
+            outline
+            className="mt-4 px-5 py-2"
             style={{ width: "80%" }}
           >
             <span className="auth-counter text-start d-ltr">
               {formatTime()}
             </span>
-          </button>
+          </Button>
         )}
       </div>
     </div>
