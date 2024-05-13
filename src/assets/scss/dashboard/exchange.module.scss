@@ -295,6 +295,12 @@
       &:checked + label {
         border-color: #111bff;
       }
+      &:disabled + label {
+        color: rgba(3, 4, 27, 0.2);
+      }
+      &:disabled {
+        cursor: default;
+      }
     }
     label {
       margin-bottom: 5px;
