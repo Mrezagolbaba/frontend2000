@@ -18,8 +18,10 @@ type Props = {
   feeCurrencyCode: CurrencyCode;
   setFeeCurrencyCode: Dispatch<SetStateAction<CurrencyCode>>;
   isLoading: boolean;
+  sourceStock: string;
 };
 export default function WageTable({
+  sourceStock,
   data,
   setFeeCurrencyCode,
   isLoading = false,
@@ -124,6 +126,23 @@ export default function WageTable({
     [data, destinationCode, feeCurrencyCode],
   );
 
+  const handleFeeOptions = useCallback(() => {
+    if (
+      Number(data?.sourceAmount) + Number(data?.transactions[0].fee) >
+      Number(sourceStock)
+    ) {
+      setFeeCurrencyCode(destinationCode);
+      return true;
+    }
+    return false;
+  }, [
+    data?.sourceAmount,
+    data?.transactions,
+    destinationCode,
+    setFeeCurrencyCode,
+    sourceStock,
+  ]);
+
   useEffect(() => {
     if (data) {
       if (feeCurrencyCode === sourceCode) handleDetails(0);
@@ -176,6 +195,7 @@ export default function WageTable({
                       type="radio"
                       name="rtc"
                       id="rtc1"
+                      disabled={handleFeeOptions()}
                       checked={feeCurrencyCode === sourceCode}
                       onChange={() => setFeeCurrencyCode(sourceCode)}
                     />
