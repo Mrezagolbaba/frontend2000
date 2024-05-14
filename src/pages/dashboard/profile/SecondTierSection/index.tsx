@@ -86,17 +86,13 @@ const AuthSection = () => {
   const { firstTierVerified, secondTierVerified, id } = useAppSelector(
     (state) => state.user,
   );
-  const {
-    data: userVerifications,
-    isLoading,
-    isSuccess,
-  } = useGetVerificationsQuery();
+  const { data: userVerifications, isSuccess } = useGetVerificationsQuery();
 
   // ==============|| States ||================= //
-  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(
-    hash.includes("#kyc-section") ? true : false,
+  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(true
+    // hash.includes("#kyc-section") && !secondTierVerified ? true : false,
   );
-  const [activeState, setActiveState] = useState<0 | 1 | 2 | 3 | 4 | 5>(0);
+  const [activeState, setActiveState] = useState<0 | 1 | 2 | 3 | 4 | 5>(2);
   const [allowStates, setAllowStates] = useState({
     nationalCard: false,
     video: false,
@@ -281,7 +277,7 @@ const AuthSection = () => {
                       outline
                       className="px-5 py-3 w-100"
                       onClick={() => {
-                        setIsOpenDialog(true);
+                        !secondTierVerified && setIsOpenDialog(true);
                       }}
                     >
                       شروع احراز هویت سطح دو
@@ -335,7 +331,7 @@ const AuthSection = () => {
                                 ) {
                                   setActiveState(1);
                                 }
-                                setIsOpenDialog(true);
+                                !secondTierVerified && setIsOpenDialog(true);
                               }}
                               color="warning"
                             >
@@ -355,10 +351,10 @@ const AuthSection = () => {
       <Modal
         className={profile["kyc-modal"]}
         isOpen={isOpenDialog}
-        toggle={() => setIsOpenDialog(!isOpenDialog)}
+        toggle={() => setIsOpenDialog((oldVal) => !oldVal)}
         size="lg"
       >
-        <ModalHeader toggle={() => setIsOpenDialog(!isOpenDialog)}>
+        <ModalHeader toggle={() => setIsOpenDialog((oldVal) => !oldVal)}>
           احراز هویت سطح دو
         </ModalHeader>
         <ModalBody>{renderSteps()}</ModalBody>

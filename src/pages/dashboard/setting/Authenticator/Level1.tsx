@@ -98,7 +98,7 @@ export default function Level1({ handleLevel }: Props) {
             onClick={handleResendClick}
             style={{ color: "#335ffc" }}
           >
-            {otpMethod === "PHONE" ? (
+            {/* {otpMethod === "PHONE" ? (
               <span className=" mt-1" style={{ fontSize: "12px" }}>
                 ارسال مجدد کد به موبایل
               </span>
@@ -106,10 +106,10 @@ export default function Level1({ handleLevel }: Props) {
               <span className=" mt-1" style={{ fontSize: "12px" }}>
                 ارسال مجدد کد به ایمیل
               </span>
-            )}
+            )} */}
           </Button>
         </div>
-        <form onSubmit={handleSubmit(handleCode)}>
+        <form onSubmit={handleSubmit(handleCode)} className="d-flex flex-column justify-content-center">
           <Controller
             control={control}
             name="code"

@@ -43,7 +43,7 @@ export default function UserInformation() {
             <h6>{firstName + " " + lastName}</h6>
             <Link
               className="btn btn-outline-secondary profile-btn"
-              to="/dashboard/profile#kyc-section"
+              to="/dashboard/profile"
             >
               <CiEdit />
               پروفایل کاربری

@@ -140,6 +140,20 @@ const PreviewStream = ({
           />
         </Row>
       )}
+
+      <Row>
+        <Col>
+          <AlertInfo
+            hasIcon
+            text="لطفا توجه داشته باشید که حجم فایل ضبط شده باید بین 10MB تا 60MB باشد."
+          />
+          <AlertSuccess
+            text="متن زیر را به طور واضح همراه با یک مدرک هویتی، هنگام ضبط ویدیو
+            نهایتا .در ۶۰ ثانیه بخوانید"
+            hasIcon
+          />
+        </Col>
+      </Row>
       <Row>
         <Col className="d-flex justify-content-center">
           <div className="timer">
@@ -170,16 +184,6 @@ const PreviewStream = ({
       </Row>
       <Row>
         <Col>
-          <AlertInfo
-            hasIcon
-            text="لطفا توجه داشته باشید که حجم فایل ضبط شده باید بین 10MB تا 60MB باشد."
-          />
-          <AlertSuccess
-            text="متن زیر را به طور واضح همراه با یک مدرک هویتی، هنگام ضبط ویدیو
-            نهایتا .در ۶۰ ثانیه بخوانید"
-            hasIcon
-          />
-
           <p className={profile["video-summary-text"]}>
             اینجانب
             {` ${firstName} ${lastName} `}
