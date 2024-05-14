@@ -41,6 +41,7 @@ export default function Otp() {
 
   // ==============|| States ||================= //
   const [timeInSeconds, setTimeInSeconds] = useState(120);
+  const [switchType, setSwitchType] = useState<"PHONE" | "EMAIL"|null>(null);
 
   // ==============|| Hooks ||================= //
   const dispatch = useDispatch();
@@ -75,6 +76,7 @@ export default function Otp() {
         method: user.otpMethod,
       };
       if (sendWay) {
+        setSwitchType(sendWay);
         toast.success(
           `کد تایید به ${sendWay === "EMAIL" ? "ایمیل" : "شماره همراه"} ارسال شد.`,
           { position: "bottom-left" },
@@ -91,7 +93,7 @@ export default function Otp() {
       const body: OTPRequest = {
         code: persianToEnglishNumbers(data.code),
         type,
-        method: method,
+        method: switchType ? switchType: method,
       };
       await otp(body).then(() => {
         setValue("code", "");
