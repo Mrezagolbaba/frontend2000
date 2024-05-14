@@ -124,7 +124,7 @@ const SpotRate = () => {
       });
   }, []);
   const checkLocation = useCallback(async () => {
-    await axios.get("https://ipapi.co/json/").then((res) => {
+    await axios.get("http://ipwho.is/").then((res) => {
       if (res.data.country_code !== "IR") setHasNotIR(true);
     });
   }, []);
