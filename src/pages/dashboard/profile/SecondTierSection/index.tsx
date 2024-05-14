@@ -83,16 +83,16 @@ const dataLevel2 = [
 const AuthSection = () => {
   // ==============|| Hooks ||================= //
   const { hash } = useLocation();
-  const { firstTierVerified, secondTierVerified, id } = useAppSelector(
+  const { firstTierVerified, secondTierVerified } = useAppSelector(
     (state) => state.user,
   );
   const { data: userVerifications, isSuccess } = useGetVerificationsQuery();
 
   // ==============|| States ||================= //
-  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(true
-    // hash.includes("#kyc-section") && !secondTierVerified ? true : false,
+  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(
+    hash.includes("#kyc-section") && !secondTierVerified ? true : false,
   );
-  const [activeState, setActiveState] = useState<0 | 1 | 2 | 3 | 4 | 5>(2);
+  const [activeState, setActiveState] = useState<0 | 1 | 2 | 3 | 4 | 5>(0);
   const [allowStates, setAllowStates] = useState({
     nationalCard: false,
     video: false,
