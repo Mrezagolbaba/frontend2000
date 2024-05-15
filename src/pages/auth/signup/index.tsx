@@ -260,7 +260,7 @@ export default function Register() {
                             }
                           />
                           <Label htmlFor={name} style={{ fontSize: "13px" }}>
-                            <Link to="/terms"> مقررات آرسونیکس</Link> را
+                            <Link to="/terms" target="_blank"> مقررات آرسونیکس</Link> را
                             خوانده‌ام و با آن موافقم.
                           </Label>
                         </div>
