@@ -13,4 +13,4 @@ export enum VERIFICATION_DOC_TYPE {
 }
 
 export const MAX_DOC_SIZE = 60000000;
-export const MIN_DOC_SIZE=10000000
+export const MIN_DOC_SIZE=1000000
