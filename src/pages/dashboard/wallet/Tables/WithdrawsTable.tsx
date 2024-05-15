@@ -144,9 +144,7 @@ export default function WithdrawsTable({ type }: Props) {
                     text={
                       type === "USDT"
                         ? record?.providerRef
-                        : record.destinationType === "BANK_ACCOUNT"
-                          ? record?.destinationId
-                          : record?.providerData?.flowPaymentIdentifier
+                        : record?.destination?.iban
                     }
                     maxCharacter={10}
                     hasBox={false}
@@ -154,7 +152,9 @@ export default function WithdrawsTable({ type }: Props) {
                 </td>
 
                 <td className="text-center">
-                  {moment(record.createdAt).locale("fa").format("DD MMMM YYYY")}
+                  {moment(record.createdAt)
+                    .locale("fa")
+                    .format("DD MMMM YYYY hh:mm")}
                 </td>
                 <td className="text-center">
                   <StatusHandler status={record.status} />
