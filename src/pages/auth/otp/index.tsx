@@ -41,7 +41,7 @@ export default function Otp() {
 
   // ==============|| States ||================= //
   const [timeInSeconds, setTimeInSeconds] = useState(120);
-  const [switchType, setSwitchType] = useState<"PHONE" | "EMAIL"|null>(null);
+  const [switchType, setSwitchType] = useState<"PHONE" | "EMAIL" | null>(null);
 
   // ==============|| Hooks ||================= //
   const dispatch = useDispatch();
@@ -93,7 +93,7 @@ export default function Otp() {
       const body: OTPRequest = {
         code: persianToEnglishNumbers(data.code),
         type,
-        method: switchType ? switchType: method,
+        method: switchType ? switchType : method,
       };
       await otp(body).then(() => {
         setValue("code", "");
@@ -255,6 +255,24 @@ export default function Otp() {
     // Clean up the interval when the component unmounts
     return () => clearInterval(timerInterval);
   }, [timeInSeconds]);
+
+  useEffect(() => {
+    // Assuming each OTP input is represented by an input element with a specific class
+    const otpInputs = document.querySelectorAll(".otp-input-class"); // Replace '.otp-input-class' with the actual class used
+
+    otpInputs.forEach((input) => {
+      input.setAttribute("type", "number");
+      input.setAttribute("pattern", "[0-9]*"); // Optional: Ensures only numeric input
+    });
+
+    // Cleanup function to reset if necessary
+    return () => {
+      otpInputs.forEach((input) => {
+        input.removeAttribute("type");
+        input.removeAttribute("pattern");
+      });
+    };
+  }, []);
 
   // ==============|| Render ||================= //
 
