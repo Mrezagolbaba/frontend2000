@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 import { Link } from "react-router-dom";
+import ChevronsRight from "components/Icons/ChevronsRight";
 
 interface Props {
   onSidebarToggle: () => void;
@@ -68,7 +69,7 @@ const Header = ({ onSidebarToggle }: Props) => {
               onClick={() => setIsLefMenuOpen(true)}
             >
               <span className="icon">
-                <GiHamburgerMenu />
+                <ChevronsRight />
               </span>
             </button>
             <ul

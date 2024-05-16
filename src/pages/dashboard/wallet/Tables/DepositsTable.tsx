@@ -3,6 +3,7 @@ import { DepositTypes, RenderAmount, StatusHandler } from ".";
 import Deposit from "assets/img/icons/depositIcon.svg";
 import { useTransactionsQuery } from "store/api/wallet-management";
 import CopyInput from "components/Input/CopyInput";
+import { Link } from "react-router-dom";
 
 type Props = {
   type: "IRR" | "TRY" | "USDT";
@@ -44,7 +45,7 @@ export default function DepositsTable({ type }: Props) {
                 style={{ color: "#03041b66" }}
                 className="text-center"
               >
-                {type !== "USDT" ? "شناسه پرداخت" : "آدرس ولت"}
+                {type !== "USDT" ? "شناسه پرداخت" : "TXID"}
               </th>
               <th
                 scope="col"
@@ -129,19 +130,26 @@ export default function DepositsTable({ type }: Props) {
                 </td>
                 <td className="text-center">
                   <div className="d-flex flex-row justify-content-center">
-                    <CopyInput
-                      text={
-                        type === "USDT"
-                          ? record.providerData.flowWalletAddress
-                          : record.providerData.flowPaymentIdentifier
-                      }
-                      maxCharacter={10}
-                      hasBox={false}
-                    />
+                    {type === "USDT" ? (
+                      <Link
+                        target="_blank"
+                        to={`https://tronscan.org/#/transaction/${record.providerData.flowWalletAddress}`}
+                      >
+                        لینک تراکنش
+                      </Link>
+                    ) : (
+                      <CopyInput
+                        text={record.id}
+                        maxCharacter={10}
+                        hasBox={false}
+                      />
+                    )}
                   </div>
                 </td>
                 <td className="text-center">
-                  {moment(record.createdAt).locale("fa").format("DD MMMM YYYY")}
+                  {moment(record.createdAt)
+                    .locale("fa")
+                    .format("hh:mm DD MMMM YYYY")}
                 </td>
                 <td className="text-center">
                   <StatusHandler status={record.status} />

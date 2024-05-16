@@ -1,14 +1,47 @@
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
-import { convertTextSingle, tomanShow } from "helpers";
+import { coinShow, convertTextSingle, lirShow, tomanShow } from "helpers";
 import Deposit from "assets/img/icons/depositIcon.svg";
 import moment from "jalali-moment";
 import { useCurrencySwapQuery } from "store/api/exchange-management";
+import SquareInfo from "components/Icons/SquareInfo";
+import { useNavigate } from "react-router-dom";
 
 const History = () => {
+  const navigate = useNavigate();
   const { data, isLoading } = useCurrencySwapQuery({
     sort: "createdAt,DESC",
     join: "transactions",
   });
+
+  const renderFee = (source, fee, transactions) => {
+    const feeIndex = source == fee ? 0 : 1;
+
+    switch (fee) {
+      case "USDT":
+        return coinShow(transactions[feeIndex].fee, "USDT");
+      case "TRY":
+        return lirShow({ value: transactions[feeIndex].fee, currency: "TRY" });
+      default:
+        return tomanShow({
+          value: transactions[feeIndex].fee,
+          currency: "IRR",
+        });
+    }
+  };
+
+  const renderAmount = (currency, amount) => {
+    switch (currency) {
+      case "USDT":
+        return coinShow(amount, "USDT");
+      case "TRY":
+        return lirShow({ value: amount, currency: "TRY" });
+      default:
+        return tomanShow({
+          value: amount,
+          currency: "IRR",
+        });
+    }
+  };
   return (
     <Card className="h-100">
       <CardHeader className="d-flex flex-row justify-content-between align-items-center">
@@ -26,21 +59,35 @@ const History = () => {
                       style={{ color: "#03041b66" }}
                       className="text-center"
                     >
-                      بازار
+                      بازار مبدا
                     </th>
                     <th
                       scope="col"
                       style={{ color: "#03041b66" }}
                       className="text-center"
                     >
-                      مقدار
+                      بازار مقصد
                     </th>
                     <th
                       scope="col"
                       style={{ color: "#03041b66" }}
                       className="text-center"
                     >
-                      مقدار دریافتی
+                      پرداخت شده
+                    </th>
+                    <th
+                      scope="col"
+                      style={{ color: "#03041b66" }}
+                      className="text-center"
+                    >
+                      کارمزد معامله
+                    </th>
+                    <th
+                      scope="col"
+                      style={{ color: "#03041b66" }}
+                      className="text-center"
+                    >
+                      دریافت شده
                     </th>
                     <th
                       scope="col"
@@ -48,6 +95,13 @@ const History = () => {
                       className="text-center"
                     >
                       تاریخ
+                    </th>
+                    <th
+                      scope="col"
+                      style={{ color: "#03041b66" }}
+                      className="text-center"
+                    >
+                      جزییات
                     </th>
                   </tr>
                 </thead>
@@ -112,38 +166,50 @@ const History = () => {
                         <td className="text-center">
                           <span className="text-success">
                             {convertTextSingle(data.destinationCurrencyCode)}
-                          </span>{" "}
-                          -{" "}
+                          </span>
+                        </td>
+                        <td className="text-center">
                           <span className="text-danger">
                             {convertTextSingle(data?.sourceCurrencyCode)}
                           </span>
                         </td>
                         <td className="text-center">
-                          <span style={{ fontSize: "10px" }}>
-                            {data.sourceCurrencyCode === "IRR"
-                              ? "TMN"
-                              : data.sourceCurrencyCode}
-                          </span>{" "}
-                          {data.sourceCurrencyCode === "IRR"
-                            ? tomanShow({ value: data?.sourceAmount })
-                            : data?.sourceAmount}
+                          {renderAmount(
+                            data?.sourceCurrencyCode,
+                            data?.sourceAmount,
+                          )}
                         </td>
                         <td className="text-center">
-                          <span style={{ fontSize: "10px" }}>
-                            {data.destinationCurrencyCode === "IRR"
-                              ? "TMN"
-                              : data.destinationCurrencyCode}
-                          </span>{" "}
-                          {data.destinationCurrencyCode === "IRR"
-                            ? tomanShow({ value: data?.destinationAmount })
-                            : data?.destinationAmount}
+                          {renderFee(
+                            data?.sourceCurrencyCode,
+                            data?.feeCurrencyCode,
+                            data?.transactions,
+                          )}
+                        </td>
+                        <td className="text-center">
+                          {renderAmount(
+                            data?.destinationCurrencyCode,
+                            data?.destinationAmount,
+                          )}
                         </td>
                         <td className="text-center">
                           <span className="text-center">
                             {moment(data?.createdAt)
                               .locale("fa")
-                              .format("DD MMMM YYYY")}
+                              .format("hh:mm , YYYY/MM/DD")}
                           </span>
+                        </td>
+                        <td className="text-center">
+                          <SquareInfo
+                            onClick={() =>
+                              navigate(`/dashboard/invoice/${data?.id}`)
+                            }
+                            width={24}
+                            height={24}
+                            style={{
+                              cursor: "pointer",
+                            }}
+                          />
                         </td>
                       </tr>
                     ))}

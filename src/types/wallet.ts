@@ -56,6 +56,7 @@ export interface TransactionResponse {
   sourceId: string;
   destinationType: TransactionRequestType;
   destinationId: string;
+  destination: any;
   displayId: string;
   currencyCode: string;
   amount: string;
