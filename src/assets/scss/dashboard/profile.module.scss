@@ -338,4 +338,15 @@
       flex: 0 0 40px;
     }
   }
+  .video-container {
+    .video-warper {
+      width: 200px;
+      height: 200px;
+    }
+  }
+  .progressbar {
+    &__circles {
+      display: none;
+    }
+  }
 }
