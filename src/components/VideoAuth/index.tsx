@@ -1,15 +1,9 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { Button, Modal } from "antd";
 import { useReactMediaRecorder } from "react-media-recorder";
-import {
-  BsCameraVideo,
-  BsPause,
-  BsPlay,
-  BsRecord,
-  BsStop,
-  BsTrash,
-} from "react-icons/bs";
+import { BsCameraVideo, BsPause, BsPlay, BsRecord, BsStop, BsTrash } from "react-icons/bs";
 import "./style.sass";
+
 type Props = {
   title: string;
   isOpen: boolean;
@@ -18,13 +12,7 @@ type Props = {
   hintContainer: ReactNode;
 };
 
-const VideoAuth = ({
-  isOpen,
-  setIsOpen,
-  onSubmit,
-  title,
-  hintContainer,
-}: Props) => {
+const VideoAuth = ({ isOpen, setIsOpen, onSubmit, title, hintContainer }: Props) => {
   const {
     status,
     startRecording,
@@ -32,7 +20,10 @@ const VideoAuth = ({
     mediaBlobUrl,
     previewStream,
     clearBlobUrl,
-  } = useReactMediaRecorder({ video: true });
+  } = useReactMediaRecorder({ 
+    video: { facingMode: "user" }, // Ensure correct facing mode for mobile
+    onStop: (blobUrl, blob) => console.log("Recording stopped, Blob URL:", blobUrl)
+  });
 
   const [isPlayVideo, setIsPlayVideo] = useState<boolean>(false);
   const [recordingTime, setRecordingTime] = useState(0);
@@ -46,6 +37,7 @@ const VideoAuth = ({
   const handleClose = () => {
     setIsOpen(false);
   };
+
   const handleSubmit = async () => {
     if (mediaBlobUrl) {
       try {
@@ -54,7 +46,6 @@ const VideoAuth = ({
         onSubmit?.(blob);
       } catch (error) {
         console.error("Error converting Blob URL to File:", error);
-        return null;
       }
     }
   };
@@ -63,7 +54,6 @@ const VideoAuth = ({
     if (status === "recording") {
       recordingTimerRef.current = setInterval(() => {
         setRecordingTime((prevTime) => prevTime + 1);
-
         if (recordingTime >= maxRecordingDuration) {
           stopRecording();
         }
@@ -102,20 +92,15 @@ const VideoAuth = ({
         <div className="video-container">
           {status === "recording" ? (
             <video
-              autoPlay={false}
-              playsInline={true}
-              disablePictureInPicture={false}
-              muted={true}
+              autoPlay
+              playsInline
+              muted
               controls={false}
-              //@ts-ignore
-              src={previewStream}
-
-              // ref={(video) =>
-              //   video ? (video.srcObject = previewStream) : null
-              // }
+              // @ts-ignore
+              srcObject={previewStream as MediaStream}
             ></video>
           ) : mediaBlobUrl ? (
-            <video id="video-recorded">
+            <video id="video-recorded" controls>
               <source src={mediaBlobUrl} type="video/webm" />
               Your browser does not support the video tag.
             </video>
