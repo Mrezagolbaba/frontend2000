@@ -23,14 +23,14 @@ export default function Loader() {
         height: "100vh",
       }}
     >
-      {/* <Spinner
+      <Spinner
         color="primary"
         style={{ width: "8rem", height: "8rem", opacity: "0.6" }}
-      /> */}
-      <Lottie options={defaultOptions}
+      />
+      {/* <Lottie options={defaultOptions}
               height={400}
               width={400}
-        />
+        /> */}
     </div>
   );
 }

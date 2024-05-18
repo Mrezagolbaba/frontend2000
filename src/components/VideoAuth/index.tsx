@@ -106,9 +106,13 @@ const VideoAuth = ({
               playsInline={true}
               disablePictureInPicture={false}
               muted={true}
-              ref={(video) =>
-                video ? (video.srcObject = previewStream) : null
-              }
+              controls={false}
+              //@ts-ignore
+              src={previewStream}
+
+              // ref={(video) =>
+              //   video ? (video.srcObject = previewStream) : null
+              // }
             ></video>
           ) : mediaBlobUrl ? (
             <video id="video-recorded">
