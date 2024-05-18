@@ -103,7 +103,7 @@ const VideoAuth = ({
           {status === "recording" ? (
             <video
               autoPlay={false}
-              playsInline={false}
+              playsInline={true}
               disablePictureInPicture={false}
               muted={true}
               ref={(video) =>
