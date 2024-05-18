@@ -102,6 +102,10 @@ const VideoAuth = ({
         <div className="video-container">
           {status === "recording" ? (
             <video
+              autoPlay={false}
+              playsInline={false}
+              disablePictureInPicture={false}
+              muted={true}
               ref={(video) =>
                 video ? (video.srcObject = previewStream) : null
               }
