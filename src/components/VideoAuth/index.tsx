@@ -105,8 +105,6 @@ const VideoAuth = ({
               ref={(video) =>
                 video ? (video.srcObject = previewStream) : null
               }
-              autoPlay
-              muted
             ></video>
           ) : mediaBlobUrl ? (
             <video id="video-recorded">
