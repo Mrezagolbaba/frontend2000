@@ -196,7 +196,7 @@ const CreditCardForm = () => {
                 )}
                 {fee && (
                   <FormText>
-                    کارمزد واریز:{" "}
+                    کارمزد شاپرک:{" "}
                     {tomanShow({
                       value: fee.depositFeeStatic,
                       currency: "IRR",

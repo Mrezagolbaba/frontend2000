@@ -35,7 +35,7 @@ export default function Deposit({ onClose }: { onClose?: () => void }) {
               tag="button"
               onClick={() => toggleTab("1")}
             >
-              درگاه پرداخت (کارت بانکی)
+              درگاه بانکی
             </NavLink>
           </NavItem>
         )}
@@ -47,7 +47,7 @@ export default function Deposit({ onClose }: { onClose?: () => void }) {
             tag="button"
             onClick={() => toggleTab("2")}
           >
-            برداشت مستقیم از حساب (شارژ سریع)
+            برداشت مستقیم (دایرکت دبیت)
           </NavLink>
         </NavItem>
         <NavItem>
@@ -58,7 +58,7 @@ export default function Deposit({ onClose }: { onClose?: () => void }) {
             tag="button"
             onClick={() => toggleTab("3")}
           >
-            واریز بین بانکی (پایا، ساتنا و...)
+           واریز با شناسه (پایا، ساتنا، حساب به حساب)
           </NavLink>
         </NavItem>
       </Nav>
