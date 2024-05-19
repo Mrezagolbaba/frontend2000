@@ -18,12 +18,12 @@ const History = () => {
 
     switch (fee) {
       case "USDT":
-        return coinShow(transactions[feeIndex].fee, "USDT");
+        return coinShow(transactions[feeIndex]?.fee, "USDT");
       case "TRY":
-        return lirShow({ value: transactions[feeIndex].fee, currency: "TRY" });
+        return lirShow({ value: transactions[feeIndex]?.fee, currency: "TRY" });
       default:
         return tomanShow({
-          value: transactions[feeIndex].fee,
+          value: transactions[feeIndex]?.fee,
           currency: "IRR",
         });
     }
@@ -165,7 +165,7 @@ const History = () => {
                       <tr key={index}>
                         <td className="text-center">
                           <span className="text-success">
-                            {convertTextSingle(data.destinationCurrencyCode)}
+                            {convertTextSingle(data?.destinationCurrencyCode)}
                           </span>
                         </td>
                         <td className="text-center">
