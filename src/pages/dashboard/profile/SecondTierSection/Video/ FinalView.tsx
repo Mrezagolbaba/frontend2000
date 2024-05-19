@@ -97,6 +97,7 @@ const FinalView = ({ mediaBlobUrl, clearBlobUrl, handleNextStep }: Props) => {
                 ref={videoPlayRef}
                 src={mediaBlobUrl}
                 autoPlay={false}
+                playsInline
                 width="100%"
                 onPause={() => setIsPlayVideo(false)}
                 onPlay={() => setIsPlayVideo(true)}
