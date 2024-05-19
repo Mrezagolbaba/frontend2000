@@ -85,9 +85,9 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش ${convertText(
-              "IRR",
-              "enToFa",
+            {`ارزش هر یک ${convertText(
+             "enToFa",
+             "IRR",
             )} در برابر ${convertText("USDT", "enToFa")}`}
           </Tooltip>
         </>

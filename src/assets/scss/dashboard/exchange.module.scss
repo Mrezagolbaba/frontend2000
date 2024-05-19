@@ -317,7 +317,10 @@
     }
   }
 }
-
+.tooltip {
+  font-family: inherit;
+  font-size: 12.5px;
+}
 @media screen and (max-width: 767px) {
   .currency-controls {
     flex-wrap: wrap;
