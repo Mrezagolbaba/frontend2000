@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { BsCameraVideo } from "react-icons/bs";
 import { Button, Col, Row } from "reactstrap";
 import CircleProgressBar from "./CircleProgressBar";
@@ -11,7 +11,7 @@ import { AlertDanger, AlertInfo, AlertSuccess } from "components/AlertWidget";
 import profile from "assets/scss/dashboard/profile.module.scss";
 
 type Props = {
-  previewStream: MediaStream | null;
+  previewStream: MutableRefObject<HTMLVideoElement | null>;
   startRecording: () => void;
   stopRecording: () => void;
   handleNextStep: (number) => void;
@@ -35,7 +35,7 @@ const PreviewStream = ({
     (state) => state.user,
   );
   const recordingTimerRef = useRef<any>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  // const videoRef = useRef<HTMLVideoElement>(null);
 
   //states
   const [hasCameraAccess, setHasCameraAccess] = useState<boolean>(false);
@@ -62,6 +62,7 @@ const PreviewStream = ({
     } catch (error) {
       setHasCameraAccess(false);
       setRecordStatus(RecorderStatus.IDLE);
+      alert(JSON.stringify(error));
     }
   };
 
@@ -99,14 +100,14 @@ const PreviewStream = ({
     };
   }, [recordStatus, recordingTime, stopRecording]);
 
-  useEffect(() => {
-    if (recordStatus === RecorderStatus.IDLE) checkCameraAccess();
-    if (videoRef.current && previewStream) {
-      videoRef.current.srcObject = previewStream;
-      videoRef.current.play();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [previewStream]);
+  // useEffect(() => {
+  //   if (recordStatus === RecorderStatus.IDLE) checkCameraAccess();
+  //   if (videoRef.current && previewStream) {
+  //     // videoRef.current.srcObject = previewStream;
+  //     videoRef.current.play();
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [previewStream]);
 
   //render
   return (
@@ -172,7 +173,12 @@ const PreviewStream = ({
             ) : (
               <>
                 <div className={profile["video-warper"]}>
-                  <video id="video-view" width="100%" ref={videoRef} autoPlay />
+                  <video
+                    id="video-view"
+                    width="100%"
+                    ref={previewStream}
+                    autoPlay
+                  />
                 </div>
                 {recordStatus === RecorderStatus.RECORDING && (
                   <CircleProgressBar counter={recordingTime} />
