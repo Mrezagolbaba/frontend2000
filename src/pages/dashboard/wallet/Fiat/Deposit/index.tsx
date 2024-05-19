@@ -187,35 +187,36 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <div className="px-2">
-      {!internationalServicesVerified ? (
-        verifications?.find((v) => v.type === "KYC_INTERNATIONAL_SERVICES")
-          ?.status === "DRAFT" ? (
-          <>
-            <AlertInfo
-              hasIcon
-              text="برای استفاده از خدمات لیر ترکیه، باید کارت اقامت ترکیه خود را ارسال نمایید."
-              key="passport-alert"
-            />
-            <Row>
-              <Col className="text-center">
-                <Button
-                  className="px-5 py-3"
-                  color="primary"
-                  outline
-                  onClick={() => setIsOpenDialog(true)}
-                >
-                  ارسال کارت اقامت
-                </Button>
-              </Col>
-            </Row>
-          </>
-        ) : (
+      {verifications?.find((v) => v.type === "KYC_INTERNATIONAL_SERVICES")
+        ?.status === "DRAFT" ||
+      verifications?.find((v) => v.type === "KYC_INTERNATIONAL_SERVICES")
+        ?.status === "REJECTED" ? (
+        <>
           <AlertInfo
             hasIcon
-            text="درخواست فعال سازی خدمات بین المللی شما در حال بررسی توسط پشتیبانی آرسونیکس می باشد."
+            text="برای استفاده از خدمات لیر ترکیه، باید کارت اقامت ترکیه خود را ارسال نمایید."
             key="passport-alert"
           />
-        )
+          <Row>
+            <Col className="text-center">
+              <Button
+                className="px-5 py-3"
+                color="primary"
+                outline
+                onClick={() => setIsOpenDialog(true)}
+              >
+                ارسال کارت اقامت
+              </Button>
+            </Col>
+          </Row>
+        </>
+      ) : verifications?.find((v) => v.type === "KYC_INTERNATIONAL_SERVICES")
+          ?.status === "INITIATED" ? (
+        <AlertInfo
+          hasIcon
+          text="درخواست فعال سازی خدمات بین المللی شما در حال بررسی توسط پشتیبانی آرسونیکس می باشد."
+          key="passport-alert"
+        />
       ) : (
         <Form>
           {!isEmpty(firstNameEn) && !isEmpty(lastNameEn) && (
