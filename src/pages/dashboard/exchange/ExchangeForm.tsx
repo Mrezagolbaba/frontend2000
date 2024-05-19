@@ -126,6 +126,7 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
       source.currency,
     ],
   );
+
   const handleSubmit = useCallback(() => {
     const sourceWalletWallet = wallets?.find(
       (w) => w.currencyCode === source.currency,
@@ -248,25 +249,11 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
 
   useEffect(() => {
     if (successReverseSwap) {
-      const newSourceAmount =
-        reversSwap.sourceCurrencyCode === "IRR"
-          ? Number(reversSwap.sourceAmount) / 10
-          : Number(reversSwap.sourceAmount);
-      const newDestinationAmount =
-        reversSwap.destinationCurrencyCode === "IRR"
-          ? Number(reversSwap.destinationAmount) / 10
-          : Number(reversSwap.destinationAmount);
-      setSource((prevState) => ({
-        ...prevState,
-        amount: newDestinationAmount,
-      }));
-      setDestination((prevState) => ({
-        ...prevState,
-        amount: newSourceAmount,
-      }));
+      const amountTemp = persianToEnglishNumbers(reversSwap.destinationAmount);
+      handleSwap("source", Number(amountTemp) / 10);
     }
     setTransaction(reversSwap);
-  }, [successReverseSwap, reversSwap]);
+  }, [successReverseSwap, reversSwap, handleSwap]);
 
   // ==============|| Render ||================= //
   return (
