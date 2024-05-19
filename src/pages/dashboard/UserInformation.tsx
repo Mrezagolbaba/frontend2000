@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
 import User1 from "assets/img/level-1.svg";
 import User2 from "assets/img/level-2.svg";
 import moment from "jalali-moment";
-import { Button, Card, CardBody } from "reactstrap";
+import { Card, CardBody } from "reactstrap";
 import { CiEdit } from "react-icons/ci";
+import { Link } from "react-router-dom";
 import { RxCalendar } from "react-icons/rx";
 import { useAppSelector } from "store/hooks";
+import { useEffect, useState } from "react";
 import { useGetSessionQuery } from "store/api/auth";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
-import { Link } from "react-router-dom";
 
 export default function UserInformation() {
   // ==============|| States ||================= //
