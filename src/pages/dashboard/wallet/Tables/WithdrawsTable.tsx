@@ -143,7 +143,7 @@ export default function WithdrawsTable({ type }: Props) {
                   <CopyInput
                     text={
                       type === "USDT"
-                        ? record?.providerRef
+                        ? record?.destinationId
                         : record?.destination?.iban
                     }
                     maxCharacter={10}
