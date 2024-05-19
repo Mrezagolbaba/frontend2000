@@ -4,10 +4,10 @@ import { BsPause, BsPlay } from "react-icons/bs";
 import { Button, Col, Row, Spinner } from "reactstrap";
 import Compressor from "compressorjs";
 import { useUploadDocMutation } from "store/api/profile-management";
+import { MAX_DOC_SIZE, MIN_DOC_SIZE } from "../types";
 
 //style
 import profile from "assets/scss/dashboard/profile.module.scss";
-import { MAX_DOC_SIZE, MIN_DOC_SIZE } from "../types";
 
 type Props = {
   mediaBlobUrl: string | undefined;
@@ -97,6 +97,7 @@ const FinalView = ({ mediaBlobUrl, clearBlobUrl, handleNextStep }: Props) => {
                 ref={videoPlayRef}
                 src={mediaBlobUrl}
                 autoPlay={false}
+                playsInline
                 width="100%"
                 onPause={() => setIsPlayVideo(false)}
                 onPlay={() => setIsPlayVideo(true)}
