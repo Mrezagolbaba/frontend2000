@@ -133,7 +133,7 @@ export default function DepositsTable({ type }: Props) {
                     {type === "USDT" ? (
                       <Link
                         target="_blank"
-                        to={`https://tronscan.org/#/transaction/${record.providerData.flowWalletAddress}`}
+                        to={`https://tronscan.org/#/transaction/${record.providerRef}`}
                       >
                         لینک تراکنش
                       </Link>
