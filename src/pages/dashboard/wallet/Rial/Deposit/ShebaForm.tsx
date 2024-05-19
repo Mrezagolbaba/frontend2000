@@ -205,7 +205,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
                   <FormGroup>
                     <Label htmlFor={name}> شناسه واریز:</Label>
                     <CopyInput text={depResponse.refCode || ""} />
-                    <FormText>کارمزد واریز بین بانکی: 0.02%</FormText>
+                    <FormText>کارمزد انتقال: 0.02%</FormText>
                   </FormGroup>
                 )}
               />

@@ -131,8 +131,9 @@ export default function DepositDebit({
     <Form onSubmit={handleSubmit(onSubmit)}>
       <AlertInfo
         hasIcon
-        text="می توانید برای تغییر حساب انتخاب شده، از قابلیت قطع دسترسی به حساب و تنظیم مجدد برداشت سریع استفاده کنید."
+        text="می توانید برای تغییر حساب انتخاب شده، از قابلیت قطع دسترسی به حساب و تنظیم مجدد برداشت مستقیم استفاده کنید."
       />
+
       <Row>
         <Col xs={12} lg={6}>
           <Controller
