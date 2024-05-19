@@ -29,7 +29,7 @@ export default function UserTier() {
                 هویت را تکمیل کنید، زمان بررسی و تایید اطلاعات ۱ ساعت
                 &zwnj;می&zwnj;باشد.{" "}
               </p>
-              <Link className="btn btn-outline-primary" to="/dashboard/profile">
+              <Link className="btn btn-outline-primary" to="/dashboard/profile#kyc-section">
                 احراز هویت سطح دو
               </Link>
             </div>
@@ -89,7 +89,7 @@ export default function UserTier() {
           </Col>
           <Col xs={12} className={dashboard["user-tier-second-button"]}>
             <div className={dashboard["user-tier-summary"]}>
-              <Link className="btn btn-outline-primary" to="/dashboard/profile">
+              <Link className="btn btn-outline-primary" to="/dashboard/profile#kyc-section">
                 احراز هویت سطح دو
               </Link>
             </div>
