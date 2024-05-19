@@ -587,3 +587,9 @@ ul {
   line-height: 30px !important;
   margin: 0 5px !important;
 }
+
+@media screen and (max-width: 575px) {
+  .btn {
+    --bs-btn-font-size: 0.8rem;
+  }
+}

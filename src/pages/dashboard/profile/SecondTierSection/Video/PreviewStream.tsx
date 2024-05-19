@@ -172,7 +172,13 @@ const PreviewStream = ({
             ) : (
               <>
                 <div className={profile["video-warper"]}>
-                  <video id="video-view" width="100%" ref={videoRef} autoPlay />
+                  <video
+                    id="video-view"
+                    width="100%"
+                    playsInline
+                    ref={videoRef}
+                    autoPlay
+                  />
                 </div>
                 {recordStatus === RecorderStatus.RECORDING && (
                   <CircleProgressBar counter={recordingTime} />

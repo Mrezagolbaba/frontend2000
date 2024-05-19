@@ -90,9 +90,10 @@ const AuthSection = () => {
 
   // ==============|| States ||================= //
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(
-    hash.includes("#kyc-section") && !secondTierVerified ? true : false,
+    true,
+    // hash.includes("#kyc-section") && !secondTierVerified ? true : false,
   );
-  const [activeState, setActiveState] = useState<0 | 1 | 2 | 3 | 4 | 5>(0);
+  const [activeState, setActiveState] = useState<0 | 1 | 2 | 3 | 4 | 5>(2);
   const [allowStates, setAllowStates] = useState({
     nationalCard: false,
     video: false,
