@@ -11,22 +11,22 @@ import {
   ModalHeader,
   Row,
 } from "reactstrap";
-import { useEffect, useState } from "react";
 import { BsCheck2 } from "react-icons/bs";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 //third-party
-import ZeroStep from "./ZeroStep";
-import FirstStep from "./FirstStep";
-import VideoStep from "./Video";
-import PhotoStep from "./PhotoStep";
 import FinalStep from "./FinalStep";
-import { useAppSelector } from "store/hooks";
+import FirstStep from "./FirstStep";
+import PhotoStep from "./PhotoStep";
+import VideoStep from "./Video";
+import ZeroStep from "./ZeroStep";
 import { AlertDanger, AlertInfo, AlertSuccess } from "components/AlertWidget";
+import { useAppSelector } from "store/hooks";
 import { useGetVerificationsQuery } from "store/api/profile-management";
 
 //style
 import profile from "assets/scss/dashboard/profile.module.scss";
-import { useLocation } from "react-router-dom";
 
 export enum REJECTION_REASON {
   NOT_ACCEPTABLE_VIDEO = "NOT_ACCEPTABLE_VIDEO",
