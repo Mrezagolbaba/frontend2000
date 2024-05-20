@@ -13,17 +13,16 @@ const History = () => {
     join: "transactions",
   });
 
-  const renderFee = (source, fee, transactions) => {
-    const feeIndex = source == fee ? 0 : 1;
-
+  const renderFee = (fee, transactions) => {
+    const targetTransAction = transactions.find((t) => t.currencyCode === fee);
     switch (fee) {
       case "USDT":
-        return coinShow(transactions[feeIndex]?.fee, "USDT");
+        return coinShow(targetTransAction?.fee, "USDT");
       case "TRY":
-        return lirShow({ value: transactions[feeIndex]?.fee, currency: "TRY" });
+        return lirShow({ value: targetTransAction?.fee, currency: "TRY" });
       default:
         return tomanShow({
-          value: transactions[feeIndex]?.fee,
+          value: targetTransAction?.fee,
           currency: "IRR",
         });
     }
@@ -165,12 +164,12 @@ const History = () => {
                       <tr key={index}>
                         <td className="text-center">
                           <span className="text-success">
-                            {convertTextSingle(data?.destinationCurrencyCode)}
+                            {convertTextSingle(data?.sourceCurrencyCode)}
                           </span>
                         </td>
                         <td className="text-center">
                           <span className="text-danger">
-                            {convertTextSingle(data?.sourceCurrencyCode)}
+                            {convertTextSingle(data?.destinationCurrencyCode)}
                           </span>
                         </td>
                         <td className="text-center">
@@ -180,11 +179,7 @@ const History = () => {
                           )}
                         </td>
                         <td className="text-center">
-                          {renderFee(
-                            data?.sourceCurrencyCode,
-                            data?.feeCurrencyCode,
-                            data?.transactions,
-                          )}
+                          {renderFee(data?.feeCurrencyCode, data?.transactions)}
                         </td>
                         <td className="text-center">
                           {renderAmount(
