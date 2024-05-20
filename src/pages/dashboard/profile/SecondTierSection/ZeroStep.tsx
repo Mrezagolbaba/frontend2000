@@ -28,7 +28,7 @@ function ZeroStep({
   //life-cycle
   useEffect(() => {
     if (isSuccess) {
-      if (!allowStates.video || !allowStates.commitLetter) onClick(4);
+      if (!allowStates.video && !allowStates.commitLetter) onClick(4);
       else onClick(1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,8 +52,7 @@ function ZeroStep({
               <>
                 <span>
                   فایل مدرک شناسایی (کارت ملی، شناسنامه، گواهینامه یا پاسپورت)
-                  خود را می توانید به صورت png, jpg, jpeg یا pdf تا حداکثر 10MB
-                  بارگذاری کنید.
+                  خود را می توانید به صورت png, jpg, jpeg یا pdf بارگذاری کنید.
                 </span>
               </>
             }
