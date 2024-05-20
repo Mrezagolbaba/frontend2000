@@ -107,7 +107,7 @@ const AuthSection = () => {
       case 3:
         return <PhotoStep onClick={setActiveState} />;
       case 2:
-        return <VideoStep onClick={setActiveState} />;
+        return <VideoStep onClick={setActiveState} allowStates={allowStates} />;
       case 1:
         return <FirstStep onClick={setActiveState} />;
       case 0:
@@ -187,23 +187,19 @@ const AuthSection = () => {
       const docStatus = userVerifications[2].status;
       if (docStatus === "REJECTED") {
         userVerifications[2].rejectReasons.forEach((reason) => {
-          switch (reason) {
-            case REJECTION_REASON.VIDEO_AND_AUDIO_NOT_SYNCED:
-            case REJECTION_REASON.POOR_QUALITY_VIDEO:
-            case REJECTION_REASON.NOT_ACCEPTABLE_VIDEO: {
-              setAllowStates({ ...allowStates, video: true });
-              break;
-            }
-            case REJECTION_REASON.INVALID_NATIONAL_CARD:
-            case REJECTION_REASON.EXPIRED_NATIONAL_CARD: {
-              setAllowStates({ ...allowStates, nationalCard: true });
-              break;
-            }
-            case REJECTION_REASON.POOR_QUALITY_COMMITMENT_LETTER: {
-              setAllowStates({ ...allowStates, commitLetter: true });
-              break;
-            }
-          }
+          if (
+            reason === REJECTION_REASON.VIDEO_AND_AUDIO_NOT_SYNCED ||
+            reason === REJECTION_REASON.POOR_QUALITY_VIDEO ||
+            reason === REJECTION_REASON.NOT_ACCEPTABLE_VIDEO
+          )
+            setAllowStates((oldState) => ({ ...oldState, video: true }));
+          else if (
+            reason === REJECTION_REASON.INVALID_NATIONAL_CARD ||
+            reason === REJECTION_REASON.EXPIRED_NATIONAL_CARD
+          )
+            setAllowStates((oldState) => ({ ...oldState, nationalCard: true }));
+          else
+            setAllowStates((oldState) => ({ ...oldState, commitLetter: true }));
         });
       } else if (docStatus === "DRAFT")
         setAllowStates({

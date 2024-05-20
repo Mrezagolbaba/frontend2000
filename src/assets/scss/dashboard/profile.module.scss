@@ -338,11 +338,29 @@
       flex: 0 0 40px;
     }
   }
+  .modal-title {
+    align-items: center;
+    h5 {
+      font-size: 1rem;
+    }
+    button {
+      font-size: 0.7rem;
+      padding: 0 2px;
+    }
+  }
   .video-container {
     .video-warper {
-      width: 150px;
-      height: 150px;
+      width: 180px;
+      height: 180px;
+      video {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
     }
+  }
+  .video-summary-text {
+    font-size: 0.8rem;
   }
   .progressbar {
     &__circles {
