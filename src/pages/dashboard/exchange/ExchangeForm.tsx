@@ -126,12 +126,16 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
       source.currency,
     ],
   );
-
   const handleSubmit = useCallback(() => {
     const sourceWalletWallet = wallets?.find(
       (w) => w.currencyCode === source.currency,
     );
-    const min = ((Number(usdtRate?.rate) * 3) / 10).toFixed(0);
+    const min =
+      source.currency === "IRR"
+        ? ((Number(usdtRate?.rate) * 3) / 10).toFixed(0)
+        : source.currency === "TRY"
+          ? (Number(usdtRate?.rate) * 3).toPrecision(6)
+          : "3";
 
     if (Number(sourceWalletWallet?.availableBalance) < source.amount) {
       setError({ ...error, source: true });
@@ -211,7 +215,7 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
 
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
-    if (successSwap && isSubmit) {
+    if (successSwap && isSubmit && swap?.id) {
       navigate(`/dashboard/invoice/${swap?.id}`);
     }
   }, [isSubmit, successSwap, navigate, swap?.id]);
