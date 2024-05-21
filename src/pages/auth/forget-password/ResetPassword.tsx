@@ -114,6 +114,7 @@ export default function ResetPassword() {
                         <PasswordInput
                           errors={errors}
                           hasShowHint={true}
+                          label="تکرار رمز عبور"
                           {...field}
                         />
                       )}
