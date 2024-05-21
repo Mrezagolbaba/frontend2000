@@ -257,24 +257,6 @@ export default function Otp() {
     return () => clearInterval(timerInterval);
   }, [timeInSeconds]);
 
-  useEffect(() => {
-    // Assuming each OTP input is represented by an input element with a specific class
-    const otpInputs = document.querySelectorAll(".otp-input-class"); // Replace '.otp-input-class' with the actual class used
-
-    otpInputs.forEach((input) => {
-      input.setAttribute("type", "number");
-      input.setAttribute("pattern", "[0-9]*"); // Optional: Ensures only numeric input
-    });
-
-    // Cleanup function to reset if necessary
-    return () => {
-      otpInputs.forEach((input) => {
-        input.removeAttribute("type");
-        input.removeAttribute("pattern");
-      });
-    };
-  }, []);
-
   // ==============|| Render ||================= //
 
   return (
