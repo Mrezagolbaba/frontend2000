@@ -129,7 +129,7 @@ export default function International({ accounts, isLoading }: Props) {
             <AlertWarning
               hasIcon
               key="warning-international-account"
-              text={`واریز به حساب‌های آرسونیکس فقط باید از حساب ${firstNameEn} ${lastNameEn} انجام شود، در غیر اینصورت پس از گذشت ۷۲ ساعت کاری با کسر کارمزد بانکی مبلغ عودت داده می‌شود.`}
+              text={`واریز به حساب‌های آرسونیکس فقط باید از حساب ${firstNameEn.toUpperCase()} ${lastNameEn.toUpperCase()} انجام شود، در غیر اینصورت پس از گذشت ۷۲ ساعت کاری با کسر کارمزد بانکی مبلغ عودت داده می‌شود.`}
             />
           )}
           <AlertInfo
@@ -177,7 +177,10 @@ export default function International({ accounts, isLoading }: Props) {
                               disabled={formLoading}
                               value={value}
                               ref={ref}
-                              onChange={onChange}
+                              onChange={({ target }) => {
+                                const val = target.value.toUpperCase();
+                                onChange(val);
+                              }}
                               name={name}
                               type="text"
                               className="form-control d-rtl"
