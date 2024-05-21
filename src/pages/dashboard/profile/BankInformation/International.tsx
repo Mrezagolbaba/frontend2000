@@ -137,84 +137,6 @@ export default function International({ accounts, isLoading }: Props) {
             key="info-international-account"
             text="برداشت فیات دیجیتال در آرسونیکس به حساب‌های مختلف محدودیتی ندارد."
           />
-          {isOpenForm && (
-            <Form
-              className="bank-account"
-              onSubmit={handleSubmit(submitHandler)}
-            >
-              <Row>
-                <Col xs={12} sm={10}>
-                  <Row>
-                    <Col xs={12} xl={7}>
-                      <Controller
-                        name="iban"
-                        control={control}
-                        render={({ field: { name, value, onChange, ref } }) => (
-                          <FormGroup className={profile["accounts-field"]}>
-                            <Label> شماره IBAN:</Label>
-                            <IBANNumber
-                              name={name}
-                              value={value}
-                              onChange={(value) => setValue(name, value)}
-                              setBankId={(id) => {
-                                setValue("bankId", id);
-                              }}
-                              disabled={formLoading}
-                              invalid={Boolean(errors.ownerFullName)}
-                            />
-                          </FormGroup>
-                        )}
-                      />
-                    </Col>
-                    <Col xs={12} xl={5}>
-                      <Controller
-                        name="ownerFullName"
-                        control={control}
-                        render={({ field: { name, value, onChange, ref } }) => (
-                          <FormGroup className={profile["accounts-field"]}>
-                            <Label> صاحب حساب:</Label>
-                            <Input
-                              disabled={formLoading}
-                              value={value}
-                              ref={ref}
-                              onChange={({ target }) => {
-                                const val = target.value.toUpperCase();
-                                onChange(val);
-                              }}
-                              name={name}
-                              type="text"
-                              className="form-control d-rtl"
-                              id={`input23_001`}
-                              invalid={Boolean(errors.ownerFullName)}
-                            />
-                          </FormGroup>
-                        )}
-                      />
-                    </Col>
-                  </Row>
-                </Col>
-                <Col
-                  xs={12}
-                  sm={2}
-                  className="d-flex align-self-center justify-content-center"
-                >
-                  <Button
-                    type="button"
-                    color="icon-danger"
-                    disabled={accounts.length <= 0}
-                    onClick={() => {
-                      setIsOpenForm(false);
-                    }}
-                  >
-                    <MdClose />
-                  </Button>
-                  <Button type="submit" color="icon-success">
-                    {formLoading ? <Spinner size="sm" /> : <LuCheck />}
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
-          )}
 
           {!accounts || isLoading ? (
             <>
@@ -360,7 +282,84 @@ export default function International({ accounts, isLoading }: Props) {
               ),
             )
           )}
-
+          {isOpenForm && (
+            <Form
+              className="bank-account"
+              onSubmit={handleSubmit(submitHandler)}
+            >
+              <Row>
+                <Col xs={12} sm={10}>
+                  <Row>
+                    <Col xs={12} xl={7}>
+                      <Controller
+                        name="iban"
+                        control={control}
+                        render={({ field: { name, value, onChange, ref } }) => (
+                          <FormGroup className={profile["accounts-field"]}>
+                            <Label> شماره IBAN:</Label>
+                            <IBANNumber
+                              name={name}
+                              value={value}
+                              onChange={(value) => setValue(name, value)}
+                              setBankId={(id) => {
+                                setValue("bankId", id);
+                              }}
+                              disabled={formLoading}
+                              invalid={Boolean(errors.ownerFullName)}
+                            />
+                          </FormGroup>
+                        )}
+                      />
+                    </Col>
+                    <Col xs={12} xl={5}>
+                      <Controller
+                        name="ownerFullName"
+                        control={control}
+                        render={({ field: { name, value, onChange, ref } }) => (
+                          <FormGroup className={profile["accounts-field"]}>
+                            <Label> صاحب حساب:</Label>
+                            <Input
+                              disabled={formLoading}
+                              value={value}
+                              ref={ref}
+                              onChange={({ target }) => {
+                                const val = target.value.toUpperCase();
+                                onChange(val);
+                              }}
+                              name={name}
+                              type="text"
+                              className="form-control d-rtl"
+                              id={`input23_001`}
+                              invalid={Boolean(errors.ownerFullName)}
+                            />
+                          </FormGroup>
+                        )}
+                      />
+                    </Col>
+                  </Row>
+                </Col>
+                <Col
+                  xs={12}
+                  sm={2}
+                  className="d-flex align-self-center justify-content-center"
+                >
+                  <Button
+                    type="button"
+                    color="icon-danger"
+                    disabled={accounts.length <= 0}
+                    onClick={() => {
+                      setIsOpenForm(false);
+                    }}
+                  >
+                    <MdClose />
+                  </Button>
+                  <Button type="submit" color="icon-success">
+                    {formLoading ? <Spinner size="sm" /> : <LuCheck />}
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+          )}
           <Row>
             <ButtonGroup style={{ display: "flex", justifyContent: "center" }}>
               <Button
