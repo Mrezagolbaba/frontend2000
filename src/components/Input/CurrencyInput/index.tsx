@@ -123,6 +123,7 @@ export default function Currency({
       className={` ${currencyStyle["currency-input"]} mx-0 form-control ${
         hasError ? "is-invalid" : ""
       }`}
+      inputMode="numeric"
       placeholder={placeholder}
       defaultValue={value}
       decimalsLimit={decimalsLimit}
