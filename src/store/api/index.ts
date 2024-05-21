@@ -110,6 +110,7 @@ export const api = createApi({
     "wallets",
     "ticket",
     "reply-ticket",
+    "debit-accounts",
   ],
   keepUnusedDataFor: 30,
   refetchOnMountOrArgChange: 30,

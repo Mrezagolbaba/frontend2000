@@ -103,6 +103,7 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: "/bank-accounts/debit-account",
         };
       },
+      providesTags: ["debit-accounts"],
     }),
     debitSubscription: builder.mutation<{ url: string }, string>({
       query(bankId) {
@@ -111,6 +112,7 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: `/bank-accounts/request-debit-subscription/${bankId}`,
         };
       },
+      invalidatesTags: ["debit-accounts", "wallets"],
     }),
     disconnectDebit: builder.mutation<{ url: string }, string>({
       query(bankId) {
@@ -119,7 +121,7 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: `/bank-accounts/remove-debit-subscription/${bankId}`,
         };
       },
-      invalidatesTags: ["bank-accounts"],
+      invalidatesTags: ["debit-accounts"],
     }),
   }),
 });
