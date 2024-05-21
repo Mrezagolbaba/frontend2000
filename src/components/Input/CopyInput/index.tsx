@@ -1,8 +1,7 @@
-import { useRef } from "react";
-import { LuCopy } from "react-icons/lu";
 import ClipboardJS from "clipboard";
 import toast from "react-hot-toast";
-import BanksWrapper from "components/BanksWrapper";
+import { LuCopy } from "react-icons/lu";
+import { useRef } from "react";
 
 import style from "assets/scss/components/Input/copyInput.module.scss";
 
@@ -24,21 +23,17 @@ export default function CopyInput({
   const handleCopy = () => {
     if (buttonRef.current) {
       const clipboard = new ClipboardJS(buttonRef.current);
-
       clipboard.on("success", (e) => {
         toast.success("کپی شد.", { position: "top-center" });
         e.clearSelection();
         clipboard.destroy();
       });
-
       clipboard.on("error", () => {
         toast.error("کپی نشد! لطفا دوباره تلاش کنید.", {
           position: "top-center",
         });
         clipboard.destroy();
       });
-
-      buttonRef.current.click();
     }
   };
 

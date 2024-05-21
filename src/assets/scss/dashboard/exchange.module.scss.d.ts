@@ -20,6 +20,5 @@ declare const classNames: {
   readonly wage: "wage";
   readonly table: "table";
   readonly "radio-toggle-control": "radio-toggle-control";
-  readonly tooltip: "tooltip";
 };
 export = classNames;
