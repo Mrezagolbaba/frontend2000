@@ -633,8 +633,15 @@ div.user-tier-card {
 }
 @media screen and (max-width: 575px) {
   .header {
+    .card .card-body {
+      padding: 20px 20px;
+    }
+    li {
+      padding-left: 0.5rem !important;
+      margin-left: 0.5rem !important;
+    }
     a {
-      font-size: 0.7rem !important;
+      font-size: 0.8rem !important;
     }
   }
   .user-summary li {

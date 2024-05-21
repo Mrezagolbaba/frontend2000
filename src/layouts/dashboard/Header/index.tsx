@@ -79,29 +79,13 @@ const Header = ({ onSidebarToggle }: Props) => {
                 isLeftMenuOpen ? dashboard.expanded : ""
               }`}
             >
-              <li className={dashboard.header__navbar__close}>
-                <button onClick={() => setIsLefMenuOpen(false)}>
-                  <span className="icon">
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M13 1L1 13" stroke="#03041B" />
-                      <path d="M13 13L1 0.999999" stroke="#03041B" />
-                    </svg>
-                  </span>
-                </button>
-              </li>
               <li>
                 <Link
-                  to="/dashboard/orders"
+                  to="/dashboard/exchange"
                   onClick={() => setIsLefMenuOpen(false)}
                   className="text-primary"
                 >
-                  سفارشات من
+                  خرید و فروش سریع
                 </Link>
               </li>
               <li>
@@ -115,12 +99,11 @@ const Header = ({ onSidebarToggle }: Props) => {
               </li>
               <li>
                 <Link
-                  target="_blank"
-                  to="https://help.arsonex.com/"
+                  to="/dashboard/orders"
                   onClick={() => setIsLefMenuOpen(false)}
                   className="text-primary"
                 >
-                  مرکز راهنمایی
+                  سفارشات من
                 </Link>
               </li>
             </ul>
