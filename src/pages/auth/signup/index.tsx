@@ -172,6 +172,7 @@ export default function Register() {
                               : undefined,
                             autoFocus: true,
                             className: auth["phone-number"],
+                            inputMode: "numeric",
                           }}
                         />
                       )}

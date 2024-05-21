@@ -132,6 +132,7 @@ export default function ForgetPassword() {
                                   : undefined,
                                 autoFocus: true,
                                 className: auth["phone-number"],
+                                inputMode: "numeric",
                               }}
                             />
                           )}

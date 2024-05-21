@@ -181,6 +181,7 @@ export default function LoginPage() {
                                   : undefined,
                                 autoFocus: true,
                                 className: auth["phone-number"],
+                                inputMode: "numeric",
                               }}
                             />
                           )}
