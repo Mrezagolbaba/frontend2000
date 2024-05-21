@@ -4,6 +4,7 @@ import {
   CardBody,
   Col,
   Container,
+  Input,
   Row,
   Spinner,
 } from "reactstrap";
@@ -327,7 +328,13 @@ export default function Otp() {
                           numInputs={6}
                           renderSeparator={undefined}
                           shouldAutoFocus={true}
-                          renderInput={(props) => <input {...props} />}
+                          renderInput={(props) => (
+                            <input
+                              {...props}
+                              type="text"
+                              inputMode="numeric"
+                            />
+                          )}
                         />
                       )}
                     />
