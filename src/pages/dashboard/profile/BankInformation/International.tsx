@@ -29,12 +29,15 @@ import IBANNumber from "components/Input/IBANNumber";
 import { persianToEnglishNumbers } from "helpers";
 
 import profile from "assets/scss/dashboard/profile.module.scss";
+import { useAppSelector } from "store/hooks";
 
 type Props = {
   accounts: BankAccountsResponse[];
   isLoading: boolean;
 };
 export default function International({ accounts, isLoading }: Props) {
+  const { firstNameEn, lastNameEn, internationalServicesVerified } =
+    useAppSelector((state) => state.user);
   const [isOpenForm, setIsOpenForm] = useState<boolean>(false);
   const [editOption, setEditOption] = useState<{
     isEdit: boolean;
@@ -122,10 +125,17 @@ export default function International({ accounts, isLoading }: Props) {
             key="warning-international-account"
             text="در صورتی که کارت اقامت کشوری که در آن ساکن هستید را در کیف پول بخش واریز فیات دیجیتال مورد نظر خود ارسال نکنید، فقط قابلیت برداشت فیات دیجیتال از آرسونیکس را خواهید داشت."
           />
+          {internationalServicesVerified && (
+            <AlertWarning
+              hasIcon
+              key="warning-international-account"
+              text={`واریز به حساب‌های آرسونیکس فقط باید از حساب ${firstNameEn} ${lastNameEn} انجام شود، در غیر اینصورت پس از گذشت ۷۲ ساعت کاری با کسر کارمزد بانکی مبلغ عودت داده می‌شود.`}
+            />
+          )}
           <AlertInfo
             hasIcon
             key="info-international-account"
-            text="اطلاعاتی مانند SWIFT Code یا Sort Code هنگام برداشت ارز مورد نظر به طور جداگانه از شما دریافت می‌شود."
+            text="برداشت فیات دیجیتال در آرسونیکس به حساب‌های مختلف محدودیتی ندارد."
           />
           {isOpenForm && (
             <Form
