@@ -9,8 +9,8 @@ import {
 } from "reactstrap";
 import * as Yup from "yup";
 import Auth from "layouts/auth";
+import Notify from "components/Notify";
 import PasswordInput from "components/PasswordInput";
-import toast from "react-hot-toast";
 import { Controller, useForm } from "react-hook-form";
 import { setVerifyLogin } from "store/reducers/jwtAuth";
 import { useDispatch } from "store/store";
@@ -64,9 +64,7 @@ export default function ResetPassword() {
   const onSubmit = async (data: any) => setPassword(data.password);
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>
-      toast.error(error?.message, {
-        position: "bottom-left",
-      }),
+      Notify({ type: "error", text: error?.message }),
     );
 
   // ==============|| Life Cycle ||================= //

@@ -1,9 +1,9 @@
 import ClipboardJS from "clipboard";
-import toast from "react-hot-toast";
 import { LuCopy } from "react-icons/lu";
 import { useRef } from "react";
 
 import style from "assets/scss/components/Input/copyInput.module.scss";
+import Notify from "components/Notify";
 
 type Props = {
   text: string;
@@ -24,14 +24,12 @@ export default function CopyInput({
     if (buttonRef.current) {
       const clipboard = new ClipboardJS(buttonRef.current);
       clipboard.on("success", (e) => {
-        toast.success("کپی شد.", { position: "top-center" });
+        Notify({ type: "success", text: "کپی شد." });
         e.clearSelection();
         clipboard.destroy();
       });
       clipboard.on("error", () => {
-        toast.error("کپی نشد! لطفا دوباره تلاش کنید.", {
-          position: "top-center",
-        });
+        Notify({ type: "error", text: "کپی نشد! لطفا دوباره تلاش کنید." });
         clipboard.destroy();
       });
     }

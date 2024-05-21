@@ -1,7 +1,3 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import Dialog from "components/Dialog";
-import DropdownInput from "components/Input/Dropdown";
-import { Controller, useForm } from "react-hook-form";
 import {
   Button,
   Col,
@@ -13,10 +9,14 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
-import { useCreateTicketMutation } from "store/api/ticket";
+import Dialog from "components/Dialog";
+import DropdownInput from "components/Input/Dropdown";
+import Notify from "components/Notify";
+import { Controller, useForm } from "react-hook-form";
 import { TicketSchema } from "./validationTicket";
+import { useCreateTicketMutation } from "store/api/ticket";
 import { useEffect } from "react";
-import toast from "react-hot-toast";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const categoryData = [
   { value: "USER_PROFILE_AND_VERIFICATION", content: "اطلاعات هویتی و احراز" },
@@ -53,7 +53,10 @@ const TicketModal = ({ isModalOpen, onCancel, onOk }) => {
   });
   useEffect(() => {
     if (isSuccess) {
-      toast.success("تیکت شما جهت بررسی به پشتیبانی ارسال شد.");
+      Notify({
+        type: "success",
+        text: "تیکت شما جهت بررسی به پشتیبانی ارسال شد.",
+      });
       onCancel?.();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

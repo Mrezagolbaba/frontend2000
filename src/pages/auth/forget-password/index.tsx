@@ -11,7 +11,6 @@ import * as Yup from "yup";
 import Auth from "layouts/auth";
 import FloatInput from "components/Input/FloatInput";
 import SelectCountry from "components/SelectCountry";
-import toast from "react-hot-toast";
 import useAuth from "hooks/useAuth";
 import { CiMobile2 } from "react-icons/ci";
 import { Controller, useForm } from "react-hook-form";
@@ -23,6 +22,7 @@ import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import auth from "assets/scss/auth/auth.module.scss";
+import Notify from "components/Notify";
 
 export default function ForgetPassword() {
   // ==============|| States ||================= //
@@ -73,9 +73,7 @@ export default function ForgetPassword() {
   // ==============|| Handlers ||================= //
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>
-      toast.error(error?.message, {
-        position: "bottom-left",
-      }),
+      Notify({ type: "error", text: error?.message }),
     );
   const handleResetPassword = async (data) => {
     const body: ForgotPasswordRequest = {

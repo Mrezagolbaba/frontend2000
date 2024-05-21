@@ -1,10 +1,10 @@
-import Dialog from "components/Dialog";
-import { formatShowAccount } from "helpers/filesManagement";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { Button, Row, Spinner } from "reactstrap";
-import { useDeleteBankAccountMutation } from "store/api/profile-management";
 import BanksWrapper from "components/BanksWrapper";
+import Dialog from "components/Dialog";
+import Notify from "components/Notify";
+import { Button, Row, Spinner } from "reactstrap";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import { formatShowAccount } from "helpers/filesManagement";
+import { useDeleteBankAccountMutation } from "store/api/profile-management";
 
 import profile from "assets/scss/dashboard/profile.module.scss";
 
@@ -35,13 +35,16 @@ export default function DeleteModal({
 
   useEffect(() => {
     if (isSuccess) {
-      toast.success("این حساب از لیست حساب های بانکی شما حذف گردید.");
-      setDeleteOptions({
-        isOpen: false,
-        id: undefined,
-        accountNumber: "",
-        iban: "",
-      });
+      Notify({
+        type: "success",
+        text: "این حساب از لیست حساب های بانکی شما حذف گردید.",
+      }),
+        setDeleteOptions({
+          isOpen: false,
+          id: undefined,
+          accountNumber: "",
+          iban: "",
+        });
     }
   }, [isSuccess, setDeleteOptions]);
 

@@ -1,14 +1,14 @@
-import toast from "react-hot-toast";
-import { useUpdatePasswordMutation } from "store/api/user";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { changePassSchema } from "pages/auth/validationForms";
-import { IChangePassword } from "types/settings";
-import { Button, Col, Row, Spinner } from "reactstrap";
+import Notify from "components/Notify";
 import PasswordInput from "components/PasswordInput";
+import { Button, Col, Row, Spinner } from "reactstrap";
+import { Controller, useForm } from "react-hook-form";
+import { IChangePassword } from "types/settings";
+import { changePassSchema } from "pages/auth/validationForms";
+import { useEffect } from "react";
+import { useUpdatePasswordMutation } from "store/api/user";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import setting from "../styles.module.scss";
-import { useEffect } from "react";
 
 const ChangePassword = () => {
   const [updatePassword, { isLoading, isSuccess }] =
@@ -38,14 +38,13 @@ const ChangePassword = () => {
   };
 
   useEffect(() => {
-    if (isSuccess) toast.success("رمز عبور با موفقیت تغییر کرد");
+    if (isSuccess)
+      Notify({ type: "success", text: "رمز عبور با موفقیت تغییر کرد" });
   }, [isSuccess]);
 
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>
-      toast.error(error?.message, {
-        position: "bottom-left",
-      }),
+      Notify({ type: "error", text: error?.message }),
     );
 
   return (
