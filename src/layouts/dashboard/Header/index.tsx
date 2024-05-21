@@ -24,7 +24,9 @@ const Header = ({ onSidebarToggle }: Props) => {
               <img src={Wallet} alt="" className="logo" />
             </Link>
           </div>
-          <ul className={dashboard.header__navbar}>
+          <ul
+            className={`${dashboard.header__navbar} ${dashboard["hide-in-mobile"]}`}
+          >
             <li>
               <Link to="/dashboard/orders">سفارشات من</Link>
             </li>
@@ -97,6 +99,7 @@ const Header = ({ onSidebarToggle }: Props) => {
                 <Link
                   to="/dashboard/orders"
                   onClick={() => setIsLefMenuOpen(false)}
+                  className="text-primary"
                 >
                   سفارشات من
                 </Link>
@@ -105,6 +108,7 @@ const Header = ({ onSidebarToggle }: Props) => {
                 <Link
                   to="/dashboard/history"
                   onClick={() => setIsLefMenuOpen(false)}
+                  className="text-primary"
                 >
                   تاریخچه
                 </Link>
@@ -114,6 +118,7 @@ const Header = ({ onSidebarToggle }: Props) => {
                   target="_blank"
                   to="https://help.arsonex.com/"
                   onClick={() => setIsLefMenuOpen(false)}
+                  className="text-primary"
                 >
                   مرکز راهنمایی
                 </Link>
