@@ -36,9 +36,9 @@ function LatestDeals() {
                 <thead>
                   <tr>
                     <th scope="col">نوع تراکنش</th>
-                    <th scope="col">ارز</th>
-                    <th scope="col">مقدار</th>
-                    <th scope="col">وضعیت</th>
+                    <th scope="col">نوع ارز</th>
+                    <th scope="col">مقدار ارز</th>
+                    <th scope="col">وضعیت تراکنش</th>
                     <th scope="col">تاریخ</th>
                   </tr>
                 </thead>
