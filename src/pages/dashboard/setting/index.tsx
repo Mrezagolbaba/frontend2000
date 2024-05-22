@@ -16,10 +16,10 @@ export default function Setting() {
             </CardHeader>
             <CardBody>
               <div className="security-form ">
-                <h6 className=" mb-4 mt-4">
+                <h5 className="verfy-method-text mb-4 mt-4">
                   نحوه تایید هویت دو مرحله ای جهت ورود به حساب کاربری و درخواست
                   برداشت
-                </h6>
+                </h5>
                 <Authenticator />
                 <ChangePassword />
               </div>
