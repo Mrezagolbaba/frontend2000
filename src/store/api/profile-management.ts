@@ -15,6 +15,7 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: `verifications`,
         };
       },
+      providesTags: ["verifications"],
     }),
     uploadDoc: builder.mutation<any, any>({
       query({ docType, fileName, file }) {
@@ -37,6 +38,7 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: "verifications/initiate-second-tier",
         };
       },
+      invalidatesTags: ["verifications"],
     }),
     initialInternational: builder.mutation<any, void>({
       query() {
@@ -45,6 +47,7 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: "verifications/initiate-international-services",
         };
       },
+      invalidatesTags: ["verifications"],
     }),
     banks: builder.query<BanksResponse[], any>({
       query(params) {
