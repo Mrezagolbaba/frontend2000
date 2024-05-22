@@ -34,42 +34,42 @@ const SpotRate = () => {
     {
       code: "BTC",
       name: "بیت کوین",
-      originName: "Bitcoin",
+      originName: "bitcoin",
       imgSrc: BTC,
       activeDeal: true,
     },
     {
       code: "USDT",
       name: "تتر",
-      originName: "Tether",
+      originName: "tether",
       imgSrc: USDT,
       activeDeal: true,
     },
     {
       code: "TRX",
       name: "ترون",
-      originName: "Tron",
+      originName: "tron",
       imgSrc: TRX,
       activeDeal: true,
     },
     {
       code: "ETH",
       name: "اتریوم",
-      originName: "Ethereum",
+      originName: "ethereum",
       imgSrc: ETH,
       activeDeal: true,
     },
     {
       code: "SOL",
       name: "سولانا",
-      originName: "Solana",
+      originName: "solana",
       imgSrc: SOL,
       activeDeal: true,
     },
     {
       code: "XRP",
       name: "ریپل",
-      originName: "Ripple",
+      originName: "ripple",
       imgSrc: XRP,
       activeDeal: true,
     },
@@ -137,6 +137,7 @@ const SpotRate = () => {
     checkLocation();
   }, [checkLocation]);
   // ==============|| Render ||================= //
+
   return (
     <section className={`${home["currency-rates"]} ${home["section-gap"]}`}>
       <Container>

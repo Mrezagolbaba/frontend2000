@@ -52,5 +52,6 @@ declare const classNames: {
   readonly "user-tier-first-button": "user-tier-first-button";
   readonly __navbar: "__navbar";
   readonly expanded: "expanded";
+  readonly "hide-in-mobile": "hide-in-mobile";
 };
 export = classNames;

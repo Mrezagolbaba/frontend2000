@@ -12,10 +12,9 @@ import {
 import * as Yup from "yup";
 import Auth from "layouts/auth";
 import FloatInput from "components/Input/FloatInput";
+import Notify from "components/Notify";
 import PasswordInput from "components/PasswordInput";
 import SelectCountry from "components/SelectCountry";
-import auth from "assets/scss/auth/auth.module.scss";
-import toast from "react-hot-toast";
 import useAuth from "hooks/useAuth";
 import { CiMobile2 } from "react-icons/ci";
 import { Controller, useForm } from "react-hook-form";
@@ -29,6 +28,8 @@ import { motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
+
+import auth from "assets/scss/auth/auth.module.scss";
 
 export default function Register() {
   // ==============|| State ||================= //
@@ -102,23 +103,18 @@ export default function Register() {
           error.data.message.includes(
             "phoneNumber must be a valid phone number",
           )
-        ) {
-          toast.error("شماره همراه وارد شده صحیح نمی باشد.", {
-            position: "bottom-left",
+        )
+          Notify({
+            type: "error",
+            text: "شماره همراه وارد شده صحیح نمی باشد.",
           });
-        } else
-          error.data.message.forEach((m) =>
-            toast.error(m, {
-              position: "bottom-left",
-            }),
-          );
+        else
+          error.data.message.forEach((m) => Notify({ type: "error", text: m }));
       });
   };
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>
-      toast.error(error?.message, {
-        position: "bottom-left",
-      }),
+      Notify({ type: "error", text: error?.message }),
     );
   const handleParams = useCallback(() => {
     if (code && !isEmpty(code)) setValue("referralCode", code);
@@ -152,7 +148,7 @@ export default function Register() {
             >
               <Container>
                 <Row className="gy-2 gx-0">
-                <Col xs={8}>
+                  <Col xs={8}>
                     <Controller
                       name="phoneNumber"
                       control={control}
@@ -172,6 +168,7 @@ export default function Register() {
                               : undefined,
                             autoFocus: true,
                             className: auth["phone-number"],
+                            inputMode: "numeric",
                           }}
                         />
                       )}
@@ -260,8 +257,11 @@ export default function Register() {
                             }
                           />
                           <Label htmlFor={name} style={{ fontSize: "13px" }}>
-                            <Link to="/terms" target="_blank"> مقررات آرسونیکس</Link> را
-                            خوانده‌ام و با آن موافقم.
+                            <Link to="/terms" target="_blank">
+                              {" "}
+                              مقررات آرسونیکس
+                            </Link>{" "}
+                            را خوانده‌ام و با آن موافقم.
                           </Label>
                         </div>
                       )}

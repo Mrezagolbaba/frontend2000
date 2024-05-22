@@ -6,7 +6,8 @@ export type TransactionType =
 export type TransactionRequestType =
   | "BANK_ACCOUNT"
   | "WALLET"
-  | "WALLET_ADDRESS";
+  | "WALLET_ADDRESS"
+  | "DEBIT";
 export type TransactionStatus =
   | "DRAFT"
   | "INITIATED"

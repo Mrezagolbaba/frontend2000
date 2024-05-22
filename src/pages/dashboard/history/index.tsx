@@ -47,21 +47,21 @@ const Orders = () => {
                         style={{ color: "#03041b66" }}
                         className="text-center"
                       >
-                        ارز
+                        نوع ارز
                       </th>
                       <th
                         scope="col"
                         style={{ color: "#03041b66" }}
                         className="text-center"
                       >
-                        مقدار
+                        مقدار ارز
                       </th>
                       <th
                         scope="col"
                         style={{ color: "#03041b66" }}
                         className="text-center"
                       >
-                        وضعیت
+                        وضعیت تراکنش
                       </th>
                       <th
                         scope="col"
