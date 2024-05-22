@@ -40,7 +40,7 @@ export default function CoinRecord({
   };
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
-    const interval = setInterval(handleRequest, 8000);
+    const interval = setInterval(handleRequest, 10000);
 
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,6 +50,7 @@ export default function CoinRecord({
     handleRequest();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [destinationCode]);
+  
 
   // ==============|| Render ||================= //
   return isLoading ? (
