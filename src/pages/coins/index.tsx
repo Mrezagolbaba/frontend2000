@@ -57,108 +57,81 @@ export default function CoinPage() {
     {
       code: "BTC",
       name: "بیت کوین",
-      originName: "Bitcoin",
+      originName: "bitcoin",
       imgSrc: BTC,
       activeDeal: true,
     },
     {
       code: "USDT",
       name: "تتر",
-      originName: "Tether",
+      originName: "tether",
       imgSrc: USDT,
       activeDeal: true,
     },
     {
       code: "TRX",
       name: "ترون",
-      originName: "Tron",
+      originName: "tron",
       imgSrc: TRX,
       activeDeal: true,
     },
     {
       code: "ETH",
       name: "اتریوم",
-      originName: "Ethereum",
+      originName: "ethereum",
       imgSrc: ETH,
       activeDeal: true,
     },
     {
       code: "SOL",
       name: "سولانا",
-      originName: "Solana",
+      originName: "solana",
       imgSrc: SOL,
       activeDeal: true,
     },
     {
       code: "XRP",
       name: "ریپل",
-      originName: "Ripple",
+      originName: "ripple",
       imgSrc: XRP,
       activeDeal: true,
     },
     {
       code: "DOGE",
       name: "دوج کوین",
-      originName: "Dogecoin",
+      originName: "dogecoin",
       imgSrc: DOGE,
       activeDeal: true,
     },
-    /*{
-      code: "TON",
-      name: "تون",
-      originName: "ton",
-      imgSrc: TON,
-      activeDeal: true,
-    },*/
     {
       code: "ADA",
       name: "کاردانو",
-      originName: "Cardano",
+      originName: "cardano",
       imgSrc: ADA,
       activeDeal: true,
     },
     {
       code: "SHIB",
       name: "شیبا",
-      originName: "Shiba Inu",
+      originName: "shiba",
       imgSrc: SHIB,
       activeDeal: true,
     },
     {
       code: "BCH",
       name: "بیت کوین کش",
-      originName: "Bitcoin Cash",
+      originName: "bitcoin-cash",
       imgSrc: BCH,
       activeDeal: true,
     },
-    /*{
-      code: "DOT",
-      name: "پولکادات",
-      originName: "polkadot",
-      imgSrc: DOT,
-      activeDeal: true,
-    },*/
+
     {
       code: "ETC",
       name: "اتریوم کلاسیک",
-      originName: "Ethereumclassic",
+      originName: "ethereum-classic",
       imgSrc: ETC,
       activeDeal: true,
     },
-    /* {
-      code: "UNI",
-      name: "یونی سواپ",
-      originName: "uniswap",
-      imgSrc: UNI,
-      activeDeal: true,
-    }, */
-    /*{
-      code: "MATIC",
-      name: "متیک",
-      originName: "matic",
-      imgSrc: MATIC,
-      activeDeal: true,
-    } */
 
     // Add more currency pairs as needed
   ];
@@ -184,7 +157,7 @@ export default function CoinPage() {
       "binancecoin",
       "xrp",
       "ton",
-      "ada",
+      "cardano",
       "shiba",
       "tron",
       "bitcoin-cash",
@@ -192,7 +165,6 @@ export default function CoinPage() {
       "ethereum-classic",
       "uniswap",
       "matic",
-
       "solana",
       "ripple",
       "dogecoin",
