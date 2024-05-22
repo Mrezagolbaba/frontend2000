@@ -29,10 +29,10 @@ export default function LastTransactions() {
             {data && data?.length > 0 && (
               <thead>
                 <tr>
-                  <th scope="col">بازار</th>
-                  <th scope="col">مقدار</th>
-                  <th scope="col">مفدار دریافتی </th>
-                  <th scope="col">زمان</th>
+                  <th scope="col">بازار معاملاتی</th>
+                  <th scope="col">مقدار خرید</th>
+                  <th scope="col">مقدار دریافت </th>
+                  <th scope="col">تاریخ</th>
                 </tr>
               </thead>
             )}

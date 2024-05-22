@@ -365,7 +365,7 @@
   }
   th,
   td {
-    padding: 12px;
+    padding: 8px;
   }
   thead th {
     font-size: 0.75em;
@@ -375,7 +375,7 @@
   }
   tbody td {
     font-size: 0.875em;
-    font-weight: 500;
+    font-weight: 400;
     color: #03041b;
     border-bottom: 1px solid rgba(3, 4, 27, 0.05);
   }
@@ -448,6 +448,7 @@
 .table-striped {
   tbody > tr td {
     border-bottom-width: 0;
+    font-size: 0.775em;
   }
   tbody > tr:nth-of-type(odd) > * {
     background-color: #f8f8f8;
