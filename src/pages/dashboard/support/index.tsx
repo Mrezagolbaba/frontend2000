@@ -15,9 +15,9 @@ const Support = () => {
       <Card className="custom-card currencies-online-rates card-secondary">
         <CardHeader className="d-flex flex-row justify-content-between align-items-center">
           <CardTitle tag="h5">پشتیبانی</CardTitle>
-          <div className="card-action">
+          <div className="card-action support-btn">
             <Link
-              className="mx-2 px-4 btn btn-primary btn-sm"
+              className="px-4 mb-2 btn btn-primary btn-sm"
               style={{
                 fontSize: ".87rem",
               }}
@@ -33,7 +33,6 @@ const Support = () => {
               style={{
                 fontSize: ".87rem",
               }}
-              className="px-4"
               onClick={() => setIsModalOpen(true)}
             >
               ارسال تیکت
