@@ -166,7 +166,7 @@ export default function DepositsTable({ type }: Props) {
             <tr>
               <td
                 colSpan={4}
-                className="text"
+                className="text-center"
                 style={{ boxShadow: "none" }}
               >
                 <img
