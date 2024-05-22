@@ -5,7 +5,6 @@ import CreditCardForm from "./CreditCardForm";
 import ShebaForm from "./ShebaForm";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
-import { AlertInfo } from "components/AlertWidget";
 import { useAppSelector } from "store/hooks";
 import DirectDebit from "./DirectDebit";
 
@@ -47,7 +46,7 @@ export default function Deposit({ onClose }: { onClose?: () => void }) {
             tag="button"
             onClick={() => toggleTab("2")}
           >
-            برداشت مستقیم (دایرکت دبیت)
+            برداشت مستقیم (Direct Debit)
           </NavLink>
         </NavItem>
         <NavItem>

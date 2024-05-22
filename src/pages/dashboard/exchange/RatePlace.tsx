@@ -109,7 +109,7 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش ${convertText(
+            {`ارزش هر یک  ${convertText(
               "IRR",
               "enToFa",
             )} در برابر ${convertText("USDT", "enToFa")}`}
@@ -133,7 +133,7 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش ${convertText(
+            {`ارزش هر یک  ${convertText(
               "TRY",
               "enToFa",
             )} در برابر ${convertText("USDT", "enToFa")}`}
@@ -157,7 +157,7 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش ${convertText(
+            {`ارزش هر یک  ${convertText(
               "TRY",
               "enToFa",
             )} در برابر ${convertText("USDT", "enToFa")}`}
@@ -179,7 +179,7 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش ${convertText(
+            {`ارزش هر یک  ${convertText(
               "IRR",
               "enToFa",
             )} در برابر ${convertText("TRY", "enToFa")}`}
@@ -201,7 +201,7 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش ${convertText(
+            {`ارزش هر یک  ${convertText(
               "IRR",
               "enToFa",
             )} در برابر ${convertText("TRY", "enToFa")}`}

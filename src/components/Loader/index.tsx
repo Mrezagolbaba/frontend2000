@@ -1,16 +1,7 @@
-import { Spinner } from "reactstrap";
-import * as animationData from './loading.json';
-import Lottie from 'react-lottie';
+import animationData from "assets/img/loading/01.svg";
 
 export default function Loader() {
-  const defaultOptions = {
-    loop: true,
-    autoplay: true, 
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice'
-    }
-  };
+
   return (
     <div
       className="d-flex justify-content-center align-items-center"
@@ -23,14 +14,8 @@ export default function Loader() {
         height: "100vh",
       }}
     >
-      <Spinner
-        color="primary"
-        style={{ width: "8rem", height: "8rem", opacity: "0.6" }}
-      />
-      {/* <Lottie options={defaultOptions}
-              height={400}
-              width={400}
-        /> */}
+
+      <img src={animationData} width={300} alt="loading..." />
     </div>
   );
 }

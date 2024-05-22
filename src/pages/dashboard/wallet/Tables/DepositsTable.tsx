@@ -123,7 +123,13 @@ export default function DepositsTable({ type }: Props) {
             data?.map((record, index) => (
               <tr key={index}>
                 <td className="text-center">
-                  <DepositTypes flow={record.providerData.flow} />
+                  <DepositTypes
+                    flow={
+                      record.sourceType === "DEBIT"
+                        ? record.sourceType
+                        : record.providerData.flow
+                    }
+                  />
                 </td>
                 <td className="text-center">
                   <RenderAmount amount={record.amount} type={type} />

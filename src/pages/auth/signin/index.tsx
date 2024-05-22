@@ -10,6 +10,7 @@ import {
 import * as Yup from "yup";
 import Auth from "layouts/auth";
 import FloatInput from "components/Input/FloatInput";
+import Notify from "components/Notify";
 import PasswordInput from "components/PasswordInput";
 import SelectCountry from "components/SelectCountry";
 import useAuth from "hooks/useAuth";
@@ -19,7 +20,6 @@ import { HiOutlineMail } from "react-icons/hi";
 import { LoginRequest } from "types/auth";
 import { PiShieldCheckeredFill } from "react-icons/pi";
 import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
-import { toast } from "react-hot-toast";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -106,19 +106,13 @@ export default function LoginPage() {
       })
       .catch((error) => {
         setLoading(false);
-        error.data.message.forEach((m) =>
-          toast.error(m, {
-            position: "bottom-left",
-          }),
-        );
+        error.data.message.forEach((m) => Notify({ type: "error", text: m }));
       });
   };
   const handleErrors = (errors: any) => {
     setLoading(false);
     Object.entries(errors).map(([fieldName, error]: any) =>
-      toast.error(error?.message, {
-        position: "bottom-left",
-      }),
+      Notify({ type: "error", text: error?.message }),
     );
   };
   const changeMethod = useCallback(() => {
@@ -181,6 +175,7 @@ export default function LoginPage() {
                                   : undefined,
                                 autoFocus: true,
                                 className: auth["phone-number"],
+                                inputMode: "numeric",
                               }}
                             />
                           )}

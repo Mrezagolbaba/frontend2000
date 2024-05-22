@@ -41,6 +41,7 @@ export default function IBANNumber({
           onChange={handleChange}
           name={name}
           type="text"
+          inputMode="numeric"
           className={`account-number-input ${className} latin-font`}
           id={`ibanNumber-${name}`}
           disabled={disabled}

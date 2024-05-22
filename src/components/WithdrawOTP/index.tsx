@@ -97,7 +97,9 @@ const WithdrawOTP = ({
           renderSeparator={undefined}
           placeholder={undefined}
           shouldAutoFocus={true}
-          renderInput={(props) => <input {...props} />}
+          renderInput={(props) => (
+            <input {...props} type="text" inputMode="numeric" />
+          )}
         />
 
         {timeInSeconds === 0 ? (

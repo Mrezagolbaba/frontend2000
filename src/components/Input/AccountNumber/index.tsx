@@ -34,6 +34,7 @@ export default function AccountNumberInput({
           onChange={onChange}
           name={name}
           type="text"
+          inputMode="numeric"
           className={`account-number-input ${className}`}
           id={`input24_${id}`}
           disabled={disabled}

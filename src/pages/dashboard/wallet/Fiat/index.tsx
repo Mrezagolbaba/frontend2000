@@ -9,24 +9,23 @@ import {
   Row,
   Table,
 } from "reactstrap";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import Dialog from "components/Dialog";
-import DepositFiat from "./Deposit";
-
-import lirFlag from "assets/img/coins/lira.png";
-
-import wallet from "assets/scss/dashboard/wallet.module.scss";
-import WithdrawFiat from "./Withdraw";
-import WithdrawOTP from "components/WithdrawOTP";
-import { useAppSelector } from "store/hooks";
-import toast from "react-hot-toast";
 import {
   useResendOtpWithdrawMutation,
   useVerifyOtpWithdrawMutation,
 } from "store/api/wallet-management";
+import DepositFiat from "./Deposit";
+import Dialog from "components/Dialog";
+import Notify from "components/Notify";
+import WithdrawFiat from "./Withdraw";
+import WithdrawOTP from "components/WithdrawOTP";
+import lirFlag from "assets/img/coins/lira.png";
 import { InitiateCurrency } from "types/wallet";
 import { lirShow } from "helpers";
+import { useAppSelector } from "store/hooks";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
+import wallet from "assets/scss/dashboard/wallet.module.scss";
 
 interface FiatProps {
   TRY: InitiateCurrency;
@@ -51,7 +50,7 @@ export default function Fiat({ TRY, isLoading, isSuccess }: FiatProps) {
   // ==============|| Hooks ||================= //
   const navigate = useNavigate();
   const [resendOtpWithdraw, { isSuccess: isResendSuccess }] =
-  useResendOtpWithdrawMutation();
+    useResendOtpWithdrawMutation();
   const [verifyOtpWithdraw] = useVerifyOtpWithdrawMutation();
   const user = useAppSelector((state) => state.user);
 
@@ -61,7 +60,7 @@ export default function Fiat({ TRY, isLoading, isSuccess }: FiatProps) {
   };
   const handleSendOtp = async (data: { code: string }) => {
     if (data.code.length > 6)
-      return toast.error("لطفا کد را وارد کنید", { position: "bottom-left" });
+      return Notify({ type: "error", text: "لطفا کد را وارد کنید" });
     const newData = {
       transactionId,
       code: data.code,
@@ -69,16 +68,15 @@ export default function Fiat({ TRY, isLoading, isSuccess }: FiatProps) {
     await verifyOtpWithdraw(newData).then((res: any) => {
       if (res) {
         handleCloseModal();
-        toast.success("برداشت با موفقیت انجام شد", { position: "bottom-left" });
+        Notify({ type: "success", text: "برداشت با موفقیت انجام شد" });
         window.location.reload();
       }
     });
   };
   const handleReSendOtp = async () => {
     await resendOtpWithdraw(transactionId).then(() => {
-      if (isResendSuccess) {
-        toast.success("کد مجددا ارسال شد", { position: "bottom-left" });
-      }
+      if (isResendSuccess)
+        Notify({ type: "success", text: "کد مجددا ارسال شد" });
     });
   };
 
