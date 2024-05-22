@@ -14,6 +14,7 @@ export default function DepositsTable({ type }: Props) {
     filter: [
       `currencyCode||eq||${type}`,
       "type||eq||DEPOSIT",
+      "type||eq||PROMOTION",
       "status||$ne||DRAFT",
     ],
     sort: "createdAt,DESC",
