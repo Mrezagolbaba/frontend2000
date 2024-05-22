@@ -30,35 +30,35 @@ export default function DepositsTable({ type }: Props) {
               <th
                 scope="col"
                 style={{ color: "#03041b66" }}
-                className="text"
+                className="text-center"
               >
                 نوع واریزی
               </th>
               <th
                 scope="col"
                 style={{ color: "#03041b66" }}
-                className="text"
+                className="text-center"
               >
                 مقدار واریزی
               </th>
               <th
                 scope="col"
                 style={{ color: "#03041b66" }}
-                className="text"
+                className="text-center"
               >
                 {type !== "USDT" ? "شناسه پرداخت" : "TXID"}
               </th>
               <th
                 scope="col"
                 style={{ color: "#03041b66" }}
-                className="text"
+                className="text-center"
               >
                 تاریخ پرداخت
               </th>
               <th
                 scope="col"
                 style={{ color: "#03041b66" }}
-                className="text"
+                className="text-center"
               >
                 وضعیت پرداخت
               </th>
@@ -123,7 +123,7 @@ export default function DepositsTable({ type }: Props) {
           ) : data && data?.length > 0 ? (
             data?.map((record, index) => (
               <tr key={index}>
-                <td className="text">
+                <td className="text-center">
                   <DepositTypes
                     flow={
                       record.sourceType === "DEBIT"
@@ -132,10 +132,10 @@ export default function DepositsTable({ type }: Props) {
                     }
                   />
                 </td>
-                <td className="text">
+                <td className="text-center">
                   <RenderAmount amount={record.amount} type={type} />
                 </td>
-                <td className="text">
+                <td className="text-center">
                   <div className="d-flex flex-row justify-content-center">
                     {type === "USDT" ? (
                       <Link
@@ -146,19 +146,19 @@ export default function DepositsTable({ type }: Props) {
                       </Link>
                     ) : (
                       <CopyInput
-                        text={record.id}
+                        text-center={record.id}
                         maxCharacter={10}
                         hasBox={false}
                       />
                     )}
                   </div>
                 </td>
-                <td className="text">
+                <td className="text-center">
                   {moment(record.createdAt)
                     .locale("fa")
                     .format("hh:mm DD MMMM YYYY")}
                 </td>
-                <td className="text">
+                <td className="text-center">
                   <StatusHandler status={record.status} />
                 </td>
               </tr>
