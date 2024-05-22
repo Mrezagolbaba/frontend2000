@@ -546,7 +546,6 @@ ul {
     padding-right: 8px;
     &::before {
       content: "";
-      float: unset;
       padding-right: unset;
       margin-left: 8px;
       width: 6px;
@@ -621,6 +620,13 @@ ul {
   line-height: 25px;
 }
 
+.table-borderless>:not(caption)>*>* {
+  border-bottom-width: 0;
+  font-size: .775em;
+  vertical-align: middle;
+  padding: 4px !important;
+  font-weight: 400;
+}
 @media screen and (max-width: 575px) {
   .btn {
     --bs-btn-font-size: 0.8rem;
