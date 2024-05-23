@@ -11,12 +11,8 @@ type Props = {
 
 export default function DepositsTable({ type }: Props) {
   const { data, isLoading } = useTransactionsQuery({
-    filter: [
-      `currencyCode||eq||${type}`,
-      "type||eq||DEPOSIT",
-      "type||eq||PROMOTION",
-      "status||$ne||DRAFT",
-    ],
+    filter: [`currencyCode||eq||${type}`, "status||$ne||DRAFT"],
+    or: ["type||eq||DEPOSIT", "type||eq||PROMOTION"],
     sort: "createdAt,DESC",
     limit: 5,
   });
@@ -27,39 +23,19 @@ export default function DepositsTable({ type }: Props) {
         {data && data?.length > 0 && (
           <thead>
             <tr>
-              <th
-                scope="col"
-                style={{ color: "#03041b66" }}
-                className="text"
-              >
+              <th scope="col" style={{ color: "#03041b66" }} className="text">
                 نوع واریزی
               </th>
-              <th
-                scope="col"
-                style={{ color: "#03041b66" }}
-                className="text"
-              >
+              <th scope="col" style={{ color: "#03041b66" }} className="text">
                 مقدار واریزی
               </th>
-              <th
-                scope="col"
-                style={{ color: "#03041b66" }}
-                className="text"
-              >
+              <th scope="col" style={{ color: "#03041b66" }} className="text">
                 {type !== "USDT" ? "شناسه پرداخت" : "TXID"}
               </th>
-              <th
-                scope="col"
-                style={{ color: "#03041b66" }}
-                className="text"
-              >
+              <th scope="col" style={{ color: "#03041b66" }} className="text">
                 تاریخ پرداخت
               </th>
-              <th
-                scope="col"
-                style={{ color: "#03041b66" }}
-                className="text"
-              >
+              <th scope="col" style={{ color: "#03041b66" }} className="text">
                 وضعیت پرداخت
               </th>
             </tr>
@@ -136,7 +112,7 @@ export default function DepositsTable({ type }: Props) {
                   <RenderAmount amount={record.amount} type={type} />
                 </td>
                 <td className="text">
-                  <div className="d-flex flex-row justify-content-center">
+                  <div className="d-flex flex-row">
                     {type === "USDT" ? (
                       <Link
                         target="_blank"

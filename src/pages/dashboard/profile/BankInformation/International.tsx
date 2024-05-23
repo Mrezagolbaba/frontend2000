@@ -12,6 +12,7 @@ import {
   CardTitle,
   Col,
   Form,
+  FormFeedback,
   FormGroup,
   Input,
   Label,
@@ -64,8 +65,10 @@ export default function International({ accounts, isLoading }: Props) {
 
   const resolver = yupResolver(
     Yup.object().shape({
-      ownerFullName: Yup.string().required(),
-      iban: Yup.string().required(),
+      ownerFullName: Yup.string().required(
+        "وارد کردن نام صاحب حساب الزامی است.",
+      ),
+      iban: Yup.string().required("شماره IBAN اشتباه است."),
       bankId: Yup.string().required(),
     }),
   );
@@ -294,7 +297,7 @@ export default function International({ accounts, isLoading }: Props) {
                       <Controller
                         name="iban"
                         control={control}
-                        render={({ field: { name, value, onChange, ref } }) => (
+                        render={({ field: { name, value } }) => (
                           <FormGroup className={profile["accounts-field"]}>
                             <Label> شماره IBAN:</Label>
                             <IBANNumber
@@ -305,7 +308,7 @@ export default function International({ accounts, isLoading }: Props) {
                                 setValue("bankId", id);
                               }}
                               disabled={formLoading}
-                              invalid={Boolean(errors.ownerFullName)}
+                              error={errors.iban}
                             />
                           </FormGroup>
                         )}
@@ -318,20 +321,27 @@ export default function International({ accounts, isLoading }: Props) {
                         render={({ field: { name, value, onChange, ref } }) => (
                           <FormGroup className={profile["accounts-field"]}>
                             <Label> صاحب حساب:</Label>
-                            <Input
-                              disabled={formLoading}
-                              value={value}
-                              ref={ref}
-                              onChange={({ target }) => {
-                                const val = target.value.toUpperCase();
-                                onChange(val);
-                              }}
-                              name={name}
-                              type="text"
-                              className="form-control d-rtl"
-                              id={`input23_001`}
-                              invalid={Boolean(errors.ownerFullName)}
-                            />
+                            <div>
+                              <Input
+                                disabled={formLoading}
+                                value={value}
+                                ref={ref}
+                                onChange={({ target }) => {
+                                  const val = target.value.toUpperCase();
+                                  onChange(val);
+                                }}
+                                name={name}
+                                type="text"
+                                className="form-control d-rtl"
+                                id={`input23_001`}
+                                invalid={Boolean(errors.ownerFullName)}
+                              />
+                              {errors.ownerFullName && (
+                                <FormFeedback className="d-block">
+                                  {errors.ownerFullName.message}
+                                </FormFeedback>
+                              )}
+                            </div>
                           </FormGroup>
                         )}
                       />

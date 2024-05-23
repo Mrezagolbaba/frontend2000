@@ -12,6 +12,7 @@ import {
   CardTitle,
   Col,
   Form,
+  FormFeedback,
   FormGroup,
   Input,
   Label,
@@ -33,7 +34,7 @@ import profile from "assets/scss/dashboard/profile.module.scss";
 const resolver = yupResolver(
   Yup.object().shape({
     iban: Yup.string(),
-    cardNumber: Yup.string().required().max(16, "فرمت شماره کارت اشتباه است."),
+    cardNumber: Yup.string().required("فرمت شماره کارت اشتباه است.").max(16, "فرمت شماره کارت اشتباه است."),
     bankId: Yup.string().required(),
   }),
 );
@@ -61,15 +62,20 @@ export default function Internal({ accounts, isLoading }: Props) {
   const [createAccount, { isLoading: formLoading, isSuccess }] =
     useCreateBankAccountMutation();
 
-  const { handleSubmit, control, reset, setValue } =
-    useForm<FormBankAccountRequest>({
-      mode: "onChange",
-      defaultValues: {
-        cardNumber: "",
-        bankId: "",
-      },
-      resolver,
-    });
+  const {
+    handleSubmit,
+    control,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<FormBankAccountRequest>({
+    mode: "onChange",
+    defaultValues: {
+      cardNumber: "",
+      bankId: "",
+    },
+    resolver,
+  });
 
   const submitHandler = (data) => {
     createAccount({
@@ -97,6 +103,8 @@ export default function Internal({ accounts, isLoading }: Props) {
     if (accounts.length <= 0) setIsOpenForm(true);
     else setIsOpenForm(false);
   }, [accounts]);
+
+  console.log(errors);
 
   return (
     <>
@@ -249,6 +257,7 @@ export default function Internal({ accounts, isLoading }: Props) {
                               }}
                               name={name}
                               id="00"
+                              error={errors?.[name]}
                             />
                           </FormGroup>
                         )}
