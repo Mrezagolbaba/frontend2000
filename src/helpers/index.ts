@@ -262,17 +262,20 @@ export function getTitlePage(path: string) {
     { path: "/contact-us", name: "تماس با ما - آرسونیکس" },
     { path: "/terms", name: "قوانین و مقررات - آرسونیکس" },
     { path: "/dashboard", name: "داشبورد کاربری - آرسونیکس" },
+    { path: "/dashboard/profile", name: "پروفایل کاربری - آرسونیکس" },
     { path: "/dashboard/exchange", name: "خرید و فروش سریع - آرسونیکس" },
     { path: "/dashboard/wallet", name: "کیف پول - آرسونیکس" },
     { path: "/dashboard/setting", name: "تنظیمات - آرسونیکس" },
     { path: "/dashboard/market", name: "بازارها - آرسونیکس" },
     { path: "/dashboard/orders", name: "سفارشات - آرسونیکس" },
-    { path: "/dashboards/history", name: "تاریخچه - آرسونیکس" },
+    { path: "/dashboard/history", name: "تاریخچه - آرسونیکس" },
     { path: "/dashboard/support", name: "پشتیبانی - آرسونیکس" },
+    { path: "/dashboard/add-friends", name: "ت از دوستان - آرسونیکس" },
     { path: "/login", name: "آرسونیکس - ورود به حساب کاربری" },
     { path: "/register", name: "آرسونیکس - ثبت نام" },
     { path: "/forget-password", name: "آرسونیکس - فراموشی رمز عبور" },
     { path: "/information", name: "آرسونیکس - احراز هویت" },
+    { path: "/404", name: "صفحه مورد نظر یافت نشد - آرسونیکس" },
   ];
 
   const findTitle = pages.find((page) => page.path === path);

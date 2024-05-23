@@ -61,7 +61,7 @@ export default function WithdrawsTable({ type }: Props) {
               <th
                 scope="col"
                 style={{ color: "#03041b66" }}
-                className="text"
+                className="text-center"
               >
                 {type === "TRY"
                   ? "IBAN"

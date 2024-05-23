@@ -48,10 +48,6 @@ const DashboardRouter = {
       element: <ProtectedRoute children={<Orders />} />,
     },
     {
-      path: "transactions",
-      element: <ProtectedRoute children={<Transactions />} />,
-    },
-    {
       path: "support",
       element: <ProtectedRoute children={<Support />} />,
     },

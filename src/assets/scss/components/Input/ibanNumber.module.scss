@@ -2,6 +2,14 @@
   position: relative;
   direction: ltr;
   width: 100%;
+  &.iban-control-error{
+    span{
+      top: 33%;
+    }
+    .iban-icon-holder {
+      top: 17px;
+    }
+  }
   span {
     font-size: 0.75em;
     font-weight: 400;
