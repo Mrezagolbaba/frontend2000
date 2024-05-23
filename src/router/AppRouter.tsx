@@ -1,4 +1,4 @@
-import { useLocation, useRoutes } from "react-router-dom";
+import { Navigate, useLocation, useRoutes } from "react-router-dom";
 import Login from "pages/auth/signin";
 import Register from "pages/auth/signup";
 import OTP from "pages/auth/otp/index";
@@ -6,6 +6,7 @@ import ForgetPassword from "pages/auth/forget-password";
 import ResetPassword from "pages/auth/forget-password/ResetPassword";
 
 import HomePage from "pages/Home";
+import NotFound from "pages/not-found";
 import Information from "pages/auth/information";
 
 import CoinPage from "pages/coins";
@@ -63,6 +64,14 @@ export default function AppRouter() {
           element: <ResponsePage />,
         },
         DashboardRouter,
+        {
+          path: "*",
+          element: <Navigate to="/404" />,
+        },
+        {
+          path: "404",
+          element: <NotFound />,
+        },
       ],
     },
   ]);
