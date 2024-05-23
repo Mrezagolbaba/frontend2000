@@ -1,6 +1,3 @@
-import { convertText, persianToEnglishNumbers } from "helpers";
-import React, { useCallback, useEffect, useState } from "react";
-import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import {
   Button,
   Card,
@@ -12,20 +9,23 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
-import { isEmpty } from "lodash";
-import toast from "react-hot-toast";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { CurrencyCode } from "types/wallet";
-import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
-import SelectCurrency from "components/Input/CurrencyInput/SelectCurrency";
-import { currencyOptions } from "components/Input/CurrencyInput/SelectCurrency/constant";
 import {
   useCreateCurrencySwapMutation,
   useLazyRatesQuery,
   useWalletsQuery,
 } from "store/api/exchange-management";
-import WageTable from "./WageTable";
+import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
+import Notify from "components/Notify";
 import RatePlace from "./RatePlace";
+import React, { useCallback, useEffect, useState } from "react";
+import SelectCurrency from "components/Input/CurrencyInput/SelectCurrency";
+import WageTable from "./WageTable";
+import { CurrencyCode } from "types/wallet";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { convertText, persianToEnglishNumbers } from "helpers";
+import { currencyOptions } from "components/Input/CurrencyInput/SelectCurrency/constant";
+import { isEmpty } from "lodash";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
 import buy from "assets/scss/dashboard/buy-sell.module.scss";
@@ -139,18 +139,19 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
 
     if (Number(sourceWalletWallet?.availableBalance) < source.amount) {
       setError({ ...error, source: true });
-      toast.error("مبلغ مورد نظر شما از موجودی قابل برداشت تان بیشتر است.", {
-        position: "bottom-left",
+      Notify({
+        type: "error",
+        text: "مبلغ مورد نظر شما از موجودی قابل برداشت تان بیشتر است.",
       });
     } else if (
       (!usdtRateSuccess && source.currency !== "USDT") ||
       source.amount < Number(min)
     ) {
       setError({ ...error, source: true });
-      toast.error(
-        `حداقل مبلغ معامله ${Number(min).toLocaleString()} ${convertText(source.currency, "enToFa")} می باشد.`,
-        { position: "bottom-left" },
-      );
+      Notify({
+        type: "error",
+        text: `حداقل مبلغ معامله ${Number(min).toLocaleString()} ${convertText(source.currency, "enToFa")} می باشد.`,
+      });
     } else {
       setIsSubmit(true);
       currencySwap({
@@ -256,7 +257,6 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
       const amountTemp = persianToEnglishNumbers(reversSwap.destinationAmount);
       handleSwap("source", Number(amountTemp) / 10);
     }
-    setTransaction(reversSwap);
   }, [successReverseSwap, reversSwap, handleSwap]);
 
   // ==============|| Render ||================= //
