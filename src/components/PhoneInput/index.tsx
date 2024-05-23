@@ -38,11 +38,15 @@ const PhoneNumberInput = (props: Props) => {
   return (
     <div className="float-input">
       <PhoneInput
-        defaultCountry="ua"
+        preferredCountries={[
+          'ir', 'tr', 'ru', 'ee', 'ae', 'gb', 'ca'
+        ]}
         value={value}
         onChange={onChange}
         prefix={inputProps?.prefix}
         placeholder='شماره همراه'
+        disableDialCodeAndPrefix={true}
+        showDisabledDialCodeAndPrefix={true}
       />
     </div>
 
