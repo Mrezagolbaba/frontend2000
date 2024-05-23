@@ -5,22 +5,43 @@
 
   .react-international-phone-input-container {
     font-family: var(--bs-font-iranyekaneFa);
-    
-    .react-international-phone-country-selector{
+
+    .react-international-phone-country-selector {
       font-family: var(--bs-font-iranyekaneFa);
-      button{
+
+      button {
         height: 42px;
         width: 100%;
         padding: 10px 10px;
         border-top-left-radius: 8px;
         border-bottom-left-radius: 8px;
-        border-right:none
+        border-right: none
       }
-     
+
     }
-    .react-international-phone-input-container .react-international-phone-country-selector-button { border-right-color: transparent;}
-    .react-international-phone-dial-code-preview{ margin-left: -6px;min-width: 52px !important;}
-    input{
+
+    .react-international-phone-input-container .react-international-phone-country-selector-button {
+      border-right-color: transparent;
+    }
+
+    .react-international-phone-dial-code-preview {
+      margin-left: -6px;
+      min-width: 52px !important;
+    }
+
+    .react-international-phone-country-selector-dropdown__list-item-country-name {
+      display: none;
+    }
+
+    .react-international-phone-country-selector-dropdown {
+      width: 95px;
+    }
+
+    .react-international-phone-country-selector-button:hover {
+      background-color: #fff;
+    }
+
+    input {
       padding: 10px 10px;
       min-width: 282px;
       max-width: 300px !important;
@@ -28,6 +49,7 @@
       border-top-right-radius: 8px;
       border-bottom-right-radius: 8px;
     }
+
     input::placeholder {
       text-align: right;
       font-weight: normal;
@@ -38,8 +60,8 @@
       transition: 0.2s ease all;
       z-index: 10;
     }
-    
-   
+
+
   }
 
   .label {
@@ -54,6 +76,7 @@
     &.as-placeholder {
       color: gray;
     }
+
     &.as-label {
       top: -8px;
       right: 12px;
@@ -63,6 +86,7 @@
       margin-left: -4px;
     }
   }
+
   .is-prefix {
     right: 40px;
   }

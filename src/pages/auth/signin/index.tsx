@@ -19,7 +19,7 @@ import { Controller, useForm } from "react-hook-form";
 import { HiOutlineMail } from "react-icons/hi";
 import { LoginRequest } from "types/auth";
 import { PiShieldCheckeredFill } from "react-icons/pi";
-import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
+import { formatPhoneNumber, isPhoneValid, persianToEnglishNumbers } from "helpers";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -49,8 +49,6 @@ export default function LoginPage() {
     if (loginType === "PHONE") {
       return Yup.object().shape({
         username: Yup.string()
-          .matches(/^[\u06F0-\u06F90-9]+$/, "شماره همراه اشتباه است")
-          .length(10, "لطفا شماره همراه خود را بدون کد کشور و یا ۰ وارد کنید")
           .required("شماره همراه الزامی می باشد."),
         selectedCountry: Yup.string().required("کد کشور الزامی می باشد."),
         ...schema,
@@ -79,20 +77,25 @@ export default function LoginPage() {
     defaultValues:
       loginType === "PHONE"
         ? {
-            username: "",
-            password: "",
-            selectedCountry: "98",
-          }
+          username: "",
+          password: "",
+          selectedCountry: "98",
+        }
         : {
-            username: "",
-            password: "",
-          },
+          username: "",
+          password: "",
+        },
     resolver,
   });
 
   // ==============|| Handlers ||================= //
   const handleLogin = async (data) => {
     const body: LoginRequest = { password: data.password, type: loginType };
+    const isValid = isPhoneValid(data.username);
+    if (!isValid) {
+      Notify({ type: "error", text: "شماره همراه اشتباه است" });
+      return;
+    }
     if (loginType === "EMAIL") body.email = data.username;
     else {
       const phoneNumber = formatPhoneNumber(
@@ -167,17 +170,6 @@ export default function LoginPage() {
                               value={value}
                               label="شماره همراه"
                               onChange={onChange}
-                              // inputProps={{
-                              //   ref: ref,
-                              //   size: "large",
-                              //   prefix: <CiMobile2 />,
-                              //   status: errors?.[name]?.message
-                              //     ? "error"
-                              //     : undefined,
-                              //   autoFocus: true,
-                              //   className: auth["phone-number"],
-                              //   inputMode: "numeric",
-                              // }}
                             />
                           )}
                         />

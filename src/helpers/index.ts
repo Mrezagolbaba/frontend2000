@@ -7,6 +7,7 @@ import { CryptoData } from "types/exchange";
 import { CurrencyCode, TransactionStatus } from "types/wallet";
 import { JWT_DECODE_KEY, REF_TOKEN_OBJ_NAME, REF_TOKEN_OBJ_TIME } from "config";
 import { isEmpty } from "lodash";
+import { PhoneNumberUtil } from 'google-libphonenumber';
 
 export function generateLabelValueArray(start: number, end: number) {
   const resultArray: { label: string; value: string }[] = [];
@@ -415,3 +416,12 @@ export async function get24hChanges(
     return null;
   }
 }
+const phoneUtil = PhoneNumberUtil.getInstance();
+
+export const isPhoneValid = (phone: string) => {
+  try {
+    return phoneUtil.isValidNumber(phoneUtil.parseAndKeepRawInput(phone));
+  } catch (error) {
+    return false;
+  }
+};
