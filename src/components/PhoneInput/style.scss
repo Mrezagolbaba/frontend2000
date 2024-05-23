@@ -19,10 +19,11 @@
      
     }
     .react-international-phone-input-container .react-international-phone-country-selector-button { border-right-color: transparent;}
-    .react-international-phone-dial-code-preview{ margin-left: -6px;}
+    .react-international-phone-dial-code-preview{ margin-left: -6px;min-width: 52px !important;}
     input{
       padding: 10px 10px;
-      min-width: 78%;
+      min-width: 282px;
+      max-width: 300px !important;
       min-height: 42px;
       border-top-right-radius: 8px;
       border-bottom-right-radius: 8px;
