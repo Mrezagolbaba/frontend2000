@@ -25,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import auth from "assets/scss/auth/auth.module.scss";
+import PhoneNumberInput from "components/PhoneInput";
 
 export default function LoginPage() {
   // ==============|| States ||================= //
@@ -153,35 +154,35 @@ export default function LoginPage() {
                 <Row className="gy-2 gx-0">
                   {loginType === "PHONE" ? (
                     <>
-                      <Col xs={8}>
+                      <Col>
                         <Controller
                           name="username"
                           control={control}
                           render={({
                             field: { name, value, onChange, ref },
                           }) => (
-                            <FloatInput
+                            <PhoneNumberInput
                               type="text"
                               name={name}
                               value={value}
                               label="شماره همراه"
                               onChange={onChange}
-                              inputProps={{
-                                ref: ref,
-                                size: "large",
-                                prefix: <CiMobile2 />,
-                                status: errors?.[name]?.message
-                                  ? "error"
-                                  : undefined,
-                                autoFocus: true,
-                                className: auth["phone-number"],
-                                inputMode: "numeric",
-                              }}
+                              // inputProps={{
+                              //   ref: ref,
+                              //   size: "large",
+                              //   prefix: <CiMobile2 />,
+                              //   status: errors?.[name]?.message
+                              //     ? "error"
+                              //     : undefined,
+                              //   autoFocus: true,
+                              //   className: auth["phone-number"],
+                              //   inputMode: "numeric",
+                              // }}
                             />
                           )}
                         />
                       </Col>
-                      <Col xs={4}>
+                      {/* <Col xs={4}>
                         <Controller
                           name="selectedCountry"
                           control={control}
@@ -194,7 +195,7 @@ export default function LoginPage() {
                             />
                           )}
                         />
-                      </Col>
+                      </Col> */}
                     </>
                   ) : (
                     <Col xs={12}>
