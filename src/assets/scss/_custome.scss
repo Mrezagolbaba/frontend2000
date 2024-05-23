@@ -446,7 +446,6 @@ html {
   }
 }
 
-
 .modal-content {
   border-radius: 10px;
   box-shadow: 0px 4px 64px rgba(0, 0, 0, 0.03);
@@ -598,32 +597,37 @@ ul {
 .change-password-form {
   h5 {
     font-size: 0.9rem;
-    font-size: .875rem;
+    font-size: 0.875rem;
     padding-top: 10px;
     font-weight: 400;
   }
 }
 .text-50 {
-  color: rgba(3, 4, 27, .5) !important;
-  font-size: .875em;
+  color: rgba(3, 4, 27, 0.5) !important;
+  font-size: 0.875em;
 }
 .float-input {
   font-size: 0.775em;
 }
 .verfy-method-text {
-  font-size: .875rem;
+  font-size: 0.875rem;
   padding-top: 10px;
   font-weight: 400;
   line-height: 25px;
 }
 
-.table-borderless>:not(caption)>*>* {
+.table-borderless > :not(caption) > * > * {
   border-bottom-width: 0;
-  font-size: .775em;
+  font-size: 0.775em;
   vertical-align: middle;
   padding: 4px !important;
   font-weight: 400;
 }
+
+.form-control.is-invalid {
+  background-image: none !important;
+}
+
 @media screen and (max-width: 575px) {
   .btn {
     --bs-btn-font-size: 0.8rem;

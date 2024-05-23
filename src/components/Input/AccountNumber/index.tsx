@@ -1,4 +1,4 @@
-import { Input } from "reactstrap";
+import { FormFeedback, Input } from "reactstrap";
 import BanksWrapper from "components/BanksWrapper";
 
 import accountNumber from "assets/scss/components/Input/accountNumber.module.scss";
@@ -11,6 +11,7 @@ type Props = {
   className?: string;
   disabled?: boolean;
   setBankId?: (string) => void;
+  error?: any;
 };
 
 export default function AccountNumberInput({
@@ -21,6 +22,7 @@ export default function AccountNumberInput({
   id,
   className,
   setBankId,
+  error,
 }: Props) {
   return (
     <div className={accountNumber["input-control"]}>
@@ -39,7 +41,9 @@ export default function AccountNumberInput({
           id={`input24_${id}`}
           disabled={disabled}
           placeholder=""
+          invalid={Boolean(error)}
         />
+        {error && <FormFeedback>{error?.message}</FormFeedback>}
       </BanksWrapper>
     </div>
   );
