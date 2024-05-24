@@ -10,19 +10,18 @@ import {
 import * as Yup from "yup";
 import Auth from "layouts/auth";
 import FloatInput from "components/Input/FloatInput";
-import SelectCountry from "components/SelectCountry";
+import Notify from "components/Notify";
+import PhoneNumberInput from "components/PhoneInput";
 import useAuth from "hooks/useAuth";
-import { CiMobile2 } from "react-icons/ci";
 import { Controller, useForm } from "react-hook-form";
 import { ForgotPasswordRequest } from "types/auth";
 import { HiOutlineMail } from "react-icons/hi";
-import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
+import { isPhoneValid } from "helpers";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import auth from "assets/scss/auth/auth.module.scss";
-import Notify from "components/Notify";
 
 export default function ForgetPassword() {
   // ==============|| States ||================= //
@@ -76,15 +75,16 @@ export default function ForgetPassword() {
       Notify({ type: "error", text: error?.message }),
     );
   const handleResetPassword = async (data) => {
+    const isValid = isPhoneValid(data.username);
+    if (!isValid) {
+      Notify({ type: "error", text: "شماره همراه اشتباه است." });
+      return;
+    }
     const body: ForgotPasswordRequest = {
       type: forgotType,
     };
     if (forgotType === "EMAIL") body.email = data.username;
-    else
-      body.phoneNumber = formatPhoneNumber(
-        persianToEnglishNumbers(data.username),
-        data.selectedCountry,
-      );
+    else body.phoneNumber = data.username;
 
     await forgotPassword(body).then(() =>
       navigate("/otp", {
@@ -107,50 +107,20 @@ export default function ForgetPassword() {
               <Container>
                 <Row className="gy-2 gx-0">
                   {forgotType === "PHONE" ? (
-                    <>
-                      <Col xs={8}>
-                        <Controller
-                          name="username"
-                          control={control}
-                          render={({
-                            field: { name, value, onChange, ref },
-                          }) => (
-                            <FloatInput
-                              type="text"
-                              name={name}
-                              value={value}
-                              label="شماره همراه"
-                              onChange={onChange}
-                              inputProps={{
-                                ref: ref,
-                                size: "large",
-                                prefix: <CiMobile2 />,
-                                status: errors?.[name]?.message
-                                  ? "error"
-                                  : undefined,
-                                autoFocus: true,
-                                className: auth["phone-number"],
-                                inputMode: "numeric",
-                              }}
-                            />
-                          )}
-                        />
-                      </Col>
-                      <Col xs={4}>
-                        <Controller
-                          name="selectedCountry"
-                          control={control}
-                          render={({ field: { name, value, onChange } }) => (
-                            <SelectCountry
-                              name={name}
-                              value={value as string}
-                              onChange={onChange}
-                              errors={errors}
-                            />
-                          )}
-                        />
-                      </Col>
-                    </>
+                    <Col xs={12}>
+                      <Controller
+                        name="username"
+                        control={control}
+                        render={({ field: { name, value, onChange } }) => (
+                          <PhoneNumberInput
+                            name={name}
+                            value={value}
+                            label="شماره همراه"
+                            onChange={onChange}
+                          />
+                        )}
+                      />
+                    </Col>
                   ) : (
                     <Col xs={12}>
                       <Controller

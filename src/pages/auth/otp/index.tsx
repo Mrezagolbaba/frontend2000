@@ -93,7 +93,7 @@ export default function Otp() {
       const body: OTPRequest = {
         code: persianToEnglishNumbers(data.code),
         type,
-        method: switchType ? switchType : method,
+        method:  user.otpMethod ?? "PHONE",
       };
       await otp(body).then(() => {
         setValue("code", "");
