@@ -2,6 +2,7 @@
   font-family: var(--bs-font-iranyekaneFa);
   padding-bottom: 5px;
   direction: ltr;
+  position: relative;
 
   .react-international-phone-input-container {
     font-family: var(--bs-font-iranyekaneFa);
@@ -15,12 +16,12 @@
         padding: 10px 10px;
         border-top-left-radius: 8px;
         border-bottom-left-radius: 8px;
-        border-right: none
+        border-right: none;
       }
-
     }
 
-    .react-international-phone-input-container .react-international-phone-country-selector-button {
+    .react-international-phone-input-container
+      .react-international-phone-country-selector-button {
       border-right-color: transparent;
     }
 
@@ -43,8 +44,7 @@
 
     input {
       padding: 10px 10px;
-      min-width: 282px;
-      max-width: 300px !important;
+      width: 100%;
       min-height: 42px;
       border-top-right-radius: 8px;
       border-bottom-right-radius: 8px;
@@ -60,8 +60,6 @@
       transition: 0.2s ease all;
       z-index: 10;
     }
-
-
   }
 
   .label {
@@ -76,7 +74,6 @@
     &.as-placeholder {
       color: gray;
     }
-
     &.as-label {
       top: -8px;
       right: 12px;
@@ -86,7 +83,6 @@
       margin-left: -4px;
     }
   }
-
   .is-prefix {
     right: 40px;
   }

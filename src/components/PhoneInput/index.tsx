@@ -1,7 +1,6 @@
-import { Input } from "antd";
-import React, { useState } from "react";
-import { PhoneInput } from 'react-international-phone';
-import 'react-international-phone/style.css';
+import { useState } from "react";
+import { PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
 
 import "./style.scss";
 
@@ -9,7 +8,6 @@ interface Props {
   name: string;
   label: string;
   value: any;
-  type?: string;
   required?: boolean;
   onChange?: any;
   inputProps?: any;
@@ -21,7 +19,6 @@ const PhoneNumberInput = (props: Props) => {
     name,
     label,
     value,
-    type = "text",
     required = false,
     onChange,
     inputProps,
@@ -33,22 +30,24 @@ const PhoneNumberInput = (props: Props) => {
   const labelClass = isOccupied ? "label as-label" : "label as-placeholder";
 
   const requiredMark = required ? <span className="text-danger">*</span> : null;
-  const isPrefix = inputProps?.prefix && "is-prefix";
+  const isPrefix = inputProps?.prefix ? "is-prefix" : "";
   return (
-    <div className="float-input">
+    <div
+      className="float-input"
+      onBlur={() => setFocus(false)}
+      onFocus={() => setFocus(true)}
+    >
       <PhoneInput
-        preferredCountries={[
-          'ir', 'tr', 'ru', 'ee', 'ae', 'gb', 'ca'
-        ]}
+        preferredCountries={["ir", "tr", "ru", "ee", "ae", "gb", "ca"]}
         value={value}
         onChange={onChange}
-        prefix={inputProps?.prefix}
-        placeholder='شماره همراه'
         disableDialCodeAndPrefix={true}
         showDisabledDialCodeAndPrefix={true}
       />
+      <label htmlFor={name} className={`${labelClass} ${isPrefix}`}>
+        {label} {requiredMark}
+      </label>
     </div>
-
   );
 };
 

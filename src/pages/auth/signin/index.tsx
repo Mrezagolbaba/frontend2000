@@ -12,20 +12,18 @@ import Auth from "layouts/auth";
 import FloatInput from "components/Input/FloatInput";
 import Notify from "components/Notify";
 import PasswordInput from "components/PasswordInput";
-import SelectCountry from "components/SelectCountry";
+import PhoneNumberInput from "components/PhoneInput";
 import useAuth from "hooks/useAuth";
-import { CiMobile2 } from "react-icons/ci";
 import { Controller, useForm } from "react-hook-form";
 import { HiOutlineMail } from "react-icons/hi";
 import { LoginRequest } from "types/auth";
 import { PiShieldCheckeredFill } from "react-icons/pi";
-import { formatPhoneNumber, isPhoneValid, persianToEnglishNumbers } from "helpers";
+import { isPhoneValid } from "helpers";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import auth from "assets/scss/auth/auth.module.scss";
-import PhoneNumberInput from "components/PhoneInput";
 
 export default function LoginPage() {
   // ==============|| States ||================= //
@@ -48,8 +46,7 @@ export default function LoginPage() {
     };
     if (loginType === "PHONE") {
       return Yup.object().shape({
-        username: Yup.string()
-          .required("شماره همراه الزامی می باشد."),
+        username: Yup.string().required("شماره همراه الزامی می باشد."),
         selectedCountry: Yup.string().required("کد کشور الزامی می باشد."),
         ...schema,
       });
@@ -77,14 +74,14 @@ export default function LoginPage() {
     defaultValues:
       loginType === "PHONE"
         ? {
-          username: "",
-          password: "",
-          selectedCountry: "98",
-        }
+            username: "",
+            password: "",
+            selectedCountry: "98",
+          }
         : {
-          username: "",
-          password: "",
-        },
+            username: "",
+            password: "",
+          },
     resolver,
   });
 
@@ -93,16 +90,12 @@ export default function LoginPage() {
     const body: LoginRequest = { password: data.password, type: loginType };
     const isValid = isPhoneValid(data.username);
     if (!isValid) {
-      Notify({ type: "error", text: "شماره همراه اشتباه است" });
+      Notify({ type: "error", text: "شماره همراه اشتباه است." });
       return;
     }
     if (loginType === "EMAIL") body.email = data.username;
     else {
-      const phoneNumber = formatPhoneNumber(
-        persianToEnglishNumbers(data.username),
-        data.selectedCountry,
-      );
-      body.phoneNumber = phoneNumber;
+      body.phoneNumber = data.username;
     }
     await login(body)
       .then(() => {
@@ -156,39 +149,20 @@ export default function LoginPage() {
               <Container>
                 <Row className="gy-2 gx-0">
                   {loginType === "PHONE" ? (
-                    <>
-                      <Col>
-                        <Controller
-                          name="username"
-                          control={control}
-                          render={({
-                            field: { name, value, onChange, ref },
-                          }) => (
-                            <PhoneNumberInput
-                              type="text"
-                              name={name}
-                              value={value}
-                              label="شماره همراه"
-                              onChange={onChange}
-                            />
-                          )}
-                        />
-                      </Col>
-                      {/* <Col xs={4}>
-                        <Controller
-                          name="selectedCountry"
-                          control={control}
-                          render={({ field: { name, value, onChange } }) => (
-                            <SelectCountry
-                              name={name}
-                              value={value as string}
-                              onChange={onChange}
-                              errors={errors}
-                            />
-                          )}
-                        />
-                      </Col> */}
-                    </>
+                    <Col>
+                      <Controller
+                        name="username"
+                        control={control}
+                        render={({ field: { name, value, onChange } }) => (
+                          <PhoneNumberInput
+                            name={name}
+                            value={value}
+                            label="شماره همراه"
+                            onChange={onChange}
+                          />
+                        )}
+                      />
+                    </Col>
                   ) : (
                     <Col xs={12}>
                       <Controller
