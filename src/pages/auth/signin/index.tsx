@@ -74,14 +74,14 @@ export default function LoginPage() {
     defaultValues:
       loginType === "PHONE"
         ? {
-            username: "",
-            password: "",
-            selectedCountry: "98",
-          }
+          username: "",
+          password: "",
+          selectedCountry: "98",
+        }
         : {
-            username: "",
-            password: "",
-          },
+          username: "",
+          password: "",
+        },
     resolver,
   });
 
@@ -89,7 +89,7 @@ export default function LoginPage() {
   const handleLogin = async (data) => {
     const body: LoginRequest = { password: data.password, type: loginType };
     const isValid = isPhoneValid(data.username);
-    if (!isValid) {
+    if (!isValid && loginType === "PHONE") {
       Notify({ type: "error", text: "شماره همراه اشتباه است." });
       return;
     }
