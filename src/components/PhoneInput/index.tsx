@@ -40,6 +40,7 @@ const PhoneNumberInput = (props: Props) => {
       <PhoneInput
         preferredCountries={["ir", "tr", "ru", "ee", "ae", "gb", "ca"]}
         value={value}
+        defaultCountry="ir"
         onChange={onChange}
         disableDialCodeAndPrefix={true}
         showDisabledDialCodeAndPrefix={true}
