@@ -11,19 +11,17 @@ import {
 } from "reactstrap";
 import * as Yup from "yup";
 import Auth from "layouts/auth";
-import FloatInput from "components/Input/FloatInput";
 import Notify from "components/Notify";
 import PasswordInput from "components/PasswordInput";
-import SelectCountry from "components/SelectCountry";
+import PhoneNumberInput from "components/PhoneInput";
 import useAuth from "hooks/useAuth";
-import { CiMobile2 } from "react-icons/ci";
 import { Controller, useForm } from "react-hook-form";
 import { FaAngleUp } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 import { PiShieldCheckeredFill } from "react-icons/pi";
 import { RegisterFormData } from "pages/auth/types";
-import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
 import { isEmpty } from "lodash";
+import { isPhoneValid } from "helpers";
 import { motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -85,12 +83,13 @@ export default function Register() {
 
   // ==============|| Handlers ||================= //
   const handleRegister = async (data: RegisterFormData) => {
-    const phoneNumber = formatPhoneNumber(
-      persianToEnglishNumbers(data.phoneNumber),
-      data.selectedCountry,
-    );
+    const isValid = isPhoneValid(data.phoneNumber);
+    if (!isValid) {
+      Notify({ type: "error", text: "شماره همراه اشتباه است." });
+      return;
+    }
     const userData = {
-      phoneNumber,
+      phoneNumber: data.phoneNumber,
       password: data.password,
       referralCode: data.referralCode,
     };
@@ -148,37 +147,18 @@ export default function Register() {
             >
               <Container>
                 <Row className="gy-2 gx-0">
-                  <Col xs={8}>
+                  <Col xs={12}>
                     <Controller
                       name="phoneNumber"
                       control={control}
-                      render={({ field: { name, value, onChange, ref } }) => (
-                        <FloatInput
-                          type="text"
+                      render={({ field: { name, value, onChange } }) => (
+                        <PhoneNumberInput
                           name={name}
                           value={value}
                           label="شماره همراه"
                           onChange={onChange}
-                          inputProps={{
-                            ref: ref,
-                            size: "large",
-                            prefix: <CiMobile2 />,
-                            status: errors?.[name]?.message
-                              ? "error"
-                              : undefined,
-                            autoFocus: true,
-                            className: auth["phone-number"],
-                            inputMode: "numeric",
-                          }}
                         />
                       )}
-                    />
-                  </Col>
-                  <Col xs={4}>
-                    <Controller
-                      name="selectedCountry"
-                      control={control}
-                      render={({ field }) => <SelectCountry {...field} />}
                     />
                   </Col>
                   <Col xs={12}>
