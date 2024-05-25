@@ -1,6 +1,5 @@
 import ProtectedRoute from "./ProtectedRoute";
 import Wallet from "pages/dashboard/wallet";
-import NewWallet from "pages/dashboard/wallet/NewIndex";
 import Setting from "pages/dashboard/setting";
 import DashboardContent from "pages/dashboard/DashboardContent";
 import Dashboard from "pages/dashboard";
@@ -30,10 +29,6 @@ const DashboardRouter = {
     {
       path: "wallet",
       element: <ProtectedRoute children={<Wallet />} />,
-    },
-    {
-      path: "new-wallet",
-      element: <ProtectedRoute children={<NewWallet />} />,
     },
     {
       path: "setting",
