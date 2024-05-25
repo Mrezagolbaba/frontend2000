@@ -31,10 +31,7 @@ export default function ForgetPassword() {
   const getValidationSchema = () => {
     if (forgotType === "PHONE") {
       return Yup.object().shape({
-        username: Yup.string()
-          .matches(/^[0-9]+$/, "شماره همراه اشتباه است")
-          .length(10, "لطفا شماره همراه خود را بدون کد کشور و یا ۰ وارد کنید")
-          .required("شماره همراه الزامی می باشد."),
+        username: Yup.string().required("شماره همراه الزامی می باشد."),
         selectedCountry: Yup.string().required("کد کشور الزامی می باشد."),
       });
     } else {

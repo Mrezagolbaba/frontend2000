@@ -34,10 +34,7 @@ export default function Register() {
   const [openRefCode, setOpenRefCode] = useState(true);
   // ==============|| Validation ||================= //
   const registerSchema = Yup.object().shape({
-    phoneNumber: Yup.string()
-      .matches(/^[\u06F0-\u06F90-9]+$/, "شماره همراه اشتباه است")
-      .length(10, "لطفا شماره همراه خود را بدون کد کشور و یا ۰ وارد کنید")
-      .required("شماره همراه الزامی می باشد."),
+    phoneNumber: Yup.string().required("شماره همراه الزامی می باشد."),
     password: Yup.string()
       .min(8, "رمز عبور باید حداقل شامل 8 کاراکتر باشد.")
       .matches(/[a-z]/, "رمز عبور حداقل باید شامل یک حرف کوچک انگلیسی باشد.")
