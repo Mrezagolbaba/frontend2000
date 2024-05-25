@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
-import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
-
 import CreditCardForm from "./CreditCardForm";
+import DirectDebit from "./DirectDebit";
 import ShebaForm from "./ShebaForm";
+import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
+import { useAppSelector } from "store/hooks";
+import { useEffect, useState } from "react";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
-import { useAppSelector } from "store/hooks";
-import DirectDebit from "./DirectDebit";
 
 export default function Deposit({ onClose }: { onClose?: () => void }) {
   const [activeTab, setActiveTab] = useState<"1" | "2" | "3">("1");

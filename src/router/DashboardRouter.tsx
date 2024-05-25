@@ -1,5 +1,6 @@
 import ProtectedRoute from "./ProtectedRoute";
 import Wallet from "pages/dashboard/wallet";
+import NewWallet from "pages/dashboard/wallet/NewIndex";
 import Setting from "pages/dashboard/setting";
 import DashboardContent from "pages/dashboard/DashboardContent";
 import Dashboard from "pages/dashboard";
@@ -7,7 +8,6 @@ import Exchange from "pages/dashboard/exchange";
 import Profile from "pages/dashboard/profile";
 import Invoice from "pages/dashboard/invoice";
 import Orders from "pages/dashboard/orders";
-import Transactions from "pages/dashboard/transactions";
 import Support from "pages/dashboard/support";
 import Market from "pages/dashboard/market";
 import History from "pages/dashboard/history";
@@ -30,6 +30,10 @@ const DashboardRouter = {
     {
       path: "wallet",
       element: <ProtectedRoute children={<Wallet />} />,
+    },
+    {
+      path: "new-wallet",
+      element: <ProtectedRoute children={<NewWallet />} />,
     },
     {
       path: "setting",

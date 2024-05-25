@@ -24,16 +24,15 @@ import { lirShow } from "helpers";
 import { useAppSelector } from "store/hooks";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import lirIcon from "assets/img/icons/flag-turkey.png";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 
-interface FiatProps {
-  TRY: InitiateCurrency;
-  isLoading: boolean;
-  isSuccess: boolean;
+interface Props {
+  balance: string;
 }
 
-export default function Fiat({ TRY, isLoading, isSuccess }: FiatProps) {
+export default function TRYWallet({ balance }: Props) {
   // ==============|| States ||================= //
   const [depositForm, setDepositForm] = useState<{
     isOpen: boolean;
@@ -82,224 +81,24 @@ export default function Fiat({ TRY, isLoading, isSuccess }: FiatProps) {
 
   // ==============|| Render ||================= //
   return (
-    <Card className="mb-4 h-100">
-      <CardHeader>
-        <CardTitle tag="h5">موجودی فیات دیجیتال</CardTitle>
-      </CardHeader>
-      <CardBody>
-        <Row className={wallet["desktop-view"]}>
-          <Col xs={12} className="table-responsive">
-            <Table borderless className={wallet["table-view"]}>
-              <thead>
-                <tr>
-                  <th>ارز</th>
-                  <th className="text-center">موجودی</th>
-                  <th className="text-center">موجودی در دسترس</th>
-                  <th className="text-center" />
-                  <th className="text-center" />
-                  <th className="text-center" />
-                </tr>
-              </thead>
-              <tbody>
-                {isLoading ? (
-                  <tr>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="text-center placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="text-center placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="text-center placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="text-center placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                  </tr>
-                ) : isSuccess ? (
-                  <tr key={0}>
-                    <td>
-                      <div>
-                        <img
-                          src={lirFlag}
-                          alt=""
-                          className={wallet["crypto-img"]}
-                        />
-                        <span className={wallet["crypto-name"]}>لیر</span>
-                      </div>
-                    </td>
-                    <td className="text-center">
-                      {lirShow({ value: TRY.balance })}
-                    </td>
-                    <td className="text-center">
-                      {lirShow({ value: TRY.availableBalance })}
-                    </td>
-                    <td className="text-center">
-                      <Button
-                        color="secondary"
-                        className="px-4 py-1"
-                        onClick={() => {
-                          setDepositForm({
-                            isOpen: true,
-                            currency: "TRY",
-                          });
-                        }}
-                      >
-                        واریز
-                      </Button>
-                    </td>
-                    <td className="text-center">
-                      <Button
-                        color="secondary"
-                        className="px-4 py-1"
-                        disabled={Number(TRY.balance) <= 0}
-                        onClick={() =>
-                          setWithdrawForm({
-                            isOpen: true,
-                            currency: "TRY",
-                            stock: Number(TRY.availableBalance),
-                          })
-                        }
-                      >
-                        برداشت
-                      </Button>
-                    </td>
-                    <td className="text-center">
-                      <Button
-                        color="primary"
-                        className="px-4 py-1"
-                        outline
-                        onClick={() =>
-                          navigate("/dashboard/exchange", {
-                            state: {
-                              source: "TRY",
-                            },
-                          })
-                        }
-                      >
-                        معامله
-                      </Button>
-                    </td>
-                  </tr>
-                ) : (
-                  <tr>دیتایی موجود نیست</tr>
-                )}
-              </tbody>
-            </Table>
-          </Col>
-        </Row>
-        <Row className={wallet["mobile-view"]}>
-          <Col xs={12}>
-            <div className="d-flex flex-column">
-              <span className={wallet["crypto-name"]}>لیر</span>
-              <img src={lirFlag} alt="" className={wallet["crypto-img"]} />
-            </div>
-          </Col>
-          <Col xs={12} sm={6} className="text-center my-3">
-            موجودی: {lirShow({ value: TRY.balance })}
-          </Col>
-
-          <Col xs={12} sm={6} className="text-center my-3">
-            موجودی در دسترس:
-            {lirShow({ value: TRY.availableBalance })}
-          </Col>
-          <Col xs={12} sm={4} className="text-center my-3">
-            <Button
-              color="secondary"
-              className="px-5 py-3"
-              onClick={() => {
-                setDepositForm({
-                  isOpen: true,
-                  currency: "TRY",
-                });
-              }}
-            >
-              واریز
-            </Button>
-          </Col>
-          <Col xs={12} sm={4} className="text-center my-3">
-            <Button
-              color="secondary"
-              className="py-3"
-              disabled={Number(TRY.balance) <= 0}
-              onClick={() =>
-                setWithdrawForm({
-                  isOpen: true,
-                  currency: "TRY",
-                  stock: Number(TRY.availableBalance),
-                })
-              }
-            >
-              برداشت
-            </Button>
-          </Col>
-          <Col xs={12} sm={4} className="text-center my-3">
-            <Button
-              color="primary"
-              className="px-5 py-3"
-              outline
-              disabled={false}
-              onClick={() =>
-                navigate("/dashboard/exchange", {
-                  state: {
-                    source: "TRY",
-                  },
-                })
-              }
-            >
-              معامله
-            </Button>
-          </Col>
-        </Row>
-      </CardBody>
-      <Dialog
-        title="واریز لیر"
-        isOpen={depositForm.isOpen}
-        onClose={() => setDepositForm({ isOpen: false, currency: "" })}
-        hasCloseButton
-      >
-        <DepositFiat
-          onClose={() => setDepositForm({ isOpen: false, currency: "" })}
-        />
-      </Dialog>
-      <Dialog
-        title="برداشت لیر"
-        isOpen={withdrawForm.isOpen}
-        onClose={() =>
-          setWithdrawForm({ isOpen: false, currency: "", stock: 0 })
-        }
-        hasCloseButton
-      >
-        <WithdrawFiat
-          setShowOtp={() => {
-            setShowOtp(true);
-          }}
-          setTransactionId={(id) => setTransactionId(id)}
-          onCloseModal={() =>
-            setWithdrawForm({ isOpen: false, currency: "", stock: 0 })
-          }
-          open={withdrawForm.isOpen}
-          stock={withdrawForm.stock}
-          currency={withdrawForm.currency}
-          onClose={() =>
-            setWithdrawForm({ isOpen: false, currency: "", stock: 0 })
-          }
-        />
-      </Dialog>
-      <Modal isOpen={showOtp} toggle={handleCloseModal}>
-        <WithdrawOTP
-          onClose={handleCloseModal}
-          securitySelection={user.otpMethod}
-          handleResend={handleReSendOtp}
-          handleGetCode={handleSendOtp}
-        />
-      </Modal>
-    </Card>
+    <div className={`${wallet.wallet__item} ${wallet["lir-box"]}`}>
+      <div className={wallet.wallet__item__icon}>
+        <img src={lirIcon} alt="try" />
+        <h6 className={wallet.wallet__item__title}>
+          لیر
+          <span className={wallet.wallet__item__subtitle}>TL</span>
+        </h6>
+      </div>
+      <div className={wallet.wallet__item__price}>{balance}</div>
+      <div className={wallet.wallet__item__actions}>
+        <a onClick={() => {}}>برداشت</a>
+        <Button color="primary" outline onClick={() => {}}>
+          واریز
+        </Button>
+        <Button color="primary" outline onClick={() => {}}>
+          معامله
+        </Button>
+      </div>
+    </div>
   );
 }
