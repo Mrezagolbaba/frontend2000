@@ -47,16 +47,23 @@ export default function Wallet() {
             ) : (
               <>
                 <Col xs={12} md={6}>
-                  <IRRWallet balance={renderBalance("IRR", "balance")} />
+                  <IRRWallet
+                    balance={renderBalance("IRR", "balance")}
+                    stock={data.find((w) => w.currencyCode === "IRR").balance}
+                  />
                 </Col>
                 <Col xs={12} md={6}>
                   <USDTWallet
                     balance={renderBalance("USDT", "balance")}
+                    stock={data.find((w) => w.currencyCode === "USDT").balance}
                     availableBalance={renderBalance("USDT", "availableBalance")}
                   />
                 </Col>
                 <Col xs={12} md={6}>
-                  <TRYWallet balance={renderBalance("TRY", "balance")} />
+                  <TRYWallet
+                    balance={renderBalance("TRY", "balance")}
+                    stock={data.find((w) => w.currencyCode === "TRY").balance}
+                  />
                 </Col>
               </>
             )}

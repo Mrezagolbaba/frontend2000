@@ -27,8 +27,6 @@ export function refreshTokenPromise(): Promise<{
     _refPromise = axiosInstance
       .post(`/auth/refresh-token`, { refreshToken: refresh_token })
       .then(({ data }) => {
-        console.log("data", data);
-
         setSession({
           access_token: data.accessToken,
           refresh_token: data.refreshToken,

@@ -9,9 +9,10 @@ import Withdraw from "./Withdraw";
 
 type Props = {
   balance: string;
+  stock: string
 };
 
-export default function IRRWallet({ balance }: Props) {
+export default function IRRWallet({ balance,stock }: Props) {
   const [isOpenDepositForm, setIsOpenDepositForm] = useState<boolean>(false);
   const [isOpenWithdraw, setIsOpenWithdraw] = useState<boolean>(false);
 
@@ -57,7 +58,7 @@ export default function IRRWallet({ balance }: Props) {
         onClose={() => setIsOpenWithdraw(false)}
         hasCloseButton
       >
-        <Withdraw stock={balance} onClose={() => setIsOpenWithdraw(false)} />
+        <Withdraw stock={stock} onClose={() => setIsOpenWithdraw(false)} />
       </Dialog>
     </>
   );

@@ -54,7 +54,7 @@ export default function Withdraw({ onClose, stock }: Props) {
   const resolver = yupResolver(
     Yup.object().shape({
       iban: Yup.string().required(),
-      amount: Yup.string().required(),
+      amount: Yup.string().required("شما هیچ مبلغی وارد نکرده اید."),
       accountId: Yup.string().required(),
     }),
   );
