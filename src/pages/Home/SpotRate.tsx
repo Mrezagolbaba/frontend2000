@@ -20,6 +20,7 @@ import GBP from "assets/img/coins/GBP.png";
 
 import home from "assets/scss/landing/home.module.scss";
 import axios from "axios";
+// import useUserLocation from "hooks/useLocation";
 
 const SpotRate = () => {
   // ==============|| States ||================= //
@@ -28,48 +29,49 @@ const SpotRate = () => {
   const [mode, setMode] = useState<"crypto" | "fiat">("crypto");
   const [coinChanges, setCoinChanges] = useState<CryptoData[] | []>([]);
   const [fiatChanges, setFiatChanges] = useState<CryptoData[] | []>([]);
+  // const userLocation = useUserLocation();
 
   // ==============|| Constants ||================= //
   const currencyPairs = [
     {
       code: "BTC",
       name: "بیت کوین",
-      originName: "Bitcoin",
+      originName: "bitcoin",
       imgSrc: BTC,
       activeDeal: true,
     },
     {
       code: "USDT",
       name: "تتر",
-      originName: "Tether",
+      originName: "tether",
       imgSrc: USDT,
       activeDeal: true,
     },
     {
       code: "TRX",
       name: "ترون",
-      originName: "Tron",
+      originName: "tron",
       imgSrc: TRX,
       activeDeal: true,
     },
     {
       code: "ETH",
       name: "اتریوم",
-      originName: "Ethereum",
+      originName: "ethereum",
       imgSrc: ETH,
       activeDeal: true,
     },
     {
       code: "SOL",
       name: "سولانا",
-      originName: "Solana",
+      originName: "solana",
       imgSrc: SOL,
       activeDeal: true,
     },
     {
       code: "XRP",
       name: "ریپل",
-      originName: "Ripple",
+      originName: "ripple",
       imgSrc: XRP,
       activeDeal: true,
     },
@@ -133,10 +135,11 @@ const SpotRate = () => {
   useEffect(() => {
     get24Changes();
   }, [get24Changes]);
-  useEffect(() => {
-    checkLocation();
-  }, [checkLocation]);
+  // useEffect(() => {
+    // checkLocation();
+  // }, [checkLocation]);
   // ==============|| Render ||================= //
+
   return (
     <section className={`${home["currency-rates"]} ${home["section-gap"]}`}>
       <Container>
@@ -146,16 +149,13 @@ const SpotRate = () => {
           </h3>
         </div>
         <div className={home["currency-rates__tabs"]}>
-          {hasNotIR ? (
             <FilterNavCoin
               activeTab={mode}
               handleTabClick={handleModeClick}
               leftTitle=" ارزهای دیجیتال"
               rightTitle="  فیات دیجیتال"
             />
-          ) : (
-            <div />
-          )}
+
           {mode === "crypto" && (
             <FilterNavCoin
               activeTab={activeTab}
