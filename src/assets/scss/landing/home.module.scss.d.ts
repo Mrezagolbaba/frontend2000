@@ -104,6 +104,7 @@ declare const classNames: {
   readonly "section-holder": "section-holder";
   readonly "section-holder__title": "section-holder__title";
   readonly "section-holder__subtitle": "section-holder__subtitle";
+  readonly "not-found": "not-found";
   readonly "navbar__item--active": "navbar__item--active";
 };
 export = classNames;

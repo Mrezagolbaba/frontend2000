@@ -54,7 +54,7 @@ export default function WithdrawsTable({ type }: Props) {
               <th
                 scope="col"
                 style={{ color: "#03041b66" }}
-                className="text-center"
+                className="text"
               >
                 مقدار
               </th>
@@ -72,14 +72,14 @@ export default function WithdrawsTable({ type }: Props) {
               <th
                 scope="col"
                 style={{ color: "#03041b66" }}
-                className="text-center"
+                className="text"
               >
                 تاریخ درخواست
               </th>
               <th
                 scope="col"
                 style={{ color: "#03041b66" }}
-                className="text-center"
+                className="text"
               >
                 وضعیت
               </th>
@@ -135,7 +135,7 @@ export default function WithdrawsTable({ type }: Props) {
           ) : data && data?.length > 0 ? (
             data?.map((record, index) => (
               <tr key={index}>
-                <td className="text-center">
+                <td className="text">
                   <RenderAmount amount={record.amount} type={type} />
                 </td>
                 <td className="d-flex justify-content-center">
@@ -143,7 +143,7 @@ export default function WithdrawsTable({ type }: Props) {
                   <CopyInput
                     text={
                       type === "USDT"
-                        ? record?.providerRef
+                        ? record?.destinationId
                         : record?.destination?.iban
                     }
                     maxCharacter={10}
@@ -151,12 +151,12 @@ export default function WithdrawsTable({ type }: Props) {
                   />
                 </td>
 
-                <td className="text-center">
+                <td className="text">
                   {moment(record.createdAt)
                     .locale("fa")
                     .format("DD MMMM YYYY hh:mm")}
                 </td>
-                <td className="text-center">
+                <td className="text">
                   <StatusHandler status={record.status} />
                 </td>
               </tr>

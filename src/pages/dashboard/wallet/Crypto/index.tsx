@@ -9,23 +9,22 @@ import {
   Row,
   Table,
 } from "reactstrap";
-import Dialog from "components/Dialog";
-import { useState } from "react";
-import DepositCrypto from "./Deposit";
-import WithdrawCrypto from "./Withdraw";
-
-import teter from "assets/img/coins/tether.svg";
-
-import wallet from "assets/scss/dashboard/wallet.module.scss";
-import { useNavigate } from "react-router-dom";
-import WithdrawOTP from "components/WithdrawOTP";
 import {
   useResendOtpWithdrawMutation,
   useVerifyOtpWithdrawMutation,
 } from "store/api/wallet-management";
-import { useAppSelector } from "store/hooks";
-import toast from "react-hot-toast";
+import DepositCrypto from "./Deposit";
+import Dialog from "components/Dialog";
+import Notify from "components/Notify";
+import WithdrawCrypto from "./Withdraw";
+import WithdrawOTP from "components/WithdrawOTP";
+import teter from "assets/img/coins/tether.svg";
 import { coinShow, persianToEnglishNumbers } from "helpers";
+import { useAppSelector } from "store/hooks";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
+import wallet from "assets/scss/dashboard/wallet.module.scss";
 
 export default function CryptoCard({ USDT, isLoading, isSuccess }: any) {
   // ==============|| States ||================= //
@@ -54,7 +53,7 @@ export default function CryptoCard({ USDT, isLoading, isSuccess }: any) {
   };
   const handleSendOtp = async (data: { code: string }) => {
     if (data.code.length > 6)
-      return toast.error("لطفا کد را وارد کنید", { position: "bottom-left" });
+      return Notify({ type: "error", text: "لطفا کد را وارد کنید" });
     const newData = {
       transactionId,
       code: persianToEnglishNumbers(data.code),
@@ -62,16 +61,14 @@ export default function CryptoCard({ USDT, isLoading, isSuccess }: any) {
     await verifyOtpWithdraw(newData).then((res: any) => {
       if (res) {
         handleCloseModal();
-        toast.success("برداشت با موفقیت انجام شد", { position: "bottom-left" });
-        // window.location.reload();
+        Notify({ type: "success", text: "برداشت با موفقیت انجام شد" });
       }
     });
   };
   const handleReSendOtp = async () => {
     await resendOtpWithdraw(transactionId).then(() => {
-      if (isResendSuccess) {
-        toast.success("کد مجددا ارسال شد", { position: "bottom-left" });
-      }
+      if (isResendSuccess)
+        Notify({ type: "success", text: "کد مجددا ارسال شد" });
     });
   };
 

@@ -11,22 +11,22 @@ import {
   ModalHeader,
   Row,
 } from "reactstrap";
-import { useEffect, useState } from "react";
 import { BsCheck2 } from "react-icons/bs";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 //third-party
-import ZeroStep from "./ZeroStep";
-import FirstStep from "./FirstStep";
-import VideoStep from "./Video";
-import PhotoStep from "./PhotoStep";
 import FinalStep from "./FinalStep";
-import { useAppSelector } from "store/hooks";
+import FirstStep from "./FirstStep";
+import PhotoStep from "./PhotoStep";
+import VideoStep from "./Video";
+import ZeroStep from "./ZeroStep";
 import { AlertDanger, AlertInfo, AlertSuccess } from "components/AlertWidget";
+import { useAppSelector } from "store/hooks";
 import { useGetVerificationsQuery } from "store/api/profile-management";
 
 //style
 import profile from "assets/scss/dashboard/profile.module.scss";
-import { useLocation } from "react-router-dom";
 
 export enum REJECTION_REASON {
   NOT_ACCEPTABLE_VIDEO = "NOT_ACCEPTABLE_VIDEO",
@@ -90,10 +90,9 @@ const AuthSection = () => {
 
   // ==============|| States ||================= //
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(
-    true,
-    // hash.includes("#kyc-section") && !secondTierVerified ? true : false,
+     hash.includes("#kyc-section") && !secondTierVerified ? true : false,
   );
-  const [activeState, setActiveState] = useState<0 | 1 | 2 | 3 | 4 | 5>(2);
+  const [activeState, setActiveState] = useState<0 | 1 | 2 | 3 | 4 | 5>(0);
   const [allowStates, setAllowStates] = useState({
     nationalCard: false,
     video: false,
@@ -108,7 +107,7 @@ const AuthSection = () => {
       case 3:
         return <PhotoStep onClick={setActiveState} />;
       case 2:
-        return <VideoStep onClick={setActiveState} />;
+        return <VideoStep onClick={setActiveState} allowStates={allowStates} />;
       case 1:
         return <FirstStep onClick={setActiveState} />;
       case 0:
@@ -188,23 +187,19 @@ const AuthSection = () => {
       const docStatus = userVerifications[2].status;
       if (docStatus === "REJECTED") {
         userVerifications[2].rejectReasons.forEach((reason) => {
-          switch (reason) {
-            case REJECTION_REASON.VIDEO_AND_AUDIO_NOT_SYNCED:
-            case REJECTION_REASON.POOR_QUALITY_VIDEO:
-            case REJECTION_REASON.NOT_ACCEPTABLE_VIDEO: {
-              setAllowStates({ ...allowStates, video: true });
-              break;
-            }
-            case REJECTION_REASON.INVALID_NATIONAL_CARD:
-            case REJECTION_REASON.EXPIRED_NATIONAL_CARD: {
-              setAllowStates({ ...allowStates, nationalCard: true });
-              break;
-            }
-            case REJECTION_REASON.POOR_QUALITY_COMMITMENT_LETTER: {
-              setAllowStates({ ...allowStates, commitLetter: true });
-              break;
-            }
-          }
+          if (
+            reason === REJECTION_REASON.VIDEO_AND_AUDIO_NOT_SYNCED ||
+            reason === REJECTION_REASON.POOR_QUALITY_VIDEO ||
+            reason === REJECTION_REASON.NOT_ACCEPTABLE_VIDEO
+          )
+            setAllowStates((oldState) => ({ ...oldState, video: true }));
+          else if (
+            reason === REJECTION_REASON.INVALID_NATIONAL_CARD ||
+            reason === REJECTION_REASON.EXPIRED_NATIONAL_CARD
+          )
+            setAllowStates((oldState) => ({ ...oldState, nationalCard: true }));
+          else
+            setAllowStates((oldState) => ({ ...oldState, commitLetter: true }));
         });
       } else if (docStatus === "DRAFT")
         setAllowStates({

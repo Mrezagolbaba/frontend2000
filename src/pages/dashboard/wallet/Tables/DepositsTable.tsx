@@ -11,11 +11,8 @@ type Props = {
 
 export default function DepositsTable({ type }: Props) {
   const { data, isLoading } = useTransactionsQuery({
-    filter: [
-      `currencyCode||eq||${type}`,
-      "type||eq||DEPOSIT",
-      "status||$ne||DRAFT",
-    ],
+    filter: [`currencyCode||eq||${type}`, "status||$ne||DRAFT"],
+    or: ["type||eq||DEPOSIT", "type||eq||PROMOTION"],
     sort: "createdAt,DESC",
     limit: 5,
   });
@@ -26,39 +23,19 @@ export default function DepositsTable({ type }: Props) {
         {data && data?.length > 0 && (
           <thead>
             <tr>
-              <th
-                scope="col"
-                style={{ color: "#03041b66" }}
-                className="text-center"
-              >
+              <th scope="col" style={{ color: "#03041b66" }} className="text">
                 نوع واریزی
               </th>
-              <th
-                scope="col"
-                style={{ color: "#03041b66" }}
-                className="text-center"
-              >
+              <th scope="col" style={{ color: "#03041b66" }} className="text">
                 مقدار واریزی
               </th>
-              <th
-                scope="col"
-                style={{ color: "#03041b66" }}
-                className="text-center"
-              >
+              <th scope="col" style={{ color: "#03041b66" }} className="text">
                 {type !== "USDT" ? "شناسه پرداخت" : "TXID"}
               </th>
-              <th
-                scope="col"
-                style={{ color: "#03041b66" }}
-                className="text-center"
-              >
+              <th scope="col" style={{ color: "#03041b66" }} className="text">
                 تاریخ پرداخت
               </th>
-              <th
-                scope="col"
-                style={{ color: "#03041b66" }}
-                className="text-center"
-              >
+              <th scope="col" style={{ color: "#03041b66" }} className="text">
                 وضعیت پرداخت
               </th>
             </tr>
@@ -122,18 +99,24 @@ export default function DepositsTable({ type }: Props) {
           ) : data && data?.length > 0 ? (
             data?.map((record, index) => (
               <tr key={index}>
-                <td className="text-center">
-                  <DepositTypes flow={record.providerData.flow} />
+                <td className="text">
+                  <DepositTypes
+                    flow={
+                      record.sourceType === "DEBIT"
+                        ? record.sourceType
+                        : record.providerData.flow
+                    }
+                  />
                 </td>
-                <td className="text-center">
+                <td className="text">
                   <RenderAmount amount={record.amount} type={type} />
                 </td>
-                <td className="text-center">
-                  <div className="d-flex flex-row justify-content-center">
+                <td className="text">
+                  <div className="d-flex flex-row">
                     {type === "USDT" ? (
                       <Link
                         target="_blank"
-                        to={`https://tronscan.org/#/transaction/${record.providerData.flowWalletAddress}`}
+                        to={`https://tronscan.org/#/transaction/${record.providerRef}`}
                       >
                         لینک تراکنش
                       </Link>
@@ -146,12 +129,12 @@ export default function DepositsTable({ type }: Props) {
                     )}
                   </div>
                 </td>
-                <td className="text-center">
+                <td className="text">
                   {moment(record.createdAt)
                     .locale("fa")
                     .format("hh:mm DD MMMM YYYY")}
                 </td>
-                <td className="text-center">
+                <td className="text">
                   <StatusHandler status={record.status} />
                 </td>
               </tr>

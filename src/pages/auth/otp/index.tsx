@@ -14,6 +14,7 @@ import {
 } from "helpers";
 import * as Yup from "yup";
 import Auth from "layouts/auth";
+import Notify from "components/Notify";
 import OtpInput from "react-otp-input";
 import useAuth from "hooks/useAuth";
 import { AlertWarning } from "components/AlertWidget";
@@ -21,7 +22,6 @@ import { Controller, useForm } from "react-hook-form";
 import { OTPRequest, ResendOTPRequest } from "types/auth";
 import { setUser } from "store/reducers/features/user/userSlice";
 import { setVerifyLogin } from "store/reducers/jwtAuth";
-import { toast } from "react-hot-toast";
 import { useDispatch } from "store/store";
 import { useEffect, useState } from "react";
 import { useGetMeQuery } from "store/api/user";
@@ -77,10 +77,10 @@ export default function Otp() {
       };
       if (sendWay) {
         setSwitchType(sendWay);
-        toast.success(
-          `کد تایید به ${sendWay === "EMAIL" ? "ایمیل" : "شماره همراه"} ارسال شد.`,
-          { position: "bottom-left" },
-        );
+        Notify({
+          type: "success",
+          text: `کد تایید به ${sendWay === "EMAIL" ? "ایمیل" : "شماره همراه"} ارسال شد.`,
+        });
         data.type = "AUTH";
         data.method = sendWay;
       }
@@ -93,7 +93,7 @@ export default function Otp() {
       const body: OTPRequest = {
         code: persianToEnglishNumbers(data.code),
         type,
-        method: switchType ? switchType : method,
+        method:  user.otpMethod ?? "PHONE",
       };
       await otp(body).then(() => {
         setValue("code", "");
@@ -121,9 +121,7 @@ export default function Otp() {
   };
   const handleErrors = (errors: any) => {
     setValue("code", "");
-    toast.error(errors?.code?.message, {
-      position: "bottom-left",
-    });
+    Notify({ type: "error", text: errors?.code?.message });
   };
   const formatTime = () => {
     const minutes = Math.floor(timeInSeconds / 60);
@@ -256,24 +254,6 @@ export default function Otp() {
     return () => clearInterval(timerInterval);
   }, [timeInSeconds]);
 
-  useEffect(() => {
-    // Assuming each OTP input is represented by an input element with a specific class
-    const otpInputs = document.querySelectorAll(".otp-input-class"); // Replace '.otp-input-class' with the actual class used
-
-    otpInputs.forEach((input) => {
-      input.setAttribute("type", "number");
-      input.setAttribute("pattern", "[0-9]*"); // Optional: Ensures only numeric input
-    });
-
-    // Cleanup function to reset if necessary
-    return () => {
-      otpInputs.forEach((input) => {
-        input.removeAttribute("type");
-        input.removeAttribute("pattern");
-      });
-    };
-  }, []);
-
   // ==============|| Render ||================= //
 
   return (
@@ -327,7 +307,9 @@ export default function Otp() {
                           numInputs={6}
                           renderSeparator={undefined}
                           shouldAutoFocus={true}
-                          renderInput={(props) => <input {...props} />}
+                          renderInput={(props) => (
+                            <input {...props} type="text" inputMode="numeric" />
+                          )}
                         />
                       )}
                     />

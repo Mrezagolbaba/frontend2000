@@ -161,6 +161,8 @@ export const DepositTypes = ({ flow }: { flow: FlowType }) => {
       return "واریز به آدرس ولت";
     case "MANUAL_WITH_PAYMENT_IDENTIFIER":
       return "واریز بین بانکی";
+      case "DEBIT":
+      return "شارژ سریع";
     default:
       return "";
   }

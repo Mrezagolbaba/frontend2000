@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { convertCoins, convertIRRToToman, convertStatus } from "helpers";
 import { useTransactionsQuery } from "store/api/wallet-management";
 import Deposit from "assets/img/icons/depositIcon.svg";
+import moment from "jalali-moment";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 
@@ -36,9 +37,9 @@ function LatestDeals() {
                 <thead>
                   <tr>
                     <th scope="col">نوع تراکنش</th>
-                    <th scope="col">ارز</th>
-                    <th scope="col">مقدار</th>
-                    <th scope="col">وضعیت</th>
+                    <th scope="col">نوع ارز</th>
+                    <th scope="col">مقدار ارز</th>
+                    <th scope="col">وضعیت تراکنش</th>
                     <th scope="col">تاریخ</th>
                   </tr>
                 </thead>
@@ -138,9 +139,9 @@ function LatestDeals() {
                         </td>
                         <td>
                           <span className="d-ltr d-block">
-                            {`${new Date(item?.createdAt).toLocaleTimeString("fa-IR")} ${new Date(
-                              item?.createdAt,
-                            ).toLocaleDateString("fa-IR")}`}
+                            {moment(item?.createdAt)
+                              .locale("fa")
+                              .format("HH:MM YYYY/MM/DD")}
                           </span>
                         </td>
                       </tr>
