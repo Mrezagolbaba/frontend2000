@@ -122,7 +122,6 @@
 .transactions {
   overflow-x: auto;
   .tabs {
-    justify-content: center;
     flex-wrap: nowrap;
     &__item {
       border: none;
@@ -140,6 +139,13 @@
         font-weight: 500;
         border-bottom: 2px solid #111bff;
       }
+    }
+  }
+}
+@media screen and (min-width: 1800px) {
+  .transactions {
+    .tabs {
+      justify-content: center;
     }
   }
 }
