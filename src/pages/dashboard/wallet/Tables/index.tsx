@@ -44,7 +44,7 @@ export default function Tables() {
                   setActiveTab("1");
                 }}
               >
-                آخرین واریزهای ریالی
+                واریز تومان
               </NavLink>
             </NavItem>
             <NavItem>
@@ -52,13 +52,13 @@ export default function Tables() {
                 className={`${wallet.tabs__item} ${
                   activeTab === "2" ? wallet.active : ""
                 }`}
-                id="tab2"
+                id="tab4"
                 tag="button"
                 onClick={() => {
                   setActiveTab("2");
                 }}
               >
-                آخرین واریزهای کوین
+                برداشت تومان
               </NavLink>
             </NavItem>
             <NavItem>
@@ -72,7 +72,7 @@ export default function Tables() {
                   setActiveTab("3");
                 }}
               >
-                آخرین واریزهای لیر
+                واریز ارز دیجیتال
               </NavLink>
             </NavItem>
             <NavItem>
@@ -86,7 +86,7 @@ export default function Tables() {
                   setActiveTab("4");
                 }}
               >
-                آخرین درخواست های تسویه حساب کوین
+                برداشت ارز دیجیتال
               </NavLink>
             </NavItem>
             <NavItem>
@@ -94,13 +94,13 @@ export default function Tables() {
                 className={`${wallet.tabs__item} ${
                   activeTab === "5" ? wallet.active : ""
                 }`}
-                id="tab4"
+                id="tab2"
                 tag="button"
                 onClick={() => {
                   setActiveTab("5");
                 }}
               >
-                آخرین درخواست های تسویه حساب ریالی
+                واریز فیات دیجیتال
               </NavLink>
             </NavItem>
             <NavItem>
@@ -114,7 +114,7 @@ export default function Tables() {
                   setActiveTab("6");
                 }}
               >
-                آخرین درخواست های تسویه حساب لیر
+                برداشت فیات دیجیتال
               </NavLink>
             </NavItem>
           </Nav>

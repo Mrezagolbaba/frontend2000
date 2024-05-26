@@ -15,7 +15,7 @@ export const userApi = enhancedApi.injectEndpoints({
           url: "/users/me",
         };
       },
-      providesTags: ["settings"],
+      providesTags: ["settings","otp"],
     }),
     updatePassword: builder.mutation<
       any,

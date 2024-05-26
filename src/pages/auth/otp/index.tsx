@@ -93,7 +93,14 @@ export default function Otp() {
       const body: OTPRequest = {
         code: persianToEnglishNumbers(data.code),
         type,
-        method:  user.otpMethod ?? "PHONE",
+        method:
+          type === "RESET_PASSWORD"
+            ? method
+            : type === "VERIFY_EMAIL"
+              ? "EMAIL"
+              : switchType
+                ? switchType
+                : user.otpMethod,
       };
       await otp(body).then(() => {
         setValue("code", "");
@@ -261,9 +268,7 @@ export default function Otp() {
       <section className={auth.container}>
         <Card className={auth.card}>
           <CardBody className={auth["card-body"]}>
-            <h4 className={auth.title}>
-              {method === "EMAIL" ? "تایید ایمیل" : "تایید شماره همراه"}
-            </h4>
+            <h4 className={auth.title}>تایید ورود دو مرحله‌ای</h4>
             <div className="auth-summary">
               {type === "VERIFY_EMAIL" && (
                 <div className="text-center">
