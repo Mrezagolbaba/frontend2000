@@ -8,21 +8,23 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
+import {
+  useDepositMutation,
+  useLazyWalletsQuery,
+  useWalletsQuery,
+} from "store/api/wallet-management";
 import * as Yup from "yup";
 import Currency from "components/Input/CurrencyInput";
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import Notify from "components/Notify";
 import { AlertInfo } from "components/AlertWidget";
 import { Controller, useForm } from "react-hook-form";
 import { iranianBankIcons } from "helpers/filesManagement/banksList";
-import { useCallback, useEffect, useState } from "react";
-import {
-  useDepositMutation,
-  useWalletsQuery,
-} from "store/api/wallet-management";
-import { useDisconnectDebitMutation } from "store/api/profile-management";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { isEmpty } from "lodash";
 import { useAppSelector } from "store/hooks";
+import { useCallback, useEffect, useState } from "react";
+import { useDisconnectDebitMutation } from "store/api/profile-management";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export default function DepositDebit({
   data,
@@ -46,7 +48,7 @@ export default function DepositDebit({
   );
 
   // ==============|| Hooks ||================= //
-  const { refetch } = useWalletsQuery();
+  const [getWallet] = useLazyWalletsQuery();
   const { token } = useAppSelector((state) => state.auth);
   const [depositRequest, { isLoading: loadingDeposit, isSuccess }] =
     useDepositMutation();
@@ -123,11 +125,18 @@ export default function DepositDebit({
   }, [data, reset, token]);
 
   const handleClose = useCallback(() => {
-    if (isSuccess || successDisconnect) {
+    if (isSuccess) {
+      Notify({ type: "success", text: "موجودی شما با موفقیت شارژ شد." });
       onClose?.();
-      refetch();
+      getWallet();
+    } else if (successDisconnect) {
+      Notify({
+        type: "success",
+        text: "سرویس شارژ سریع برای شما غیر فعال شد.",
+      });
+      onClose?.();
     }
-  }, [isSuccess, onClose, refetch, successDisconnect]);
+  }, [getWallet, isSuccess, onClose, successDisconnect]);
 
   // ==============|| Life Cycle ||================= //
   useEffect(() => handleList(), [handleList]);

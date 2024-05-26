@@ -27,7 +27,7 @@ export const walletManagement = enhancedApi.injectEndpoints({
           data,
         };
       },
-      // invalidatesTags: ["wallets"],
+      invalidatesTags: ["wallets"],
     }),
     depositInfo: builder.query<DepositInfoResponse[], CurrencyCode>({
       query(currencyCode) {
@@ -129,5 +129,6 @@ export const {
   useTransactionQuery,
   useTransactionsQuery,
   useWalletsQuery,
+  useLazyWalletsQuery,
   useRefCodeMutation,
 } = walletManagement;
