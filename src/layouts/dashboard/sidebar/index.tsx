@@ -179,7 +179,7 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
           <span className="icon mx-2">
             <TbPower />
           </span>
-          <span>خروج از حساب</span>
+          <span> خروج </span>
         </Button>
       </div>
     </div>

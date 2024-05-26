@@ -628,6 +628,12 @@ ul {
   background-image: none !important;
 }
 
+@media screen and (max-width: 767px) {
+  .card .card-title {
+    font-size: 1em;
+  }
+}
+
 @media screen and (max-width: 575px) {
   .btn {
     --bs-btn-font-size: 0.8rem;

@@ -18,7 +18,9 @@ import {
 import { useBankAccountsQuery } from "store/api/profile-management";
 import { useEffect, useState } from "react";
 import {
+  useResendOtpWithdrawMutation,
   useTransactionFeeQuery,
+  useVerifyOtpWithdrawMutation,
   useWithdrawMutation,
 } from "store/api/wallet-management";
 import { Link } from "react-router-dom";
@@ -29,15 +31,14 @@ import turkeyFlag from "assets/img/icons/flag-turkey.png";
 import lirFlag from "assets/img/coins/lira.png";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
+import Dialog from "components/Dialog";
+import WithdrawOTP from "components/WithdrawOTP";
+import { useAppSelector } from "store/hooks";
+import Notify from "components/Notify";
 
 type Props = {
   onClose: () => void;
   stock: number;
-  currency: string;
-  open: boolean;
-  onCloseModal: () => void;
-  setTransactionId: (id: string) => void;
-  setShowOtp: () => void;
 };
 type FiatFormType = {
   network: string;
@@ -47,15 +48,13 @@ type FiatFormType = {
   destinationCountry: string;
 };
 
-const WithdrawFiat = ({
-  onClose,
-  stock,
-  currency,
-  open,
-  onCloseModal,
-  setTransactionId,
-  setShowOtp,
-}: Props) => {
+const WithdrawFiat = ({ onClose, stock }: Props) => {
+  const [isOpenOTP, setIsOpenOTP] = useState(false);
+  const { otpMethod } = useAppSelector((state) => state.user);
+  const [resendOtpWithdraw, { isSuccess: isResendSuccess }] =
+    useResendOtpWithdrawMutation();
+  const [verifyOtpWithdraw, { isSuccess: successVerify }] =
+    useVerifyOtpWithdrawMutation();
   const [accountOptions, setAccountOptions] = useState<OptionType[] | []>([]);
   const { data: fee } = useTransactionFeeQuery("TRY");
   const { data: accounts, isSuccess: getSuccessAccounts } =
@@ -94,6 +93,27 @@ const WithdrawFiat = ({
     },
     resolver,
   });
+
+  const handleSendOtp = async (data: { code: string }) => {
+    if (data.code.length > 6)
+      return Notify({ type: "error", text: "لطفا کد را وارد کنید" });
+    const newData = {
+      transactionId: response?.id,
+      code: data.code,
+    };
+    await verifyOtpWithdraw(newData).then((res: any) => {
+      if (res) {
+        Notify({ type: "success", text: "برداشت با موفقیت انجام شد" });
+        window.location.reload();
+      }
+    });
+  };
+  const handleReSendOtp = async () => {
+    await resendOtpWithdraw(response?.id).then(() => {
+      if (isResendSuccess)
+        Notify({ type: "success", text: "کد مجددا ارسال شد" });
+    });
+  };
 
   const onSubmit = async (data: FiatFormType) => {
     if (Number(data.amount) < Number(fee?.withdrawMinAmount)) {
@@ -160,12 +180,18 @@ const WithdrawFiat = ({
 
   useEffect(() => {
     if (isSuccess) {
-      setTransactionId(response?.id as string);
-      setShowOtp();
-      onCloseModal();
+      setIsOpenOTP(true);
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if (successVerify) {
+      Notify({ type: "success", text: "برداشت با موفقیت انجام شد" });
+      setIsOpenOTP(false);
+      onClose?.();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess, response]);
+  }, [successVerify]);
 
   return (
     <div className="px-2">
@@ -282,7 +308,6 @@ const WithdrawFiat = ({
                     <Label htmlFor={name}> واریز به حساب:</Label>
                     <Link
                       to="/dashboard/profile#international-accounts"
-                      
                       target="blank"
                     >
                       <span className={wallet?.["little-label"]}>
@@ -317,6 +342,19 @@ const WithdrawFiat = ({
           </div>
         </Row>
       </Form>
+      <Dialog
+        title="تایید برداشت"
+        isOpen={isOpenOTP}
+        onClose={() => setIsOpenOTP(false)}
+      >
+        <WithdrawOTP
+          onClose={() => setIsOpenOTP(false)}
+          title="تایید برداشت"
+          securitySelection={otpMethod}
+          handleResend={handleReSendOtp}
+          handleGetCode={handleSendOtp}
+        />
+      </Dialog>
     </div>
   );
 };

@@ -22,6 +22,7 @@ export interface IUser {
   deletedAt: string;
   irPhoneNumber?: string;
   gateways: any[];
+  signupFinished: boolean;
 }
 export interface Isessions {
   id: string;

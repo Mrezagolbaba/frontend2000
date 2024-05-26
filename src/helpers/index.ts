@@ -7,7 +7,7 @@ import { CryptoData } from "types/exchange";
 import { CurrencyCode, TransactionStatus } from "types/wallet";
 import { JWT_DECODE_KEY, REF_TOKEN_OBJ_NAME, REF_TOKEN_OBJ_TIME } from "config";
 import { isEmpty } from "lodash";
-import { PhoneNumberUtil } from 'google-libphonenumber';
+import { PhoneNumberUtil } from "google-libphonenumber";
 
 export function generateLabelValueArray(start: number, end: number) {
   const resultArray: { label: string; value: string }[] = [];
@@ -367,6 +367,39 @@ export const coinShow = (value: string, currency?: CurrencyCode): string => {
     return `${Number(newValue).toLocaleString("IRR")} ${convertText(currency, "enToFa")}`;
 
   return Number(newValue).toLocaleString("IRR");
+};
+
+export const normalizeAmount = (
+  amount: string | number,
+  code: "IRR" | "TRY" | "USDT",
+  isShowCurrency?: boolean,
+) => {
+  const value = Number(amount);
+  if (Number.isNaN(value) || !value) {
+    return "0";
+  }
+  switch (code) {
+    case "USDT": {
+      const normalizeValue = value.toPrecision(6);
+      if (isShowCurrency)
+        return `${Number(normalizeValue).toLocaleString("IRR")} ${convertText("USDT", "enToFa")}`;
+      else return Number(normalizeValue).toLocaleString("IRR");
+    }
+    case "TRY": {
+      const normalizeValue = value.toPrecision(2);
+      if (isShowCurrency)
+        return `${Number(normalizeValue).toLocaleString("IRR")} ${convertText("TRY", "enToFa")}`;
+      else return Number(normalizeValue).toLocaleString("IRR");
+    }
+    case "IRR": {
+      const normalizeValue = Math.trunc(value / 10);
+      if (isShowCurrency)
+        return `${Number(normalizeValue).toLocaleString("IRR")} ${convertText("IRR", "enToFa")}`;
+      else return Number(normalizeValue).toLocaleString("IRR");
+    }
+    default:
+      return "0";
+  }
 };
 
 export const getEncryptedObject = (data: string) => {

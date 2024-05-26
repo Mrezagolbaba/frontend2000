@@ -12,18 +12,18 @@ import {
   Button,
   Spinner,
 } from "reactstrap";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
-import Currency from "components/Input/CurrencyInput";
-import { AlertInfo } from "components/AlertWidget";
-import { useBankAccountsQuery } from "store/api/profile-management";
 import {
   useDepositMutation,
   useTransactionFeeQuery,
 } from "store/api/wallet-management";
-import { Link, useNavigate } from "react-router-dom";
-import { useAppSelector } from "store/hooks";
-import { tomanShow } from "helpers";
 import BanksWrapper from "components/BanksWrapper";
+import Currency from "components/Input/CurrencyInput";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import { AlertInfo } from "components/AlertWidget";
+import { Link, useNavigate } from "react-router-dom";
+import { tomanShow } from "helpers";
+import { useAppSelector } from "store/hooks";
+import { useBankAccountsQuery } from "store/api/profile-management";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 
@@ -50,7 +50,7 @@ const CreditCardForm = () => {
   const resolver = yupResolver(
     Yup.object().shape({
       accountNumber: Yup.string().required(),
-      amount: Yup.string().required(),
+      amount: Yup.string().required("شما هیچ مبلغی وارد نکرده اید."),
       accountId: Yup.string().required(),
     }),
   );
