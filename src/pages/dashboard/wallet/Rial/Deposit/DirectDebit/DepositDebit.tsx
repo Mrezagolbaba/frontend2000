@@ -15,7 +15,10 @@ import { AlertInfo } from "components/AlertWidget";
 import { Controller, useForm } from "react-hook-form";
 import { iranianBankIcons } from "helpers/filesManagement/banksList";
 import { useCallback, useEffect, useState } from "react";
-import { useDepositMutation } from "store/api/wallet-management";
+import {
+  useDepositMutation,
+  useWalletsQuery,
+} from "store/api/wallet-management";
 import { useDisconnectDebitMutation } from "store/api/profile-management";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { isEmpty } from "lodash";
@@ -43,6 +46,7 @@ export default function DepositDebit({
   );
 
   // ==============|| Hooks ||================= //
+  const { refetch } = useWalletsQuery();
   const { token } = useAppSelector((state) => state.auth);
   const [depositRequest, { isLoading: loadingDeposit, isSuccess }] =
     useDepositMutation();
@@ -116,15 +120,20 @@ export default function DepositDebit({
         bankId: data[0].id,
       });
     }
-  }, [data, reset]);
+  }, [data, reset, token]);
+
+  const handleClose = useCallback(() => {
+    if (isSuccess || successDisconnect) {
+      onClose?.();
+      refetch();
+    }
+  }, [isSuccess, onClose, refetch, successDisconnect]);
 
   // ==============|| Life Cycle ||================= //
   useEffect(() => handleList(), [handleList]);
   useEffect(() => {
-    if (isSuccess || successDisconnect) {
-      onClose?.();
-    }
-  }, [successDisconnect, isSuccess, onClose]);
+    handleClose();
+  }, [handleClose]);
 
   // ==============|| Render ||================= //
   return (
