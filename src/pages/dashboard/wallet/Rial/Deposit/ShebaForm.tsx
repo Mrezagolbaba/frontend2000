@@ -229,7 +229,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
             navigate("/dashboard/profile#kyc-section");
           }}
         >
-          ارتقاع به سطح دو
+          ارتقا به سطح دو
         </Button>
       </div>
     </Row>
