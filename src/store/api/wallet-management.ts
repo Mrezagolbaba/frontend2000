@@ -17,7 +17,7 @@ export const walletManagement = enhancedApi.injectEndpoints({
           data,
         };
       },
-      invalidatesTags: ["wallets"],
+      // invalidatesTags: ["wallets"],
     }),
     withdraw: builder.mutation<TransactionResponse, WithdrawRequest>({
       query(data) {
