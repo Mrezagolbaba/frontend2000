@@ -14,7 +14,7 @@ export default function Wallet() {
   const renderBalance = (code, field) => {
     const wallet = data.find((w) => w.currencyCode === code);
 
-    return normalizeAmount(wallet[field], code, false);
+    return normalizeAmount(wallet?.[field] || "0", code, false);
   };
 
   return (
@@ -45,27 +45,41 @@ export default function Wallet() {
                 </Col>
               </>
             ) : (
-              <>
-                <Col xs={12} md={6}>
-                  <IRRWallet
-                    balance={renderBalance("IRR", "balance")}
-                    stock={data.find((w) => w.currencyCode === "IRR").balance}
-                  />
-                </Col>
-                <Col xs={12} md={6}>
-                  <USDTWallet
-                    balance={renderBalance("USDT", "balance")}
-                    stock={data.find((w) => w.currencyCode === "USDT").balance}
-                    availableBalance={renderBalance("USDT", "availableBalance")}
-                  />
-                </Col>
-                <Col xs={12} md={6}>
-                  <TRYWallet
-                    balance={renderBalance("TRY", "balance")}
-                    stock={data.find((w) => w.currencyCode === "TRY").balance}
-                  />
-                </Col>
-              </>
+              data && (
+                <>
+                  <Col xs={12} md={6}>
+                    <IRRWallet
+                      balance={renderBalance("IRR", "balance")}
+                      stock={
+                        data.find((w) => w.currencyCode === "IRR")?.balance ||
+                        "0"
+                      }
+                    />
+                  </Col>
+                  <Col xs={12} md={6}>
+                    <USDTWallet
+                      balance={renderBalance("USDT", "balance")}
+                      stock={
+                        data.find((w) => w.currencyCode === "USDT")?.balance ||
+                        "0"
+                      }
+                      availableBalance={renderBalance(
+                        "USDT",
+                        "availableBalance",
+                      )}
+                    />
+                  </Col>
+                  <Col xs={12} md={6}>
+                    <TRYWallet
+                      balance={renderBalance("TRY", "balance")}
+                      stock={
+                        data.find((w) => w.currencyCode === "TRY")?.balance ||
+                        "0"
+                      }
+                    />
+                  </Col>
+                </>
+              )
             )}
           </Row>
         </CardBody>
