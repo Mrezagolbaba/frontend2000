@@ -17,7 +17,7 @@ export const walletManagement = enhancedApi.injectEndpoints({
           data,
         };
       },
-      invalidatesTags: ["wallets"],
+      // invalidatesTags: ["wallets"],
     }),
     withdraw: builder.mutation<TransactionResponse, WithdrawRequest>({
       query(data) {
@@ -129,5 +129,6 @@ export const {
   useTransactionQuery,
   useTransactionsQuery,
   useWalletsQuery,
+  useLazyWalletsQuery,
   useRefCodeMutation,
 } = walletManagement;
