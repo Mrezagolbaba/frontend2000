@@ -20,7 +20,7 @@ import GBP from "assets/img/coins/GBP.png";
 
 import home from "assets/scss/landing/home.module.scss";
 import axios from "axios";
-import useUserLocation from "hooks/useLocation";
+// import useUserLocation from "hooks/useLocation";
 
 const SpotRate = () => {
   // ==============|| States ||================= //
@@ -29,7 +29,7 @@ const SpotRate = () => {
   const [mode, setMode] = useState<"crypto" | "fiat">("crypto");
   const [coinChanges, setCoinChanges] = useState<CryptoData[] | []>([]);
   const [fiatChanges, setFiatChanges] = useState<CryptoData[] | []>([]);
-  const userLocation = useUserLocation();
+  // const userLocation = useUserLocation();
 
   // ==============|| Constants ||================= //
   const currencyPairs = [
