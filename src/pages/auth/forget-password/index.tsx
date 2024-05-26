@@ -73,7 +73,7 @@ export default function ForgetPassword() {
     );
   const handleResetPassword = async (data) => {
     const isValid = isPhoneValid(data.username);
-    if (!isValid) {
+    if (!isValid && forgotType === "PHONE") {
       Notify({ type: "error", text: "شماره همراه اشتباه است." });
       return;
     }

@@ -7,7 +7,6 @@ import Exchange from "pages/dashboard/exchange";
 import Profile from "pages/dashboard/profile";
 import Invoice from "pages/dashboard/invoice";
 import Orders from "pages/dashboard/orders";
-import Transactions from "pages/dashboard/transactions";
 import Support from "pages/dashboard/support";
 import Market from "pages/dashboard/market";
 import History from "pages/dashboard/history";

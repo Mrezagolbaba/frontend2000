@@ -1,10 +1,7 @@
 import { useState, useEffect } from 'react';
 
 interface Location {
-  latitude: number;
-  longitude: number;
-  timeZone: string | null;
-  countryCode: string | null;
+  data: any;
 }
 const API_KEY=''
 const useUserLocation = (): Location | null => {
@@ -13,25 +10,21 @@ const useUserLocation = (): Location | null => {
   useEffect(() => {
     const getUserLocation = async () => {
       try {
-        // Call the browser's Geolocation API to get the user's location
-        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject);
-        });
-
-        // Extract latitude and longitude from the position object
-        const { latitude, longitude } = position.coords;
-
+        const options = {
+          method: 'GET',
+          headers: {'Content-Type': 'application/json', Authorization: 'Bearer undefined'}
+        };
         // Fetch additional details like time zone and country code using Google Maps Geocoding API
-        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=YOUR_API_KEY`);
+        const response = await fetch(`https://api.cloudflare.com/client/v4/zones/cce82946786a744a5d0d219f8cf69d46/settings/ip_geolocation`,options);
         const data = await response.json();
-
+        console.log(data,'data')
         // Extract time zone and country code from the response
         const timeZone = data.results[0]?.time_zone;
         const countryCode = data.results[0]?.address_components.find((component: any) =>
           component.types.includes('country')
         )?.short_name;
 
-        setUserLocation({ latitude, longitude, timeZone, countryCode });
+        setUserLocation({ data});
       } catch (error) {
         console.error('Error fetching user location:', error);
       }

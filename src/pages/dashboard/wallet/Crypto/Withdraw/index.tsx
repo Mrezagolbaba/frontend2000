@@ -5,6 +5,7 @@ import { Controller, useForm as useRHF } from "react-hook-form";
 import {
   Button,
   Col,
+  Form,
   FormFeedback,
   FormGroup,
   FormText,
@@ -15,17 +16,22 @@ import {
 } from "reactstrap";
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import Currency from "components/Input/CurrencyInput";
-import { useEffect } from "react";
-
-import tron from "assets/img/network/tron.svg";
-
-import wallet from "assets/scss/dashboard/wallet.module.scss";
+import { useEffect, useState } from "react";
 
 import {
+  useResendOtpWithdrawMutation,
   useTransactionFeeQuery,
+  useVerifyOtpWithdrawMutation,
   useWithdrawMutation,
 } from "store/api/wallet-management";
-import { coinShow } from "helpers";
+import { coinShow, persianToEnglishNumbers } from "helpers";
+import Dialog from "components/Dialog";
+import WithdrawOTP from "components/WithdrawOTP";
+import Notify from "components/Notify";
+import tron from "assets/img/network/tron.svg";
+import { useAppSelector } from "store/hooks";
+
+import wallet from "assets/scss/dashboard/wallet.module.scss";
 
 type CryptoFormType = {
   network: string;
@@ -37,21 +43,14 @@ const WithdrawCrypto = ({
   onClose,
   currency,
   stock,
-  onCloseModal,
-  setShowOtp,
-  setTransactionId,
 }: {
   onClose: () => void;
   currency: string;
   stock: number;
-  onCloseModal: () => void;
-  setShowOtp: () => void;
-  setTransactionId: (id: string) => void;
 }) => {
-  //hooks
-  const { data: fee } = useTransactionFeeQuery("USDT");
-  const [withdraw, { data: response, isLoading: formLoading, isSuccess }] =
-    useWithdrawMutation();
+  // ==============|| States ||================= //
+  const [isOpenOtp, setIsOpenOTP] = useState(false);
+  // ==============|| Validation ||================= //
   const resolver = yupResolver(
     Yup.object().shape({
       network: Yup.string().required(),
@@ -59,6 +58,16 @@ const WithdrawCrypto = ({
       destination: Yup.string().required("آدرس کیف پول را وارد کنید."),
     }),
   );
+
+  // ==============|| Hooks ||================= //
+  const { otpMethod } = useAppSelector((state) => state.user);
+  const [verifyOtpWithdraw, { isSuccess: successVerify }] =
+    useVerifyOtpWithdrawMutation();
+  const { data: fee } = useTransactionFeeQuery("USDT");
+  const [withdraw, { data: response, isLoading: formLoading, isSuccess }] =
+    useWithdrawMutation();
+  const [resendOtpWithdraw, { isSuccess: isResendSuccess }] =
+    useResendOtpWithdrawMutation();
   const {
     handleSubmit,
     control,
@@ -76,7 +85,7 @@ const WithdrawCrypto = ({
     resolver,
   });
 
-  //constants
+  // ==============|| constants ||================= //
   const optionList: OptionType[] = [
     {
       content: (
@@ -91,7 +100,7 @@ const WithdrawCrypto = ({
     },
   ];
 
-  //handlers
+  // ==============|| Handlers ||================= //
   const onSubmit = async (data: CryptoFormType) => {
     if (data.destination.length < 34)
       setError("destination", {
@@ -115,19 +124,37 @@ const WithdrawCrypto = ({
         destination: data.destination,
       });
   };
+  const handleSendOtp = async (data: { code: string }) => {
+    if (data.code.length > 6)
+      return Notify({ type: "error", text: "لطفا کد را وارد کنید" });
+    const newData = {
+      transactionId: response?.id,
+      code: persianToEnglishNumbers(data.code),
+    };
+    verifyOtpWithdraw(newData);
+  };
+  const handleReSendOtp = async () => {
+    await resendOtpWithdraw(response?.id).then(() => {
+      if (isResendSuccess)
+        Notify({ type: "success", text: "کد مجددا ارسال شد" });
+    });
+  };
 
-  //life-cycle
+  // ==============|| Life Cycle ||================= //
   useEffect(() => {
-    if (isSuccess) {
-      setTransactionId(response?.id as string);
-      setShowOtp();
-      onCloseModal();
+    if (isSuccess) setIsOpenOTP(true);
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if (successVerify) {
+      setIsOpenOTP(false);
+      Notify({ type: "success", text: "برداشت با موفقیت انجام شد" });
+      onClose?.();
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess, response]);
+  }, [successVerify]);
 
-  //render
+  // ==============|| Render ||================= //
   return (
     <div className="px-2">
       <AlertWarning
@@ -139,7 +166,7 @@ const WithdrawCrypto = ({
         hasIcon
         text="انتقال داخلی (آرسونیکس به آرسونیکس) هیچ کارمزدی ندارد."
       />
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <Row>
           <Col xs={12} lg={6}>
             <Controller
@@ -241,7 +268,20 @@ const WithdrawCrypto = ({
             </Button>
           </div>
         </Row>
-      </form>
+      </Form>
+      <Dialog
+        title="تایید برداشت"
+        isOpen={isOpenOtp}
+        onClose={() => setIsOpenOTP(false)}
+      >
+        <WithdrawOTP
+          title="تایید برداشت"
+          onClose={() => setIsOpenOTP(false)}
+          securitySelection={otpMethod}
+          handleResend={handleReSendOtp}
+          handleGetCode={handleSendOtp}
+        />
+      </Dialog>
     </div>
   );
 };

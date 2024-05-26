@@ -9,6 +9,7 @@ import {
   NavLink,
   TabContent,
   TabPane,
+  Table,
 } from "reactstrap";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
@@ -29,101 +30,113 @@ export default function Tables() {
   };
   return (
     <Card>
-      <CardHeader>
-        <CardTitle tag="h5">تراکنش های اخیر</CardTitle>
-      </CardHeader>
-      <CardBody className={wallet["data-tab-container"]}>
-        <Nav className={wallet["data-tab"]}>
-          <NavItem>
-            <NavLink
-              className={`${wallet["data-tab__item"]} ${
-                activeTab === "1" ? wallet.active : ""
-              }`}
-              tag="button"
-              onClick={() => clickTab("1")}
-            >
-              واریز تومانی
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={`${wallet["data-tab__item"]} ${
-                activeTab === "2" ? wallet.active : ""
-              }`}
-              tag="button"
-              // disabled={!secondTierVerified}
-              onClick={() => clickTab("2")}
-            >
-              برداشت تومانی
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={`${wallet["data-tab__item"]} ${
-                activeTab === "3" ? wallet.active : ""
-              }`}
-              tag="button"
-              // disabled={!secondTierVerified}
-              onClick={() => clickTab("3")}
-            >
-              واریز فیات دیجیتال
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={`${wallet["data-tab__item"]} ${
-                activeTab === "4" ? wallet.active : ""
-              }`}
-              tag="button"
-              // disabled={!secondTierVerified}
-              onClick={() => clickTab("4")}
-            >
-              برداشت فیات دیجیتال
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={`${wallet["data-tab__item"]} ${
-                activeTab === "5" ? wallet.active : ""
-              }`}
-              tag="button"
-              // disabled={!secondTierVerified}
-              onClick={() => clickTab("5")}
-            >
-              واریز ارز دیجیتال
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={`${wallet["data-tab__item"]} ${
-                activeTab === "6" ? wallet.active : ""
-              }`}
-              tag="button"
-              // disabled={!secondTierVerified}
-              onClick={() => clickTab("6")}
-            >
-              برداشت ارز دیجیتال
-            </NavLink>
-          </NavItem>
-        </Nav>
-        <TabContent activeTab={activeTab}>
+      <CardBody>
+        <div className={wallet.transactions}>
+          <Nav className={wallet.tabs} id="transactions">
+            <NavItem>
+              <NavLink
+                className={`${wallet.tabs__item} ${
+                  activeTab === "1" ? wallet.active : ""
+                }`}
+                id="tab1"
+                tag="button"
+                onClick={() => {
+                  setActiveTab("1");
+                }}
+              >
+                واریز تومان
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={`${wallet.tabs__item} ${
+                  activeTab === "2" ? wallet.active : ""
+                }`}
+                id="tab4"
+                tag="button"
+                onClick={() => {
+                  setActiveTab("2");
+                }}
+              >
+                برداشت تومان
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={`${wallet.tabs__item} ${
+                  activeTab === "3" ? wallet.active : ""
+                }`}
+                id="tab2"
+                tag="button"
+                onClick={() => {
+                  setActiveTab("3");
+                }}
+              >
+                واریز ارز دیجیتال
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={`${wallet.tabs__item} ${
+                  activeTab === "4" ? wallet.active : ""
+                }`}
+                id="tab3"
+                tag="button"
+                onClick={() => {
+                  setActiveTab("4");
+                }}
+              >
+                برداشت ارز دیجیتال
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={`${wallet.tabs__item} ${
+                  activeTab === "5" ? wallet.active : ""
+                }`}
+                id="tab2"
+                tag="button"
+                onClick={() => {
+                  setActiveTab("5");
+                }}
+              >
+                واریز فیات دیجیتال
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={`${wallet.tabs__item} ${
+                  activeTab === "6" ? wallet.active : ""
+                }`}
+                id="tab4"
+                tag="button"
+                onClick={() => {
+                  setActiveTab("6");
+                }}
+              >
+                برداشت فیات دیجیتال
+              </NavLink>
+            </NavItem>
+          </Nav>
+        </div>
+        <TabContent activeTab={activeTab} className="mt-3">
           <TabPane tabId="1">
             <DepositsTable type="IRR" />
           </TabPane>
           <TabPane tabId="2">
-            <WithdrawsTable type="IRR" />
+            <DepositsTable type="USDT" />
           </TabPane>
           <TabPane tabId="3">
             <DepositsTable type="TRY" />
           </TabPane>
           <TabPane tabId="4">
-            <WithdrawsTable type="TRY" />
+            <WithdrawsTable type="IRR" />
           </TabPane>
           <TabPane tabId="5">
-            <DepositsTable type="USDT" />
+            <WithdrawsTable type="USDT" />
           </TabPane>
           <TabPane tabId="6">
-            <WithdrawsTable type="USDT" />
+            <WithdrawsTable type="TRY" />
           </TabPane>
         </TabContent>
       </CardBody>
@@ -161,7 +174,7 @@ export const DepositTypes = ({ flow }: { flow: FlowType }) => {
       return "واریز به آدرس ولت";
     case "MANUAL_WITH_PAYMENT_IDENTIFIER":
       return "واریز بین بانکی";
-      case "DEBIT":
+    case "DEBIT":
       return "شارژ سریع";
     default:
       return "";

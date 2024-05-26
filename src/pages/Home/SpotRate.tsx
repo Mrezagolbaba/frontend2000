@@ -135,9 +135,9 @@ const SpotRate = () => {
   useEffect(() => {
     get24Changes();
   }, [get24Changes]);
-  useEffect(() => {
-    checkLocation();
-  }, [checkLocation]);
+  // useEffect(() => {
+    // checkLocation();
+  // }, [checkLocation]);
   // ==============|| Render ||================= //
 
   return (
@@ -149,16 +149,13 @@ const SpotRate = () => {
           </h3>
         </div>
         <div className={home["currency-rates__tabs"]}>
-          {hasNotIR ? (
             <FilterNavCoin
               activeTab={mode}
               handleTabClick={handleModeClick}
               leftTitle=" ارزهای دیجیتال"
               rightTitle="  فیات دیجیتال"
             />
-          ) : (
-            <div />
-          )}
+
           {mode === "crypto" && (
             <FilterNavCoin
               activeTab={activeTab}
