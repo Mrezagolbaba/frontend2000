@@ -83,7 +83,6 @@ export const walletManagement = enhancedApi.injectEndpoints({
           url: `/transactions/${id}`,
         };
       },
-      providesTags: ["wallets"],
     }),
     transactions: builder.query<TransactionResponse[], any>({
       query(params) {
@@ -93,7 +92,6 @@ export const walletManagement = enhancedApi.injectEndpoints({
           params: params,
         };
       },
-      providesTags: ["wallets"],
     }),
     wallets: builder.query<any, void>({
       query() {
@@ -102,7 +100,6 @@ export const walletManagement = enhancedApi.injectEndpoints({
           url: "/wallets",
         };
       },
-      providesTags: ["wallets"],
     }),
     refCode: builder.mutation<any, { currencyCode: string; flow: string }>({
       query(data) {
