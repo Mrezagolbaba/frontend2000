@@ -12,6 +12,7 @@ import {
   CardTitle,
   Col,
   Form,
+  FormFeedback,
   FormGroup,
   Input,
   Label,
@@ -29,12 +30,15 @@ import IBANNumber from "components/Input/IBANNumber";
 import { persianToEnglishNumbers } from "helpers";
 
 import profile from "assets/scss/dashboard/profile.module.scss";
+import { useAppSelector } from "store/hooks";
 
 type Props = {
   accounts: BankAccountsResponse[];
   isLoading: boolean;
 };
 export default function International({ accounts, isLoading }: Props) {
+  const { firstNameEn, lastNameEn, internationalServicesVerified } =
+    useAppSelector((state) => state.user);
   const [isOpenForm, setIsOpenForm] = useState<boolean>(false);
   const [editOption, setEditOption] = useState<{
     isEdit: boolean;
@@ -61,8 +65,10 @@ export default function International({ accounts, isLoading }: Props) {
 
   const resolver = yupResolver(
     Yup.object().shape({
-      ownerFullName: Yup.string().required(),
-      iban: Yup.string().required(),
+      ownerFullName: Yup.string().required(
+        "وارد کردن نام صاحب حساب الزامی است.",
+      ),
+      iban: Yup.string().required("شماره IBAN اشتباه است."),
       bankId: Yup.string().required(),
     }),
   );
@@ -110,8 +116,6 @@ export default function International({ accounts, isLoading }: Props) {
     createAccount({ ...data, iban: "TR" + ibanNumber });
   };
 
-  console.log(errors);
-
   return (
     <>
       <Card className="mb-4">
@@ -122,89 +126,25 @@ export default function International({ accounts, isLoading }: Props) {
           <AlertWarning
             hasIcon
             key="warning-international-account"
-            text="در صورتی که کارت اقامت کشوری که در آن ساکن هستید را از قسمت احراز هویت ارسال نکنید، فقط قابلیت برداشت فیات دیجیتال از آرسونیکس را خواهید داشت."
+            text="در صورتی که کارت اقامت کشوری که در آن ساکن هستید را در کیف پول بخش واریز فیات دیجیتال مورد نظر خود ارسال نکنید، فقط قابلیت برداشت فیات دیجیتال از آرسونیکس را خواهید داشت."
           />
+          {internationalServicesVerified && (
+            <AlertWarning
+              hasIcon
+              key="warning-international-account"
+              text={`واریز به حساب‌های آرسونیکس فقط باید از حساب ${firstNameEn.toUpperCase()} ${lastNameEn.toUpperCase()} انجام شود، در غیر اینصورت پس از گذشت ۷۲ ساعت کاری با کسر کارمزد بانکی مبلغ عودت داده می‌شود.`}
+            />
+          )}
           <AlertInfo
             hasIcon
             key="info-international-account"
-            text="اطلاعاتی مانند SWIFT Code یا Sort Code هنگام برداشت ارز مورد نظر به طور جداگانه از شما دریافت می‌شود."
+            text="برداشت فیات دیجیتال در آرسونیکس به حساب‌های مختلف محدودیتی ندارد."
           />
-          {isOpenForm && (
-            <Form
-              className="bank-account"
-              onSubmit={handleSubmit(submitHandler)}
-            >
-              <Row>
-                <Col xs={10}>
-                  <Row>
-                    <Col xs={12} xl={7}>
-                      <Controller
-                        name="iban"
-                        control={control}
-                        render={({ field: { name, value, onChange, ref } }) => (
-                          <FormGroup className={profile["accounts-field"]}>
-                            <Label> شماره IBAN:</Label>
-                            <IBANNumber
-                              name={name}
-                              value={value}
-                              onChange={(value) => setValue(name, value)}
-                              setBankId={(id) => {
-                                setValue("bankId", id);
-                              }}
-                              disabled={formLoading}
-                              invalid={Boolean(errors.ownerFullName)}
-                            />
-                          </FormGroup>
-                        )}
-                      />
-                    </Col>
-                    <Col xs={12} xl={5}>
-                      <Controller
-                        name="ownerFullName"
-                        control={control}
-                        render={({ field: { name, value, onChange, ref } }) => (
-                          <FormGroup className={profile["accounts-field"]}>
-                            <Label> صاحب حساب:</Label>
-                            <Input
-                              disabled={formLoading}
-                              value={value}
-                              ref={ref}
-                              onChange={onChange}
-                              name={name}
-                              type="text"
-                              className="form-control d-rtl"
-                              id={`input23_001`}
-                              invalid={Boolean(errors.ownerFullName)}
-                            />
-                          </FormGroup>
-                        )}
-                      />
-                    </Col>
-                  </Row>
-                </Col>
-                <Col xs={2} className="align-self-center">
-                  <Button
-                    type="button"
-                    color="icon-danger"
-                    disabled={accounts.length <= 0}
-                    onClick={() => {
-                      setIsOpenForm(false);
-                    }}
-                  >
-                    <MdClose />
-                  </Button>
-                  <Button type="submit" color="icon-success">
-                    {formLoading ? <Spinner size="sm" /> : <LuCheck />}
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
-          )}
 
           {!accounts || isLoading ? (
             <>
               <Row>
-                <Col xs={10}>
+                <Col xs={12} sm={10}>
                   <Row className="px-2 my-1">
                     <Col xs={12} xl={6} className="placeholder-glow">
                       <div className={profile["accounts-field"]}>
@@ -268,7 +208,7 @@ export default function International({ accounts, isLoading }: Props) {
                 ""
               ) : (
                 <Row>
-                  <Col xs={10}>
+                  <Col xs={12} sm={10}>
                     <Row className="px-2">
                       <Col xs={12} xl={7}>
                         <FormGroup className={profile["accounts-field"]}>
@@ -301,10 +241,11 @@ export default function International({ accounts, isLoading }: Props) {
                       </Col>
                     </Row>
                   </Col>
-                  <Col sm={2} className="align-self-center">
+                  <Col xs={12} sm={2} className="align-self-center">
                     <Button
                       type="button"
                       color="icon-danger"
+                      className="w-100"
                       onClick={() => {
                         // const logo = searchIranianBanks(
                         //   account?.cardNumber
@@ -344,7 +285,91 @@ export default function International({ accounts, isLoading }: Props) {
               ),
             )
           )}
-
+          {isOpenForm && (
+            <Form
+              className="bank-account"
+              onSubmit={handleSubmit(submitHandler)}
+            >
+              <Row>
+                <Col xs={12} sm={10}>
+                  <Row>
+                    <Col xs={12} xl={7}>
+                      <Controller
+                        name="iban"
+                        control={control}
+                        render={({ field: { name, value } }) => (
+                          <FormGroup className={profile["accounts-field"]}>
+                            <Label> شماره IBAN:</Label>
+                            <IBANNumber
+                              name={name}
+                              value={value}
+                              onChange={(value) => setValue(name, value)}
+                              setBankId={(id) => {
+                                setValue("bankId", id);
+                              }}
+                              disabled={formLoading}
+                              error={errors.iban}
+                            />
+                          </FormGroup>
+                        )}
+                      />
+                    </Col>
+                    <Col xs={12} xl={5}>
+                      <Controller
+                        name="ownerFullName"
+                        control={control}
+                        render={({ field: { name, value, onChange, ref } }) => (
+                          <FormGroup className={profile["accounts-field"]}>
+                            <Label> صاحب حساب:</Label>
+                            <div>
+                              <Input
+                                disabled={formLoading}
+                                value={value}
+                                ref={ref}
+                                onChange={({ target }) => {
+                                  const val = target.value.toUpperCase();
+                                  onChange(val);
+                                }}
+                                name={name}
+                                type="text"
+                                className="form-control d-rtl"
+                                id={`input23_001`}
+                                invalid={Boolean(errors.ownerFullName)}
+                              />
+                              {errors.ownerFullName && (
+                                <FormFeedback className="d-block">
+                                  {errors.ownerFullName.message}
+                                </FormFeedback>
+                              )}
+                            </div>
+                          </FormGroup>
+                        )}
+                      />
+                    </Col>
+                  </Row>
+                </Col>
+                <Col
+                  xs={12}
+                  sm={2}
+                  className="d-flex align-self-center justify-content-center"
+                >
+                  <Button
+                    type="button"
+                    color="icon-danger"
+                    disabled={accounts.length <= 0}
+                    onClick={() => {
+                      setIsOpenForm(false);
+                    }}
+                  >
+                    <MdClose />
+                  </Button>
+                  <Button type="submit" color="icon-success">
+                    {formLoading ? <Spinner size="sm" /> : <LuCheck />}
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+          )}
           <Row>
             <ButtonGroup style={{ display: "flex", justifyContent: "center" }}>
               <Button

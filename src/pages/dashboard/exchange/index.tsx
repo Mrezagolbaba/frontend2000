@@ -21,6 +21,7 @@ import Deposit from "../wallet/Rial/Deposit";
 import { CurrencyCode } from "types/wallet";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
+import { Link } from "react-router-dom";
 
 const accordionData = [
   {
@@ -51,7 +52,7 @@ const accordionData = [
     id: "5",
     question: "چقدر زمان برای دریافت ارز دیجیتال لازم است؟",
     answer:
-      "در آرسونیکس ارز دیجیتال بعد از درخواست برداشت به حساب کاربر بدون وقفه زمانی واریز می‌شود. در صورتی که مراحل احراز هویت خود را به طور کامل انجام دهید، ارز دیجیتال شما بدون معطلی به کیف پول شما واریز می‌شود.",
+      "در آرسونیکس ارز دیجیتال بعد از درخواست برداشت به حساب کاربر بدون وقفه زمانی واریز می‌شود. در صورتی که مراحل احراز هویت خود را به طور کامل انجام دهید، ارز دیجیتال شما بدون معطلی به کیف پول شما واریز می‌شود. در نظر داشته باشید اولین برداشت ارز دیجیتال (در صورت تبدیل با استفاده از تومان) به دستور پلیس فتا بعد از 72 ساعت انجام می‌شود.",
   },
   {
     id: "6",
@@ -106,7 +107,13 @@ export default function Exchange() {
             <CardHeader className="d-flex flex-row justify-content-between align-items-center">
               <CardTitle tag="h5"> سوالات متداول</CardTitle>
               <div className="card-action">
-                <a href="#">مرکز راهنمایی </a>
+                <Link
+                  target="_blank"
+                  className="btn btn-link"
+                  to="https://help.arsonex.com/"
+                >
+                  مرکز راهنمایی
+                </Link>
               </div>
             </CardHeader>
 

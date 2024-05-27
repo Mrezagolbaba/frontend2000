@@ -1,7 +1,6 @@
 import { BsCheck2 } from "react-icons/bs";
 import {
   Badge,
-  Button,
   Card,
   CardBody,
   CardHeader,
@@ -10,6 +9,7 @@ import {
   Row,
 } from "reactstrap";
 import { useAppSelector } from "store/hooks";
+import { Link } from "react-router-dom";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 
@@ -29,9 +29,9 @@ export default function UserTier() {
                 هویت را تکمیل کنید، زمان بررسی و تایید اطلاعات ۱ ساعت
                 &zwnj;می&zwnj;باشد.{" "}
               </p>
-              <Button outline color="primary" tag="a" href="/dashboard/profile">
+              <Link className="btn btn-outline-primary" to="/dashboard/profile#kyc-section">
                 احراز هویت سطح دو
-              </Button>
+              </Link>
             </div>
           </Col>
           <Col xxl={3} md={6}>
@@ -62,7 +62,7 @@ export default function UserTier() {
             </ul>
           </Col>
           <Col xxl={3} md={6}>
-            <ul className="auth-jumbotron__advantages">
+            <ul className={dashboard["user-tier-advantages"]}>
               <li>
                 <h5>احراز هویت سطح دو</h5>
               </li>
@@ -89,9 +89,9 @@ export default function UserTier() {
           </Col>
           <Col xs={12} className={dashboard["user-tier-second-button"]}>
             <div className={dashboard["user-tier-summary"]}>
-              <Button outline color="primary" tag="a" href="/dashboard/profile">
+              <Link className="btn btn-outline-primary" to="/dashboard/profile#kyc-section">
                 احراز هویت سطح دو
-              </Button>
+              </Link>
             </div>
           </Col>
         </Row>

@@ -66,6 +66,7 @@
 }
 
 .upload-container {
+  height: 100%;
   border: 1px solid #dee2e6;
   border-radius: 10px;
   &.empty-upload {
@@ -73,9 +74,12 @@
     color: rgba(3, 4, 27, 0.5);
     font-size: 0.8rem;
     transition: ease-in all 100ms;
-    &:hover {
+    & > div:hover {
       color: #111bff;
       transition: ease-out all 100ms;
+    }
+    & > div:not(:last-child) {
+      border-left: 1px solid #dee2e6;
     }
     svg {
       font-size: 3rem;
@@ -322,6 +326,45 @@
     & > img {
       border-radius: 50%;
       width: 64px;
+    }
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .accounts-field {
+    flex-direction: column;
+    & > label {
+      line-height: 20px;
+      flex: 0 0 40px;
+    }
+  }
+  .modal-title {
+    align-items: center;
+    h5 {
+      font-size: 1rem;
+    }
+    button {
+      font-size: 0.7rem;
+      padding: 0 2px;
+    }
+  }
+  .video-container {
+    .video-warper {
+      width: 180px;
+      height: 180px;
+      video {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+  .video-summary-text {
+    font-size: 0.8rem;
+  }
+  .progressbar {
+    &__circles {
+      display: none;
     }
   }
 }

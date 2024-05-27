@@ -1,8 +1,11 @@
-import Deposit from "assets/img/icons/depositIcon.svg";
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
-import { useTransactionsQuery } from "store/api/wallet-management";
-import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import { Link } from "react-router-dom";
 import { convertCoins, convertIRRToToman, convertStatus } from "helpers";
+import { useTransactionsQuery } from "store/api/wallet-management";
+import Deposit from "assets/img/icons/depositIcon.svg";
+import moment from "jalali-moment";
+
+import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 
 function LatestDeals() {
   const { data, isLoading } = useTransactionsQuery({
@@ -20,9 +23,9 @@ function LatestDeals() {
     <Card className="h-100">
       <CardHeader className="d-flex flex-row justify-content-between align-items-center">
         <CardTitle tag="h5"> تراکنش های اخیر</CardTitle>
-        <a className={dashboard["sub-link"]} href="/dashboard/history">
+        <Link className={dashboard["sub-link"]} to="/dashboard/history">
           تاریخچه
-        </a>
+        </Link>
       </CardHeader>
       <CardBody>
         <div className={dashboard["table-responsive"]}>
@@ -34,9 +37,9 @@ function LatestDeals() {
                 <thead>
                   <tr>
                     <th scope="col">نوع تراکنش</th>
-                    <th scope="col">ارز</th>
-                    <th scope="col">مقدار</th>
-                    <th scope="col">وضعیت</th>
+                    <th scope="col">نوع ارز</th>
+                    <th scope="col">مقدار ارز</th>
+                    <th scope="col">وضعیت تراکنش</th>
                     <th scope="col">تاریخ</th>
                   </tr>
                 </thead>
@@ -96,7 +99,7 @@ function LatestDeals() {
                   </tbody>
                 ) : (
                   <tbody>
-                    {transActions.slice(-7)?.map((item,index) => (
+                    {transActions.slice(-7)?.map((item, index) => (
                       <tr key={index}>
                         <td>
                           <span
@@ -110,28 +113,35 @@ function LatestDeals() {
                           </span>
                         </td>
                         <td>{convertCoins(item.currencyCode)}</td>
-                        {
-                          item.currencyCode === "IRR" ? <td>{convertIRRToToman(Number(item.amount)).toLocaleString()}</td> : <td>{Number(item.amount).toLocaleString()}</td>
-                        }
+                        {item.currencyCode === "IRR" ? (
+                          <td>
+                            {convertIRRToToman(
+                              Number(item.amount),
+                            ).toLocaleString()}
+                          </td>
+                        ) : (
+                          <td>{Number(item.amount).toLocaleString()}</td>
+                        )}
                         <td>
                           <span
-                            className={`${item.status === "CANCELED" ||
+                            className={`${
+                              item.status === "CANCELED" ||
                               item.status === "FAILED" ||
                               item.status === "EXPIRED"
-                              ? "text-danger"
-                              : item.status === "SUCCESSFUL"
-                                ? "text-success"
-                                : "text-secondary"
-                              }`}
+                                ? "text-danger"
+                                : item.status === "SUCCESSFUL"
+                                  ? "text-success"
+                                  : "text-secondary"
+                            }`}
                           >
                             {convertStatus(item.status)}
                           </span>
                         </td>
                         <td>
                           <span className="d-ltr d-block">
-                            {`${new Date(item?.createdAt).toLocaleTimeString("fa-IR")} ${new Date(
-                              item?.createdAt,
-                            ).toLocaleDateString("fa-IR")}`}
+                            {moment(item?.createdAt)
+                              .locale("fa")
+                              .format("HH:MM YYYY/MM/DD")}
                           </span>
                         </td>
                       </tr>
@@ -140,21 +150,21 @@ function LatestDeals() {
                 )}
               </>
             ) : (
-              <tr>
-                <td colSpan={4} className="text-center">
-                  <img
-                    src={Deposit}
-                    style={{
-                      height: "50px",
-                      width: "50px",
-                      marginBottom: "10px",
-                    }}
-                  />
-                  <div className="text-dark">
-                    اولین معامله خود را با آرسونیکس تجربه کنید
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td colSpan={4} className="text-center bg-white">
+                    <img
+                      src={Deposit}
+                      style={{
+                        height: "50px",
+                        width: "50px",
+                        marginBottom: "10px",
+                      }}
+                    />
+                    <p>اولین تراکنش خود را با آرسونیکس تجربه کنید</p>
+                  </td>
+                </tr>
+              </tbody>
             )}
           </table>
         </div>

@@ -18,5 +18,8 @@ declare const classNames: {
   readonly "otp-container": "otp-container";
   readonly "otp-input": "otp-input";
   readonly "custom-header": "custom-header";
+  readonly "ref-code": "ref-code";
+  readonly "login-type": "login-type";
+  readonly "login-type__active": "login-type__active";
 };
 export = classNames;

@@ -1,8 +1,9 @@
 import moment from "jalali-moment";
 import { DepositTypes, RenderAmount, StatusHandler } from ".";
-
+import Deposit from "assets/img/icons/depositIcon.svg";
 import { useTransactionsQuery } from "store/api/wallet-management";
 import CopyInput from "components/Input/CopyInput";
+import { Link } from "react-router-dom";
 
 type Props = {
   type: "IRR" | "TRY" | "USDT";
@@ -10,7 +11,8 @@ type Props = {
 
 export default function DepositsTable({ type }: Props) {
   const { data, isLoading } = useTransactionsQuery({
-    filter: [`currencyCode||eq||${type}`, "type||eq||DEPOSIT"],
+    filter: [`currencyCode||eq||${type}`, "status||$ne||DRAFT"],
+    or: ["type||eq||DEPOSIT", "type||eq||PROMOTION"],
     sort: "createdAt,DESC",
     limit: 5,
   });
@@ -18,45 +20,27 @@ export default function DepositsTable({ type }: Props) {
   return (
     <div className="table-responsive">
       <table className="table table-borderless table-striped">
-        <thead>
-          <tr>
-            <th
-              scope="col"
-              style={{ color: "#03041b66" }}
-              className="text-center"
-            >
-              نوع واریزی
-            </th>
-            <th
-              scope="col"
-              style={{ color: "#03041b66" }}
-              className="text-center"
-            >
-              مقدار واریزی
-            </th>
-            <th
-              scope="col"
-              style={{ color: "#03041b66" }}
-              className="text-center"
-            >
-              {type !== "USDT" ? "شناسه پرداخت" : "آدرس ولت"}
-            </th>
-            <th
-              scope="col"
-              style={{ color: "#03041b66" }}
-              className="text-center"
-            >
-              تاریخ پرداخت
-            </th>
-            <th
-              scope="col"
-              style={{ color: "#03041b66" }}
-              className="text-center"
-            >
-              وضعیت پرداخت
-            </th>
-          </tr>
-        </thead>
+        {data && data?.length > 0 && (
+          <thead>
+            <tr>
+              <th scope="col" style={{ color: "#03041b66" }} className="text">
+                نوع واریزی
+              </th>
+              <th scope="col" style={{ color: "#03041b66" }} className="text">
+                مقدار واریزی
+              </th>
+              <th scope="col" style={{ color: "#03041b66" }} className="text">
+                {type !== "USDT" ? "شناسه پرداخت" : "TXID"}
+              </th>
+              <th scope="col" style={{ color: "#03041b66" }} className="text">
+                تاریخ پرداخت
+              </th>
+              <th scope="col" style={{ color: "#03041b66" }} className="text">
+                وضعیت پرداخت
+              </th>
+            </tr>
+          </thead>
+        )}
         <tbody>
           {isLoading ? (
             <>
@@ -115,35 +99,64 @@ export default function DepositsTable({ type }: Props) {
           ) : data && data?.length > 0 ? (
             data?.map((record, index) => (
               <tr key={index}>
-                <td className="text-center">
-                  <DepositTypes flow={record.providerData.flow} />
+                <td className="text">
+                  <DepositTypes
+                    flow={
+                      record.sourceType === "DEBIT"
+                        ? record.sourceType
+                        : record.providerData.flow
+                    }
+                  />
                 </td>
-                <td className="text-center">
+                <td className="text">
                   <RenderAmount amount={record.amount} type={type} />
                 </td>
-                <td className="text-center">
-                  <div className="d-flex flex-row justify-content-center">
-                    <CopyInput
-                      text={
-                        type === "USDT"
-                          ? record.providerData.flowWalletAddress
-                          : record.providerData.flowPaymentIdentifier
-                      }
-                      maxCharacter={10}
-                      hasBox={false}
-                    />
+                <td className="text">
+                  <div className="d-flex flex-row">
+                    {type === "USDT" ? (
+                      <Link
+                        target="_blank"
+                        to={`https://tronscan.org/#/transaction/${record.providerRef}`}
+                      >
+                        لینک تراکنش
+                      </Link>
+                    ) : (
+                      <CopyInput
+                        text={record.id}
+                        maxCharacter={10}
+                        hasBox={false}
+                      />
+                    )}
                   </div>
                 </td>
-                <td className="text-center">
-                  {moment(record.createdAt).locale("fa").format("DD MMMM YYYY")}
+                <td className="text">
+                  {moment(record.createdAt)
+                    .locale("fa")
+                    .format("hh:mm DD MMMM YYYY")}
                 </td>
-                <td className="text-center">
+                <td className="text">
                   <StatusHandler status={record.status} />
                 </td>
               </tr>
             ))
           ) : (
-            <tr className="py-4">دیتایی وجود ندارد</tr>
+            <tr>
+              <td
+                colSpan={4}
+                className="text-center"
+                style={{ boxShadow: "none" }}
+              >
+                <img
+                  src={Deposit}
+                  style={{
+                    height: "50px",
+                    width: "50px",
+                    margin: "20px 0",
+                  }}
+                />
+                <p>اولین تراکنش خود را با آرسونیکس تجربه کنید</p>
+              </td>
+            </tr>
           )}
         </tbody>
       </table>

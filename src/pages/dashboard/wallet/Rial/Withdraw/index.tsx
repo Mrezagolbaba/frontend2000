@@ -1,8 +1,3 @@
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { AlertInfo } from "components/AlertWidget";
 import {
   Button,
   Col,
@@ -12,18 +7,23 @@ import {
   Label,
   Row,
 } from "reactstrap";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
-import Currency from "components/Input/CurrencyInput";
-import { useBankAccountsQuery } from "store/api/profile-management";
 import {
   useTransactionFeeQuery,
   useWithdrawMutation,
 } from "store/api/wallet-management";
-import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
-import { useAppSelector } from "store/hooks";
-import { tomanShow } from "helpers";
+import * as Yup from "yup";
 import BanksWrapper from "components/BanksWrapper";
+import Currency from "components/Input/CurrencyInput";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import Notify from "components/Notify";
+import { AlertInfo } from "components/AlertWidget";
+import { Controller, useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { tomanShow } from "helpers";
+import { useAppSelector } from "store/hooks";
+import { useBankAccountsQuery } from "store/api/profile-management";
+import { useEffect, useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 
@@ -54,7 +54,7 @@ export default function Withdraw({ onClose, stock }: Props) {
   const resolver = yupResolver(
     Yup.object().shape({
       iban: Yup.string().required(),
-      amount: Yup.string().required(),
+      amount: Yup.string().required("شما هیچ مبلغی وارد نکرده اید."),
       accountId: Yup.string().required(),
     }),
   );
@@ -141,9 +141,10 @@ export default function Withdraw({ onClose, stock }: Props) {
 
   useEffect(() => {
     if (isSuccessWithdraw) {
-      toast.success(
-        "درخواست برداشت با موفقیت ثبت شد. لطفا منتظر تایید پشتیبانی بمانید.",
-      );
+      Notify({
+        type: "success",
+        text: "درخواست برداشت با موفقیت ثبت شد. لطفا منتظر تایید پشتیبانی بمانید.",
+      });
       onClose?.();
     }
 

@@ -16,7 +16,7 @@ export default function Authenticator() {
 
   const [value, setValue] = useState<OTPType>(otpMethod);
   const [successValue, setSuccessValue] = useState<OTPType>(otpMethod);
-  const [level, setLevel] = useState<0|1 | 2>(0);
+  const [level, setLevel] = useState<0 | 1 | 2>(0);
 
   const [level1Req, { isError, isSuccess }] =
     useRequestSwitchOtpMethodMutation();
@@ -24,6 +24,7 @@ export default function Authenticator() {
   const handleChange = (e, name: OTPType) => {
     e.preventDefault();
     setIsDisabled(true);
+    setLevel(1);
     if (name !== value) {
       setValue(name);
       setIsOpenModal(true);
@@ -74,7 +75,7 @@ export default function Authenticator() {
       <Col xl={3} lg={3} md={2} sm={2}>
         <div
           className={setting["authenticator-select"]}
-          onClick={(e) => handleChange(e, "PHONE")}
+          onClick={(e) => !isDisabled && handleChange(e, "PHONE")}
         >
           <Input
             name="PHONE"
@@ -84,7 +85,7 @@ export default function Authenticator() {
             className="m-2"
             disabled={isDisabled}
             checked={successValue === "PHONE"}
-            onChange={(e) => handleChange(e, "PHONE")}
+            onChange={(e) => !isDisabled && handleChange(e, "PHONE")}
           />
           <span>پیامک</span>
         </div>
@@ -92,7 +93,7 @@ export default function Authenticator() {
       <Col xl={6} lg={6} md={2} sm={2}>
         <div
           className={setting["authenticator-select"]}
-          onClick={(e) => handleChange(e, "AUTHENTICATOR")}
+          onClick={(e) => !isDisabled && handleChange(e, "AUTHENTICATOR")}
         >
           <Input
             name="AUTHENTICATOR"

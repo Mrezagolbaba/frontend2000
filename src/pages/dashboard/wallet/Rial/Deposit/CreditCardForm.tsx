@@ -12,18 +12,18 @@ import {
   Button,
   Spinner,
 } from "reactstrap";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
-import Currency from "components/Input/CurrencyInput";
-import { AlertInfo } from "components/AlertWidget";
-import { useBankAccountsQuery } from "store/api/profile-management";
 import {
   useDepositMutation,
   useTransactionFeeQuery,
 } from "store/api/wallet-management";
-import { Link, useNavigate } from "react-router-dom";
-import { useAppSelector } from "store/hooks";
-import { tomanShow } from "helpers";
 import BanksWrapper from "components/BanksWrapper";
+import Currency from "components/Input/CurrencyInput";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import { AlertInfo } from "components/AlertWidget";
+import { Link, useNavigate } from "react-router-dom";
+import { tomanShow } from "helpers";
+import { useAppSelector } from "store/hooks";
+import { useBankAccountsQuery } from "store/api/profile-management";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 
@@ -50,7 +50,7 @@ const CreditCardForm = () => {
   const resolver = yupResolver(
     Yup.object().shape({
       accountNumber: Yup.string().required(),
-      amount: Yup.string().required(),
+      amount: Yup.string().required("شما هیچ مبلغی وارد نکرده اید."),
       accountId: Yup.string().required(),
     }),
   );
@@ -148,7 +148,10 @@ const CreditCardForm = () => {
               <FormGroup className="position-relative">
                 <div className="d-flex flex-row justify-content-between">
                   <Label htmlFor={name}>کارت واریزی: </Label>
-                  <Link to="/dashboard/profile" target="blank">
+                  <Link
+                    to="/dashboard/profile#iranian-accounts"
+                    target="_blank"
+                  >
                     <span className={wallet?.["little-label"]}>
                       افزودن حساب جدید
                     </span>
@@ -193,7 +196,7 @@ const CreditCardForm = () => {
                 )}
                 {fee && (
                   <FormText>
-                    کارمزد واریز:{" "}
+                    کارمزد شاپرک:{" "}
                     {tomanShow({
                       value: fee.depositFeeStatic,
                       currency: "IRR",
@@ -221,7 +224,9 @@ const CreditCardForm = () => {
               className="px-5 py-3"
               color="primary"
               type="button"
-              onClick={() => {}}
+              onClick={() => {
+                navigate("/dashboard/profile#kyc-section");
+              }}
             >
               احراز هویت سطح دو
             </Button>

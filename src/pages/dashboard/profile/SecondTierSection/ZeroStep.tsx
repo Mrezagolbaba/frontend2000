@@ -28,7 +28,7 @@ function ZeroStep({
   //life-cycle
   useEffect(() => {
     if (isSuccess) {
-      if (!allowStates.video || !allowStates.commitLetter) onClick(4);
+      if (!allowStates.video && !allowStates.commitLetter) onClick(4);
       else onClick(1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -51,8 +51,8 @@ function ZeroStep({
             text={
               <>
                 <span>
-                  فایل مدرک شناسایی (کارت ملی - کارت اقامت) خود را می توانید به
-                  صورت png, jpg, jpeg یا pdf تا حداکثر 10MB بارگذاری کنید.
+                  فایل مدرک شناسایی (کارت ملی، شناسنامه، گواهینامه یا پاسپورت)
+                  خود را می توانید به صورت png, jpg, jpeg یا pdf بارگذاری کنید.
                 </span>
               </>
             }
@@ -103,7 +103,7 @@ function ZeroStep({
                         color="primary"
                         onClick={async () => {
                           uploadDoc({
-                            docType: "NATIONAL_CARD_FRONT",
+                            docType: "NATIONAL_CARD",
                             file: images?.[0]?.file,
                             fileName: "file",
                           });

@@ -21,6 +21,8 @@ export interface IUser {
   updatedAt: string;
   deletedAt: string;
   irPhoneNumber?: string;
+  gateways: any[];
+  signupFinished: boolean;
 }
 export interface Isessions {
   id: string;
@@ -64,6 +66,15 @@ export interface CheckVerificationsResponse {
 }
 
 export interface SetEnglishNamesRequest {
+  firstName: string;
+  lastName: string;
+}
+
+export interface FirstTierRequest {
+  email: string;
+  nationalCode: string;
+  birthDate: string;
+  phoneNumber: string;
   firstName: string;
   lastName: string;
 }

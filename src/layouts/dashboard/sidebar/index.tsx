@@ -1,20 +1,18 @@
+import AddFriend from "assets/img/icons/users.svg";
+import Exchange from "assets/img/icons/swap.svg";
+import Home from "assets/img/icons/house.svg";
 import LogoArsonex from "assets/img/logo-arsonex.png";
-import Home from "assets/img/icons/home.svg";
+import Market from "assets/img/icons/chart-simple.svg";
 import Wallet from "assets/img/icons/wallet.svg";
-import Order from "assets/img/icons/paper.svg";
-import History from "assets/img/icons/time-circle.svg";
-import AddFriend from "assets/img/icons/add-user.svg";
-import React, { Dispatch, SetStateAction, useState } from "react";
-import { useLocation, Link } from "react-router-dom";
+import useAuth from "hooks/useAuth";
 import { Button, Nav, NavItem } from "reactstrap";
-
-import { CiEdit, CiLogout } from "react-icons/ci";
-
-import personIcon from "assets/img/icons/profile.png";
+import { CiEdit } from "react-icons/ci";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { TbPower } from "react-icons/tb";
+import { useAppSelector } from "store/hooks";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
-import useLogout from "services/auth/logout";
-import { useAppSelector } from "store/hooks";
 
 type Props = {
   isOpen: boolean;
@@ -22,56 +20,68 @@ type Props = {
 };
 
 export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
+  // ==============|| Hooks ||================= //
   const { firstName, lastName } = useAppSelector((state) => state.user);
-  const [activeItem, setActiveItem] = useState("");
-  const logout = useLogout();
-
   const location = useLocation();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
-  React.useEffect(() => {
-    const path = location.pathname;
-    setActiveItem(path);
-    setIsSidebarOpen(false);
-  }, [location]);
+  // ==============|| States ||================= //
+  const [activeItem, setActiveItem] = useState("");
 
-  const handleClick = (key: string) => {
-    setActiveItem(key);
-  };
-  const handleLogout = async () => {
-    try {
-      await logout.mutateAsync({}).then((res) => {
-        localStorage.removeItem("token");
-        window.location.href = "/login";
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // ==============|| Variables ||================= //
   const items = [
     {
+      id: "home",
       path: "/dashboard",
       label: "پیشخوان",
-      icon: <img src={Home} alt="" />,
+      icon: Home,
     },
     {
+      id: "wallet",
       path: "/dashboard/wallet",
       label: "کیف پول",
-      icon: <img src={Wallet} alt="" />,
+      icon: Wallet,
     },
     {
-      path: "/dashboard/orders",
-      label: "سفارشات من",
-      icon: <img src={Order} alt="" />,
+      id: "exchange",
+      path: "/dashboard/exchange",
+      label: "خرید و فروش سریع",
+      icon: Exchange,
     },
     {
-      path: "/dashboard/history",
-      label: "تاریخچه",
-      icon: <img src={History} alt="" />,
+      id: "market",
+      path: "/dashboard/market",
+      label: "بازارها",
+      icon: Market,
+    },
+    {
+      id: "addFriends",
+      path: "/dashboard/add-friends",
+      label: " دعوت دوستان",
+      icon: AddFriend,
     },
   ];
 
+  // ==============|| Handlers ||================= //
+  const handleClick = (key: string) => {
+    setActiveItem(key);
+  };
+  const handleLogout = async () =>
+    await logout().then(() => navigate("/login"));
+
+  // ==============|| Life Cycle ||================= //
+  useEffect(() => {
+    const path = location.pathname;
+    setActiveItem(path);
+    setIsSidebarOpen(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
+
+  // ==============|| Render ||================= //
   return (
     <div className={`${dashboard.sidebar} ${isOpen ? dashboard.expanded : ""}`}>
+      {/* /\ \/ /\ \/ [clos-button in mobile] /\ \/ /\ \/ */}
       <button
         className={dashboard.sidebar__close}
         onClick={() => setIsSidebarOpen(false)}
@@ -100,67 +110,78 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
         </span>
       </button>
 
+      {/* /\ \/ /\ \/ [logo and user-info] /\ \/ /\ \/ */}
       <div className={dashboard.sidebar__logo}>
         <Link to="/">
           <img src={LogoArsonex} alt="" className="" />
         </Link>
-      </div>
-      {location.pathname !== "/dashboard" && (
-        <div className={dashboard.sidebar__user}>
-          <span>{firstName[0]}</span>
-          <div>
-            <h6 className={dashboard.sidebar__user__name}>
-              {firstName + " " + lastName}
-            </h6>
-            <Button
-              className="profile-btn"
-              outline
-              color="secondary"
-              href="/dashboard/profile"
-            >
-              <CiEdit />
-              پروفایل کاربری
-            </Button>
+        {location.pathname !== "/dashboard" && (
+          <div className={dashboard.sidebar__user}>
+            <span>{firstName[0]}</span>
+            <div>
+              <h6 className={dashboard.sidebar__user__name}>
+                {firstName + " " + lastName}
+              </h6>
+              <Link
+                className="btn btn-outline-secondary profile-btn"
+                to="/dashboard/profile"
+              >
+                <CiEdit />
+                پروفایل کاربری
+              </Link>
+            </div>
           </div>
-        </div>
-      )}
-      <Nav
-        className={`${dashboard.sidebar__navbar} ${
-          location.pathname !== "/dashboard" ? dashboard["short-navbar"] : ""
-        }`}
-        vertical
-      >
-        {items.map((item) => (
-          <NavItem
-            key={item.path}
-            className={` ${dashboard.sidebar__navbar__item} ${
-              activeItem === item.path ? dashboard.active : ""
-            }`}
-            onClick={() => handleClick(item.path)}
-          >
-            <Link to={item.path}>
-              <span className="icon">{item.icon}</span>
-              <span>{item.label}</span>
-            </Link>
-          </NavItem>
-        ))}
-        <NavItem
-          key="logout"
-          className={`${dashboard.sidebar__navbar__item} ${dashboard["item-logout"]}`}
+        )}
+      </div>
+
+      {/* /\ \/ /\ \/ [navbar] /\ \/ /\ \/ */}
+      <div className={dashboard["sidebar-wrapper"]}>
+        <Nav
+          className={`${dashboard.sidebar__navbar} ${
+            location.pathname !== "/dashboard" ? dashboard["short-navbar"] : ""
+          }`}
+          vertical
         >
-          <a
-            onClick={() => handleLogout()}
-            style={{
-              cursor: "pointer",
-            }}
-          >
-            <span className="icon">
-              <CiLogout />
-            </span>
-            <span>خروج از حساب</span>
-          </a>
-        </NavItem>
-      </Nav>
+          {items.map((item) => (
+            <NavItem
+              key={item.path}
+              className={` ${dashboard.sidebar__navbar__item} ${
+                activeItem === item.path ? dashboard.active : ""
+              }`}
+              onClick={() => handleClick(item.path)}
+            >
+              <Link to={item.path}>
+                <span className="icon">
+                  <img src={item.icon} width={24} height={24} alt={item.id} />
+                </span>
+                <span style={{ fontSize: "12px" }}>{item.label}</span>
+              </Link>
+            </NavItem>
+          ))}
+          <NavItem
+            key="logout"
+            className={`${dashboard.sidebar__navbar__item} ${dashboard["item-logout"]}`}
+          ></NavItem>
+        </Nav>
+      </div>
+
+      {/* /\ \/ /\ \/ [logout-button] /\ \/ /\ \/ */}
+      <div
+        className={`${dashboard.sidebar__navbar__item} ${dashboard["item-logout"]}`}
+      >
+        <Button
+          color="danger"
+          outline
+          block
+          onClick={() => handleLogout()}
+          className="my-2"
+        >
+          <span className="icon mx-2">
+            <TbPower />
+          </span>
+          <span> خروج </span>
+        </Button>
+      </div>
     </div>
   );
 }

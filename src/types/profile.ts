@@ -42,10 +42,6 @@ export interface IranianBankAccountForm {
   bankId: string;
 }
 
-export interface BanksRequest {
-  filters?: string;
-}
-
 export interface BanksResponse {
   id: string;
   name: string;
@@ -55,6 +51,7 @@ export interface BanksResponse {
   currencyCode: string;
   createdAt: string;
   updatedAt: string | undefined | null;
+  logoPath?: string;
   meta: {
     codes: string[];
   };

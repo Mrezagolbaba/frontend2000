@@ -19,14 +19,16 @@
 .confidence {
   flex: 0 0 calc(100% - 172px);
   text-align: center;
+  margin-bottom: 35px;
   & > div {
-    border: 1px solid #cccccc2e;
-    margin-bottom: 35px;
-    border-radius: 10px;
-    padding: 10px;
+    border: 1px solid rgba(204, 204, 204, 0.1803921569);
+    border-radius: 6px;
+    padding: 6px;
     display: inline-block;
+    padding-right: 20px;
+    padding-left: 20px;
     & > span {
-      vertical-align: top;
+      vertical-align: middle;
     }
   }
   p {
@@ -99,6 +101,7 @@
       }
     }
   }
+
 }
 .already {
   word-spacing: 1px;
@@ -149,7 +152,7 @@
 }
 .custom-header {
   position: relative;
-  padding-top: 20px;
+  padding: 25px 0 !important;
   margin-bottom: 50px;
   background-repeat: no-repeat;
   background-size:
@@ -167,8 +170,13 @@
     0 263px,
     0 0;
   border-bottom: 1px solid #cccccc6b;
-  padding-bottom: 20px;
 }
+.ref-code {
+  label {
+    cursor: pointer;
+  }
+}
+
 @media screen and (max-width: 767px) {
   .header {
     flex-wrap: wrap;
@@ -199,5 +207,38 @@
   }
   .text {
     font-size: 0.75em;
+  }
+}
+
+.login-type {
+  display: flex;
+  flex-direction: row;
+  width: auto;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  transition: all ease-in 400ms;
+  & > div {
+    background-color: #eee;
+    padding: 2px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+  }
+  button {
+    background-color: transparent;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    margin: 0 3px;
+    transition: all ease-in 400ms;
+    &:hover {
+      color: #111bff;
+    }
+  }
+  &__active {
+    background-color: #111bff !important;
+    color: #fff !important;
+    &:hover {
+      color: #fff !important;
+    }
   }
 }

@@ -1,9 +1,10 @@
 import { Button, Container } from "reactstrap";
 import home from "assets/scss/landing/home.module.scss";
 import { useAppSelector } from "store/hooks";
+import { Link } from "react-router-dom";
 
 const BottomBanner = () => {
-  const { id } = useAppSelector((state) => state.user);
+  const { id, firstTierVerified } = useAppSelector((state) => state.user);
   return (
     <section className={home["bottom-banner"]}>
       <Container>
@@ -12,17 +13,15 @@ const BottomBanner = () => {
             آرسونیکس ، بهترین نرخ و کمترین کارمزد
           </h2>
           <p className={home["bottom-banner__desc"]}>
-            در کمتر از دو دقیقه، بدون ارسال هیچ مدرکی با احراز هویت خودکار؛
+            در کمتر از دو دقیقه، با احراز هویت خودکار؛
             اولین معامله را انجام خواهید داد
           </p>
-          <Button
-            href={id ? "/dashboard" : "/register"}
-            tag="a"
-            color="light"
-            className={home["bottom-banner__button"]}
+          <Link
+            to={id && firstTierVerified ? "/dashboard" : "/register"}
+            className={`btn btn-light ${home["bottom-banner__button"]}`}
           >
             شروع کنید
-          </Button>
+          </Link>
         </div>
       </Container>
     </section>

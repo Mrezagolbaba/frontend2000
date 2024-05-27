@@ -1,12 +1,12 @@
 import React from "react";
-import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
-
-import dashboard from "assets/scss/dashboard/dashboard.module.scss";
-import { useCurrencySwapQuery } from "store/api/exchange-management";
 import moment from "jalali-moment";
+import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
+import { Link } from "react-router-dom";
+import { tomanShow } from "helpers";
+import { useCurrencySwapQuery } from "store/api/exchange-management";
 
 import Deposit from "assets/img/icons/depositIcon.svg";
-import { tomanShow } from "helpers";
+import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 
 export default function LastTransactions() {
   const { data } = useCurrencySwapQuery({
@@ -17,12 +17,9 @@ export default function LastTransactions() {
     <Card className="h-100">
       <CardHeader className="d-flex flex-row justify-content-between align-items-center">
         <CardTitle tag="h5"> آخرین معاملات</CardTitle>
-        <div className="card-action">
-          <a className={dashboard["sub-link"]} href="/dashboard/orders">
-            سفارشات من
-          </a>
-        </div>
-       
+        <Link className={dashboard["sub-link"]} to="/dashboard/orders">
+          سفارشات من
+        </Link>
       </CardHeader>
       <CardBody>
         <div className={dashboard["table-responsive"]}>
@@ -32,10 +29,10 @@ export default function LastTransactions() {
             {data && data?.length > 0 && (
               <thead>
                 <tr>
-                  <th scope="col">بازار</th>
-                  <th scope="col">مقدار</th>
-                  <th scope="col">مفدار دریافتی </th>
-                  <th scope="col">زمان</th>
+                  <th scope="col">بازار معاملاتی</th>
+                  <th scope="col">مقدار خرید</th>
+                  <th scope="col">مقدار دریافت </th>
+                  <th scope="col">تاریخ</th>
                 </tr>
               </thead>
             )}
@@ -94,7 +91,7 @@ export default function LastTransactions() {
                           marginBottom: "10px",
                         }}
                       />
-                      <p>اولین تراکنش خود را با آرسونیکس تجربه کنید</p>
+                      <p>اولین معامله خود را با آرسونیکس تجربه کنید</p>
                     </td>
                   </tr>
                 ))}

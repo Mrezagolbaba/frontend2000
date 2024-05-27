@@ -18,6 +18,7 @@ declare const classNames: {
   readonly sidebar__logo: "sidebar__logo";
   readonly sidebar__user: "sidebar__user";
   readonly sidebar__user__name: "sidebar__user__name";
+  readonly "sidebar-wrapper": "sidebar-wrapper";
   readonly sidebar__navbar: "sidebar__navbar";
   readonly sidebar__navbar__item: "sidebar__navbar__item";
   readonly active: "active";
@@ -51,5 +52,6 @@ declare const classNames: {
   readonly "user-tier-first-button": "user-tier-first-button";
   readonly __navbar: "__navbar";
   readonly expanded: "expanded";
+  readonly "hide-in-mobile": "hide-in-mobile";
 };
 export = classNames;

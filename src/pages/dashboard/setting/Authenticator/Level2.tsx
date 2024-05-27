@@ -1,23 +1,23 @@
-import OTPInput from "react-otp-input";
-import { Button, Spinner } from "reactstrap";
-import { useEffect } from "react";
-import QRCode from "react-qr-code";
-import { useAppSelector } from "store/hooks";
-import { OTPType } from "types/settings";
-import { FaApple } from "react-icons/fa";
-import { IoLogoGooglePlaystore } from "react-icons/io5";
-import {
-  useGetAuthenticatorQuery,
-  useSwitchOtpMethodMutation,
-} from "store/api/settings";
-import toast from "react-hot-toast";
 import {
   PhoneNumberMask,
   maskingString,
   persianToEnglishNumbers,
 } from "helpers";
+import {
+  useGetAuthenticatorQuery,
+  useSwitchOtpMethodMutation,
+} from "store/api/settings";
 import CopyInput from "components/Input/CopyInput";
+import Notify from "components/Notify";
+import OTPInput from "react-otp-input";
+import QRCode from "react-qr-code";
+import { Button, Spinner } from "reactstrap";
 import { Controller, useForm } from "react-hook-form";
+import { FaApple } from "react-icons/fa";
+import { IoLogoGooglePlaystore } from "react-icons/io5";
+import { OTPType } from "types/settings";
+import { useAppSelector } from "store/hooks";
+import { useEffect } from "react";
 
 import otp from "assets/scss/components/Input/otpContainer.module.scss";
 
@@ -34,8 +34,7 @@ export default function Level2({
   const { phoneNumber, email } = useAppSelector((state) => state.user);
   const { data: authenticator } = useGetAuthenticatorQuery();
 
-  const [finalReq, { isSuccess, isLoading }] =
-    useSwitchOtpMethodMutation();
+  const [finalReq, { isSuccess, isLoading }] = useSwitchOtpMethodMutation();
 
   const { handleSubmit, setValue, control } = useForm<{ code: string }>({
     mode: "onChange",
@@ -52,10 +51,11 @@ export default function Level2({
     if (isSuccess) {
       handleSuccess();
       handleClose();
-      toast.success("روش احراز هویت شما تغییر کرد.", {
-        position: "bottom-left",
+      Notify({
+        type: "success",
+        text: "روش احراز هویت شما تغییر کرد.",
       });
-    } 
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 

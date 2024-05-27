@@ -9,6 +9,7 @@ import dashboard from "assets/img/lay/dashboard.png";
 
 import home from "assets/scss/landing/home.module.scss";
 import { Col, Container, Row } from "reactstrap";
+import { Link } from "react-router-dom";
 
 const Advantages = () => {
   return (
@@ -30,7 +31,7 @@ const Advantages = () => {
                   <h3 className={home["feature__title"]}>پشتیبانی آنلاین</h3>
                   <p className={home["feature__text"]}>
                     شما می‌توانید در ۲۴ ساعت شبانه ‌روز با پشتیبانی آرسونیکس
-                    فعال برای ایرانیان داخل و خارج از ایران در ارتباط باشید
+                    فعال برای ایرانیان داخل و خارج از ایران در ارتباط باشید.
                   </p>
                 </div>
               </div>
@@ -43,8 +44,8 @@ const Advantages = () => {
                 <div className={home["feature__body"]}>
                   <h3 className={home["feature__title"]}>کارمزد منصفانه</h3>
                   <p className={home["feature__text"]}>
-                    در آرسونیکس معامله تک‌ نرخی ارزهای دیجیتال و پایین ترین سطح
-                    کارمزد معاملات فیات را تجربه کنید
+                    در آرسونیکس معامله تک‌ نرخی ارزهای دیجیتال (OTC) و پایین
+                    ترین سطح کارمزد معاملات فیات را تجربه کنید.
                   </p>
                 </div>
               </div>
@@ -87,7 +88,11 @@ const Advantages = () => {
       <section className={home["features__slide"]}>
         <div className={home["features__slide__container"]}>
           <Row className="g-4">
-            <Col md={6} tag="a" href="https://help.arsonex.com/">
+            <Link
+              target="_blank"
+              className="col-md-6"
+              to="https://help.arsonex.com/"
+            >
               <div className={`${home["feature__box"]} ${home["box--blue"]}`}>
                 <div className={home["feature__box__caption"]}>
                   <h4 className={home["feature__box__title"]}>
@@ -99,18 +104,18 @@ const Advantages = () => {
                   </h5>
                 </div>
               </div>
-            </Col>
+            </Link>
             <Col md={6}>
               <div
                 className={`${home["feature__box"]} ${home["box--darkblue"]}`}
               >
                 <div className={home["feature__box__caption"]}>
                   <h4 className={home["feature__box__title"]}>
-                    35% درصد کارمزد، برای شما (بزودی)
+                    تا سقف 35% درصد کارمزد، برای شما
                   </h4>
                   <h5 className={home["feature__box__subtitle"]}>
-                    فقط از دوستان خود دعوت کنید، 35% کارمزد بعد از هر معامله
-                    بصورت آنی دریافت کنید.
+                    فقط از دوستان خود دعوت کنید، تا سقف 35% کارمزد بعد از هر
+                    معامله بصورت آنی دریافت کنید.
                   </h5>
                 </div>
               </div>

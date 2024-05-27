@@ -1,21 +1,3 @@
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { CiMobile2 } from "react-icons/ci";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { PiShieldCheckeredFill } from "react-icons/pi";
-import toast from "react-hot-toast";
-
-import Auth from "layouts/auth";
-import { registerSchema } from "pages/auth/validationForms";
-import { RegisterFormData } from "pages/auth/types";
-import { useCreateUser } from "services/auth";
-import SelectCountry from "components/SelectCountry";
-import PasswordInput from "components/PasswordInput";
-import FloatInput from "components/Input/FloatInput";
-import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
-import React, { useState } from "react";
-import auth from "assets/scss/auth/auth.module.scss";
 import {
   Button,
   Card,
@@ -27,18 +9,63 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
+import * as Yup from "yup";
+import Auth from "layouts/auth";
+import Notify from "components/Notify";
+import PasswordInput from "components/PasswordInput";
+import PhoneNumberInput from "components/PhoneInput";
+import useAuth from "hooks/useAuth";
+import { Controller, useForm } from "react-hook-form";
+import { FaAngleUp } from "react-icons/fa";
+import { Link, useParams } from "react-router-dom";
+import { PiShieldCheckeredFill } from "react-icons/pi";
+import { RegisterFormData } from "pages/auth/types";
+import { isEmpty } from "lodash";
+import { isPhoneValid } from "helpers";
+import { motion } from "framer-motion";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-const SignupPage: React.FC = () => {
-  const navigate = useNavigate();
-  const registerRequest = useCreateUser();
+import auth from "assets/scss/auth/auth.module.scss";
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
+export default function Register() {
+  // ==============|| State ||================= //
+  const [openRefCode, setOpenRefCode] = useState(true);
+  // ==============|| Validation ||================= //
+  const registerSchema = Yup.object().shape({
+    phoneNumber: Yup.string().required("شماره همراه الزامی می باشد."),
+    password: Yup.string()
+      .min(8, "رمز عبور باید حداقل شامل 8 کاراکتر باشد.")
+      .matches(/[a-z]/, "رمز عبور حداقل باید شامل یک حرف کوچک انگلیسی باشد.")
+      .matches(/[A-Z]/, "رمز عبور باید حداقل شامل یک حرف بزرگ انگلیسی باشد.")
+      .matches(/[0-9]/, "رمز عبور حداقل باید شامل یک عدد باشد.")
+      .matches(
+        /[!@#$%^&*()\-_=+[\]{}|;:',.<>/?\\]/,
+        "رمز عبور باید حداقل شامل یک کاراکتر ویژه باشد (!@#$%^&*()-+).",
+      )
+      .required("رمز عبور الزامی است."),
+    selectedCountry: Yup.string().required("کد کشور الزامی می باشد."),
+    terms: Yup.boolean()
+      .test(
+        "required",
+        "لطفا قوانین را مطالعه کنید و تایید کنید",
+        (value) => value === true,
+      )
+      .required(),
+    referralCode: Yup.string().required("لطفا کد معرف خود را وارد کنید."),
+  });
   const resolver = yupResolver(registerSchema);
+
+  // ==============|| Hooks ||================= //
+  const { register } = useAuth();
+  const navigate = useNavigate();
+  const { code } = useParams();
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    setValue,
+    formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     mode: "onChange",
     defaultValues: {
@@ -46,45 +73,53 @@ const SignupPage: React.FC = () => {
       password: "",
       selectedCountry: "98",
       terms: false,
-      inviteCode: "",
+      referralCode: "",
     },
     resolver,
   });
 
+  // ==============|| Handlers ||================= //
   const handleRegister = async (data: RegisterFormData) => {
-    setIsLoading(true);
-      const phoneNumber = formatPhoneNumber(
-        persianToEnglishNumbers(data.phoneNumber),
-        data.selectedCountry,
-      );
-      const userData = {
-        phoneNumber,
-        password: data.password,
-        inviteCode:  data.inviteCode.toUpperCase()
-      };
-      await registerRequest
-        .mutateAsync(userData)
-        .then((res) => {
-          if (res) {
-            navigate("/mobile-otp", {
-              state: {
-                phoneNumber: userData.phoneNumber,
-              },
-            });
-            setIsLoading(false);
-          }
-        })
-        .catch(() => {
-          setIsLoading(false);
-        });
+    const isValid = isPhoneValid(data.phoneNumber);
+    if (!isValid) {
+      Notify({ type: "error", text: "شماره همراه اشتباه است." });
+      return;
+    }
+    const userData = {
+      phoneNumber: data.phoneNumber,
+      password: data.password,
+      referralCode: data.referralCode,
+    };
+    await register(userData)
+      .then(() =>
+        navigate("/otp", { state: { type: "AUTH", method: "PHONE" } }),
+      )
+      .catch((error) => {
+        if (
+          error.data.message.includes(
+            "phoneNumber must be a valid phone number",
+          )
+        )
+          Notify({
+            type: "error",
+            text: "شماره همراه وارد شده صحیح نمی باشد.",
+          });
+        else
+          error.data.message.forEach((m) => Notify({ type: "error", text: m }));
+      });
   };
   const handleErrors = (errors: any) =>
     Object.entries(errors).map(([fieldName, error]: any) =>
-      toast.error(error?.message, {
-        position: "bottom-left",
-      }),
+      Notify({ type: "error", text: error?.message }),
     );
+  const handleParams = useCallback(() => {
+    if (code && !isEmpty(code)) setValue("referralCode", code);
+  }, [code, setValue]);
 
+  // ==============|| Life Cycle ||================= //
+  useEffect(() => handleParams(), [handleParams]);
+
+  // ==============|| Render ||================= //
   return (
     <Auth>
       <section className={auth.container}>
@@ -103,44 +138,24 @@ const SignupPage: React.FC = () => {
                 </span>
               </div>
             </div>
-            {/* <p className={auth.text}> شماره تلفن خود را وارد کنید.</p> */}
-
             <form
               className={auth.form}
               onSubmit={handleSubmit(handleRegister, handleErrors)}
             >
               <Container>
                 <Row className="gy-2 gx-0">
-                  <Col xs={8}>
+                  <Col xs={12}>
                     <Controller
                       name="phoneNumber"
                       control={control}
-                      render={({ field: { name, value, onChange, ref } }) => (
-                        <FloatInput
-                          type="text"
+                      render={({ field: { name, value, onChange } }) => (
+                        <PhoneNumberInput
                           name={name}
                           value={value}
                           label="شماره همراه"
                           onChange={onChange}
-                          inputProps={{
-                            ref: ref,
-                            size: "large",
-                            prefix: <CiMobile2 />,
-                            status: errors?.[name]?.message
-                              ? "error"
-                              : undefined,
-                            autoFocus: true,
-                            className: auth["phone-number"],
-                          }}
                         />
                       )}
-                    />
-                  </Col>
-                  <Col xs={4}>
-                    <Controller
-                      name="selectedCountry"
-                      control={control}
-                      render={({ field }) => <SelectCountry {...field} />}
                     />
                   </Col>
                   <Col xs={12}>
@@ -152,24 +167,53 @@ const SignupPage: React.FC = () => {
                       )}
                     />
                   </Col>
-                  <Controller
-                    name="inviteCode"
-                    control={control}
-                    render={({ field: { name, value, onChange, ref } }) => (
-                      <div className="mb-3">
-                        <Label htmlFor={name}>کد معرف:</Label>
-                        <Input
-                          type="text"
-                          id={name}
-                          name={name}
-                          value={value}
-                          onChange={onChange}
-                          ref={ref}
-                          status={errors?.[name]?.message ? "error" : undefined}
-                        />
-                      </div>
-                    )}
-                  />
+                  <Col xs={12}>
+                    <Controller
+                      name="referralCode"
+                      control={control}
+                      render={({ field: { name, value, onChange } }) => (
+                        <div className={`${auth["ref-code"]} mb-3`}>
+                          <motion.label
+                            htmlFor={name}
+                            onClick={() => setOpenRefCode((oldVal) => !oldVal)}
+                          >
+                            کد معرف:
+                          </motion.label>
+                          <div>
+                            <motion.span
+                              className="icon"
+                              initial={false}
+                              animate={{ rotate: openRefCode ? 0 : 180 }}
+                              transition={{ duration: 0.3 }}
+                            >
+                              <FaAngleUp />
+                            </motion.span>
+                          </div>
+                          <motion.div
+                            initial={false}
+                            animate={{ height: openRefCode ? "auto" : 0 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            style={{ overflow: "hidden" }}
+                          >
+                            <motion.input
+                              className="form-control ref-input"
+                              type="text"
+                              id={name}
+                              name={name}
+                              value={value}
+                              onChange={onChange}
+                              initial={{ opacity: 0, y: -10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.3 }}
+                              // status={
+                              //   errors?.[name]?.message ? "error" : undefined
+                              // }
+                            />
+                          </motion.div>
+                        </div>
+                      )}
+                    />
+                  </Col>
                   <Col xs={12} className={auth.terms}>
                     <Controller
                       name="terms"
@@ -190,8 +234,11 @@ const SignupPage: React.FC = () => {
                             }
                           />
                           <Label htmlFor={name} style={{ fontSize: "13px" }}>
-                            <Link to="/terms"> مقررات آرسونیکس</Link> را
-                            خوانده‌ام و با آن موافقم.
+                            <Link to="/terms" target="_blank">
+                              {" "}
+                              مقررات آرسونیکس
+                            </Link>{" "}
+                            را خوانده‌ام و با آن موافقم.
                           </Label>
                         </div>
                       )}
@@ -206,9 +253,9 @@ const SignupPage: React.FC = () => {
                           color="primary"
                           type="submit"
                           className={auth.submit}
-                          disabled={isLoading}
+                          disabled={isSubmitting}
                         >
-                          {isLoading ? (
+                          {isSubmitting ? (
                             <Spinner style={{ color: "white" }} />
                           ) : (
                             "ثبت نام"
@@ -231,6 +278,4 @@ const SignupPage: React.FC = () => {
       </section>
     </Auth>
   );
-};
-
-export default SignupPage;
+}

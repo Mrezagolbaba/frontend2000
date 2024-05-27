@@ -1,13 +1,11 @@
-import { Button } from "reactstrap";
 import { CryptoData } from "types/exchange";
-import { coinShow, tomanShow } from "helpers";
-import { useGetRateQuery } from "store/api/publics";
-import greenChart from "assets/img/graph-g.png";
-import redChart from "assets/img/graph-r.png";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppSelector } from "store/hooks";
+import { useEffect } from "react";
+import { useLazyGetRateQuery } from "store/api/publics";
 
 import style from "assets/scss/components/CoinRecord/style.module.scss";
-import { GiDividedSpiral } from "react-icons/gi";
-import { useAppSelector } from "store/hooks";
+import { Button } from "reactstrap";
 
 type Props = {
   destinationCode: "IRR" | "USDT";
@@ -16,21 +14,45 @@ type Props = {
     currencyCode: string;
     name: string;
     originName: string;
+    activeDeal?: boolean;
   };
-  changesLog: CryptoData;
+  mode: "fiat" | "crypto";
+  changesLog?: CryptoData;
 };
 
 export default function CoinRecord({
   destinationCode,
   source,
   changesLog,
+  mode,
 }: Props) {
-  const { id } = useAppSelector((state) => state.user);
-  const { data, isLoading, isSuccess } = useGetRateQuery({
-    sourceCurrencyCode: source.currencyCode,
-    targetCurrencyCode: destinationCode,
-  });
+  // ==============|| Hooks ||================= //
+  const { id, firstTierVerified } = useAppSelector((state) => state.user);
+  const [request, { data, isLoading, isSuccess }] = useLazyGetRateQuery();
+  const navigate = useNavigate();
 
+  // ==============|| Handlers ||================= //
+  const handleRequest = () => {
+    request({
+      sourceCurrencyCode: source.currencyCode,
+      targetCurrencyCode: destinationCode,
+    });
+  };
+  // ==============|| Life Cycle ||================= //
+  useEffect(() => {
+    const interval = setInterval(handleRequest, 10000);
+
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [destinationCode]);
+
+  useEffect(() => {
+    handleRequest();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [destinationCode]);
+  
+
+  // ==============|| Render ||================= //
   return isLoading ? (
     <tr>
       <td className="placeholder-glow">
@@ -39,66 +61,82 @@ export default function CoinRecord({
       <td className="placeholder-glow">
         <div className="placeholder col-12 rounded" />
       </td>
-      <td className="placeholder-glow">
-        <div className="placeholder col-12 rounded" />
-      </td>
+      {mode === "crypto" && (
+        <td className="placeholder-glow">
+          <div className="placeholder col-12 rounded" />
+        </td>
+      )}
       <td className="placeholder-glow">
         <div className="placeholder col-12 rounded" />
       </td>
     </tr>
   ) : (
-    isSuccess && (
+    isSuccess && data && (
       <tr>
         <td className={style["coin-wrapper"]}>
           <div className={style["coin-logo"]}>
             <img src={source.imgSrc} alt={source.currencyCode} />
           </div>
           <div className={style["coin-name"]}>
-            <span className={style["origin-name"]}>{source.name}</span>
+            <span className={style["persian-name"]}>
+              {destinationCode === "IRR" ? source.name : source.originName}
+            </span>
             <span className={style["nick-name"]}>{source.currencyCode}</span>
           </div>
         </td>
         <td className="text-center">
           <div className={destinationCode === "USDT" ? "latin-font" : ""}>
             {destinationCode === "IRR"
-              ? tomanShow({ value: data.rate, currency: "IRR" })
-              : coinShow(data.rate) + " usdt"}
+              ? "IRT " +
+                (Number(data.rate) / 10).toLocaleString("IRR", {
+                  maximumFractionDigits: mode === "fiat" ? 0 : 6,
+                })
+              : "USDT " +
+                Number(data.rate).toLocaleString("en-US", {
+                  maximumFractionDigits: 6,
+                })}
           </div>
         </td>
-        <td className="text-center">
-          {changesLog ? (
-            <div className={style["graph-wrapper"]}>
-              <div
-                className={` ${destinationCode === "USDT" ? "latin-font" : "ltr-tag"} ${
-                  changesLog.price_change_percentage_24h > 0
-                    ? "text-success"
-                    : "text-danger"
-                }`}
-              >
-                {changesLog.price_change_percentage_24h.toFixed(2)}
-              </div>
-              <img
+        {mode === "crypto" && (
+          <td className="text-center">
+            {changesLog ? (
+              <div className={style["graph-wrapper"]}>
+                <div
+                  className={` ${destinationCode === "USDT" ? "latin-font" : "ltr-tag"} ${
+                    changesLog.price_change_percentage_24h > 0
+                      ? "text-success"
+                      : "text-danger"
+                  }`}
+                >
+                  {changesLog.price_change_percentage_24h.toFixed(2) + "٪"}
+                </div>
+                {/*<img
                 src={
                   changesLog?.price_change_percentage_24h > 0
                     ? greenChart
                     : redChart
                 }
                 alt="graph"
-              />
-            </div>
-          ) : (
-            "-"
-          )}
-        </td>
+              /> */}
+              </div>
+            ) : (
+              "-"
+            )}
+          </td>
+        )}
         <td className="text-center">
           <div className="table-crypto-actions">
             <Button
               color="primary"
               outline
-              tag="a"
-              href={id ? "/dashboard/exchange" : "/login"}
+              onClick={() =>
+                id && firstTierVerified
+                  ? navigate("/dashboard/exchange")
+                  : navigate("/login")
+              }
+              disabled={!source.activeDeal}
             >
-              معامله
+              {source.activeDeal ? "معامله" : "به زودی"}
             </Button>
           </div>
         </td>

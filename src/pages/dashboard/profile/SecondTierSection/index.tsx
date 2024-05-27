@@ -11,17 +11,18 @@ import {
   ModalHeader,
   Row,
 } from "reactstrap";
-import { useEffect, useState } from "react";
 import { BsCheck2 } from "react-icons/bs";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 //third-party
-import ZeroStep from "./ZeroStep";
-import FirstStep from "./FirstStep";
-import VideoStep from "./Video";
-import PhotoStep from "./PhotoStep";
 import FinalStep from "./FinalStep";
-import { useAppSelector } from "store/hooks";
+import FirstStep from "./FirstStep";
+import PhotoStep from "./PhotoStep";
+import VideoStep from "./Video";
+import ZeroStep from "./ZeroStep";
 import { AlertDanger, AlertInfo, AlertSuccess } from "components/AlertWidget";
+import { useAppSelector } from "store/hooks";
 import { useGetVerificationsQuery } from "store/api/profile-management";
 
 //style
@@ -80,18 +81,17 @@ const dataLevel2 = [
 ];
 
 const AuthSection = () => {
-  //hooks
-  const { firstTierVerified, secondTierVerified, id } = useAppSelector(
+  // ==============|| Hooks ||================= //
+  const { hash } = useLocation();
+  const { firstTierVerified, secondTierVerified } = useAppSelector(
     (state) => state.user,
   );
-  const {
-    data: userVerifications,
-    isLoading,
-    isSuccess,
-  } = useGetVerificationsQuery();
+  const { data: userVerifications, isSuccess } = useGetVerificationsQuery();
 
-  //states
-  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
+  // ==============|| States ||================= //
+  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(
+     hash.includes("#kyc-section") && !secondTierVerified ? true : false,
+  );
   const [activeState, setActiveState] = useState<0 | 1 | 2 | 3 | 4 | 5>(0);
   const [allowStates, setAllowStates] = useState({
     nationalCard: false,
@@ -99,7 +99,7 @@ const AuthSection = () => {
     commitLetter: false,
   });
 
-  //handlers
+  // ==============|| Handlers ||================= //
   const renderSteps = () => {
     switch (activeState) {
       case 4:
@@ -107,7 +107,7 @@ const AuthSection = () => {
       case 3:
         return <PhotoStep onClick={setActiveState} />;
       case 2:
-        return <VideoStep onClick={setActiveState} />;
+        return <VideoStep onClick={setActiveState} allowStates={allowStates} />;
       case 1:
         return <FirstStep onClick={setActiveState} />;
       case 0:
@@ -120,46 +120,6 @@ const AuthSection = () => {
       }
     }
   };
-
-  useEffect(() => {
-    if (isSuccess && userVerifications) {
-      const docStatus = userVerifications[2].status;
-      if (docStatus === "REJECTED") {
-        userVerifications[2].rejectReasons.forEach((reason) => {
-          switch (reason) {
-            case REJECTION_REASON.VIDEO_AND_AUDIO_NOT_SYNCED:
-            case REJECTION_REASON.POOR_QUALITY_VIDEO:
-            case REJECTION_REASON.NOT_ACCEPTABLE_VIDEO: {
-              setAllowStates({ ...allowStates, video: true });
-              break;
-            }
-            case REJECTION_REASON.INVALID_NATIONAL_CARD:
-            case REJECTION_REASON.EXPIRED_NATIONAL_CARD: {
-              setAllowStates({ ...allowStates, nationalCard: true });
-              break;
-            }
-            case REJECTION_REASON.POOR_QUALITY_COMMITMENT_LETTER: {
-              setAllowStates({ ...allowStates, commitLetter: true });
-              break;
-            }
-          }
-        });
-      } else if (docStatus === "DRAFT")
-        setAllowStates({
-          nationalCard: true,
-          video: true,
-          commitLetter: true,
-        });
-      else
-        setAllowStates({
-          nationalCard: false,
-          video: false,
-          commitLetter: false,
-        });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
-
   const generateErrorReason = (reason, index) => {
     switch (reason) {
       case REJECTION_REASON.NOT_ACCEPTABLE_VIDEO:
@@ -221,13 +181,49 @@ const AuthSection = () => {
     }
   };
 
-  //render
+  // ==============|| Life Cycle ||================= //
+  useEffect(() => {
+    if (isSuccess && userVerifications) {
+      const docStatus = userVerifications[2].status;
+      if (docStatus === "REJECTED") {
+        userVerifications[2].rejectReasons.forEach((reason) => {
+          if (
+            reason === REJECTION_REASON.VIDEO_AND_AUDIO_NOT_SYNCED ||
+            reason === REJECTION_REASON.POOR_QUALITY_VIDEO ||
+            reason === REJECTION_REASON.NOT_ACCEPTABLE_VIDEO
+          )
+            setAllowStates((oldState) => ({ ...oldState, video: true }));
+          else if (
+            reason === REJECTION_REASON.INVALID_NATIONAL_CARD ||
+            reason === REJECTION_REASON.EXPIRED_NATIONAL_CARD
+          )
+            setAllowStates((oldState) => ({ ...oldState, nationalCard: true }));
+          else
+            setAllowStates((oldState) => ({ ...oldState, commitLetter: true }));
+        });
+      } else if (docStatus === "DRAFT")
+        setAllowStates({
+          nationalCard: true,
+          video: true,
+          commitLetter: true,
+        });
+      else
+        setAllowStates({
+          nationalCard: false,
+          video: false,
+          commitLetter: false,
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
+
+  // ==============|| Render ||================= //
   return (
-    <Card className="mb-4" id="kyc-section">
+    <Card className="mb-4">
       <CardHeader>
         <CardTitle tag="h5">احراز هویت</CardTitle>
       </CardHeader>
-      <CardBody>
+      <CardBody id="kyc-section">
         <Row>
           <Col xs={12} className="gutter-row">
             <Row>
@@ -277,7 +273,7 @@ const AuthSection = () => {
                       outline
                       className="px-5 py-3 w-100"
                       onClick={() => {
-                        setIsOpenDialog(true);
+                        !secondTierVerified && setIsOpenDialog(true);
                       }}
                     >
                       شروع احراز هویت سطح دو
@@ -331,7 +327,7 @@ const AuthSection = () => {
                                 ) {
                                   setActiveState(1);
                                 }
-                                setIsOpenDialog(true);
+                                !secondTierVerified && setIsOpenDialog(true);
                               }}
                               color="warning"
                             >
@@ -351,10 +347,10 @@ const AuthSection = () => {
       <Modal
         className={profile["kyc-modal"]}
         isOpen={isOpenDialog}
-        toggle={() => setIsOpenDialog(!isOpenDialog)}
+        toggle={() => setIsOpenDialog((oldVal) => !oldVal)}
         size="lg"
       >
-        <ModalHeader toggle={() => setIsOpenDialog(!isOpenDialog)}>
+        <ModalHeader toggle={() => setIsOpenDialog((oldVal) => !oldVal)}>
           احراز هویت سطح دو
         </ModalHeader>
         <ModalBody>{renderSteps()}</ModalBody>

@@ -26,7 +26,7 @@ export default function BanksWrapper({
 }: Props) {
   const [logo, setLogo] = useState(arsonexMark);
   const { data: banks, isSuccess } = useBanksQuery({
-    filters: `currencyCode||$eq||${type}`,
+    filter: `currencyCode||$eq||${type}`,
   });
 
   //turkish-banks

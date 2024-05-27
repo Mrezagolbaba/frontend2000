@@ -17,13 +17,15 @@ import { AlertInfo } from "components/AlertWidget";
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import {
   useDepositInfoQuery,
-  useDepositMutation,
+  useRefCodeMutation,
   useTransactionFeeQuery,
 } from "store/api/wallet-management";
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import { useBankAccountsQuery } from "store/api/profile-management";
 import BanksWrapper from "components/BanksWrapper";
 import { tomanShow } from "helpers";
+import { useAppSelector } from "store/hooks";
+import { useNavigate } from "react-router-dom";
 
 type ShebaFormType = {
   accountName: string;
@@ -31,8 +33,7 @@ type ShebaFormType = {
   depositId: string;
   bankName: string;
 };
-const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" }) => {
-  const [hasLevel2, setHasLevel2] = useState<boolean>(true);
+const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
   const [selectedBank, setSelectedBank] = useState<string>("");
   const [otherInfo, setOtherInfo] = useState<{
@@ -43,9 +44,12 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" }) => {
     code: "",
   });
 
+  const navigate = useNavigate();
+  const { secondTierVerified } = useAppSelector((state) => state.user);
+
   const { data, isSuccess } = useDepositInfoQuery("IRR");
   const { data: fee } = useTransactionFeeQuery("IRR");
-  const [depositRequest, { data: depResponse }] = useDepositMutation();
+  const [initRefCode, { data: depResponse }] = useRefCodeMutation();
 
   const { data: accounts, isSuccess: getSuccessAccounts } =
     useBankAccountsQuery({
@@ -60,7 +64,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" }) => {
       bankName: Yup.string().required(),
     }),
   );
-  const { handleSubmit, control } = useForm<ShebaFormType>({
+  const { control } = useForm<ShebaFormType>({
     mode: "onChange",
     defaultValues: {
       accountName: "",
@@ -70,9 +74,6 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" }) => {
     },
     resolver,
   });
-  const onSubmit = async (data: ShebaFormType) => {
-    console.log(data);
-  };
 
   useEffect(() => {
     let list = [] as OptionType[] | [];
@@ -106,95 +107,113 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" }) => {
   }, [data, isSuccess]);
 
   useEffect(() => {
-    activeTab === "2" &&
-      accounts &&
-      depositRequest({
+    if (
+      getSuccessAccounts &&
+      data &&
+      data?.length > 0 &&
+      activeTab === "3" &&
+      accounts
+    ) {
+      initRefCode({
         currencyCode: "IRR",
-        amount: fee?.depositMinAmount,
         flow: "MANUAL_WITH_PAYMENT_IDENTIFIER",
-        bankAccountId: accounts[0]?.id,
       });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, getSuccessAccounts, activeTab]);
 
-  return hasLevel2 ? (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Row>
-        <Col xs={12} lg={6}>
-          <FormGroup>
-            <Label htmlFor="bank-name"> بانک مقصد:</Label>
-            <DropdownInput
-              id="bank-name"
-              value={selectedBank}
-              onChange={(val, otherOption) => {
-                setSelectedBank(val);
-                setOtherInfo({
-                  ownerName: otherOption.ownerName,
-                });
-              }}
-              options={optionList}
-            />
-          </FormGroup>
-        </Col>
-        <Col xs={12} lg={6}>
-          <Controller
-            name="accountName"
-            control={control}
-            render={({ field: { name, value, onChange, ref } }) => (
-              <FormGroup>
-                <Label htmlFor={name}>نام صاحب حساب:</Label>
-                <Input
-                  disabled
-                  type="text"
-                  name={name}
-                  value={otherInfo?.ownerName}
-                  onChange={onChange}
-                  ref={ref}
-                />
-              </FormGroup>
-            )}
-          />
-        </Col>
-        <Col xs={12} lg={6}>
-          <Controller
-            name="shebaNumber"
-            control={control}
-            render={({ field: { name, value } }) => (
-              <FormGroup>
-                <Label htmlFor={name}> شماره شبا:</Label>
-                <CopyInput text={selectedBank || ""} />
-                {fee && (
-                  <FormText>
-                    حداقل مبلغ واریز:{" "}
-                    {tomanShow({
-                      value: fee.depositMinAmount,
-                      currency: "IRR",
-                    })}
-                  </FormText>
-                )}
-              </FormGroup>
-            )}
-          />
-        </Col>
-        {depResponse && (
+  return secondTierVerified ? (
+    <>
+      <AlertInfo
+        hasIcon
+        text=" از حساب‌هایی که در پروفایل خود وارد کرده‌اید امکان واریز وجود دارد."
+      />
+      <AlertInfo
+        hasIcon
+        text=" شناسه واریز را در قسمت توضیحات یا شناسه واریز وارد نمایید."
+      />
+      <AlertInfo
+        hasIcon
+        text=" تمامی روش‌های پرداخت بجز روش پل مورد تایید می‌باشد."
+      />
+      <form>
+        <Row>
+          <Col xs={12} lg={6}>
+            <FormGroup>
+              <Label htmlFor="bank-name"> بانک مقصد:</Label>
+              <DropdownInput
+                id="bank-name"
+                value={selectedBank}
+                onChange={(val, otherOption) => {
+                  setSelectedBank(val);
+                  setOtherInfo({
+                    ownerName: otherOption.ownerName,
+                  });
+                }}
+                options={optionList}
+              />
+            </FormGroup>
+          </Col>
           <Col xs={12} lg={6}>
             <Controller
-              name="depositId"
+              name="accountName"
               control={control}
-              render={({ field: { name, value } }) => (
+              render={({ field: { name, value, onChange, ref } }) => (
                 <FormGroup>
-                  <Label htmlFor={name}> شناسه واریز:</Label>
-                  <CopyInput
-                    text={depResponse.providerData.flowPaymentIdentifier || ""}
+                  <Label htmlFor={name}>نام صاحب حساب:</Label>
+                  <Input
+                    disabled
+                    type="text"
+                    name={name}
+                    value={otherInfo?.ownerName}
+                    onChange={onChange}
+                    ref={ref}
                   />
-                  <FormText>کارمزد واریز بین بانکی: صفر تومان</FormText>
                 </FormGroup>
               )}
             />
           </Col>
-        )}
-      </Row>
-    </form>
+          {data && data.length > 0 && (
+            <Col xs={12} lg={6}>
+              <Controller
+                name="shebaNumber"
+                control={control}
+                render={({ field: { name, value } }) => (
+                  <FormGroup>
+                    <Label htmlFor={name}> شماره شبا:</Label>
+                    <CopyInput text={selectedBank || ""} />
+                    {fee && (
+                      <FormText>
+                        حداقل مبلغ واریز:
+                        {tomanShow({
+                          value: fee.depositMinAmount,
+                          currency: "IRR",
+                        })}
+                      </FormText>
+                    )}
+                  </FormGroup>
+                )}
+              />
+            </Col>
+          )}
+          {depResponse && (
+            <Col xs={12} lg={6}>
+              <Controller
+                name="depositId"
+                control={control}
+                render={({ field: { name, value } }) => (
+                  <FormGroup>
+                    <Label htmlFor={name}> شناسه واریز:</Label>
+                    <CopyInput text={depResponse.refCode || ""} />
+                    <FormText>کارمزد انتقال: 0.02%</FormText>
+                  </FormGroup>
+                )}
+              />
+            </Col>
+          )}
+        </Row>
+      </form>
+    </>
   ) : (
     <Row>
       <AlertInfo
@@ -202,8 +221,15 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" }) => {
         hasIcon={true}
       />
       <div className="text-center mt-3">
-        <Button color="primary" type="button" onClick={() => {}} outline>
-          ارتقاع سطح کاربری
+        <Button
+          className="px-5 py-3"
+          color="primary"
+          type="button"
+          onClick={() => {
+            navigate("/dashboard/profile#kyc-section");
+          }}
+        >
+          ارتقا به سطح دو
         </Button>
       </div>
     </Row>

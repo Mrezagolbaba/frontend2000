@@ -1,9 +1,10 @@
+import Notify from "components/Notify";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import { AuthenticationLevel2Props } from "./types";
 import defaultImage from "assets/img/profile/auth.png";
+import { AuthenticationLevel2Props } from "./types";
 import { BsTrash3, BsUpload } from "react-icons/bs";
-import { useAppSelector } from "store/hooks";
 import { Button, Col, Container, Row, Spinner } from "reactstrap";
+import { useAppSelector } from "store/hooks";
 import { useUploadDocMutation } from "store/api/profile-management";
 
 import profile from "assets/scss/dashboard/profile.module.scss";
@@ -92,11 +93,23 @@ export default function PhotoStep({
             onChange={({ target }: ChangeEvent<HTMLInputElement>) => {
               const file = target.files && target.files[0];
               setFile(file || null);
-              if (file) {
+              if (
+                file &&
+                (file.type === "image/png" ||
+                  file.type === "image/jpg" ||
+                  file.type === "image/jpeg" ||
+                  file.type === "image/web" ||
+                  file.type === "application/pdf")
+              ) {
                 const url = URL.createObjectURL(file);
                 setImageUrl(url);
               } else {
-                setImageUrl(defaultImage);
+                Notify({
+                  type: "error",
+                  text: "لطفا توجه داشته باشید که فایل انتخابی باید یکی از فرمت های عکس (jpg, jpeg, png یا pdf) باشد.",
+                }),
+                  setImageUrl(defaultImage);
+                setFile(null);
               }
             }}
           />

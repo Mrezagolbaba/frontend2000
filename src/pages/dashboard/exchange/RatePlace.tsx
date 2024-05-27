@@ -22,6 +22,7 @@ type Props = {
   reverseRate: string;
   rate: string;
   isLoading: boolean;
+  setStock?: (string)=>void
 };
 
 export default function RatePlace({
@@ -33,15 +34,18 @@ export default function RatePlace({
   rate,
   reverseRate,
   isLoading = false,
+  setStock
 }: Props) {
   const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
   const toggleTooltip = () => setTooltipOpen((prevState) => !prevState);
 
   const handleStock = () => {
     const currency = type === "source" ? source.currency : destination.currency;
+    const currencyLabel =
+      currency === "IRR" ? "تومان" : currency === "TRY" ? "لیر" : "تتر";
     if (wallets && wallets.length > 0) {
       const currentWallet = wallets?.find((w) => w.currencyCode === currency);
-
+      setStock?.(currentWallet?.availableBalance);
       switch (currency) {
         case "IRR": {
           return tomanShow({
@@ -60,7 +64,7 @@ export default function RatePlace({
         }
       }
     }
-    return 0;
+    return `${0} ${currencyLabel}`;
   };
 
   const handleRate = () => {
@@ -70,7 +74,7 @@ export default function RatePlace({
           <div id="currency-detail">
             <BsTag />
             <span className="title">
-              نرخ {convertText("USDT", "enToFa")} :{" "}
+              نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
             </span>
             <span className="value">
               {tomanShow({ value: rate, currency: "IRR" })}
@@ -81,9 +85,9 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش ${convertText(
-              "IRR",
-              "enToFa",
+            {`ارزش هر یک ${convertText(
+             "enToFa",
+             "IRR",
             )} در برابر ${convertText("USDT", "enToFa")}`}
           </Tooltip>
         </>
@@ -94,7 +98,7 @@ export default function RatePlace({
           <div id="currency-detail">
             <BsTag />
             <span className="title">
-              نرخ {convertText("USDT", "enToFa")} :{" "}
+              نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
             </span>
             <span className="value">
               {tomanShow({ value: reverseRate, currency: "IRR" })}
@@ -105,7 +109,7 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش ${convertText(
+            {`ارزش هر یک  ${convertText(
               "IRR",
               "enToFa",
             )} در برابر ${convertText("USDT", "enToFa")}`}
@@ -118,7 +122,7 @@ export default function RatePlace({
           <div id="currency-detail">
             <BsTag />
             <span className="title">
-              نرخ {convertText("USDT", "enToFa")} :{" "}
+              نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
             </span>
             <span className="value">
               {lirShow({ value: rate, currency: "TRY" })}
@@ -129,7 +133,7 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش ${convertText(
+            {`ارزش هر یک  ${convertText(
               "TRY",
               "enToFa",
             )} در برابر ${convertText("USDT", "enToFa")}`}
@@ -142,7 +146,7 @@ export default function RatePlace({
           <div id="currency-detail">
             <BsTag />
             <span className="title">
-              نرخ {convertText("USDT", "enToFa")} :{" "}
+              نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
             </span>
             <span className="value">
               {lirShow({ value: reverseRate, currency: "TRY" })}
@@ -153,7 +157,7 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش ${convertText(
+            {`ارزش هر یک  ${convertText(
               "TRY",
               "enToFa",
             )} در برابر ${convertText("USDT", "enToFa")}`}
@@ -165,7 +169,7 @@ export default function RatePlace({
         <>
           <div id="currency-detail">
             <BsTag />
-            <span className="title">نرخ {convertText("TRY", "enToFa")} : </span>
+            <span className="title">نرخ تقریبی {convertText("TRY", "enToFa")} : </span>
             <span className="value">
               {tomanShow({ value: rate, currency: "IRR" })}
             </span>
@@ -175,7 +179,7 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش ${convertText(
+            {`ارزش هر یک  ${convertText(
               "IRR",
               "enToFa",
             )} در برابر ${convertText("TRY", "enToFa")}`}
@@ -187,7 +191,7 @@ export default function RatePlace({
         <>
           <div id="currency-detail">
             <BsTag />
-            <span className="title">نرخ {convertText("TRY", "enToFa")} : </span>
+            <span className="title">نرخ تقریبی {convertText("TRY", "enToFa")} : </span>
             <span className="value">
               {tomanShow({ value: reverseRate, currency: "IRR" })}
             </span>
@@ -197,7 +201,7 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش ${convertText(
+            {`ارزش هر یک  ${convertText(
               "IRR",
               "enToFa",
             )} در برابر ${convertText("TRY", "enToFa")}`}

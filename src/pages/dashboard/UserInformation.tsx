@@ -1,43 +1,37 @@
-import React, { useEffect, useState } from "react";
-import { Button, Card, CardBody } from "reactstrap";
-
-import { CiEdit } from "react-icons/ci";
-import { RxCalendar } from "react-icons/rx";
-import { useAppSelector } from "store/hooks";
-import useSession from "services/auth/session";
-import moment from "jalali-moment";
-
 import User1 from "assets/img/level-1.svg";
 import User2 from "assets/img/level-2.svg";
+import moment from "jalali-moment";
+import { Card, CardBody } from "reactstrap";
+import { CiEdit } from "react-icons/ci";
+import { Link } from "react-router-dom";
+import { RxCalendar } from "react-icons/rx";
+import { useAppSelector } from "store/hooks";
+import { useEffect, useState } from "react";
+import { useGetSessionQuery } from "store/api/auth";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 
 export default function UserInformation() {
+  // ==============|| States ||================= //
+  const [lastSession, setLastSession] = useState("");
+
+  // ==============|| Hooks ||================= //
   const { firstName, lastName, secondTierVerified } = useAppSelector(
     (state) => state.user,
   );
-  const [lastSession, setLastSession] = useState("");
+  const { data, isSuccess } = useGetSessionQuery({});
 
-  const session = useSession();
-  const getSession = async () => {
-    try {
-      await session.mutateAsync({}).then((res) => {
-        const transformedArray = res.map((item) => {
-          return item;
-        });
-        const lastItem = transformedArray[transformedArray.length - 1];
-        setLastSession(
-          moment(lastItem.createdAt).locale("fa").format(" DD MMMM YYYY"),
-        );
-      });
-    } catch (err) {}
-  };
-
+  // ==============|| Life Cycle ||================= //
   useEffect(() => {
-    getSession();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (isSuccess && data) {
+      const lastItem = data[data.length - 1];
+      setLastSession(
+        moment(lastItem.createdAt).locale("fa").format(" DD MMMM YYYY"),
+      );
+    }
+  }, [data, isSuccess]);
 
+  // ==============|| Render ||================= //
   return (
     <Card className={dashboard["user-summary"]}>
       <CardBody className={dashboard["user-summary__body"]}>
@@ -47,15 +41,13 @@ export default function UserInformation() {
           </li>
           <li className={dashboard["user-summary__edit"]}>
             <h6>{firstName + " " + lastName}</h6>
-            <Button
-              className="profile-btn"
-              outline
-              color="secondary"
-              href="/dashboard/profile"
+            <Link
+              className="btn btn-outline-secondary profile-btn"
+              to="/dashboard/profile"
             >
               <CiEdit />
               پروفایل کاربری
-            </Button>
+            </Link>
           </li>
           <li className={dashboard["user-summary__last-seen"]}>
             <h6>آخرین ورود</h6>
@@ -85,9 +77,12 @@ export default function UserInformation() {
               ) : (
                 <span>
                   <span>سطح یک</span>{" "}
-                  <a href="/dashboard/profile" style={{ color: "#111bff" }}>
+                  <Link
+                    to="/dashboard/profile#kyc-section"
+                    style={{ color: "#111bff" }}
+                  >
                     ارتقا سطح
-                  </a>
+                  </Link>
                 </span>
               )}
             </div>

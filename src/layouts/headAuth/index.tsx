@@ -1,26 +1,30 @@
-import LogoPrimary from "assets/img/logo-primary.png";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import home from "assets/scss/landing/home.module.scss";
 import { Button } from "reactstrap";
+import { FC, useState } from "react";
 import { IoIosCloseCircleOutline } from "react-icons/io";
-const HeadAuth: React.FC = () => {
+import { Link } from "react-router-dom";
+
+import home from "assets/scss/landing/home.module.scss";
+
+const HeadAuth: FC = () => {
   const [openOverlayMenu, setOpenOverlayMenu] = useState<boolean>(false);
   return (
     <header className="auth-header auth-header--bg">
       <div className="auth-logo">
-        <a href="#">
+        <Link to="/">
           <img src="assets/img/logo-arsonex.png" alt="" />
-        </a>
+        </Link>
       </div>
-      <nav style={{
-        borderBottom: "1px solid #e2e2e2",
-        paddingBottom: "20px",
-        marginBottom: "50px",
-      }}>
+      <nav
+        style={{
+          borderBottom: "1px solid #e2e2e2",
+          paddingBottom: "20px",
+          marginBottom: "50px",
+        }}
+      >
         <ul
-          className={`${home.navbar} navbar--simple ${openOverlayMenu ? home.expanded : ""
-            }`}
+          className={`${home.navbar} navbar--simple ${
+            openOverlayMenu ? home.expanded : ""
+          }`}
           id="navbar"
         >
           <li>
@@ -30,14 +34,12 @@ const HeadAuth: React.FC = () => {
                   <Link to="/login">ورود</Link>
                 </li>
                 <li className={home.header__auth__register}>
-                  <Button
-                    tag="a"
-                    href="/register"
-                    color="primary"
-                    className={home["rounded-button"]}
+                  <Link
+                    to="/register"
+                    className={`btn btn-primary ${home["rounded-button"]}`}
                   >
                     ثبت نام
-                  </Button>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -65,10 +67,7 @@ const HeadAuth: React.FC = () => {
           <li>
             <div className={home.navbar__close}>
               {/* <button type="button" onclick={()=>respMenu.dismiss()}> */}
-              <button
-                type="button"
-                onClick={() => setOpenOverlayMenu(false)}
-              >
+              <button type="button" onClick={() => setOpenOverlayMenu(false)}>
                 <span className="icon">
                   <IoIosCloseCircleOutline />
                 </span>

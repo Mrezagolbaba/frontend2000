@@ -1,9 +1,13 @@
+import Cookies from "js-cookie";
+import CryptoJS from "crypto-js";
 import axios from "axios";
-import moment from "jalali-moment";
 import jalaliMoment from "jalali-moment";
-import { isEmpty } from "lodash";
+import moment from "jalali-moment";
 import { CryptoData } from "types/exchange";
 import { CurrencyCode, TransactionStatus } from "types/wallet";
+import { JWT_DECODE_KEY, REF_TOKEN_OBJ_NAME, REF_TOKEN_OBJ_TIME } from "config";
+import { isEmpty } from "lodash";
+import { PhoneNumberUtil } from "google-libphonenumber";
 
 export function generateLabelValueArray(start: number, end: number) {
   const resultArray: { label: string; value: string }[] = [];
@@ -95,11 +99,11 @@ export const persianToEnglishNumbers = (persianNumber: string) => {
 export const passwordListValidation = [
   {
     title: "حداقل یک عدد",
-    isCheck: true,
+    isCheck: false,
   },
   {
     title: "حداقل 8 کاراکتر",
-    isCheck: true,
+    isCheck: false,
   },
   {
     title: "حداقل یک کاراکتر با حرف بزرگ",
@@ -107,7 +111,7 @@ export const passwordListValidation = [
   },
   {
     title: "حداقل یک کاراکتر با حرف کوچک",
-    isCheck: true,
+    isCheck: false,
   },
   {
     title: "حداقل یک کاراکتر ویژه از قبیل: !@#$%^&*()-+",
@@ -123,17 +127,17 @@ export const isPasswordValid = (password: string) => {
   const hasSpecialChar = /[!@#$%^&*()\-_=+[\]{}|;:',.<>/?\\]/.test(password);
 
   const isValid: boolean[] = [];
-  if (password.length < minLength) isValid[0] = false;
-  else isValid[0] = true;
-
-  if (!hasLowerCase) isValid[1] = false;
+  if (password.length < minLength) isValid[1] = false;
   else isValid[1] = true;
+
+  if (!hasLowerCase) isValid[3] = false;
+  else isValid[3] = true;
 
   if (!hasUpperCase) isValid[2] = false;
   else isValid[2] = true;
 
-  if (!hasNumber) isValid[3] = false;
-  else isValid[3] = true;
+  if (!hasNumber) isValid[0] = false;
+  else isValid[0] = true;
 
   if (!hasSpecialChar) isValid[4] = false;
   else isValid[4] = true;
@@ -259,17 +263,20 @@ export function getTitlePage(path: string) {
     { path: "/contact-us", name: "تماس با ما - آرسونیکس" },
     { path: "/terms", name: "قوانین و مقررات - آرسونیکس" },
     { path: "/dashboard", name: "داشبورد کاربری - آرسونیکس" },
+    { path: "/dashboard/profile", name: "پروفایل کاربری - آرسونیکس" },
     { path: "/dashboard/exchange", name: "خرید و فروش سریع - آرسونیکس" },
     { path: "/dashboard/wallet", name: "کیف پول - آرسونیکس" },
     { path: "/dashboard/setting", name: "تنظیمات - آرسونیکس" },
     { path: "/dashboard/market", name: "بازارها - آرسونیکس" },
     { path: "/dashboard/orders", name: "سفارشات - آرسونیکس" },
-    { path: "/dashboards/history", name: "تاریخچه - آرسونیکس" },
+    { path: "/dashboard/history", name: "تاریخچه - آرسونیکس" },
     { path: "/dashboard/support", name: "پشتیبانی - آرسونیکس" },
+    { path: "/dashboard/add-friends", name: "ت از دوستان - آرسونیکس" },
     { path: "/login", name: "آرسونیکس - ورود به حساب کاربری" },
     { path: "/register", name: "آرسونیکس - ثبت نام" },
     { path: "/forget-password", name: "آرسونیکس - فراموشی رمز عبور" },
     { path: "/information", name: "آرسونیکس - احراز هویت" },
+    { path: "/404", name: "صفحه مورد نظر یافت نشد - آرسونیکس" },
   ];
 
   const findTitle = pages.find((page) => page.path === path);
@@ -324,14 +331,14 @@ export const tomanShow = ({
   justFix = false,
 }: CurrencyProps): string => {
   const intValue = parseInt(value);
-  const newValue = (intValue / 10).toFixed(0);
-  if (Number.isNaN(intValue) || newValue === "NaN") {
+  const newValue = Math.trunc(intValue / 10);
+  if (Number.isNaN(intValue)) {
     return "0";
   }
-  if (justFix) return (Math.round(intValue * 100) / 1000).toFixed(0);
+  if (justFix) return Math.trunc(intValue / 10).toString();
   else if (!isEmpty(currency))
-    return `${Number(newValue).toLocaleString("IRR")} ${convertText(currency, "enToFa")}`;
-  else return Number(newValue).toLocaleString("IRR");
+    return `${newValue.toLocaleString("IRR")} ${convertText(currency, "enToFa")}`;
+  else return newValue.toLocaleString("IRR");
 };
 
 export const lirShow = ({
@@ -351,7 +358,7 @@ export const lirShow = ({
 };
 
 export const coinShow = (value: string, currency?: CurrencyCode): string => {
-  const newValue = Number(value).toFixed(6);
+  const newValue = Number(value).toPrecision(6);
 
   if (Number.isNaN(newValue) || newValue == "NaN") {
     return "0";
@@ -362,27 +369,105 @@ export const coinShow = (value: string, currency?: CurrencyCode): string => {
   return Number(newValue).toLocaleString("IRR");
 };
 
+export const normalizeAmount = (
+  a: string,
+  currency: "IRR" | "TRY" | "USDT",
+  isShowCurrency: boolean,
+) => {
+  const amount = a? a.toString() : "0";
+  const everChar = 3;
+  const insertChar = ",";
+  const indexDot =
+    amount?.indexOf(".") > 0 ? amount.indexOf(".") : amount?.length;
+  let newAmount = "",
+    intPart = "";
+  if (currency === "IRR") {
+    newAmount = amount.substring(0, indexDot - 1);
+  } else newAmount = amount.substring(0, indexDot);
 
+  for (let i = 0; i < newAmount.length; i += everChar) {
+    const slice = newAmount.substring(i, i + everChar);
+    if (slice.length === everChar && newAmount.length !== everChar + i)
+      intPart = intPart.concat(slice, insertChar);
+    else intPart = intPart.concat(slice);
+  }
+  console.log(intPart, "initPart");
 
+  switch (currency) {
+    case "USDT": {
+      const decimalPart = amount.substring(indexDot, indexDot + 7);
+      if (isShowCurrency) return `${intPart + decimalPart} تتر`;
+      else return intPart + decimalPart;
+    }
+    case "TRY": {
+      const decimalPart = amount.substring(indexDot, indexDot + 3);
+      if (isShowCurrency) return `${intPart + decimalPart} لیر`;
+      else return intPart + decimalPart;
+    }
+    case "IRR":
+    default: {
+      if (isShowCurrency) return `${intPart} تومان`;
+      else return intPart;
+    }
+  }
+};
 
-
-export async function get24hChanges(ids: string[], vsCurrency: string = 'usd'): Promise<CryptoData[] | null> {
+export const getEncryptedObject = (data: string) => {
   try {
-      const url = 'https://api.coingecko.com/api/v3/coins/markets';
-      const params = {
-          ids: ids.join(','),
-          vs_currency: vsCurrency,
-          price_change_percentage: '24h'
-      };
-      const response = await axios.get(url, { params });
-      if (response.status === 200) {
-          return response.data;
-      } else {
-          console.error(`Error: ${response.status}`);
-          return null;
-      }
-  } catch (error) {
-      console.error('Error fetching data:', error);
+    return CryptoJS.DES.encrypt(data, JWT_DECODE_KEY).toString();
+  } catch (e) {
+    return null;
+  }
+};
+export const getDecryptedObject = (data: string) => {
+  try {
+    return CryptoJS.DES.decrypt(data, JWT_DECODE_KEY).toString();
+  } catch (e) {
+    return null;
+  }
+};
+
+export const setRefToken = (refreshToken: string, expiredAt: string) => {
+  if (window && refreshToken != null) {
+    Cookies.set(REF_TOKEN_OBJ_NAME, refreshToken, {
+      expiredAt: expiredAt,
+      secure: true,
+    });
+  }
+};
+export const getRefToken = () => Cookies.get(REF_TOKEN_OBJ_NAME);
+
+export const removeRefToken = () => Cookies.remove(REF_TOKEN_OBJ_NAME);
+
+export async function get24hChanges(
+  ids: string[],
+  vsCurrency: string = "usd",
+): Promise<CryptoData[] | null> {
+  try {
+    const url = "https://api.coingecko.com/api/v3/coins/markets";
+    const params = {
+      ids: ids.join(","),
+      vs_currency: vsCurrency,
+      price_change_percentage: "24h",
+    };
+    const response = await axios.get(url, { params });
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      console.error(`Error: ${response.status}`);
       return null;
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null;
   }
 }
+const phoneUtil = PhoneNumberUtil.getInstance();
+
+export const isPhoneValid = (phone: string) => {
+  try {
+    return phoneUtil.isValidNumber(phoneUtil.parseAndKeepRawInput(phone));
+  } catch (error) {
+    return false;
+  }
+};

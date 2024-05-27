@@ -6,7 +6,8 @@ export type TransactionType =
 export type TransactionRequestType =
   | "BANK_ACCOUNT"
   | "WALLET"
-  | "WALLET_ADDRESS";
+  | "WALLET_ADDRESS"
+  | "DEBIT";
 export type TransactionStatus =
   | "DRAFT"
   | "INITIATED"
@@ -28,7 +29,8 @@ export type ProviderType =
 export type FlowType =
   | "MANUAL_WITH_WALLET_ADDRESS"
   | "MANUAL_WITH_PAYMENT_IDENTIFIER"
-  | "REDIRECT";
+  | "REDIRECT"
+  | "DEBIT";
 
 export type CurrencyCode = "IRR" | "TRX" | "USDT" | "TRY";
 
@@ -55,6 +57,7 @@ export interface TransactionResponse {
   sourceId: string;
   destinationType: TransactionRequestType;
   destinationId: string;
+  destination: any;
   displayId: string;
   currencyCode: string;
   amount: string;
@@ -90,7 +93,7 @@ export interface DepositInfoResponse {
   iban: string;
 }
 
-export  interface InitiateCurrency {
+export interface InitiateCurrency {
   availableBalance: string;
   balance: string;
   createdAt: string;

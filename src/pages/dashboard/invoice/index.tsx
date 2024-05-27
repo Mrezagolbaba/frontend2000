@@ -5,7 +5,7 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import "./styles.module.scss";
 import { coinShow, convertText, lirShow, tomanShow } from "helpers";
 import moment from "jalali-moment";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useGetCurrencySwapQuery } from "store/api/exchange-management";
@@ -43,12 +43,13 @@ const Invoice = () => {
   };
   const renderFee = () => {
     let index;
-    if (invoice.feeCurrencyCode === invoice.destinationCurrencyCode) index = 1;
+    if (invoice?.feeCurrencyCode === invoice?.destinationCurrencyCode)
+      index = 1;
     else index = 0;
 
     return renderAmount(
-      invoice.transactions[index]?.fee,
-      invoice.feeCurrencyCode,
+      invoice?.transactions[index]?.fee,
+      invoice?.feeCurrencyCode,
     );
   };
 
@@ -58,17 +59,17 @@ const Invoice = () => {
       <Card>
         <CardHeader>
           <div className="card-back">
-            <a href="#">
+            <Link to="/">
               <span className="icon">
                 <MdOutlineKeyboardArrowRight color="black" />
               </span>
-            </a>
+            </Link>
           </div>
         </CardHeader>
         <CardBody>
           <div ref={componentRef as any} className="p-3" dir="rtl">
             <div className="invoice__header">
-              <div className="container">
+              <div className="container px-4">
                 <div className="row align-items-center">
                   <div className="col-sm-12 col-md-4">
                     <div className="invoice-id text-md-end text-center d-flex">
@@ -79,7 +80,7 @@ const Invoice = () => {
                         </span>
                       ) : (
                         <span className="px-2">
-                          {invoice.transactions[0].invoiceNumber}
+                          {invoice?.transactions[0]?.invoiceNumber}
                         </span>
                       )}
                     </div>
@@ -98,7 +99,7 @@ const Invoice = () => {
                         </span>
                       ) : (
                         <time className="d-inline-block d-ltr px-2">
-                          {moment(invoice.createdAt)
+                          {moment(invoice?.createdAt)
                             .locale("fa")
                             .format("YYYY/MM/DD")}
                         </time>
@@ -108,7 +109,7 @@ const Invoice = () => {
                 </div>
               </div>
             </div>
-            <div className="invoice__body">
+            <div className="invoice__body px-4">
               <div className="invoice-table">
                 <h6 className="invoice-title">مشخصات خریدار:</h6>
                 <div className="table-responsive">
@@ -180,16 +181,13 @@ const Invoice = () => {
                             </span>
                           ) : (
                             <span className="px-2">
-                              تبدیل{" "}
-                              {convertText(
+                              {` تبدیل ${convertText(
                                 invoice.sourceCurrencyCode,
                                 "enToFa",
-                              )}{" "}
-                              به{" "}
-                              {convertText(
+                              )} به ${convertText(
                                 invoice.destinationCurrencyCode,
                                 "enToFa",
-                              )}
+                              )}`}
                             </span>
                           )}
                         </td>
@@ -216,7 +214,7 @@ const Invoice = () => {
                             <span className="px-2">
                               {renderAmount(
                                 invoice?.destinationAmount,
-                                invoice.destinationCurrencyCode,
+                                invoice?.destinationCurrencyCode,
                               )}
                             </span>
                           )}
@@ -244,13 +242,13 @@ const Invoice = () => {
             <div
               style={{
                 display: "flex",
-                justifyContent: "space-evenly",
+                justifyContent: "center",
               }}
             >
               <Button
                 type="button"
                 color="primary"
-                className="mb-2 mr-2"
+                className="px-5 py-3 mx-2"
                 onClick={() => navigate("/dashboard/wallet")}
               >
                 برداشت {convertText(invoice?.destinationCurrencyCode, "enToFa")}
@@ -259,7 +257,7 @@ const Invoice = () => {
                 color="primary"
                 outline
                 onClick={handlePrint}
-                className="mb-2 ml-2"
+                className="px-5 py-3 mx-2"
               >
                 چاپ فاکتور
               </Button>

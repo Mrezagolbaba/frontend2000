@@ -5,6 +5,7 @@ import { useAppSelector } from "store/hooks";
 import { IoIosClose } from "react-icons/io";
 
 import otp from "assets/scss/components/Input/otpContainer.module.scss";
+import { Button } from "reactstrap";
 
 interface Props {
   securitySelection: string;
@@ -78,10 +79,6 @@ const WithdrawOTP = ({
 
   return (
     <div className={otp["otp-container"]}>
-      <div className={otp["otp-header"]}>
-        <h5>{title}</h5>
-        <IoIosClose color="#c6d2d9" size={40} onClick={() => onClose()} />
-      </div>
       <div className={otp["otp-content"]}>
         <div className={otp["otp-title"]}>{renderCaption()}</div>
         <OtpInput
@@ -96,26 +93,32 @@ const WithdrawOTP = ({
           renderSeparator={undefined}
           placeholder={undefined}
           shouldAutoFocus={true}
-          renderInput={(props) => <input {...props} />}
+          renderInput={(props) => (
+            <input {...props} type="text" inputMode="numeric" />
+          )}
         />
 
         {timeInSeconds === 0 ? (
-          <button
-            className="btn btn-outline-primary mt-4 px-5 py-2"
+          <Button
+            color="primary"
+            outline
+            className="mt-4 px-5 py-2"
             style={{ width: "80%" }}
             onClick={handleResendClick}
           >
             ارسال مجدد کد
-          </button>
+          </Button>
         ) : (
-          <button
-            className="btn btn-outline-primary px-5 py-2 mt-4"
+          <Button
+            color="primary"
+            outline
+            className="mt-4 px-5 py-2"
             style={{ width: "80%" }}
           >
             <span className="auth-counter text-start d-ltr">
               {formatTime()}
             </span>
-          </button>
+          </Button>
         )}
       </div>
     </div>

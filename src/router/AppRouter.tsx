@@ -1,14 +1,12 @@
-import { useLocation, useRoutes } from "react-router-dom";
-import LoginPage from "pages/auth/signin";
-import LoginEmailPage from "pages/auth/signin/EmailSignin";
-import SignupPage from "pages/auth/signup";
-import OtpEmail from "pages/auth/otp/OtpEmail";
-import OtpMobile from "pages/auth/otp/OtpMobile";
-import ForgetPasswordWithMobile from "pages/auth/reset-password/WithMobile";
-import ForgetPasswordWithEmail from "pages/auth/reset-password/WithEmail";
-import ResetPassword from "pages/auth/reset-password/ResetPassword";
+import { Navigate, useLocation, useRoutes } from "react-router-dom";
+import Login from "pages/auth/signin";
+import Register from "pages/auth/signup";
+import OTP from "pages/auth/otp/index";
+import ForgetPassword from "pages/auth/forget-password";
+import ResetPassword from "pages/auth/forget-password/ResetPassword";
 
 import HomePage from "pages/Home";
+import NotFound from "pages/not-found";
 import Information from "pages/auth/information";
 
 import CoinPage from "pages/coins";
@@ -19,6 +17,8 @@ import RulesPage from "pages/rules";
 import AboutUs from "pages/about-us";
 import { useEffect } from "react";
 import { getTitlePage } from "helpers";
+import AuthRouter from "./AuthRouter";
+import ResponsePage from "pages/dashboard/wallet/Rial/Deposit/DirectDebit/ResponsePage";
 
 export default function AppRouter() {
   const location = useLocation();
@@ -32,24 +32,46 @@ export default function AppRouter() {
       // element: <HomePage />,
       children: [
         { path: "", element: <HomePage /> },
-        { path: "login", element: <LoginPage /> },
-        { path: "login-email", element: <LoginEmailPage /> },
-        { path: "register", element: <SignupPage /> },
-        { path: "mobile-otp", element: <OtpMobile /> },
-        { path: "email-otp", element: <OtpEmail /> },
-        { path: "forget-password", element: <ForgetPasswordWithMobile /> },
+        { path: "login", element: <AuthRouter children={<Login />} /> },
         {
-          path: "forget-password-with-email",
-          element: <ForgetPasswordWithEmail />,
+          path: "register",
+          element: <AuthRouter children={<Register />} />,
         },
-        { path: "reset-password", element: <ResetPassword /> },
+        {
+          path: "register/:code",
+          element: <AuthRouter children={<Register />} />,
+        },
+        { path: "otp", element: <AuthRouter children={<OTP />} /> },
+        {
+          path: "forget-password",
+          element: <AuthRouter children={<ForgetPassword />} />,
+        },
+        {
+          path: "reset-password",
+          element: <AuthRouter children={<ResetPassword />} />,
+        },
+        {
+          path: "information",
+          element: <AuthRouter children={<Information />} />,
+        },
         { path: "coins", element: <CoinPage /> },
-        { path: "information", element: <Information /> },
         { path: "coming-soon", element: <ComingSoon /> },
         { path: "contact-us", element: <ContactUs /> },
         { path: "about-us", element: <AboutUs /> },
         { path: "terms", element: <RulesPage /> },
+        {
+          path: "debit-subscription-finished/:status",
+          element: <ResponsePage />,
+        },
         DashboardRouter,
+        {
+          path: "*",
+          element: <Navigate to="/404" />,
+        },
+        {
+          path: "404",
+          element: <NotFound />,
+        },
       ],
     },
   ]);

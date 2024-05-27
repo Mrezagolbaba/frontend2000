@@ -6,6 +6,8 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { useState } from "react";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import { Link } from "react-router-dom";
+import ChevronsRight from "components/Icons/ChevronsRight";
 
 interface Props {
   onSidebarToggle: () => void;
@@ -18,99 +20,43 @@ const Header = ({ onSidebarToggle }: Props) => {
       <Card className={dashboard.card}>
         <CardBody className={dashboard["card-body"]}>
           <div className={dashboard.header__logo}>
-            <a href="#">
+            <Link to="/dashboard">
               <img src={Wallet} alt="" className="logo" />
-            </a>
+            </Link>
           </div>
-          <ul className={dashboard.header__navbar}>
+          <ul
+            className={`${dashboard.header__navbar} ${dashboard["hide-in-mobile"]}`}
+          >
             <li>
-              <a href="/dashboard/exchange">خرید و فروش سریع</a>
+              <Link to="/dashboard/orders">سفارشات من</Link>
             </li>
             <li>
-              <a href="/dashboard/market">بازارها</a>
+              <Link to="/dashboard/history">تاریخچه</Link>
             </li>
             <li>
-              <a href="/dashboard/wallet">واریز و برداشت</a>
+              <Link to="/dashboard/wallet">واریز و برداشت</Link>
             </li>
             <li>
-              <a href="https://help.arsonex.com/"> مرکز راهنمایی </a>
+              <Link target="_blank" to="https://help.arsonex.com/">
+                مرکز راهنمایی
+              </Link>
             </li>
           </ul>
           <div className={dashboard.header__support}>
-            <a href="/dashboard/support" className="">
+            <Link to="/dashboard/support" className="">
               <span className="icon">
                 <img src={Support} alt="support" />
               </span>
               <span style={{ marginRight: "10px" }}>پشتیبانی</span>
-            </a>
+            </Link>
           </div>
           <div>
-            <a href="/dashboard/setting">
+            <Link to="/dashboard/setting">
               <span className="icon">
                 <img src={Setting} alt="setting" />
               </span>
-            </a>
+            </Link>
           </div>
-          {/* <div className={dashboard.header__notification}>
-            <a href="/dashboard/notification">
-              <span className="icon">
-                <img src={Notifications} alt="notification" />
-              </span>
-            </a>
-          </div> */}
-
-          {/* <div className={dashboard.header__subheader}>
-                <button
-                  className={dashboard["header__hamburger-btn"]}
-                  onClick={() => onSidebarToggle()}
-                >
-                  <span className="icon">
-                    <GiHamburgerMenu />
-                  </span>
-                </button>
-                <button
-                  className={dashboard["header__hamburger-btn"]}
-                  onClick={() => setIsLefMenuOpen(true)}
-                >
-                  <span className="icon">
-                    <GiHamburgerMenu />
-                  </span>
-                </button>
-                <ul
-                  className={`${dashboard.header__navbar} ${isLeftMenuOpen ? dashboard.expanded : ""
-                    }`}
-                >
-                  <li className={dashboard.header__navbar__close}>
-                    <button onClick={() => setIsLefMenuOpen(false)}>
-                      <li>
-                        <a href="/dashboard/buy-sell">خرید و فروش سریع</a>
-                      </li>
-                    </button>
-                  </li>
-                </ul>
-                <div className={dashboard.header__support}>
-                  <a href="/support" className="">
-                    <span className="icon">
-                      <img src={Support} alt="support" />
-                    </span>
-                    پشتیبانی
-                  </a>
-                </div>
-                <div>
-                  <a href="/setting">
-                    <span className="icon">
-                      <img src={Setting} alt="setting" />
-                    </span>
-                  </a>
-                </div>
-                <div className={dashboard.header__notification}>
-                  <a href="/notification">
-                    <span className="icon">
-                      <img src={Notifications} alt="notification" />
-                    </span>
-                  </a>
-                </div>
-              </div> */}
           <div className={dashboard.header__subheader}>
             <button
               className={dashboard["header__hamburger-btn"]}
@@ -125,7 +71,7 @@ const Header = ({ onSidebarToggle }: Props) => {
               onClick={() => setIsLefMenuOpen(true)}
             >
               <span className="icon">
-                <GiHamburgerMenu />
+                <ChevronsRight />
               </span>
             </button>
             <ul
@@ -133,30 +79,32 @@ const Header = ({ onSidebarToggle }: Props) => {
                 isLeftMenuOpen ? dashboard.expanded : ""
               }`}
             >
-              <li className={dashboard.header__navbar__close}>
-                <button onClick={() => setIsLefMenuOpen(false)}>
-                  <span className="icon">
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M13 1L1 13" stroke="#03041B" />
-                      <path d="M13 13L1 0.999999" stroke="#03041B" />
-                    </svg>
-                  </span>
-                </button>
+              <li>
+                <Link
+                  to="/dashboard/exchange"
+                  onClick={() => setIsLefMenuOpen(false)}
+                  className="text-primary"
+                >
+                  خرید و فروش سریع
+                </Link>
               </li>
               <li>
-                <a href="/dashboard/market">بازارها</a>
+                <Link
+                  to="/dashboard/history"
+                  onClick={() => setIsLefMenuOpen(false)}
+                  className="text-primary"
+                >
+                  تاریخچه
+                </Link>
               </li>
-              {/* <li>
-                <a href="#">خرید و فروش پیشرفته</a>
-              </li> */}
               <li>
-                <a href="/dashboard/exchange">خرید و فروش سریع</a>
+                <Link
+                  to="/dashboard/orders"
+                  onClick={() => setIsLefMenuOpen(false)}
+                  className="text-primary"
+                >
+                  سفارشات من
+                </Link>
               </li>
             </ul>
           </div>

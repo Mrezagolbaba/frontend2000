@@ -1,18 +1,3 @@
-import React, { useState } from "react";
-import { CiMobile2 } from "react-icons/ci";
-import { useNavigate } from "react-router-dom";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { toast } from "react-hot-toast";
-
-import { formatPhoneNumber, persianToEnglishNumbers } from "helpers";
-import { useLogin } from "services/auth";
-import Auth from "layouts/auth";
-import { loginSchema } from "pages/auth/validationForms";
-import { LoginFormData } from "pages/auth/types";
-import FloatInput from "components/Input/FloatInput";
-import PasswordInput from "components/PasswordInput";
-import SelectCountry from "components/SelectCountry";
 import {
   Button,
   Card,
@@ -22,142 +7,200 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
+import * as Yup from "yup";
+import Auth from "layouts/auth";
+import FloatInput from "components/Input/FloatInput";
+import Notify from "components/Notify";
+import PasswordInput from "components/PasswordInput";
+import PhoneNumberInput from "components/PhoneInput";
+import useAuth from "hooks/useAuth";
+import { Controller, useForm } from "react-hook-form";
+import { HiOutlineMail } from "react-icons/hi";
+import { LoginRequest } from "types/auth";
+import { PiShieldCheckeredFill } from "react-icons/pi";
+import { isPhoneValid } from "helpers";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import auth from "assets/scss/auth/auth.module.scss";
-import { useGetMe } from "services/auth/user";
-import { useAppDispatch } from "store/hooks";
-import { IUser } from "types/user";
-import { PiShieldCheckeredFill } from "react-icons/pi";
 
-const LoginPage: React.FC = () => {
+export default function LoginPage() {
+  // ==============|| States ||================= //
+  const [loginType, setLoginType] = useState<"PHONE" | "EMAIL">("PHONE");
+  const [loading, setLoading] = useState(false);
+
+  // ==============|| Validation ||================= //
+  const getValidationSchema = () => {
+    const schema = {
+      password: Yup.string()
+        .min(8, "اطلاعات وارد شده اشتباه است.")
+        .matches(/[a-z]/, ",اطلاعات وارد شده اشتباه است.")
+        .matches(/[A-Z]/, "اطلاعات وارد شده اشتباه است.")
+        .matches(/[0-9]/, "اطلاعات وارد شده اشتباه است.")
+        .matches(
+          /[!@#$%^&*()\-_=+[\]{}|;:',.<>/?\\]/,
+          "اطلاعات وارد شده اشتباه است.",
+        )
+        .required("رمز عبور الزامی است."),
+    };
+    if (loginType === "PHONE") {
+      return Yup.object().shape({
+        username: Yup.string().required("شماره همراه الزامی می باشد."),
+        selectedCountry: Yup.string().required("کد کشور الزامی می باشد."),
+        ...schema,
+      });
+    } else {
+      return Yup.object().shape({
+        username: Yup.string()
+          .email("ایمیل اشتباه است")
+          .required("ایمیل الزامی است"),
+        ...schema,
+      });
+    }
+  };
+  const resolver = yupResolver(getValidationSchema());
+
+  // ==============|| Hooks ||================= //
+  const { login } = useAuth();
   const navigate = useNavigate();
-  const loginMutation = useLogin();
-  const getMe = useGetMe();
-  const dispatch = useAppDispatch();
-
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const resolver = yupResolver(loginSchema);
   const {
     handleSubmit,
     control,
+    reset,
     formState: { errors },
-  } = useForm<LoginFormData>({
+  } = useForm({
     mode: "onChange",
-    defaultValues: {
-      phoneNumber: "",
-      password: "",
-      selectedCountry: "98",
-    },
+    defaultValues:
+      loginType === "PHONE"
+        ? {
+          username: "",
+          password: "",
+          selectedCountry: "98",
+        }
+        : {
+          username: "",
+          password: "",
+        },
     resolver,
   });
 
-  const handleLogin = async (data: LoginFormData) => {
-    setIsLoading(true);
-    const phoneNumber = formatPhoneNumber(
-      persianToEnglishNumbers(data.phoneNumber),
-      data.selectedCountry,
-    );
-    const userData = {
-      phoneNumber,
-      password: data.password,
-      type: "PHONE",
-    };
-
-    await loginMutation
-      .mutateAsync(userData)
-      .then((res) => {
-        if (res) {
-          setIsLoading(false);
-          getMe.mutateAsync(null).then((res: IUser) => {
-            res && res.otpMethod === "EMAIL"
-              ? navigate("/email-otp", {
-                  state: {
-                    email: res.email,
-                    page: "login",
-                  },
-                })
-              : navigate("/mobile-otp", {
-                  state: {
-                    phoneNumber: userData.phoneNumber,
-                  },
-                });
-          });
-        }
+  // ==============|| Handlers ||================= //
+  const handleLogin = async (data) => {
+    const body: LoginRequest = { password: data.password, type: loginType };
+    const isValid = isPhoneValid(data.username);
+    if (!isValid && loginType === "PHONE") {
+      Notify({ type: "error", text: "شماره همراه اشتباه است." });
+      return;
+    }
+    if (loginType === "EMAIL") body.email = data.username;
+    else {
+      body.phoneNumber = data.username;
+    }
+    await login(body)
+      .then(() => {
+        navigate("/otp", { state: { type: "AUTH", method: loginType } });
       })
-      .catch(() => {
-        setIsLoading(false);
+      .catch((error) => {
+        setLoading(false);
+        error.data.message.forEach((m) => Notify({ type: "error", text: m }));
       });
   };
-
-  const handleErrors = (errors: any) =>
+  const handleErrors = (errors: any) => {
+    setLoading(false);
     Object.entries(errors).map(([fieldName, error]: any) =>
-      toast.error(error?.message, {
-        position: "bottom-left",
-      }),
+      Notify({ type: "error", text: error?.message }),
     );
+  };
+  const changeMethod = useCallback(() => {
+    if (loginType === "EMAIL")
+      reset({
+        username: "",
+        password: "",
+      });
+    else reset({ username: "", password: "", selectedCountry: "98" });
+  }, [loginType, reset]);
 
+  // ==============|| Life Cycle ||================= //
+  useEffect(() => changeMethod(), [changeMethod]);
+
+  // ==============|| Render ||================= //
   return (
     <Auth>
       <section className={auth.container}>
         <Card className={auth.card}>
           <CardBody className={auth["card-body"]}>
             <h4 className={auth.title}>ورود به حساب کاربری</h4>
-            <div className={auth.confidence}>
+            <div className={`${auth.confidence} mb-4`}>
               <p>از یکسان بودن آدرس صفحه با آدرس زیر مطمئن شوید.</p>
               <div className="d-ltr">
-                <label>
+                <span>
                   <span>https://</span>arsonex.com
-                </label>
+                </span>
                 <span className="icon">
                   <PiShieldCheckeredFill />
                 </span>
               </div>
             </div>
-
             <form
               className={auth.form}
               onSubmit={handleSubmit(handleLogin, handleErrors)}
             >
               <Container>
                 <Row className="gy-2 gx-0">
-                  <Col xs={8}>
-                    <Controller
-                      name="phoneNumber"
-                      control={control}
-                      render={({ field: { name, value, onChange, ref } }) => (
-                        <FloatInput
-                          type="text"
-                          name={name}
-                          value={value}
-                          label="شماره همراه"
-                          onChange={onChange}
-                          inputProps={{
-                            ref: ref,
-                            size: "large",
-                            prefix: <CiMobile2 />,
-                            status: errors?.[name]?.message
-                              ? "error"
-                              : undefined,
-                            autoFocus: true,
-                            className: auth["phone-number"],
-                          }}
-                        />
-                      )}
-                    />
-                  </Col>
-                  <Col xs={4}>
-                    <Controller
-                      name="selectedCountry"
-                      control={control}
-                      render={({ field }) => <SelectCountry {...field} />}
-                    />
-                  </Col>
+                  {loginType === "PHONE" ? (
+                    <Col>
+                      <Controller
+                        name="username"
+                        control={control}
+                        render={({ field: { name, value, onChange } }) => (
+                          <PhoneNumberInput
+                            name={name}
+                            value={value}
+                            label="شماره همراه"
+                            onChange={onChange}
+                          />
+                        )}
+                      />
+                    </Col>
+                  ) : (
+                    <Col xs={12}>
+                      <Controller
+                        name="username"
+                        control={control}
+                        render={({ field: { name, value, onChange, ref } }) => (
+                          <FloatInput
+                            type="email"
+                            name={name}
+                            value={value}
+                            label="ایمیل"
+                            onChange={onChange}
+                            inputProps={{
+                              ref: ref,
+                              size: "large",
+                              prefix: <HiOutlineMail />,
+                              status: errors?.[name]?.message
+                                ? "error"
+                                : undefined,
+                              autoFocus: true,
+                            }}
+                          />
+                        )}
+                      />
+                    </Col>
+                  )}
                   <Col xs={12}>
                     <Controller
                       name="password"
                       control={control}
-                      render={({ field }) => <PasswordInput {...field} />}
+                      render={({ field: { name, value, onChange } }) => (
+                        <PasswordInput
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          errors={errors}
+                        />
+                      )}
                     />
                   </Col>
                   <Col xs={12}>
@@ -176,23 +219,29 @@ const LoginPage: React.FC = () => {
                           type="submit"
                           color="primary"
                           className={auth.submit}
-                          disabled={isLoading}
+                          disabled={loading}
                         >
-                          {isLoading ? (
+                          {loading ? (
                             <Spinner style={{ color: "white" }} />
                           ) : (
                             "ورود به حساب"
                           )}
                         </Button>
+                      </div>
+                      <div className="mb3">
                         <Button
-                          type="button"
                           color="primary"
                           outline
-                          className={`${auth.submit} mt-3`}
-                          tag="a"
-                          href="/login-email"
+                          className={auth.submit}
+                          onClick={() => {
+                            loginType === "EMAIL"
+                              ? setLoginType("PHONE")
+                              : setLoginType("EMAIL");
+                          }}
                         >
-                          ورود با استفاده از ایمیل
+                          {loginType === "EMAIL"
+                            ? "ورود با استفاده از موبایل"
+                            : "ورود با استفاده از ایمیل"}
                         </Button>
                       </div>
                       <div className={auth.already}>
@@ -211,6 +260,4 @@ const LoginPage: React.FC = () => {
       </section>
     </Auth>
   );
-};
-
-export default LoginPage;
+}

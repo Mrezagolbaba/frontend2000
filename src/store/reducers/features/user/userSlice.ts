@@ -22,6 +22,8 @@ const initialState: IUser = {
   createdAt: "",
   updatedAt: "",
   deletedAt: "",
+  gateways: [],
+  signupFinished: false,
 };
 
 const userSlice = createSlice({

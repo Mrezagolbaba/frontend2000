@@ -1,46 +1,62 @@
-import { useState } from "react";
-import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
-
 import CreditCardForm from "./CreditCardForm";
+import DirectDebit from "./DirectDebit";
 import ShebaForm from "./ShebaForm";
+import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
+import { useAppSelector } from "store/hooks";
+import { useEffect, useState } from "react";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
-import { AlertInfo } from "components/AlertWidget";
-import { useAppSelector } from "store/hooks";
 
-export default function Deposit() {
-  const [activeTab, setActiveTab] = useState<"1" | "2">("1");
-  const { secondTierVerified } = useAppSelector((state) => state.user);
+export default function Deposit({ onClose }: { onClose?: () => void }) {
+  const [activeTab, setActiveTab] = useState<"1" | "2" | "3">("1");
+  const { gateways } = useAppSelector((state) => state.user);
 
   const toggleTab = (tab) => {
     if (activeTab !== tab) {
       setActiveTab(tab);
     }
   };
+
+  useEffect(() => {
+    if (gateways?.length <= 0) setActiveTab("2");
+  }, [gateways]);
+
   return (
     <div className={wallet["deposit-form"]}>
       <Nav pills className={`${wallet["deposit-form__nav"]} mb-3`}>
-        <NavItem>
-          <NavLink
-            className={`${wallet["nav-link"]} ${
-              activeTab === "1" ? wallet.active : ""
-            }`}
-            tag="button"
-            onClick={() => toggleTab("1")}
-          >
-            درگاه پرداخت (کارت بانکی)
-          </NavLink>
-        </NavItem>
+        {gateways?.length > 0 && (
+          <NavItem>
+            <NavLink
+              className={`${wallet["nav-link"]} ${
+                activeTab === "1" ? wallet.active : ""
+              }`}
+              tag="button"
+              onClick={() => toggleTab("1")}
+            >
+              درگاه بانکی
+            </NavLink>
+          </NavItem>
+        )}
         <NavItem>
           <NavLink
             className={`${wallet["nav-link"]} ${
               activeTab === "2" ? wallet.active : ""
             }`}
             tag="button"
-            disabled={!secondTierVerified}
             onClick={() => toggleTab("2")}
           >
-            واریز بین بانکی (پایا، ساتنا و...)
+            برداشت مستقیم (Direct Debit)
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className={`${wallet["nav-link"]} ${
+              activeTab === "3" ? wallet.active : ""
+            }`}
+            tag="button"
+            onClick={() => toggleTab("3")}
+          >
+           واریز با شناسه (پایا، ساتنا، حساب به حساب)
           </NavLink>
         </NavItem>
       </Nav>
@@ -48,20 +64,11 @@ export default function Deposit() {
         <TabPane tabId="1">
           <CreditCardForm />
         </TabPane>
-        <TabPane tabId="2">
-          <AlertInfo
-            hasIcon
-            text=" از حساب‌هایی که در پروفایل خود وارد کرده‌اید امکان واریز وجود دارد."
-          />
-          <AlertInfo
-            hasIcon
-            text=" شناسه واریز را در قسمت توضیحات یا شناسه واریز وارد نمایید."
-          />
-          <AlertInfo
-            hasIcon
-            text=" تمامی روش‌های پرداخت بجز روش پل مورد تایید می‌باشد."
-          />
+        <TabPane tabId="3">
           <ShebaForm activeTab={activeTab} />
+        </TabPane>
+        <TabPane tabId="2">
+          {activeTab === "2" && <DirectDebit onClose={() => onClose?.()} />}
         </TabPane>
       </TabContent>
     </div>

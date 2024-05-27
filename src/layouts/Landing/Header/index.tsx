@@ -4,17 +4,23 @@ import Logo from "assets/img/logo/light.png";
 import LogoPrimary from "assets/img/logo-primary.png";
 
 import home from "assets/scss/landing/home.module.scss";
-import { Button, Container } from "reactstrap";
+import { Container } from "reactstrap";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { TbMenu } from "react-icons/tb";
 import { useAppSelector } from "store/hooks";
 
 type Props = {
   disableBanner?: boolean;
+  HasRemoveAuthButton?: boolean;
 };
-const Header = ({ disableBanner = false }: Props) => {
+const Header = ({
+  disableBanner = false,
+  HasRemoveAuthButton = false,
+}: Props) => {
   const [openOverlayMenu, setOpenOverlayMenu] = useState<boolean>(false);
-  const user = useAppSelector((state) => state.user);
+  const { id, firstTierVerified, firstName, lastName } = useAppSelector(
+    (state) => state.user,
+  );
 
   const { pathname } = useLocation();
 
@@ -38,23 +44,22 @@ const Header = ({ disableBanner = false }: Props) => {
 
           <nav>
             <ul
-              className={`${home.navbar} navbar--light ${
+              className={`${home.navbar} ${disableBanner && home["navbar-light"]} navbar--light ${
                 openOverlayMenu ? home.expanded : ""
               }`}
               id="navbar"
             >
               <li>
                 <div className={home.header__auth}>
-                  {user.id ? (
+                  {id && firstTierVerified ? (
                     <div>
-                      <Button
-                        tag="a"
-                        href="/dashboard/profile"
+                      <Link
+                        to="/dashboard/profile"
                         color="landing-primary"
-                        className={home["rounded-button"]}
+                        className={`btn btn-landing-primary ${home["rounded-button"]}`}
                       >
-                        {user.firstName + " " + user.lastName}
-                      </Button>
+                        {firstName + " " + lastName}
+                      </Link>
                     </div>
                   ) : (
                     <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
@@ -62,14 +67,12 @@ const Header = ({ disableBanner = false }: Props) => {
                         <Link to="/login">ورود</Link>
                       </li>
                       <li className={home.header__auth__register}>
-                        <Button
-                          tag="a"
-                          href="/register"
-                          color="primary"
-                          className={home["rounded-button"]}
+                        <Link
+                          to="/register"
+                          className={`btn btn-primary ${home["rounded-button"]}`}
                         >
                           ثبت نام
-                        </Button>
+                        </Link>
                       </li>
                     </ul>
                   )}
@@ -97,7 +100,9 @@ const Header = ({ disableBanner = false }: Props) => {
                 <Link to="/dashboard">خرید و فروش آنی</Link>
               </li>
               <li className={`${home.navbar__item}`}>
-                <Link to="https://help.arsonex.com/">مرکز راهنمایی</Link>
+                <Link target="_blank" to="https://help.arsonex.com/">
+                  مرکز راهنمایی
+                </Link>
               </li>
               <li
                 className={`${home.navbar__item} ${
@@ -129,37 +134,37 @@ const Header = ({ disableBanner = false }: Props) => {
             </ul>
           </nav>
 
-          <div className={home.header__auth}>
-            {user.id ? (
-              <div>
-                <Button
-                  tag="a"
-                  href="/dashboard/profile"
-                  color="landing-primary"
-                  className={home["rounded-button"]}
-                >
-                  {user.firstName + " " + user.lastName}
-                </Button>
-              </div>
-            ) : (
-              <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
-                <li className={home.navbar__item}>
-                  <Link to="/login">ورود</Link>
-                </li>
-                <li className={home.header__auth__register}>
-                  <Button
-                    tag="a"
-                    href="/register"
-                    color="landing-primary"
-                    className={home["rounded-button"]}
+          {!HasRemoveAuthButton && (
+            <div className={home.header__auth}>
+              {id && firstTierVerified ? (
+                <div>
+                  <Link
+                    to="/dashboard/profile"
+                    className={`btn btn-landing-primary ${home["rounded-button"]}`}
                   >
-                    ثبت نام
-                  </Button>
-                </li>
-              </ul>
-            )}
-          </div>
-          <div className={home.header__hamburger}>
+                    {firstName + " " + lastName}
+                  </Link>
+                </div>
+              ) : (
+                <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
+                  <li className={home.navbar__item}>
+                    <Link to="/login">ورود</Link>
+                  </li>
+                  <li className={home.header__auth__register}>
+                    <Link
+                      to="/register"
+                      className={`btn btn-landing-primary ${home["rounded-button"]}`}
+                    >
+                      ثبت نام
+                    </Link>
+                  </li>
+                </ul>
+              )}
+            </div>
+          )}
+          <div
+            className={`${home.header__hamburger} ${disableBanner && home["white-hamburger"]}`}
+          >
             {/* <button type="button" onclick="respMenu.open()"> */}
             <button type="button" onClick={() => setOpenOverlayMenu(true)}>
               <span className="icon">
@@ -179,16 +184,15 @@ const Header = ({ disableBanner = false }: Props) => {
             <div className={home.header__intro}>
               <h1>آرسونیکس، همراه ارز دیجیتال شما</h1>
               <p>
-              خريد و فروش ارزديجيتال به آساني
+                ارز دیجیتال، تومان یا فیات دیجیتال؛ بدون محدودیت، به سرعت معامله
+                کنید
               </p>
-              <Button
-                tag="a"
-                href={user.id ? "/dashboard" : "/register"}
-                color="landing-primary"
-                className={home["rounded-button"]}
+              <Link
+                to={id && firstTierVerified ? "/dashboard" : "/register"}
+                className={`btn btn-landing-primary ${home["rounded-button"]}`}
               >
                 با آرسونیکس شروع کنید
-              </Button>
+              </Link>
             </div>
             <div className={`${home["img_top_left"]} position-absolute `}>
               <div className={home.i_t_l_img}></div>

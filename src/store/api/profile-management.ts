@@ -1,7 +1,6 @@
 import {
   BankAccountsResponse,
   BanksResponse,
-  BanksRequest,
   FormBankAccountRequest,
   VerificationResponse,
 } from "types/profile";
@@ -16,6 +15,7 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: `verifications`,
         };
       },
+      providesTags: ["verifications"],
     }),
     uploadDoc: builder.mutation<any, any>({
       query({ docType, fileName, file }) {
@@ -38,6 +38,7 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: "verifications/initiate-second-tier",
         };
       },
+      invalidatesTags: ["verifications"],
     }),
     initialInternational: builder.mutation<any, void>({
       query() {
@@ -46,15 +47,22 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: "verifications/initiate-international-services",
         };
       },
+      invalidatesTags: ["verifications"],
     }),
-    banks: builder.query<BanksResponse[], BanksRequest>({
-      query({ filters }) {
+    banks: builder.query<BanksResponse[], any>({
+      query(params) {
         return {
           method: "GET",
           url: "/banks",
-          params: {
-            filter: filters,
-          },
+          params: params,
+        };
+      },
+    }),
+    getBankLogo: builder.query<File, string>({
+      query(id) {
+        return {
+          method: "GET",
+          url: `/banks/logo/${id}`,
         };
       },
     }),
@@ -91,6 +99,33 @@ export const profileManagement = enhancedApi.injectEndpoints({
       },
       invalidatesTags: ["bank-accounts"],
     }),
+    getDebitAccount: builder.query<any, any>({
+      query() {
+        return {
+          method: "GET",
+          url: "/bank-accounts/debit-account",
+        };
+      },
+      providesTags: ["debit-accounts"],
+    }),
+    debitSubscription: builder.mutation<{ url: string }, string>({
+      query(bankId) {
+        return {
+          method: "PATCH",
+          url: `/bank-accounts/request-debit-subscription/${bankId}`,
+        };
+      },
+      invalidatesTags: ["debit-accounts", "wallets"],
+    }),
+    disconnectDebit: builder.mutation<{ url: string }, string>({
+      query(bankId) {
+        return {
+          method: "PATCH",
+          url: `/bank-accounts/remove-debit-subscription/${bankId}`,
+        };
+      },
+      invalidatesTags: ["debit-accounts"],
+    }),
   }),
 });
 
@@ -99,8 +134,12 @@ export const {
   useInitialVerificationMutation,
   useInitialInternationalMutation,
   useBanksQuery,
+  useGetBankLogoQuery,
   useBankAccountsQuery,
   useCreateBankAccountMutation,
   useDeleteBankAccountMutation,
   useGetVerificationsQuery,
+  useGetDebitAccountQuery,
+  useDebitSubscriptionMutation,
+  useDisconnectDebitMutation,
 } = profileManagement;

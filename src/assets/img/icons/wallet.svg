@@ -1,6 +1,1 @@
-<svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M6.74766 1H15.3911C18.2892 1 20.6388 3.34951 20.6388 6.24766V13.4247C20.6388 16.3229 18.2892 18.6724 15.3911 18.6724H6.74766C3.84951 18.6724 1.5 16.3229 1.5 13.4247V6.24766C1.5 3.34951 3.84951 1 6.74766 1Z" stroke="#03041B" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round"/>
-  <path d="M20.6389 12.3958H16.5906C15.1042 12.3949 13.8993 11.191 13.8984 9.70452C13.8984 8.21807 15.1042 7.01416 16.5906 7.01324H20.6389" stroke="#03041B" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round"/>
-  <path d="M17.0486 9.64288H16.7369" stroke="#03041B" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round"/>
-  <path d="M6.03558 5.53814H11.4345" stroke="#03041B" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2024 Fonticons, Inc. --><path d="M80 32C35.8 32 0 67.8 0 112V400c0 44.2 35.8 80 80 80H432c44.2 0 80-35.8 80-80V176c0-44.2-35.8-80-80-80H112c-8.8 0-16 7.2-16 16s7.2 16 16 16H432c26.5 0 48 21.5 48 48V400c0 26.5-21.5 48-48 48H80c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48H464c8.8 0 16-7.2 16-16s-7.2-16-16-16H80zM384 312a24 24 0 1 0 0-48 24 24 0 1 0 0 48z"/></svg>

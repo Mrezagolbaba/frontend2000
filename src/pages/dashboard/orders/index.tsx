@@ -1,26 +1,56 @@
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
-import { useAppSelector } from "store/hooks";
-import { convertTextSingle, tomanShow } from "helpers";
-
+import { coinShow, convertTextSingle, lirShow, tomanShow } from "helpers";
+import Deposit from "assets/img/icons/depositIcon.svg";
 import moment from "jalali-moment";
 import { useCurrencySwapQuery } from "store/api/exchange-management";
+import SquareInfo from "components/Icons/SquareInfo";
+import { useNavigate } from "react-router-dom";
 
 const History = () => {
+  const navigate = useNavigate();
   const { data, isLoading } = useCurrencySwapQuery({
     sort: "createdAt,DESC",
     join: "transactions",
   });
+
+  const renderFee = (fee, transactions) => {
+    const targetTransAction = transactions.find((t) => t.currencyCode === fee);
+    switch (fee) {
+      case "USDT":
+        return coinShow(targetTransAction?.fee, "USDT");
+      case "TRY":
+        return lirShow({ value: targetTransAction?.fee, currency: "TRY" });
+      default:
+        return tomanShow({
+          value: targetTransAction?.fee,
+          currency: "IRR",
+        });
+    }
+  };
+
+  const renderAmount = (currency, amount) => {
+    switch (currency) {
+      case "USDT":
+        return coinShow(amount, "USDT");
+      case "TRY":
+        return lirShow({ value: amount, currency: "TRY" });
+      default:
+        return tomanShow({
+          value: amount,
+          currency: "IRR",
+        });
+    }
+  };
   return (
     <Card className="h-100">
       <CardHeader className="d-flex flex-row justify-content-between align-items-center">
         <CardTitle tag="h5"> سفارشات من </CardTitle>
       </CardHeader>
       <CardBody>
-      <div className="table-responsive">
-            <table
-              className={`table table-borderless ${data?.length === 0 ? "table-modern" : "table-striped"}`}
-            >
-              {data?.length > 0 && (
+        <div className="table-responsive">
+          <table className="table table-borderless table-striped">
+            {data?.length > 0 ? (
+              <>
                 <thead>
                   <tr>
                     <th
@@ -28,21 +58,35 @@ const History = () => {
                       style={{ color: "#03041b66" }}
                       className="text-center"
                     >
-                      بازار
+                      بازار مبدا
                     </th>
                     <th
                       scope="col"
                       style={{ color: "#03041b66" }}
                       className="text-center"
                     >
-                      مقدار
+                      بازار مقصد
                     </th>
                     <th
                       scope="col"
                       style={{ color: "#03041b66" }}
                       className="text-center"
                     >
-                      مقدار دریافتی
+                      پرداخت شده
+                    </th>
+                    <th
+                      scope="col"
+                      style={{ color: "#03041b66" }}
+                      className="text-center"
+                    >
+                      کارمزد معامله
+                    </th>
+                    <th
+                      scope="col"
+                      style={{ color: "#03041b66" }}
+                      className="text-center"
+                    >
+                      دریافت شده
                     </th>
                     <th
                       scope="col"
@@ -51,121 +95,141 @@ const History = () => {
                     >
                       تاریخ
                     </th>
+                    <th
+                      scope="col"
+                      style={{ color: "#03041b66" }}
+                      className="text-center"
+                    >
+                      جزییات
+                    </th>
                   </tr>
                 </thead>
-              )}
-              {isLoading ? (
-                <tbody>
-                  <tr>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                    <td className="placeholder-glow">
-                      <div className="placeholder col-12 rounded" />
-                    </td>
-                  </tr>
-                </tbody>
-              ) : (
-                <tbody>
-                  {data?.length > 0 &&
-                    data?.map((data, index) => (
+                {isLoading ? (
+                  <tbody>
+                    <tr>
+                      <td className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                      <td className="placeholder-glow">
+                        <div className="placeholder col-12 rounded" />
+                      </td>
+                    </tr>
+                  </tbody>
+                ) : (
+                  <tbody>
+                    {data?.map((data, index) => (
                       <tr key={index}>
                         <td className="text-center">
                           <span className="text-success">
-                            {convertTextSingle(data.destinationCurrencyCode)}
-                          </span>{" "}
-                          -{" "}
-                          <span className="text-danger">
                             {convertTextSingle(data?.sourceCurrencyCode)}
                           </span>
                         </td>
                         <td className="text-center">
-                          <span style={{ fontSize: "10px" }}>
-                            {data.sourceCurrencyCode === "IRR"
-                              ? "TMN"
-                              : data.sourceCurrencyCode}
-                          </span>{" "}
-                          {data.sourceCurrencyCode === "IRR"
-                            ? tomanShow({ value: data?.sourceAmount })
-                            : data?.sourceAmount}
+                          <span className="text-danger">
+                            {convertTextSingle(data?.destinationCurrencyCode)}
+                          </span>
                         </td>
                         <td className="text-center">
-                          <span style={{ fontSize: "10px" }}>
-                            {data.destinationCurrencyCode === "IRR"
-                              ? "TMN"
-                              : data.destinationCurrencyCode}
-                          </span>{" "}
-                          {data.destinationCurrencyCode === "IRR"
-                            ? tomanShow({ value: data?.destinationAmount })
-                            : data?.destinationAmount}
+                          {renderAmount(
+                            data?.sourceCurrencyCode,
+                            data?.sourceAmount,
+                          )}
+                        </td>
+                        <td className="text-center">
+                          {renderFee(data?.feeCurrencyCode, data?.transactions)}
+                        </td>
+                        <td className="text-center">
+                          {renderAmount(
+                            data?.destinationCurrencyCode,
+                            data?.destinationAmount,
+                          )}
                         </td>
                         <td className="text-center">
                           <span className="text-center">
                             {moment(data?.createdAt)
                               .locale("fa")
-                              .format("DD MMMM YYYY")}
+                              .format("hh:mm , YYYY/MM/DD")}
                           </span>
+                        </td>
+                        <td className="text-center">
+                          <SquareInfo
+                            onClick={() =>
+                              navigate(`/dashboard/invoice/${data?.id}`)
+                            }
+                            width={24}
+                            height={24}
+                            style={{
+                              cursor: "pointer",
+                            }}
+                          />
                         </td>
                       </tr>
                     ))}
-                  {data?.length === 0 && (
-                    <tr>
-                      <td colSpan={4} className="text-center bg-white">
-                        <p>
-                          شما تا بحال هیچ معامله‌ای در آرسونیکس انجام نداده‌اید
-                          اولین معامله خود را با آرسونیکس تجربه کنید.
-                        </p>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              )}
-            </table>
-          </div>
-      
+                  </tbody>
+                )}
+              </>
+            ) : (
+              <tr>
+                <td colSpan={4} className="text-center">
+                  <img
+                    src={Deposit}
+                    style={{
+                      height: "50px",
+                      width: "50px",
+                      marginBottom: "10px",
+                    }}
+                  />
+                  <div className="text-dark">
+                    اولین معامله خود را با آرسونیکس تجربه کنید
+                  </div>
+                </td>
+              </tr>
+            )}
+          </table>
+        </div>
       </CardBody>
     </Card>
   );
