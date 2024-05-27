@@ -12,7 +12,6 @@ import {
 import {
   useCreateCurrencySwapMutation,
   useLazyRatesQuery,
-  useWalletsQuery,
 } from "store/api/exchange-management";
 import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
 import Notify from "components/Notify";
@@ -26,6 +25,7 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { convertText, persianToEnglishNumbers } from "helpers";
 import { currencyOptions } from "components/Input/CurrencyInput/SelectCurrency/constant";
 import { isEmpty } from "lodash";
+import { useWalletsQuery } from "store/api/wallet-management";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
 import buy from "assets/scss/dashboard/buy-sell.module.scss";
