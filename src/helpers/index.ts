@@ -390,7 +390,6 @@ export const normalizeAmount = (
       intPart = intPart.concat(slice, insertChar);
     else intPart = intPart.concat(slice);
   }
-  console.log(intPart, "initPart");
 
   switch (currency) {
     case "USDT": {
@@ -410,42 +409,6 @@ export const normalizeAmount = (
     }
   }
 };
-
-// export const normalizeAmount = (
-//   amount: string | number,
-//   code: "IRR" | "TRY" | "USDT",
-//   isShowCurrency?: boolean,
-// ) => {
-//   const value = roundingPrice("17923.1696387180517353277497913891124", 6, true);
-//   console.log(value);
-
-//   if (Number.isNaN(value) || !value) {
-//     return "0";
-//   }
-//   switch (code) {
-//     case "USDT": {
-//       const normalizeValue = value.toPrecision(6);
-//       if (isShowCurrency)
-//         return `${normalizeValue.toLocaleString()} ${convertText("USDT", "enToFa")}`;
-//       else return normalizeValue.toLocaleString();
-//     }
-//     case "TRY": {
-//       const normalizeValue = value.toPrecision(2);
-//       console.log(`${value} ${convertText("TRY", "enToFa")}`, "value");
-//       if (isShowCurrency)
-//         return `${normalizeValue.toLocaleString()} ${convertText("TRY", "enToFa")}`;
-//       else return normalizeValue.toLocaleString();
-//     }
-//     case "IRR": {
-//       const normalizeValue = Math.trunc(value / 10);
-//       if (isShowCurrency)
-//         return `${normalizeValue.toLocaleString()} ${convertText("IRR", "enToFa")}`;
-//       else return normalizeValue.toLocaleString();
-//     }
-//     default:
-//       return "0";
-//   }
-// };
 
 export const getEncryptedObject = (data: string) => {
   try {
