@@ -38,9 +38,11 @@ export default function USDTWallet({
         </div>
         <div className={wallet.wallet__item__price}>
           {balance}
-          <span className={wallet["available-balance"]}>
-            در دسترس: {availableBalance}
-          </span>
+          {availableBalance !== balance && (
+            <span className={wallet["available-balance"]}>
+              در دسترس: {availableBalance}
+            </span>
+          )}
         </div>
         <div className={wallet.wallet__item__actions}>
           <a onClick={() => setIsOpenWithdraw(true)}>برداشت</a>
