@@ -36,7 +36,7 @@ export const authApi = enhancedApi.injectEndpoints({
           data,
         };
       },
-      invalidatesTags: ["otp"]
+      // invalidatesTags: ["otp"]
     }),
     resendOtp: builder.mutation<void, ResendOTPRequest>({
       query(data) {

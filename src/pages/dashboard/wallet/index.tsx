@@ -13,8 +13,7 @@ export default function Wallet() {
 
   const renderBalance = (code, field) => {
     const wallet = data.find((w) => w.currencyCode === code);
-
-    return normalizeAmount(wallet?.[field] || "0", code, false);
+    return normalizeAmount(wallet?.[field], code, false);
   };
 
   return (
@@ -72,8 +71,12 @@ export default function Wallet() {
                   <Col xs={12} md={6}>
                     <TRYWallet
                       balance={renderBalance("TRY", "balance")}
+                      availableBalance={renderBalance(
+                        "TRY",
+                        "availableBalance",
+                      )}
                       stock={
-                        data.find((w) => w.currencyCode === "TRY")?.balance ||
+                        data.find((w) => w.currencyCode === "TRY")?.availableBalance ||
                         "0"
                       }
                     />

@@ -10,10 +10,12 @@ import wallet from "assets/scss/dashboard/wallet.module.scss";
 
 interface Props {
   balance: string;
+  availableBalance: string;
   stock: string;
 }
 
-export default function TRYWallet({ balance, stock }: Props) {
+export default function TRYWallet({ balance, stock, availableBalance }: Props) {
+
   // ==============|| States ||================= //
   const [isOpenDeposit, setIsOpenDeposit] = useState(false);
   const [isOpenWithdraw, setIsOpenWithdraw] = useState(false);
@@ -32,7 +34,14 @@ export default function TRYWallet({ balance, stock }: Props) {
             <span className={wallet.wallet__item__subtitle}>TL</span>
           </h6>
         </div>
-        <div className={wallet.wallet__item__price}>{balance}</div>
+        <div className={wallet.wallet__item__price}>
+          {balance}
+          {availableBalance !== balance && (
+            <span className={wallet["available-balance"]}>
+              در دسترس: {availableBalance}
+            </span>
+          )}
+        </div>
         <div className={wallet.wallet__item__actions}>
           <a onClick={() => setIsOpenWithdraw(true)}>برداشت</a>
           <Button

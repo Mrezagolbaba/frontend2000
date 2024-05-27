@@ -79,10 +79,6 @@ const WithdrawOTP = ({
 
   return (
     <div className={otp["otp-container"]}>
-      <div className={otp["otp-header"]}>
-        <h5>{title}</h5>
-        <IoIosClose color="#c6d2d9" size={40} onClick={() => onClose()} />
-      </div>
       <div className={otp["otp-content"]}>
         <div className={otp["otp-title"]}>{renderCaption()}</div>
         <OtpInput
