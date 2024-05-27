@@ -370,14 +370,15 @@ export const coinShow = (value: string, currency?: CurrencyCode): string => {
 };
 
 export const normalizeAmount = (
-  amount: string,
+  a: string,
   currency: "IRR" | "TRY" | "USDT",
   isShowCurrency: boolean,
 ) => {
+  const amount = a? a.toString() : "0";
   const everChar = 3;
   const insertChar = ",";
   const indexDot =
-    amount?.indexOf(".") > 0 ? amount.indexOf(".") : amount.length;
+    amount?.indexOf(".") > 0 ? amount.indexOf(".") : amount?.length;
   let newAmount = "",
     intPart = "";
   if (currency === "IRR") {
