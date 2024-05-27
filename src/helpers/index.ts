@@ -370,35 +370,44 @@ export const coinShow = (value: string, currency?: CurrencyCode): string => {
 };
 
 export const normalizeAmount = (
-  amount: string | number,
-  code: "IRR" | "TRY" | "USDT",
-  isShowCurrency?: boolean,
+  amount: string,
+  currency: "IRR" | "TRY" | "USDT",
+  isShowCurrency: boolean,
 ) => {
-  const value = Number(amount);
-  if (Number.isNaN(value) || !value) {
-    return "0";
+  const everChar = 3;
+  const insertChar = ",";
+  const indexDot =
+    amount?.indexOf(".") > 0 ? amount.indexOf(".") : amount.length;
+  let newAmount = "",
+    intPart = "";
+  if (currency === "IRR") {
+    newAmount = amount.substring(0, indexDot - 1);
+  } else newAmount = amount.substring(0, indexDot);
+
+  for (let i = 0; i < newAmount.length; i += everChar) {
+    const slice = newAmount.substring(i, i + everChar);
+    if (slice.length === everChar && newAmount.length !== everChar + i)
+      intPart = intPart.concat(slice, insertChar);
+    else intPart = intPart.concat(slice);
   }
-  switch (code) {
+  console.log(intPart, "initPart");
+
+  switch (currency) {
     case "USDT": {
-      const normalizeValue = value.toPrecision(6);
-      if (isShowCurrency)
-        return `${Number(normalizeValue).toLocaleString("IRR")} ${convertText("USDT", "enToFa")}`;
-      else return Number(normalizeValue).toLocaleString("IRR");
+      const decimalPart = amount.substring(indexDot, indexDot + 7);
+      if (isShowCurrency) return `${intPart + decimalPart} تتر`;
+      else return intPart + decimalPart;
     }
     case "TRY": {
-      const normalizeValue = value.toPrecision(2);
-      if (isShowCurrency)
-        return `${Number(normalizeValue).toLocaleString("IRR")} ${convertText("TRY", "enToFa")}`;
-      else return Number(normalizeValue).toLocaleString("IRR");
+      const decimalPart = amount.substring(indexDot, indexDot + 3);
+      if (isShowCurrency) return `${intPart + decimalPart} لیر`;
+      else return intPart + decimalPart;
     }
-    case "IRR": {
-      const normalizeValue = Math.trunc(value / 10);
-      if (isShowCurrency)
-        return `${Number(normalizeValue).toLocaleString("IRR")} ${convertText("IRR", "enToFa")}`;
-      else return Number(normalizeValue).toLocaleString("IRR");
+    case "IRR":
+    default: {
+      if (isShowCurrency) return `${intPart} تومان`;
+      else return intPart;
     }
-    default:
-      return "0";
   }
 };
 
