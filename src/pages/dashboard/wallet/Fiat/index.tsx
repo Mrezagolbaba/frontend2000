@@ -15,6 +15,7 @@ interface Props {
 }
 
 export default function TRYWallet({ balance, stock, availableBalance }: Props) {
+
   // ==============|| States ||================= //
   const [isOpenDeposit, setIsOpenDeposit] = useState(false);
   const [isOpenWithdraw, setIsOpenWithdraw] = useState(false);

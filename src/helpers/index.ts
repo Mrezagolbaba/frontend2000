@@ -370,81 +370,37 @@ export const coinShow = (value: string, currency?: CurrencyCode): string => {
 };
 
 export const normalizeAmount = (
-  amount: string,
-  currency: "IRR" | "TRY" | "USDT",
-  isShowCurrency: boolean,
+  amount: string | number,
+  code: "IRR" | "TRY" | "USDT",
+  isShowCurrency?: boolean,
 ) => {
-  const everChar = 3;
-  const insertChar = ",";
-  const indexDot =
-    amount?.indexOf(".") > 0 ? amount.indexOf(".") : amount.length;
-  let newAmount = "",
-    intPart = "";
-  if (currency === "IRR") {
-    newAmount = amount.substring(0, indexDot - 1);
-  } else newAmount = amount.substring(0, indexDot);
-
-  for (let i = 0; i < newAmount.length; i += everChar) {
-    const slice = newAmount.substring(i, i + everChar);
-    if (slice.length === everChar && newAmount.length !== everChar + i)
-      intPart = intPart.concat(slice, insertChar);
-    else intPart = intPart.concat(slice);
+  const value = Number(amount);
+  if (Number.isNaN(value) || !value) {
+    return "0";
   }
-
-  switch (currency) {
+  switch (code) {
     case "USDT": {
-      const decimalPart = amount.substring(indexDot - 1, indexDot + 7);
-      if (isShowCurrency) return `${intPart + decimalPart} تتر`;
-      else return intPart + decimalPart;
+      const normalizeValue = value.toPrecision(6);
+      if (isShowCurrency)
+        return `${Number(normalizeValue).toLocaleString("IRR")} ${convertText("USDT", "enToFa")}`;
+      else return Number(normalizeValue).toLocaleString("IRR");
     }
     case "TRY": {
-      const decimalPart = amount.substring(indexDot - 1, indexDot + 3);
-      if (isShowCurrency) return `${intPart + decimalPart} لیر`;
-      else return intPart + decimalPart;
+      const normalizeValue = value.toPrecision(2);
+      if (isShowCurrency)
+        return `${Number(normalizeValue).toLocaleString("IRR")} ${convertText("TRY", "enToFa")}`;
+      else return Number(normalizeValue).toLocaleString("IRR");
     }
-    case "IRR":
-    default: {
-      if (isShowCurrency) return `${intPart} تومان`;
-      else return intPart;
+    case "IRR": {
+      const normalizeValue = Math.trunc(value / 10);
+      if (isShowCurrency)
+        return `${Number(normalizeValue).toLocaleString("IRR")} ${convertText("IRR", "enToFa")}`;
+      else return Number(normalizeValue).toLocaleString("IRR");
     }
+    default:
+      return "0";
   }
 };
-
-// export const normalizeAmount = (
-//   amount: string | number,
-//   code: "IRR" | "TRY" | "USDT",
-//   isShowCurrency?: boolean,
-// ) => {
-//   const value = roundingPrice("17923.1696387180517353277497913891124", 6, true);
-//   console.log(value);
-
-//   if (Number.isNaN(value) || !value) {
-//     return "0";
-//   }
-//   switch (code) {
-//     case "USDT": {
-//       const normalizeValue = value.toPrecision(6);
-//       if (isShowCurrency)
-//         return `${normalizeValue.toLocaleString()} ${convertText("USDT", "enToFa")}`;
-//       else return normalizeValue.toLocaleString();
-//     }
-//     case "TRY": {
-//       const normalizeValue = value.toPrecision(2);
-//       console.log(`${value} ${convertText("TRY", "enToFa")}`, "value");
-//       if (isShowCurrency)
-//         return `${normalizeValue.toLocaleString()} ${convertText("TRY", "enToFa")}`;
-//       else return normalizeValue.toLocaleString();
-//     }
-//     case "IRR": {
-//       const normalizeValue = Math.trunc(value / 10);
-//       if (isShowCurrency)
-//         return `${normalizeValue.toLocaleString()} ${convertText("IRR", "enToFa")}`;
-//       else return normalizeValue.toLocaleString();
-//     }
-//     default:
-//       return "0";
-//   }
-// };
 
 export const getEncryptedObject = (data: string) => {
   try {
