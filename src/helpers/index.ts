@@ -390,6 +390,7 @@ export const normalizeAmount = (
       intPart = intPart.concat(slice, insertChar);
     else intPart = intPart.concat(slice);
   }
+  console.log(intPart, "initPart");
 
   switch (currency) {
     case "USDT": {

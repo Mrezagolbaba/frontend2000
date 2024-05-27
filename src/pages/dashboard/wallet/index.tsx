@@ -13,7 +13,6 @@ export default function Wallet() {
 
   const renderBalance = (code, field) => {
     const wallet = data.find((w) => w.currencyCode === code);
-
     return normalizeAmount(wallet?.[field], code, false);
   };
 
