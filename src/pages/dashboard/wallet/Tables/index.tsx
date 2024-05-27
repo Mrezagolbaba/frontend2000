@@ -9,7 +9,6 @@ import {
   NavLink,
   TabContent,
   TabPane,
-  Table,
 } from "reactstrap";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
@@ -30,113 +29,101 @@ export default function Tables() {
   };
   return (
     <Card>
-      <CardBody>
-        <div className={wallet.transactions}>
-          <Nav className={wallet.tabs} id="transactions">
+      <CardHeader>
+        <CardTitle tag="h5">تراکنش های اخیر</CardTitle>
+      </CardHeader>
+      <CardBody className={wallet["data-tab-container"]}>
+        <Nav className={wallet["data-tab"]}>
             <NavItem>
               <NavLink
-                className={`${wallet.tabs__item} ${
+              className={`${wallet["data-tab__item"]} ${
                   activeTab === "1" ? wallet.active : ""
                 }`}
-                id="tab1"
                 tag="button"
-                onClick={() => {
-                  setActiveTab("1");
-                }}
+              onClick={() => clickTab("1")}
               >
-                واریز تومان
+              واریز تومانی
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink
-                className={`${wallet.tabs__item} ${
+              className={`${wallet["data-tab__item"]} ${
                   activeTab === "2" ? wallet.active : ""
                 }`}
-                id="tab4"
                 tag="button"
-                onClick={() => {
-                  setActiveTab("2");
-                }}
+              // disabled={!secondTierVerified}
+              onClick={() => clickTab("2")}
               >
-                برداشت تومان
+              برداشت تومانی
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink
-                className={`${wallet.tabs__item} ${
+              className={`${wallet["data-tab__item"]} ${
                   activeTab === "3" ? wallet.active : ""
                 }`}
-                id="tab2"
                 tag="button"
-                onClick={() => {
-                  setActiveTab("3");
-                }}
+              // disabled={!secondTierVerified}
+              onClick={() => clickTab("3")}
               >
-                واریز ارز دیجیتال
+              واریز فیات دیجیتال
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink
-                className={`${wallet.tabs__item} ${
+              className={`${wallet["data-tab__item"]} ${
                   activeTab === "4" ? wallet.active : ""
                 }`}
-                id="tab3"
                 tag="button"
-                onClick={() => {
-                  setActiveTab("4");
-                }}
+              // disabled={!secondTierVerified}
+              onClick={() => clickTab("4")}
               >
-                برداشت ارز دیجیتال
+              برداشت فیات دیجیتال
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink
-                className={`${wallet.tabs__item} ${
+              className={`${wallet["data-tab__item"]} ${
                   activeTab === "5" ? wallet.active : ""
                 }`}
-                id="tab2"
                 tag="button"
-                onClick={() => {
-                  setActiveTab("5");
-                }}
+              // disabled={!secondTierVerified}
+              onClick={() => clickTab("5")}
               >
-                واریز فیات دیجیتال
+              واریز ارز دیجیتال
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink
-                className={`${wallet.tabs__item} ${
+              className={`${wallet["data-tab__item"]} ${
                   activeTab === "6" ? wallet.active : ""
                 }`}
-                id="tab4"
                 tag="button"
-                onClick={() => {
-                  setActiveTab("6");
-                }}
+              // disabled={!secondTierVerified}
+              onClick={() => clickTab("6")}
               >
-                برداشت فیات دیجیتال
+              برداشت ارز دیجیتال
               </NavLink>
             </NavItem>
           </Nav>
-        </div>
-        <TabContent activeTab={activeTab} className="mt-3">
+        <TabContent activeTab={activeTab}>
           <TabPane tabId="1">
             <DepositsTable type="IRR" />
           </TabPane>
           <TabPane tabId="2">
-            <DepositsTable type="USDT" />
+            <WithdrawsTable type="IRR" />
           </TabPane>
           <TabPane tabId="3">
             <DepositsTable type="TRY" />
           </TabPane>
           <TabPane tabId="4">
-            <WithdrawsTable type="IRR" />
+            <WithdrawsTable type="TRY" />
           </TabPane>
           <TabPane tabId="5">
-            <WithdrawsTable type="USDT" />
+            <DepositsTable type="USDT" />
           </TabPane>
           <TabPane tabId="6">
-            <WithdrawsTable type="TRY" />
+            <WithdrawsTable type="USDT" />
           </TabPane>
         </TabContent>
       </CardBody>

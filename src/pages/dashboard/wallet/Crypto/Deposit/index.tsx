@@ -1,3 +1,9 @@
+import { AlertInfo, AlertWarning } from "components/AlertWidget";
+import * as Yup from "yup";
+import tron from "assets/img/network/tron.svg";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import { Controller, useForm as useRHF } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Button,
   Col,
@@ -8,20 +14,14 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
+import { useEffect, useState } from "react";
+import CopyInput from "components/Input/CopyInput";
 import {
   useCancelTransactionMutation,
   useDepositMutation,
   useLazyTransactionQuery,
 } from "store/api/wallet-management";
-import * as Yup from "yup";
-import CopyInput from "components/Input/CopyInput";
 import CountdownTimer from "components/Input/CountDownInput";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
-import tron from "assets/img/network/tron.svg";
-import { AlertInfo, AlertWarning } from "components/AlertWidget";
-import { Controller, useForm as useRHF } from "react-hook-form";
-import { useEffect, useState } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 
@@ -43,7 +43,8 @@ const DepositCrypto = ({ onClose, currency }: Props) => {
     endTime: "",
   });
 
-  const [depositRequest, { data, isLoading, isSuccess }] = useDepositMutation();
+  const [depositRequest, { data, isLoading: LoadingDeposit, isSuccess }] =
+    useDepositMutation();
 
   const [
     getTransAction,
@@ -149,7 +150,7 @@ const DepositCrypto = ({ onClose, currency }: Props) => {
   }, [data, isSuccess]);
 
   const renderUI = () => {
-    if (loadingTransaction || isLoading) {
+    if (loadingTransaction || LoadingDeposit) {
       return (
         <Row className="placeholder-glow">
           <Col xs={12} lg={6}>
@@ -247,10 +248,10 @@ const DepositCrypto = ({ onClose, currency }: Props) => {
                   color="primary"
                   outline
                   type="submit"
-                  disabled={isLoading}
+                  disabled={LoadingDeposit}
                   className="px-5 py-3"
                 >
-                  {isLoading ? <Spinner /> : "ساخت کیف پول"}
+                  {LoadingDeposit ? <Spinner /> : "ساخت کیف پول"}
                 </Button>
               </div>
             </Row>

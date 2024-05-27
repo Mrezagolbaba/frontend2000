@@ -1,49 +1,63 @@
 import { useState } from "react";
-import { Button } from "reactstrap";
-import irIcon from "assets/img/icons/flag-iran.png";
-
-import wallet from "assets/scss/dashboard/wallet.module.scss";
+import { Button, Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 import Dialog from "components/Dialog";
 import Deposit from "./Deposit";
 import Withdraw from "./Withdraw";
+import { tomanShow } from "helpers";
+
+import wallet from "assets/scss/dashboard/wallet.module.scss";
 
 type Props = {
-  balance: string;
-  stock: string
+  stock: any;
+  isLoading: boolean;
 };
 
-export default function IRRWallet({ balance,stock }: Props) {
+export default function RialCard({ stock, isLoading }: Props) {
   const [isOpenDepositForm, setIsOpenDepositForm] = useState<boolean>(false);
   const [isOpenWithdraw, setIsOpenWithdraw] = useState<boolean>(false);
 
   return (
-    <>
-      <div className={wallet.wallet__item}>
-        <div className={wallet.wallet__item__icon}>
-          <img src={irIcon} alt="irt" />
-          <h6 className={wallet.wallet__item__title}>
-            تومان
-            <span className={wallet.wallet__item__subtitle}>TMN</span>
-          </h6>
+    <Card className="mb-4">
+      <CardHeader>
+        <CardTitle tag="h5">موجودی تومانی</CardTitle>
+      </CardHeader>
+      <CardBody>
+        <div className={wallet["balance"]}>
+          <div className={wallet["balance__value"]}>
+            {isLoading ? (
+              <div
+                className="text-center placeholder-glow"
+                style={{ width: "100px" }}
+              >
+                <div className="placeholder col-12 rounded py-1 " />
         </div>
-        <div className={wallet.wallet__item__price}>{balance}</div>
-        <div className={wallet.wallet__item__actions}>
-          <a
-            onClick={() => {
-              setIsOpenWithdraw(true);
-            }}
+            ) : (
+              <strong className="d-inline-block">
+                {tomanShow({ value: stock.availableBalance })}
+                <small>تومان</small>
+              </strong>
+            )}
+          </div>
+          <div className={wallet["balance__action"]}>
+            <Button
+              className={wallet["btn"]}
+              type="button"
+              color="primary"
+              onClick={() => setIsOpenDepositForm(true)}
           >
-            برداشت
-          </a>
+              واریز تومان
+            </Button>
           <Button
+              className={wallet["btn"]}
+              onClick={() => setIsOpenWithdraw(true)}
             color="primary"
             outline
-            onClick={() => setIsOpenDepositForm(true)}
           >
-            واریز
+              برداشت تومان
           </Button>
         </div>
       </div>
+      </CardBody>
       <Dialog
         title="واریز تومان"
         isOpen={isOpenDepositForm}
@@ -58,8 +72,11 @@ export default function IRRWallet({ balance,stock }: Props) {
         onClose={() => setIsOpenWithdraw(false)}
         hasCloseButton
       >
-        <Withdraw stock={stock} onClose={() => setIsOpenWithdraw(false)} />
+        <Withdraw
+          stock={stock?.availableBalance}
+          onClose={() => setIsOpenWithdraw(false)}
+        />
       </Dialog>
-    </>
+    </Card>
   );
 }
