@@ -390,15 +390,16 @@ export const normalizeAmount = (
       intPart = intPart.concat(slice, insertChar);
     else intPart = intPart.concat(slice);
   }
+  console.log(intPart, "initPart");
 
   switch (currency) {
     case "USDT": {
-      const decimalPart = amount.substring(indexDot - 1, indexDot + 7);
+      const decimalPart = amount.substring(indexDot, indexDot + 7);
       if (isShowCurrency) return `${intPart + decimalPart} تتر`;
       else return intPart + decimalPart;
     }
     case "TRY": {
-      const decimalPart = amount.substring(indexDot - 1, indexDot + 3);
+      const decimalPart = amount.substring(indexDot, indexDot + 3);
       if (isShowCurrency) return `${intPart + decimalPart} لیر`;
       else return intPart + decimalPart;
     }
