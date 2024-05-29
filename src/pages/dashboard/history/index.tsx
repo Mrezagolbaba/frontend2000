@@ -1,88 +1,166 @@
-import ATable from "components/ATable";
-import moment from "jalali-moment";
-import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
-import { convertText, normalizeAmount } from "helpers";
-import { useMemo } from "react";
-import { useTransactionsQuery } from "store/api/wallet-management";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Nav,
+  NavItem,
+  NavLink,
+  TabContent,
+  TabPane,
+} from "reactstrap";
+import FiatDeposit from "./FiatDeposit";
+import FiatWithdraw from "./FiatWithdraw";
+import IRRDeposit from "./IRRDeposit";
+import IRRWithdraw from "./IRRWithdraw";
+import USDTDeposit from "./USDTDeposit";
+import USDTWithdraw from "./USDTWithdraw";
+import { TransactionStatus } from "types/wallet";
+import { useState } from "react";
 
-const Orders = () => {
-  // ==============|| Hooks ||================= //
-  const { data, isLoading, isSuccess, isFetching } = useTransactionsQuery({
-    sort: "createdAt,DESC",
-    filter: [
-      `currencyCode||eq||USDT`,
-      "status||$ne||DRAFT",
-      "status||$ne||EXPIRED",
-      "status||$ne||INITIATED",
-    ],
-    or: ["type||eq||DEPOSIT", "type||eq||WITHDRAW"],
-  });
+import wallet from "assets/scss/dashboard/wallet.module.scss";
 
-  // ==============|| Constants ||================= //
-  const columns = useMemo(
-    () => [
-      {
-        id: "0",
-        accessorKey: "type",
-        accessorFn: (row: any) =>
-          row?.type === "DEPOSIT" ? (
-            <span className="text-success">واریز</span>
-          ) : (
-            <span className="text-danger">برداشت</span>
-          ),
-        header: "نوع تراکنش",
-      },
-      {
-        id: "1",
-        accessorKey: "cryptoName",
-        accessorFn: (row) => convertText(row?.currencyCode, "enToFa"),
-        header: "نوع ارز",
-      },
-      {
-        id: "3",
-        accessorKey: "amount",
-        header: "مقدار",
-        accessorFn: (row: any) =>
-          normalizeAmount(row?.amount, row?.currencyCode, false),
-      },
-      {
-        id: "6",
-        accessorKey: "status",
-        header: "وضعیت",
-        accessorFn: (row: any) =>
-          row?.status === "SUCCESSFUL" ? (
-            <span className="text-success">موفق</span>
-          ) : (
-            <span className="text-danger">ناموفق</span>
-          ),
-      },
-      {
-        id: "3",
-        accessorKey: "createdAt",
-        header: "تاریخ",
-        accessorFn: (row: any) =>
-          moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
-      },
-    ],
-    [],
+export default function Tables() {
+  const [activeTab, setActiveTab] = useState<"1" | "2" | "3" | "4" | "5" | "6">(
+    "1",
   );
 
-   // ==============|| Render ||================= //
   return (
-    <section className="page page-orders">
-      <Card className="custom-card currencies-online-rates card-secondary">
-        <CardHeader className="d-flex flex-row justify-content-between align-items-center">
-          <CardTitle tag="h5">آخرین تراکنش ها</CardTitle>
-        </CardHeader>
-        <CardBody>
-          <ATable
-            data={isSuccess ? data : []}
-            isLoading={isLoading || isFetching}
-            columns={columns}
-          />
-        </CardBody>
-      </Card>
-    </section>
+    <Card>
+      <CardHeader className="d-flex flex-row justify-content-between align-items-center">
+        <CardTitle tag="h5">آخرین تراکنش ها</CardTitle>
+      </CardHeader>
+      <CardBody>
+        <div className={wallet.transactions}>
+          <Nav className={wallet.tabs} id="transactions">
+            <NavItem>
+              <NavLink
+                className={`${wallet.tabs__item} ${
+                  activeTab === "1" ? wallet.active : ""
+                }`}
+                id="tab1"
+                tag="button"
+                onClick={() => {
+                  setActiveTab("1");
+                }}
+              >
+                واریز تومان
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={`${wallet.tabs__item} ${
+                  activeTab === "2" ? wallet.active : ""
+                }`}
+                id="tab4"
+                tag="button"
+                onClick={() => {
+                  setActiveTab("2");
+                }}
+              >
+                برداشت تومان
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={`${wallet.tabs__item} ${
+                  activeTab === "3" ? wallet.active : ""
+                }`}
+                id="tab2"
+                tag="button"
+                onClick={() => {
+                  setActiveTab("3");
+                }}
+              >
+                واریز ارز دیجیتال
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={`${wallet.tabs__item} ${
+                  activeTab === "4" ? wallet.active : ""
+                }`}
+                id="tab3"
+                tag="button"
+                onClick={() => {
+                  setActiveTab("4");
+                }}
+              >
+                برداشت ارز دیجیتال
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={`${wallet.tabs__item} ${
+                  activeTab === "5" ? wallet.active : ""
+                }`}
+                id="tab2"
+                tag="button"
+                onClick={() => {
+                  setActiveTab("5");
+                }}
+              >
+                واریز فیات دیجیتال
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={`${wallet.tabs__item} ${
+                  activeTab === "6" ? wallet.active : ""
+                }`}
+                id="tab4"
+                tag="button"
+                onClick={() => {
+                  setActiveTab("6");
+                }}
+              >
+                برداشت فیات دیجیتال
+              </NavLink>
+            </NavItem>
+          </Nav>
+        </div>
+        <TabContent activeTab={activeTab} className="mt-3">
+          <TabPane tabId="1">
+            <IRRDeposit />
+          </TabPane>
+          <TabPane tabId="2">
+            <IRRWithdraw />
+          </TabPane>
+          <TabPane tabId="3">
+            <USDTDeposit />
+          </TabPane>
+          <TabPane tabId="4">
+            <USDTWithdraw />
+          </TabPane>
+          <TabPane tabId="5">
+            <FiatDeposit />
+          </TabPane>
+          <TabPane tabId="6">
+            <FiatWithdraw />
+          </TabPane>
+        </TabContent>
+      </CardBody>
+    </Card>
   );
+}
+
+export const StatusHandler = ({ status }: { status: TransactionStatus }) => {
+  switch (status) {
+    case "SUCCESSFUL":
+      return <span className="text-success"> موفق</span>;
+
+    case "FAILED":
+    case "CANCELED":
+    case "EXPIRED":
+      return <span className="text-danger">ناموفق</span>;
+
+    case "PROCESSING":
+    case "INITIATED":
+      return <span className="text-info">در حال پردازش</span>;
+    case "REFUND":
+      return <span className="text-warning"> عودت</span>;
+    case "DRAFT":
+    default:
+      return <span className="text-dark"> پیش نویس</span>;
+  }
 };
-export default Orders;
