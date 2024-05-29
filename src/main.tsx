@@ -13,7 +13,6 @@ import App from "./App.tsx";
 import { Provider } from "react-redux";
 import { persister, store } from "store/store.ts";
 import TagManager from "react-gtm-module";
-import "./sentry.ts"
 
 import "assets/scss/index.scss";
 
