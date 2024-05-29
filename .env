@@ -1,0 +1,1 @@
+VITE_BASE_URL=https://api.arsonex.com/v1/
