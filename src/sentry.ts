@@ -20,6 +20,7 @@ Sentry.init({
       matchRoutes,
     }),
     Sentry.replayIntegration(),
+    Sentry.browserTracingIntegration(),
   ],
 
   // Set tracesSampleRate to 1.0 to capture 100%
@@ -29,8 +30,8 @@ Sentry.init({
   // Set `tracePropagationTargets` to control for which URLs distributed tracing should be enabled
   tracePropagationTargets: [
     "localhost",
-    /^https:\/\/dev-api\.paydirham\.me\//,
-    /^https:\/\/staging-api\.paydirham\.me\//,
+    // /^https:\/\/dev-api\.paydirham\.me\//,
+    // /^https:\/\/staging-api\.paydirham\.me\//,
     /^https:\/\/api\.arsonex\.com\//,
   ],
   // Capture Replay for 10% of all sessions,

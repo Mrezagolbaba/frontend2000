@@ -146,14 +146,14 @@ export const StatusHandler = ({ status }: { status: TransactionStatus }) => {
 
     case "FAILED":
     case "CANCELED":
+    case "EXPIRED":
       return <span className="text-danger">ناموفق</span>;
 
     case "PROCESSING":
     case "INITIATED":
       return <span className="text-info">در حال پردازش</span>;
-
-    case "EXPIRED":
-      return <span className="text-muted">منقضی شده</span>;
+    case "REFUND":
+      return <span className="text-warning"> عودت</span>;
     case "DRAFT":
     default:
       return <span className="text-dark"> پیش نویس</span>;

@@ -23,12 +23,11 @@ import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import Notify from "components/Notify";
 import WithdrawOTP from "components/WithdrawOTP";
 import tron from "assets/img/network/tron.svg";
-import { AlertInfo, AlertSuccess, AlertWarning } from "components/AlertWidget";
+import { AlertInfo, AlertWarning } from "components/AlertWidget";
 import { Controller, useForm as useRHF } from "react-hook-form";
 import { normalizeAmount, persianToEnglishNumbers } from "helpers";
 import { useAppSelector } from "store/hooks";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
@@ -40,17 +39,16 @@ type CryptoFormType = {
 };
 
 const WithdrawCrypto = ({
-  onClose,
+  onSuccessWithdraw,
   currency,
   stock,
 }: {
-  onClose: () => void;
+  onSuccessWithdraw: () => void;
   currency: string;
   stock: number;
 }) => {
   // ==============|| States ||================= //
   const [isOpenOtp, setIsOpenOTP] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
 
   // ==============|| Validation ||================= //
   const resolver = yupResolver(
@@ -62,7 +60,6 @@ const WithdrawCrypto = ({
   );
 
   // ==============|| Hooks ||================= //
-  const navigate = useNavigate();
   const { otpMethod } = useAppSelector((state) => state.user);
   const [verifyOtpWithdraw, { isSuccess: successVerify }] =
     useVerifyOtpWithdrawMutation();
@@ -151,10 +148,10 @@ const WithdrawCrypto = ({
   useEffect(() => {
     if (successVerify) {
       setIsOpenOTP(false);
-      setShowSuccess(true);
+      onSuccessWithdraw();
       Notify({ type: "success", text: "برداشت با موفقیت انجام شد" });
     }
-  }, [successVerify]);
+  }, [onSuccessWithdraw, successVerify]);
 
   // ==============|| Render ||================= //
   return (
@@ -298,26 +295,6 @@ const WithdrawCrypto = ({
           handleResend={handleReSendOtp}
           handleGetCode={handleSendOtp}
         />
-      </Dialog>
-      <Dialog
-        title=""
-        size="md"
-        isOpen={showSuccess}
-        onClose={() => setShowSuccess(false)}
-      >
-        <AlertSuccess
-          hasIcon
-          text="برداشت شما با موفقیت ثبت شد. می توانید از قسمت تاریخچه وضعیت برداشت را مشاهده نمایید."
-        />
-        <Button
-          onClick={() => {
-            onClose?.();
-            setShowSuccess(false);
-            navigate("/dashboard/orders");
-          }}
-        >
-          مشاهده وضعیت برداشت
-        </Button>
       </Dialog>
     </div>
   );

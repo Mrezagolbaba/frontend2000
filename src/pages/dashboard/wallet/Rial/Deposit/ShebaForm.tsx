@@ -184,7 +184,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
                     <CopyInput text={selectedBank || ""} />
                     {fee && (
                       <FormText>
-                        {`حداقل مبلغ واریز: {normalizeAmount(fee.depositMinAmount, "IRR", true)}`}
+                        {`حداقل مبلغ واریز: ${normalizeAmount(fee?.depositMinAmount, "IRR", true)}`}
                       </FormText>
                     )}
                   </FormGroup>

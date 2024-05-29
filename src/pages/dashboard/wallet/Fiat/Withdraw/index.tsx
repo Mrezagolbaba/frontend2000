@@ -24,9 +24,9 @@ import Notify from "components/Notify";
 import WithdrawOTP from "components/WithdrawOTP";
 import lirFlag from "assets/img/coins/lira.png";
 import turkeyFlag from "assets/img/icons/flag-turkey.png";
-import { AlertSuccess, AlertWarning } from "components/AlertWidget";
+import { AlertWarning } from "components/AlertWidget";
 import { Controller, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { normalizeAmount } from "helpers";
 import { useAppSelector } from "store/hooks";
 import { useBankAccountsQuery } from "store/api/profile-management";
@@ -36,7 +36,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 
 type Props = {
-  onClose: () => void;
+  onSuccessWithdraw: () => void;
   stock: number;
 };
 type FiatFormType = {
@@ -47,14 +47,12 @@ type FiatFormType = {
   destinationCountry: string;
 };
 
-export default function WithdrawFiat({ onClose, stock }: Props) {
+export default function WithdrawFiat({ stock,onSuccessWithdraw }: Props) {
   // ==============|| States ||================= //
-  const [showSuccess, setShowSuccess] = useState(false);
   const [isOpenOTP, setIsOpenOTP] = useState(false);
   const [accountOptions, setAccountOptions] = useState<OptionType[] | []>([]);
 
   // ==============|| Hooks ||================= //
-  const navigate = useNavigate();
   const { otpMethod } = useAppSelector((state) => state.user);
   const [resendOtpWithdraw, { isSuccess: isResendSuccess }] =
     useResendOtpWithdrawMutation();
@@ -181,11 +179,11 @@ export default function WithdrawFiat({ onClose, stock }: Props) {
 
   useEffect(() => {
     if (successVerify) {
-      setShowSuccess(true);
       Notify({ type: "success", text: "برداشت با موفقیت انجام شد" });
       setIsOpenOTP(false);
+      onSuccessWithdraw?.();
     }
-  }, [successVerify]);
+  }, [onSuccessWithdraw, successVerify]);
 
   // ==============|| Render ||================= //
   return (
@@ -373,26 +371,6 @@ export default function WithdrawFiat({ onClose, stock }: Props) {
           handleResend={handleReSendOtp}
           handleGetCode={handleSendOtp}
         />
-      </Dialog>
-      <Dialog
-        title=""
-        size="md"
-        isOpen={showSuccess}
-        onClose={() => setShowSuccess(false)}
-      >
-        <AlertSuccess
-          hasIcon
-          text="برداشت شما با موفقیت ثبت شد. می توانید از قسمت تاریخچه وضعیت برداشت را مشاهده نمایید."
-        />
-        <Button
-          onClick={() => {
-            onClose?.();
-            setShowSuccess(false);
-            navigate("/dashboard/orders");
-          }}
-        >
-          مشاهده وضعیت برداشت
-        </Button>
       </Dialog>
     </div>
   );
