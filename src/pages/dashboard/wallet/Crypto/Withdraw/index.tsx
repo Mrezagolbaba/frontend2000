@@ -1,7 +1,3 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import { AlertInfo, AlertWarning } from "components/AlertWidget";
-import * as Yup from "yup";
-import { Controller, useForm as useRHF } from "react-hook-form";
 import {
   Button,
   Col,
@@ -14,22 +10,25 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
-import Currency from "components/Input/CurrencyInput";
-import { useEffect, useState } from "react";
-
 import {
   useResendOtpWithdrawMutation,
   useTransactionFeeQuery,
   useVerifyOtpWithdrawMutation,
   useWithdrawMutation,
 } from "store/api/wallet-management";
-import { coinShow, persianToEnglishNumbers } from "helpers";
+import * as Yup from "yup";
+import Currency from "components/Input/CurrencyInput";
 import Dialog from "components/Dialog";
-import WithdrawOTP from "components/WithdrawOTP";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import Notify from "components/Notify";
+import WithdrawOTP from "components/WithdrawOTP";
 import tron from "assets/img/network/tron.svg";
+import { AlertInfo, AlertWarning } from "components/AlertWidget";
+import { Controller, useForm as useRHF } from "react-hook-form";
+import { normalizeAmount, persianToEnglishNumbers } from "helpers";
 import { useAppSelector } from "store/hooks";
+import { useEffect, useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 
@@ -40,16 +39,17 @@ type CryptoFormType = {
 };
 
 const WithdrawCrypto = ({
-  onClose,
+  onSuccessWithdraw,
   currency,
   stock,
 }: {
-  onClose: () => void;
+  onSuccessWithdraw: () => void;
   currency: string;
   stock: number;
 }) => {
   // ==============|| States ||================= //
   const [isOpenOtp, setIsOpenOTP] = useState(false);
+
   // ==============|| Validation ||================= //
   const resolver = yupResolver(
     Yup.object().shape({
@@ -110,7 +110,7 @@ const WithdrawCrypto = ({
     else if (Number(data.amount) < fee?.withdrawMinAmount)
       setError("amount", {
         type: "manual",
-        message: `مبلغ وارد شده نمی تواند کمتر از ${coinShow(fee?.withdrawMinAmount, "USDT")} باشد.`,
+        message: `مبلغ وارد شده نمی تواند کمتر از ${normalizeAmount(fee?.withdrawMinAmount, "USDT", true)} باشد.`,
       });
     else if (Number(data.amount) > stock)
       setError("amount", {
@@ -148,11 +148,10 @@ const WithdrawCrypto = ({
   useEffect(() => {
     if (successVerify) {
       setIsOpenOTP(false);
+      onSuccessWithdraw();
       Notify({ type: "success", text: "برداشت با موفقیت انجام شد" });
-      onClose?.();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [successVerify]);
+  }, [onSuccessWithdraw, successVerify]);
 
   // ==============|| Render ||================= //
   return (
@@ -182,12 +181,10 @@ const WithdrawCrypto = ({
                     onChange={(val) => setValue(name, val)}
                     options={optionList}
                     disabled={true}
-                    // hasError={Boolean(errors?.[name])}
                   />
                   {errors?.[name] && (
                     <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                   )}
-                  {/* <FormText>سقف واریز</FormText> */}
                 </FormGroup>
               )}
             />
@@ -201,7 +198,10 @@ const WithdrawCrypto = ({
                   <div className="d-flex flex-row justify-content-between">
                     <Label htmlFor={name}>مبلغ برداشت: </Label>
                     <span className="d-flex flex-row justify-content-between">
-                      <FormText>{`موجودی شما: ${coinShow(stock.toString(), "USDT")}`}</FormText>
+                      <FormText
+                        role="button"
+                        onClick={() => setValue(name, stock.toString())}
+                      >{`موجودی شما: ${normalizeAmount(stock.toString(), "USDT", true)}`}</FormText>
                     </span>
                   </div>
                   <Currency
@@ -211,19 +211,32 @@ const WithdrawCrypto = ({
                       clearErrors(name);
                       setValue(name, val);
                     }}
+                    decimalsLimit={6}
                     hasError={Boolean(errors?.amount)}
                   />
                   {errors?.[name] && (
                     <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                   )}
-                  <span className="d-flex flex-row justify-content-between">
+                  <div className="d-flex flex-column">
                     {fee && (
                       <FormText>
-                        کارمزد برداشت :{" "}
-                        {coinShow(fee.withdrawFeeStatic, "USDT")}
+                        {`کارمزد برداشت: ${normalizeAmount(fee.withdrawFeeStatic, "USDT", true)}`}
                       </FormText>
                     )}
-                  </span>
+                    {value !== "" &&
+                      fee?.withdrawFeeStatic &&
+                      Number(value) - Number(fee?.withdrawFeeStatic) > 0 && (
+                        <FormText>
+                          {`خالص دریافتی: ${normalizeAmount(
+                            (
+                              Number(value) - Number(fee.withdrawFeeStatic)
+                            ).toString(),
+                            "USDT",
+                            true,
+                          )}`}
+                        </FormText>
+                      )}
+                  </div>
                 </FormGroup>
               )}
             />
@@ -271,6 +284,7 @@ const WithdrawCrypto = ({
       </Form>
       <Dialog
         title="تایید برداشت"
+        size="md"
         isOpen={isOpenOtp}
         onClose={() => setIsOpenOTP(false)}
       >

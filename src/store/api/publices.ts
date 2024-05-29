@@ -15,10 +15,11 @@ export const publicApi = enhancedApi.injectEndpoints({
       },
     }),
     getRates: builder.query<any, any>({
-      query() {
+      query(params) {
         return {
           method: "GET",
           url: `/rates`,
+          params,
         };
       },
     }),

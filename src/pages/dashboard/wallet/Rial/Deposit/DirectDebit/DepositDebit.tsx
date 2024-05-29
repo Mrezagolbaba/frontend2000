@@ -11,7 +11,6 @@ import {
 import {
   useDepositMutation,
   useLazyWalletsQuery,
-  useWalletsQuery,
 } from "store/api/wallet-management";
 import * as Yup from "yup";
 import Currency from "components/Input/CurrencyInput";

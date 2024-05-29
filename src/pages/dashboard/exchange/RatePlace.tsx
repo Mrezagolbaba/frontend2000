@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { BsTag } from "react-icons/bs";
 import { CiWallet } from "react-icons/ci";
 import { CurrencyCode } from "types/wallet";
-import { coinShow, convertText, lirShow, tomanShow } from "helpers";
-import { BsTag } from "react-icons/bs";
 import { Tooltip } from "reactstrap";
+import { convertText, normalizeAmount } from "helpers";
+import { useState } from "react";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
 
@@ -22,7 +22,7 @@ type Props = {
   reverseRate: string;
   rate: string;
   isLoading: boolean;
-  setStock?: (string)=>void
+  setStock?: (string) => void;
 };
 
 export default function RatePlace({
@@ -34,11 +34,13 @@ export default function RatePlace({
   rate,
   reverseRate,
   isLoading = false,
-  setStock
+  setStock,
 }: Props) {
+  // ==============|| States ||================= //
   const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
-  const toggleTooltip = () => setTooltipOpen((prevState) => !prevState);
 
+  // ==============|| Handlers ||================= //
+  const toggleTooltip = () => setTooltipOpen((prevState) => !prevState);
   const handleStock = () => {
     const currency = type === "source" ? source.currency : destination.currency;
     const currencyLabel =
@@ -46,27 +48,10 @@ export default function RatePlace({
     if (wallets && wallets.length > 0) {
       const currentWallet = wallets?.find((w) => w.currencyCode === currency);
       setStock?.(currentWallet?.availableBalance);
-      switch (currency) {
-        case "IRR": {
-          return tomanShow({
-            value: currentWallet?.availableBalance,
-            currency: "IRR",
-          });
-        }
-        case "TRY": {
-          return lirShow({
-            value: currentWallet?.availableBalance,
-            currency: "TRY",
-          });
-        }
-        default: {
-          return coinShow(currentWallet?.availableBalance, "USDT");
-        }
-      }
+      return normalizeAmount(currentWallet?.availableBalance, currency, true);
     }
     return `${0} ${currencyLabel}`;
   };
-
   const handleRate = () => {
     if (source.currency === "USDT" && destination.currency === "IRR")
       return (
@@ -76,9 +61,7 @@ export default function RatePlace({
             <span className="title">
               نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
             </span>
-            <span className="value">
-              {tomanShow({ value: rate, currency: "IRR" })}
-            </span>
+            <span className="value">{normalizeAmount(rate, "IRR", true)}</span>
           </div>
           <Tooltip
             isOpen={tooltipOpen}
@@ -86,8 +69,8 @@ export default function RatePlace({
             toggle={toggleTooltip}
           >
             {`ارزش هر یک ${convertText(
-             "enToFa",
-             "IRR",
+              "enToFa",
+              "IRR",
             )} در برابر ${convertText("USDT", "enToFa")}`}
           </Tooltip>
         </>
@@ -101,7 +84,7 @@ export default function RatePlace({
               نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
             </span>
             <span className="value">
-              {tomanShow({ value: reverseRate, currency: "IRR" })}
+              {normalizeAmount(reverseRate, "IRR", true)}
             </span>
           </div>
           <Tooltip
@@ -124,9 +107,7 @@ export default function RatePlace({
             <span className="title">
               نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
             </span>
-            <span className="value">
-              {lirShow({ value: rate, currency: "TRY" })}
-            </span>
+            <span className="value">{normalizeAmount(rate, "TRY", true)}</span>
           </div>
           <Tooltip
             isOpen={tooltipOpen}
@@ -149,7 +130,7 @@ export default function RatePlace({
               نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
             </span>
             <span className="value">
-              {lirShow({ value: reverseRate, currency: "TRY" })}
+              {normalizeAmount(reverseRate, "TRY", true)}
             </span>
           </div>
           <Tooltip
@@ -169,10 +150,10 @@ export default function RatePlace({
         <>
           <div id="currency-detail">
             <BsTag />
-            <span className="title">نرخ تقریبی {convertText("TRY", "enToFa")} : </span>
-            <span className="value">
-              {tomanShow({ value: rate, currency: "IRR" })}
+            <span className="title">
+              نرخ تقریبی {convertText("TRY", "enToFa")} :{" "}
             </span>
+            <span className="value">{normalizeAmount(rate, "IRR", true)}</span>
           </div>
           <Tooltip
             isOpen={tooltipOpen}
@@ -191,9 +172,11 @@ export default function RatePlace({
         <>
           <div id="currency-detail">
             <BsTag />
-            <span className="title">نرخ تقریبی {convertText("TRY", "enToFa")} : </span>
+            <span className="title">
+              نرخ تقریبی {convertText("TRY", "enToFa")} :{" "}
+            </span>
             <span className="value">
-              {tomanShow({ value: reverseRate, currency: "IRR" })}
+              {normalizeAmount(reverseRate, "IRR", true)}
             </span>
           </div>
           <Tooltip
@@ -211,6 +194,7 @@ export default function RatePlace({
     }
   };
 
+  // ==============|| Render ||================= //
   return (
     <>
       <div className={exchange.detail}>

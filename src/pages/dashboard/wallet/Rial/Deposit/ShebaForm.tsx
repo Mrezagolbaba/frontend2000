@@ -23,7 +23,7 @@ import {
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import { useBankAccountsQuery } from "store/api/profile-management";
 import BanksWrapper from "components/BanksWrapper";
-import { tomanShow } from "helpers";
+import { normalizeAmount } from "helpers";
 import { useAppSelector } from "store/hooks";
 import { useNavigate } from "react-router-dom";
 
@@ -184,11 +184,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
                     <CopyInput text={selectedBank || ""} />
                     {fee && (
                       <FormText>
-                        حداقل مبلغ واریز:
-                        {tomanShow({
-                          value: fee.depositMinAmount,
-                          currency: "IRR",
-                        })}
+                        {`حداقل مبلغ واریز: ${normalizeAmount(fee?.depositMinAmount, "IRR", true)}`}
                       </FormText>
                     )}
                   </FormGroup>

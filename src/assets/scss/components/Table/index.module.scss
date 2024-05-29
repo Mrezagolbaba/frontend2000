@@ -1,0 +1,50 @@
+.wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table {
+  width: 100%;
+  border-color: rgba(3, 4, 27, 0.1);
+  caption-side: bottom;
+  border-collapse: collapse;
+  .head,
+  .body,
+  .tr,
+  .th {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0;
+  }
+  .td,
+  .th {
+    padding: 12px;
+    text-align: center;
+    text-align: -webkit-center;
+  }
+  .th {
+    font-size: 0.875em;
+    font-weight: 500;
+    color: rgba(3, 4, 27, 0.4);
+    white-space: nowrap;
+  }
+  .body .td {
+    font-size: 0.875em;
+    font-weight: 500;
+    color: #03041b;
+    border-bottom: 1px solid rgba(3, 4, 27, 0.05);
+  }
+
+  &.small__view {
+    .td,
+    .th {
+      padding: 10px 4px;
+      font-size: 0.75em;
+    }
+  }
+}
+
+@media screen and (max-width: 1399px) {
+  .table .body .td {
+    min-width: 140px;
+  }
+}

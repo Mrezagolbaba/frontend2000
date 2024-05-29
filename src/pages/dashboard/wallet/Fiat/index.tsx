@@ -1,12 +1,13 @@
 import DepositFiat from "./Deposit";
 import Dialog from "components/Dialog";
 import WithdrawFiat from "./Withdraw";
-import lirIcon from "assets/img/icons/flag-turkey.png";
+import lirIcon from "assets/img/coins/try.svg";
 import { Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
+import { AlertSuccess } from "components/AlertWidget";
 
 interface Props {
   balance: string;
@@ -15,10 +16,10 @@ interface Props {
 }
 
 export default function TRYWallet({ balance, stock, availableBalance }: Props) {
-
   // ==============|| States ||================= //
   const [isOpenDeposit, setIsOpenDeposit] = useState(false);
   const [isOpenWithdraw, setIsOpenWithdraw] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   // ==============|| Hooks ||================= //
   const navigate = useNavigate();
@@ -83,8 +84,36 @@ export default function TRYWallet({ balance, stock, availableBalance }: Props) {
       >
         <WithdrawFiat
           stock={Number(stock)}
-          onClose={() => setIsOpenWithdraw(false)}
+          onSuccessWithdraw={() => {
+            setIsOpenWithdraw(false);
+            setShowSuccess(true);
+          }}
         />
+      </Dialog>
+
+      <Dialog
+        title=""
+        size="md"
+        isOpen={showSuccess}
+        onClose={() => setShowSuccess(false)}
+      >
+        <div className="d-flex flex-column align-items-center">
+          <AlertSuccess
+            hasIcon
+            text="برداشت شما با موفقیت ثبت شد. می توانید از قسمت تاریخچه وضعیت برداشت را مشاهده نمایید."
+          />
+          <Button
+            color="primary"
+            outline
+            className="px-5 py-3 mt-5"
+            onClick={() => {
+              setShowSuccess(false);
+              navigate("/dashboard/history");
+            }}
+          >
+            مشاهده وضعیت برداشت
+          </Button>
+        </div>
       </Dialog>
     </>
   );

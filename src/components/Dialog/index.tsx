@@ -15,7 +15,7 @@ function Dialog({
   isOpen,
   onClose,
   title,
-  hasCloseButton = false,
+  hasCloseButton = true,
   children,
   size = "lg",
 }: Props) {

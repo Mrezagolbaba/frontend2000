@@ -1,6 +1,5 @@
 import { iranianBankIcons } from "helpers/filesManagement/banksList";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { axiosInstance } from "store/api";
+import { useEffect, useMemo, useState } from "react";
 import { useAppSelector } from "store/hooks";
 
 type Props = {

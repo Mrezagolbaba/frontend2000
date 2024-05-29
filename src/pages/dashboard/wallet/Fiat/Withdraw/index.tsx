@@ -1,9 +1,3 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-import { AlertWarning } from "components/AlertWidget";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
-import { Controller, useForm } from "react-hook-form";
-import Currency from "components/Input/CurrencyInput";
 import {
   Button,
   Col,
@@ -15,29 +9,34 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
-import { useBankAccountsQuery } from "store/api/profile-management";
-import { useEffect, useState } from "react";
 import {
   useResendOtpWithdrawMutation,
   useTransactionFeeQuery,
   useVerifyOtpWithdrawMutation,
   useWithdrawMutation,
 } from "store/api/wallet-management";
-import { Link } from "react-router-dom";
+import * as Yup from "yup";
 import BanksWrapper from "components/BanksWrapper";
-import { lirShow } from "helpers";
-
-import turkeyFlag from "assets/img/icons/flag-turkey.png";
+import Currency from "components/Input/CurrencyInput";
+import Dialog from "components/Dialog";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import Notify from "components/Notify";
+import WithdrawOTP from "components/WithdrawOTP";
 import lirFlag from "assets/img/coins/lira.png";
+import turkeyFlag from "assets/img/icons/flag-turkey.png";
+import { AlertWarning } from "components/AlertWidget";
+import { Controller, useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { normalizeAmount } from "helpers";
+import { useAppSelector } from "store/hooks";
+import { useBankAccountsQuery } from "store/api/profile-management";
+import { useEffect, useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
-import Dialog from "components/Dialog";
-import WithdrawOTP from "components/WithdrawOTP";
-import { useAppSelector } from "store/hooks";
-import Notify from "components/Notify";
 
 type Props = {
-  onClose: () => void;
+  onSuccessWithdraw: () => void;
   stock: number;
 };
 type FiatFormType = {
@@ -48,23 +47,24 @@ type FiatFormType = {
   destinationCountry: string;
 };
 
-const WithdrawFiat = ({ onClose, stock }: Props) => {
+export default function WithdrawFiat({ stock,onSuccessWithdraw }: Props) {
+  // ==============|| States ||================= //
   const [isOpenOTP, setIsOpenOTP] = useState(false);
+  const [accountOptions, setAccountOptions] = useState<OptionType[] | []>([]);
+
+  // ==============|| Hooks ||================= //
   const { otpMethod } = useAppSelector((state) => state.user);
   const [resendOtpWithdraw, { isSuccess: isResendSuccess }] =
     useResendOtpWithdrawMutation();
   const [verifyOtpWithdraw, { isSuccess: successVerify }] =
     useVerifyOtpWithdrawMutation();
-  const [accountOptions, setAccountOptions] = useState<OptionType[] | []>([]);
   const { data: fee } = useTransactionFeeQuery("TRY");
   const { data: accounts, isSuccess: getSuccessAccounts } =
     useBankAccountsQuery({
       filter: "currencyCode||$eq||TRY",
     });
-
   const [withdrawRequest, { data: response, isLoading, isSuccess }] =
     useWithdrawMutation();
-
   const resolver = yupResolver(
     Yup.object().shape({
       network: Yup.string().required(),
@@ -74,7 +74,6 @@ const WithdrawFiat = ({ onClose, stock }: Props) => {
       destinationCountry: Yup.string().required(),
     }),
   );
-
   const {
     handleSubmit,
     control,
@@ -94,6 +93,7 @@ const WithdrawFiat = ({ onClose, stock }: Props) => {
     resolver,
   });
 
+  // ==============|| Handlers ||================= //
   const handleSendOtp = async (data: { code: string }) => {
     if (data.code.length > 6)
       return Notify({ type: "error", text: "لطفا کد را وارد کنید" });
@@ -101,12 +101,7 @@ const WithdrawFiat = ({ onClose, stock }: Props) => {
       transactionId: response?.id,
       code: data.code,
     };
-    await verifyOtpWithdraw(newData).then((res: any) => {
-      if (res) {
-        Notify({ type: "success", text: "برداشت با موفقیت انجام شد" });
-        window.location.reload();
-      }
-    });
+    await verifyOtpWithdraw(newData);
   };
   const handleReSendOtp = async () => {
     await resendOtpWithdraw(response?.id).then(() => {
@@ -114,17 +109,16 @@ const WithdrawFiat = ({ onClose, stock }: Props) => {
         Notify({ type: "success", text: "کد مجددا ارسال شد" });
     });
   };
-
   const onSubmit = async (data: FiatFormType) => {
     if (Number(data.amount) < Number(fee?.withdrawMinAmount)) {
       setError("amount", {
         type: "manual",
-        message: `مبلغ وارد شده نمی تواند کمتر از ${lirShow({ value: fee?.withdrawMinAmount, currency: "TRY" })} باشد.`,
+        message: `مبلغ وارد شده نمی تواند کمتر از ${normalizeAmount(fee?.withdrawMinAmount, "TRY", true)} باشد.`,
       });
     } else if (Number(data.amount) > Number(fee?.withdrawMaxAmount)) {
       setError("amount", {
         type: "manual",
-        message: `مبلغ وارد شده نمی تواند بیش تر از ${lirShow({ value: fee.withdrawMaxAmount, currency: "TRY" })} باشد.`,
+        message: `مبلغ وارد شده نمی تواند بیش تر از ${normalizeAmount(fee.withdrawMaxAmount, "TRY", true)} باشد.`,
       });
     } else if (Number(data.amount) > stock)
       setError("amount", {
@@ -139,6 +133,7 @@ const WithdrawFiat = ({ onClose, stock }: Props) => {
       });
   };
 
+  // ==============|| Life Cycle ||================= //
   useEffect(() => {
     let list = [] as OptionType[] | [];
 
@@ -169,7 +164,6 @@ const WithdrawFiat = ({ onClose, stock }: Props) => {
     // setValue("iban", accountOptions[0]?.value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, getSuccessAccounts]);
-
   useEffect(() => {
     if (accountOptions.length > 0) {
       setValue("iban", accountOptions[0]?.value);
@@ -177,7 +171,6 @@ const WithdrawFiat = ({ onClose, stock }: Props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountOptions]);
-
   useEffect(() => {
     if (isSuccess) {
       setIsOpenOTP(true);
@@ -188,11 +181,11 @@ const WithdrawFiat = ({ onClose, stock }: Props) => {
     if (successVerify) {
       Notify({ type: "success", text: "برداشت با موفقیت انجام شد" });
       setIsOpenOTP(false);
-      onClose?.();
+      onSuccessWithdraw?.();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [successVerify]);
+  }, [onSuccessWithdraw, successVerify]);
 
+  // ==============|| Render ||================= //
   return (
     <div className="px-2">
       <AlertWarning
@@ -244,6 +237,12 @@ const WithdrawFiat = ({ onClose, stock }: Props) => {
                 <FormGroup className="position-relative">
                   <div className="d-flex flex-row justify-content-between">
                     <Label htmlFor={name}>مبلغ برداشت: </Label>
+                    <span className="d-flex flex-row justify-content-between">
+                      <FormText
+                        role="button"
+                        onClick={() => setValue(name, stock.toString())}
+                      >{`موجودی شما: ${normalizeAmount(stock.toString(), "TRY", true)}`}</FormText>
+                    </span>
                   </div>
                   <Currency
                     name={name}
@@ -252,14 +251,32 @@ const WithdrawFiat = ({ onClose, stock }: Props) => {
                       clearErrors(name);
                       setValue(name, val);
                     }}
+                    decimalsLimit={2}
                     hasError={Boolean(errors?.[name])}
                   />
                   {errors?.[name] && (
                     <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                   )}
-                  <FormText>
-                    {` موجودی در دسترس: ${lirShow({ value: stock.toString(), currency: "TRY" })}`}
-                  </FormText>
+                  <div className="d-flex flex-column">
+                    {fee && (
+                      <FormText>
+                        {`کارمزد برداشت: ${normalizeAmount(fee.withdrawFeeStatic, "TRY", true)}`}
+                      </FormText>
+                    )}
+                    {value !== "" &&
+                      fee?.withdrawFeeStatic &&
+                      Number(value) - Number(fee?.withdrawFeeStatic) > 0 && (
+                        <FormText>
+                          {`خالص دریافتی: ${normalizeAmount(
+                            (
+                              Number(value) - Number(fee.withdrawFeeStatic)
+                            ).toString(),
+                            "TRY",
+                            true,
+                          )}`}
+                        </FormText>
+                      )}
+                  </div>
                 </FormGroup>
               )}
             />
@@ -345,11 +362,11 @@ const WithdrawFiat = ({ onClose, stock }: Props) => {
       <Dialog
         title="تایید برداشت"
         isOpen={isOpenOTP}
+        size="md"
         onClose={() => setIsOpenOTP(false)}
       >
         <WithdrawOTP
           onClose={() => setIsOpenOTP(false)}
-          title="تایید برداشت"
           securitySelection={otpMethod}
           handleResend={handleReSendOtp}
           handleGetCode={handleSendOtp}
@@ -357,6 +374,4 @@ const WithdrawFiat = ({ onClose, stock }: Props) => {
       </Dialog>
     </div>
   );
-};
-
-export default WithdrawFiat;
+}

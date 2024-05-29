@@ -26,7 +26,7 @@ export default function UserInformation() {
     if (isSuccess && data) {
       const lastItem = data[data.length - 1];
       setLastSession(
-        moment(lastItem.createdAt).locale("fa").format(" DD MMMM YYYY"),
+        moment(lastItem.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
       );
     }
   }, [data, isSuccess]);

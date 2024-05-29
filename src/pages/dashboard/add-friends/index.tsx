@@ -1,20 +1,22 @@
-import { useRef } from "react";
 import {
-  Col,
-  Row,
   Card,
-  CardHeader,
   CardBody,
+  CardHeader,
+  Col,
   FormGroup,
   Label,
+  Row,
 } from "reactstrap";
-import { FaUsers, FaWallet } from "react-icons/fa";
-import CopyInput from "components/Input/CopyInput";
-import moment from "jalali-moment";
 import {
   useGetFriendsListQuery,
   useGetReferralCodeQuery,
 } from "store/api/addFriends";
+import ATable from "components/ATable";
+import CopyInput from "components/Input/CopyInput";
+import moment from "jalali-moment";
+import { FaUsers, FaWallet } from "react-icons/fa";
+import { useMemo } from "react";
+
 interface IReferral {
   code: string;
   isDefault: boolean;
@@ -24,9 +26,41 @@ interface IReferral {
   updatedAt: Date;
 }
 const AddFriends = () => {
+  // ==============|| Hooks ||================= //
   const { data } = useGetReferralCodeQuery();
-  const { data: refferalFriends } = useGetFriendsListQuery();
+  const {
+    data: referralFriends,
+    isLoading,
+    isSuccess,
+    isFetching,
+  } = useGetFriendsListQuery();
 
+  // ==============|| Constants ||================= //
+  const columns = useMemo(
+    () => [
+      {
+        id: "0",
+        accessorKey: "phoneNumber",
+        header: "شماره تلفن همراه",
+        accessorFn: (row: any) => <span dir="ltr">{row?.phoneNumber}</span>,
+      },
+      {
+        id: "1",
+        accessorKey: "referrerCode",
+        header: "کد دعوت",
+      },
+      {
+        id: "2",
+        accessorKey: "createdAt",
+        header: "زمان ثبت نام",
+        accessorFn: (row: any) =>
+          moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
+      },
+    ],
+    [],
+  );
+
+  // ==============|| Render ||================= //
   return (
     <section className="page page-add-friends">
       <Card className="mb-4">
@@ -87,7 +121,7 @@ const AddFriends = () => {
                         <FaUsers size={50} color="#d7d7d7" />
                       </span>
                       <h6 className="text-center mt-2">
-                        {refferalFriends?.referredUsersCount} نفر
+                        {referralFriends?.referredUsersCount} نفر
                       </h6>
                     </div>
                   </div>
@@ -103,65 +137,11 @@ const AddFriends = () => {
           <h5 className="card-title">لیست دوستان</h5>
         </CardHeader>
         <CardBody>
-          <div className="table-responsive">
-            <table className="table table-borderless table-striped">
-              {refferalFriends && refferalFriends.briefs?.length > 0 && (
-                <thead>
-                  <tr>
-                    <th
-                      scope="col"
-                      style={{ color: "#03041b66" }}
-                      className="text-center"
-                    >
-                      شماره تلفن همراه
-                    </th>
-                    <th
-                      scope="col"
-                      style={{ color: "#03041b66" }}
-                      className="text-center"
-                    >
-                      {/*   پاداش دریافتی (IRT) */}
-                      کد دعوت
-                    </th>
-
-                    <th
-                      scope="col"
-                      style={{ color: "#03041b66" }}
-                      className="text-center"
-                    >
-                      زمان ثبت نام
-                    </th>
-                  </tr>
-                </thead>
-              )}
-              <tbody>
-                {refferalFriends &&
-                  refferalFriends.briefs.length > 0 &&
-                  refferalFriends.briefs?.map((item, index) => (
-                    <tr key={index}>
-                      <td className="text-center">
-                        {item.phoneNumber.replace("+", "")}
-                      </td>
-                      <td className="text-center">{item.referrerCode}</td>
-                      <td className="text-center">
-                        <span className="d-inline-block d-ltr">
-                          {moment(data?.createdAt)
-                            .locale("fa")
-                            .format("DD MMMM YYYY")}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                {refferalFriends && refferalFriends.briefs.length <= 0 && (
-                  <tr>
-                    <td colSpan={3} className="text-center">
-                      شما هنوز دوستی را دعوت نکرده اید.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+          <ATable
+            data={isSuccess ? referralFriends?.briefs : []}
+            isLoading={isLoading || isFetching}
+            columns={columns}
+          />
         </CardBody>
       </Card>
     </section>

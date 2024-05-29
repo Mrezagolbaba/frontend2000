@@ -1,11 +1,11 @@
-import { useState } from "react";
+import Deposit from "./Deposit";
+import Dialog from "components/Dialog";
+import Withdraw from "./Withdraw";
+import irIcon from "assets/img/coins/Toman.svg";
 import { Button } from "reactstrap";
-import irIcon from "assets/img/icons/flag-iran.png";
+import { useState } from "react";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
-import Dialog from "components/Dialog";
-import Deposit from "./Deposit";
-import Withdraw from "./Withdraw";
 
 type Props = {
   balance: string;

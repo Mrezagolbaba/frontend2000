@@ -1,17 +1,18 @@
-import { Button, Card, CardBody, CardHeader, Table } from "reactstrap";
-import { useAppSelector } from "store/hooks";
 import logo from "assets/img/logo-arsonex.png";
-import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import "./styles.module.scss";
-import { coinShow, convertText, lirShow, tomanShow } from "helpers";
 import moment from "jalali-moment";
+import { Button, Card, CardBody, CardHeader, Table } from "reactstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useRef } from "react";
-import { useReactToPrint } from "react-to-print";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { convertText, normalizeAmount } from "helpers";
+import { useAppSelector } from "store/hooks";
 import { useGetCurrencySwapQuery } from "store/api/exchange-management";
+import { useReactToPrint } from "react-to-print";
+import { useRef } from "react";
+
+import "./styles.module.scss";
 
 const Invoice = () => {
-  //hooks
+  // ==============|| Hooks ||================= //
   const { id } = useParams();
   const navigate = useNavigate();
   const componentRef = useRef() as any;
@@ -23,37 +24,20 @@ const Invoice = () => {
     content: () => componentRef.current as any,
   });
 
-  //handlers
-  const renderAmount = (amount, currency) => {
-    switch (currency) {
-      case "USDT":
-        return coinShow(amount, "USDT");
-      case "TRY":
-        return lirShow({
-          value: amount,
-          currency: "TRY",
-        });
-      case "IRR":
-      default:
-        return tomanShow({
-          value: amount,
-          currency: "IRR",
-        });
-    }
-  };
+  // ==============|| Handlers ||================= //
   const renderFee = () => {
     let index;
     if (invoice?.feeCurrencyCode === invoice?.destinationCurrencyCode)
       index = 1;
     else index = 0;
-
-    return renderAmount(
-      invoice?.transactions[index]?.fee,
+    return normalizeAmount(
+      invoice?.transactions?.[index]?.fee,
       invoice?.feeCurrencyCode,
+      true,
     );
   };
 
-  //render
+  // ==============|| Render ||================= //
   return (
     <section className="page page-wallet mt-4">
       <Card>
@@ -101,7 +85,7 @@ const Invoice = () => {
                         <time className="d-inline-block d-ltr px-2">
                           {moment(invoice?.createdAt)
                             .locale("fa")
-                            .format("YYYY/MM/DD")}
+                            .format("hh:mm YYYY/MM/DD")}
                         </time>
                       )}
                     </div>
@@ -198,9 +182,10 @@ const Invoice = () => {
                             </span>
                           ) : (
                             <span className="px-2">
-                              {renderAmount(
+                              {normalizeAmount(
                                 invoice?.sourceAmount,
-                                invoice.sourceCurrencyCode,
+                                invoice?.sourceCurrencyCode,
+                                true,
                               )}
                             </span>
                           )}
@@ -212,9 +197,10 @@ const Invoice = () => {
                             </span>
                           ) : (
                             <span className="px-2">
-                              {renderAmount(
+                              {normalizeAmount(
                                 invoice?.destinationAmount,
                                 invoice?.destinationCurrencyCode,
+                                true,
                               )}
                             </span>
                           )}

@@ -16,14 +16,11 @@ export const exchangeManagement = enhancedApi.injectEndpoints({
       },
     }),
     currencySwap: builder.query<any, any>({
-      query({ join, sort }) {
+      query(params) {
         return {
           method: "GET",
           url: `/currency-swaps`,
-          params: {
-            join,
-            sort,
-          },
+          params,
         };
       },
     }),
