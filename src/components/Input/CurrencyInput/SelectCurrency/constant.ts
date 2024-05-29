@@ -1,5 +1,5 @@
-import Lira from "assets/img/coins/lira.png";
-import Rial from "assets/img/icons/flag-iran.svg";
+import Lira from "assets/img/coins/try.svg";
+import toman from "assets/img/coins/Toman.svg";
 import tetter from "assets/img/coins/tether.svg";
 import { CurrencyCode } from "types/wallet";
 
@@ -13,7 +13,7 @@ export type CurrencyOption = {
 export const currencyOptions: CurrencyOption[] = [
   {
     value: "IRR",
-    label: { text: "تومان", img: Rial },
+    label: { text: "تومان", img: toman },
   },
 
   {

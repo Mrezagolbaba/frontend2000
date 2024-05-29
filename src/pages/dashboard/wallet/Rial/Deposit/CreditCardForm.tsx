@@ -1,29 +1,29 @@
-import * as Yup from "yup";
-import { useEffect, useState } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Controller, useForm } from "react-hook-form";
 import {
+  Button,
   Col,
-  Label,
-  Row,
+  FormFeedback,
   FormGroup,
   FormText,
-  FormFeedback,
-  Button,
+  Label,
+  Row,
   Spinner,
 } from "reactstrap";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
-import Currency from "components/Input/CurrencyInput";
-import { AlertInfo } from "components/AlertWidget";
-import { useBankAccountsQuery } from "store/api/profile-management";
 import {
   useDepositMutation,
   useTransactionFeeQuery,
 } from "store/api/wallet-management";
-import { Link, useNavigate } from "react-router-dom";
-import { useAppSelector } from "store/hooks";
-import { tomanShow } from "helpers";
+import * as Yup from "yup";
 import BanksWrapper from "components/BanksWrapper";
+import Currency from "components/Input/CurrencyInput";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import { AlertInfo } from "components/AlertWidget";
+import { Controller, useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { normalizeAmount } from "helpers";
+import { useAppSelector } from "store/hooks";
+import { useBankAccountsQuery } from "store/api/profile-management";
+import { useEffect, useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 
@@ -34,13 +34,15 @@ type CreditCardForm = {
 };
 
 const CreditCardForm = () => {
+  // ==============|| States ||================= //
+  const [hasAccount, setHasAccount] = useState<boolean>(true);
+  const [optionList, setOptionList] = useState<OptionType[] | any[]>([]);
+
+  // ==============|| Hooks ||================= //
   const { firstName, lastName, secondTierVerified } = useAppSelector(
     (state) => state.user,
   );
   const navigate = useNavigate();
-  const [hasAccount, setHasAccount] = useState<boolean>(true);
-  const [optionList, setOptionList] = useState<OptionType[] | any[]>([]);
-
   const { data: fee } = useTransactionFeeQuery("IRR");
   const { data, isSuccess } = useBankAccountsQuery({});
   const [
@@ -50,7 +52,7 @@ const CreditCardForm = () => {
   const resolver = yupResolver(
     Yup.object().shape({
       accountNumber: Yup.string().required(),
-      amount: Yup.string().required(),
+      amount: Yup.string().required("شما هیچ مبلغی وارد نکرده اید."),
       accountId: Yup.string().required(),
     }),
   );
@@ -70,16 +72,18 @@ const CreditCardForm = () => {
     },
     resolver,
   });
+
+  // ==============|| Handlers ||================= //
   const onSubmit = async (data: CreditCardForm) => {
     if (Number(data.amount) < fee?.depositMinAmount / 10)
       setError("amount", {
         type: "manual",
-        message: `مبلغ وارد شده نمی تواند کمتر از ${tomanShow({ value: fee?.depositMinAmount, currency: "IRR" })} باشد.`,
+        message: `مبلغ وارد شده نمی تواند کمتر از ${normalizeAmount(fee?.depositMinAmount, "IRR", true)} باشد.`,
       });
     else if (Number(data.amount) >= fee?.depositMaxAmount)
       setError("amount", {
         type: "manual",
-        message: `مبلغ وارد شده نمی تواند بیشتر از ${tomanShow({ value: fee.depositMaxAmount, currency: "IRR" })} باشد.`,
+        message: `مبلغ وارد شده نمی تواند بیشتر از ${normalizeAmount(fee.depositMaxAmount, "IRR", true)} باشد.`,
       });
     else
       depositRequest({
@@ -90,6 +94,7 @@ const CreditCardForm = () => {
       });
   };
 
+  // ==============|| Life Cycle ||================= //
   useEffect(() => {
     if (isSuccess) {
       if (data.length <= 0) {
@@ -135,8 +140,9 @@ const CreditCardForm = () => {
     if (isSubmitSuccess && response) {
       window.location.replace(response.providerData.flowRedirectUrl);
     }
-  }, [isSubmitSuccess, navigate, response]);
+  }, [isSubmitSuccess, response]);
 
+  // ==============|| Render ||================= //
   return hasAccount ? (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Row>
@@ -170,7 +176,11 @@ const CreditCardForm = () => {
                 {errors?.[name] && (
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
-                <FormText></FormText>
+                {fee && (
+                  <FormText>
+                    {`سقف واریز: ${normalizeAmount(fee?.depositMaxAmount, "IRR", true)}`}
+                  </FormText>
+                )}
               </FormGroup>
             )}
           />
@@ -194,15 +204,24 @@ const CreditCardForm = () => {
                 {errors?.[name] && (
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
-                {fee && (
+                <div className="d-flex flex-column">
+                  {fee && (
+                    <FormText>
+                      {`کارمزد شاپرک: ${normalizeAmount(fee?.depositFeeStatic, "IRR", true)}`}
+                    </FormText>
+                  )}
                   <FormText>
-                    کارمزد شاپرک:{" "}
-                    {tomanShow({
-                      value: fee.depositFeeStatic,
-                      currency: "IRR",
-                    })}
+                    {Number(value) - Number(fee?.depositFeeStatic) / 10 > 0 &&
+                      `مبلغ واریز به کیف پول: ${normalizeAmount(
+                        (
+                          Number(value) -
+                          Number(fee.depositFeeStatic) / 10
+                        ).toString(),
+                        "IRR",
+                        true,
+                      )}`}
                   </FormText>
-                )}
+                </div>
               </FormGroup>
             )}
           />

@@ -1,27 +1,73 @@
-import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
+import ATable from "components/ATable";
 import moment from "jalali-moment";
-import Deposit from "assets/img/icons/depositIcon.svg";
-import {
-  convertCoins,
-  convertIRRToToman,
-  convertStatus,
-  convertTextSingle,
-  tomanShow,
-} from "helpers";
+import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
+import { convertText, normalizeAmount } from "helpers";
+import { useMemo } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
 
 const Orders = () => {
-  const { data, isLoading } = useTransactionsQuery({
+  // ==============|| Hooks ||================= //
+  const { data, isLoading, isSuccess, isFetching } = useTransactionsQuery({
     sort: "createdAt,DESC",
+    filter: [
+      `currencyCode||eq||USDT`,
+      "status||$ne||DRAFT",
+      "status||$ne||EXPIRED",
+      "status||$ne||INITIATED",
+    ],
+    or: ["type||eq||DEPOSIT", "type||eq||WITHDRAW"],
   });
-  const transActions = data?.filter(
-    (item) =>
-      item.status !== "EXPIRED" &&
-      item.status !== "INITIATED" &&
-      item.status !== "DRAFT" &&
-      (item.type === "DEPOSIT" || item.type === "WITHDRAW"),
+
+  // ==============|| Constants ||================= //
+  const columns = useMemo(
+    () => [
+      {
+        id: "0",
+        accessorKey: "type",
+        accessorFn: (row: any) =>
+          row?.type === "DEPOSIT" ? (
+            <span className="text-success">واریز</span>
+          ) : (
+            <span className="text-danger">برداشت</span>
+          ),
+        header: "نوع تراکنش",
+      },
+      {
+        id: "1",
+        accessorKey: "cryptoName",
+        accessorFn: (row) => convertText(row?.currencyCode, "enToFa"),
+        header: "نوع ارز",
+      },
+      {
+        id: "3",
+        accessorKey: "amount",
+        header: "مقدار",
+        accessorFn: (row: any) =>
+          normalizeAmount(row?.amount, row?.currencyCode, false),
+      },
+      {
+        id: "6",
+        accessorKey: "status",
+        header: "وضعیت",
+        accessorFn: (row: any) =>
+          row?.status === "SUCCESSFUL" ? (
+            <span className="text-success">موفق</span>
+          ) : (
+            <span className="text-danger">ناموفق</span>
+          ),
+      },
+      {
+        id: "3",
+        accessorKey: "createdAt",
+        header: "تاریخ",
+        accessorFn: (row: any) =>
+          moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
+      },
+    ],
+    [],
   );
 
+   // ==============|| Render ||================= //
   return (
     <section className="page page-orders">
       <Card className="custom-card currencies-online-rates card-secondary">
@@ -29,180 +75,11 @@ const Orders = () => {
           <CardTitle tag="h5">آخرین تراکنش ها</CardTitle>
         </CardHeader>
         <CardBody>
-          <div className={"table-responsive"}>
-            <table className="table table-borderless table-striped">
-              {transActions && transActions?.length > 0 ? (
-                <>
-                  <thead>
-                    <tr>
-                      <th
-                        scope="col"
-                        style={{ color: "#03041b66" }}
-                        className="text-center"
-                      >
-                        نوع تراکنش
-                      </th>
-                      <th
-                        scope="col"
-                        style={{ color: "#03041b66" }}
-                        className="text-center"
-                      >
-                        نوع ارز
-                      </th>
-                      <th
-                        scope="col"
-                        style={{ color: "#03041b66" }}
-                        className="text-center"
-                      >
-                        مقدار ارز
-                      </th>
-                      <th
-                        scope="col"
-                        style={{ color: "#03041b66" }}
-                        className="text-center"
-                      >
-                        وضعیت تراکنش
-                      </th>
-                      <th
-                        scope="col"
-                        style={{ color: "#03041b66" }}
-                        className="text-center"
-                      >
-                        تاریخ
-                      </th>
-                    </tr>
-                  </thead>
-                  {isLoading ? (
-                    <tbody>
-                      <tr>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                      </tr>
-                    </tbody>
-                  ) : (
-                    <tbody>
-                      {transActions?.map((item) => (
-                        <tr>
-                          <td className="text-center">
-                            <span
-                              className={
-                                item.type === "DEPOSIT"
-                                  ? "text-success"
-                                  : "text-danger"
-                              }
-                            >
-                              {item.type === "DEPOSIT" ? "واریز" : "برداشت"}
-                            </span>
-                          </td>
-                          <td className="text-center">
-                            {convertCoins(item.currencyCode)}
-                          </td>
-                          <td className="text-center">
-                            {item.currencyCode === "IRR" ? (
-                              <span className="text-center">
-                                {convertIRRToToman(
-                                  Number(item.amount),
-                                ).toLocaleString()}
-                              </span>
-                            ) : (
-                              <span className="text-center">
-                                {Number(item.amount).toLocaleString()}
-                              </span>
-                            )}
-                          </td>
-                          <td className="text-center">
-                            <span
-                              className={`${
-                                item.status === "CANCELED" ||
-                                item.status === "FAILED" ||
-                                item.status === "EXPIRED"
-                                  ? "text-danger"
-                                  : item.status === "SUCCESSFUL"
-                                    ? "text-success"
-                                    : "text-secondary"
-                              }`}
-                            >
-                              {convertStatus(item.status)}
-                            </span>
-                          </td>
-                          <td className="text-center">
-                            <span className="d-ltr d-block">
-                              {moment(item?.createdAt)
-                                .locale("fa")
-                                .format("DD MMMM YYYY")}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  )}
-                </>
-              ) : (
-                <tr>
-                  <td colSpan={4} className="text-center  bg-white">
-                    <img
-                      src={Deposit}
-                      style={{
-                        height: "50px",
-                        width: "50px",
-                        marginBottom: "10px",
-                      }}
-                    />
-                    <div className="text-dark">
-                      اولین تراکنش خود را با آرسونیکس تجربه کنید
-                    </div>
-                  </td>
-                </tr>
-              )}
-            </table>
-          </div>
+          <ATable
+            data={isSuccess ? data : []}
+            isLoading={isLoading || isFetching}
+            columns={columns}
+          />
         </CardBody>
       </Card>
     </section>

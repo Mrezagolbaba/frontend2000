@@ -147,12 +147,12 @@ export default function Detail() {
                           <td>
                             {moment(data?.ticket.createdAt)
                               .locale("fa")
-                              .format("YYYY/MM/DD")}
+                              .format("hh:mm YYYY/MM/DD")}
                           </td>
                           <td>
                             {moment(data?.ticket.updatedAt)
                               .locale("fa")
-                              .format("YYYY/MM/DD")}
+                              .format("hh:mm YYYY/MM/DD")}
                           </td>
                           <td>
                             <span className="text-primary">

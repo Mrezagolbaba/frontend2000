@@ -1,6 +1,4 @@
 import { Button, Card, CardBody, Col, Container, Row } from "reactstrap";
-import { GiBrokenSkull } from "react-icons/gi";
-import { RiBattery2ChargeFill } from "react-icons/ri";
 import { useNavigate, useParams } from "react-router-dom";
 import Layout from "layouts/dashboard";
 

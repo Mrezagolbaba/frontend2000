@@ -191,6 +191,7 @@
       text-align: right;
     }
     img {
+      border-radius: 50%;
       margin-left: 8px;
       vertical-align: middle;
     }
@@ -205,6 +206,9 @@
     box-sizing: border-box;
     text-align: right;
     font-size: 1em;
+    img {
+      border-radius: 50%;
+    }
   }
 }
 

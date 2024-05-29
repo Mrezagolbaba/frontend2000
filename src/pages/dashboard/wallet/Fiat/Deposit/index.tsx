@@ -2,7 +2,7 @@ import { AlertDanger, AlertInfo, AlertWarning } from "components/AlertWidget";
 import CopyInput from "components/Input/CopyInput";
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import { useEffect, useState } from "react";
-import { Button, Col, Form, FormGroup, Label, Row } from "reactstrap";
+import { Button, Col, Form, FormGroup, Label, List, Row } from "reactstrap";
 import {
   useDepositInfoQuery,
   useRefCodeMutation,
@@ -13,13 +13,20 @@ import { isEmpty } from "lodash";
 import Dialog from "components/Dialog";
 import InternationalVerification from "pages/dashboard/profile/InternationalVerification";
 import BanksWrapper from "components/BanksWrapper";
-
-import wallet from "assets/scss/dashboard/wallet.module.scss";
 import { useCheckVerificationsQuery } from "store/api/user";
 
+import wallet from "assets/scss/dashboard/wallet.module.scss";
+import profile from "assets/scss/dashboard/profile.module.scss";
+
+export enum REJECTION_REASON {
+  INVALID_RESIDENCE_PERMIT = "INVALID_RESIDENCE_PERMIT",
+  EXPIRED_RESIDENCE_PERMIT = "EXPIRED_RESIDENCE_PERMIT",
+  POOR_QUALITY_RESIDENCE_PERMIT_FRONT = "POOR_QUALITY_RESIDENCE_PERMIT_FRONT",
+  POOR_QUALITY_RESIDENCE_PERMIT_BACK = "POOR_QUALITY_RESIDENCE_PERMIT_BACK",
+}
+
 const DepositFiat = ({ onClose }: { onClose: () => void }) => {
-  const { firstNameEn, lastNameEn, internationalServicesVerified } =
-    useAppSelector((state) => state.user);
+  const { firstNameEn, lastNameEn } = useAppSelector((state) => state.user);
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
   const [selectedBank, setSelectedBank] = useState<string>("");
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
@@ -41,7 +48,9 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
     { data: depResponse, isLoading: LoadingDeposit, isSuccess: depositSuccess },
   ] = useRefCodeMutation();
 
-  const { data: verifications } = useCheckVerificationsQuery();
+  const { data: verifications, isSuccess: internationalSuccess } =
+    useCheckVerificationsQuery();
+  const [internationalVerify, setInternationalVerify] = useState<any>();
 
   useEffect(() => {
     let list = [] as OptionType[] | [];
@@ -87,6 +96,42 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, getSuccessAccounts]);
+
+  useEffect(() => {
+    if (internationalSuccess && verifications)
+      setInternationalVerify(
+        verifications?.find((v) => v.type === "KYC_INTERNATIONAL_SERVICES"),
+      );
+  }, [internationalSuccess]);
+
+  const generateErrorReason = (reason, index) => {
+    switch (reason) {
+      case REJECTION_REASON.INVALID_RESIDENCE_PERMIT:
+        return (
+          <li key={index} className={profile["reject-reason-list"]}>
+            کارت اقامت معتبر نیست.
+          </li>
+        );
+      case REJECTION_REASON.EXPIRED_RESIDENCE_PERMIT:
+        return (
+          <li key={index} className={profile["reject-reason-list"]}>
+            کارت اقامت منقضی شده است.
+          </li>
+        );
+      case REJECTION_REASON.POOR_QUALITY_RESIDENCE_PERMIT_FRONT:
+        return (
+          <li key={index} className={profile["reject-reason-list"]}>
+            کیفیت تصویر روی کارت اقامت پایین است.
+          </li>
+        );
+      case REJECTION_REASON.POOR_QUALITY_RESIDENCE_PERMIT_BACK:
+        return (
+          <li key={index} className={profile["reject-reason-list"]}>
+            کیفیت تصویر پست کارت اقامت پایین است.
+          </li>
+        );
+    }
+  };
 
   const renderUI = () => {
     if (LoadingDeposit) {
@@ -187,10 +232,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <div className="px-2">
-      {verifications?.find((v) => v.type === "KYC_INTERNATIONAL_SERVICES")
-        ?.status === "DRAFT" ||
-      verifications?.find((v) => v.type === "KYC_INTERNATIONAL_SERVICES")
-        ?.status === "REJECTED" ? (
+      {internationalVerify?.status === "DRAFT" ? (
         <>
           <AlertInfo
             hasIcon
@@ -210,12 +252,32 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
             </Col>
           </Row>
         </>
-      ) : verifications?.find((v) => v.type === "KYC_INTERNATIONAL_SERVICES")
-          ?.status === "INITIATED" ? (
+      ) : internationalVerify?.status === "INITIATED" ? (
         <AlertInfo
           hasIcon
           text="درخواست فعال سازی خدمات بین المللی شما در حال بررسی توسط پشتیبانی آرسونیکس می باشد."
           key="passport-alert"
+        />
+      ) : internationalVerify?.status === "REJECTED" ? (
+        <AlertDanger
+          text={
+            <>
+              <h6>درخواست شما به دلایل زیر رد شده است:</h6>
+              <List className="py-3">
+                {internationalVerify?.rejectReasons.map((reason, index) =>
+                  generateErrorReason(reason, index),
+                )}
+                <Button
+                  className="mt-3 px-3 py-2"
+                  onClick={() => setIsOpenDialog(true)}
+                  color="warning"
+                >
+                  اصلاح درخواست
+                </Button>
+              </List>
+            </>
+          }
+          hasIcon={false}
         />
       ) : (
         <Form>

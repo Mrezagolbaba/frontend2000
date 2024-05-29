@@ -1,235 +1,114 @@
-import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
-import { coinShow, convertTextSingle, lirShow, tomanShow } from "helpers";
-import Deposit from "assets/img/icons/depositIcon.svg";
-import moment from "jalali-moment";
-import { useCurrencySwapQuery } from "store/api/exchange-management";
+import ATable from "components/ATable";
 import SquareInfo from "components/Icons/SquareInfo";
+import moment from "jalali-moment";
+import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
+import { convertTextSingle, normalizeAmount } from "helpers";
+import { useCurrencySwapQuery } from "store/api/exchange-management";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 const History = () => {
+  // ==============|| Hooks ||================= //
   const navigate = useNavigate();
-  const { data, isLoading } = useCurrencySwapQuery({
+  const { data, isLoading, isSuccess, isFetching } = useCurrencySwapQuery({
     sort: "createdAt,DESC",
     join: "transactions",
   });
 
+    // ==============|| Handlers ||================= //
   const renderFee = (fee, transactions) => {
     const targetTransAction = transactions.find((t) => t.currencyCode === fee);
-    switch (fee) {
-      case "USDT":
-        return coinShow(targetTransAction?.fee, "USDT");
-      case "TRY":
-        return lirShow({ value: targetTransAction?.fee, currency: "TRY" });
-      default:
-        return tomanShow({
-          value: targetTransAction?.fee,
-          currency: "IRR",
-        });
-    }
+    return targetTransAction?.fee
+      ? normalizeAmount(targetTransAction?.fee, fee, true)
+      : "0";
   };
 
-  const renderAmount = (currency, amount) => {
-    switch (currency) {
-      case "USDT":
-        return coinShow(amount, "USDT");
-      case "TRY":
-        return lirShow({ value: amount, currency: "TRY" });
-      default:
-        return tomanShow({
-          value: amount,
-          currency: "IRR",
-        });
-    }
-  };
+  // ==============|| Constants ||================= //
+  const columns = useMemo(
+    () => [
+      {
+        id: "0",
+        accessorKey: "source",
+        accessorFn: (row: any) => (
+          <span className="text-success">
+            {convertTextSingle(row?.sourceCurrencyCode)}
+          </span>
+        ),
+        header: "بازار مبدا",
+      },
+      {
+        id: "1",
+        accessorKey: "destination",
+        accessorFn: (row: any) => (
+          <span className="text-danger">
+            {convertTextSingle(row?.destinationCurrencyCode)}
+          </span>
+        ),
+        header: "بازار مقصد",
+      },
+      {
+        id: "2",
+        accessorKey: "sourceAmount",
+        header: "پرداخت شده",
+        accessorFn: (row: any) =>
+          normalizeAmount(row?.sourceAmount, row?.sourceCurrencyCode, true),
+      },
+      {
+        id: "3",
+        accessorKey: "fee",
+        header: "کارمزد معامله",
+        accessorFn: (row: any) =>
+          renderFee(row?.feeCurrencyCode, row?.transactions),
+      },
+      {
+        id: "4",
+        accessorKey: "destinationAmount",
+        header: "دریافت شده",
+        accessorFn: (row: any) =>
+          normalizeAmount(
+            row?.destinationAmount,
+            row?.destinationCurrencyCode,
+            true,
+          ),
+      },
+      {
+        id: "5",
+        accessorKey: "createdAt",
+        header: "تاریخ",
+        accessorFn: (row: any) =>
+          moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
+      },
+      {
+        id: "6",
+        accessorKey: "details",
+        header: "جزئیات",
+        accessorFn: (row: any) => (
+          <SquareInfo
+            onClick={() => navigate(`/dashboard/invoice/${row?.id}`)}
+            width={24}
+            height={24}
+            style={{
+              cursor: "pointer",
+            }}
+          />
+        ),
+      },
+    ],
+    [],
+  );
+
+   // ==============|| Render ||================= //
   return (
     <Card className="h-100">
       <CardHeader className="d-flex flex-row justify-content-between align-items-center">
         <CardTitle tag="h5"> سفارشات من </CardTitle>
       </CardHeader>
       <CardBody>
-        <div className="table-responsive">
-          <table className="table table-borderless table-striped">
-            {data?.length > 0 ? (
-              <>
-                <thead>
-                  <tr>
-                    <th
-                      scope="col"
-                      style={{ color: "#03041b66" }}
-                      className="text-center"
-                    >
-                      بازار مبدا
-                    </th>
-                    <th
-                      scope="col"
-                      style={{ color: "#03041b66" }}
-                      className="text-center"
-                    >
-                      بازار مقصد
-                    </th>
-                    <th
-                      scope="col"
-                      style={{ color: "#03041b66" }}
-                      className="text-center"
-                    >
-                      پرداخت شده
-                    </th>
-                    <th
-                      scope="col"
-                      style={{ color: "#03041b66" }}
-                      className="text-center"
-                    >
-                      کارمزد معامله
-                    </th>
-                    <th
-                      scope="col"
-                      style={{ color: "#03041b66" }}
-                      className="text-center"
-                    >
-                      دریافت شده
-                    </th>
-                    <th
-                      scope="col"
-                      style={{ color: "#03041b66" }}
-                      className="text-center"
-                    >
-                      تاریخ
-                    </th>
-                    <th
-                      scope="col"
-                      style={{ color: "#03041b66" }}
-                      className="text-center"
-                    >
-                      جزییات
-                    </th>
-                  </tr>
-                </thead>
-                {isLoading ? (
-                  <tbody>
-                    <tr>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                    </tr>
-                  </tbody>
-                ) : (
-                  <tbody>
-                    {data?.map((data, index) => (
-                      <tr key={index}>
-                        <td className="text-center">
-                          <span className="text-success">
-                            {convertTextSingle(data?.sourceCurrencyCode)}
-                          </span>
-                        </td>
-                        <td className="text-center">
-                          <span className="text-danger">
-                            {convertTextSingle(data?.destinationCurrencyCode)}
-                          </span>
-                        </td>
-                        <td className="text-center">
-                          {renderAmount(
-                            data?.sourceCurrencyCode,
-                            data?.sourceAmount,
-                          )}
-                        </td>
-                        <td className="text-center">
-                          {renderFee(data?.feeCurrencyCode, data?.transactions)}
-                        </td>
-                        <td className="text-center">
-                          {renderAmount(
-                            data?.destinationCurrencyCode,
-                            data?.destinationAmount,
-                          )}
-                        </td>
-                        <td className="text-center">
-                          <span className="text-center">
-                            {moment(data?.createdAt)
-                              .locale("fa")
-                              .format("hh:mm , YYYY/MM/DD")}
-                          </span>
-                        </td>
-                        <td className="text-center">
-                          <SquareInfo
-                            onClick={() =>
-                              navigate(`/dashboard/invoice/${data?.id}`)
-                            }
-                            width={24}
-                            height={24}
-                            style={{
-                              cursor: "pointer",
-                            }}
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                )}
-              </>
-            ) : (
-              <tr>
-                <td colSpan={4} className="text-center">
-                  <img
-                    src={Deposit}
-                    style={{
-                      height: "50px",
-                      width: "50px",
-                      marginBottom: "10px",
-                    }}
-                  />
-                  <div className="text-dark">
-                    اولین معامله خود را با آرسونیکس تجربه کنید
-                  </div>
-                </td>
-              </tr>
-            )}
-          </table>
-        </div>
+        <ATable
+          data={isSuccess ? data : []}
+          isLoading={isLoading || isFetching}
+          columns={columns}
+        />
       </CardBody>
     </Card>
   );
