@@ -7,11 +7,10 @@ import Exchange from "pages/dashboard/exchange";
 import Profile from "pages/dashboard/profile";
 import Invoice from "pages/dashboard/invoice";
 import Orders from "pages/dashboard/orders";
-import Transactions from "pages/dashboard/transactions";
 import Support from "pages/dashboard/support";
 import Market from "pages/dashboard/market";
 import History from "pages/dashboard/history";
-import PaymentRecipt from "pages/dashboard/payment-receipt";
+import PaymentRecept from "pages/dashboard/paymentReceipt";
 import SupportDetails from "pages/dashboard/support/detail";
 import AddFriends from "pages/dashboard/add-friends";
 
@@ -48,10 +47,6 @@ const DashboardRouter = {
       element: <ProtectedRoute children={<Orders />} />,
     },
     {
-      path: "transactions",
-      element: <ProtectedRoute children={<Transactions />} />,
-    },
-    {
       path: "support",
       element: <ProtectedRoute children={<Support />} />,
     },
@@ -69,7 +64,7 @@ const DashboardRouter = {
     },
     {
       path: "payment-receipt/:id",
-      element: <ProtectedRoute children={<PaymentRecipt />} />,
+      element: <ProtectedRoute children={<PaymentRecept />} />,
     },
     {
       path: "add-friends",

@@ -1,23 +1,67 @@
+import ATable from "components/ATable";
 import TicketModal from "./AddModal";
 import moment from "jalali-moment";
 import { Button, Card, CardBody, CardHeader, CardTitle } from "reactstrap";
-import { ITicket } from "types/ticket";
 import { Link } from "react-router-dom";
 import { useGetTicketsQuery } from "store/api/ticket";
-import { useState } from "react";
-import Deposit from "assets/img/icons/depositIcon.svg";
+import { useMemo, useState } from "react";
 
 const Support = () => {
+  // ==============|| States ||================= //
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data, isLoading } = useGetTicketsQuery();
+
+  // ==============|| Hooks ||================= //
+  const { data, isLoading, isSuccess, isFetching } = useGetTicketsQuery();
+
+  // ==============|| Constants ||================= //
+  const columns = useMemo(
+    () => [
+      {
+        id: "0",
+        accessorKey: "createdAt",
+        header: "تاریخ ارسال",
+        accessorFn: (row: any) =>
+          moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
+      },
+      {
+        id: "1",
+        accessorKey: "subject",
+        header: "عنوان تیکت",
+      },
+      {
+        id: "2",
+        accessorKey: "status",
+        header: "وضعیت",
+        accessorFn: (row: any) =>
+          row?.status === "OPEN" ? (
+            <span className="text-success">باز</span>
+          ) : row?.status === "CLOSE" ? (
+            <span className="text-danger">بسته</span>
+          ) : (
+            <span className="text-info">در حال بررسی</span>
+          ),
+      },
+      {
+        id: "3",
+        accessorKey: "detail",
+        header: "",
+        accessorFn: (row: any) => (
+          <Link to={`details/${row?.id}`}>مشاهده جزئیات</Link>
+        ),
+      },
+    ],
+    [],
+  );
+
+  // ==============|| Render ||================= //
   return (
     <section className="page page-support">
       <Card className="custom-card currencies-online-rates card-secondary">
         <CardHeader className="d-flex flex-row justify-content-between align-items-center">
           <CardTitle tag="h5">پشتیبانی</CardTitle>
-          <div className="card-action">
+          <div className="card-action support-btn">
             <Link
-              className="mx-2 px-4 btn btn-primary btn-sm"
+              className="px-4 mb-2 btn btn-primary btn-sm"
               style={{
                 fontSize: ".87rem",
               }}
@@ -33,7 +77,6 @@ const Support = () => {
               style={{
                 fontSize: ".87rem",
               }}
-              className="px-4"
               onClick={() => setIsModalOpen(true)}
             >
               ارسال تیکت
@@ -41,132 +84,11 @@ const Support = () => {
           </div>
         </CardHeader>
         <CardBody>
-          <div
-            className="table-responsive"
-            style={{
-              fontSize: ".87rem",
-            }}
-          >
-            <table
-              className={`table table-borderless ${data?.length === 0 ? "table-modern" : "table-striped"}`}
-            >
-              {data?.length > 0 ? (
-                <>
-                  <thead>
-                    <tr>
-                      <th
-                        scope="col"
-                        style={{ color: "#03041b66" }}
-                        className="text-center"
-                      >
-                        تاریخ ارسال
-                      </th>
-                      <th
-                        scope="col"
-                        style={{ color: "#03041b66" }}
-                        className="text-center"
-                      >
-                        عنوان تیکت
-                      </th>
-                      <th
-                        scope="col"
-                        style={{ color: "#03041b66" }}
-                        className="text-center"
-                      >
-                        وضعیت
-                      </th>
-                      <th scope="col" className="text-center"></th>
-                    </tr>
-                  </thead>
-                  {isLoading ? (
-                    <tbody>
-                      <tr>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                        <td className="placeholder-glow">
-                          <div className="placeholder col-12 rounded" />
-                        </td>
-                      </tr>
-                    </tbody>
-                  ) : (
-                    <tbody>
-                      {data?.map((item: ITicket, index: number) => (
-                        <tr key={index}>
-                          <td className="text-center">
-                            <span className="d-ltr d-block">
-                              {moment(item?.createdAt)
-                                .locale("fa")
-                                .format("DD MMMM YYYY")}
-                            </span>
-                          </td>
-                          <td className="text-center">{item.subject}</td>
-                          <td className="text-center">
-                            {item.status === "OPEN" ? (
-                              <span className="text-success"> باز</span>
-                            ) : (
-                              <span className="text-danger">بسته </span>
-                            )}
-                          </td>
-                          <td className="text-center table-new__actions">
-                            <Link to={`details/${item.id}`}>مشاهده جزئیات</Link>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  )}
-                </>
-              ) : (
-                <tr>
-                  <td colSpan={4} className="text-center">
-                    <img
-                      src={Deposit}
-                      style={{
-                        height: "50px",
-                        width: "50px",
-                        marginBottom: "10px",
-                      }}
-                    />
-                    <div className="text-dark">هیچ تیکتی وجود ندارد</div>
-                  </td>
-                </tr>
-              )}
-            </table>
-          </div>
+          <ATable
+            data={isSuccess ? data : []}
+            isLoading={isLoading || isFetching}
+            columns={columns}
+          />
         </CardBody>
       </Card>
       <TicketModal

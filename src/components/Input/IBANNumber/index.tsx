@@ -1,5 +1,5 @@
 import { ChangeEvent } from "react";
-import { Input } from "reactstrap";
+import { FormFeedback, Input } from "reactstrap";
 import BanksWrapper from "components/BanksWrapper";
 
 import style from "assets/scss/components/Input/ibanNumber.module.scss";
@@ -11,7 +11,7 @@ type Props = {
   onChange?: (value: string) => void;
   className?: string;
   setBankId?: (string) => void;
-  invalid?: boolean;
+  error?: any;
 };
 
 export default function IBANNumber({
@@ -21,14 +21,16 @@ export default function IBANNumber({
   disabled = false,
   className,
   setBankId,
-  invalid = false,
+  error,
 }: Props) {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace("TR", "").replace(/\s/g, "");
     onChange?.(value);
   };
   return (
-    <div className={style["iban-input-control"]}>
+    <div
+      className={`${style["iban-input-control"]} ${error ? style["iban-control-error"] : ""}`}
+    >
       <BanksWrapper
         value={value}
         type="TRY"
@@ -41,13 +43,15 @@ export default function IBANNumber({
           onChange={handleChange}
           name={name}
           type="text"
+          inputMode="numeric"
           className={`account-number-input ${className} latin-font`}
           id={`ibanNumber-${name}`}
           disabled={disabled}
           placeholder=""
-          invalid={invalid}
+          invalid={Boolean(error)}
         />
       </BanksWrapper>
+      {error && <FormFeedback dir="rtl">{error?.message}</FormFeedback>}
     </div>
   );
 }

@@ -1,13 +1,13 @@
+import Notify from "components/Notify";
 import axios, { AxiosRequestConfig } from "axios";
 import { BaseQueryFn, createApi } from "@reduxjs/toolkit/dist/query/react";
-import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import toast from "react-hot-toast";
+import { SerializedError } from "@reduxjs/toolkit";
+import { clearUser } from "store/reducers/features/user/userSlice";
 import { getRefToken } from "helpers";
-import { setSession } from "contexts/JWTContext";
 import { isEmpty } from "lodash";
 import { setLogin, setLogout } from "store/reducers/jwtAuth";
-import { clearUser } from "store/reducers/features/user/userSlice";
+import { setSession } from "contexts/JWTContext";
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
@@ -27,8 +27,6 @@ export function refreshTokenPromise(): Promise<{
     _refPromise = axiosInstance
       .post(`/auth/refresh-token`, { refreshToken: refresh_token })
       .then(({ data }) => {
-        console.log("data", data);
-
         setSession({
           access_token: data.accessToken,
           refresh_token: data.refreshToken,
@@ -63,11 +61,12 @@ const axiosBaseQuery =
       const status = response.status;
       const isPrivate = !isEmpty(response?.config?.headers?.Authorization);
 
-      if (status === 500 || status > 500) {
-        toast.error("مشکلی در ارتباط با سرور بوجود آمده است", {
-          position: "bottom-left",
+      if (status === 500 || status > 500)
+        Notify({
+          type: "error",
+          text: "مشکلی در ارتباط با سرور بوجود آمده است",
         });
-      } else if (status === 401 && isPrivate) {
+      else if (status === 401 && isPrivate) {
         try {
           const { token, expiredAt } = await refreshTokenPromise();
           api.dispatch(
@@ -84,11 +83,11 @@ const axiosBaseQuery =
           window.location.assign("/login");
         }
         return axiosBaseQuery()(args, api, extraOptions);
-      } else if (response?.data?.translatedMessage) {
-        toast.error(response.data.translatedMessage, {
-          position: "bottom-left",
+      } else if (response?.data?.translatedMessage)
+        Notify({
+          type: "error",
+          text: response.data.translatedMessage,
         });
-      }
 
       return {
         error: {
@@ -109,6 +108,9 @@ export const api = createApi({
     "wallets",
     "ticket",
     "reply-ticket",
+    "debit-accounts",
+    "verifications",
+    "otp"
   ],
   keepUnusedDataFor: 30,
   refetchOnMountOrArgChange: 30,

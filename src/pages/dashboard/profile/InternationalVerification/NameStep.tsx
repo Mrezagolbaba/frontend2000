@@ -88,7 +88,10 @@ export default function NameStep({ successHandler }: Props) {
                   name={name}
                   id={name}
                   value={value}
-                  onChange={onChange}
+                  onChange={({ target }) => {
+                    const val = target.value.toUpperCase();
+                    onChange(val);
+                  }}
                   invalid={Boolean(errors?.[name])}
                 />
                 {errors?.[name] && (
@@ -110,7 +113,10 @@ export default function NameStep({ successHandler }: Props) {
                   name={name}
                   id={name}
                   value={value}
-                  onChange={onChange}
+                  onChange={({ target }) => {
+                    const val = target.value.toUpperCase();
+                    onChange(val);
+                  }}
                   invalid={Boolean(errors?.[name])}
                 />
                 {errors?.[name] && (

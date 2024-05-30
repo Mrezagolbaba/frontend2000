@@ -24,6 +24,7 @@ export default function Authenticator() {
   const handleChange = (e, name: OTPType) => {
     e.preventDefault();
     setIsDisabled(true);
+    setLevel(1);
     if (name !== value) {
       setValue(name);
       setIsOpenModal(true);

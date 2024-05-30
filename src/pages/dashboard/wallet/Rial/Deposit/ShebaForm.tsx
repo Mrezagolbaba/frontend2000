@@ -23,7 +23,7 @@ import {
 import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import { useBankAccountsQuery } from "store/api/profile-management";
 import BanksWrapper from "components/BanksWrapper";
-import { tomanShow } from "helpers";
+import { normalizeAmount } from "helpers";
 import { useAppSelector } from "store/hooks";
 import { useNavigate } from "react-router-dom";
 
@@ -184,11 +184,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
                     <CopyInput text={selectedBank || ""} />
                     {fee && (
                       <FormText>
-                        حداقل مبلغ واریز:
-                        {tomanShow({
-                          value: fee.depositMinAmount,
-                          currency: "IRR",
-                        })}
+                        {`حداقل مبلغ واریز: ${normalizeAmount(fee?.depositMinAmount, "IRR", true)}`}
                       </FormText>
                     )}
                   </FormGroup>
@@ -205,7 +201,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
                   <FormGroup>
                     <Label htmlFor={name}> شناسه واریز:</Label>
                     <CopyInput text={depResponse.refCode || ""} />
-                    <FormText>کارمزد واریز بین بانکی: صفر تومان</FormText>
+                    <FormText>کارمزد انتقال: 0.02%</FormText>
                   </FormGroup>
                 )}
               />
@@ -229,7 +225,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
             navigate("/dashboard/profile#kyc-section");
           }}
         >
-          ارتقاع به سطح دو
+          ارتقا به سطح دو
         </Button>
       </div>
     </Row>

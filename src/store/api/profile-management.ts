@@ -15,6 +15,7 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: `verifications`,
         };
       },
+      providesTags: ["verifications"],
     }),
     uploadDoc: builder.mutation<any, any>({
       query({ docType, fileName, file }) {
@@ -37,6 +38,7 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: "verifications/initiate-second-tier",
         };
       },
+      invalidatesTags: ["verifications"],
     }),
     initialInternational: builder.mutation<any, void>({
       query() {
@@ -45,6 +47,7 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: "verifications/initiate-international-services",
         };
       },
+      invalidatesTags: ["verifications"],
     }),
     banks: builder.query<BanksResponse[], any>({
       query(params) {
@@ -103,6 +106,7 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: "/bank-accounts/debit-account",
         };
       },
+      providesTags: ["debit-accounts"],
     }),
     debitSubscription: builder.mutation<{ url: string }, string>({
       query(bankId) {
@@ -111,6 +115,7 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: `/bank-accounts/request-debit-subscription/${bankId}`,
         };
       },
+      invalidatesTags: ["debit-accounts", "wallets"],
     }),
     disconnectDebit: builder.mutation<{ url: string }, string>({
       query(bankId) {
@@ -119,7 +124,7 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: `/bank-accounts/remove-debit-subscription/${bankId}`,
         };
       },
-      invalidatesTags: ["bank-accounts"],
+      invalidatesTags: ["debit-accounts"],
     }),
   }),
 });

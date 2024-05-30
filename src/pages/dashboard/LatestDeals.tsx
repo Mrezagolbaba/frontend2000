@@ -1,21 +1,74 @@
+import ATable from "components/ATable";
+import moment from "jalali-moment";
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 import { Link } from "react-router-dom";
-import { convertCoins, convertIRRToToman, convertStatus } from "helpers";
+import { convertText, normalizeAmount } from "helpers";
+import { useMemo } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
-import Deposit from "assets/img/icons/depositIcon.svg";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 
 function LatestDeals() {
-  const { data, isLoading } = useTransactionsQuery({
+  // ==============|| Hooks ||================= //
+  const { data, isLoading, isSuccess, isFetching } = useTransactionsQuery({
     sort: "createdAt,DESC",
+    filter: [
+      `currencyCode||eq||USDT`,
+      "status||$ne||DRAFT",
+      "status||$ne||EXPIRED",
+      "status||$ne||INITIATED",
+    ],
+    or: ["type||eq||DEPOSIT", "type||eq||WITHDRAW"],
+    limit: 10,
   });
-  const transActions = data?.filter(
-    (item) =>
-      item.status !== "EXPIRED" &&
-      item.status !== "INITIATED" &&
-      item.status !== "DRAFT" &&
-      (item.type === "DEPOSIT" || item.type === "WITHDRAW"),
+
+  // ==============|| Constants ||================= //
+  const columns = useMemo(
+    () => [
+      {
+        id: "0",
+        accessorKey: "type",
+        accessorFn: (row: any) =>
+          row?.type === "DEPOSIT" ? (
+            <span className="text-success">واریز</span>
+          ) : (
+            <span className="text-danger">برداشت</span>
+          ),
+        header: "نوع تراکنش",
+      },
+      {
+        id: "1",
+        accessorKey: "cryptoName",
+        accessorFn: (row) => convertText(row?.currencyCode, "enToFa"),
+        header: "نوع ارز",
+      },
+      {
+        id: "3",
+        accessorKey: "amount",
+        header: "مقدار",
+        accessorFn: (row: any) =>
+          normalizeAmount(row?.amount, row?.currencyCode, false),
+      },
+      {
+        id: "6",
+        accessorKey: "status",
+        header: "وضعیت",
+        accessorFn: (row: any) =>
+          row?.status === "SUCCESSFUL" ? (
+            <span className="text-success">موفق</span>
+          ) : (
+            <span className="text-danger">ناموفق</span>
+          ),
+      },
+      {
+        id: "3",
+        accessorKey: "createdAt",
+        header: "تاریخ",
+        accessorFn: (row: any) =>
+          moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
+      },
+    ],
+    [],
   );
 
   return (
@@ -27,146 +80,12 @@ function LatestDeals() {
         </Link>
       </CardHeader>
       <CardBody>
-        <div className={dashboard["table-responsive"]}>
-          <table
-            className={`${dashboard["data-table"]} ${dashboard["table-striped"]}`}
-          >
-            {transActions && transActions.length > 0 ? (
-              <>
-                <thead>
-                  <tr>
-                    <th scope="col">نوع تراکنش</th>
-                    <th scope="col">ارز</th>
-                    <th scope="col">مقدار</th>
-                    <th scope="col">وضعیت</th>
-                    <th scope="col">تاریخ</th>
-                  </tr>
-                </thead>
-                {isLoading ? (
-                  <tbody>
-                    <tr>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                      <td className="placeholder-glow">
-                        <div className="placeholder col-12 rounded" />
-                      </td>
-                    </tr>
-                  </tbody>
-                ) : (
-                  <tbody>
-                    {transActions.slice(-7)?.map((item, index) => (
-                      <tr key={index}>
-                        <td>
-                          <span
-                            className={
-                              item.type === "DEPOSIT"
-                                ? "text-success"
-                                : "text-danger"
-                            }
-                          >
-                            {item.type === "DEPOSIT" ? "واریز" : "برداشت"}
-                          </span>
-                        </td>
-                        <td>{convertCoins(item.currencyCode)}</td>
-                        {item.currencyCode === "IRR" ? (
-                          <td>
-                            {convertIRRToToman(
-                              Number(item.amount),
-                            ).toLocaleString()}
-                          </td>
-                        ) : (
-                          <td>{Number(item.amount).toLocaleString()}</td>
-                        )}
-                        <td>
-                          <span
-                            className={`${
-                              item.status === "CANCELED" ||
-                              item.status === "FAILED" ||
-                              item.status === "EXPIRED"
-                                ? "text-danger"
-                                : item.status === "SUCCESSFUL"
-                                  ? "text-success"
-                                  : "text-secondary"
-                            }`}
-                          >
-                            {convertStatus(item.status)}
-                          </span>
-                        </td>
-                        <td>
-                          <span className="d-ltr d-block">
-                            {`${new Date(item?.createdAt).toLocaleTimeString("fa-IR")} ${new Date(
-                              item?.createdAt,
-                            ).toLocaleDateString("fa-IR")}`}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                )}
-              </>
-            ) : (
-              <tbody>
-                <tr>
-                  <td colSpan={4} className="text-center bg-white">
-                    <img
-                      src={Deposit}
-                      style={{
-                        height: "50px",
-                        width: "50px",
-                        marginBottom: "10px",
-                      }}
-                    />
-                    <p>اولین تراکنش خود را با آرسونیکس تجربه کنید</p>
-                  </td>
-                </tr>
-              </tbody>
-            )}
-          </table>
-        </div>
+        <ATable
+          size="small"
+          data={isSuccess ? data : []}
+          isLoading={isLoading || isFetching}
+          columns={columns}
+        />
       </CardBody>
     </Card>
   );

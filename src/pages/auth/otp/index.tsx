@@ -14,6 +14,7 @@ import {
 } from "helpers";
 import * as Yup from "yup";
 import Auth from "layouts/auth";
+import Notify from "components/Notify";
 import OtpInput from "react-otp-input";
 import useAuth from "hooks/useAuth";
 import { AlertWarning } from "components/AlertWidget";
@@ -21,7 +22,6 @@ import { Controller, useForm } from "react-hook-form";
 import { OTPRequest, ResendOTPRequest } from "types/auth";
 import { setUser } from "store/reducers/features/user/userSlice";
 import { setVerifyLogin } from "store/reducers/jwtAuth";
-import { toast } from "react-hot-toast";
 import { useDispatch } from "store/store";
 import { useEffect, useState } from "react";
 import { useGetMeQuery } from "store/api/user";
@@ -41,6 +41,7 @@ export default function Otp() {
 
   // ==============|| States ||================= //
   const [timeInSeconds, setTimeInSeconds] = useState(120);
+  const [switchType, setSwitchType] = useState<"PHONE" | "EMAIL" | null>(null);
 
   // ==============|| Hooks ||================= //
   const dispatch = useDispatch();
@@ -75,10 +76,11 @@ export default function Otp() {
         method: user.otpMethod,
       };
       if (sendWay) {
-        toast.success(
-          `کد تایید به ${sendWay === "EMAIL" ? "ایمیل" : "شماره همراه"} ارسال شد.`,
-          { position: "bottom-left" },
-        );
+        setSwitchType(sendWay);
+        Notify({
+          type: "success",
+          text: `کد تایید به ${sendWay === "EMAIL" ? "ایمیل" : "شماره همراه"} ارسال شد.`,
+        });
         data.type = "AUTH";
         data.method = sendWay;
       }
@@ -91,7 +93,14 @@ export default function Otp() {
       const body: OTPRequest = {
         code: persianToEnglishNumbers(data.code),
         type,
-        method: method,
+        method:
+          type === "RESET_PASSWORD"
+            ? method
+            : type === "VERIFY_EMAIL"
+              ? "EMAIL"
+              : switchType
+                ? switchType
+                : user.otpMethod,
       };
       await otp(body).then(() => {
         setValue("code", "");
@@ -119,9 +128,7 @@ export default function Otp() {
   };
   const handleErrors = (errors: any) => {
     setValue("code", "");
-    toast.error(errors?.code?.message, {
-      position: "bottom-left",
-    });
+    Notify({ type: "error", text: errors?.code?.message });
   };
   const formatTime = () => {
     const minutes = Math.floor(timeInSeconds / 60);
@@ -261,9 +268,7 @@ export default function Otp() {
       <section className={auth.container}>
         <Card className={auth.card}>
           <CardBody className={auth["card-body"]}>
-            <h4 className={auth.title}>
-              {method === "EMAIL" ? "تایید ایمیل" : "تایید شماره همراه"}
-            </h4>
+            <h4 className={auth.title}>تایید ورود دو مرحله‌ای</h4>
             <div className="auth-summary">
               {type === "VERIFY_EMAIL" && (
                 <div className="text-center">
@@ -307,7 +312,9 @@ export default function Otp() {
                           numInputs={6}
                           renderSeparator={undefined}
                           shouldAutoFocus={true}
-                          renderInput={(props) => <input {...props} />}
+                          renderInput={(props) => (
+                            <input {...props} type="text" inputMode="numeric" />
+                          )}
                         />
                       )}
                     />

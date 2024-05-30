@@ -5,9 +5,9 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Table } from "reactstrap";
-import { coinShow, convertText, lirShow, tomanShow } from "helpers";
 import { CurrencyCode } from "types/wallet";
+import { Table } from "reactstrap";
+import { convertText, normalizeAmount } from "helpers";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
 
@@ -18,8 +18,10 @@ type Props = {
   feeCurrencyCode: CurrencyCode;
   setFeeCurrencyCode: Dispatch<SetStateAction<CurrencyCode>>;
   isLoading: boolean;
+  sourceStock: string;
 };
 export default function WageTable({
+  sourceStock,
   data,
   setFeeCurrencyCode,
   isLoading = false,
@@ -27,19 +29,23 @@ export default function WageTable({
   destinationCode,
   feeCurrencyCode,
 }: Props) {
+  // ==============|| States ||================= //
   const [feeCost, setFeeCost] = useState<string | null>(null);
   const [feeAmount, setFeeAmount] = useState<string | null>(null);
-
   const [feeWithDiscount, setFeeWithDiscount] = useState<string | null>(null);
-
   const [finalAmount, setFinalAmount] = useState<string | null>(null);
 
+  // ==============|| Handlers ||================= //
   const handleDetails = useCallback(
     (key: 0 | 1) => {
       const targetFee = data?.transactions[key].fees[0];
 
       if (targetFee.format === "STATIC") {
-        const coin = coinShow(targetFee.internalConvertedAmount, "USDT");
+        const coin = normalizeAmount(
+          targetFee?.internalConvertedAmount,
+          "USDT",
+          true,
+        );
         setFeeCost(coin);
       } else {
         const coin = (Number(targetFee.value) * 100).toPrecision(2);
@@ -66,64 +72,49 @@ export default function WageTable({
       } else {
         if (feeCurrencyCode === destinationCode)
           feeTemp =
-            Number(data?.transactions[1].amount) -
-            Number(data.transactions[1].fee);
-        else feeTemp = Number(data?.transactions[1].amount);
+            Number(data?.transactions[1]?.amount) -
+            Number(data.transactions[1]?.fee);
+        else feeTemp = Number(data?.transactions[1]?.amount);
       }
-      switch (feeCurrencyCode) {
-        case "USDT":
-          setFeeAmount(coinShow(data?.transactions[key].fee, "USDT"));
-          discount > 0 &&
-            setFeeWithDiscount(
-              coinShow(finalFeeWithDiscount.toString(), "USDT"),
-            );
-          break;
-        case "TRY":
-          setFeeAmount(
-            lirShow({ value: data?.transactions[key].fee, currency: "TRY" }),
-          );
-          discount > 0 &&
-            setFeeWithDiscount(
-              lirShow({
-                value: finalFeeWithDiscount.toString(),
-                currency: "TRY",
-              }),
-            );
-          break;
-        case "IRR":
-        default:
-          setFeeAmount(
-            tomanShow({ value: data?.transactions[key].fee, currency: "IRR" }),
-          );
-          discount > 0 &&
-            setFeeWithDiscount(
-              tomanShow({
-                value: finalFeeWithDiscount.toString(),
-                currency: "IRR",
-              }),
-            );
-          break;
-      }
-      switch (data.destinationCurrencyCode) {
-        case "USDT":
-          setFinalAmount(coinShow(feeTemp.toString(), "USDT"));
-          break;
-        case "TRY":
-          setFinalAmount(
-            lirShow({ value: feeTemp.toString(), currency: "TRY" }),
-          );
-          break;
-        case "IRR":
-        default:
-          setFinalAmount(
-            tomanShow({ value: feeTemp.toString(), currency: "IRR" }),
-          );
-          break;
-      }
+      setFeeAmount(
+        normalizeAmount(data?.transactions[key]?.fee, feeCurrencyCode, true),
+      );
+      discount > 0 &&
+        setFeeWithDiscount(
+          normalizeAmount(
+            finalFeeWithDiscount.toString(),
+            feeCurrencyCode,
+            true,
+          ),
+        );
+      setFinalAmount(
+        normalizeAmount(
+          feeTemp.toString(),
+          data?.destinationCurrencyCode,
+          true,
+        ),
+      );
     },
     [data, destinationCode, feeCurrencyCode],
   );
+  const handleFeeOptions = useCallback(() => {
+    if (
+      Number(data?.sourceAmount) + Number(data?.transactions[0].fee) >
+      Number(sourceStock)
+    ) {
+      setFeeCurrencyCode(destinationCode);
+      return true;
+    }
+    return false;
+  }, [
+    data?.sourceAmount,
+    data?.transactions,
+    destinationCode,
+    setFeeCurrencyCode,
+    sourceStock,
+  ]);
 
+  // ==============|| Life Cycle ||================= //
   useEffect(() => {
     if (data) {
       if (feeCurrencyCode === sourceCode) handleDetails(0);
@@ -131,6 +122,7 @@ export default function WageTable({
     }
   }, [data, feeCurrencyCode, handleDetails, sourceCode]);
 
+  // ==============|| Render ||================= //
   return (
     <div className={exchange.wage}>
       <Table className={exchange.table}>
@@ -176,6 +168,7 @@ export default function WageTable({
                       type="radio"
                       name="rtc"
                       id="rtc1"
+                      disabled={handleFeeOptions()}
                       checked={feeCurrencyCode === sourceCode}
                       onChange={() => setFeeCurrencyCode(sourceCode)}
                     />
@@ -211,7 +204,6 @@ export default function WageTable({
                   ) : (
                     feeAmount
                   ))}
-                {/* {feeCost === null ? "-" : `${feeCost} معادل ${feeAmount}`} */}
               </td>
               <td className="text-center">
                 {finalAmount === null ? "-" : finalAmount}

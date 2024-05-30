@@ -5,10 +5,10 @@ import {
   DropdownToggle,
 } from "reactstrap";
 import { CurrencyCode } from "types/wallet";
+import { CurrencyOption, currencyOptions } from "./constant";
 import { useEffect, useState } from "react";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
-import { CurrencyOption, currencyOptions } from "./constant";
 
 type Props = {
   onChange: (option: CurrencyOption) => void;

@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
 import User1 from "assets/img/level-1.svg";
 import User2 from "assets/img/level-2.svg";
 import moment from "jalali-moment";
-import { Button, Card, CardBody } from "reactstrap";
+import { Card, CardBody } from "reactstrap";
 import { CiEdit } from "react-icons/ci";
+import { Link } from "react-router-dom";
 import { RxCalendar } from "react-icons/rx";
 import { useAppSelector } from "store/hooks";
+import { useEffect, useState } from "react";
 import { useGetSessionQuery } from "store/api/auth";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
-import { Link } from "react-router-dom";
 
 export default function UserInformation() {
   // ==============|| States ||================= //
@@ -26,7 +26,7 @@ export default function UserInformation() {
     if (isSuccess && data) {
       const lastItem = data[data.length - 1];
       setLastSession(
-        moment(lastItem.createdAt).locale("fa").format(" DD MMMM YYYY"),
+        moment(lastItem.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
       );
     }
   }, [data, isSuccess]);
@@ -77,7 +77,10 @@ export default function UserInformation() {
               ) : (
                 <span>
                   <span>سطح یک</span>{" "}
-                  <Link to="/dashboard/profile" style={{ color: "#111bff" }}>
+                  <Link
+                    to="/dashboard/profile#kyc-section"
+                    style={{ color: "#111bff" }}
+                  >
                     ارتقا سطح
                   </Link>
                 </span>

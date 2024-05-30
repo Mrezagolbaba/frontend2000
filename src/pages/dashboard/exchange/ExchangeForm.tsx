@@ -1,6 +1,3 @@
-import { convertText, persianToEnglishNumbers } from "helpers";
-import React, { useCallback, useEffect, useState } from "react";
-import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import {
   Button,
   Card,
@@ -12,20 +9,23 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
-import { isEmpty } from "lodash";
-import toast from "react-hot-toast";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { CurrencyCode } from "types/wallet";
-import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
-import SelectCurrency from "components/Input/CurrencyInput/SelectCurrency";
-import { currencyOptions } from "components/Input/CurrencyInput/SelectCurrency/constant";
 import {
   useCreateCurrencySwapMutation,
   useLazyRatesQuery,
-  useWalletsQuery,
 } from "store/api/exchange-management";
-import WageTable from "./WageTable";
+import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
+import Notify from "components/Notify";
 import RatePlace from "./RatePlace";
+import React, { useCallback, useEffect, useState } from "react";
+import SelectCurrency from "components/Input/CurrencyInput/SelectCurrency";
+import WageTable from "./WageTable";
+import { CurrencyCode } from "types/wallet";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { convertText, persianToEnglishNumbers } from "helpers";
+import { currencyOptions } from "components/Input/CurrencyInput/SelectCurrency/constant";
+import { isEmpty } from "lodash";
+import { useWalletsQuery } from "store/api/wallet-management";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
 import buy from "assets/scss/dashboard/buy-sell.module.scss";
@@ -40,6 +40,8 @@ type Props = {
 };
 
 export default function ExchangeForm({ setIsOpenDialog }: Props) {
+  // ==============|| States ||================= //
+  const [sourceStock, setSourceStock] = useState("0");
   // ==============|| Hooks ||================= //
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -82,56 +84,74 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
   const [isSubmit, setIsSubmit] = useState(false);
 
   // ==============|| Handlers ||================= //
-  const handleSwap = (type: "source" | "destination", value) => {
-    if (isEmpty(value)) {
-      setSource((prev) => ({ ...prev, amount: 0 }));
-      setDestination((prev) => ({ ...prev, amount: 0 }));
-    }
-    if (type === "source") {
-      currencySwap({
-        isDry: true,
-        data: {
-          sourceCurrencyCode: source.currency,
-          sourceAmount:
-            source.currency === "IRR"
-              ? (Number(value) * 10).toString()
-              : value.toString(),
-          destinationCurrencyCode: destination.currency,
-          feeCurrencyCode: feeCurrencyCode,
-        },
-      });
-    } else if (type === "destination") {
-      reversCurrencySwap({
-        isDry: true,
-        data: {
-          sourceCurrencyCode: destination.currency,
-          sourceAmount:
-            destination.currency === "IRR"
-              ? (Number(value) * 10).toString()
-              : value.toString(),
-          destinationCurrencyCode: source.currency,
-          feeCurrencyCode: feeCurrencyCode,
-        },
-      });
-    }
-  };
-  const handleSubmit = () => {
+  const handleSwap = useCallback(
+    (type: "source" | "destination", value) => {
+      if (isEmpty(value)) {
+        setSource((prev) => ({ ...prev, amount: 0 }));
+        setDestination((prev) => ({ ...prev, amount: 0 }));
+      }
+      if (type === "source") {
+        currencySwap({
+          isDry: true,
+          data: {
+            sourceCurrencyCode: source.currency,
+            sourceAmount:
+              source.currency === "IRR"
+                ? (Number(value) * 10).toString()
+                : value.toString(),
+            destinationCurrencyCode: destination.currency,
+            feeCurrencyCode: feeCurrencyCode,
+          },
+        });
+      } else if (type === "destination") {
+        reversCurrencySwap({
+          isDry: true,
+          data: {
+            sourceCurrencyCode: destination.currency,
+            sourceAmount:
+              destination.currency === "IRR"
+                ? (Number(value) * 10).toString()
+                : value.toString(),
+            destinationCurrencyCode: source.currency,
+            feeCurrencyCode: feeCurrencyCode,
+          },
+        });
+      }
+    },
+    [
+      currencySwap,
+      destination.currency,
+      feeCurrencyCode,
+      reversCurrencySwap,
+      source.currency,
+    ],
+  );
+  const handleSubmit = useCallback(() => {
     const sourceWalletWallet = wallets?.find(
       (w) => w.currencyCode === source.currency,
     );
-    const min = ((Number(usdtRate?.rate) * 3) / 10).toFixed(0);
+    const min =
+      source.currency === "IRR"
+        ? ((Number(usdtRate?.rate) * 3) / 10).toFixed(0)
+        : source.currency === "TRY"
+          ? (Number(usdtRate?.rate) * 3).toPrecision(6)
+          : "3";
 
     if (Number(sourceWalletWallet?.availableBalance) < source.amount) {
       setError({ ...error, source: true });
-      toast.error("مبلغ مورد نظر شما از موجودی قابل برداشت تان بیشتر است.", {
-        position: "bottom-left",
+      Notify({
+        type: "error",
+        text: "مبلغ مورد نظر شما از موجودی قابل برداشت تان بیشتر است.",
       });
-    } else if (!usdtRateSuccess || source.amount < Number(min)) {
+    } else if (
+      (!usdtRateSuccess && source.currency !== "USDT") ||
+      source.amount < Number(min)
+    ) {
       setError({ ...error, source: true });
-      toast.error(
-        `حداقل مبلغ معامله ${Number(min).toLocaleString()}  می باشد.`,
-        { position: "bottom-left" },
-      );
+      Notify({
+        type: "error",
+        text: `حداقل مبلغ معامله ${Number(min).toLocaleString()} ${convertText(source.currency, "enToFa")} می باشد.`,
+      });
     } else {
       setIsSubmit(true);
       currencySwap({
@@ -147,7 +167,16 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
         },
       });
     }
-  };
+  }, [
+    currencySwap,
+    destination.currency,
+    error,
+    feeCurrencyCode,
+    source,
+    usdtRate?.rate,
+    usdtRateSuccess,
+    wallets,
+  ]);
   const initPageRout = useCallback(() => {
     if (state?.source && state.source.amount > 0)
       currencySwap({
@@ -163,10 +192,31 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
         },
       });
   }, [currencySwap, state]);
+  const ratesHandler = useCallback(() => {
+    getRate({
+      sourceCurrencyCode: source.currency,
+      targetCurrencyCode: destination.currency,
+    });
+    getReverseRate({
+      sourceCurrencyCode: destination.currency,
+      targetCurrencyCode: source.currency,
+    });
+    source.currency !== "USDT" &&
+      getUsdtRate({
+        sourceCurrencyCode: "USDT",
+        targetCurrencyCode: source.currency,
+      });
+  }, [
+    destination.currency,
+    getRate,
+    getReverseRate,
+    getUsdtRate,
+    source.currency,
+  ]);
 
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
-    if (successSwap && isSubmit) {
+    if (successSwap && isSubmit && swap?.id) {
       navigate(`/dashboard/invoice/${swap?.id}`);
     }
   }, [isSubmit, successSwap, navigate, swap?.id]);
@@ -176,21 +226,8 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
   }, [initPageRout]);
 
   useEffect(() => {
-    getRate({
-      sourceCurrencyCode: source.currency,
-      targetCurrencyCode: destination.currency,
-    });
-    getReverseRate({
-      sourceCurrencyCode: destination.currency,
-      targetCurrencyCode: source.currency,
-    });
-    getUsdtRate({
-      sourceCurrencyCode: "USDT",
-      targetCurrencyCode: source.currency,
-    });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [source.currency, destination.currency]);
+    ratesHandler();
+  }, [ratesHandler]);
 
   useEffect(() => {
     if (successSwap) {
@@ -217,25 +254,10 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
 
   useEffect(() => {
     if (successReverseSwap) {
-      const newSourceAmount =
-        reversSwap.sourceCurrencyCode === "IRR"
-          ? Number(reversSwap.sourceAmount) / 10
-          : Number(reversSwap.sourceAmount);
-      const newDestinationAmount =
-        reversSwap.destinationCurrencyCode === "IRR"
-          ? Number(reversSwap.destinationAmount) / 10
-          : Number(reversSwap.destinationAmount);
-      setSource((prevState) => ({
-        ...prevState,
-        amount: newDestinationAmount,
-      }));
-      setDestination((prevState) => ({
-        ...prevState,
-        amount: newSourceAmount,
-      }));
+      const amountTemp = persianToEnglishNumbers(reversSwap.destinationAmount);
+      handleSwap("source", Number(amountTemp) / 10);
     }
-    setTransaction(reversSwap);
-  }, [successReverseSwap, reversSwap]);
+  }, [successReverseSwap, reversSwap, handleSwap]);
 
   // ==============|| Render ||================= //
   return (
@@ -340,6 +362,7 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
                 showRate={true}
                 isLoading={isLoadingWallet}
                 wallets={wallets}
+                setStock={setSourceStock}
                 rate={exchangeRate?.rate as string}
                 reverseRate={exchangeReverseRate?.rate as string}
               />
@@ -447,6 +470,7 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
           <Row>
             <Col xs={12}>
               <WageTable
+                sourceStock={sourceStock}
                 isLoading={isLoadingSwap || isLoadingReverseSwap}
                 sourceCode={source.currency}
                 destinationCode={destination.currency}

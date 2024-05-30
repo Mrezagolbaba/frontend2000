@@ -16,25 +16,13 @@ export const exchangeManagement = enhancedApi.injectEndpoints({
       },
     }),
     currencySwap: builder.query<any, any>({
-      query({ join, sort }) {
+      query(params) {
         return {
           method: "GET",
           url: `/currency-swaps`,
-          params: {
-            join,
-            sort,
-          },
+          params,
         };
       },
-    }),
-    wallets: builder.query<any, void>({
-      query() {
-        return {
-          method: "GET",
-          url: "wallets",
-        };
-      },
-      providesTags: ["wallets"],
     }),
     createCurrencySwap: builder.mutation<any, { isDry: boolean; data: any }>({
       query({ isDry, data }) {
@@ -65,7 +53,6 @@ export const exchangeManagement = enhancedApi.injectEndpoints({
 export const {
   useLazyRatesQuery,
   useCurrencySwapQuery,
-  useWalletsQuery,
   useCreateCurrencySwapMutation,
   useGetCurrencySwapQuery,
 } = exchangeManagement;

@@ -1,6 +1,6 @@
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 import { Link } from "react-router-dom";
-import { convertTextSingle, extractLeftSide, tomanShow } from "helpers";
+import { convertTextSingle, extractLeftSide, normalizeAmount } from "helpers";
 import { useGetRatesQuery } from "store/api/publices";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
@@ -14,7 +14,7 @@ export default function TradingMarkets() {
         <CardTitle tag="h5"> بازارهای معاملاتی</CardTitle>
         <div className="card-action">
           <Link to="/dashboard/market" className={dashboard["sub-link"]}>
-            مشاهده تمام بازارها
+            تمام بازارها
           </Link>
         </div>
       </CardHeader>
@@ -146,7 +146,7 @@ export default function TradingMarkets() {
                             data-th="قیمت واحد (تومان)"
                           >
                             <span className="td-responsive">
-                              {tomanShow({ value: record?.rate })}
+                              {normalizeAmount(record?.rate, "IRR", false)}
                             </span>
                           </td>
 

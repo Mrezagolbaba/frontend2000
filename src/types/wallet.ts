@@ -6,7 +6,8 @@ export type TransactionType =
 export type TransactionRequestType =
   | "BANK_ACCOUNT"
   | "WALLET"
-  | "WALLET_ADDRESS";
+  | "WALLET_ADDRESS"
+  | "DEBIT";
 export type TransactionStatus =
   | "DRAFT"
   | "INITIATED"
@@ -56,6 +57,8 @@ export interface TransactionResponse {
   sourceId: string;
   destinationType: TransactionRequestType;
   destinationId: string;
+  destination: any;
+  source: any;
   displayId: string;
   currencyCode: string;
   amount: string;

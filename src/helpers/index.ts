@@ -4,9 +4,10 @@ import axios from "axios";
 import jalaliMoment from "jalali-moment";
 import moment from "jalali-moment";
 import { CryptoData } from "types/exchange";
-import { CurrencyCode, TransactionStatus } from "types/wallet";
-import { JWT_DECODE_KEY, REF_TOKEN_OBJ_NAME, REF_TOKEN_OBJ_TIME } from "config";
+import { TransactionStatus } from "types/wallet";
+import { JWT_DECODE_KEY, REF_TOKEN_OBJ_NAME } from "config";
 import { isEmpty } from "lodash";
+import { PhoneNumberUtil } from "google-libphonenumber";
 
 export function generateLabelValueArray(start: number, end: number) {
   const resultArray: { label: string; value: string }[] = [];
@@ -262,17 +263,20 @@ export function getTitlePage(path: string) {
     { path: "/contact-us", name: "تماس با ما - آرسونیکس" },
     { path: "/terms", name: "قوانین و مقررات - آرسونیکس" },
     { path: "/dashboard", name: "داشبورد کاربری - آرسونیکس" },
+    { path: "/dashboard/profile", name: "پروفایل کاربری - آرسونیکس" },
     { path: "/dashboard/exchange", name: "خرید و فروش سریع - آرسونیکس" },
     { path: "/dashboard/wallet", name: "کیف پول - آرسونیکس" },
     { path: "/dashboard/setting", name: "تنظیمات - آرسونیکس" },
     { path: "/dashboard/market", name: "بازارها - آرسونیکس" },
     { path: "/dashboard/orders", name: "سفارشات - آرسونیکس" },
-    { path: "/dashboards/history", name: "تاریخچه - آرسونیکس" },
+    { path: "/dashboard/history", name: "تاریخچه - آرسونیکس" },
     { path: "/dashboard/support", name: "پشتیبانی - آرسونیکس" },
+    { path: "/dashboard/add-friends", name: "ت از دوستان - آرسونیکس" },
     { path: "/login", name: "آرسونیکس - ورود به حساب کاربری" },
     { path: "/register", name: "آرسونیکس - ثبت نام" },
     { path: "/forget-password", name: "آرسونیکس - فراموشی رمز عبور" },
     { path: "/information", name: "آرسونیکس - احراز هویت" },
+    { path: "/404", name: "صفحه مورد نظر یافت نشد - آرسونیکس" },
   ];
 
   const findTitle = pages.find((page) => page.path === path);
@@ -315,54 +319,54 @@ export const convertCoins = (value) => {
   }
 };
 
-type CurrencyProps = {
-  value: string;
-  currency?: CurrencyCode;
-  justFix?: boolean;
-};
-
-export const tomanShow = ({
-  value,
-  currency,
-  justFix = false,
-}: CurrencyProps): string => {
-  const intValue = parseInt(value);
-  const newValue = Math.trunc(intValue / 10);
-  if (Number.isNaN(intValue)) {
-    return "0";
+/***********
+ *  this function generate amounts and prices with separator and set decimals with according currencies
+ * currency list for now >> "IRR" , "TRY" , "USDT" , "TRX"
+ ***********/
+export const normalizeAmount = (
+  amount: string,
+  currency: "IRR" | "TRY" | "USDT" | "TRX",
+  isShowCurrency: boolean,
+) => {
+  if (!amount || isEmpty(amount)) return "0";
+  const everChar = 3;
+  const insertChar = ",";
+  const indexDot =
+    amount?.indexOf(".") > 0 ? amount.indexOf(".") : amount.length;
+  let newAmount = "",
+    intPart = "";
+  if (currency === "IRR") {
+    newAmount = amount.substring(0, indexDot - 1);
+  } else newAmount = amount.substring(0, indexDot);
+  for (let i = newAmount.length; i > 0; i -= everChar) {
+    const slice = newAmount.substring(i - everChar, i);
+    if (i !== newAmount.length && slice.length <= everChar)
+      intPart = slice.concat(insertChar, intPart);
+    else intPart = slice.concat(intPart);
   }
-  if (justFix) return Math.trunc(intValue / 10).toString();
-  else if (!isEmpty(currency))
-    return `${newValue.toLocaleString("IRR")} ${convertText(currency, "enToFa")}`;
-  else return newValue.toLocaleString("IRR");
-};
 
-export const lirShow = ({
-  value,
-  currency,
-  justFix = false,
-}: CurrencyProps): string => {
-  const intValue = Number(value);
-  const newValue = intValue.toFixed(2);
-  if (Number.isNaN(intValue) || newValue === "NaN") {
-    return "0";
+  if (isEmpty(intPart)) intPart = "0";
+
+  switch (currency) {
+    case "USDT":
+    case "TRX": {
+      let decimalPart = amount.substring(indexDot, indexDot + 7);
+      if (decimalPart === ".000000") decimalPart = "";
+      if (isShowCurrency) return `${intPart + decimalPart} تتر`;
+      else return intPart + decimalPart;
+    }
+    case "TRY": {
+      let decimalPart = amount.substring(indexDot, indexDot + 3);
+      if (decimalPart === ".00") decimalPart = "";
+      if (isShowCurrency) return `${intPart + decimalPart} لیر`;
+      else return intPart + decimalPart;
+    }
+    case "IRR":
+    default: {
+      if (isShowCurrency) return `${intPart} تومان`;
+      else return intPart;
+    }
   }
-  if (justFix) return (Math.round(intValue * 100) / 100).toFixed(2);
-  else if (!isEmpty(currency))
-    return `${Number(newValue).toLocaleString("IRR")} ${convertText(currency, "enToFa")}`;
-  else return Number(newValue).toLocaleString("IRR");
-};
-
-export const coinShow = (value: string, currency?: CurrencyCode): string => {
-  const newValue = Number(value).toPrecision(6);
-
-  if (Number.isNaN(newValue) || newValue == "NaN") {
-    return "0";
-  }
-  if (!isEmpty(currency))
-    return `${Number(newValue).toLocaleString("IRR")} ${convertText(currency, "enToFa")}`;
-
-  return Number(newValue).toLocaleString("IRR");
 };
 
 export const getEncryptedObject = (data: string) => {
@@ -415,3 +419,12 @@ export async function get24hChanges(
     return null;
   }
 }
+const phoneUtil = PhoneNumberUtil.getInstance();
+
+export const isPhoneValid = (phone: string) => {
+  try {
+    return phoneUtil.isValidNumber(phoneUtil.parseAndKeepRawInput(phone));
+  } catch (error) {
+    return false;
+  }
+};

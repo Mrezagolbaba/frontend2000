@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
-import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
-
 import CreditCardForm from "./CreditCardForm";
+import DirectDebit from "./DirectDebit";
 import ShebaForm from "./ShebaForm";
+import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
+import { useAppSelector } from "store/hooks";
+import { useEffect, useState } from "react";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
-import { AlertInfo } from "components/AlertWidget";
-import { useAppSelector } from "store/hooks";
-import DirectDebit from "./DirectDebit";
 
 export default function Deposit({ onClose }: { onClose?: () => void }) {
   const [activeTab, setActiveTab] = useState<"1" | "2" | "3">("1");
@@ -35,7 +33,7 @@ export default function Deposit({ onClose }: { onClose?: () => void }) {
               tag="button"
               onClick={() => toggleTab("1")}
             >
-              درگاه پرداخت (کارت بانکی)
+              درگاه بانکی
             </NavLink>
           </NavItem>
         )}
@@ -47,7 +45,7 @@ export default function Deposit({ onClose }: { onClose?: () => void }) {
             tag="button"
             onClick={() => toggleTab("2")}
           >
-            برداشت مستقیم از حساب (شارژ سریع)
+            برداشت مستقیم (Direct Debit)
           </NavLink>
         </NavItem>
         <NavItem>
@@ -58,7 +56,7 @@ export default function Deposit({ onClose }: { onClose?: () => void }) {
             tag="button"
             onClick={() => toggleTab("3")}
           >
-            واریز بین بانکی (پایا، ساتنا و...)
+           واریز با شناسه (پایا، ساتنا، حساب به حساب)
           </NavLink>
         </NavItem>
       </Nav>

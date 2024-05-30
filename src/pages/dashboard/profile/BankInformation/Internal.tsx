@@ -12,6 +12,7 @@ import {
   CardTitle,
   Col,
   Form,
+  FormFeedback,
   FormGroup,
   Input,
   Label,
@@ -33,7 +34,7 @@ import profile from "assets/scss/dashboard/profile.module.scss";
 const resolver = yupResolver(
   Yup.object().shape({
     iban: Yup.string(),
-    cardNumber: Yup.string().required().max(16, "فرمت شماره کارت اشتباه است."),
+    cardNumber: Yup.string().required("فرمت شماره کارت اشتباه است.").max(16, "فرمت شماره کارت اشتباه است."),
     bankId: Yup.string().required(),
   }),
 );
@@ -61,15 +62,20 @@ export default function Internal({ accounts, isLoading }: Props) {
   const [createAccount, { isLoading: formLoading, isSuccess }] =
     useCreateBankAccountMutation();
 
-  const { handleSubmit, control, reset, setValue } =
-    useForm<FormBankAccountRequest>({
-      mode: "onChange",
-      defaultValues: {
-        cardNumber: "",
-        bankId: "",
-      },
-      resolver,
-    });
+  const {
+    handleSubmit,
+    control,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<FormBankAccountRequest>({
+    mode: "onChange",
+    defaultValues: {
+      cardNumber: "",
+      bankId: "",
+    },
+    resolver,
+  });
 
   const submitHandler = (data) => {
     createAccount({
@@ -98,6 +104,8 @@ export default function Internal({ accounts, isLoading }: Props) {
     else setIsOpenForm(false);
   }, [accounts]);
 
+  console.log(errors);
+
   return (
     <>
       <Card className="mb-4">
@@ -110,54 +118,6 @@ export default function Internal({ accounts, isLoading }: Props) {
             key="account-warning"
             text={`تنها حساب‌هایی که به نام ${firstName} ${lastName} باشند قابلیت اضافه شدن را دارند، در نظر داشته باشید واریز و برداشت فقط از طریق حساب هایی که معرفی می‌کنید امکان پذیر خواهد بود.`}
           />
-
-          {isOpenForm && (
-            <Form onSubmit={handleSubmit(submitHandler)}>
-              <Row className="justify-content-center">
-                <Col xs={12} xl={6}>
-                  <Row className="px-2">
-                    <Col xs={12} sm={9}>
-                      <Controller
-                        name="cardNumber"
-                        control={control}
-                        render={({ field: { name, value, onChange } }) => (
-                          <FormGroup className={profile["accounts-field"]}>
-                            <Label>شماره کارت:</Label>
-                            <AccountNumberInput
-                              disabled={formLoading}
-                              value={value}
-                              onChange={onChange}
-                              setBankId={(val) => {
-                                setValue("bankId", val);
-                              }}
-                              name={name}
-                              id="00"
-                            />
-                          </FormGroup>
-                        )}
-                      />
-                    </Col>
-                    <Col xs={12} sm={3} className="align-self-center">
-                      <Button
-                        type="button"
-                        color="icon-danger"
-                        disabled={accounts.length <= 0}
-                        onClick={() => {
-                          setIsOpenForm(false);
-                          resetForm();
-                        }}
-                      >
-                        <MdClose />
-                      </Button>
-                      <Button type="submit" color="icon-success">
-                        {formLoading ? <Spinner size="sm" /> : <LuCheck />}
-                      </Button>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-            </Form>
-          )}
 
           {!accounts || isLoading ? (
             <>
@@ -275,6 +235,54 @@ export default function Internal({ accounts, isLoading }: Props) {
                 </Col>
               </Row>
             ))
+          )}
+          {isOpenForm && (
+            <Form onSubmit={handleSubmit(submitHandler)}>
+              <Row className="justify-content-center">
+                <Col xs={12} xl={6}>
+                  <Row className="px-2">
+                    <Col xs={12} sm={9}>
+                      <Controller
+                        name="cardNumber"
+                        control={control}
+                        render={({ field: { name, value, onChange } }) => (
+                          <FormGroup className={profile["accounts-field"]}>
+                            <Label>شماره کارت:</Label>
+                            <AccountNumberInput
+                              disabled={formLoading}
+                              value={value}
+                              onChange={onChange}
+                              setBankId={(val) => {
+                                setValue("bankId", val);
+                              }}
+                              name={name}
+                              id="00"
+                              error={errors?.[name]}
+                            />
+                          </FormGroup>
+                        )}
+                      />
+                    </Col>
+                    <Col xs={12} sm={3} className="align-self-center">
+                      <Button
+                        type="button"
+                        color="icon-danger"
+                        disabled={accounts.length <= 0}
+                        onClick={() => {
+                          setIsOpenForm(false);
+                          resetForm();
+                        }}
+                      >
+                        <MdClose />
+                      </Button>
+                      <Button type="submit" color="icon-success">
+                        {formLoading ? <Spinner size="sm" /> : <LuCheck />}
+                      </Button>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+            </Form>
           )}
           <Row>
             <Col xs={12}>

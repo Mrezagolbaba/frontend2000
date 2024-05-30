@@ -1,6 +1,7 @@
-import { Spinner } from "reactstrap";
+import animationData from "assets/img/loading/01.svg";
 
 export default function Loader() {
+
   return (
     <div
       className="d-flex justify-content-center align-items-center"
@@ -13,10 +14,8 @@ export default function Loader() {
         height: "100vh",
       }}
     >
-      <Spinner
-        color="primary"
-        style={{ width: "8rem", height: "8rem", opacity: "0.6" }}
-      />
+
+      <img src={animationData} width={300} alt="loading..." />
     </div>
   );
 }

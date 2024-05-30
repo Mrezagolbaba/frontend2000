@@ -1,8 +1,3 @@
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { AlertInfo } from "components/AlertWidget";
 import {
   Button,
   Col,
@@ -12,18 +7,23 @@ import {
   Label,
   Row,
 } from "reactstrap";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
-import Currency from "components/Input/CurrencyInput";
-import { useBankAccountsQuery } from "store/api/profile-management";
 import {
   useTransactionFeeQuery,
   useWithdrawMutation,
 } from "store/api/wallet-management";
-import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
-import { useAppSelector } from "store/hooks";
-import { tomanShow } from "helpers";
+import * as Yup from "yup";
 import BanksWrapper from "components/BanksWrapper";
+import Currency from "components/Input/CurrencyInput";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import Notify from "components/Notify";
+import { AlertInfo } from "components/AlertWidget";
+import { Controller, useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { normalizeAmount } from "helpers";
+import { useAppSelector } from "store/hooks";
+import { useBankAccountsQuery } from "store/api/profile-management";
+import { useEffect, useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 
@@ -54,7 +54,7 @@ export default function Withdraw({ onClose, stock }: Props) {
   const resolver = yupResolver(
     Yup.object().shape({
       iban: Yup.string().required(),
-      amount: Yup.string().required(),
+      amount: Yup.string().required("شما هیچ مبلغی وارد نکرده اید."),
       accountId: Yup.string().required(),
     }),
   );
@@ -119,12 +119,12 @@ export default function Withdraw({ onClose, stock }: Props) {
     if (Number(data.amount) < fee?.withdrawMinAmount / 10)
       setError("amount", {
         type: "manual",
-        message: `مبلغ وارد شده نمی تواند کمتر از ${tomanShow({ value: fee?.withdrawMinAmount, currency: "IRR" })} باشد.`,
+        message: `مبلغ وارد شده نمی تواند کمتر از ${normalizeAmount(fee?.withdrawMinAmount, "IRR", true)} باشد.`,
       });
     else if (Number(data.amount) > fee?.withdrawMaxAmount / 10)
       setError("amount", {
         type: "manual",
-        message: `مبلغ وارد شده نمی تواند بیشتر از ${tomanShow({ value: fee.withdrawMaxAmount, currency: "IRR" })} باشد.`,
+        message: `مبلغ وارد شده نمی تواند بیشتر از ${normalizeAmount(fee?.withdrawMaxAmount, "IRR", true)} باشد.`,
       });
     else if (Number(data.amount) > Number(stock) / 10)
       setError("amount", {
@@ -141,9 +141,10 @@ export default function Withdraw({ onClose, stock }: Props) {
 
   useEffect(() => {
     if (isSuccessWithdraw) {
-      toast.success(
-        "درخواست برداشت با موفقیت ثبت شد. لطفا منتظر تایید پشتیبانی بمانید.",
-      );
+      Notify({
+        type: "success",
+        text: "درخواست برداشت با موفقیت ثبت شد. لطفا منتظر تایید پشتیبانی بمانید.",
+      });
       onClose?.();
     }
 
@@ -195,6 +196,9 @@ export default function Withdraw({ onClose, stock }: Props) {
                 {errors?.[name] && (
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
+                {fee?.withdrawMaxAmount && (
+                  <FormText>{`سقف باقیمانده برداشت روزانه: ${normalizeAmount(fee?.withdrawMaxAmount, "IRR", true)}`}</FormText>
+                )}
               </FormGroup>
             )}
           />
@@ -208,7 +212,10 @@ export default function Withdraw({ onClose, stock }: Props) {
                 <div className="d-flex flex-row justify-content-between">
                   <Label htmlFor={name}>مبلغ برداشت: </Label>
                   <span className="d-flex flex-row justify-content-between">
-                    <FormText>{`موجودی شما: ${tomanShow({ value: stock.toString(), currency: "IRR" })}`}</FormText>
+                    <FormText
+                      role="button"
+                      onClick={() => setValue(name, stock.toString())}
+                    >{`موجودی شما: ${normalizeAmount(stock.toString(), "IRR", true)}`}</FormText>
                   </span>
                 </div>
                 <Currency
@@ -224,17 +231,27 @@ export default function Withdraw({ onClose, stock }: Props) {
                 {errors?.[name] && (
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
-                <span className="d-flex flex-row justify-content-between">
+                <div className="d-flex flex-column">
                   {fee && (
                     <FormText>
-                      کارمزد برداشت :{" "}
-                      {tomanShow({
-                        value: fee.withdrawFeeStatic,
-                        currency: "IRR",
-                      })}
+                      {`کارمزد برداشت: ${normalizeAmount(fee.withdrawFeeStatic, "IRR", true)}`}
                     </FormText>
                   )}
-                </span>
+                  {value !== "" &&
+                    fee?.withdrawFeeStatic &&
+                    Number(value) - Number(fee?.withdrawFeeStatic) > 0 && (
+                      <FormText>
+                        {`خالص دریافتی: ${normalizeAmount(
+                          (
+                            Number(value) -
+                            Number(fee.withdrawFeeStatic) / 10
+                          ).toString(),
+                          "IRR",
+                          true,
+                        )}`}
+                      </FormText>
+                    )}
+                </div>
               </FormGroup>
             )}
           />
