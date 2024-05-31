@@ -80,35 +80,8 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
 
   // ==============|| Render ||================= //
   return (
-    <div className={`${dashboard.sidebar} ${isOpen ? dashboard.expanded : ""}`}>
+    <div className={dashboard.sidebar}>
       {/* /\ \/ /\ \/ [clos-button in mobile] /\ \/ /\ \/ */}
-      <button
-        className={dashboard.sidebar__close}
-        onClick={() => setIsSidebarOpen(false)}
-      >
-        <span className="icon">
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 14 14"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M13 1L1 13"
-              stroke="#03041B"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-            <path
-              d="M13 13L1 0.999999"
-              stroke="#03041B"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
-        </span>
-      </button>
 
       {/* /\ \/ /\ \/ [logo and user-info] /\ \/ /\ \/ */}
       <div className={dashboard.sidebar__logo}>
