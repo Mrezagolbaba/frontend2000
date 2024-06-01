@@ -30,6 +30,7 @@ declare const classNames: {
   readonly "short-navbar": "short-navbar";
   readonly "mobile-menu": "mobile-menu";
   readonly "sub-item": "sub-item";
+  readonly "bold-item": "bold-item";
   readonly "icon-item": "icon-item";
   readonly "custom-card": "custom-card";
   readonly "user-summary": "user-summary";

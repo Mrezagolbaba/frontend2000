@@ -30,6 +30,7 @@ export default function MobileMenu() {
       path: "/dashboard/exchange",
       label: "معامله",
       icon: <Exchange />,
+      hasBold: true,
     },
     {
       id: "market",
@@ -64,7 +65,7 @@ export default function MobileMenu() {
         {items.map((item, key) => (
           <NavItem
             key={key}
-            className={activeItem === item.path ? dashboard.active : ""}
+            className={`${activeItem === item.path ? dashboard.active : ""} ${item?.hasBold ? dashboard["bold-item"] : ""}`}
             onClick={(e) => handleClick(e, item.path)}
           >
             <Link to={item.path}>

@@ -11,11 +11,6 @@ export default function Layout({ children }: { children: ReactNode }) {
   // ==============|| States ||================= //
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
-  // ==============|| Handlers ||================= //
-  const handleSidebarToggle = () => {
-    setIsSidebarOpen((prevStat) => !prevStat);
-  };
-
   // ==============|| Render ||================= //
   return (
     <Suspense fallback={<Loader />}>
