@@ -66,7 +66,7 @@ const Support = () => {
                 fontSize: ".87rem",
               }}
               target="_blank"
-              to="https://help.arsonex.com/"
+              to="/helper"
             >
               مرکز راهنمایی
             </Link>

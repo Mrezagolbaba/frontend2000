@@ -17,7 +17,6 @@ const useUserLocation = (): Location | null => {
         // Fetch additional details like time zone and country code using Google Maps Geocoding API
         const response = await fetch(`https://api.cloudflare.com/client/v4/zones/cce82946786a744a5d0d219f8cf69d46/settings/ip_geolocation`,options);
         const data = await response.json();
-        console.log(data,'data')
         // Extract time zone and country code from the response
         const timeZone = data.results[0]?.time_zone;
         const countryCode = data.results[0]?.address_components.find((component: any) =>

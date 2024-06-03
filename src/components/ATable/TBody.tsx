@@ -9,7 +9,6 @@ type Props = {
 };
 
 export default function TBody({ rows, noDataText, colLength }: Props) {
-  console.log(rows);
 
   return (
     <tbody className={body}>
