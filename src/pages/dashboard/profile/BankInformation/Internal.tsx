@@ -104,8 +104,6 @@ export default function Internal({ accounts, isLoading }: Props) {
     else setIsOpenForm(false);
   }, [accounts]);
 
-  console.log(errors);
-
   return (
     <>
       <Card className="mb-4">

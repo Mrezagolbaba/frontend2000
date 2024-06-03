@@ -1,6 +1,7 @@
 import Footer from "layouts/Landing/Footer";
 
 import style from "assets/scss/landing/home.module.scss";
+import { Link } from "react-router-dom";
 
 export default function NotFound() {
   return (
@@ -19,10 +20,10 @@ export default function NotFound() {
             شما &zwnj;می&zwnj;توانید در مرکز راهنمایی آرسونیکس به مطالب بیشتری
             دسترسی پیدا کنید.
           </p>
-          <a href="https://help.arsonex.com/" className="btn btn-primary mt-3">
+          <Link to="/helper" className="btn btn-primary mt-3">
             مرکز راهنمایی
-          </a>
-          <a className="text-white mt-4 d-flex" href="https://arsonex.com">
+          </Link>
+          <Link className="text-white mt-4 d-flex" to="/">
             <span>بازگشت به صفحه اصلی</span>
             <svg
               style={{ width: "18px", paddingRight: "3px" }}
@@ -39,7 +40,7 @@ export default function NotFound() {
                 d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75"
               />
             </svg>
-          </a>
+          </Link>
         </div>
       </main>
       <Footer />

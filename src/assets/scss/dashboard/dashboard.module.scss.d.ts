@@ -32,6 +32,9 @@ declare const classNames: {
   readonly "sub-item": "sub-item";
   readonly "bold-item": "bold-item";
   readonly "icon-item": "icon-item";
+  readonly "more-menu": "more-menu";
+  readonly "show-more": "show-more";
+  readonly "more-menu__wrapper": "more-menu__wrapper";
   readonly "custom-card": "custom-card";
   readonly "user-summary": "user-summary";
   readonly "user-summary__body": "user-summary__body";
