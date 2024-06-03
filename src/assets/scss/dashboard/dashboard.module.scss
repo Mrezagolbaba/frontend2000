@@ -208,19 +208,6 @@
   background-color: #fff;
   padding: 0 20px;
   box-shadow: -10px 4px 64px rgba(0, 0, 0, 0.03);
-  &__close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    border: none;
-    padding: 0;
-    background-color: transparent;
-    outline: none;
-    width: 12px;
-    height: 12px;
-    line-height: 12px;
-    display: none;
-  }
   &__logo {
     text-align: center;
     padding: 60px 0;
@@ -275,6 +262,9 @@
       & > a > span {
         padding: 0 5px;
       }
+      & > a svg {
+        stroke: #03041b;
+      }
       &:before {
         display: block;
         width: 3px;
@@ -296,6 +286,9 @@
         a {
           color: #111bff;
           font-weight: 500;
+          svg {
+            stroke: #111bff;
+          }
         }
       }
       &.item-logout {

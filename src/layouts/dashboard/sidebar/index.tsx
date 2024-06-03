@@ -1,9 +1,5 @@
-import AddFriend from "assets/img/icons/users.svg";
-import Exchange from "assets/img/icons/swap.svg";
-import Home from "assets/img/icons/house.svg";
 import LogoArsonex from "assets/img/logo-arsonex.png";
 import Market from "assets/img/icons/chart-simple.svg";
-import Wallet from "assets/img/icons/wallet.svg";
 import useAuth from "hooks/useAuth";
 import { Button, Nav, NavItem } from "reactstrap";
 import { CiEdit } from "react-icons/ci";
@@ -13,6 +9,12 @@ import { useAppSelector } from "store/hooks";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import WalletIcon from "components/Icons/WalletIcon";
+import HomeIcon from "components/Icons/HomeIcon";
+import Exchange from "pages/dashboard/exchange";
+import MarketsIcon from "components/Icons/MarketsIcon";
+import ExchangeIcon from "components/Icons/ExchangeIcon";
+import InviteFriendsIcon from "components/Icons/InviteFriendsIcon";
 
 type Props = {
   isOpen: boolean;
@@ -35,31 +37,31 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
       id: "home",
       path: "/dashboard",
       label: "پیشخوان",
-      icon: Home,
+      icon: <HomeIcon />,
     },
     {
       id: "wallet",
       path: "/dashboard/wallet",
       label: "کیف پول",
-      icon: Wallet,
+      icon: <WalletIcon />,
     },
     {
       id: "exchange",
       path: "/dashboard/exchange",
       label: "خرید و فروش سریع",
-      icon: Exchange,
+      icon: <ExchangeIcon />,
     },
     {
       id: "market",
       path: "/dashboard/market",
       label: "بازارها",
-      icon: Market,
+      icon: <MarketsIcon />,
     },
     {
       id: "addFriends",
       path: "/dashboard/add-friends",
       label: " دعوت دوستان",
-      icon: AddFriend,
+      icon: <InviteFriendsIcon />,
     },
   ];
 
@@ -124,9 +126,7 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
               onClick={() => handleClick(item.path)}
             >
               <Link to={item.path}>
-                <span className="icon">
-                  <img src={item.icon} width={24} height={24} alt={item.id} />
-                </span>
+                <span className="icon">{item.icon}</span>
                 <span style={{ fontSize: "12px" }}>{item.label}</span>
               </Link>
             </NavItem>

@@ -18,7 +18,6 @@ declare const classNames: {
   readonly header__subheader: "header__subheader";
   readonly "header__hamburger-btn": "header__hamburger-btn";
   readonly sidebar: "sidebar";
-  readonly sidebar__close: "sidebar__close";
   readonly sidebar__logo: "sidebar__logo";
   readonly sidebar__user: "sidebar__user";
   readonly sidebar__user__name: "sidebar__user__name";
