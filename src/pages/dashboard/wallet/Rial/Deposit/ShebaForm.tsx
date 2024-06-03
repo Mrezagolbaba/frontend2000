@@ -34,6 +34,7 @@ type ShebaFormType = {
   bankName: string;
 };
 const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
+  // ==============|| States ||================= //
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
   const [selectedBank, setSelectedBank] = useState<string>("");
   const [otherInfo, setOtherInfo] = useState<{
@@ -44,18 +45,17 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
     code: "",
   });
 
+  // ==============|| Hooks ||================= //
   const navigate = useNavigate();
   const { secondTierVerified } = useAppSelector((state) => state.user);
 
   const { data, isSuccess } = useDepositInfoQuery("IRR");
   const { data: fee } = useTransactionFeeQuery("IRR");
-  const [initRefCode, { data: depResponse }] = useRefCodeMutation();
-
+  const [initRefCode, { data: depResponse, isLoading }] = useRefCodeMutation();
   const { data: accounts, isSuccess: getSuccessAccounts } =
     useBankAccountsQuery({
       filter: "currencyCode||$eq||IRR",
     });
-
   const resolver = yupResolver(
     Yup.object().shape({
       accountName: Yup.string().required(),
@@ -75,6 +75,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
     resolver,
   });
 
+  // ==============|| Life Cycle ||================= //
   useEffect(() => {
     let list = [] as OptionType[] | [];
     if (data && data?.length > 0) {
@@ -105,7 +106,6 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
     }
     setOptionList(list);
   }, [data, isSuccess]);
-
   useEffect(() => {
     if (
       getSuccessAccounts &&
@@ -122,6 +122,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, getSuccessAccounts, activeTab]);
 
+  // ==============|| Render ||================= //
   return secondTierVerified ? (
     <>
       <AlertInfo
@@ -173,12 +174,12 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
               )}
             />
           </Col>
-          {data && data.length > 0 && (
+          {data && data.length > 0 && depResponse && (
             <Col xs={12} lg={6}>
               <Controller
                 name="shebaNumber"
                 control={control}
-                render={({ field: { name, value } }) => (
+                render={({ field: { name } }) => (
                   <FormGroup>
                     <Label htmlFor={name}> شماره شبا:</Label>
                     <CopyInput text={selectedBank || ""} />
@@ -192,7 +193,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
               />
             </Col>
           )}
-          {depResponse && (
+          {depResponse && !isLoading && (
             <Col xs={12} lg={6}>
               <Controller
                 name="depositId"
