@@ -16,7 +16,7 @@ const Invoice = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const componentRef = useRef() as any;
-  const { firstName, lastName, phoneNumber, nationalId } = useAppSelector(
+  const { firstName, lastName, irPhoneNumber, nationalId } = useAppSelector(
     (state) => state.user,
   );
   const { data: invoice, isLoading } = useGetCurrencySwapQuery(id as string);
@@ -26,15 +26,10 @@ const Invoice = () => {
 
   // ==============|| Handlers ||================= //
   const renderFee = () => {
-    let index;
-    if (invoice?.feeCurrencyCode === invoice?.destinationCurrencyCode)
-      index = 1;
-    else index = 0;
-    return normalizeAmount(
-      invoice?.transactions?.[index]?.fee,
-      invoice?.feeCurrencyCode,
-      true,
+    const transaction = invoice?.transactions.find(
+      (t) => t.currencyCode === invoice?.feeCurrencyCode,
     );
+    return normalizeAmount(transaction.fee, invoice?.feeCurrencyCode, true);
   };
 
   // ==============|| Render ||================= //
@@ -129,7 +124,7 @@ const Invoice = () => {
                             textAlign: "center",
                           }}
                         >
-                          {phoneNumber}
+                          <a href={`tel:${irPhoneNumber}`}>{irPhoneNumber}</a>
                         </td>
                       </tr>
                     </tbody>

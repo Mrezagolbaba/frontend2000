@@ -99,10 +99,10 @@ export default function Exchange() {
   return (
     <section className="page page-wallet">
       <Row className="g-4">
-        <Col xs={12} xxl={7} className="h-100">
+        <Col xs={12} xxl={8} className="h-100">
           <ExchangeForm setIsOpenDialog={setConfigdialog} />
         </Col>
-        <Col xs={12} xxl={5}>
+        <Col xs={12} xxl={4}>
           <Card className="h-100">
             <CardHeader className="d-flex flex-row justify-content-between align-items-center">
               <CardTitle tag="h5"> سوالات متداول</CardTitle>

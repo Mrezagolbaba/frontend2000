@@ -2,7 +2,7 @@ import { BsTag } from "react-icons/bs";
 import { CiWallet } from "react-icons/ci";
 import { CurrencyCode } from "types/wallet";
 import { Tooltip } from "reactstrap";
-import { convertText, normalizeAmount } from "helpers";
+import { normalizeAmount } from "helpers";
 import { useState } from "react";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
@@ -58,9 +58,7 @@ export default function RatePlace({
         <>
           <div id="currency-detail">
             <BsTag />
-            <span className="title">
-              نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
-            </span>
+            <span className="title">نرخ تقریبی تتر : </span>
             <span className="value">{normalizeAmount(rate, "IRR", true)}</span>
           </div>
           <Tooltip
@@ -68,10 +66,7 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش هر یک ${convertText(
-              "enToFa",
-              "IRR",
-            )} در برابر ${convertText("USDT", "enToFa")}`}
+            ارزش هر یک تتر در برابر تومان
           </Tooltip>
         </>
       );
@@ -80,9 +75,7 @@ export default function RatePlace({
         <>
           <div id="currency-detail">
             <BsTag />
-            <span className="title">
-              نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
-            </span>
+            <span className="title">نرخ تقریبی تتر : </span>
             <span className="value">
               {normalizeAmount(reverseRate, "IRR", true)}
             </span>
@@ -92,10 +85,7 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش هر یک  ${convertText(
-              "IRR",
-              "enToFa",
-            )} در برابر ${convertText("USDT", "enToFa")}`}
+            ارزش هر یک تتر در برابر تومان
           </Tooltip>
         </>
       );
@@ -104,9 +94,7 @@ export default function RatePlace({
         <>
           <div id="currency-detail">
             <BsTag />
-            <span className="title">
-              نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
-            </span>
+            <span className="title">نرخ تقریبی تتر : </span>
             <span className="value">{normalizeAmount(rate, "TRY", true)}</span>
           </div>
           <Tooltip
@@ -114,10 +102,7 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش هر یک  ${convertText(
-              "TRY",
-              "enToFa",
-            )} در برابر ${convertText("USDT", "enToFa")}`}
+            ارزش هر یک تتر در برابر لیر
           </Tooltip>
         </>
       );
@@ -126,9 +111,7 @@ export default function RatePlace({
         <>
           <div id="currency-detail">
             <BsTag />
-            <span className="title">
-              نرخ تقریبی {convertText("USDT", "enToFa")} :{" "}
-            </span>
+            <span className="title">نرخ تقریبی تتر : </span>
             <span className="value">
               {normalizeAmount(reverseRate, "TRY", true)}
             </span>
@@ -138,10 +121,7 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش هر یک  ${convertText(
-              "TRY",
-              "enToFa",
-            )} در برابر ${convertText("USDT", "enToFa")}`}
+            ارزش هر یک تتر در برابر لیر
           </Tooltip>
         </>
       );
@@ -150,9 +130,7 @@ export default function RatePlace({
         <>
           <div id="currency-detail">
             <BsTag />
-            <span className="title">
-              نرخ تقریبی {convertText("TRY", "enToFa")} :{" "}
-            </span>
+            <span className="title">نرخ تقریبی لیر : </span>
             <span className="value">{normalizeAmount(rate, "IRR", true)}</span>
           </div>
           <Tooltip
@@ -160,10 +138,7 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش هر یک  ${convertText(
-              "IRR",
-              "enToFa",
-            )} در برابر ${convertText("TRY", "enToFa")}`}
+            ارزش هر یک لیر در برابر تومان
           </Tooltip>
         </>
       );
@@ -172,9 +147,7 @@ export default function RatePlace({
         <>
           <div id="currency-detail">
             <BsTag />
-            <span className="title">
-              نرخ تقریبی {convertText("TRY", "enToFa")} :{" "}
-            </span>
+            <span className="title">نرخ تقریبی لیر : </span>
             <span className="value">
               {normalizeAmount(reverseRate, "IRR", true)}
             </span>
@@ -184,10 +157,7 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            {`ارزش هر یک  ${convertText(
-              "IRR",
-              "enToFa",
-            )} در برابر ${convertText("TRY", "enToFa")}`}
+            ارزش هر یک لیر در برابر تومان
           </Tooltip>
         </>
       );
