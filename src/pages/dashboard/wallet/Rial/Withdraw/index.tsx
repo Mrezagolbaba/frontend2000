@@ -39,18 +39,19 @@ type Props = {
 };
 
 export default function Withdraw({ onClose, stock }: Props) {
+  // ==============|| States ||================= //
+  const [optionList, setOptionList] = useState<OptionType[] | []>([]);
+  const [hasAccount, setHasAccount] = useState<boolean>(true);
+
+  // ==============|| Hooks ||================= //
   const { firstName, lastName, secondTierVerified } = useAppSelector(
     (state) => state.user,
   );
-
   const navigate = useNavigate();
-  const [hasAccount, setHasAccount] = useState<boolean>(true);
-  const [optionList, setOptionList] = useState<OptionType[] | []>([]);
   const { data, isSuccess } = useBankAccountsQuery({});
   const { data: fee } = useTransactionFeeQuery("IRR");
   const [withdrawRequest, { isSuccess: isSuccessWithdraw }] =
     useWithdrawMutation();
-
   const resolver = yupResolver(
     Yup.object().shape({
       iban: Yup.string().required(),
@@ -76,6 +77,32 @@ export default function Withdraw({ onClose, stock }: Props) {
     resolver,
   });
 
+  // ==============|| Handlers ||================= //
+  const onSubmit = async (data: WithdrawType) => {
+    if (Number(data.amount) < fee?.withdrawMinAmount / 10)
+      setError("amount", {
+        type: "manual",
+        message: `مبلغ وارد شده نمی تواند کمتر از ${normalizeAmount(fee?.withdrawMinAmount, "IRR", true)} باشد.`,
+      });
+    else if (Number(data.amount) > fee?.withdrawMaxAmount / 10)
+      setError("amount", {
+        type: "manual",
+        message: `مبلغ وارد شده نمی تواند بیشتر از ${normalizeAmount(fee?.withdrawMaxAmount, "IRR", true)} باشد.`,
+      });
+    else if (Number(data.amount) > Number(stock) / 10)
+      setError("amount", {
+        type: "manual",
+        message: "موجودی کیف پول شما کافی نیست.",
+      });
+    else
+      withdrawRequest({
+        destination: data.accountId,
+        currencyCode: "IRR",
+        amount: (Number(data.amount) * 10).toString(),
+      });
+  };
+
+  // ==============|| Life Cycle ||================= //
   useEffect(() => {
     if (isSuccess) {
       if (data.length <= 0) {
@@ -114,31 +141,6 @@ export default function Withdraw({ onClose, stock }: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, isSuccess]);
-
-  const onSubmit = async (data: WithdrawType) => {
-    if (Number(data.amount) < fee?.withdrawMinAmount / 10)
-      setError("amount", {
-        type: "manual",
-        message: `مبلغ وارد شده نمی تواند کمتر از ${normalizeAmount(fee?.withdrawMinAmount, "IRR", true)} باشد.`,
-      });
-    else if (Number(data.amount) > fee?.withdrawMaxAmount / 10)
-      setError("amount", {
-        type: "manual",
-        message: `مبلغ وارد شده نمی تواند بیشتر از ${normalizeAmount(fee?.withdrawMaxAmount, "IRR", true)} باشد.`,
-      });
-    else if (Number(data.amount) > Number(stock) / 10)
-      setError("amount", {
-        type: "manual",
-        message: "موجودی کیف پول شما کافی نیست.",
-      });
-    else
-      withdrawRequest({
-        destination: data.accountId,
-        currencyCode: "IRR",
-        amount: (Number(data.amount) * 10).toString(),
-      });
-  };
-
   useEffect(() => {
     if (isSuccessWithdraw) {
       Notify({
@@ -150,6 +152,8 @@ export default function Withdraw({ onClose, stock }: Props) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccessWithdraw]);
+
+  // ==============|| Render ||================= //
   return hasAccount ? (
     <form className="px-3" onSubmit={handleSubmit(onSubmit)}>
       <Row>
@@ -214,7 +218,11 @@ export default function Withdraw({ onClose, stock }: Props) {
                   <span className="d-flex flex-row justify-content-between">
                     <FormText
                       role="button"
-                      onClick={() => setValue(name, stock.toString())}
+                      onClick={() => {
+                        const val = (Number(stock) / 10).toString();
+
+                        setValue(name, parseInt(val).toString());
+                      }}
                     >{`موجودی شما: ${normalizeAmount(stock.toString(), "IRR", true)}`}</FormText>
                   </span>
                 </div>
@@ -243,8 +251,8 @@ export default function Withdraw({ onClose, stock }: Props) {
                       <FormText>
                         {`خالص دریافتی: ${normalizeAmount(
                           (
-                            Number(value) -
-                            Number(fee.withdrawFeeStatic) / 10
+                            Number(value) * 10 -
+                            Number(fee.withdrawFeeStatic)
                           ).toString(),
                           "IRR",
                           true,
