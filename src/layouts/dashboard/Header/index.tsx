@@ -59,7 +59,7 @@ const Header = () => {
               <span className="icon">
                 <SupportIcon />
               </span>
-              <span style={{ marginRight: "10px" }}>پشتیبانی</span>
+              {/* <span style={{ marginRight: "10px" }}>پشتیبانی</span> */}
             </Link>
           </div>
           <div
