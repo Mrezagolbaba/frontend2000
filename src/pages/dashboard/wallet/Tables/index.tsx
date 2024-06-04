@@ -143,7 +143,8 @@ export const StatusHandler = ({ status }: { status: TransactionStatus }) => {
   switch (status) {
     case "SUCCESSFUL":
       return <span className="text-success"> موفق</span>;
-
+    case "Waited_to_be_withdrew":
+      return <span className="text-warning">در انتظار پرداخت</span>;
     case "FAILED":
     case "CANCELED":
     case "EXPIRED":
