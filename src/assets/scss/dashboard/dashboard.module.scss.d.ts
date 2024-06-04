@@ -1,7 +1,6 @@
 declare const classNames: {
   readonly wrapper: "wrapper";
   readonly "main-wrapper": "main-wrapper";
-  readonly "menu-overlay": "menu-overlay";
   readonly header: "header";
   readonly card: "card";
   readonly "card-body": "card-body";

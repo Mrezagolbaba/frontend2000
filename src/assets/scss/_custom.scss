@@ -541,11 +541,11 @@ ul {
     }
   }
   .breadcrumb-item + .breadcrumb-item {
-    padding-left: unset;
+    padding-left: 0;
     padding-right: 8px;
     &::before {
       content: "";
-      padding-right: unset;
+      padding-right: 0;
       margin-left: 8px;
       width: 6px;
       height: 12px;
@@ -555,6 +555,7 @@ ul {
       background-repeat: no-repeat;
       background-position: 0 0;
       background-size: 6px;
+      float: none;
     }
   }
 }
@@ -657,4 +658,3 @@ ul {
     --bs-btn-font-size: 0.8rem;
   }
 }
-

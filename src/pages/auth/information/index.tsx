@@ -13,20 +13,23 @@ import {
   getDate18YearsAgo,
   persianToEnglishNumbers,
 } from "helpers";
-import "@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css";
 import * as Yup from "yup";
 import Auth from "layouts/auth";
+import CalenderIcon from "components/Icons/CalenderIcon";
 import DatePicker from "@hassanmojab/react-modern-calendar-datepicker";
+import EmailIcon from "components/Icons/EmailIcon";
 import FloatInput from "components/Input/FloatInput";
-import { CiMobile2, CiUser, CiMail, CiCalendarDate } from "react-icons/ci";
+import IDCardIcon from "components/Icons/IDCardIcon";
+import MobileIcon from "components/Icons/MobileIcon";
+import UserIcon from "components/Icons/UserIcon";
 import { Controller, useForm } from "react-hook-form";
-import { LiaIdCardSolid } from "react-icons/lia";
 import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useFirstTierMutation, useGetMeQuery } from "store/api/user";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 
+import "@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css";
 import auth from "assets/scss/auth/auth.module.scss";
 
 type Day = {
@@ -63,16 +66,13 @@ export default function Information() {
   const resolver = yupResolver(InformationSchema);
 
   // ==============|| Hooks ||================= //
-  const [
-    firstTierRequest,
-    { isLoading: loadingFirstTier, isSuccess: successFirstTier },
-  ] = useFirstTierMutation();
+  const [firstTierRequest, { isSuccess }] = useFirstTierMutation();
   const navigate = useNavigate();
-  const { data: user, isLoading } = useGetMeQuery();
+  const { data: user, isLoading: loadingData } = useGetMeQuery();
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting, isLoading },
   } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -119,7 +119,7 @@ export default function Information() {
 
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
-    if (successFirstTier) {
+    if (isSuccess) {
       navigate("/otp", {
         state: {
           type: "VERIFY_EMAIL",
@@ -128,7 +128,7 @@ export default function Information() {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [successFirstTier]);
+  }, [isSuccess]);
 
   // ==============|| Render ||================= //
   return (
@@ -158,7 +158,7 @@ export default function Information() {
                           inputProps={{
                             ref: ref,
                             size: "large",
-                            prefix: <CiUser size={20} />,
+                            prefix: <UserIcon />,
                             status: errors?.[name]?.message
                               ? "error"
                               : undefined,
@@ -181,7 +181,7 @@ export default function Information() {
                           inputProps={{
                             ref: ref,
                             size: "large",
-                            prefix: <CiUser size={20} />,
+                            prefix: <UserIcon />,
                             status: errors?.[name]?.message
                               ? "error"
                               : undefined,
@@ -204,7 +204,7 @@ export default function Information() {
                           inputProps={{
                             ref: ref,
                             size: "large",
-                            prefix: <LiaIdCardSolid size={20} />,
+                            prefix: <IDCardIcon />,
                             status: errors?.[name]?.message
                               ? "error"
                               : undefined,
@@ -220,7 +220,9 @@ export default function Information() {
                       render={({ field: { name, onChange } }) => (
                         <DatePicker
                           value={selectedDay}
-                          onChange={(date) => setSelectedDay(date as any)}
+                          onChange={(date) =>
+                            date && setSelectedDay(date as any)
+                          }
                           shouldHighlightWeekends
                           locale="fa"
                           wrapperClassName="w-100"
@@ -231,20 +233,12 @@ export default function Information() {
                               type="text"
                               name={name}
                               label="تاریخ تولد"
-                              value={
-                                selectedDay !== undefined
-                                  ? selectedDay?.year +
-                                    "-" +
-                                    selectedDay?.month +
-                                    "-" +
-                                    selectedDay?.day
-                                  : ""
-                              }
+                              value={""}
                               onChange={onChange}
                               inputProps={{
                                 ref: ref,
                                 size: "large",
-                                prefix: <CiCalendarDate size={20} />,
+                                prefix: <CalenderIcon />,
                                 status: errors?.["birthDate"]?.message
                                   ? "error"
                                   : undefined,
@@ -272,7 +266,7 @@ export default function Information() {
                             dir: "ltr",
                             ref: ref,
                             size: "large",
-                            prefix: <CiMobile2 size={20} />,
+                            prefix: <MobileIcon />,
                             status: errors?.[name]?.message
                               ? "error"
                               : undefined,
@@ -296,7 +290,7 @@ export default function Information() {
                           inputProps={{
                             ref: ref,
                             size: "large",
-                            prefix: <CiMail size={20} />,
+                            prefix: <EmailIcon />,
                             status: errors?.[name]?.message
                               ? "error"
                               : undefined,
@@ -306,16 +300,16 @@ export default function Information() {
                     />
                   </Col>
                 </Row>
-                <Row>
+                <Row className="mt-5">
                   <Col xs={12}>
                     <div className="auth-footer">
                       <Button
                         type="submit"
                         color="primary"
                         className={auth.submit}
-                        disabled={isLoading || loadingFirstTier}
+                        disabled={isLoading || isSubmitting || loadingData}
                       >
-                        {loadingFirstTier ? (
+                        {isLoading || isSubmitting ? (
                           <Spinner style={{ color: "white" }} />
                         ) : (
                           "ثبت اطلاعات"
