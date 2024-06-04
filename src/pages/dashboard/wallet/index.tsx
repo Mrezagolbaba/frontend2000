@@ -49,6 +49,10 @@ export default function Wallet() {
                   <Col xs={12} md={6}>
                     <IRRWallet
                       balance={renderBalance("IRR", "balance")}
+                      availableBalance={renderBalance(
+                        "IRR",
+                        "availableBalance",
+                      )}
                       stock={
                         data.find((w) => w.currencyCode === "IRR")?.balance ||
                         "0"
@@ -76,8 +80,8 @@ export default function Wallet() {
                         "availableBalance",
                       )}
                       stock={
-                        data.find((w) => w.currencyCode === "TRY")?.availableBalance ||
-                        "0"
+                        data.find((w) => w.currencyCode === "TRY")
+                          ?.availableBalance || "0"
                       }
                     />
                   </Col>
