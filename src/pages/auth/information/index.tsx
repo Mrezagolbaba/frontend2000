@@ -4,7 +4,6 @@ import {
   CardBody,
   Col,
   Container,
-  Input,
   Row,
   Spinner,
 } from "reactstrap";
@@ -30,6 +29,8 @@ import auth from "assets/scss/auth/auth.module.scss";
 import UserIcon from "components/Icons/UserIcon";
 import IDCardIcon from "components/Icons/IDCardIcon";
 import CalenderIcon from "components/Icons/CalenderIcon";
+import MobileIcon from "components/Icons/MobileIcon";
+import EmailIcon from "components/Icons/EmailIcon";
 
 type Day = {
   year: number;
@@ -39,7 +40,6 @@ type Day = {
 type DayValue = Day | null | undefined;
 
 export default function Information() {
-  console.log("here");
   // ==============|| States ||================= //
   const [selectedDay, setSelectedDay] = useState<DayValue>({
     year: 1368,
@@ -231,33 +231,29 @@ export default function Information() {
                           wrapperClassName="w-100"
                           maximumDate={minimumDate}
                           colorPrimary="#111bff"
-                          renderInput={({ ref }) => {
-                            console.log(selectedDay);
-
-                            return (
-                              <FloatInput
-                                type="text"
-                                name={name}
-                                label="تاریخ تولد"
-                                value={""}
-                                onChange={onChange}
-                                inputProps={{
-                                  ref: ref,
-                                  size: "large",
-                                  prefix: <CalenderIcon />,
-                                  status: errors?.["birthDate"]?.message
-                                    ? "error"
-                                    : undefined,
-                                }}
-                              />
-                            );
-                          }}
+                          renderInput={({ ref }) => (
+                            <FloatInput
+                              type="text"
+                              name={name}
+                              label="تاریخ تولد"
+                              value={""}
+                              onChange={onChange}
+                              inputProps={{
+                                ref: ref,
+                                size: "large",
+                                prefix: <CalenderIcon />,
+                                status: errors?.["birthDate"]?.message
+                                  ? "error"
+                                  : undefined,
+                              }}
+                            />
+                          )}
                         />
                       )}
                     />
                   </Col>
 
-                  {/* <Col xs={12}>
+                  <Col xs={12}>
                     <Controller
                       name="phoneNumber"
                       control={control}
@@ -273,7 +269,7 @@ export default function Information() {
                             dir: "ltr",
                             ref: ref,
                             size: "large",
-                            prefix: <CiMobile2 size={20} />,
+                            prefix: <MobileIcon />,
                             status: errors?.[name]?.message
                               ? "error"
                               : undefined,
@@ -297,7 +293,7 @@ export default function Information() {
                           inputProps={{
                             ref: ref,
                             size: "large",
-                            prefix: <CiMail size={20} />,
+                            prefix: <EmailIcon />,
                             status: errors?.[name]?.message
                               ? "error"
                               : undefined,
@@ -305,9 +301,9 @@ export default function Information() {
                         />
                       )}
                     />
-                  </Col> */}
+                  </Col>
                 </Row>
-                <Row>
+                <Row className="mt-5">
                   <Col xs={12}>
                     <div className="auth-footer">
                       <Button
