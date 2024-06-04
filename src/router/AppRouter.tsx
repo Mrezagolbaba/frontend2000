@@ -69,10 +69,6 @@ export default function AppRouter() {
           element: <Navigate to="/404" />,
         },
         {
-          path: "/helper",
-          element: <Navigate to="https://help.arsonex.com/" />,
-        },
-        {
           path: "404",
           element: <NotFound />,
         },

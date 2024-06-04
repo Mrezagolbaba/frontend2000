@@ -24,11 +24,12 @@ export default function MobileMenu() {
   const toggleMenu = () => {
     setIsOpen((val) => !val);
   };
-  const handleClick = (e, key: string) => {
+  const handleClick = (e, key: string, isHelper) => {
     e.preventDefault();
-    navigate(key);
     setActiveItem(key);
     setIsOpen(false);
+    if (isHelper) window.location.replace(key);
+    else navigate(key);
   };
 
   // ==============|| Constants ||================= //
@@ -84,7 +85,7 @@ export default function MobileMenu() {
     },
     {
       id: "helper",
-      path: "/helper",
+      path: "https://help.arsonex.com/",
       label: "مرکز راهنمایی",
     },
     {
@@ -109,7 +110,7 @@ export default function MobileMenu() {
   return (
     <>
       <div className={dashboard["mobile-menu"]}>
-        <Nav dir="ltr">
+        <Nav>
           {items.map((item, key) => {
             if (
               secondTierVerified &&
@@ -122,7 +123,9 @@ export default function MobileMenu() {
                   key={key}
                   className={`${activeItem === item.path ? dashboard.active : ""} ${item?.hasBold ? dashboard["bold-item"] : ""}`}
                   onClick={(e) =>
-                    item.onClick ? item.onClick() : handleClick(e, item.path)
+                    item.onClick
+                      ? item.onClick()
+                      : handleClick(e, item.path, false)
                   }
                 >
                   <Link to={item.path}>
@@ -138,20 +141,26 @@ export default function MobileMenu() {
         >
           <div className={dashboard["more-menu__wrapper"]}>
             <Nav className="row">
-              {otherItems.map((item, key) => (
-                <NavItem
-                  key={key}
-                  className={`${activeItem === item.path ? dashboard.active : ""} col-4`}
-                  onClick={(e) => handleClick(e, item.path)}
-                >
-                  <Link
-                    to={item.path}
-                    target={item.id === "helper" ? "_blank" : "_self"}
+              {otherItems.map((item, key) =>
+                secondTierVerified &&
+                item.path === "/dashboard/profile#kyc-section" ? null : (
+                  <NavItem
+                    key={key}
+                    className={`${activeItem === item.path ? dashboard.active : ""} col-4`}
+                    onClick={(e) => handleClick(e, item.path, true)}
                   >
-                    <span className={dashboard["sub-item"]}>{item.label}</span>
-                  </Link>
-                </NavItem>
-              ))}
+                    <Link
+                      to={item.path}
+                      replace={item.id === "helper" ? true : false}
+                      target={item.id === "helper" ? "_blank" : "_self"}
+                    >
+                      <span className={dashboard["sub-item"]}>
+                        {item.label}
+                      </span>
+                    </Link>
+                  </NavItem>
+                ),
+              )}
             </Nav>
           </div>
         </div>
