@@ -440,6 +440,9 @@
       border-right: 1px solid #ecf1f9;
       border-bottom: 1px solid #ecf1f9;
       border-top: 1px solid #ecf1f9;
+      &:last-child {
+        border-left: 1px solid #ecf1f9;
+      }
       a {
         max-height: 54px;
       }
