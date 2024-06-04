@@ -28,14 +28,17 @@ const PasswordInput = ({
   hasShowHint = false,
   label = "رمز عبور",
 }: Props) => {
+  // ==============|| States ||================= //
   const [passValid, setPassValid] = useState<boolean[] | []>([]);
   const [hasShowPass, setHasShowPass] = useState<boolean>(false);
 
+  // ==============|| Handlers ||================= //
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (hasShowHint) setPassValid(() => isPasswordValid(e.target.value));
     onChange?.(e);
   };
 
+  // ==============|| Render ||================= //
   return (
     <>
       <FloatInput
@@ -65,7 +68,10 @@ const PasswordInput = ({
       {hasShowHint && (
         <List className={style.validation}>
           {passwordListValidation.map((item, index) => (
-            <li key={index} className={passValid[index] ? style.check : style.unCheck}>
+            <li
+              key={index}
+              className={passValid[index] ? style.check : style.unCheck}
+            >
               <h4>{item.title}</h4>
               {passValid[index] ? <CheckIcon /> : <ExclamationIcon />}
             </li>

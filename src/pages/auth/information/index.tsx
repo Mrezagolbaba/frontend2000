@@ -13,11 +13,15 @@ import {
   getDate18YearsAgo,
   persianToEnglishNumbers,
 } from "helpers";
-import "@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css";
 import * as Yup from "yup";
 import Auth from "layouts/auth";
+import CalenderIcon from "components/Icons/CalenderIcon";
 import DatePicker from "@hassanmojab/react-modern-calendar-datepicker";
+import EmailIcon from "components/Icons/EmailIcon";
 import FloatInput from "components/Input/FloatInput";
+import IDCardIcon from "components/Icons/IDCardIcon";
+import MobileIcon from "components/Icons/MobileIcon";
+import UserIcon from "components/Icons/UserIcon";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
@@ -25,12 +29,8 @@ import { useFirstTierMutation, useGetMeQuery } from "store/api/user";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 
+import "@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css";
 import auth from "assets/scss/auth/auth.module.scss";
-import UserIcon from "components/Icons/UserIcon";
-import IDCardIcon from "components/Icons/IDCardIcon";
-import CalenderIcon from "components/Icons/CalenderIcon";
-import MobileIcon from "components/Icons/MobileIcon";
-import EmailIcon from "components/Icons/EmailIcon";
 
 type Day = {
   year: number;

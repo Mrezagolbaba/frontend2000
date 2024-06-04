@@ -1,9 +1,9 @@
-import { useState } from "react";
+import MobileIcon from "components/Icons/MobileIcon";
 import { PhoneInput } from "react-international-phone";
-import "react-international-phone/style.css";
+import { useState } from "react";
 
 import style from "assets/scss/components/Input/phoneInput.module.scss";
-import MobileIcon from "components/Icons/MobileIcon";
+import "react-international-phone/style.css";
 
 interface Props {
   name: string;
@@ -25,15 +25,15 @@ const PhoneNumberInput = (props: Props) => {
     inputProps,
     disabled = false,
   } = props;
-
+  // ==============|| Constants ||================= //
   const isOccupied = focus || (value && value.length !== 0);
-
   const labelClass = isOccupied
     ? `${style.label} ${style["as-label"]}`
     : `${style.label} ${style["as-placeholder"]}`;
-
   const requiredMark = required ? <span className="text-danger">*</span> : null;
   const isPrefix = inputProps?.prefix ? "is-prefix" : "";
+
+  // ==============|| Render ||================= //
   return (
     <div
       className={style["float-input"]}
@@ -49,6 +49,7 @@ const PhoneNumberInput = (props: Props) => {
         onChange={onChange}
         disableDialCodeAndPrefix={true}
         showDisabledDialCodeAndPrefix={true}
+        disabled={disabled}
       />
       <span className={style.icon}>
         <MobileIcon />

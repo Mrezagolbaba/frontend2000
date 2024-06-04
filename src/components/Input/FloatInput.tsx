@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Input } from "reactstrap";
 
 import style from "assets/scss/components/Input/floatInput.module.scss";
 
@@ -26,15 +25,15 @@ const FloatInput = (props: Props) => {
     inputProps,
     disabled = false,
   } = props;
-
+  // ==============|| Constants ||================= //
   const isOccupied = focus || (value && value.length !== 0);
-
   const labelClass = isOccupied
     ? `${style.label} ${style["as-label"]}`
     : `${style.label} ${style["as-placeholder"]}`;
-
   const requiredMark = required ? <span className="text-danger">*</span> : null;
   const isPrefix = inputProps?.prefix && "is-prefix";
+
+  // ==============|| Render ||================= //
   return (
     <div
       className={style["float-input"]}
