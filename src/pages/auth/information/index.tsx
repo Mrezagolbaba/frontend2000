@@ -37,6 +37,7 @@ type Day = {
 type DayValue = Day | null | undefined;
 
 export default function Information() {
+  console.log("here");
   // ==============|| States ||================= //
   const [selectedDay, setSelectedDay] = useState<DayValue>({
     year: 1368,

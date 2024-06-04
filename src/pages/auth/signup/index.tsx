@@ -12,8 +12,8 @@ import {
 import * as Yup from "yup";
 import Auth from "layouts/auth";
 import Notify from "components/Notify";
-import PasswordInput from "components/PasswordInput";
-import PhoneNumberInput from "components/PhoneInput";
+import PasswordInput from "components/Input/PasswordInput";
+import PhoneNumberInput from "components/Input/PhoneInput";
 import useAuth from "hooks/useAuth";
 import { Controller, useForm } from "react-hook-form";
 import { FaAngleUp } from "react-icons/fa";

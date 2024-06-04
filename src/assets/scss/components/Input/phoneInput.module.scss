@@ -1,15 +1,13 @@
 .float-input {
+  position: relative;
   font-family: var(--bs-font-iranyekaneFa);
   padding-bottom: 5px;
   direction: ltr;
   position: relative;
-
-  .react-international-phone-input-container {
+  .container {
     font-family: var(--bs-font-iranyekaneFa);
-
-    .react-international-phone-country-selector {
+    & > div:first-child {
       font-family: var(--bs-font-iranyekaneFa);
-
       button {
         height: 42px;
         width: 100%;
@@ -17,42 +15,39 @@
         border-top-left-radius: 8px;
         border-bottom-left-radius: 8px;
         border-right: none;
+        border-right-color: transparent;
+        &:hover {
+          background-color: #fff;
+        }
+      }
+      ul {
+        width: 110px;
+        border: none;
+        outline: none;
+        & > li {
+          & > span {
+            display: none;
+          }
+          & > span + span {
+            display: block;
+          }
+        }
       }
     }
-
-    .react-international-phone-input-container
-      .react-international-phone-country-selector-button {
-      border-right-color: transparent;
-    }
-
-    .react-international-phone-dial-code-preview {
+    & > div:not(:first-child) {
       margin-left: -6px;
       min-width: 52px !important;
+      border-left: none;
     }
+  }
 
-    .react-international-phone-country-selector-dropdown__list-item-country-name {
-      display: none;
-    }
-
-    .react-international-phone-country-selector-dropdown {
-      width: 110px;
-      border: none;
-      outline: none;
-    }
-
-    .react-international-phone-country-selector-button:hover {
-      background-color: #fff;
-    }
-
-    input {
-      padding: 10px 10px;
-      width: 100%;
-      min-height: 42px;
-      border-top-right-radius: 8px;
-      border-bottom-right-radius: 8px;
-    }
-
-    input::placeholder {
+  .input {
+    padding: 10px 40px 10px 10px;
+    width: 100%;
+    min-height: 42px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    &::placeholder {
       text-align: right;
       font-weight: normal;
       position: absolute;
@@ -63,23 +58,32 @@
       z-index: 10;
     }
   }
-
+  .icon {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    svg {
+      fill: none;
+      stroke: #696969;
+      width: 20px;
+    }
+  }
   .label {
     font-weight: normal;
     position: absolute;
     pointer-events: none;
-    right: 12px;
+    right: 40px;
     top: 11px;
-    transition: 0.2s ease all;
     z-index: 10;
-
+    font-size: 0.775em;
+    transition: 0.2s ease all;
     &.as-placeholder {
       color: gray;
     }
     &.as-label {
       top: -8px;
-      right: 12px;
-      font-size: 12px !important;
+      right: 25px;
+      font-size: 0.7em;
       background: white;
       padding: 0 4px;
       margin-left: -4px;

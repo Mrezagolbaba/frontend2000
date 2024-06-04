@@ -10,7 +10,7 @@ import {
 import * as Yup from "yup";
 import Auth from "layouts/auth";
 import Notify from "components/Notify";
-import PasswordInput from "components/PasswordInput";
+import PasswordInput from "components/Input/PasswordInput";
 import { Controller, useForm } from "react-hook-form";
 import { setVerifyLogin } from "store/reducers/jwtAuth";
 import { useDispatch } from "store/store";

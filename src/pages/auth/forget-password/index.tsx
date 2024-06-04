@@ -11,7 +11,7 @@ import * as Yup from "yup";
 import Auth from "layouts/auth";
 import FloatInput from "components/Input/FloatInput";
 import Notify from "components/Notify";
-import PhoneNumberInput from "components/PhoneInput";
+import PhoneNumberInput from "components/Input/PhoneInput";
 import useAuth from "hooks/useAuth";
 import { Controller, useForm } from "react-hook-form";
 import { ForgotPasswordRequest } from "types/auth";
@@ -22,6 +22,7 @@ import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import auth from "assets/scss/auth/auth.module.scss";
+import EmailIcon from "components/Icons/EmailIcon";
 
 export default function ForgetPassword() {
   // ==============|| States ||================= //
@@ -133,7 +134,7 @@ export default function ForgetPassword() {
                             inputProps={{
                               ref: ref,
                               size: "large",
-                              prefix: <HiOutlineMail />,
+                              prefix: <EmailIcon />,
                               status: errors?.[name]?.message
                                 ? "error"
                                 : undefined,
