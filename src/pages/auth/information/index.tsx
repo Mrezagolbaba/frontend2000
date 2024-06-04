@@ -66,16 +66,13 @@ export default function Information() {
   const resolver = yupResolver(InformationSchema);
 
   // ==============|| Hooks ||================= //
-  const [
-    firstTierRequest,
-    { isLoading: loadingFirstTier, isSuccess: successFirstTier },
-  ] = useFirstTierMutation();
+  const [firstTierRequest, { isSuccess }] = useFirstTierMutation();
   const navigate = useNavigate();
-  const { data: user, isLoading } = useGetMeQuery();
+  const { data: user, isLoading: loadingData } = useGetMeQuery();
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting, isLoading },
   } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -122,7 +119,7 @@ export default function Information() {
 
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
-    if (successFirstTier) {
+    if (isSuccess) {
       navigate("/otp", {
         state: {
           type: "VERIFY_EMAIL",
@@ -131,7 +128,7 @@ export default function Information() {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [successFirstTier]);
+  }, [isSuccess]);
 
   // ==============|| Render ||================= //
   return (
@@ -310,9 +307,9 @@ export default function Information() {
                         type="submit"
                         color="primary"
                         className={auth.submit}
-                        disabled={isLoading || loadingFirstTier}
+                        disabled={isLoading || isSubmitting || loadingData}
                       >
-                        {loadingFirstTier ? (
+                        {isLoading || isSubmitting ? (
                           <Spinner style={{ color: "white" }} />
                         ) : (
                           "ثبت اطلاعات"

@@ -9,20 +9,19 @@ import {
 } from "reactstrap";
 import * as Yup from "yup";
 import Auth from "layouts/auth";
+import EmailIcon from "components/Icons/EmailIcon";
 import FloatInput from "components/Input/FloatInput";
 import Notify from "components/Notify";
 import PhoneNumberInput from "components/Input/PhoneInput";
 import useAuth from "hooks/useAuth";
 import { Controller, useForm } from "react-hook-form";
 import { ForgotPasswordRequest } from "types/auth";
-import { HiOutlineMail } from "react-icons/hi";
 import { isPhoneValid } from "helpers";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import auth from "assets/scss/auth/auth.module.scss";
-import EmailIcon from "components/Icons/EmailIcon";
 
 export default function ForgetPassword() {
   // ==============|| States ||================= //
@@ -51,8 +50,7 @@ export default function ForgetPassword() {
   const {
     handleSubmit,
     control,
-    setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isLoading },
   } = useForm({
     mode: "onChange",
     defaultValues:
@@ -154,9 +152,9 @@ export default function ForgetPassword() {
                           type="submit"
                           color="primary"
                           className={`${auth.submit} mt-5`}
-                          disabled={isSubmitting}
+                          disabled={isSubmitting || isLoading}
                         >
-                          {isSubmitting ? (
+                          {isSubmitting || isLoading ? (
                             <Spinner style={{ color: "white" }} />
                           ) : (
                             "ثبت درخواست"

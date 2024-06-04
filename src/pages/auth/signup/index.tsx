@@ -65,7 +65,7 @@ export default function Register() {
     handleSubmit,
     control,
     setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isLoading },
   } = useForm<RegisterFormData>({
     mode: "onChange",
     defaultValues: {
@@ -253,9 +253,9 @@ export default function Register() {
                           color="primary"
                           type="submit"
                           className={auth.submit}
-                          disabled={isSubmitting}
+                          disabled={isSubmitting || isLoading}
                         >
-                          {isSubmitting ? (
+                          {isSubmitting || isLoading ? (
                             <Spinner style={{ color: "white" }} />
                           ) : (
                             "ثبت نام"

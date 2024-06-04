@@ -28,7 +28,6 @@ import auth from "assets/scss/auth/auth.module.scss";
 export default function LoginPage() {
   // ==============|| States ||================= //
   const [loginType, setLoginType] = useState<"PHONE" | "EMAIL">("PHONE");
-  const [loading, setLoading] = useState(false);
 
   // ==============|| Validation ||================= //
   const getValidationSchema = () => {
@@ -68,20 +67,20 @@ export default function LoginPage() {
     handleSubmit,
     control,
     reset,
-    formState: { errors },
+    formState: { errors, isLoading, isSubmitting },
   } = useForm({
     mode: "onChange",
     defaultValues:
       loginType === "PHONE"
         ? {
-          username: "",
-          password: "",
-          selectedCountry: "98",
-        }
+            username: "",
+            password: "",
+            selectedCountry: "98",
+          }
         : {
-          username: "",
-          password: "",
-        },
+            username: "",
+            password: "",
+          },
     resolver,
   });
 
@@ -102,12 +101,10 @@ export default function LoginPage() {
         navigate("/otp", { state: { type: "AUTH", method: loginType } });
       })
       .catch((error) => {
-        setLoading(false);
         error.data.message.forEach((m) => Notify({ type: "error", text: m }));
       });
   };
   const handleErrors = (errors: any) => {
-    setLoading(false);
     Object.entries(errors).map(([fieldName, error]: any) =>
       Notify({ type: "error", text: error?.message }),
     );
@@ -219,9 +216,9 @@ export default function LoginPage() {
                           type="submit"
                           color="primary"
                           className={auth.submit}
-                          disabled={loading}
+                          disabled={isLoading || isSubmitting}
                         >
-                          {loading ? (
+                          {isLoading || isSubmitting ? (
                             <Spinner style={{ color: "white" }} />
                           ) : (
                             "ورود به حساب"
