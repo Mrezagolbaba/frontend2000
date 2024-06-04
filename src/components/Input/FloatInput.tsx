@@ -42,7 +42,8 @@ const FloatInput = (props: Props) => {
       onFocus={() => setFocus(true)}
     >
       <span className={style["prefix-icon"]}>{inputProps?.prefix}</span>
-      <Input
+      <input
+        className="form-control"
         name={name}
         id={name}
         type={type}

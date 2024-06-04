@@ -4,6 +4,7 @@ import {
   CardBody,
   Col,
   Container,
+  Input,
   Row,
   Spinner,
 } from "reactstrap";
@@ -18,9 +19,7 @@ import * as Yup from "yup";
 import Auth from "layouts/auth";
 import DatePicker from "@hassanmojab/react-modern-calendar-datepicker";
 import FloatInput from "components/Input/FloatInput";
-import { CiMobile2, CiUser, CiMail, CiCalendarDate } from "react-icons/ci";
 import { Controller, useForm } from "react-hook-form";
-import { LiaIdCardSolid } from "react-icons/lia";
 import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useFirstTierMutation, useGetMeQuery } from "store/api/user";
@@ -28,6 +27,9 @@ import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import auth from "assets/scss/auth/auth.module.scss";
+import UserIcon from "components/Icons/UserIcon";
+import IDCardIcon from "components/Icons/IDCardIcon";
+import CalenderIcon from "components/Icons/CalenderIcon";
 
 type Day = {
   year: number;
@@ -159,7 +161,7 @@ export default function Information() {
                           inputProps={{
                             ref: ref,
                             size: "large",
-                            prefix: <CiUser size={20} />,
+                            prefix: <UserIcon />,
                             status: errors?.[name]?.message
                               ? "error"
                               : undefined,
@@ -182,7 +184,7 @@ export default function Information() {
                           inputProps={{
                             ref: ref,
                             size: "large",
-                            prefix: <CiUser size={20} />,
+                            prefix: <UserIcon />,
                             status: errors?.[name]?.message
                               ? "error"
                               : undefined,
@@ -205,7 +207,7 @@ export default function Information() {
                           inputProps={{
                             ref: ref,
                             size: "large",
-                            prefix: <LiaIdCardSolid size={20} />,
+                            prefix: <IDCardIcon />,
                             status: errors?.[name]?.message
                               ? "error"
                               : undefined,
@@ -221,43 +223,41 @@ export default function Information() {
                       render={({ field: { name, onChange } }) => (
                         <DatePicker
                           value={selectedDay}
-                          onChange={(date) => setSelectedDay(date as any)}
+                          onChange={(date) =>
+                            date && setSelectedDay(date as any)
+                          }
                           shouldHighlightWeekends
                           locale="fa"
                           wrapperClassName="w-100"
                           maximumDate={minimumDate}
                           colorPrimary="#111bff"
-                          renderInput={({ ref }) => (
-                            <FloatInput
-                              type="text"
-                              name={name}
-                              label="تاریخ تولد"
-                              value={
-                                selectedDay !== undefined
-                                  ? selectedDay?.year +
-                                    "-" +
-                                    selectedDay?.month +
-                                    "-" +
-                                    selectedDay?.day
-                                  : ""
-                              }
-                              onChange={onChange}
-                              inputProps={{
-                                ref: ref,
-                                size: "large",
-                                prefix: <CiCalendarDate size={20} />,
-                                status: errors?.["birthDate"]?.message
-                                  ? "error"
-                                  : undefined,
-                              }}
-                            />
-                          )}
+                          renderInput={({ ref }) => {
+                            console.log(selectedDay);
+
+                            return (
+                              <FloatInput
+                                type="text"
+                                name={name}
+                                label="تاریخ تولد"
+                                value={""}
+                                onChange={onChange}
+                                inputProps={{
+                                  ref: ref,
+                                  size: "large",
+                                  prefix: <CalenderIcon />,
+                                  status: errors?.["birthDate"]?.message
+                                    ? "error"
+                                    : undefined,
+                                }}
+                              />
+                            );
+                          }}
                         />
                       )}
                     />
                   </Col>
 
-                  <Col xs={12}>
+                  {/* <Col xs={12}>
                     <Controller
                       name="phoneNumber"
                       control={control}
@@ -305,7 +305,7 @@ export default function Information() {
                         />
                       )}
                     />
-                  </Col>
+                  </Col> */}
                 </Row>
                 <Row>
                   <Col xs={12}>
