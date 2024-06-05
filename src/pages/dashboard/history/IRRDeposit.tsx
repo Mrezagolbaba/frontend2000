@@ -6,12 +6,13 @@ import { normalizeAmount } from "helpers";
 import { useMemo } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
 
-function IRRDeposit() {
+function IRRDeposit({ limit }: { limit?: number | undefined }) {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
     filter: [`currencyCode||eq||IRR`, "status||$ne||DRAFT"],
     or: ["type||eq||DEPOSIT", "type||eq||PROMOTION"],
     sort: "createdAt,DESC",
+    limit,
   });
 
   // ==============|| handlers ||================= //
@@ -43,12 +44,18 @@ function IRRDeposit() {
         accessorFn: (row: any) =>
           moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
         header: "تاریخ",
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "1",
         accessorKey: "amount",
         header: "مقدار",
         accessorFn: (row: any) => normalizeAmount(row?.amount, "IRR", false),
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "2",

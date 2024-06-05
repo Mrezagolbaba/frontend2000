@@ -7,5 +7,6 @@ declare const classNames: {
   readonly th: "th";
   readonly td: "td";
   readonly small__view: "small__view";
+  readonly hasMobile: "hasMobile";
 };
 export = classNames;

@@ -6,7 +6,11 @@ import { normalizeAmount } from "helpers";
 import { useMemo } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
 
-export default function FiatWithdraw() {
+export default function FiatWithdraw({
+  limit,
+}: {
+  limit?: number | undefined;
+}) {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
     filter: [
@@ -15,6 +19,7 @@ export default function FiatWithdraw() {
       "type||eq||WITHDRAW",
     ],
     sort: "createdAt,DESC",
+    limit,
   });
 
   // ==============|| Constants ||================= //
@@ -26,6 +31,9 @@ export default function FiatWithdraw() {
         accessorFn: (row: any) =>
           moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
         header: "تاریخ",
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "1",
@@ -38,6 +46,9 @@ export default function FiatWithdraw() {
         accessorKey: "amount",
         header: "مقدار",
         accessorFn: (row: any) => normalizeAmount(row?.amount, "TRY", false),
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "3",

@@ -48,3 +48,9 @@
     min-width: 140px;
   }
 }
+
+@media screen and (max-width: 978px) {
+  .table .head .th:not(.hasMobile),.table .body .td:not(.hasMobile) {
+    display: none;
+  }
+}

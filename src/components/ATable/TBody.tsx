@@ -1,5 +1,10 @@
 import { Row } from "@tanstack/react-table";
-import { body, td, tr } from "assets/scss/components/Table/index.module.scss";
+import {
+  body,
+  hasMobile,
+  td,
+  tr,
+} from "assets/scss/components/Table/index.module.scss";
 import NoData from "assets/img/icons/depositIcon.svg";
 
 type Props = {
@@ -9,14 +14,16 @@ type Props = {
 };
 
 export default function TBody({ rows, noDataText, colLength }: Props) {
-
   return (
     <tbody className={body}>
       {rows.length > 0 ? (
         rows.map((row) => (
           <tr key={row.id} className={tr}>
             {row.getAllCells().map((cell: any, index: number) => (
-              <td className={td} key={index}>
+              <td
+                className={`${td} ${cell.column.columnDef?.meta?.hasMobile ? hasMobile : ""}`}
+                key={index}
+              >
                 {cell.getValue() as any}
               </td>
             ))}

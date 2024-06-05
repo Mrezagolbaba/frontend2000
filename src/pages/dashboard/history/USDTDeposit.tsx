@@ -6,12 +6,13 @@ import { normalizeAmount } from "helpers";
 import { useMemo } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
 
-function USDTDeposit() {
+function USDTDeposit({ limit }: { limit?: number | undefined }) {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
     filter: [`currencyCode||eq||USDT`, "status||$ne||DRAFT"],
     or: ["type||eq||DEPOSIT", "type||eq||PROMOTION"],
     sort: "createdAt,DESC",
+    limit,
   });
 
   // ==============|| Handlers ||================= //
@@ -33,6 +34,9 @@ function USDTDeposit() {
         accessorFn: (row: any) =>
           moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
         header: "تاریخ",
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "1",
@@ -51,6 +55,9 @@ function USDTDeposit() {
         accessorKey: "amount",
         header: "مقدار",
         accessorFn: (row: any) => normalizeAmount(row?.amount, "USDT", false),
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "4",

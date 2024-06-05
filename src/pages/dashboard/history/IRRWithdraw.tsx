@@ -6,7 +6,7 @@ import { normalizeAmount } from "helpers";
 import { useMemo } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
 
-function IRRWithdraw() {
+function IRRWithdraw({ limit }: { limit?: number | undefined }) {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
     filter: [
@@ -15,6 +15,7 @@ function IRRWithdraw() {
       "type||eq||WITHDRAW",
     ],
     sort: "createdAt,DESC",
+    limit,
   });
 
   // ==============|| Constants ||================= //
@@ -26,12 +27,18 @@ function IRRWithdraw() {
         accessorFn: (row: any) =>
           moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
         header: "تاریخ",
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "1",
         accessorKey: "amount",
         header: "مقدار",
         accessorFn: (row: any) => normalizeAmount(row?.amount, "IRR", false),
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "2",

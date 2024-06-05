@@ -38,6 +38,8 @@ export default function ATable({
     getRowId: (originalRow) => originalRow.uuid,
   });
 
+  console.log(columns);
+
   return (
     <div className={wrapper}>
       {hasFilter && <TFilter columns={columns} />}

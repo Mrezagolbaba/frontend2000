@@ -6,7 +6,7 @@ import { normalizeAmount } from "helpers";
 import { useMemo } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
 
-function USDTWithdraw() {
+function USDTWithdraw({ limit }: { limit?: number | undefined }) {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
     filter: [
@@ -15,6 +15,7 @@ function USDTWithdraw() {
       "type||eq||WITHDRAW",
     ],
     sort: "createdAt,DESC",
+    limit,
   });
 
   // ==============|| Constants ||================= //
@@ -26,6 +27,9 @@ function USDTWithdraw() {
         accessorFn: (row: any) =>
           moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
         header: "تاریخ",
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "1",
@@ -44,6 +48,9 @@ function USDTWithdraw() {
         accessorKey: "amount",
         header: "مقدار",
         accessorFn: (row: any) => normalizeAmount(row?.amount, "USDT", false),
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "4",

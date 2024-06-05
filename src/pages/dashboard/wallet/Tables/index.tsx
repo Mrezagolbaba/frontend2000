@@ -7,16 +7,17 @@ import {
   TabContent,
   TabPane,
 } from "reactstrap";
-import FiatDeposit from "./FiatDeposit";
-import FiatWithdraw from "./FiatWithdraw";
-import IRRDeposit from "./IRRDeposit";
-import IRRWithdraw from "./IRRWithdraw";
-import USDTDeposit from "./USDTDeposit";
-import USDTWithdraw from "./USDTWithdraw";
+
 import { TransactionStatus } from "types/wallet";
 import { useState } from "react";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
+import FiatDeposit from "pages/dashboard/history/FiatDeposit";
+import IRRDeposit from "pages/dashboard/history/IRRDeposit";
+import IRRWithdraw from "pages/dashboard/history/IRRWithdraw";
+import USDTDeposit from "pages/dashboard/history/USDTDeposit";
+import USDTWithdraw from "pages/dashboard/history/USDTWithdraw";
+import FiatWithdraw from "pages/dashboard/history/FiatWithdraw";
 
 export default function Tables() {
   const [activeTab, setActiveTab] = useState<"1" | "2" | "3" | "4" | "5" | "6">(
@@ -24,7 +25,7 @@ export default function Tables() {
   );
 
   return (
-    <Card>
+    <Card className="mb-5">
       <CardBody>
         <div className={wallet.transactions}>
           <Nav className={wallet.tabs} id="transactions">
@@ -116,22 +117,22 @@ export default function Tables() {
         </div>
         <TabContent activeTab={activeTab} className="mt-3">
           <TabPane tabId="1">
-            <IRRDeposit />
+            <IRRDeposit limit={5} />
           </TabPane>
           <TabPane tabId="2">
-            <IRRWithdraw />
+            <IRRWithdraw limit={5} />
           </TabPane>
           <TabPane tabId="3">
-            <USDTDeposit />
+            <USDTDeposit limit={5} />
           </TabPane>
           <TabPane tabId="4">
-            <USDTWithdraw />
+            <USDTWithdraw limit={5} />
           </TabPane>
           <TabPane tabId="5">
-            <FiatDeposit />
+            <FiatDeposit limit={5} />
           </TabPane>
           <TabPane tabId="6">
-            <FiatWithdraw />
+            <FiatWithdraw limit={5} />
           </TabPane>
         </TabContent>
       </CardBody>

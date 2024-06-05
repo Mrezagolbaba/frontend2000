@@ -6,12 +6,13 @@ import { normalizeAmount } from "helpers";
 import { useMemo } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
 
-export default function FiatDeposit() {
+export default function FiatDeposit({ limit }: { limit?: number | undefined }) {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
     filter: [`currencyCode||eq||TRY`, "status||$ne||DRAFT"],
     or: ["type||eq||DEPOSIT", "type||eq||PROMOTION"],
     sort: "createdAt,DESC",
+    limit,
   });
 
   // ==============|| Constants ||================= //
@@ -23,6 +24,9 @@ export default function FiatDeposit() {
         accessorFn: (row: any) =>
           moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
         header: "تاریخ",
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "1",
@@ -35,6 +39,9 @@ export default function FiatDeposit() {
         accessorKey: "amount",
         header: "مقدار",
         accessorFn: (row: any) => normalizeAmount(row?.amount, "TRY", false),
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "3",
