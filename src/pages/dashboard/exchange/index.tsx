@@ -107,11 +107,7 @@ export default function Exchange() {
             <CardHeader className="d-flex flex-row justify-content-between align-items-center">
               <CardTitle tag="h5"> سوالات متداول</CardTitle>
               <div className="card-action">
-                <Link
-                  target="_blank"
-                  className="btn btn-link"
-                  to="https://help.arsonex.com/"
-                >
+                <Link target="_blank" className="btn btn-link" to="/helper">
                   مرکز راهنمایی
                 </Link>
               </div>

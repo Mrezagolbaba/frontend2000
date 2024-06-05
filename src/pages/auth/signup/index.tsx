@@ -12,8 +12,8 @@ import {
 import * as Yup from "yup";
 import Auth from "layouts/auth";
 import Notify from "components/Notify";
-import PasswordInput from "components/PasswordInput";
-import PhoneNumberInput from "components/PhoneInput";
+import PasswordInput from "components/Input/PasswordInput";
+import PhoneNumberInput from "components/Input/PhoneInput";
 import useAuth from "hooks/useAuth";
 import { Controller, useForm } from "react-hook-form";
 import { FaAngleUp } from "react-icons/fa";
@@ -65,7 +65,7 @@ export default function Register() {
     handleSubmit,
     control,
     setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isLoading },
   } = useForm<RegisterFormData>({
     mode: "onChange",
     defaultValues: {
@@ -253,9 +253,9 @@ export default function Register() {
                           color="primary"
                           type="submit"
                           className={auth.submit}
-                          disabled={isSubmitting}
+                          disabled={isSubmitting || isLoading}
                         >
-                          {isSubmitting ? (
+                          {isSubmitting || isLoading ? (
                             <Spinner style={{ color: "white" }} />
                           ) : (
                             "ثبت نام"

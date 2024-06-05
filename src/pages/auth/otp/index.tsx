@@ -50,12 +50,12 @@ export default function Otp() {
   const { otp } = useAuth();
   const [resendOtpRequest, { isLoading: resendLoading }] =
     useResendOtpMutation();
-  const { data: user, isLoading, isSuccess } = useGetMeQuery();
+  const { data: user, isLoading: loadingData, isSuccess } = useGetMeQuery();
   const {
     handleSubmit,
     setValue,
     control,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isLoading },
   } = useForm<{ code: string }>({
     mode: "onChange",
     defaultValues: {
@@ -179,7 +179,9 @@ export default function Otp() {
             <Button
               color="link"
               className={auth.link}
-              disabled={resendLoading || isLoading || isSubmitting}
+              disabled={
+                resendLoading || loadingData || isSubmitting || isLoading
+              }
               onClick={() => handleResend("PHONE")}
             >
               ارسال کد به شماره همراه
@@ -187,7 +189,9 @@ export default function Otp() {
             <Button
               color="link"
               className={auth.link}
-              disabled={resendLoading || isLoading || isSubmitting}
+              disabled={
+                resendLoading || loadingData || isSubmitting || isLoading
+              }
               onClick={() => handleResend("EMAIL")}
             >
               ارسال کد به ایمیل
@@ -200,7 +204,9 @@ export default function Otp() {
             <Button
               color="link"
               className={auth.link}
-              disabled={resendLoading || isLoading || isSubmitting}
+              disabled={
+                resendLoading || loadingData || isSubmitting || isLoading
+              }
               onClick={() => handleResend()}
             >
               ارسال مجدد کد
@@ -208,7 +214,9 @@ export default function Otp() {
             <Button
               color="link"
               className={auth.link}
-              disabled={resendLoading || isLoading || isSubmitting}
+              disabled={
+                resendLoading || loadingData || isSubmitting || isLoading
+              }
               onClick={() => handleResend("PHONE")}
             >
               ارسال کد به شماره همراه
@@ -221,7 +229,9 @@ export default function Otp() {
             <Button
               color="link"
               className={auth.link}
-              disabled={resendLoading || isLoading || isSubmitting}
+              disabled={
+                resendLoading || loadingData || isSubmitting || isLoading
+              }
               onClick={() => handleResend()}
             >
               ارسال مجدد کد
@@ -229,7 +239,9 @@ export default function Otp() {
             <Button
               color="link"
               className={auth.link}
-              disabled={resendLoading || isLoading || isSubmitting}
+              disabled={
+                resendLoading || loadingData || isSubmitting || isLoading
+              }
               onClick={() => handleResend("EMAIL")}
             >
               ارسال کد به ایمیل
@@ -241,7 +253,7 @@ export default function Otp() {
         <Button
           color="link"
           className={auth.link}
-          disabled={resendLoading || isLoading || isSubmitting}
+          disabled={resendLoading || loadingData || isSubmitting || isLoading}
           onClick={() => handleResend()}
         >
           ارسال مجدد کد
@@ -278,7 +290,7 @@ export default function Otp() {
                   />
                 </div>
               )}
-              {isLoading ? (
+              {loadingData ? (
                 <div className="placeholder-glow">
                   <div
                     className="placeholder col-12 rounded"
@@ -338,30 +350,20 @@ export default function Otp() {
                           color="primary"
                           disabled={
                             timeInSeconds <= 0 ||
-                            isLoading ||
+                            loadingData ||
                             resendLoading ||
-                            isSubmitting
+                            isSubmitting ||
+                            isLoading
                           }
                           className={auth.submit}
                         >
-                          {isSubmitting ? (
+                          {isSubmitting || isLoading ? (
                             <Spinner style={{ color: "white" }} />
                           ) : (
                             "ارسال"
                           )}
                         </Button>
                       </div>
-                      {/* <div className="mt-5">
-                        <Button
-                          className={auth.link}
-                          color="link"
-                          onClick={() => navigate(-1)}
-                        >
-                          {method === "EMAIL"
-                            ? "ویرایش ایمیل"
-                            : "ویرایش شماره همراه"}
-                        </Button>
-                      </div> */}
                     </div>
                   </Col>
                 </Row>

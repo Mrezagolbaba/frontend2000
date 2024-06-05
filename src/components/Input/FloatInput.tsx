@@ -1,7 +1,6 @@
-import { Input } from "antd";
 import React, { useState } from "react";
 
-import "./style.scss";
+import style from "assets/scss/components/Input/floatInput.module.scss";
 
 interface Props {
   name: string;
@@ -26,20 +25,24 @@ const FloatInput = (props: Props) => {
     inputProps,
     disabled = false,
   } = props;
-
+  // ==============|| Constants ||================= //
   const isOccupied = focus || (value && value.length !== 0);
-
-  const labelClass = isOccupied ? "label as-label" : "label as-placeholder";
-
+  const labelClass = isOccupied
+    ? `${style.label} ${style["as-label"]}`
+    : `${style.label} ${style["as-placeholder"]}`;
   const requiredMark = required ? <span className="text-danger">*</span> : null;
   const isPrefix = inputProps?.prefix && "is-prefix";
+
+  // ==============|| Render ||================= //
   return (
     <div
-      className="float-input"
+      className={style["float-input"]}
       onBlur={() => setFocus(false)}
       onFocus={() => setFocus(true)}
     >
-      <Input
+      <span className={style["prefix-icon"]}>{inputProps?.prefix}</span>
+      <input
+        className="form-control"
         name={name}
         id={name}
         type={type}
@@ -48,6 +51,7 @@ const FloatInput = (props: Props) => {
         disabled={disabled}
         {...inputProps}
       />
+      <span className={style["suffix-icon"]}>{inputProps?.suffix}</span>
       <label htmlFor={name} className={`${labelClass} ${isPrefix}`}>
         {label} {requiredMark}
       </label>
