@@ -541,11 +541,11 @@ ul {
     }
   }
   .breadcrumb-item + .breadcrumb-item {
-    padding-left: unset;
+    padding-left: 0;
     padding-right: 8px;
     &::before {
       content: "";
-      padding-right: unset;
+      padding-right: 0;
       margin-left: 8px;
       width: 6px;
       height: 12px;
@@ -555,6 +555,7 @@ ul {
       background-repeat: no-repeat;
       background-position: 0 0;
       background-size: 6px;
+      float: none;
     }
   }
 }
@@ -626,6 +627,24 @@ ul {
 
 .form-control.is-invalid {
   background-image: none !important;
+}
+
+@media screen and (max-width: 978px) {
+  .container,
+  .container-fluid,
+  .container-xxl,
+  .container-xl,
+  .container-lg,
+  .container-md,
+  .container-sm {
+    --bs-gutter-x: 0;
+    --bs-gutter-y: 0;
+    width: 100%;
+    padding-right: calc(var(--bs-gutter-x) * 0.5);
+    padding-left: calc(var(--bs-gutter-x) * 0.5);
+    margin-right: auto;
+    margin-left: auto;
+  }
 }
 
 @media screen and (max-width: 767px) {

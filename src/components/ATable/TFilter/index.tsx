@@ -19,7 +19,6 @@ type TypeInput =
 
 export default function TFilter({ columns }: Props) {
   const renderInputs = (type: TypeInput) => {
-    console.log(type);
     switch (type) {
       case "range":
         return (

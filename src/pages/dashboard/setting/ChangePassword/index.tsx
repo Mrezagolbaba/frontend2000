@@ -1,5 +1,5 @@
 import Notify from "components/Notify";
-import PasswordInput from "components/PasswordInput";
+import PasswordInput from "components/Input/PasswordInput";
 import { Button, Col, Row, Spinner } from "reactstrap";
 import { Controller, useForm } from "react-hook-form";
 import { IChangePassword } from "types/settings";

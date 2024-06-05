@@ -1,20 +1,27 @@
 import Wallet from "assets/img/logo-wallex.png";
-import Notifications from "assets/img/icons/notification.svg";
-import Support from "assets/img/icons/support.svg";
-import Setting from "assets/img/icons/setting.svg";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { useState } from "react";
-import { Card, CardBody, Col, Row } from "reactstrap";
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
-import { Link } from "react-router-dom";
-import ChevronsRight from "components/Icons/ChevronsRight";
+import { Card, CardBody, Tooltip } from "reactstrap";
+import { Link, useNavigate } from "react-router-dom";
+import SettingsIcon from "components/Icons/SettingsIcon";
+import SupportIcon from "components/Icons/SupportIcon";
+import { useEffect, useState } from "react";
+import useAuth from "hooks/useAuth";
+import LogoutIcon from "components/Icons/LogoutIcon";
 
-interface Props {
-  onSidebarToggle: () => void;
-}
+const Header = () => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
-const Header = ({ onSidebarToggle }: Props) => {
-  const [isLeftMenuOpen, setIsLefMenuOpen] = useState<boolean>(false);
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [activeItem, setActiveItem] = useState("");
+  const toggle = () => setTooltipOpen(!tooltipOpen);
+
+  // ==============|| Life Cycle ||================= //
+  useEffect(() => {
+    const path = location.pathname;
+    setActiveItem(path);
+  }, []);
+
   return (
     <header className={dashboard.header}>
       <Card className={dashboard.card}>
@@ -37,76 +44,56 @@ const Header = ({ onSidebarToggle }: Props) => {
               <Link to="/dashboard/wallet">واریز و برداشت</Link>
             </li>
             <li>
-              <Link target="_blank" to="https://help.arsonex.com/">
+              <Link target="_blank" to="/helper">
                 مرکز راهنمایی
               </Link>
             </li>
           </ul>
-          <div className={dashboard.header__support}>
-            <Link to="/dashboard/support" className="">
+          <div
+            className={`${dashboard.header__support} ${activeItem === "/dashboard/support" ? dashboard.active : ""}`}
+          >
+            <Link
+              to="/dashboard/support"
+              onClick={() => setActiveItem("/dashboard/support")}
+            >
               <span className="icon">
-                <img src={Support} alt="support" />
+                <SupportIcon />
               </span>
-              <span style={{ marginRight: "10px" }}>پشتیبانی</span>
+              {/* <span style={{ marginRight: "10px" }}>پشتیبانی</span> */}
             </Link>
           </div>
-          <div>
-            <Link to="/dashboard/setting">
+          <div
+            className={`${dashboard.header__settings} ${activeItem === "/dashboard/setting" ? dashboard.active : ""}`}
+          >
+            <Link
+              to="/dashboard/setting"
+              onClick={() => setActiveItem("/dashboard/setting")}
+            >
               <span className="icon">
-                <img src={Setting} alt="setting" />
+                <SettingsIcon />
               </span>
             </Link>
           </div>
-          <div className={dashboard.header__subheader}>
-            <button
-              className={dashboard["header__hamburger-btn"]}
-              onClick={() => onSidebarToggle()}
+          <div className={dashboard.header__profile} onClick={toggle}>
+            <a id="profile-tooltip">
+              <span>م</span>
+            </a>
+            <Tooltip
+              className={dashboard.header__profile__btn}
+              isOpen={tooltipOpen}
+              target="profile-tooltip"
+              toggle={toggle}
             >
-              <span className="icon">
-                <GiHamburgerMenu />
-              </span>
-            </button>
-            <button
-              className={dashboard["header__hamburger-btn"]}
-              onClick={() => setIsLefMenuOpen(true)}
-            >
-              <span className="icon">
-                <ChevronsRight />
-              </span>
-            </button>
-            <ul
-              className={`${dashboard.header__navbar} ${
-                isLeftMenuOpen ? dashboard.expanded : ""
-              }`}
-            >
-              <li>
-                <Link
-                  to="/dashboard/exchange"
-                  onClick={() => setIsLefMenuOpen(false)}
-                  className="text-primary"
-                >
-                  خرید و فروش سریع
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/dashboard/history"
-                  onClick={() => setIsLefMenuOpen(false)}
-                  className="text-primary"
-                >
-                  تاریخچه
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/dashboard/orders"
-                  onClick={() => setIsLefMenuOpen(false)}
-                  className="text-primary"
-                >
-                  سفارشات من
-                </Link>
-              </li>
-            </ul>
+              <Link to="/dashboard/profile">پروفایل کاربری</Link>
+              <a
+                onClick={async () =>
+                  await logout().then(() => navigate("/login"))
+                }
+              >
+                <LogoutIcon />
+                خروج
+              </a>
+            </Tooltip>
           </div>
         </CardBody>
       </Card>
