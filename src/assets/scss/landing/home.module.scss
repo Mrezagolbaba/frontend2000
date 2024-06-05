@@ -16,6 +16,7 @@
 .wrapper {
   position: relative;
   direction: rtl;
+  overflow-x: hidden;
 }
 
 .menu-overlay {
@@ -1003,7 +1004,7 @@ img.avatar {
   }
 }
 
-.not-found{
+.not-found {
   background: #050625;
 }
 
@@ -1076,6 +1077,9 @@ img.avatar {
       display: block;
     }
   }
+  .features__wrapper {
+    padding: 0 10px;
+  }
   .section-title__title {
     font-size: 2rem;
   }
@@ -1090,6 +1094,7 @@ img.avatar {
     }
   }
   .footer {
+    padding: 150px 10px 45px;
     .social-media {
       margin: 0 auto 30px;
     }
