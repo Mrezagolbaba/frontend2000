@@ -44,7 +44,7 @@ const Header = () => {
               <Link to="/dashboard/wallet">واریز و برداشت</Link>
             </li>
             <li>
-              <Link target="_blank" to="/helper">
+              <Link target="_blank" to="https://help.arsonex.com/">
                 مرکز راهنمایی
               </Link>
             </li>
