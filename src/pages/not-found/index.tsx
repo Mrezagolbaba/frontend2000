@@ -20,7 +20,7 @@ export default function NotFound() {
             شما &zwnj;می&zwnj;توانید در مرکز راهنمایی آرسونیکس به مطالب بیشتری
             دسترسی پیدا کنید.
           </p>
-          <Link to="/helper" className="btn btn-primary mt-3">
+          <Link to="https://help.arsonex.com/" className="btn btn-primary mt-3">
             مرکز راهنمایی
           </Link>
           <Link className="text-white mt-4 d-flex" to="/">
