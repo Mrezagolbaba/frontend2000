@@ -91,7 +91,7 @@ const Advantages = () => {
             <Link
               target="_blank"
               className="col-md-6"
-              to="/helper"
+              to="https://help.arsonex.com/"
             >
               <div className={`${home["feature__box"]} ${home["box--blue"]}`}>
                 <div className={home["feature__box__caption"]}>

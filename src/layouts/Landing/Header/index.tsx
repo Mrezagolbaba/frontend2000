@@ -100,7 +100,7 @@ const Header = ({
                 <Link to="/dashboard">خرید و فروش آنی</Link>
               </li>
               <li className={`${home.navbar__item}`}>
-                <Link target="_blank" to="/helper">
+                <Link target="_blank" to="https://help.arsonex.com/">
                   مرکز راهنمایی
                 </Link>
               </li>

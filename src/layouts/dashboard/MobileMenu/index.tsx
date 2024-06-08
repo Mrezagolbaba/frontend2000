@@ -69,19 +69,19 @@ export default function MobileMenu() {
   ];
   const otherItems = [
     {
-      id: "home",
+      id: "kyc",
+      path: "/dashboard/profile#kyc-section",
+      label: "احراز هویت",
+    },
+    {
+      id: "add-friends",
       path: "/dashboard/add-friends",
       label: "دعوت از دوستان",
     },
     {
-      id: "wallet",
+      id: "accounts",
       path: "/dashboard/profile#iranian-accounts",
       label: "حساب های بانکی",
-    },
-    {
-      id: "exchange",
-      path: "/dashboard/profile#kyc-section",
-      label: "احراز هویت",
     },
     {
       id: "helper",
@@ -89,14 +89,19 @@ export default function MobileMenu() {
       label: "مرکز راهنمایی",
     },
     {
-      id: "addFriends",
+      id: "support",
       path: "/dashboard/support",
       label: "پشتیبانی",
     },
     {
-      id: "addFriends",
-      path: "/dashboard/profile",
-      label: "پروفایل کاربری",
+      id: "orders",
+      path: "/dashboard/orders",
+      label: "سفارشات من",
+    },
+    {
+      id: "history",
+      path: "/dashboard/history",
+      label: "تاریخچه",
     },
   ];
 
@@ -111,30 +116,20 @@ export default function MobileMenu() {
     <>
       <div className={dashboard["mobile-menu"]}>
         <Nav>
-          {items.map((item, key) => {
-            if (
-              secondTierVerified &&
-              item.path === "/dashboard/profile#kyc-section"
-            )
-              return null;
-            else
-              return (
-                <NavItem
-                  key={key}
-                  className={`${activeItem === item.path ? dashboard.active : ""} ${item?.hasBold ? dashboard["bold-item"] : ""}`}
-                  onClick={(e) =>
-                    item.onClick
-                      ? item.onClick()
-                      : handleClick(e, item.path, false)
-                  }
-                >
-                  <Link to={item.path}>
-                    <span className={dashboard["icon-item"]}>{item.icon}</span>
-                    <span className={dashboard["sub-item"]}>{item.label}</span>
-                  </Link>
-                </NavItem>
-              );
-          })}
+          {items.map((item, key) => (
+            <NavItem
+              key={key}
+              className={`${activeItem === item.path ? dashboard.active : ""} ${item?.hasBold ? dashboard["bold-item"] : ""}`}
+              onClick={(e) =>
+                item.onClick ? item.onClick() : handleClick(e, item.path, false)
+              }
+            >
+              <Link to={item.path}>
+                <span className={dashboard["icon-item"]}>{item.icon}</span>
+                <span className={dashboard["sub-item"]}>{item.label}</span>
+              </Link>
+            </NavItem>
+          ))}
         </Nav>
         <div
           className={`${dashboard["more-menu"]} ${isOpen ? dashboard["show-more"] : ""}`}
@@ -146,7 +141,7 @@ export default function MobileMenu() {
                 item.path === "/dashboard/profile#kyc-section" ? null : (
                   <NavItem
                     key={key}
-                    className={`${activeItem === item.path ? dashboard.active : ""} col-4`}
+                    className={`${activeItem === item.path ? dashboard.active : ""} ${item.id === "kyc" ? "col-12" : "col-4"}`}
                     onClick={(e) => handleClick(e, item.path, true)}
                   >
                     <Link

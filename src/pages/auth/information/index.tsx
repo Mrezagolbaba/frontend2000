@@ -233,7 +233,15 @@ export default function Information() {
                               type="text"
                               name={name}
                               label="تاریخ تولد"
-                              value={""}
+                              value={
+                                selectedDay !== undefined
+                                  ? selectedDay?.year +
+                                    "-" +
+                                    selectedDay?.month +
+                                    "-" +
+                                    selectedDay?.day
+                                  : ""
+                              }
                               onChange={onChange}
                               inputProps={{
                                 ref: ref,

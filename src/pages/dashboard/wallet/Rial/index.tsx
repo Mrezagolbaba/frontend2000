@@ -9,10 +9,11 @@ import wallet from "assets/scss/dashboard/wallet.module.scss";
 
 type Props = {
   balance: string;
-  stock: string
+  availableBalance: string;
+  stock: string;
 };
 
-export default function IRRWallet({ balance,stock }: Props) {
+export default function IRRWallet({ balance, availableBalance, stock }: Props) {
   const [isOpenDepositForm, setIsOpenDepositForm] = useState<boolean>(false);
   const [isOpenWithdraw, setIsOpenWithdraw] = useState<boolean>(false);
 
@@ -26,7 +27,14 @@ export default function IRRWallet({ balance,stock }: Props) {
             <span className={wallet.wallet__item__subtitle}>TMN</span>
           </h6>
         </div>
-        <div className={wallet.wallet__item__price}>{balance}</div>
+        <div className={wallet.wallet__item__price}>
+          {balance}
+          {availableBalance !== balance && (
+            <span className={wallet["available-balance"]}>
+              در دسترس: {availableBalance}
+            </span>
+          )}
+        </div>
         <div className={wallet.wallet__item__actions}>
           <a
             onClick={() => {
