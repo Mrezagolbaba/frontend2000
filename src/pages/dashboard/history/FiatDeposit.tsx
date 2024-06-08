@@ -3,10 +3,15 @@ import CopyInput from "components/Input/CopyInput";
 import moment from "jalali-moment";
 import { StatusHandler } from ".";
 import { normalizeAmount } from "helpers";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
+import Dialog from "components/Dialog";
+import TransactionReceipt from "../invoice/TransactionReceipt";
 
 export default function FiatDeposit({ limit }: { limit?: number | undefined }) {
+  // ==============|| States ||================= //
+  const [modal, setModal] = useState({ isOpen: false, id: "" });
+
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
     filter: [`currencyCode||eq||TRY`, "status||$ne||DRAFT"],
@@ -67,10 +72,21 @@ export default function FiatDeposit({ limit }: { limit?: number | undefined }) {
 
   // ==============|| Render ||================= //
   return (
-    <ATable
-      data={isSuccess ? data : []}
-      isLoading={isLoading || isFetching}
-      columns={columns}
-    />
+    <>
+      <ATable
+        data={isSuccess ? data : []}
+        isLoading={isLoading || isFetching}
+        columns={columns}
+        rowClickFn={(id) => setModal({ isOpen: true, id: id })}
+      />
+      <Dialog
+        isOpen={modal.isOpen}
+        onClose={() => setModal({ isOpen: false, id: "" })}
+        hasCloseButton
+        size="md"
+      >
+        <TransactionReceipt type="DEPOSIT" transactionID={modal.id} />
+      </Dialog>
+    </>
   );
 }

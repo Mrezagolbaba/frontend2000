@@ -27,11 +27,25 @@
     color: rgba(3, 4, 27, 0.4);
     white-space: nowrap;
   }
-  .body .td {
-    font-size: 0.875em;
-    font-weight: 500;
-    color: #03041b;
-    border-bottom: 1px solid rgba(3, 4, 27, 0.05);
+  .body {
+    tr {
+      cursor: default;
+      &.clickable {
+        cursor: pointer;
+        transition: all ease-in 200ms;
+        &:hover,
+        &:active {
+          background-color: rgba(17, 27, 255, 0.1);
+          transition: all ease-out 200ms;
+        }
+      }
+    }
+    .td {
+      font-size: 0.875em;
+      font-weight: 500;
+      color: #03041b;
+      border-bottom: 1px solid rgba(3, 4, 27, 0.05);
+    }
   }
 
   &.small__view {
@@ -50,7 +64,8 @@
 }
 
 @media screen and (max-width: 978px) {
-  .table .head .th:not(.hasMobile),.table .body .td:not(.hasMobile) {
+  .table .head .th:not(.hasMobile),
+  .table .body .td:not(.hasMobile) {
     display: none;
   }
 }

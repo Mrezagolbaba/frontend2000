@@ -6,6 +6,7 @@ declare const classNames: {
   readonly tr: "tr";
   readonly th: "th";
   readonly td: "td";
+  readonly clickable: "clickable";
   readonly small__view: "small__view";
   readonly hasMobile: "hasMobile";
 };

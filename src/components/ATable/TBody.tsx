@@ -1,6 +1,7 @@
 import { Row } from "@tanstack/react-table";
 import {
   body,
+  clickable,
   hasMobile,
   td,
   tr,
@@ -11,14 +12,24 @@ type Props = {
   rows: Row<any>[];
   noDataText: string;
   colLength: number;
+  rowClickFn?: (id: string) => void;
 };
 
-export default function TBody({ rows, noDataText, colLength }: Props) {
+export default function TBody({
+  rows,
+  noDataText,
+  colLength,
+  rowClickFn,
+}: Props) {
   return (
     <tbody className={body}>
       {rows.length > 0 ? (
         rows.map((row) => (
-          <tr key={row.id} className={tr}>
+          <tr
+            key={row.id}
+            className={`${tr} ${rowClickFn ? clickable : ""}`}
+            onClick={() => rowClickFn?.(row?.original?.id)}
+          >
             {row.getAllCells().map((cell: any, index: number) => (
               <td
                 className={`${td} ${cell.column.columnDef?.meta?.hasMobile ? hasMobile : ""}`}

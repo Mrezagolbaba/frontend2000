@@ -4,10 +4,11 @@ import axios from "axios";
 import jalaliMoment from "jalali-moment";
 import moment from "jalali-moment";
 import { CryptoData } from "types/exchange";
-import { TransactionStatus } from "types/wallet";
+import { CurrencyCode, TransactionStatus } from "types/wallet";
 import { JWT_DECODE_KEY, REF_TOKEN_OBJ_NAME } from "config";
 import { isEmpty } from "lodash";
 import { PhoneNumberUtil } from "google-libphonenumber";
+import { StatusColors } from "types/invoice";
 
 export function generateLabelValueArray(start: number, end: number) {
   const resultArray: { label: string; value: string }[] = [];
@@ -325,7 +326,7 @@ export const convertCoins = (value) => {
  ***********/
 export const normalizeAmount = (
   amount: string,
-  currency: "IRR" | "TRY" | "USDT" | "TRX",
+  currency: CurrencyCode,
   isShowCurrency: boolean,
 ) => {
   if (!amount || isEmpty(amount)) return "0";
@@ -426,5 +427,28 @@ export const isPhoneValid = (phone: string) => {
     return phoneUtil.isValidNumber(phoneUtil.parseAndKeepRawInput(phone));
   } catch (error) {
     return false;
+  }
+};
+
+export const renderStatus = (
+  status: TransactionStatus,
+): { badgeName: StatusColors; label: string } => {
+  switch (status) {
+    case "SUCCESSFUL":
+      return { badgeName: "success", label: "موفق" };
+
+    case "FAILED":
+    case "CANCELED":
+    case "EXPIRED":
+      return { badgeName: "danger", label: "ناموفق" };
+
+    case "PROCESSING":
+    case "INITIATED":
+      return { badgeName: "info", label: "در حال پردازش" };
+    case "REFUND":
+      return { badgeName: "warning", label: "عودت" };
+    case "DRAFT":
+    default:
+      return { badgeName: "dark", label: "پیش نویس" };
   }
 };

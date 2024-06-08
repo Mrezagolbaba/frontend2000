@@ -21,6 +21,7 @@ type Props = {
   isLoading?: boolean;
   noDataText?: string;
   size?: "small" | "large";
+  rowClickFn?: (id: string) => void;
 };
 
 export default function ATable({
@@ -30,6 +31,7 @@ export default function ATable({
   isLoading = false,
   noDataText = "دیتایی وجود ندارد.",
   size = "large",
+  rowClickFn,
 }: Props) {
   const { _getColumnDefs, getRowModel } = useReactTable({
     columns,
@@ -37,8 +39,6 @@ export default function ATable({
     getCoreRowModel: getCoreRowModel(),
     getRowId: (originalRow) => originalRow.uuid,
   });
-
-  console.log(columns);
 
   return (
     <div className={wrapper}>
@@ -51,6 +51,7 @@ export default function ATable({
           <TBody
             colLength={_getColumnDefs().length}
             noDataText={noDataText}
+            rowClickFn={rowClickFn}
             rows={data?.length > 0 ? getRowModel().rows : []}
           />
         )}
