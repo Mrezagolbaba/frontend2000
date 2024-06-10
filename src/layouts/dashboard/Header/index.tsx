@@ -1,20 +1,25 @@
-import Wallet from "assets/img/logo-wallex.png";
-import dashboard from "assets/scss/dashboard/dashboard.module.scss";
-import { Card, CardBody, Tooltip } from "reactstrap";
-import { Link, useNavigate } from "react-router-dom";
+import LogoutIcon from "components/Icons/LogoutIcon";
 import SettingsIcon from "components/Icons/SettingsIcon";
 import SupportIcon from "components/Icons/SupportIcon";
-import { useEffect, useState } from "react";
+import Wallet from "assets/img/logo-wallex.png";
 import useAuth from "hooks/useAuth";
-import LogoutIcon from "components/Icons/LogoutIcon";
+import { Card, CardBody } from "reactstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useAppSelector } from "store/hooks";
+import { useEffect, useState } from "react";
+
+import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import MobileProfile from "./MobileProfile";
 
 const Header = () => {
+  const { firstName } = useAppSelector((state) => state.user);
   const { logout } = useAuth();
   const navigate = useNavigate();
 
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("");
-  const toggle = () => setTooltipOpen(!tooltipOpen);
+  const toggle = () => setTooltipOpen((oldVal) => !oldVal);
 
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
@@ -74,27 +79,7 @@ const Header = () => {
               </span>
             </Link>
           </div>
-          <div className={dashboard.header__profile} onClick={toggle}>
-            <a id="profile-tooltip">
-              <span>م</span>
-            </a>
-            <Tooltip
-              className={dashboard.header__profile__btn}
-              isOpen={tooltipOpen}
-              target="profile-tooltip"
-              toggle={toggle}
-            >
-              <Link to="/dashboard/profile">پروفایل کاربری</Link>
-              <a
-                onClick={async () =>
-                  await logout().then(() => navigate("/login"))
-                }
-              >
-                <LogoutIcon />
-                خروج
-              </a>
-            </Tooltip>
-          </div>
+          <MobileProfile />
         </CardBody>
       </Card>
     </header>
