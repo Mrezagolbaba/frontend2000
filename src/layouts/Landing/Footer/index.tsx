@@ -55,7 +55,7 @@ const Footer = (): ReactElement => {
               <h3 className={home["footer-widget-title"]}>امکانات</h3>
               <ul className={home["footer-links"]}>
                 <li>
-                  <Link target="_blank" to="/dashboard/exchange">خرید و فروش سریع</Link>
+                  <Link target="_blank" to="/dashboard/exchange">معامله سریع</Link>
                 </li>
                 <li>
                   <Link target="_blank" to="https://help.arsonex.com/withdraw-fiat/">

@@ -264,7 +264,7 @@ export function getTitlePage(path: string) {
     { path: "/terms", name: "قوانین و مقررات - آرسونیکس" },
     { path: "/dashboard", name: "داشبورد کاربری - آرسونیکس" },
     { path: "/dashboard/profile", name: "پروفایل کاربری - آرسونیکس" },
-    { path: "/dashboard/exchange", name: "خرید و فروش سریع - آرسونیکس" },
+    { path: "/dashboard/exchange", name: "معامله سریع - آرسونیکس" },
     { path: "/dashboard/wallet", name: "کیف پول - آرسونیکس" },
     { path: "/dashboard/setting", name: "تنظیمات - آرسونیکس" },
     { path: "/dashboard/market", name: "بازارها - آرسونیکس" },

@@ -51,7 +51,7 @@ const HeadAuth: FC = () => {
             <Link to="/market">قیمت لحظه ای</Link>
           </li>
           <li className={home.navbar__item}>
-            <Link to="/terms">خرید و فروش آنی</Link>
+            <Link to="/terms">معامله آنی</Link>
           </li>
           <li className={home.navbar__item}>
             <Link to="https://www.arsonex.com/blog" target="_blank">
