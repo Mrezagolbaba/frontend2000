@@ -97,7 +97,7 @@ const Header = ({
                   pathname === "/dashboard" ? home.active : ""
                 }`}
               >
-                <Link to="/dashboard">معامله آنی</Link>
+                <Link to="/dashboard">معامله سریع</Link>
               </li>
               <li className={`${home.navbar__item}`}>
                 <Link target="_blank" to="https://help.arsonex.com/">
