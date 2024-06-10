@@ -191,7 +191,6 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
                 <CopyInput
                   text={selectedBank || ""}
                   key="iban-account"
-                  isIban={false}
                 />
               </FormGroup>
             </Col>
