@@ -45,8 +45,8 @@
     padding: 10px 40px 10px 10px;
     width: 100%;
     min-height: 42px;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
+    border-top-right-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
     &::placeholder {
       text-align: right;
       font-weight: normal;
