@@ -145,7 +145,7 @@ export default function Withdraw({ onClose, stock }: Props) {
     if (isSuccessWithdraw) {
       Notify({
         type: "success",
-        text: "درخواست برداشت با موفقیت ثبت شد. لطفا منتظر تایید پشتیبانی بمانید.",
+        text: "درخواست برداشت با موفقیت ثبت شد.",
       });
       onClose?.();
     }
