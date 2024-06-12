@@ -1,10 +1,12 @@
-import SuccessfullPyment from "components/paymeny/successfullPyment";
 import FailedPayment from "components/paymeny/failedPayment";
-import { useTransactionStatusQuery } from "store/api/wallet-management";
-import { useParams } from "react-router-dom";
+import SuccessfullPyment from "components/paymeny/successfullPyment";
+import useQueryParams from "hooks/useQueryParams";
 import { Card, CardBody, Spinner } from "reactstrap";
+import { useTransactionStatusQuery } from "store/api/wallet-management";
+
 const PaymentRecipt = () => {
-  const id = useParams<{ id: string }>().id as string;
+  const query = useQueryParams();
+  const id = query.get("id") || "";
   const { data, isLoading, isError } = useTransactionStatusQuery(id);
   return (
     <section className="page page-wallet mt-4 d-flex justify-content-center">

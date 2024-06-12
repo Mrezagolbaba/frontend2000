@@ -271,7 +271,12 @@ export function getTitlePage(path: string) {
     { path: "/dashboard/orders", name: "سفارشات - آرسونیکس" },
     { path: "/dashboard/history", name: "تاریخچه - آرسونیکس" },
     { path: "/dashboard/support", name: "پشتیبانی - آرسونیکس" },
-    { path: "/dashboard/add-friends", name: "ت از دوستان - آرسونیکس" },
+    { path: "/dashboard/add-friends", name: "دعوت از دوستان - آرسونیکس" },
+    { path: "/dashboard/payment-receipt", name: "وضعیت پرداخت - آرسونیکس" },
+    {
+      path: "/dashboard/debit-subscription-finished",
+      name: "وضعیت اتصال - آرسونیکس",
+    },
     { path: "/login", name: "آرسونیکس - ورود به حساب کاربری" },
     { path: "/register", name: "آرسونیکس - ثبت نام" },
     { path: "/forget-password", name: "آرسونیکس - فراموشی رمز عبور" },

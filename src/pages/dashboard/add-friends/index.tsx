@@ -88,7 +88,7 @@ const AddFriends = () => {
                     <CopyInput
                       text={
                         data
-                          ? `https://arsonex.com/register/${(data as IReferral).code}`
+                          ? `https://arsonex.com/register?code=${(data as IReferral).code}`
                           : ""
                       }
                     />
