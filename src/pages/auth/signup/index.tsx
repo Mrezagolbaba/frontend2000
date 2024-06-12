@@ -28,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import auth from "assets/scss/auth/auth.module.scss";
+import useQueryParams from "hooks/useQueryParams";
 
 export default function Register() {
   // ==============|| State ||================= //
@@ -60,7 +61,8 @@ export default function Register() {
   // ==============|| Hooks ||================= //
   const { register } = useAuth();
   const navigate = useNavigate();
-  const { code } = useParams();
+  const query = useQueryParams();
+  const code = query.get("code")
   const {
     handleSubmit,
     control,

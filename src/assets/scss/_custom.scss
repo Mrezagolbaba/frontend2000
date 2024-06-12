@@ -80,6 +80,7 @@ html {
   );
   --bs-body-font-family: var(--bs-font-iranyekaneFa);
   --bs-body-font-size: 1rem;
+  --bs-body-font-size2: clamp(0.65rem, 0.7vw, 2rem);
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
   --bs-body-color: #212529;
