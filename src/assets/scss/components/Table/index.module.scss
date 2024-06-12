@@ -22,7 +22,7 @@
     text-align: -webkit-center;
   }
   .th {
-    font-size: 0.875em;
+    font-size: clamp(0.8rem, 0.9vw, 1.2rem);
     font-weight: 500;
     color: rgba(3, 4, 27, 0.4);
     white-space: nowrap;
@@ -39,9 +39,15 @@
           transition: all ease-out 200ms;
         }
       }
+      &.mobile {
+        display: none;
+      }
+      &.desktop {
+        display: table-row;
+      }
     }
     .td {
-      font-size: 0.875em;
+      font-size: clamp(0.7rem, 0.8vw, 1rem);
       font-weight: 500;
       color: #03041b;
       border-bottom: 1px solid rgba(3, 4, 27, 0.05);
@@ -52,7 +58,6 @@
     .td,
     .th {
       padding: 10px 4px;
-      font-size: 0.75em;
     }
   }
 }
@@ -64,6 +69,34 @@
 }
 
 @media screen and (max-width: 978px) {
+  .table .head {
+    display: none;
+  }
+  .table .body {
+    .tr {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 5px;
+      &.mobile,
+      &.mobile > td {
+        display: block;
+      }
+      &.desktop {
+        display: none;
+      }
+    }
+    .td {
+      border: none !important;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      &:before {
+        content: attr(data-th);
+        padding-left: 5px;
+        display: flow-root;
+      }
+    }
+  }
   .table .head .th:not(.hasMobile),
   .table .body .td:not(.hasMobile) {
     display: none;

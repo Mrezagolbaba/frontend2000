@@ -1,0 +1,59 @@
+.transaction {
+  display: flex;
+  flex-direction: row;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  overflow: hidden;
+  .success {
+    background-color: var(--bs-success);
+    color: var(--bs-white);
+  }
+  .warning {
+    background-color: var(--bs-warning);
+    color: var(--bs-black);
+  }
+  .danger {
+    background-color: var(--bs-danger);
+    color: var(--bs-white);
+  }
+  .dark {
+    background-color: var(--bs-dark);
+    color: var(--bs-white);
+  }
+  .info {
+    background-color: var(--bs-info);
+    color: var(--bs-white);
+  }
+  &__counter {
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &__data {
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    &__detail {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      .title {
+        font-size: clamp(0.9rem, 1.4vw, 1.5rem);
+      }
+      .amount {
+        font-size: clamp(0.65rem, 0.8vw, 0.9rem);
+      }
+    }
+    &__others {
+      font-size: clamp(0.65rem, 0.8vw, 0.9rem);
+      & > div {
+        padding: 5px 0;
+      }
+      a {
+        padding-right: 5px;
+      }
+    }
+  }
+}

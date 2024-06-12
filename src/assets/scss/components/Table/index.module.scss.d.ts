@@ -7,6 +7,8 @@ declare const classNames: {
   readonly th: "th";
   readonly td: "td";
   readonly clickable: "clickable";
+  readonly mobile: "mobile";
+  readonly desktop: "desktop";
   readonly small__view: "small__view";
   readonly hasMobile: "hasMobile";
 };
