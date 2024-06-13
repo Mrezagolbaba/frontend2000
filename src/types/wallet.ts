@@ -61,7 +61,7 @@ export interface TransactionResponse {
   destination: any;
   source: any;
   displayId: string;
-  currencyCode: string;
+  currencyCode: CurrencyCode;
   amount: string;
   fee: string;
   internalConversionRate: string;
