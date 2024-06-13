@@ -1,12 +1,14 @@
 import ATable from "components/ATable";
 import CopyInput from "components/Input/CopyInput";
+import Dialog from "components/Dialog";
+import TransactionReceipt from "../invoice/TransactionReceipt";
 import moment from "jalali-moment";
+import { Button } from "reactstrap";
 import { StatusHandler } from ".";
 import { normalizeAmount, renderStatus } from "helpers";
 import { useMemo, useState } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
-import Dialog from "components/Dialog";
-import TransactionReceipt from "../invoice/TransactionReceipt";
+
 import style, {
   amount,
   title,
@@ -88,10 +90,7 @@ export default function FiatDeposit({ limit }: { limit?: number | undefined }) {
         columns={columns}
         noDataText="اولین تراکنش فیات دیجیتال خود را با آرسونیکس را تجربه کنید."
         mobileView={(row) => (
-          <div
-            className={transaction}
-            onClick={() => setModal({ isOpen: true, id: row.original.id })}
-          >
+          <div className={transaction}>
             <div
               className={`${transaction__counter} ${style[renderStatus(row.original.status).badgeName]}`}
             >
@@ -144,6 +143,17 @@ export default function FiatDeposit({ limit }: { limit?: number | undefined }) {
                       hasBox={false}
                     />
                   </span>
+                </div>
+                <div className="d-flex justify-content-center">
+                  <Button
+                    outline
+                    color="primary"
+                    onClick={() =>
+                      setModal({ isOpen: true, id: row.original.id })
+                    }
+                  >
+                    نمایش جزئیات
+                  </Button>
                 </div>
               </div>
             </div>

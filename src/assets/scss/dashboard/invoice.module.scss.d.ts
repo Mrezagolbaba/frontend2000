@@ -1,5 +1,6 @@
 declare const classNames: {
   readonly transaction: "transaction";
+  readonly transaction__close: "transaction__close";
   readonly transaction__icon: "transaction__icon";
   readonly transaction__icon__loading: "transaction__icon__loading";
   readonly success: "success";

@@ -1,9 +1,11 @@
 import ATable from "components/ATable";
 import CopyInput from "components/Input/CopyInput";
 import moment from "jalali-moment";
+import { Button } from "reactstrap";
+import { Link } from "react-router-dom";
 import { StatusHandler } from ".";
 import { normalizeAmount, renderStatus } from "helpers";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
 
 import style, {
@@ -15,9 +17,13 @@ import style, {
   transaction__data__detail,
   transaction__data__others,
 } from "assets/scss/dashboard/history.module.scss";
-import { Link } from "react-router-dom";
+import Dialog from "components/Dialog";
+import TransactionReceipt from "../invoice/TransactionReceipt";
 
 function USDTWithdraw({ limit }: { limit?: number | undefined }) {
+  // ==============|| States ||================= //
+  const [modal, setModal] = useState({ isOpen: false, id: "" });
+
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
     filter: [
@@ -105,6 +111,7 @@ function USDTWithdraw({ limit }: { limit?: number | undefined }) {
 
   // ==============|| Render ||================= //
   return (
+   <>
     <ATable
       data={isSuccess ? data : []}
       isLoading={isLoading || isFetching}
@@ -192,11 +199,35 @@ function USDTWithdraw({ limit }: { limit?: number | undefined }) {
                   />
                 </span>
               </div>
+              <div className="d-flex justify-content-center">
+                <Button
+                  outline
+                  color="primary"
+                  onClick={() =>
+                    setModal({ isOpen: true, id: row.original.id })
+                  }
+                >
+                  نمایش جزئیات
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       )}
     />
+    <Dialog
+        isOpen={modal.isOpen}
+        onClose={() => setModal({ isOpen: false, id: "" })}
+        hasCloseButton
+        size="md"
+      >
+        <TransactionReceipt
+          onClose={() => setModal({ isOpen: false, id: "" })}
+          type="WITHDRAW"
+          transactionID={modal.id}
+        />
+      </Dialog>
+   </>
   );
 }
 

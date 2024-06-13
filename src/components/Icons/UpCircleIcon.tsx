@@ -11,9 +11,7 @@ const UpCircleIcon = (props: SVGProps<SVGSVGElement>) => {
     >
       <g
         id="Page-1"
-        stroke="none"
         strokeWidth="1"
-        fill="none"
         fillRule="evenodd"
       >
         <g
