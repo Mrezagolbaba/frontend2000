@@ -25,6 +25,10 @@
     background-color: var(--bs-info);
     color: var(--bs-white);
   }
+  .primary {
+    background-color: #111bf1;
+    color: var(--bs-white);
+  }
   &__counter {
     width: 30px;
     display: flex;
