@@ -1,12 +1,13 @@
 import ATable from "components/ATable";
 import CopyInput from "components/Input/CopyInput";
+import Dialog from "components/Dialog";
+import TransactionReceipt from "../invoice/TransactionReceipt";
 import moment from "jalali-moment";
 import { Button } from "reactstrap";
 import { StatusHandler } from ".";
 import { normalizeAmount, renderStatus } from "helpers";
 import { useMemo, useState } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
-import { BottomSheet } from "react-spring-bottom-sheet";
 
 import style, {
   amount,
@@ -17,7 +18,6 @@ import style, {
   transaction__data__detail,
   transaction__data__others,
 } from "assets/scss/dashboard/history.module.scss";
-import TransactionReceipt from "../invoice/TransactionReceipt";
 
 export default function FiatWithdraw({
   limit,
@@ -207,13 +207,17 @@ export default function FiatWithdraw({
           </div>
         )}
       />
-      <BottomSheet open={modal.isOpen}>
+      <Dialog
+        isOpen={modal.isOpen}
+        onClose={() => setModal({ isOpen: false, id: "" })}
+        size="md"
+      >
         <TransactionReceipt
           transactionID={modal.id}
           type="WITHDRAW"
           onClose={() => setModal({ isOpen: false, id: "" })}
         />
-      </BottomSheet>
+      </Dialog>
     </>
   );
 }
