@@ -48,7 +48,7 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
     {
       id: "exchange",
       path: "/dashboard/exchange",
-      label: "خرید و فروش سریع",
+      label: "معامله سریع",
       icon: <ExchangeIcon />,
     },
     {

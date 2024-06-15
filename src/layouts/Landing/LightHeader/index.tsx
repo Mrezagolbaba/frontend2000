@@ -100,7 +100,7 @@ const LightHeader = ({
                       pathname === "/dashboard" ? home.active : ""
                     }`}
                   >
-                    <Link to="/dashboard">خرید و فروش آنی</Link>
+                    <Link to="/dashboard">معامله سریع</Link>
                   </li>
                   <li className={home.page__navitem}>
                     <Link target="_blank" to="https://help.arsonex.com/">

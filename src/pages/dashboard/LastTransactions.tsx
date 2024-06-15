@@ -2,14 +2,25 @@ import ATable from "components/ATable";
 import moment from "jalali-moment";
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 import { Link } from "react-router-dom";
-import { normalizeAmount } from "helpers";
+import { convertText, normalizeAmount, renderStatus } from "helpers";
 import { useCurrencySwapQuery } from "store/api/exchange-management";
 import { useMemo } from "react";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import style, {
+  amount,
+  title,
+  transaction,
+  transaction__counter,
+  transaction__data,
+  transaction__data__detail,
+  transaction__data__others,
+} from "assets/scss/dashboard/history.module.scss";
+import CopyInput from "components/Input/CopyInput";
+import Deal from "components/MobileRecord/Deal";
 
 export default function LastTransactions() {
-   // ==============|| Hooks ||================= //
+  // ==============|| Hooks ||================= //
   const { data, isSuccess, isLoading, isFetching } = useCurrencySwapQuery({
     sort: "createdAt,DESC",
     join: "transactions",
@@ -75,6 +86,7 @@ export default function LastTransactions() {
           data={isSuccess ? data : []}
           isLoading={isLoading || isFetching}
           columns={columns}
+          mobileView={(row) => <Deal record={row.original} id={row.id} />}
         />
       </CardBody>
     </Card>

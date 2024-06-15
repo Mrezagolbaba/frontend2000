@@ -1,7 +1,7 @@
 import ATable from "components/ATable";
 import Turkey from "assets/img/coins/try.svg";
 import USDT from "assets/img/coins/usdt.svg";
-import { Card, CardBody, CardHeader } from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import { Link } from "react-router-dom";
 import { convertTextSingle, extractLeftSide, normalizeAmount } from "helpers";
 import { useGetRatesQuery } from "store/api/publices";
@@ -32,12 +32,18 @@ const Market = () => {
           </>
         ),
         header: "ارز",
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "1",
         accessorKey: "lastPrice",
         accessorFn: (row) => normalizeAmount(row?.rate, "IRR", true),
         header: "آخرین قیمت (تومان)",
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "3",
@@ -48,6 +54,9 @@ const Market = () => {
             شروع معامله
           </Link>
         ),
+        meta: {
+          hasMobile: true,
+        },
       },
     ],
     [],
@@ -79,6 +88,32 @@ const Market = () => {
             }
             isLoading={isLoading || isFetching}
             columns={columns}
+            mobileView={(row) => (
+              <div
+                className="d-flex flex-column align-items-center justify-content-center"
+                style={{
+                  borderBottom: "1px solid #eee",
+                  marginBottom: "5px",
+                  paddingBottom: "5px",
+                }}
+              >
+                <span className="icon">
+                  <img
+                    src={row.original?.pair === "USDT/IRR" ? USDT : Turkey}
+                    alt=""
+                    style={{ width: "40px", marginLeft: "5px" }}
+                  />
+                </span>
+
+                <span style={{ fontSize: "1rem", padding: "5px 0" }}>
+                  {convertTextSingle(extractLeftSide(row.original.pair))}
+                </span>
+
+                <span style={{ fontSize: "0.9rem", padding: "5px 0" }}>
+                  {normalizeAmount(row.original?.rate, "IRR", true)}
+                </span>
+              </div>
+            )}
           />
         </CardBody>
       </Card>

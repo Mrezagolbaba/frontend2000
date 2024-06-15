@@ -1,17 +1,19 @@
 import ATable from "components/ATable";
 import CopyInput from "components/Input/CopyInput";
+import Transaction from "components/MobileRecord/Transaction";
 import moment from "jalali-moment";
 import { StatusHandler } from ".";
 import { normalizeAmount } from "helpers";
 import { useMemo } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
 
-function USDTDeposit() {
+function USDTDeposit({ limit }: { limit?: number | undefined }) {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
     filter: [`currencyCode||eq||USDT`, "status||$ne||DRAFT"],
     or: ["type||eq||DEPOSIT", "type||eq||PROMOTION"],
     sort: "createdAt,DESC",
+    limit,
   });
 
   // ==============|| Handlers ||================= //
@@ -33,6 +35,9 @@ function USDTDeposit() {
         accessorFn: (row: any) =>
           moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
         header: "تاریخ",
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "1",
@@ -51,6 +56,9 @@ function USDTDeposit() {
         accessorKey: "amount",
         header: "مقدار",
         accessorFn: (row: any) => normalizeAmount(row?.amount, "USDT", false),
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "4",
@@ -86,6 +94,10 @@ function USDTDeposit() {
       data={isSuccess ? data : []}
       isLoading={isLoading || isFetching}
       columns={columns}
+      noDataText="اولین تراکنش ارز دیجیتال خود را با آرسونیکس را تجربه کنید."
+      mobileView={(row) => (
+        <Transaction record={row.original} id={row.id} />
+      )}
     />
   );
 }

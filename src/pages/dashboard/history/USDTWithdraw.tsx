@@ -1,12 +1,13 @@
 import ATable from "components/ATable";
-import CopyInput from "components/Input/CopyInput";
+import Transaction from "components/MobileRecord/Transaction";
 import moment from "jalali-moment";
+import { Link } from "react-router-dom";
 import { StatusHandler } from ".";
 import { normalizeAmount } from "helpers";
 import { useMemo } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
 
-function USDTWithdraw() {
+function USDTWithdraw({ limit }: { limit?: number | undefined }) {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
     filter: [
@@ -15,6 +16,7 @@ function USDTWithdraw() {
       "type||eq||WITHDRAW",
     ],
     sort: "createdAt,DESC",
+    limit,
   });
 
   // ==============|| Constants ||================= //
@@ -26,6 +28,9 @@ function USDTWithdraw() {
         accessorFn: (row: any) =>
           moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
         header: "تاریخ",
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "1",
@@ -44,6 +49,9 @@ function USDTWithdraw() {
         accessorKey: "amount",
         header: "مقدار",
         accessorFn: (row: any) => normalizeAmount(row?.amount, "USDT", false),
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "4",
@@ -67,19 +75,12 @@ function USDTWithdraw() {
         accessorKey: "iban",
         header: "آدرس مقصد",
         accessorFn: (row: any) => (
-          <CopyInput
-            text={row?.destination?.iban}
-            hasBox={false}
-            maxCharacter={10}
-          />
-        ),
-      },
-      {
-        id: "7",
-        accessorKey: "txid",
-        header: "TXID",
-        accessorFn: (row: any) => (
-          <CopyInput text={row?.providerRef} hasBox={false} maxCharacter={10} />
+          <Link
+            to={`https://tronscan.org/#/transaction/${row.providerRef}`}
+            target="_blank"
+          >
+            لینک تراکنش
+          </Link>
         ),
       },
       {
@@ -98,6 +99,10 @@ function USDTWithdraw() {
       data={isSuccess ? data : []}
       isLoading={isLoading || isFetching}
       columns={columns}
+      noDataText="اولین تراکنش ارز دیجیتال خود را با آرسونیکس را تجربه کنید."
+      mobileView={(row) => (
+        <Transaction record={row.original} id={row.id} />
+      )}
     />
   );
 }

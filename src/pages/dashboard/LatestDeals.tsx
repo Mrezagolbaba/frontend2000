@@ -1,4 +1,5 @@
 import ATable from "components/ATable";
+import Transaction from "components/MobileRecord/Transaction";
 import moment from "jalali-moment";
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 import { Link } from "react-router-dom";
@@ -85,6 +86,9 @@ function LatestDeals() {
           data={isSuccess ? data : []}
           isLoading={isLoading || isFetching}
           columns={columns}
+          mobileView={(row) => (
+            <Transaction record={row.original} id={row.id} />
+          )}
         />
       </CardBody>
     </Card>

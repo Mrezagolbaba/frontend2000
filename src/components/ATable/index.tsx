@@ -3,10 +3,11 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import THeder from "./THeder";
 import TBody from "./TBody";
 import TFilter from "./TFilter";
+import THeder from "./THeder";
 import TLoading from "./TLoading";
+import { ReactElement } from "react";
 
 import {
   wrapper,
@@ -21,6 +22,8 @@ type Props = {
   isLoading?: boolean;
   noDataText?: string;
   size?: "small" | "large";
+  rowClickFn?: (id: string) => void;
+  mobileView?: (row) => ReactElement;
 };
 
 export default function ATable({
@@ -30,6 +33,8 @@ export default function ATable({
   isLoading = false,
   noDataText = "دیتایی وجود ندارد.",
   size = "large",
+  rowClickFn,
+  mobileView,
 }: Props) {
   const { _getColumnDefs, getRowModel } = useReactTable({
     columns,
@@ -47,8 +52,10 @@ export default function ATable({
           <TLoading columns={_getColumnDefs()} />
         ) : (
           <TBody
+            mobileView={mobileView}
             colLength={_getColumnDefs().length}
             noDataText={noDataText}
+            rowClickFn={rowClickFn}
             rows={data?.length > 0 ? getRowModel().rows : []}
           />
         )}

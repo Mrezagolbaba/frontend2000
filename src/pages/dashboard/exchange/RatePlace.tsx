@@ -2,10 +2,11 @@ import { BsTag } from "react-icons/bs";
 import { CiWallet } from "react-icons/ci";
 import { CurrencyCode } from "types/wallet";
 import { Tooltip } from "reactstrap";
-import { normalizeAmount } from "helpers";
+import { convertText, normalizeAmount } from "helpers";
 import { useState } from "react";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
+import TagIcon from "components/Icons/TagIcon";
 
 type Props = {
   destination: {
@@ -19,7 +20,6 @@ type Props = {
   type: "source" | "destination";
   showRate?: boolean;
   wallets: any;
-  reverseRate: string;
   rate: string;
   isLoading: boolean;
   setStock?: (string) => void;
@@ -32,7 +32,6 @@ export default function RatePlace({
   wallets,
   showRate = false,
   rate,
-  reverseRate,
   isLoading = false,
   setStock,
 }: Props) {
@@ -53,31 +52,21 @@ export default function RatePlace({
     return `${0} ${currencyLabel}`;
   };
   const handleRate = () => {
-    if (source.currency === "USDT" && destination.currency === "IRR")
+    const ratAmount = Number(rate);
+
+    if (ratAmount < 1) {
+      console.log("rate", ratAmount, destination, source);
       return (
         <>
           <div id="currency-detail">
-            <BsTag />
-            <span className="title">نرخ تقریبی تتر : </span>
-            <span className="value">{normalizeAmount(rate, "IRR", true)}</span>
-          </div>
-          <Tooltip
-            isOpen={tooltipOpen}
-            target="currency-detail"
-            toggle={toggleTooltip}
-          >
-            ارزش هر یک تتر در برابر تومان
-          </Tooltip>
-        </>
-      );
-    else if (source.currency === "IRR" && destination.currency === "USDT")
-      return (
-        <>
-          <div id="currency-detail">
-            <BsTag />
-            <span className="title">نرخ تقریبی تتر : </span>
+            <TagIcon />
+            <span className="title">{`نرخ تقریبی ${convertText(destination.currency, "enToFa")}: `}</span>
             <span className="value">
-              {normalizeAmount(reverseRate, "IRR", true)}
+              {normalizeAmount(
+                (1 / ratAmount).toString(),
+                source.currency,
+                true,
+              )}
             </span>
           </div>
           <Tooltip
@@ -85,35 +74,24 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            ارزش هر یک تتر در برابر تومان
+            {`ارزش هر یک ${convertText(destination.currency, "enToFa")} در برابر ${convertText(source.currency, "enToFa")}`}
           </Tooltip>
         </>
       );
-    else if (source.currency === "USDT" && destination.currency === "TRY") {
+    } else
       return (
         <>
           <div id="currency-detail">
-            <BsTag />
-            <span className="title">نرخ تقریبی تتر : </span>
-            <span className="value">{normalizeAmount(rate, "TRY", true)}</span>
-          </div>
-          <Tooltip
-            isOpen={tooltipOpen}
-            target="currency-detail"
-            toggle={toggleTooltip}
-          >
-            ارزش هر یک تتر در برابر لیر
-          </Tooltip>
-        </>
-      );
-    } else if (destination.currency === "USDT" && source.currency === "TRY") {
-      return (
-        <>
-          <div id="currency-detail">
-            <BsTag />
-            <span className="title">نرخ تقریبی تتر : </span>
+            <TagIcon />
+            <span className="title">
+              {`نرخ تقریبی ${convertText(source.currency, "enToFa")}: `}
+            </span>
             <span className="value">
-              {normalizeAmount(reverseRate, "TRY", true)}
+              {normalizeAmount(
+                ratAmount.toString(),
+                destination.currency,
+                true,
+              )}
             </span>
           </div>
           <Tooltip
@@ -121,47 +99,119 @@ export default function RatePlace({
             target="currency-detail"
             toggle={toggleTooltip}
           >
-            ارزش هر یک تتر در برابر لیر
+            {`ارزش هر یک ${convertText(source.currency, "enToFa")} در برابر ${convertText(destination.currency, "enToFa")}`}
           </Tooltip>
         </>
       );
-    } else if (source.currency === "TRY" && destination.currency === "IRR") {
-      return (
-        <>
-          <div id="currency-detail">
-            <BsTag />
-            <span className="title">نرخ تقریبی لیر : </span>
-            <span className="value">{normalizeAmount(rate, "IRR", true)}</span>
-          </div>
-          <Tooltip
-            isOpen={tooltipOpen}
-            target="currency-detail"
-            toggle={toggleTooltip}
-          >
-            ارزش هر یک لیر در برابر تومان
-          </Tooltip>
-        </>
-      );
-    } else if (destination.currency === "TRY" && source.currency === "IRR") {
-      return (
-        <>
-          <div id="currency-detail">
-            <BsTag />
-            <span className="title">نرخ تقریبی لیر : </span>
-            <span className="value">
-              {normalizeAmount(reverseRate, "IRR", true)}
-            </span>
-          </div>
-          <Tooltip
-            isOpen={tooltipOpen}
-            target="currency-detail"
-            toggle={toggleTooltip}
-          >
-            ارزش هر یک لیر در برابر تومان
-          </Tooltip>
-        </>
-      );
-    }
+    // if (source.currency === "USDT" && destination.currency === "IRR")
+    //   return (
+    //     <>
+    //       <div id="currency-detail">
+    //         <BsTag />
+    //         <span className="title">نرخ تقریبی تتر : </span>
+    //         <span className="value">{normalizeAmount(rate, "IRR", true)}</span>
+    //       </div>
+    //       <Tooltip
+    //         isOpen={tooltipOpen}
+    //         target="currency-detail"
+    //         toggle={toggleTooltip}
+    //       >
+    //         ارزش هر یک تتر در برابر تومان
+    //       </Tooltip>
+    //     </>
+    //   );
+    // else if (source.currency === "IRR" && destination.currency === "USDT")
+    //   return (
+    //     <>
+    //       <div id="currency-detail">
+    //         <BsTag />
+    //         <span className="title">نرخ تقریبی تتر : </span>
+    //         <span className="value">
+    //           {normalizeAmount(reverseRate, "IRR", true)}
+    //         </span>
+    //       </div>
+    //       <Tooltip
+    //         isOpen={tooltipOpen}
+    //         target="currency-detail"
+    //         toggle={toggleTooltip}
+    //       >
+    //         ارزش هر یک تتر در برابر تومان
+    //       </Tooltip>
+    //     </>
+    //   );
+    // else if (source.currency === "USDT" && destination.currency === "TRY") {
+    //   return (
+    //     <>
+    //       <div id="currency-detail">
+    //         <BsTag />
+    //         <span className="title">نرخ تقریبی تتر : </span>
+    //         <span className="value">{normalizeAmount(rate, "TRY", true)}</span>
+    //       </div>
+    //       <Tooltip
+    //         isOpen={tooltipOpen}
+    //         target="currency-detail"
+    //         toggle={toggleTooltip}
+    //       >
+    //         ارزش هر یک تتر در برابر لیر
+    //       </Tooltip>
+    //     </>
+    //   );
+    // } else if (destination.currency === "USDT" && source.currency === "TRY") {
+    //   return (
+    //     <>
+    //       <div id="currency-detail">
+    //         <BsTag />
+    //         <span className="title">نرخ تقریبی تتر : </span>
+    //         <span className="value">
+    //           {normalizeAmount(reverseRate, "TRY", true)}
+    //         </span>
+    //       </div>
+    //       <Tooltip
+    //         isOpen={tooltipOpen}
+    //         target="currency-detail"
+    //         toggle={toggleTooltip}
+    //       >
+    //         ارزش هر یک تتر در برابر لیر
+    //       </Tooltip>
+    //     </>
+    //   );
+    // } else if (source.currency === "TRY" && destination.currency === "IRR") {
+    //   return (
+    //     <>
+    //       <div id="currency-detail">
+    //         <BsTag />
+    //         <span className="title">نرخ تقریبی لیر : </span>
+    //         <span className="value">{normalizeAmount(rate, "IRR", true)}</span>
+    //       </div>
+    //       <Tooltip
+    //         isOpen={tooltipOpen}
+    //         target="currency-detail"
+    //         toggle={toggleTooltip}
+    //       >
+    //         ارزش هر یک لیر در برابر تومان
+    //       </Tooltip>
+    //     </>
+    //   );
+    // } else if (destination.currency === "TRY" && source.currency === "IRR") {
+    //   return (
+    //     <>
+    //       <div id="currency-detail">
+    //         <BsTag />
+    //         <span className="title">نرخ تقریبی لیر : </span>
+    //         <span className="value">
+    //           {normalizeAmount(reverseRate, "IRR", true)}
+    //         </span>
+    //       </div>
+    //       <Tooltip
+    //         isOpen={tooltipOpen}
+    //         target="currency-detail"
+    //         toggle={toggleTooltip}
+    //       >
+    //         ارزش هر یک لیر در برابر تومان
+    //       </Tooltip>
+    //     </>
+    //   );
+    // }
   };
 
   // ==============|| Render ||================= //

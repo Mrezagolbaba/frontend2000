@@ -8,6 +8,7 @@ import {
   Row,
 } from "reactstrap";
 import {
+  useTransactionDynamicFeeMutation,
   useTransactionFeeQuery,
   useWithdrawMutation,
 } from "store/api/wallet-management";
@@ -50,6 +51,7 @@ export default function Withdraw({ onClose, stock }: Props) {
   const navigate = useNavigate();
   const { data, isSuccess } = useBankAccountsQuery({});
   const { data: fee } = useTransactionFeeQuery("IRR");
+  const [getFees, { data: fees }] = useTransactionDynamicFeeMutation();
   const [withdrawRequest, { isSuccess: isSuccessWithdraw }] =
     useWithdrawMutation();
   const resolver = yupResolver(
@@ -145,7 +147,7 @@ export default function Withdraw({ onClose, stock }: Props) {
     if (isSuccessWithdraw) {
       Notify({
         type: "success",
-        text: "درخواست برداشت با موفقیت ثبت شد. لطفا منتظر تایید پشتیبانی بمانید.",
+        text: "درخواست برداشت با موفقیت ثبت شد.",
       });
       onClose?.();
     }
@@ -230,6 +232,12 @@ export default function Withdraw({ onClose, stock }: Props) {
                   name={name}
                   value={value}
                   onChange={(val) => {
+                    val &&
+                      getFees({
+                        currencyCode: "IRR",
+                        amount: (Number(val) * 10).toString(),
+                        tranasctionType: "WITHDRAW",
+                      });
                     clearErrors("amount");
                     setValue(name, val);
                   }}
@@ -240,19 +248,18 @@ export default function Withdraw({ onClose, stock }: Props) {
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
                 <div className="d-flex flex-column">
-                  {fee && (
-                    <FormText>
-                      {`کارمزد برداشت: ${normalizeAmount(fee.withdrawFeeStatic, "IRR", true)}`}
-                    </FormText>
-                  )}
+                  <FormText>
+                    {`کارمزد برداشت: ${fees ? normalizeAmount(fees?.feeAmount, "IRR", true) : "-"}`}
+                  </FormText>
+
                   {value !== "" &&
-                    fee?.withdrawFeeStatic &&
-                    Number(value) - Number(fee?.withdrawFeeStatic) > 0 && (
+                    fees?.feeAmount &&
+                    Number(value) - Number(fees?.feeAmount) > 0 && (
                       <FormText>
                         {`خالص دریافتی: ${normalizeAmount(
                           (
                             Number(value) * 10 -
-                            Number(fee.withdrawFeeStatic)
+                            Number(fees?.feeAmount)
                           ).toString(),
                           "IRR",
                           true,
