@@ -1,4 +1,6 @@
 import moment from "jalali-moment";
+import { convertText, normalizeAmount } from "helpers";
+
 import style, {
   amount,
   title,
@@ -9,7 +11,6 @@ import style, {
   transaction__data__detail,
   transaction__data__others,
 } from "assets/scss/components/mobileRecord.module.scss";
-import { convertText, normalizeAmount } from "helpers";
 
 type Props = {
   record: any;
