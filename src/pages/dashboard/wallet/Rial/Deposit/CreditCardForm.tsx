@@ -214,7 +214,7 @@ const CreditCardForm = () => {
                     {Number(value) - Number(fee?.depositFeeStatic) / 10 > 0 &&
                       `مبلغ واریز به کیف پول: ${normalizeAmount(
                         (
-                          Number(value) -
+                          Number(value) * 10 -
                           Number(fee.depositFeeStatic) / 10
                         ).toString(),
                         "IRR",
