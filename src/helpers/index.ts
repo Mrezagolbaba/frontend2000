@@ -4,10 +4,11 @@ import axios from "axios";
 import jalaliMoment from "jalali-moment";
 import moment from "jalali-moment";
 import { CryptoData } from "types/exchange";
-import { TransactionStatus } from "types/wallet";
+import { CurrencyCode, TransactionStatus } from "types/wallet";
 import { JWT_DECODE_KEY, REF_TOKEN_OBJ_NAME } from "config";
 import { isEmpty } from "lodash";
 import { PhoneNumberUtil } from "google-libphonenumber";
+import { StatusColors } from "types/invoice";
 
 export function generateLabelValueArray(start: number, end: number) {
   const resultArray: { label: string; value: string }[] = [];
@@ -264,14 +265,19 @@ export function getTitlePage(path: string) {
     { path: "/terms", name: "قوانین و مقررات - آرسونیکس" },
     { path: "/dashboard", name: "داشبورد کاربری - آرسونیکس" },
     { path: "/dashboard/profile", name: "پروفایل کاربری - آرسونیکس" },
-    { path: "/dashboard/exchange", name: "خرید و فروش سریع - آرسونیکس" },
+    { path: "/dashboard/exchange", name: "معامله سریع - آرسونیکس" },
     { path: "/dashboard/wallet", name: "کیف پول - آرسونیکس" },
     { path: "/dashboard/setting", name: "تنظیمات - آرسونیکس" },
     { path: "/dashboard/market", name: "بازارها - آرسونیکس" },
     { path: "/dashboard/orders", name: "سفارشات - آرسونیکس" },
     { path: "/dashboard/history", name: "تاریخچه - آرسونیکس" },
     { path: "/dashboard/support", name: "پشتیبانی - آرسونیکس" },
-    { path: "/dashboard/add-friends", name: "ت از دوستان - آرسونیکس" },
+    { path: "/dashboard/add-friends", name: "دعوت از دوستان - آرسونیکس" },
+    { path: "/dashboard/payment-receipt", name: "وضعیت پرداخت - آرسونیکس" },
+    {
+      path: "/dashboard/debit-subscription-finished",
+      name: "وضعیت اتصال - آرسونیکس",
+    },
     { path: "/login", name: "آرسونیکس - ورود به حساب کاربری" },
     { path: "/register", name: "آرسونیکس - ثبت نام" },
     { path: "/forget-password", name: "آرسونیکس - فراموشی رمز عبور" },
@@ -325,7 +331,7 @@ export const convertCoins = (value) => {
  ***********/
 export const normalizeAmount = (
   amount: string,
-  currency: "IRR" | "TRY" | "USDT" | "TRX",
+  currency: CurrencyCode,
   isShowCurrency: boolean,
 ) => {
   if (!amount || isEmpty(amount)) return "0";
@@ -426,5 +432,28 @@ export const isPhoneValid = (phone: string) => {
     return phoneUtil.isValidNumber(phoneUtil.parseAndKeepRawInput(phone));
   } catch (error) {
     return false;
+  }
+};
+
+export const renderStatus = (
+  status: TransactionStatus,
+): { badgeName: StatusColors; label: string } => {
+  switch (status) {
+    case "SUCCESSFUL":
+      return { badgeName: "success", label: "موفق" };
+
+    case "FAILED":
+    case "CANCELED":
+    case "EXPIRED":
+      return { badgeName: "danger", label: "ناموفق" };
+
+    case "PROCESSING":
+    case "INITIATED":
+      return { badgeName: "info", label: "در حال پردازش" };
+    case "REFUND":
+      return { badgeName: "warning", label: "عودت" };
+    case "DRAFT":
+    default:
+      return { badgeName: "dark", label: "پیش نویس" };
   }
 };

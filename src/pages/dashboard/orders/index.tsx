@@ -1,4 +1,5 @@
 import ATable from "components/ATable";
+import Deal from "components/MobileRecord/Deal";
 import SquareInfo from "components/Icons/SquareInfo";
 import moment from "jalali-moment";
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
@@ -15,7 +16,7 @@ const History = () => {
     join: "transactions",
   });
 
-    // ==============|| Handlers ||================= //
+  // ==============|| Handlers ||================= //
   const renderFee = (fee, transactions) => {
     const targetTransAction = transactions.find((t) => t.currencyCode === fee);
     return targetTransAction?.fee
@@ -97,7 +98,7 @@ const History = () => {
     [],
   );
 
-   // ==============|| Render ||================= //
+  // ==============|| Render ||================= //
   return (
     <Card className="h-100">
       <CardHeader className="d-flex flex-row justify-content-between align-items-center">
@@ -108,6 +109,7 @@ const History = () => {
           data={isSuccess ? data : []}
           isLoading={isLoading || isFetching}
           columns={columns}
+          mobileView={(row) => <Deal record={row.original} id={row.id} />}
         />
       </CardBody>
     </Card>

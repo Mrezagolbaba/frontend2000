@@ -1,0 +1,66 @@
+.transaction {
+  position: relative;
+  padding: 10px 5px;
+  h3 {
+    padding: 10px 0 20px 0;
+    font-size: clamp(1.3rem, 1.3vw, 2rem);
+    text-align: center;
+  }
+  h5 {
+    padding: 20px 0;
+    text-align: center;
+    font-size: clamp(1rem, 1vw, 1.5rem);
+  }
+  &__close {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 32px;
+    height: 32px;
+    stroke: #696969;
+    cursor: pointer;
+  }
+  &__icon {
+    text-align: center;
+    svg {
+      width: 72px;
+      height: 72px;
+    }
+    &__loading {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+    }
+    &.success svg {
+      fill: #198754;
+    }
+    &.danger svg {
+      fill: #ff1f11;
+    }
+    &.warning svg {
+      fill: #ffc107;
+    }
+    &.info svg {
+      fill: #0dcaf0;
+    }
+    &.dark svg {
+      fill: #212529;
+    }
+  }
+  &__field {
+    font-size: clamp(0.8rem, 1vw, 1.2rem);
+    padding: 1.5rem 0.5rem;
+    border-bottom: 1px solid rgba(3, 4, 27, 0.123);
+    &:last-child {
+      border-bottom: none;
+    }
+    &__label {
+      display: flex;
+      justify-content: flex-start;
+    }
+    &__data {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}

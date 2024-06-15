@@ -1,12 +1,13 @@
 import ATable from "components/ATable";
 import CopyInput from "components/Input/CopyInput";
+import Transaction from "components/MobileRecord/Transaction";
 import moment from "jalali-moment";
 import { StatusHandler } from ".";
 import { normalizeAmount } from "helpers";
 import { useMemo } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
 
-function IRRWithdraw() {
+function IRRWithdraw({ limit }: { limit?: number | undefined }) {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
     filter: [
@@ -15,6 +16,7 @@ function IRRWithdraw() {
       "type||eq||WITHDRAW",
     ],
     sort: "createdAt,DESC",
+    limit,
   });
 
   // ==============|| Constants ||================= //
@@ -26,12 +28,18 @@ function IRRWithdraw() {
         accessorFn: (row: any) =>
           moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
         header: "تاریخ",
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "1",
         accessorKey: "amount",
         header: "مقدار",
         accessorFn: (row: any) => normalizeAmount(row?.amount, "IRR", false),
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "2",
@@ -86,6 +94,10 @@ function IRRWithdraw() {
       data={isSuccess ? data : []}
       isLoading={isLoading || isFetching}
       columns={columns}
+      noDataText="اولین تراکنش تومان با آرسونیکس را تجربه کنید."
+      mobileView={(row) => (
+        <Transaction record={row.original} id={row.id} />
+      )}
     />
   );
 }

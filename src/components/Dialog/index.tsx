@@ -5,7 +5,7 @@ import dialog from "assets/scss/components/Dialog/style.module.scss";
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  title: string | ReactElement;
+  title?: string | ReactElement;
   hasCloseButton?: boolean;
   children: React.ReactNode;
   size?: "xs" | "sm" | "lg" | "md" | "xl";
@@ -28,12 +28,14 @@ function Dialog({
       backdrop
       fade
     >
-      <ModalHeader
-        className={dialog["modal-header"]}
-        toggle={hasCloseButton ? onClose : undefined}
-      >
-        {title}
-      </ModalHeader>
+      {title && (
+        <ModalHeader
+          className={dialog["modal-header"]}
+          toggle={hasCloseButton ? onClose : undefined}
+        >
+          {title}
+        </ModalHeader>
+      )}
       <ModalBody>{children}</ModalBody>
     </Modal>
   );

@@ -29,6 +29,7 @@ import { useWalletsQuery } from "store/api/wallet-management";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
 import buy from "assets/scss/dashboard/buy-sell.module.scss";
+import ExchangeIcon from "components/Icons/ExchangeIcon";
 
 type Props = {
   setIsOpenDialog: React.Dispatch<
@@ -58,8 +59,8 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
       isSuccess: successReverseSwap,
     },
   ] = useCreateCurrencySwapMutation();
-  const [getRate, { data: exchangeRate }] = useLazyRatesQuery();
-  const [getReverseRate, { data: exchangeReverseRate }] = useLazyRatesQuery();
+  const [getRate, { data: exchangeRate, isFetching: fetchingRate }] =
+    useLazyRatesQuery();
   const [getUsdtRate, { data: usdtRate, isSuccess: usdtRateSuccess }] =
     useLazyRatesQuery();
 
@@ -197,22 +198,13 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
       sourceCurrencyCode: source.currency,
       targetCurrencyCode: destination.currency,
     });
-    getReverseRate({
-      sourceCurrencyCode: destination.currency,
-      targetCurrencyCode: source.currency,
-    });
+
     source.currency !== "USDT" &&
       getUsdtRate({
         sourceCurrencyCode: "USDT",
         targetCurrencyCode: source.currency,
       });
-  }, [
-    destination.currency,
-    getRate,
-    getReverseRate,
-    getUsdtRate,
-    source.currency,
-  ]);
+  }, [destination.currency, getRate, getUsdtRate, source.currency]);
 
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
@@ -360,46 +352,22 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
                 destination={destination}
                 type="source"
                 showRate={true}
-                isLoading={isLoadingWallet}
+                isLoading={isLoadingWallet || fetchingRate}
                 wallets={wallets}
                 setStock={setSourceStock}
                 rate={exchangeRate?.rate as string}
-                reverseRate={exchangeReverseRate?.rate as string}
               />
             </div>
             <div className={exchange.divider}>
-              <span>
-                <svg
-                  fill="#000000"
-                  viewBox="0 0 24 24"
-                  id="exchange-3"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="icon flat-line"
-                >
-                  <polyline
-                    id="primary"
-                    points="20 10 4 10 7 7"
-                    style={{
-                      fill: "none",
-                      stroke: "rgb(0, 0, 0)",
-                      strokeLinecap: "round",
-                      strokeLinejoin: "round",
-                      strokeWidth: "2",
-                    }}
-                  />
-                  <polyline
-                    id="primary-2"
-                    data-name="primary"
-                    points="4 14 20 14 17 17"
-                    style={{
-                      fill: "none",
-                      stroke: "rgb(0, 0, 0)",
-                      strokeLinecap: "round",
-                      strokeLinejoin: "round",
-                      strokeWidth: "2",
-                    }}
-                  />
-                </svg>
+              <span
+                onClick={() => {
+                  const newSource = destination;
+                  const newDestination = source;
+                  setSource(newSource);
+                  setDestination(newDestination);
+                }}
+              >
+                <ExchangeIcon />
               </span>
             </div>
             <div className={exchange["currency-controls__group"]}>
@@ -459,11 +427,10 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
               <RatePlace
                 source={source}
                 destination={destination}
-                isLoading={isLoadingWallet}
+                isLoading={isLoadingWallet || fetchingRate}
                 type="destination"
                 wallets={wallets}
                 rate={exchangeRate?.rate as string}
-                reverseRate={exchangeReverseRate?.rate as string}
               />
             </div>
           </div>

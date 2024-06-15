@@ -13,6 +13,9 @@ declare const classNames: {
   readonly header__settings: "header__settings";
   readonly header__profile: "header__profile";
   readonly header__profile__btn: "header__profile__btn";
+  readonly header__profile__list: "header__profile__list";
+  readonly profile__open: "profile__open";
+  readonly header__profile__overlay: "header__profile__overlay";
   readonly header__notification: "header__notification";
   readonly header__subheader: "header__subheader";
   readonly "header__hamburger-btn": "header__hamburger-btn";

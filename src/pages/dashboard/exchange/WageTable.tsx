@@ -161,7 +161,7 @@ export default function WageTable({
             </tr>
           ) : (
             <tr>
-              <td className="text-center">
+              <td className="text-center" data-th="نحوه پرداخت کارمزد">
                 <fieldset>
                   <div className={exchange["radio-toggle-control"]}>
                     <input
@@ -191,7 +191,7 @@ export default function WageTable({
                   </div>
                 </fieldset>
               </td>
-              <td className="text-center">
+              <td className="text-center" data-th="مبلغ کارمزد">
                 {!feeCost && "-"}
                 {feeCost && feeCost}
                 {" معادل "}
@@ -205,7 +205,7 @@ export default function WageTable({
                     feeAmount
                   ))}
               </td>
-              <td className="text-center">
+              <td className="text-center" data-th="مبلغ نهایی دریافت">
                 {finalAmount === null ? "-" : finalAmount}
               </td>
             </tr>

@@ -1,17 +1,19 @@
 import ATable from "components/ATable";
 import CopyInput from "components/Input/CopyInput";
+import Transaction from "components/MobileRecord/Transaction";
 import moment from "jalali-moment";
 import { StatusHandler } from ".";
 import { normalizeAmount } from "helpers";
 import { useMemo } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
 
-export default function FiatDeposit() {
+export default function FiatDeposit({ limit }: { limit?: number | undefined }) {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
     filter: [`currencyCode||eq||TRY`, "status||$ne||DRAFT"],
     or: ["type||eq||DEPOSIT", "type||eq||PROMOTION"],
     sort: "createdAt,DESC",
+    limit,
   });
 
   // ==============|| Constants ||================= //
@@ -23,6 +25,9 @@ export default function FiatDeposit() {
         accessorFn: (row: any) =>
           moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
         header: "تاریخ",
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "1",
@@ -35,6 +40,9 @@ export default function FiatDeposit() {
         accessorKey: "amount",
         header: "مقدار",
         accessorFn: (row: any) => normalizeAmount(row?.amount, "TRY", false),
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "3",
@@ -64,6 +72,10 @@ export default function FiatDeposit() {
       data={isSuccess ? data : []}
       isLoading={isLoading || isFetching}
       columns={columns}
+      noDataText="اولین تراکنش فیات دیجیتال خود را با آرسونیکس را تجربه کنید."
+      mobileView={(row) => (
+        <Transaction record={row.original} id={row.id} />
+      )}
     />
   );
 }
