@@ -1,22 +1,13 @@
 import ATable from "components/ATable";
+import Transaction from "components/MobileRecord/Transaction";
 import moment from "jalali-moment";
-import { Button, Card, CardBody, CardHeader, CardTitle } from "reactstrap";
+import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 import { Link } from "react-router-dom";
-import { convertText, normalizeAmount, renderStatus } from "helpers";
+import { convertText, normalizeAmount } from "helpers";
 import { useMemo } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
-import style, {
-  amount,
-  title,
-  transaction,
-  transaction__counter,
-  transaction__data,
-  transaction__data__detail,
-  transaction__data__others,
-} from "assets/scss/dashboard/history.module.scss";
-import CopyInput from "components/Input/CopyInput";
 
 function LatestDeals() {
   // ==============|| Hooks ||================= //
@@ -96,55 +87,7 @@ function LatestDeals() {
           isLoading={isLoading || isFetching}
           columns={columns}
           mobileView={(row) => (
-            <div className={transaction}>
-              <div
-                className={`${transaction__counter} ${style[renderStatus(row.original.status).badgeName]}`}
-              >
-                <span>{Number(row.id) + 1}</span>
-              </div>
-              <div className={transaction__data}>
-                <div className={transaction__data__detail}>
-                  <div
-                    className={title}
-                  >{`${row.original.type === "DEPOSIT" ? "واریز" : "برداشت"} ${renderStatus(row.original.status).label}`}</div>
-                  <div className={amount}>
-                    <span>
-                      {normalizeAmount(
-                        row.original.amount,
-                        row.original.currencyCode,
-                        true,
-                      )}
-                    </span>
-                  </div>
-                </div>
-                <div className={transaction__data__others}>
-                  <div>
-                    <span>نام ارز: </span>
-                    <span>
-                      {convertText(row.original?.currencyCode, "enToFa")}
-                    </span>
-                  </div>
-                  <div>
-                    <span>{`تاریخ ${row.original.type === "DEPOSIT" ? "واریز" : "برداشت"}: `}</span>
-                    <span>
-                      {moment(row.original.createdAt)
-                        .locale("fa")
-                        .format("hh:mm YYYY/MM/DD")}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="d-flex align-items-center">
-                      کد رهگیری:
-                      <CopyInput
-                        maxCharacter={12}
-                        text={row.original.displayId}
-                        hasBox={false}
-                      />
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Transaction record={row.original} id={row.id} />
           )}
         />
       </CardBody>
