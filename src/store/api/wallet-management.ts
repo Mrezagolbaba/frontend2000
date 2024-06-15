@@ -113,6 +113,23 @@ export const walletManagement = enhancedApi.injectEndpoints({
         };
       },
     }),
+
+    transactionDynamicFee: builder.mutation<
+      any,
+      {
+        currencyCode: CurrencyCode;
+        amount: string;
+        tranasctionType: "DEPOSIT" | "WITHDRAW";
+      }
+    >({
+      query(data) {
+        return {
+          method: "POST",
+          url: "/transactions/fee",
+          data: data,
+        };
+      },
+    }),
   }),
 });
 
@@ -131,4 +148,5 @@ export const {
   useWalletsQuery,
   useLazyWalletsQuery,
   useRefCodeMutation,
+  useTransactionDynamicFeeMutation,
 } = walletManagement;
