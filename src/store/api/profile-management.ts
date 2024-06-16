@@ -115,7 +115,6 @@ export const profileManagement = enhancedApi.injectEndpoints({
           url: `/bank-accounts/request-debit-subscription/${bankId}`,
         };
       },
-      invalidatesTags: ["debit-accounts", "wallets"],
     }),
     disconnectDebit: builder.mutation<{ url: string }, string>({
       query(bankId) {
