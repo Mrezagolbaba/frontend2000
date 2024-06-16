@@ -8,6 +8,7 @@ import {
   Row,
 } from "reactstrap";
 import {
+  useTransactionDynamicFeeMutation,
   useTransactionFeeQuery,
   useWithdrawMutation,
 } from "store/api/wallet-management";
@@ -50,6 +51,7 @@ export default function Withdraw({ onClose, stock }: Props) {
   const navigate = useNavigate();
   const { data, isSuccess } = useBankAccountsQuery({});
   const { data: fee } = useTransactionFeeQuery("IRR");
+  const [getFees, { data: fees }] = useTransactionDynamicFeeMutation();
   const [withdrawRequest, { isSuccess: isSuccessWithdraw }] =
     useWithdrawMutation();
   const resolver = yupResolver(
@@ -230,6 +232,12 @@ export default function Withdraw({ onClose, stock }: Props) {
                   name={name}
                   value={value}
                   onChange={(val) => {
+                    val &&
+                      getFees({
+                        currencyCode: "IRR",
+                        amount: (Number(val) * 10).toString(),
+                        tranasctionType: "WITHDRAW",
+                      });
                     clearErrors("amount");
                     setValue(name, val);
                   }}
@@ -249,13 +257,13 @@ export default function Withdraw({ onClose, stock }: Props) {
                   </FormText>
 
                   {value !== "" &&
-                    fee?.withdrawFeeStatic &&
-                    Number(value) - Number(fee?.withdrawFeeStatic) > 0 && (
+                    fees?.feeAmount &&
+                    Number(value) - Number(fees?.feeAmount) > 0 && (
                       <FormText>
                         {`خالص دریافتی: ${normalizeAmount(
                           (
                             Number(value) * 10 -
-                            Number(fee.withdrawFeeStatic)
+                            Number(fees?.feeAmount)
                           ).toString(),
                           "IRR",
                           true,
