@@ -1,11 +1,10 @@
 import OtpInput from "react-otp-input";
-import { useEffect, useState } from "react";
+import { Button } from "reactstrap";
 import { PhoneNumberMask, maskingString } from "helpers";
 import { useAppSelector } from "store/hooks";
-import { IoIosClose } from "react-icons/io";
+import { useEffect, useState } from "react";
 
 import otp from "assets/scss/components/Input/otpContainer.module.scss";
-import { Button } from "reactstrap";
 
 interface Props {
   securitySelection: string;

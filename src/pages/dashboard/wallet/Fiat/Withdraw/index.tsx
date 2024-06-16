@@ -49,7 +49,7 @@ type FiatFormType = {
 
 export default function WithdrawFiat({ stock,onSuccessWithdraw }: Props) {
   // ==============|| States ||================= //
-  const [isOpenOTP, setIsOpenOTP] = useState(false);
+  const [isOpenOTP, setIsOpenOTP] = useState(true);
   const [accountOptions, setAccountOptions] = useState<OptionType[] | []>([]);
 
   // ==============|| Hooks ||================= //
