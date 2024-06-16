@@ -45,7 +45,7 @@ export default function Deposit({ onClose }: { onClose?: () => void }) {
             tag="button"
             onClick={() => toggleTab("2")}
           >
-            برداشت مستقیم (Direct Debit)
+            برداشت مستقیم <span className={wallet.hide}>(Direct Debit)</span>
           </NavLink>
         </NavItem>
         <NavItem>
@@ -56,7 +56,8 @@ export default function Deposit({ onClose }: { onClose?: () => void }) {
             tag="button"
             onClick={() => toggleTab("3")}
           >
-           واریز با شناسه (پایا، ساتنا، حساب به حساب)
+            واریز با شناسه{" "}
+            <span className={wallet.hide}>(پایا، ساتنا، حساب به حساب)</span>
           </NavLink>
         </NavItem>
       </Nav>
