@@ -15,6 +15,7 @@ import Exchange from "pages/dashboard/exchange";
 import MarketsIcon from "components/Icons/MarketsIcon";
 import ExchangeIcon from "components/Icons/ExchangeIcon";
 import InviteFriendsIcon from "components/Icons/InviteFriendsIcon";
+import TradeIcon from "components/Icons/TradeIcon";
 
 type Props = {
   isOpen: boolean;
@@ -37,31 +38,31 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
       id: "home",
       path: "/dashboard",
       label: "پیشخوان",
-      icon: <HomeIcon />,
+      icon: <HomeIcon fill="none" stroke="#03041b" />,
     },
     {
       id: "wallet",
       path: "/dashboard/wallet",
       label: "کیف پول",
-      icon: <WalletIcon />,
+      icon: <WalletIcon fill="none" stroke="#03041b" />,
     },
     {
       id: "exchange",
       path: "/dashboard/exchange",
       label: "معامله سریع",
-      icon: <ExchangeIcon />,
+      icon: <TradeIcon fill="none" stroke="#03041b" />,
     },
     {
       id: "market",
       path: "/dashboard/market",
       label: "بازارها",
-      icon: <MarketsIcon />,
+      icon: <MarketsIcon fill="none" stroke="#03041b" />,
     },
     {
       id: "addFriends",
       path: "/dashboard/add-friends",
       label: " دعوت دوستان",
-      icon: <InviteFriendsIcon />,
+      icon: <InviteFriendsIcon fill="none" stroke="#03041b" />,
     },
   ];
 
@@ -127,7 +128,7 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
             >
               <Link to={item.path}>
                 <span className="icon">{item.icon}</span>
-                <span style={{ fontSize: "12px" }}>{item.label}</span>
+                <span>{item.label}</span>
               </Link>
             </NavItem>
           ))}
