@@ -1,15 +1,15 @@
 import CloseIcon from "components/Icons/CloseIcon";
-import Exchange from "components/Icons/ExchangeIcon";
-import Home from "components/Icons/HomeIcon";
-import MORE from "components/Icons/MoreAppIcon";
-import Market from "components/Icons/MarketsIcon";
-import Wallet from "components/Icons/WalletIcon";
 import { Link, useNavigate } from "react-router-dom";
 import { Nav, NavItem } from "reactstrap";
 import { useAppSelector } from "store/hooks";
 import { useEffect, useState } from "react";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import TradeIcon from "components/Icons/TradeIcon";
+import HomeIcon from "components/Icons/HomeIcon";
+import WalletIcon from "components/Icons/WalletIcon";
+import MarketsIcon from "components/Icons/MarketsIcon";
+import MoreAppIcon from "components/Icons/MoreAppIcon";
 
 export default function MobileMenu() {
   // ==============|| States ||================= //
@@ -38,32 +38,36 @@ export default function MobileMenu() {
       id: "home",
       path: "/dashboard",
       label: "خانه",
-      icon: <Home />,
+      icon: <HomeIcon fill="none" stroke="#03041b" />,
     },
     {
       id: "wallet",
       path: "/dashboard/wallet",
       label: "کیف پول",
-      icon: <Wallet />,
+      icon: <WalletIcon fill="none" stroke="#03041b" />,
     },
     {
       id: "exchange",
       path: "/dashboard/exchange",
       label: "معامله",
-      icon: <Exchange />,
+      icon: <TradeIcon fill="none" stroke="#03041b" />,
       hasBold: true,
     },
     {
       id: "market",
       path: "/dashboard/market",
       label: "بازارها",
-      icon: <Market />,
+      icon: <MarketsIcon fill="none" stroke="#03041b" />,
     },
     {
       id: "addFriends",
       path: "#more",
       label: "بیشتر",
-      icon: !isOpen ? <MORE /> : <CloseIcon />,
+      icon: !isOpen ? (
+        <MoreAppIcon fill="none" stroke="#03041b" />
+      ) : (
+        <CloseIcon fill="none" stroke="#03041b" />
+      ),
       onClick: () => toggleMenu(),
     },
   ];
