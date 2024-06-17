@@ -268,7 +268,7 @@
       width: 100%;
       transition: all 200ms ease-out;
       & > a {
-        font-size: clamp(0.8rem, 1vw, 1.3rem);
+        font-size: clamp(0.8rem, 1vw, 1rem);
         & > span {
           padding: 0 5px;
           svg {
