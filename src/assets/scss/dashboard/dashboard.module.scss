@@ -60,12 +60,13 @@
       span > svg {
         width: 24px;
         height: 24px;
-        fill: #696969;
+        stroke: #696969;
+        fill: none;
       }
     }
     &.active {
       span > svg {
-        fill: #111bff !important;
+        stroke: #111bff !important;
       }
     }
   }
@@ -266,11 +267,15 @@
       display: block;
       width: 100%;
       transition: all 200ms ease-out;
-      & > a > span {
-        padding: 0 5px;
-      }
-      & > a svg {
-        stroke: #03041b;
+      & > a {
+        font-size: clamp(0.8rem, 1vw, 1rem);
+        & > span {
+          padding: 0 5px;
+          svg {
+            width: 20px;
+            height: 20px;
+          }
+        }
       }
       &:before {
         display: block;
@@ -294,7 +299,7 @@
           color: #111bff;
           font-weight: 500;
           svg {
-            stroke: #111bff;
+            stroke: #111bff !important;
           }
         }
       }
