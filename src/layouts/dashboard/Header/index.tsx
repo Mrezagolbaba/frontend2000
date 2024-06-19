@@ -1,20 +1,15 @@
-import Wallet from "assets/img/logo-wallex.png";
-import dashboard from "assets/scss/dashboard/dashboard.module.scss";
-import { Card, CardBody, Tooltip } from "reactstrap";
-import { Link, useNavigate } from "react-router-dom";
 import SettingsIcon from "components/Icons/SettingsIcon";
 import SupportIcon from "components/Icons/SupportIcon";
+import Wallet from "assets/img/logo-wallex.png";
+import { Card, CardBody } from "reactstrap";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import useAuth from "hooks/useAuth";
-import LogoutIcon from "components/Icons/LogoutIcon";
+
+import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import MobileProfile from "./MobileProfile";
 
 const Header = () => {
-  const { logout } = useAuth();
-  const navigate = useNavigate();
-
-  const [tooltipOpen, setTooltipOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("");
-  const toggle = () => setTooltipOpen(!tooltipOpen);
 
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
@@ -59,7 +54,6 @@ const Header = () => {
               <span className="icon">
                 <SupportIcon />
               </span>
-              {/* <span style={{ marginRight: "10px" }}>پشتیبانی</span> */}
             </Link>
           </div>
           <div
@@ -74,27 +68,7 @@ const Header = () => {
               </span>
             </Link>
           </div>
-          <div className={dashboard.header__profile} onClick={toggle}>
-            <a id="profile-tooltip">
-              <span>م</span>
-            </a>
-            <Tooltip
-              className={dashboard.header__profile__btn}
-              isOpen={tooltipOpen}
-              target="profile-tooltip"
-              toggle={toggle}
-            >
-              <Link to="/dashboard/profile">پروفایل کاربری</Link>
-              <a
-                onClick={async () =>
-                  await logout().then(() => navigate("/login"))
-                }
-              >
-                <LogoutIcon />
-                خروج
-              </a>
-            </Tooltip>
-          </div>
+          <MobileProfile />
         </CardBody>
       </Card>
     </header>

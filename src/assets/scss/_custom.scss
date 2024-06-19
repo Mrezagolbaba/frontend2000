@@ -80,6 +80,7 @@ html {
   );
   --bs-body-font-family: var(--bs-font-iranyekaneFa);
   --bs-body-font-size: 1rem;
+  --bs-body-font-size2: clamp(0.65rem, 0.7vw, 2rem);
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
   --bs-body-color: #212529;
@@ -627,6 +628,23 @@ ul {
 
 .form-control.is-invalid {
   background-image: none !important;
+}
+
+.overlay-redirect {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgb(22 22 35 / 80%);
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
 }
 
 @media screen and (max-width: 978px) {

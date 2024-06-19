@@ -1,12 +1,17 @@
 import ATable from "components/ATable";
 import CopyInput from "components/Input/CopyInput";
+import Transaction from "components/MobileRecord/Transaction";
 import moment from "jalali-moment";
 import { StatusHandler } from ".";
 import { normalizeAmount } from "helpers";
 import { useMemo } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
 
-export default function FiatWithdraw() {
+export default function FiatWithdraw({
+  limit,
+}: {
+  limit?: number | undefined;
+}) {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
     filter: [
@@ -15,6 +20,7 @@ export default function FiatWithdraw() {
       "type||eq||WITHDRAW",
     ],
     sort: "createdAt,DESC",
+    limit,
   });
 
   // ==============|| Constants ||================= //
@@ -26,6 +32,9 @@ export default function FiatWithdraw() {
         accessorFn: (row: any) =>
           moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
         header: "تاریخ",
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "1",
@@ -38,6 +47,9 @@ export default function FiatWithdraw() {
         accessorKey: "amount",
         header: "مقدار",
         accessorFn: (row: any) => normalizeAmount(row?.amount, "TRY", false),
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "3",
@@ -84,6 +96,10 @@ export default function FiatWithdraw() {
       data={isSuccess ? data : []}
       isLoading={isLoading || isFetching}
       columns={columns}
+      noDataText="اولین تراکنش فیات دیجیتال خود را با آرسونیکس را تجربه کنید."
+      mobileView={(row) => (
+        <Transaction record={row.original} id={row.id} />
+      )}
     />
   );
 }

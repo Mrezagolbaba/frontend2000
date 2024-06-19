@@ -43,11 +43,17 @@ const AddFriends = () => {
         accessorKey: "phoneNumber",
         header: "شماره تلفن همراه",
         accessorFn: (row: any) => <span dir="ltr">{row?.phoneNumber}</span>,
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "1",
         accessorKey: "referrerCode",
         header: "کد دعوت",
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "2",
@@ -55,6 +61,9 @@ const AddFriends = () => {
         header: "زمان ثبت نام",
         accessorFn: (row: any) =>
           moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
+        meta: {
+          hasMobile: true,
+        },
       },
     ],
     [],
@@ -88,7 +97,7 @@ const AddFriends = () => {
                     <CopyInput
                       text={
                         data
-                          ? `https://arsonex.com/register/${(data as IReferral).code}`
+                          ? `https://arsonex.com/register?code=${(data as IReferral).code}`
                           : ""
                       }
                     />

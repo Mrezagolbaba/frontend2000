@@ -1,17 +1,19 @@
 import ATable from "components/ATable";
 import CopyInput from "components/Input/CopyInput";
+import Transaction from "components/MobileRecord/Transaction";
 import moment from "jalali-moment";
 import { StatusHandler } from ".";
 import { normalizeAmount } from "helpers";
 import { useMemo } from "react";
 import { useTransactionsQuery } from "store/api/wallet-management";
 
-function IRRDeposit() {
+function IRRDeposit({ limit }: { limit?: number | undefined }) {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
     filter: [`currencyCode||eq||IRR`, "status||$ne||DRAFT"],
     or: ["type||eq||DEPOSIT", "type||eq||PROMOTION"],
     sort: "createdAt,DESC",
+    limit,
   });
 
   // ==============|| handlers ||================= //
@@ -43,20 +45,28 @@ function IRRDeposit() {
         accessorFn: (row: any) =>
           moment(row.createdAt).locale("fa").format("hh:mm YYYY/MM/DD"),
         header: "تاریخ",
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "1",
         accessorKey: "amount",
         header: "مقدار",
         accessorFn: (row: any) => normalizeAmount(row?.amount, "IRR", false),
+        meta: {
+          hasMobile: true,
+        },
       },
       {
         id: "2",
         accessorKey: "fee",
         accessorFn: (row: any) => normalizeAmount(row?.fee, "IRR", false),
         header: "کارمزد",
+        meta: {
+          hasMobile: true,
+        },
       },
-
       {
         id: "4",
         accessorKey: "type",
@@ -81,6 +91,9 @@ function IRRDeposit() {
         accessorKey: "status",
         header: "وضعیت",
         accessorFn: (row: any) => <StatusHandler status={row?.status} />,
+        meta: {
+          hasMobile: true,
+        },
       },
     ],
     [],
@@ -92,6 +105,10 @@ function IRRDeposit() {
       data={isSuccess ? data : []}
       isLoading={isLoading || isFetching}
       columns={columns}
+      noDataText="اولین تراکنش تومان با آرسونیکس را تجربه کنید."
+      mobileView={(row) => (
+        <Transaction record={row.original} id={row.id} />
+      )}
     />
   );
 }
