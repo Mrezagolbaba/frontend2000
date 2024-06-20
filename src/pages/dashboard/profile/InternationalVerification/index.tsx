@@ -12,7 +12,9 @@ export enum REJECTION_REASON {
   EXPIRED_RESIDENCE_PERMIT = "EXPIRED_RESIDENCE_PERMIT",
   POOR_QUALITY_RESIDENCE_PERMIT_FRONT = "POOR_QUALITY_RESIDENCE_PERMIT_FRONT",
   POOR_QUALITY_RESIDENCE_PERMIT_BACK = "POOR_QUALITY_RESIDENCE_PERMIT_BACK",
+  NAME_IS_DIFFERENT_IN_RESIDENCE_PERMIT = "NAME_IS_DIFFERENT_IN_RESIDENCE_PERMIT",
 }
+
 export default function InternationalVerification() {
   // ==============|| States ||================= //
   const [step, setStep] = useState<0 | 1 | 2>(0);
@@ -39,9 +41,13 @@ export default function InternationalVerification() {
       const international = userVerifications.find(
         (item) => item.type === "KYC_INTERNATIONAL_SERVICES",
       );
-      if (international?.status === "REJECTED") {
+      if (
+        international?.status === "REJECTED" &&
+        !international.rejectReasons.includes(
+          REJECTION_REASON.NAME_IS_DIFFERENT_IN_RESIDENCE_PERMIT,
+        )
+      )
         setStep(1);
-      }
     }
   }, [isSuccess, userVerifications]);
 
