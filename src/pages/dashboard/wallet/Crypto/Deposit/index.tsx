@@ -124,13 +124,17 @@ const DepositCrypto = ({ onClose, currency }: Props) => {
 
   useEffect(() => {
     if (successGetTransaction && transaction) {
-      setShowResult(true);
-      setResult({
-        networkName: transaction.currencyCode,
-        walletAddress: transaction.providerData.flowWalletAddress,
-        amount: transaction.amount,
-        endTime: transaction.expiresAt as string,
-      });
+      if (new Date(transaction.expiresAt as string) > new Date()) {
+        setShowResult(false);
+      } else {
+        setShowResult(true);
+        setResult({
+          networkName: transaction.currencyCode,
+          walletAddress: transaction.providerData.flowWalletAddress,
+          amount: transaction.amount,
+          endTime: transaction.expiresAt as string,
+        });
+      }
     }
   }, [successGetTransaction, transaction]);
 
