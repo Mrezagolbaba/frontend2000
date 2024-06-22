@@ -365,18 +365,19 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
                   const newDestination = source;
                   setSource(newSource);
                   setDestination(newDestination);
-                  await currencySwap({
-                    isDry: true,
-                    data: {
-                      sourceCurrencyCode: newSource?.currency,
-                      sourceAmount:
-                        newSource.currency === "IRR"
-                          ? (Number(newSource?.amount) * 10).toString()
-                          : newSource?.amount.toString(),
-                      destinationCurrencyCode: newDestination.currency,
-                      feeCurrencyCode: newSource.currency,
-                    },
-                  });
+                  newSource?.amount > 0 &&
+                    (await currencySwap({
+                      isDry: true,
+                      data: {
+                        sourceCurrencyCode: newSource?.currency,
+                        sourceAmount:
+                          newSource.currency === "IRR"
+                            ? (Number(newSource?.amount) * 10).toString()
+                            : newSource?.amount.toString(),
+                        destinationCurrencyCode: newDestination.currency,
+                        feeCurrencyCode: newSource.currency,
+                      },
+                    }));
                 }}
               >
                 <ExchangeIcon />
