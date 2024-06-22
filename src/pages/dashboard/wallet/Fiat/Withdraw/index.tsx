@@ -27,7 +27,7 @@ import turkeyFlag from "assets/img/icons/flag-turkey.png";
 import { AlertWarning } from "components/AlertWidget";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { normalizeAmount } from "helpers";
+import { ibanMAsk, normalizeAmount } from "helpers";
 import { useAppSelector } from "store/hooks";
 import { useBankAccountsQuery } from "store/api/profile-management";
 import { useEffect, useState } from "react";
@@ -47,7 +47,7 @@ type FiatFormType = {
   destinationCountry: string;
 };
 
-export default function WithdrawFiat({ stock,onSuccessWithdraw }: Props) {
+export default function WithdrawFiat({ stock, onSuccessWithdraw }: Props) {
   // ==============|| States ||================= //
   const [isOpenOTP, setIsOpenOTP] = useState(false);
   const [accountOptions, setAccountOptions] = useState<OptionType[] | []>([]);
@@ -150,7 +150,9 @@ export default function WithdrawFiat({ stock,onSuccessWithdraw }: Props) {
                 iconClassName={wallet["items-credit__icon"]}
               >
                 <span dir="ltr">
-                  {(item.iban.includes("TR") ? item.iban : "TR" + item.iban) +
+                  {(item.iban.includes("TR")
+                    ? ibanMAsk(item.iban)
+                    : "TR" + ibanMAsk(item.iban)) +
                     " - " +
                     item.ownerFullName}
                 </span>

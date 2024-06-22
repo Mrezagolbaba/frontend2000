@@ -9,6 +9,7 @@ import SelectCurrency from "components/Input/CurrencyInput/SelectCurrency";
 import { currencyOptions } from "components/Input/CurrencyInput/SelectCurrency/constant";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
+import ExchangeIcon from "components/Icons/ExchangeIcon";
 
 export default function ExchangeSection() {
   const navigate = useNavigate();
@@ -111,41 +112,15 @@ export default function ExchangeSection() {
             </div>
             <div className={exchange.divider}>
               <span
-                style={{
-                  marginBottom: "0",
+                style={{ marginBottom: 0 }}
+                onClick={() => {
+                  const newSource = destination;
+                  const newDestination = source;
+                  setSource(newSource);
+                  setDestination(newDestination);
                 }}
               >
-                <svg
-                  fill="#000000"
-                  viewBox="0 0 24 24"
-                  id="exchange-3"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="icon flat-line"
-                >
-                  <polyline
-                    id="primary"
-                    points="20 10 4 10 7 7"
-                    style={{
-                      fill: "none",
-                      stroke: "rgb(0, 0, 0)",
-                      strokeLinecap: "round",
-                      strokeLinejoin: "round",
-                      strokeWidth: "2",
-                    }}
-                  />
-                  <polyline
-                    id="primary-2"
-                    data-name="primary"
-                    points="4 14 20 14 17 17"
-                    style={{
-                      fill: "none",
-                      stroke: "rgb(0, 0, 0)",
-                      strokeLinecap: "round",
-                      strokeLinejoin: "round",
-                      strokeWidth: "2",
-                    }}
-                  />
-                </svg>
+                <ExchangeIcon />
               </span>
             </div>
             <div className={exchange["currency-controls__group"]}>

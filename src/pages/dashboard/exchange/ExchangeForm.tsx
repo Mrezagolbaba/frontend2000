@@ -16,7 +16,7 @@ import {
 import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
 import Notify from "components/Notify";
 import RatePlace from "./RatePlace";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import SelectCurrency from "components/Input/CurrencyInput/SelectCurrency";
 import WageTable from "./WageTable";
 import { CurrencyCode } from "types/wallet";
@@ -360,11 +360,23 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
             </div>
             <div className={exchange.divider}>
               <span
-                onClick={() => {
+                onClick={async () => {
                   const newSource = destination;
                   const newDestination = source;
                   setSource(newSource);
                   setDestination(newDestination);
+                  await currencySwap({
+                    isDry: true,
+                    data: {
+                      sourceCurrencyCode: newSource?.currency,
+                      sourceAmount:
+                        newSource.currency === "IRR"
+                          ? (Number(newSource?.amount) * 10).toString()
+                          : newSource?.amount.toString(),
+                      destinationCurrencyCode: newDestination.currency,
+                      feeCurrencyCode: newSource.currency,
+                    },
+                  });
                 }}
               >
                 <ExchangeIcon />
