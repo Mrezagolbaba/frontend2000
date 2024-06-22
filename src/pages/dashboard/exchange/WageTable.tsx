@@ -3,6 +3,7 @@ import {
   SetStateAction,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { CurrencyCode } from "types/wallet";
@@ -90,7 +91,7 @@ export default function WageTable({
       setFinalAmount(
         normalizeAmount(
           feeTemp.toString(),
-          data?.destinationCurrencyCode,
+          destinationCode,
           true,
         ),
       );
@@ -116,6 +117,8 @@ export default function WageTable({
 
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
+    console.log("change", sourceCode, feeCurrencyCode);
+
     if (data) {
       if (feeCurrencyCode === sourceCode) handleDetails(0);
       else handleDetails(1);
