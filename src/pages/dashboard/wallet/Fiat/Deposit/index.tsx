@@ -17,16 +17,21 @@ import { useCheckVerificationsQuery } from "store/api/user";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import profile from "assets/scss/dashboard/profile.module.scss";
+import { useNavigate } from "react-router-dom";
 
 export enum REJECTION_REASON {
   INVALID_RESIDENCE_PERMIT = "INVALID_RESIDENCE_PERMIT",
   EXPIRED_RESIDENCE_PERMIT = "EXPIRED_RESIDENCE_PERMIT",
   POOR_QUALITY_RESIDENCE_PERMIT_FRONT = "POOR_QUALITY_RESIDENCE_PERMIT_FRONT",
   POOR_QUALITY_RESIDENCE_PERMIT_BACK = "POOR_QUALITY_RESIDENCE_PERMIT_BACK",
+  NAME_IS_DIFFERENT_IN_RESIDENCE_PERMIT = "NAME_IS_DIFFERENT_IN_RESIDENCE_PERMIT",
 }
 
 const DepositFiat = ({ onClose }: { onClose: () => void }) => {
-  const { firstNameEn, lastNameEn } = useAppSelector((state) => state.user);
+  const { firstNameEn, lastNameEn, secondTierVerified } = useAppSelector(
+    (state) => state.user,
+  );
+  const navigate = useNavigate();
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
   const [selectedBank, setSelectedBank] = useState<string>("");
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
@@ -102,7 +107,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
       setInternationalVerify(
         verifications?.find((v) => v.type === "KYC_INTERNATIONAL_SERVICES"),
       );
-  }, [internationalSuccess]);
+  }, [internationalSuccess, verifications]);
 
   const generateErrorReason = (reason, index) => {
     switch (reason) {
@@ -128,6 +133,13 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
         return (
           <li key={index} className={profile["reject-reason-list"]}>
             کیفیت تصویر پست کارت اقامت پایین است.
+          </li>
+        );
+
+      case REJECTION_REASON.NAME_IS_DIFFERENT_IN_RESIDENCE_PERMIT:
+        return (
+          <li key={index} className={profile["reject-reason-list"]}>
+            نام و نام خانوادگی لاتین با کارت اقامت متابقت ندارد.
           </li>
         );
     }
@@ -188,10 +200,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
               <FormGroup>
                 <Label htmlFor="iban"> شماره IBAN:</Label>
 
-                <CopyInput
-                  text={selectedBank || ""}
-                  key="iban-account"
-                />
+                <CopyInput text={selectedBank || ""} key="iban-account" />
               </FormGroup>
             </Col>
             {depResponse && (
@@ -231,7 +240,27 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <div className="px-2">
-      {internationalVerify?.status === "DRAFT" ? (
+      {!secondTierVerified ? (
+        <>
+          <AlertInfo
+            hasIcon
+            text="لطفا ابتدا احراز هویت سطح دو خود را تکمیل کنید."
+            key="passport-alert"
+          />
+          <Row>
+            <Col className="text-center">
+              <Button
+                className="px-5 py-3"
+                color="primary"
+                outline
+                onClick={() => navigate("/dashboard/profile#kyc-section")}
+              >
+                احراز هویت سطح دو
+              </Button>
+            </Col>
+          </Row>
+        </>
+      ) : internationalVerify?.status === "DRAFT" ? (
         <>
           <AlertInfo
             hasIcon

@@ -123,7 +123,7 @@
         &:first-child {
           color: #052b61;
           &:hover {
-            background-color: #052b61;
+            background-color: #111bff;
             color: #fff;
           }
         }
@@ -455,7 +455,6 @@
       width: 100vw;
     }
     ul {
-      width: 100vw;
       padding: 0;
       justify-content: flex-start;
     }
@@ -646,6 +645,11 @@
   box-shadow: 0 2px 4px rgba(126, 142, 177, 0.12);
   transition: all 0.25s ease;
   margin-bottom: 1rem;
+  svg {
+    width: 20px !important;
+    height: 20px !important;
+    padding-left: 5px;
+  }
   &:hover {
     transform: translateY(-5px) scale(1.02);
     box-shadow: 0 5px 12px rgba(126, 142, 177, 0.2);
