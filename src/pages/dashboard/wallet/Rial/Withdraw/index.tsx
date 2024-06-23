@@ -249,9 +249,9 @@ export default function Withdraw({ onClose, stock }: Props) {
                 )}
                 <div className="d-flex flex-column">
                   <FormText>
-                    {fee && (
+                    {fees && (
                       <FormText>
-                        {`کارمزد برداشت: ${normalizeAmount(fee.withdrawFeeStatic, "IRR", true)}`}
+                        {`کارمزد برداشت: ${normalizeAmount(fees.feeAmount, "IRR", true)}`}
                       </FormText>
                     )}
                   </FormText>
