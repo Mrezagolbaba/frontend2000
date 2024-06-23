@@ -7,6 +7,7 @@ const DepositIcon = (props: SVGProps<SVGSVGElement>) => {
       height="24px"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
+      transform="rotate(90)"
       {...props}
     >
       <g id="SVGRepo_bgCarrier" strokeWidth="0" />
