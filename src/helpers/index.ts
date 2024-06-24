@@ -54,6 +54,14 @@ export const PhoneNumberMask: React.FC<PhoneNumberMaskProps> = ({
   return maskedPhoneNumber;
 };
 
+export const ibanMAsk = (iban) => {
+  const prefix = iban.slice(0, 4);
+  const masking = "****";
+  const suffix = iban.slice(-10);
+
+  return `${prefix}${masking}${suffix}`;
+};
+
 export const formatPhoneNumber = (phoneNumber: string, code: string) => {
   // Remove leading zero if it exists
   const numericPhoneNumber = phoneNumber.replace(/\D/g, "");

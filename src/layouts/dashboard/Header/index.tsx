@@ -1,25 +1,15 @@
-import LogoutIcon from "components/Icons/LogoutIcon";
 import SettingsIcon from "components/Icons/SettingsIcon";
 import SupportIcon from "components/Icons/SupportIcon";
 import Wallet from "assets/img/logo-wallex.png";
-import useAuth from "hooks/useAuth";
 import { Card, CardBody } from "reactstrap";
-import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { useAppSelector } from "store/hooks";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 import MobileProfile from "./MobileProfile";
 
 const Header = () => {
-  const { firstName } = useAppSelector((state) => state.user);
-  const { logout } = useAuth();
-  const navigate = useNavigate();
-
-  const [tooltipOpen, setTooltipOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("");
-  const toggle = () => setTooltipOpen((oldVal) => !oldVal);
 
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
@@ -64,7 +54,6 @@ const Header = () => {
               <span className="icon">
                 <SupportIcon />
               </span>
-              {/* <span style={{ marginRight: "10px" }}>پشتیبانی</span> */}
             </Link>
           </div>
           <div
