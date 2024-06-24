@@ -9,16 +9,18 @@ import { useWalletsQuery } from "store/api/wallet-management";
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 
 export default function Wallet() {
-  const { data, isSuccess, isLoading, isFetching } = useWalletsQuery();
+  // ==============|| Hooks ||================= //
+  const { data, isLoading, isFetching } = useWalletsQuery();
 
+  // ==============|| Handlers ||================= //
   const renderBalance = (code, field) => {
     const wallet = data.find((w) => w.currencyCode === code);
     return normalizeAmount(wallet?.[field], code, false);
   };
 
+  // ==============|| Render ||================= //
   return (
     <section className="page page-wallet">
-      {/****************** wallets *******************/}
       <Card className={wallet.wallet}>
         <CardHeader>
           <CardTitle tag="h5">کیف پول</CardTitle>
@@ -54,8 +56,8 @@ export default function Wallet() {
                         "availableBalance",
                       )}
                       stock={
-                        data.find((w) => w.currencyCode === "IRR")?.balance ||
-                        "0"
+                        data.find((w) => w.currencyCode === "IRR")
+                          ?.availableBalance || "0"
                       }
                     />
                   </Col>
@@ -63,8 +65,8 @@ export default function Wallet() {
                     <USDTWallet
                       balance={renderBalance("USDT", "balance")}
                       stock={
-                        data.find((w) => w.currencyCode === "USDT")?.balance ||
-                        "0"
+                        data.find((w) => w.currencyCode === "USDT")
+                          ?.availableBalance || "0"
                       }
                       availableBalance={renderBalance(
                         "USDT",
@@ -91,7 +93,6 @@ export default function Wallet() {
           </Row>
         </CardBody>
       </Card>
-      {/****************** latest transactions *******************/}
       <Tables />
     </section>
   );

@@ -21,5 +21,6 @@ declare const classNames: {
   readonly tabs__item: "tabs__item";
   readonly wallet__item_title: "wallet__item_title";
   readonly wallet__item_icon: "wallet__item_icon";
+  readonly hide: "hide";
 };
 export = classNames;

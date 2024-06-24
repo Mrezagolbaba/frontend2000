@@ -1,5 +1,6 @@
 .custom-dropdown {
   .toggle-btn {
+    font-size: clamp(0.6rem, 1vw, 0.8rem);
     position: relative;
     width: 100%;
     text-align: right;
@@ -26,7 +27,6 @@
     background-position: 12px 50%;
     border: 1px solid rgba(3, 4, 27, 0.1);
     background-color: #fff;
-    font-size: 0.75rem;
     border-radius: 10px;
     transition:
       color 0.15s ease-in-out,
@@ -65,7 +65,7 @@
     width: 100%;
     max-height: 181.031px;
     min-height: 0px;
-    font-size: 0.75rem;
+    font-size: clamp(0.6rem, 1vw, 0.8rem);
     text-align: right;
     &:not(.inner) {
       box-shadow: 0px 11px 21px rgba(0, 0, 0, 0.06) !important;
