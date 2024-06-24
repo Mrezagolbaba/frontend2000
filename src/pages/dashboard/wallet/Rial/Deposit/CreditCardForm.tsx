@@ -37,6 +37,7 @@ const CreditCardForm = () => {
   // ==============|| States ||================= //
   const [hasAccount, setHasAccount] = useState<boolean>(true);
   const [optionList, setOptionList] = useState<OptionType[] | any[]>([]);
+  const [isRedirect, setIsRedirect] = useState(false);
 
   // ==============|| Hooks ||================= //
   const { firstName, lastName, secondTierVerified } = useAppSelector(
@@ -138,121 +139,130 @@ const CreditCardForm = () => {
 
   useEffect(() => {
     if (isSubmitSuccess && response) {
+      setIsRedirect(true);
       window.location.replace(response.providerData.flowRedirectUrl);
     }
   }, [isSubmitSuccess, response]);
 
   // ==============|| Render ||================= //
   return hasAccount ? (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Row>
-        <Col xs={12} lg={6}>
-          <Controller
-            name="accountNumber"
-            control={control}
-            render={({ field: { name, value } }) => (
-              <FormGroup className="position-relative">
-                <div className="d-flex flex-row justify-content-between">
-                  <Label htmlFor={name}>کارت واریزی: </Label>
-                  <Link
-                    to="/dashboard/profile#iranian-accounts"
-                    target="_blank"
-                  >
-                    <span className={wallet?.["little-label"]}>
-                      افزودن حساب جدید
-                    </span>
-                  </Link>
-                </div>
-                <DropdownInput
-                  id={name}
-                  value={value}
-                  onChange={(val, otherOption) => {
-                    setValue("accountId", otherOption.accountId);
-                    setValue(name, val);
-                  }}
-                  options={optionList}
-                  hasError={Boolean(errors?.[name])}
-                />
-                {errors?.[name] && (
-                  <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
-                )}
-                {fee && (
-                  <FormText>
-                    {`سقف واریز: ${normalizeAmount(fee?.depositMaxAmount, "IRR", true)}`}
-                  </FormText>
-                )}
-              </FormGroup>
-            )}
-          />
-        </Col>
-        <Col xs={12} lg={6}>
-          <Controller
-            name="amount"
-            control={control}
-            render={({ field: { name, value } }) => (
-              <FormGroup className="position-relative">
-                <div className="d-flex flex-row justify-content-between">
-                  <Label htmlFor={name}>مبلغ واریز: </Label>
-                </div>
-                <Currency
-                  name={name}
-                  value={value}
-                  onChange={(val) => setValue(name, val)}
-                  placeholder="مبلغ را به تومان وارد کنید"
-                  hasError={Boolean(errors?.[name])}
-                />
-                {errors?.[name] && (
-                  <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
-                )}
-                <div className="d-flex flex-column">
+    <>
+      {isRedirect && (
+        <div className="overlay-redirect">
+          <Spinner />
+          <span>درحال انتقال به صفحه مورد نظر ...</span>
+        </div>
+      )}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Row>
+          <Col xs={12} lg={6}>
+            <Controller
+              name="accountNumber"
+              control={control}
+              render={({ field: { name, value } }) => (
+                <FormGroup className="position-relative">
+                  <div className="d-flex flex-row justify-content-between">
+                    <Label htmlFor={name}>کارت واریزی: </Label>
+                    <Link
+                      to="/dashboard/profile#iranian-accounts"
+                      target="_blank"
+                    >
+                      <span className={wallet?.["little-label"]}>
+                        افزودن حساب جدید
+                      </span>
+                    </Link>
+                  </div>
+                  <DropdownInput
+                    id={name}
+                    value={value}
+                    onChange={(val, otherOption) => {
+                      setValue("accountId", otherOption.accountId);
+                      setValue(name, val);
+                    }}
+                    options={optionList}
+                    hasError={Boolean(errors?.[name])}
+                  />
+                  {errors?.[name] && (
+                    <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
+                  )}
                   {fee && (
                     <FormText>
-                      {`کارمزد شاپرک: ${normalizeAmount(fee?.depositFeeStatic, "IRR", true)}`}
+                      {`سقف واریز: ${normalizeAmount(fee?.depositMaxAmount, "IRR", true)}`}
                     </FormText>
                   )}
-                  <FormText>
-                    {Number(value) - Number(fee?.depositFeeStatic) / 10 > 0 &&
-                      `مبلغ واریز به کیف پول: ${normalizeAmount(
-                        (
-                          Number(value) * 10 -
-                          Number(fee.depositFeeStatic) / 10
-                        ).toString(),
-                        "IRR",
-                        true,
-                      )}`}
-                  </FormText>
-                </div>
-              </FormGroup>
-            )}
-          />
-        </Col>
-      </Row>
-      <Row className="mt-5">
-        <div className="d-flex flex-row justify-content-evenly">
-          <Button
-            className="px-5 py-3"
-            color="primary"
-            outline
-            type="submit"
-            disabled={isLoading || isSubmitSuccess}
-          >
-            {isLoading ? <Spinner /> : "انتقال به درگاه پرداخت"}
-          </Button>
-          {!secondTierVerified && (
+                </FormGroup>
+              )}
+            />
+          </Col>
+          <Col xs={12} lg={6}>
+            <Controller
+              name="amount"
+              control={control}
+              render={({ field: { name, value } }) => (
+                <FormGroup className="position-relative">
+                  <div className="d-flex flex-row justify-content-between">
+                    <Label htmlFor={name}>مبلغ واریز: </Label>
+                  </div>
+                  <Currency
+                    name={name}
+                    value={value}
+                    onChange={(val) => setValue(name, val)}
+                    placeholder="مبلغ را به تومان وارد کنید"
+                    hasError={Boolean(errors?.[name])}
+                  />
+                  {errors?.[name] && (
+                    <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
+                  )}
+                  <div className="d-flex flex-column">
+                    {fee && (
+                      <FormText>
+                        {`کارمزد شاپرک: ${normalizeAmount(fee?.depositFeeStatic, "IRR", true)}`}
+                      </FormText>
+                    )}
+                    <FormText>
+                      {Number(value) - Number(fee?.depositFeeStatic) / 10 > 0 &&
+                        `مبلغ واریز به کیف پول: ${normalizeAmount(
+                          (
+                            Number(value) * 10 -
+                            Number(fee.depositFeeStatic) / 10
+                          ).toString(),
+                          "IRR",
+                          true,
+                        )}`}
+                    </FormText>
+                  </div>
+                </FormGroup>
+              )}
+            />
+          </Col>
+        </Row>
+        <Row className="mt-5">
+          <div className="d-flex flex-row justify-content-evenly">
             <Button
               className="px-5 py-3"
               color="primary"
-              type="button"
-              onClick={() => {
-                navigate("/dashboard/profile#kyc-section");
-              }}
+              outline
+              type="submit"
+              disabled={isLoading || isSubmitSuccess}
             >
-              احراز هویت سطح دو
+              {isLoading ? <Spinner /> : "انتقال به درگاه پرداخت"}
             </Button>
-          )}
-        </div>
-      </Row>
-    </form>
+            {!secondTierVerified && (
+              <Button
+                className="px-5 py-3"
+                color="primary"
+                type="button"
+                onClick={() => {
+                  navigate("/dashboard/profile#kyc-section");
+                }}
+              >
+                احراز هویت سطح دو
+              </Button>
+            )}
+          </div>
+        </Row>
+      </form>
+    </>
   ) : (
     <Row>
       <AlertInfo
