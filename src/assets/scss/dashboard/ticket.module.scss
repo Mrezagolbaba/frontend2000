@@ -3,6 +3,10 @@
   position: relative;
   margin-bottom: 30px;
   padding-left: 66px;
+  &.admin-comment {
+    padding-left: 0;
+    padding-right: 66px;
+  }
   &__body {
     position: relative;
     padding: 24px;
@@ -51,5 +55,62 @@
     opacity: 0.8;
     width: 80%;
     object-fit: cover;
+  }
+}
+
+.mobile-view {
+  display: flex;
+  flex-direction: row;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  overflow: hidden;
+  position: relative;
+  .counter {
+    width: 30px;
+    background-color: var(--bs-primary);
+    color: var(--bs-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &__body {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px;
+    width: 100%;
+    font-size: 0.7rem;
+  }
+  &__title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    h5 {
+      font-size: 1rem;
+      text-align: right;
+    }
+  }
+  &__button {
+    padding: 10px 0;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .table {
+    thead {
+      display: none;
+    }
+    tbody {
+      td {
+        display: flex;
+        border-bottom: 1px solid rgba(3, 4, 27, 0.05);
+        flex-wrap: wrap;
+        justify-content: space-between;
+        &:before {
+          content: attr(data-th);
+          display: flow-root;
+        }
+      }
+    }
   }
 }
