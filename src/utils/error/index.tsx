@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
   useEffect(() => {
@@ -21,6 +23,7 @@ const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
   return (
     <>
       <Toaster />
+      <ToastContainer position="bottom-right" rtl={true} />
       {children}
     </>
   );
