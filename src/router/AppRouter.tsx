@@ -37,7 +37,9 @@ export default function AppRouter() {
       toast(
         <div>
           <p>برای تجربه کاربری بهتر اپلیکیشن ما را نصب کنید</p>
-          <Button onClick={promptToInstall}>نصب</Button>
+          <Button color="primary" outline onClick={promptToInstall}>
+            نصب
+          </Button>
         </div>,
         { position: "bottom-center" },
       );
