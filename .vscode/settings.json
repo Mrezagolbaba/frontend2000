@@ -1,12 +1,13 @@
 {
     "editor.codeActionsOnSave": {
-    "source.organizeImports": "explicit",
-    "source.fixAll": "explicit"
-  },
+        "source.organizeImports": "explicit",
+        "source.fixAll": "explicit"
+    },
     "githubPullRequests.ignoredPullRequestBranches": [
         "main"
     ],
     "cSpell.words": [
+        "Arsonex",
         "precache",
         "precached",
         "precaching"

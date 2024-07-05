@@ -23,10 +23,12 @@ export default defineConfig({
     }),
     sassDts(), // Add the SASS plugin to the plugins array
     VitePWA({
-      registerType: "autoUpdate",
-      // strategies: "injectManifest",
-      // srcDir: "src",
-      // filename: "serviceWorker.js",
+      srcDir: "src",
+      filename: 'serviceWorker.js',
+      strategies: "injectManifest",
+      injectManifest: {
+        maximumFileSizeToCacheInBytes: 3000000,
+      }
     }),
   ],
   resolve: {

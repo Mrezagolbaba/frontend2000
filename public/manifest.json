@@ -6,7 +6,7 @@
   "theme_color": "#ffffff",
   "orientation": "portrait",
   "scope": "/",
-  "start_url": "http://localhost:8000/",
+  "start_url": "/",
   "icons": [
     {
       "src": "assets/icons/icon-48x48.png",
