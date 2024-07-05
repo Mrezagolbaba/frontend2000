@@ -24,7 +24,7 @@ export default defineConfig({
     sassDts(), // Add the SASS plugin to the plugins array
     VitePWA({
       srcDir: "src",
-      filename: 'serviceWorker.js',
+      filename: 'service-worker.js',
       strategies: "injectManifest",
       injectManifest: {
         maximumFileSizeToCacheInBytes: 3000000,

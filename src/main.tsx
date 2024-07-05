@@ -15,7 +15,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import { persister, store } from "store/store.ts";
 import App from "./App.tsx";
-import * as serviceWorker from "./service-worker.js";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration.tsx";
 
 const tagManagerArgs = {
   gtmId: "GTM-WRSW3TKG", // Replace with your GTM container ID
@@ -64,4 +64,4 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     </Provider>
   </React.StrictMode>,
 );
-serviceWorker.register();
+serviceWorkerRegistration.register();
