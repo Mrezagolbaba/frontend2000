@@ -43,7 +43,7 @@
   //   "@utils/*": ["src/utils/*"]
   // },
   "references": [{ "path": "./tsconfig.node.json" }],
-  "include": ["src"],
+  "include": ["src", "src/service-worker.js"],
   "exclude": ["node_modules"],
   "rules": {
     "no-unused-vars": "off",

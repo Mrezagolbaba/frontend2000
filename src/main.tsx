@@ -1,22 +1,21 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { useEffect } from "react";
 import * as Sentry from "@sentry/react";
+import "assets/scss/index.scss";
+import React, { useEffect } from "react";
+import ReactDOM from "react-dom/client";
+import TagManager from "react-gtm-module";
+import { Provider } from "react-redux";
 import {
   createRoutesFromChildren,
   matchRoutes,
   useLocation,
   useNavigationType,
 } from "react-router-dom";
-import App from "./App.tsx";
-import { Provider } from "react-redux";
-import { persister, store } from "store/store.ts";
-import TagManager from "react-gtm-module";
-import "assets/scss/index.scss";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { PersistGate } from "redux-persist/integration/react";
-import * as serviceWorker from "./serviceWorker";
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
+import { persister, store } from "store/store.ts";
+import App from "./App.tsx";
+import * as serviceWorker from "./service-worker.js";
 
 const tagManagerArgs = {
   gtmId: "GTM-WRSW3TKG", // Replace with your GTM container ID
