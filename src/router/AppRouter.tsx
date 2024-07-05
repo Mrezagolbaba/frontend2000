@@ -15,12 +15,12 @@ import ComingSoon from "pages/ComingSoon";
 import ContactUs from "pages/contact-us";
 import RulesPage from "pages/rules";
 import AboutUs from "pages/about-us";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getTitlePage } from "helpers";
 import AuthRouter from "./AuthRouter";
 import ResponsePage from "pages/dashboard/wallet/Rial/Deposit/DirectDebit/ResponsePage";
-import { toast } from "react-toastify";
 import { useAddToHomeScreenPrompt } from "hooks/useAddToHomeScreenPrompt";
+import toast from "react-hot-toast";
 
 export default function AppRouter() {
   const location = useLocation();
@@ -32,7 +32,7 @@ export default function AppRouter() {
 
   useEffect(() => {
     if (prompt)
-      toast.info(
+      toast(
         <div style={{ fontFamily: "IRANYekanFa", textAlign: "right" }}>
           <p>برای تجربه کاربری بهتر اپلیکیشن ما را نصب کنید</p>
           <button
