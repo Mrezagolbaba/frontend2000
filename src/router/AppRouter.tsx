@@ -21,6 +21,8 @@ import AuthRouter from "./AuthRouter";
 import ResponsePage from "pages/dashboard/wallet/Rial/Deposit/DirectDebit/ResponsePage";
 import { useAddToHomeScreenPrompt } from "hooks/useAddToHomeScreenPrompt";
 import toast from "react-hot-toast";
+import { Button } from "reactstrap";
+import { isMobile, isTablet } from "react-device-detect";
 
 export default function AppRouter() {
   const location = useLocation();
@@ -31,11 +33,11 @@ export default function AppRouter() {
   }, [location.pathname]);
 
   useEffect(() => {
-    if (prompt)
+    if (prompt && (isMobile || isTablet))
       toast(
         <div>
           <p>برای تجربه کاربری بهتر اپلیکیشن ما را نصب کنید</p>
-          <button onClick={promptToInstall}>نصب</button>
+          <Button onClick={promptToInstall}>نصب</Button>
         </div>,
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
