@@ -39,6 +39,7 @@ export default function AppRouter() {
           <p>برای تجربه کاربری بهتر اپلیکیشن ما را نصب کنید</p>
           <Button onClick={promptToInstall}>نصب</Button>
         </div>,
+        { position: "bottom-center" },
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prompt]);
