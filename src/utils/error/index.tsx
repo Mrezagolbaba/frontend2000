@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import "react-toastify/dist/ReactToastify.css";
 
 const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
   useEffect(() => {
