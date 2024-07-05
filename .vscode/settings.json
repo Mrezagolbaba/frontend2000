@@ -1,5 +1,14 @@
 {
+    "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll": "explicit"
+  },
     "githubPullRequests.ignoredPullRequestBranches": [
         "main"
+    ],
+    "cSpell.words": [
+        "precache",
+        "precached",
+        "precaching"
     ]
 }
