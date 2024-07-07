@@ -19,13 +19,33 @@ import { useEffect } from "react";
 import { getTitlePage } from "helpers";
 import AuthRouter from "./AuthRouter";
 import ResponsePage from "pages/dashboard/wallet/Rial/Deposit/DirectDebit/ResponsePage";
+import { useAddToHomeScreenPrompt } from "hooks/useAddToHomeScreenPrompt";
+import toast from "react-hot-toast";
+import { Button } from "reactstrap";
+import { isMobile, isTablet } from "react-device-detect";
 
 export default function AppRouter() {
   const location = useLocation();
+  const [prompt, promptToInstall] = useAddToHomeScreenPrompt();
 
   useEffect(() => {
     document.title = getTitlePage(location.pathname);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (prompt && (isMobile || isTablet))
+      toast(
+        <div>
+          <p>برای تجربه کاربری بهتر اپلیکیشن ما را نصب کنید</p>
+          <Button color="primary" outline onClick={promptToInstall}>
+            نصب
+          </Button>
+        </div>,
+        { position: "bottom-center" },
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prompt]);
+
   return useRoutes([
     {
       path: "/",
