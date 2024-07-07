@@ -4,8 +4,22 @@ import { BreadcrumbItem, Container, Breadcrumb } from "reactstrap";
 import home from "assets/scss/landing/home.module.scss";
 import rules from "assets/scss/landing/rules.module.scss";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function RulesPage() {
+  const jumpToReleventDiv = (id) => {
+    const releventDiv = document.getElementById(id);
+    // behavior: "smooth" parameter for smooth movement
+    releventDiv?.scrollIntoView({behavior: "smooth"});
+  }
+  useEffect(() => {
+    //https://arsonex.com/terms/#privacy get the id from the url
+    if (window.location.hash) {
+      const id = window.location.hash.substring(1);
+      jumpToReleventDiv(id);
+    }
+  }, []);
+
   return (
     <LandingLayout disableBanner={true}>
       <main className={home["main-wrapper"]}>
