@@ -28,6 +28,20 @@
 .card + .card {
   margin-top: 20px;
 }
+.hours{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+.hours > p{
+  text-align: center;
+  font-size: 1.2rem;
+  color: #8c8c8c;
+  font-weight: bold;
+  direction: rtl;
+  line-height: 2rem;
+}
 
 .social {
   display: flex;

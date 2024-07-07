@@ -349,7 +349,7 @@ export default function RulesPage() {
                 </p>
               </div>
             </div>
-            <div
+            <div id='privacy'
               className={`${rules["rules-summary"]} ${rules["rules-summary--mb50"]}`}
             >
               <div className={`${rules["rules-text"]}`}>
