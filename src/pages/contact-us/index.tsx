@@ -49,6 +49,12 @@ export default function ContactUs() {
                 </CardBody>
               </Card>
             </div>
+
+            <div className={contact.hours}>
+              <p>
+                24 ساعت شبانه روز پاسخگوی شما هستیم
+              </p>
+            </div>
             <ul className={contact.social}>
               <li>
                 <Link to="https://t.me/Arsonexchange">

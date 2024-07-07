@@ -98,6 +98,11 @@ const Footer = (): ReactElement => {
                   </Link>
                 </li>
                 <li>
+                  <Link to="https://arsonex.com/terms/#privacy">
+                     حفظ حریم خصوصی
+                  </Link>
+                </li>
+                <li>
                   <Link
                     target="_blank"
                     to="https://help.arsonex.com/authentication-process/"
