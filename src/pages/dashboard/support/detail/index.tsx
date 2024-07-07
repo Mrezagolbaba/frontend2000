@@ -16,6 +16,8 @@ import { useCloseTicketMutation, useGetTicketQuery } from "store/api/ticket";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import ticket from "assets/scss/dashboard/ticket.module.scss";
+
 const categoryRender = (value) => {
   switch (value) {
     case "USER_PROFILE_AND_VERIFICATION":
@@ -70,7 +72,7 @@ export default function Detail() {
                   <table
                     id="responsive"
                     style={{ fontSize: ".75rem" }}
-                    className="table-modern table table-borderless"
+                    className={`${ticket.table} table-modern table table-borderless`}
                   >
                     <thead>
                       <tr>
@@ -144,17 +146,17 @@ export default function Detail() {
                     ) : (
                       <tbody>
                         <tr>
-                          <td>
+                          <td data-th="زمان ایجاد">
                             {moment(data?.ticket.createdAt)
                               .locale("fa")
                               .format("hh:mm YYYY/MM/DD")}
                           </td>
-                          <td>
+                          <td data-th=" بروزرسانی">
                             {moment(data?.ticket.updatedAt)
                               .locale("fa")
                               .format("hh:mm YYYY/MM/DD")}
                           </td>
-                          <td>
+                          <td data-th="وضعیت تیکت">
                             <span className="text-primary">
                               {" "}
                               {data?.ticket.status === "OPEN"
@@ -162,9 +164,11 @@ export default function Detail() {
                                 : "بسته"}
                             </span>
                           </td>
-                          <td>{categoryRender(data.ticket.category)}</td>
-                          <td>{`${firstName} ${lastName}`}</td>
-                          <td>{data.ticket.subject}</td>
+                          <td data-th="دسته بندی">
+                            {categoryRender(data.ticket.category)}
+                          </td>
+                          <td data-th="ایجاد کننده">{`${firstName} ${lastName}`}</td>
+                          <td data-th="عنوان تیکت">{data.ticket.subject}</td>
                         </tr>
                       </tbody>
                     )}

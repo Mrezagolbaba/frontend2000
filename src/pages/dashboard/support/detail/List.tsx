@@ -35,7 +35,10 @@ export default function ReplyTicketList({
       </div>
       {data &&
         data.map((t, key) => (
-          <div className={ticket.comment} key={key}>
+          <div
+            className={`${ticket.comment} ${checkWriter(t.reply) === "ADMIN" ? ticket["admin-comment"] : ""}`}
+            key={key}
+          >
             <div
               className={`${ticket.comment__body} ${checkWriter(t.reply) === "ADMIN" ? ticket.answer : ""}`}
             >

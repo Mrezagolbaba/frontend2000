@@ -152,7 +152,7 @@ const TransactionReceipt = ({ transactionID, type, onClose }: Props) => {
           </Col>
         </Row>
       )}
-      {type === "DEPOSIT" && (
+      {/* {type === "DEPOSIT" && (
         <Row
           className={`${transaction__field} ${isLoading || isFetching ? "placeholder-glow" : ""}`}
         >
@@ -167,7 +167,7 @@ const TransactionReceipt = ({ transactionID, type, onClose }: Props) => {
             )}
           </Col>
         </Row>
-      )}
+      )} */}
       {type === "WITHDRAW" &&
         (data?.currencyCode === "IRR" || data?.currencyCode === "TRY") && (
           <Row
