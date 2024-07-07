@@ -47,6 +47,11 @@ const Footer = (): ReactElement => {
                 <li>
                   <Link target="_blank" to="/terms">قوانین و مقررات</Link>
                 </li>
+                <li>
+                  <Link to="https://arsonex.com/terms/#privacy">
+                     حفظ حریم خصوصی
+                  </Link>
+                </li>
               </ul>
             </div>
           </Col>
@@ -95,11 +100,6 @@ const Footer = (): ReactElement => {
                 <li>
                   <Link target="_blank" to="https://help.arsonex.com/security/">
                     امنیت کاربران
-                  </Link>
-                </li>
-                <li>
-                  <Link to="https://arsonex.com/terms/#privacy">
-                     حفظ حریم خصوصی
                   </Link>
                 </li>
                 <li>
