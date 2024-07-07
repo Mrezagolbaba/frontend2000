@@ -1,6 +1,7 @@
 declare const classNames: {
   readonly section: "section";
   readonly card: "card";
+  readonly hours: "hours";
   readonly social: "social";
   readonly "social-tile": "social-tile";
   readonly "tile-icon": "tile-icon";
