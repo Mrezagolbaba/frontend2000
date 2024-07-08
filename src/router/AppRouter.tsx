@@ -37,8 +37,8 @@ export default function AppRouter() {
 
   useEffect(() => {
     if (
-      (prompt && (isMobile || isTablet)) ||
-      ((isFirefox || isIOS) && !isInStandaloneMode())
+      (isMobile || isTablet) &&
+      (prompt || ((isFirefox || isIOS) && !isInStandaloneMode()))
     )
       toast(
         <div>
