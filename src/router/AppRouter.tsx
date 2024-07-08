@@ -15,7 +15,7 @@ import ComingSoon from "pages/ComingSoon";
 import ContactUs from "pages/contact-us";
 import RulesPage from "pages/rules";
 import AboutUs from "pages/about-us";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { getTitlePage } from "helpers";
 import AuthRouter from "./AuthRouter";
 import ResponsePage from "pages/dashboard/wallet/Rial/Deposit/DirectDebit/ResponsePage";
@@ -36,7 +36,7 @@ export default function AppRouter() {
     document.title = getTitlePage(location.pathname);
   }, [location.pathname]);
 
-  useEffect(() => {
+  const displayToast = useCallback(() => {
     if (
       (isMobile || isTablet) &&
       (prompt || ((isFirefox || isMozilla || isIOS) && !isInStandaloneMode()))
@@ -62,6 +62,9 @@ export default function AppRouter() {
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prompt]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => displayToast(), []);
 
   return useRoutes([
     {
