@@ -23,11 +23,12 @@ import { useAddToHomeScreenPrompt } from "hooks/useAddToHomeScreenPrompt";
 import toast from "react-hot-toast";
 import { Button } from "reactstrap";
 import { isIOS, isMobile, isTablet, isFirefox } from "react-device-detect";
+import IOSShare from "assets/icons/IOSShare";
 
 export default function AppRouter() {
   const location = useLocation();
   const [prompt, promptToInstall] = useAddToHomeScreenPrompt();
-
+  const isMozilla = navigator.userAgent.toLowerCase().includes("mozilla");
   const isInStandaloneMode = () =>
     "standalone" in window.navigator && window.navigator.standalone;
 
@@ -38,14 +39,24 @@ export default function AppRouter() {
   useEffect(() => {
     if (
       (isMobile || isTablet) &&
-      (prompt || ((isFirefox || isIOS) && !isInStandaloneMode()))
+      (prompt || ((isFirefox || isMozilla || isIOS) && !isInStandaloneMode()))
     )
       toast(
         <div>
-          <p>برای تجربه کاربری بهتر اپلیکیشن ما را نصب کنید</p>
-          <Button color="primary" outline onClick={promptToInstall}>
-            نصب
-          </Button>
+          <p>برای تجربه کاربری بهتر اپلیکیشن ما را نصب کنید.</p>
+          {!isIOS ? (
+            <Button color="primary" outline onClick={promptToInstall}>
+              نصب
+            </Button>
+          ) : (
+            <ol style={{ fontSize: "14px", marginTop: "-10px" }}>
+              <li>
+                <IOSShare style={{ width: "30px", height: "30px" }} /> را انتخاب
+                کنید.
+              </li>
+              <li>"Add to HomeScreen" را انتخاب کنید.</li>
+            </ol>
+          )}
         </div>,
         { position: "bottom-center" },
       );
