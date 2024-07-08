@@ -22,18 +22,21 @@ import ResponsePage from "pages/dashboard/wallet/Rial/Deposit/DirectDebit/Respon
 import { useAddToHomeScreenPrompt } from "hooks/useAddToHomeScreenPrompt";
 import toast from "react-hot-toast";
 import { Button } from "reactstrap";
-import { isMobile, isTablet } from "react-device-detect";
+import { isIOS, isMobile, isTablet } from "react-device-detect";
 
 export default function AppRouter() {
   const location = useLocation();
   const [prompt, promptToInstall] = useAddToHomeScreenPrompt();
+
+  const isInStandaloneMode = () =>
+    "standalone" in window.navigator && window.navigator.standalone;
 
   useEffect(() => {
     document.title = getTitlePage(location.pathname);
   }, [location.pathname]);
 
   useEffect(() => {
-    if (prompt && (isMobile || isTablet))
+    if ((prompt && (isMobile || isTablet)) || (isIOS && !isInStandaloneMode()))
       toast(
         <div>
           <p>برای تجربه کاربری بهتر اپلیکیشن ما را نصب کنید</p>
