@@ -7,7 +7,7 @@ export default function IOSShare({ ...rest }) {
       viewBox="0 0 50.00 50.00"
       xmlns="http://www.w3.org/2000/svg"
       stroke="#2e9aff"
-      strokeWidth="0.0005"
+      strokeWidth="0.005"
       {...rest}
     >
       <g id="SVGRepo_bgCarrier" stroke-width="0" />
