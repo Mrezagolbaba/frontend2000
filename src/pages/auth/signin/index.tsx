@@ -22,7 +22,7 @@ import { isPhoneValid } from "helpers";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
-
+import { Turnstile } from "@marsidev/react-turnstile";
 import auth from "assets/scss/auth/auth.module.scss";
 
 export default function LoginPage() {
@@ -206,6 +206,14 @@ export default function LoginPage() {
                         رمز عبور را فراموش کرده&zwnj;ام!
                       </Button>
                     </div>
+                  </Col>
+                </Row>
+                <Row className="mb-3">
+                  <Col xs={12}>
+                    <Turnstile
+                      siteKey="0x4AAAAAAAcxFkE7R0BYN7cc"
+                      options={{ theme: "light", appearance: "always" }}
+                    />
                   </Col>
                 </Row>
                 <Row>
