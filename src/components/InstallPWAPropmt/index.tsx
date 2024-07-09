@@ -4,7 +4,7 @@ import { isMobile, isTablet, isFirefox, isIOS } from "react-device-detect";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import Logo from "assets/img/logo-arsonex.png";
 import IOSShare from "assets/icons/IOSShare";
-import "./styles.scss";
+import pwa from "assets/scss/components/InstallPWAPrompt/styles.module.scss";
 
 const InstallPWAPrompt: FC = () => {
   const [modal, setModal] = useState<boolean>(false);
@@ -22,30 +22,30 @@ const InstallPWAPrompt: FC = () => {
 
   return (
     <Modal isOpen={modal} toggle={toggle} centered>
-      <div className="wrapper">
+      <div className={pwa.wrapper}>
         <ModalHeader toggle={toggle} className="pb-2">
           <div className="d-inline-flex flex-row align-items-center gap-3">
             <img src={Logo} loading="lazy" height="35px" width="35px" />
-            <p className="m-0 f16">نصب آرسونیکس</p>
+            <p className={`m-0 ${pwa.f16}`}>نصب آرسونیکس</p>
           </div>
         </ModalHeader>
         <ModalBody>
-          <p className="description">
+          <p className={pwa.description}>
             برنامه را روی دستگاه خود نصب کنید تا در هر زمان به راحتی به آن
             دسترسی داشته باشید.
           </p>
           {isIOS && (
-            <ol className="ordered-list">
+            <ol className={pwa["ordered-list"]}>
               <li className="mb-1 mt-4">
                 روی{" "}
-                <span className="icon">
+                <span className={pwa.icon}>
                   <IOSShare style={{ width: "25px", height: "30px" }} />
                 </span>{" "}
                 کلیک کنید.
               </li>
               <li>
-                <span className="icon p-1">Add to Home Screen</span> را انتخاب
-                کنید.
+                <span className={`${pwa.icon} p-1`}>Add to Home Screen</span> را
+                انتخاب کنید.
               </li>
             </ol>
           )}
