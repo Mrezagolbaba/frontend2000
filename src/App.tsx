@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import AppRouter from "router/AppRouter";
 import ErrorBoundary from "utils/error";
 import { JWTProvider as AuthProvider } from "contexts/JWTContext";
+import InstallPWAPrompt from "components/InstallPWAPropmt";
 
 const queryClient = new QueryClient();
 
@@ -21,7 +22,10 @@ function App() {
       <ErrorBoundary>
         <BrowserRouter>
           <AuthProvider>
-            <AppRouter />
+            <>
+              <AppRouter />
+              <InstallPWAPrompt />
+            </>
           </AuthProvider>
         </BrowserRouter>
       </ErrorBoundary>
