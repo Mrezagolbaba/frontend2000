@@ -10,11 +10,7 @@ import { useTransactionsQuery } from "store/api/wallet-management";
 function USDTWithdraw({ limit }: { limit?: number | undefined }) {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
-    filter: [
-      `currencyCode||eq||USDT`,
-      "status||$ne||DRAFT",
-      "type||eq||WITHDRAW",
-    ],
+    filter: [`currencyCode||eq||USDT`, "type||eq||WITHDRAW"],
     sort: "createdAt,DESC",
     limit,
   });
@@ -100,9 +96,7 @@ function USDTWithdraw({ limit }: { limit?: number | undefined }) {
       isLoading={isLoading || isFetching}
       columns={columns}
       noDataText="اولین تراکنش ارز دیجیتال خود را با آرسونیکس را تجربه کنید."
-      mobileView={(row) => (
-        <Transaction record={row.original} id={row.id} />
-      )}
+      mobileView={(row) => <Transaction record={row.original} id={row.id} />}
     />
   );
 }
