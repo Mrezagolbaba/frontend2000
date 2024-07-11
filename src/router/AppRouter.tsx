@@ -28,6 +28,7 @@ export default function AppRouter() {
   }, [location.pathname]);
 
   return useRoutes([
+    { path: ".", element: <Navigate to="/" /> },
     {
       path: "/",
       children: [

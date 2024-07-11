@@ -10,11 +10,7 @@ import { useTransactionsQuery } from "store/api/wallet-management";
 function IRRWithdraw({ limit }: { limit?: number | undefined }) {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
-    filter: [
-      `currencyCode||eq||IRR`,
-      "status||$ne||DRAFT",
-      "type||eq||WITHDRAW",
-    ],
+    filter: [`currencyCode||eq||IRR`, "type||eq||WITHDRAW"],
     sort: "createdAt,DESC",
     limit,
   });
@@ -95,9 +91,7 @@ function IRRWithdraw({ limit }: { limit?: number | undefined }) {
       isLoading={isLoading || isFetching}
       columns={columns}
       noDataText="اولین تراکنش تومان با آرسونیکس را تجربه کنید."
-      mobileView={(row) => (
-        <Transaction record={row.original} id={row.id} />
-      )}
+      mobileView={(row) => <Transaction record={row.original} id={row.id} />}
     />
   );
 }

@@ -14,11 +14,7 @@ export default function FiatWithdraw({
 }) {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
-    filter: [
-      `currencyCode||eq||TRY`,
-      "status||$ne||DRAFT",
-      "type||eq||WITHDRAW",
-    ],
+    filter: [`currencyCode||eq||TRY`, "type||eq||WITHDRAW"],
     sort: "createdAt,DESC",
     limit,
   });
@@ -97,9 +93,7 @@ export default function FiatWithdraw({
       isLoading={isLoading || isFetching}
       columns={columns}
       noDataText="اولین تراکنش فیات دیجیتال خود را با آرسونیکس را تجربه کنید."
-      mobileView={(row) => (
-        <Transaction record={row.original} id={row.id} />
-      )}
+      mobileView={(row) => <Transaction record={row.original} id={row.id} />}
     />
   );
 }
