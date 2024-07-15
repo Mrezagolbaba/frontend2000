@@ -3,14 +3,16 @@ import {
   SetStateAction,
   useCallback,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 import { CurrencyCode } from "types/wallet";
 import { Table } from "reactstrap";
 import { convertText, normalizeAmount } from "helpers";
+import ExclamationIcon from "components/Icons/ExclamationIcon";
+import { motion } from "framer-motion";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
+import Dialog from "components/Dialog";
 
 type Props = {
   sourceCode: CurrencyCode;
@@ -35,6 +37,7 @@ export default function WageTable({
   const [feeAmount, setFeeAmount] = useState<string | null>(null);
   const [feeWithDiscount, setFeeWithDiscount] = useState<string | null>(null);
   const [finalAmount, setFinalAmount] = useState<string | null>(null);
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   // ==============|| Handlers ||================= //
   const handleDetails = useCallback(
@@ -89,11 +92,7 @@ export default function WageTable({
           ),
         );
       setFinalAmount(
-        normalizeAmount(
-          feeTemp.toString(),
-          destinationCode,
-          true,
-        ),
+        normalizeAmount(feeTemp.toString(), destinationCode, true),
       );
     },
     [data, destinationCode, feeCurrencyCode],
@@ -192,19 +191,49 @@ export default function WageTable({
                   </div>
                 </fieldset>
               </td>
-              <td className="text-center" data-th="مبلغ کارمزد">
-                {!feeCost && "-"}
-                {feeCost && feeCost}
-                {" معادل "}
-                {!feeAmount && "-"}
-                {feeAmount &&
-                  (feeWithDiscount ? (
-                    <>
-                      <s>{feeAmount}</s> {feeWithDiscount}
-                    </>
-                  ) : (
-                    feeAmount
-                  ))}
+              <td className="text-center d-flex flex-row" data-th="مبلغ کارمزد">
+                {data?.transactions[0]?.fees[0]?.type === "INTERNAL_INDIRECT" && (
+                  <motion.div
+                    style={{
+                      borderRadius: "50%",
+                      cursor: "pointer",
+                      width: "18px",
+                      height: "18px",
+                    }}
+                    animate={{
+                      scale: [1, 1.1, 1.1, 1, 1],
+                    }}
+                    transition={{
+                      duration: 0.5,
+                      ease: "easeIn",
+                      times: [0, 0.2, 0.8, 1],
+                      repeat: Infinity,
+                      repeatDelay: 0.5,
+                    }}
+                    onClick={() => setIsOpenModal(true)}
+                  >
+                    <ExclamationIcon
+                      stroke="#ffc107"
+                      fill="none"
+                      width={18}
+                      height={18}
+                    />
+                  </motion.div>
+                )}
+                <div className="mx-2">
+                  {!feeCost && "-"}
+                  {feeCost && feeCost}
+                  {" معادل "}
+                  {!feeAmount && "-"}
+                  {feeAmount &&
+                    (feeWithDiscount ? (
+                      <>
+                        <s>{feeAmount}</s> {feeWithDiscount}
+                      </>
+                    ) : (
+                      feeAmount
+                    ))}
+                </div>
               </td>
               <td className="text-center" data-th="مبلغ نهایی دریافت">
                 {finalAmount === null ? "-" : finalAmount}
@@ -213,6 +242,20 @@ export default function WageTable({
           )}
         </tbody>
       </Table>
+
+      <Dialog
+        isOpen={isOpenModal}
+        onClose={() => setIsOpenModal(false)}
+        title="توضیحات کارمزد معامله"
+      >
+        <p>
+          کاربر گرامی، در نظر داشته باشید امکان تبدیل چندباره دارایی (که یک طرف
+          معامله فیات دیجیتال باشد) برای کاهش کارمزد در آرسونیکس وجود ندارد.
+        </p>
+        <p className="text-center mt-5">
+          تا سقف {"654 تتر "} کارمزد معاملاتی شما {"2.5%"} می باشد.
+        </p>
+      </Dialog>
     </div>
   );
 }
