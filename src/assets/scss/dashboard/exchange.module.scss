@@ -324,6 +324,13 @@
       transition: all 180ms ease-in-out;
     }
   }
+  &__dialog {
+    width: 550px !important;
+    height: 100% !important;
+    margin: auto !important;
+    display: flex !important;
+    align-items: center !important;
+  }
 }
 
 @media screen and (max-width: 767px) {

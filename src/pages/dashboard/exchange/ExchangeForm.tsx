@@ -26,10 +26,10 @@ import { convertText, persianToEnglishNumbers } from "helpers";
 import { currencyOptions } from "components/Input/CurrencyInput/SelectCurrency/constant";
 import { isEmpty } from "lodash";
 import { useWalletsQuery } from "store/api/wallet-management";
+import ExchangeIcon from "components/Icons/ExchangeIcon";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
 import buy from "assets/scss/dashboard/buy-sell.module.scss";
-import ExchangeIcon from "components/Icons/ExchangeIcon";
 
 type Props = {
   setIsOpenDialog: React.Dispatch<
@@ -450,6 +450,10 @@ export default function ExchangeForm({ setIsOpenDialog }: Props) {
           <Row>
             <Col xs={12}>
               <WageTable
+                wallet={
+                  wallets &&
+                  wallets.find((w) => w.currencyCode === source.currency)
+                }
                 sourceStock={sourceStock}
                 isLoading={isLoadingSwap || isLoadingReverseSwap}
                 sourceCode={source.currency}
