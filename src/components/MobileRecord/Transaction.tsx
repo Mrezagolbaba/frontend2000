@@ -34,7 +34,7 @@ const Transaction = ({ record, id }: Props) => {
           <div className={transaction__data__detail}>
             <div
               className={title}
-            >{`${record.type === "DEPOSIT" ? "واریز" : "برداشت"} ${renderStatus(record.status).label}`}</div>
+            >{renderStatus(record.status).label}</div>
             <div className={amount}>
               <span>
                 {normalizeAmount(record.amount, record.currencyCode, true)}
