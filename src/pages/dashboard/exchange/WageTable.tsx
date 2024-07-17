@@ -117,9 +117,8 @@ export default function WageTable({
   ]);
 
   const findShare = () => {
-    const share = Object.values(wallet.meta.share)?.[0] as any;
-    console.log(share?.balance);
-
+    const share =
+      wallet?.meta?.share && (Object.values(wallet?.meta?.share)?.[0] as any);
     return normalizeAmount(share?.balance, sourceCode, true);
   };
 
