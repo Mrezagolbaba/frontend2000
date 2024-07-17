@@ -159,7 +159,7 @@ export const StatusHandler = ({ status }: { status: TransactionStatus }) => {
       return <span className="text-info">در حال پردازش</span>;
     case "REFUND":
       return <span className="text-warning"> عودت</span>;
-    case "Waited_to_be_withdrew":
+    case "WAITED_TO_BE_WITHDREW":
       return <span className="text-info"> در انتظار پرداخت</span>;
     case "DRAFT":
     default:
