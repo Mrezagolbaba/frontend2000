@@ -460,6 +460,8 @@ export const renderStatus = (
       return { badgeName: "info", label: "در حال پردازش" };
     case "REFUND":
       return { badgeName: "warning", label: "عودت" };
+    case "Waited_to_be_withdrew":
+      return { badgeName: "info", label: "در انتظار پرداخت" };
     case "DRAFT":
     default:
       return { badgeName: "dark", label: "پیش نویس" };
