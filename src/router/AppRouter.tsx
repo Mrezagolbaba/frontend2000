@@ -26,7 +26,9 @@ export default function AppRouter() {
   useEffect(() => {
     document.title = getTitlePage(location.pathname);
   }, [location.pathname]);
+
   return useRoutes([
+    { path: ".", element: <Navigate to="/" /> },
     {
       path: "/",
       children: [
