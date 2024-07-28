@@ -3,12 +3,14 @@ import {
   SetStateAction,
   useCallback,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 import { CurrencyCode } from "types/wallet";
-import { Table } from "reactstrap";
+import { Button, Col, Row, Table } from "reactstrap";
 import { convertText, normalizeAmount } from "helpers";
+import ExclamationIcon from "components/Icons/ExclamationIcon";
+import { motion } from "framer-motion";
+import Dialog from "components/Dialog";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
 
@@ -20,8 +22,10 @@ type Props = {
   setFeeCurrencyCode: Dispatch<SetStateAction<CurrencyCode>>;
   isLoading: boolean;
   sourceStock: string;
+  wallet: any;
 };
 export default function WageTable({
+  wallet,
   sourceStock,
   data,
   setFeeCurrencyCode,
@@ -35,6 +39,7 @@ export default function WageTable({
   const [feeAmount, setFeeAmount] = useState<string | null>(null);
   const [feeWithDiscount, setFeeWithDiscount] = useState<string | null>(null);
   const [finalAmount, setFinalAmount] = useState<string | null>(null);
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   // ==============|| Handlers ||================= //
   const handleDetails = useCallback(
@@ -89,11 +94,7 @@ export default function WageTable({
           ),
         );
       setFinalAmount(
-        normalizeAmount(
-          feeTemp.toString(),
-          destinationCode,
-          true,
-        ),
+        normalizeAmount(feeTemp.toString(), destinationCode, true),
       );
     },
     [data, destinationCode, feeCurrencyCode],
@@ -114,6 +115,12 @@ export default function WageTable({
     setFeeCurrencyCode,
     sourceStock,
   ]);
+
+  const findShare = () => {
+    const share =
+      wallet?.meta?.share && (Object.values(wallet?.meta?.share)?.[0] as any);
+    return normalizeAmount(share?.balance, sourceCode, true);
+  };
 
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
@@ -192,19 +199,50 @@ export default function WageTable({
                   </div>
                 </fieldset>
               </td>
-              <td className="text-center" data-th="مبلغ کارمزد">
-                {!feeCost && "-"}
-                {feeCost && feeCost}
-                {" معادل "}
-                {!feeAmount && "-"}
-                {feeAmount &&
-                  (feeWithDiscount ? (
-                    <>
-                      <s>{feeAmount}</s> {feeWithDiscount}
-                    </>
-                  ) : (
-                    feeAmount
-                  ))}
+              <td className="text-center d-flex flex-row" data-th="مبلغ کارمزد">
+                {data?.transactions[0]?.fees[0]?.type ===
+                  "INTERNAL_INDIRECT" && (
+                  <motion.div
+                    style={{
+                      borderRadius: "50%",
+                      cursor: "pointer",
+                      width: "18px",
+                      height: "18px",
+                    }}
+                    animate={{
+                      scale: [1, 1.1, 1.1, 1, 1],
+                    }}
+                    transition={{
+                      duration: 0.5,
+                      ease: "easeIn",
+                      times: [0, 0.2, 0.8, 1],
+                      repeat: Infinity,
+                      repeatDelay: 0.5,
+                    }}
+                    onClick={() => setIsOpenModal(true)}
+                  >
+                    <ExclamationIcon
+                      stroke="#ffc107"
+                      fill="none"
+                      width={18}
+                      height={18}
+                    />
+                  </motion.div>
+                )}
+                <div className="mx-2">
+                  {!feeCost && "-"}
+                  {feeCost && feeCost}
+                  {" معادل "}
+                  {!feeAmount && "-"}
+                  {feeAmount &&
+                    (feeWithDiscount ? (
+                      <>
+                        <s>{feeAmount}</s> {feeWithDiscount}
+                      </>
+                    ) : (
+                      feeAmount
+                    ))}
+                </div>
               </td>
               <td className="text-center" data-th="مبلغ نهایی دریافت">
                 {finalAmount === null ? "-" : finalAmount}
@@ -213,6 +251,39 @@ export default function WageTable({
           )}
         </tbody>
       </Table>
+
+      <Dialog
+        classNameDialog={exchange.wage__dialog}
+        isOpen={isOpenModal}
+        onClose={() => setIsOpenModal(false)}
+        title="توضیحات کارمزد معامله"
+      >
+        <Row>
+          <Col xs={12}>
+            <p>
+              کاربر گرامی، در نظر داشته باشید امکان تبدیل چندباره دارایی (که یک
+              طرف معامله فیات دیجیتال باشد) برای کاهش کارمزد در آرسونیکس وجود
+              ندارد.
+            </p>
+            <p
+              style={{
+                fontWeight: "bold",
+              }}
+              className="text-center mt-5"
+            >
+              تا سقف {findShare()} کارمزد معاملاتی شما {feeCost && feeCost} می
+              باشد.
+            </p>
+          </Col>
+        </Row>
+        <Row className="mt-2">
+          <Col xs={12} className="d-flex flex-row justify-content-end">
+            <Button color="primary" onClick={() => setIsOpenModal(false)}>
+              بستن
+            </Button>
+          </Col>
+        </Row>
+      </Dialog>
     </div>
   );
 }

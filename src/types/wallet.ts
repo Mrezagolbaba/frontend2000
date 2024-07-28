@@ -16,7 +16,7 @@ export type TransactionStatus =
   | "FAILED"
   | "EXPIRED"
   | "CANCELED"
-  | "Waited_to_be_withdrew"
+  | "WAITED_TO_BE_WITHDREW"
   | "REFUND";
 
 export type ProviderType =

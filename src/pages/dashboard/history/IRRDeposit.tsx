@@ -10,8 +10,7 @@ import { useTransactionsQuery } from "store/api/wallet-management";
 function IRRDeposit({ limit }: { limit?: number | undefined }) {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isFetching, isSuccess } = useTransactionsQuery({
-    filter: [`currencyCode||eq||IRR`, "status||$ne||DRAFT"],
-    or: ["type||eq||DEPOSIT", "type||eq||PROMOTION"],
+    filter: ["currencyCode||eq||IRR", "type||eq||DEPOSIT"],
     sort: "createdAt,DESC",
     limit,
   });
@@ -106,9 +105,7 @@ function IRRDeposit({ limit }: { limit?: number | undefined }) {
       isLoading={isLoading || isFetching}
       columns={columns}
       noDataText="اولین تراکنش تومان با آرسونیکس را تجربه کنید."
-      mobileView={(row) => (
-        <Transaction record={row.original} id={row.id} />
-      )}
+      mobileView={(row) => <Transaction record={row.original} id={row.id} />}
     />
   );
 }

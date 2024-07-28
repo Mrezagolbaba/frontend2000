@@ -9,6 +9,7 @@ type Props = {
   hasCloseButton?: boolean;
   children: React.ReactNode;
   size?: "xs" | "sm" | "lg" | "md" | "xl";
+  classNameDialog?: string
 };
 
 function Dialog({
@@ -18,10 +19,11 @@ function Dialog({
   hasCloseButton = true,
   children,
   size = "lg",
+  classNameDialog
 }: Props) {
   return (
     <Modal
-      className={dialog["modal"]}
+      className={`${dialog["modal"]} ${classNameDialog ? classNameDialog : ""}`}
       isOpen={isOpen}
       toggle={onClose}
       size={size}
