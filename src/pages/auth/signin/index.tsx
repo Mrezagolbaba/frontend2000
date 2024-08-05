@@ -212,7 +212,11 @@ export default function LoginPage() {
                   <Col xs={12}>
                     <Turnstile
                       siteKey="0x4AAAAAAAcxFkE7R0BYN7cc"
-                      options={{ theme: "light", appearance: "always" }}
+                      options={{
+                        theme: "light",
+                        appearance: "always",
+                        size: "invisible",
+                      }}
                     />
                   </Col>
                 </Row>
