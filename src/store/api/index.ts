@@ -5,7 +5,6 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
 import { clearUser } from "store/reducers/features/user/userSlice";
 import { getRefToken } from "helpers";
-import { isEmpty } from "lodash";
 import { setLogin, setLogout } from "store/reducers/jwtAuth";
 import { setSession } from "contexts/JWTContext";
 
