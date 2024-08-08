@@ -2,18 +2,19 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useWalletsQuery } from "store/api/wallet-management";
 import WithdrawCrypto from "./Crypto/Withdraw";
 import WithdrawFiat from "./Fiat/Withdraw";
-import { Button, Card, CardBody } from "reactstrap";
-
-import wallet from "assets/scss/dashboard/wallet.module.scss";
+import { Card, CardBody } from "reactstrap";
 import IRTWithdraw from "./Rial/Withdraw";
 
+import wallet from "assets/scss/dashboard/wallet.module.scss";
+import button from "assets/scss/components/button.module.scss";
+
 export default function Withdraw() {
-  const { currency } = useParams();
+  const { type } = useParams();
   const navigate = useNavigate();
   const { data, isLoading, isFetching } = useWalletsQuery();
 
   const renderWithdraw = () => {
-    switch (currency) {
+    switch (type) {
       case "crypto":
         return (
           <WithdrawCrypto
@@ -64,31 +65,30 @@ export default function Withdraw() {
     <Card>
       <CardBody>
         <div className={wallet["button-section"]}>
-          <Button
-            color={currency === "irt" ? "primary" : "outline"}
+          <button
+            className={`${button["arsonex-btn"]} ${type === "irt" ? button["primary"] : button["primary-light"]}`}
             onClick={() =>
-              currency !== "irt" && navigate("/dashboard/wallet/withdraw/irt")
+              type !== "irt" && navigate("/dashboard/wallet/withdraw/irt")
             }
           >
             برداشت تومان
-          </Button>
-          <Button
-            color={currency === "crypto" ? "primary" : "outline"}
+          </button>
+          <button
+            className={`${button["arsonex-btn"]} ${type === "crypto" ? button["primary"] : button["primary-light"]}`}
             onClick={() =>
-              currency !== "crypto" &&
-              navigate("/dashboard/wallet/withdraw/crypto")
+              type !== "crypto" && navigate("/dashboard/wallet/withdraw/crypto")
             }
           >
             برداشت کوین
-          </Button>
-          <Button
-            color={currency === "fiat" ? "primary" : "outline"}
+          </button>
+          <button
+            className={`${button["arsonex-btn"]} ${type === "fiat" ? button["primary"] : button["primary-light"]}`}
             onClick={() =>
-              currency !== "fiat" && navigate("/dashboard/wallet/withdraw/fiat")
+              type !== "fiat" && navigate("/dashboard/wallet/withdraw/fiat")
             }
           >
             برداشت فیات دیجیتال
-          </Button>
+          </button>
         </div>
         <div className={wallet["horizontal-divider"]} />
         <div className={wallet["content-section"]}>{renderWithdraw()}</div>
