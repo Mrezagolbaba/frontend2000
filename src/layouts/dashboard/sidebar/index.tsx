@@ -1,7 +1,7 @@
 import LogoArsonex from "assets/img/logo-arsonex.png";
 import Market from "assets/img/icons/chart-simple.svg";
 import useAuth from "hooks/useAuth";
-import { Button, Nav, NavItem } from "reactstrap";
+import { Button, Collapse, Nav, NavItem } from "reactstrap";
 import { CiEdit } from "react-icons/ci";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { TbPower } from "react-icons/tb";
@@ -16,6 +16,7 @@ import MarketsIcon from "components/Icons/MarketsIcon";
 import ExchangeIcon from "components/Icons/ExchangeIcon";
 import InviteFriendsIcon from "components/Icons/InviteFriendsIcon";
 import TradeIcon from "components/Icons/TradeIcon";
+import ArrowIcon from "components/Icons/ArrowIcon";
 
 type Props = {
   isOpen: boolean;
@@ -31,6 +32,7 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
 
   // ==============|| States ||================= //
   const [activeItem, setActiveItem] = useState("");
+  const [isOpenCollapse, setIsOpenCollapse] = useState(-1);
 
   // ==============|| Variables ||================= //
   const items = [
@@ -45,6 +47,23 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
       path: "/dashboard/wallet",
       label: "کیف پول",
       icon: <WalletIcon fill="none" stroke="#03041b" />,
+      children: [
+        {
+          id: "deposit",
+          path: "/dashboard/wallet/deposit",
+          label: "واریز",
+        },
+        {
+          id: "withdraw",
+          path: "/dashboard/wallet/withdraw",
+          label: "برداشت",
+        },
+        {
+          id: "bank-accounts",
+          path: "/dashboard/profile",
+          label: "حساب های بانکی",
+        },
+      ],
     },
     {
       id: "exchange",
@@ -118,9 +137,9 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
           }`}
           vertical
         >
-          {items.map((item) => (
+          {items.map((item, key) => (
             <NavItem
-              key={item.path}
+              key={key}
               className={` ${dashboard.sidebar__navbar__item} ${
                 activeItem === item.path ? dashboard.active : ""
               }`}
@@ -130,6 +149,40 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
                 <span className="icon">{item.icon}</span>
                 <span>{item.label}</span>
               </Link>
+              {item.children && item.children.length > 0 && (
+                <>
+                  <span
+                    className={`icon ${
+                      isOpenCollapse === key ? dashboard["active-sub"] : ""
+                    }`}
+                    onClick={() =>
+                      isOpenCollapse !== key
+                        ? setIsOpenCollapse(key)
+                        : setIsOpenCollapse(-1)
+                    }
+                  >
+                    <ArrowIcon />
+                  </span>
+                  <Collapse
+                    className={dashboard.submenu}
+                    isOpen={isOpenCollapse === key}
+                  >
+                    {item.children.map((sub, index) => (
+                      <NavItem
+                        key={index}
+                        className={` ${dashboard.sidebar__navbar__item} ${
+                          activeItem === sub.path ? dashboard.active : ""
+                        }`}
+                        onClick={() => handleClick(sub.path)}
+                      >
+                        <Link to={sub.path}>
+                          <span>{sub.label}</span>
+                        </Link>
+                      </NavItem>
+                    ))}
+                  </Collapse>
+                </>
+              )}
             </NavItem>
           ))}
           <NavItem

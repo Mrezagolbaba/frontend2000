@@ -268,8 +268,19 @@
       width: 100%;
       transition: all 200ms ease-out;
       & > a {
-        font-size: clamp(0.8rem, 1vw, 1rem);
-        & > span {
+        position: relative;
+        &:before {
+          display: block;
+          width: 3px;
+          height: 22px;
+          border-radius: 2px;
+          background-color: #111bff;
+          position: absolute;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+        span {
           padding: 0 5px;
           svg {
             width: 20px;
@@ -277,36 +288,59 @@
           }
         }
       }
-      &:before {
-        display: block;
-        width: 3px;
-        height: 22px;
-        border-radius: 2px;
-        background-color: #111bff;
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
+      & > span {
+        padding: 0 5px;
+        cursor: pointer;
+        svg {
+          fill: #03041b;
+          width: 14px;
+          height: 14px;
+          transform: rotate(180deg);
+          transition: all ease 200ms;
+        }
+        &.active-sub svg {
+          transform: rotate(0);
+        }
       }
       &.active {
-        background-color: rgba(17, 27, 255, 0.1);
-        border-radius: 10px;
-
-        &:before {
-          content: "";
-        }
-        a {
+        & > a {
+          border-radius: 10px;
           color: #111bff;
           font-weight: 500;
+          &:before {
+            content: "";
+          }
           svg {
             stroke: #111bff !important;
           }
         }
+        & > span {
+          svg {
+            fill: #111bff;
+          }
+        }
+      }
+      & > span {
+        position: absolute;
+        top: 28px;
+        left: 10px;
+        svg {
+          width: 12px;
+          height: 12px;
+        }
       }
       &.item-logout {
         margin-top: auto;
-        &:hover a {
-          color: #ff1f11;
+        svg {
+          stroke: var(--bs-danger);
+        }
+        &:hover {
+          a {
+            color: #ff1f11;
+          }
+          svg {
+            stroke: var(--bs-white);
+          }
         }
       }
       a {
@@ -318,6 +352,13 @@
       }
       .icon {
         margin-left: 10px;
+      }
+      .submenu {
+        padding-right: 50px;
+        a {
+          padding-right: 10px;
+          font-size: 0.8rem;
+        }
       }
     }
   }
@@ -453,7 +494,6 @@
     &__wrapper {
       background-color: #fff;
       width: 100vw;
-      
     }
     ul {
       padding: 0;
