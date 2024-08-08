@@ -1,21 +1,16 @@
-import Deposit from "./Deposit";
-import Dialog from "components/Dialog";
-import Withdraw from "./Withdraw";
 import irIcon from "assets/img/coins/Toman.svg";
 import { Button } from "reactstrap";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 
 type Props = {
   balance: string;
   availableBalance: string;
-  stock: string;
 };
 
-export default function IRRWallet({ balance, availableBalance, stock }: Props) {
-  const [isOpenDepositForm, setIsOpenDepositForm] = useState<boolean>(false);
-  const [isOpenWithdraw, setIsOpenWithdraw] = useState<boolean>(false);
+export default function IRRWallet({ balance, availableBalance }: Props) {
+  const navigate = useNavigate();
 
   return (
     <>
@@ -36,38 +31,16 @@ export default function IRRWallet({ balance, availableBalance, stock }: Props) {
           )}
         </div>
         <div className={wallet.wallet__item__actions}>
-          <a
-            onClick={() => {
-              setIsOpenWithdraw(true);
-            }}
-          >
-            برداشت
-          </a>
+          <Link to="/dashboard/wallet/withdraw/irt">برداشت</Link>
           <Button
             color="primary"
             outline
-            onClick={() => setIsOpenDepositForm(true)}
+            onClick={() => navigate("/dashboard/wallet/deposit/irt")}
           >
             واریز
           </Button>
         </div>
       </div>
-      <Dialog
-        title="واریز تومان"
-        isOpen={isOpenDepositForm}
-        onClose={() => setIsOpenDepositForm(false)}
-        hasCloseButton
-      >
-        <Deposit onClose={() => setIsOpenDepositForm(false)} />
-      </Dialog>
-      <Dialog
-        title="برداشت تومان"
-        isOpen={isOpenWithdraw}
-        onClose={() => setIsOpenWithdraw(false)}
-        hasCloseButton
-      >
-        <Withdraw stock={stock} onClose={() => setIsOpenWithdraw(false)} />
-      </Dialog>
     </>
   );
 }
