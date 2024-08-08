@@ -13,7 +13,7 @@ import {
 } from "store/api/wallet-management";
 import { useBankAccountsQuery } from "store/api/profile-management";
 import Notify from "components/Notify";
-import { ibanMAsk, normalizeAmount } from "helpers";
+import { ibanMAsk, normalizeAmount, persianToEnglishNumbers } from "helpers";
 import BanksWrapper from "components/BanksWrapper";
 import lirFlag from "assets/img/coins/lira.png";
 import turkeyFlag from "assets/img/icons/flag-turkey.png";
@@ -254,9 +254,10 @@ export default function WithdrawFiat({ stock, onSuccessWithdraw }: Props) {
                         thousandSeparator=","
                         name={name}
                         value={value}
-                        onChange={({ target }) => {
+                        onChange={(e: any) => {
                           clearErrors(name);
-                          setValue(name, target.value);
+                          const amountTemp = e.target.value.replaceAll(",", "");
+                          setValue(name, persianToEnglishNumbers(amountTemp));
                         }}
                         // decimalsLimit={2}
                         // hasError={Boolean(errors?.[name])}

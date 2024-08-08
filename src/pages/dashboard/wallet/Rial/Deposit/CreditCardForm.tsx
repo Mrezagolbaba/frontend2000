@@ -11,7 +11,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useBankAccountsQuery } from "store/api/profile-management";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { normalizeAmount } from "helpers";
+import { normalizeAmount, persianToEnglishNumbers } from "helpers";
 import { IBankAccounts } from "types/banks";
 import BanksWrapper from "components/BanksWrapper";
 import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
@@ -209,11 +209,9 @@ const CreditCardForm = () => {
                     thousandSeparator=","
                     name={name}
                     value={value}
-                    onChange={({ target }) => {
-                      console.log(target.value);
-
-                      // const amountTemp = target.value.replaceAll(",", "");
-                      setValue(name, target.value);
+                    onChange={(e: any) => {
+                      const amountTemp = e.target.value.replaceAll(",", "");
+                      setValue(name, persianToEnglishNumbers(amountTemp));
                     }}
                     placeholder="تومان"
                     // hasError={Boolean(errors?.[name])}
