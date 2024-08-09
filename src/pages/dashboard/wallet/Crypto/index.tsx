@@ -1,27 +1,18 @@
-import DepositCrypto from "./Deposit";
 import Dialog from "components/Dialog";
-import WithdrawCrypto from "./Withdraw";
 import tetherIcon from "assets/img/coins/tether.svg";
 import { Button } from "reactstrap";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { AlertSuccess } from "components/AlertWidget";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
-import { AlertSuccess } from "components/AlertWidget";
 
 type Props = {
   balance: string;
   availableBalance: string;
-  stock: string;
 };
-export default function USDTWallet({
-  balance,
-  availableBalance,
-  stock,
-}: Props) {
+export default function USDTWallet({ balance, availableBalance }: Props) {
   // ==============|| States ||================= //
-  const [isOpenDeposit, setIsOpenDeposit] = useState(false);
-  const [isOpenWithdraw, setIsOpenWithdraw] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
   // ==============|| Hooks ||================= //
@@ -47,11 +38,11 @@ export default function USDTWallet({
           )}
         </div>
         <div className={wallet.wallet__item__actions}>
-          <a onClick={() => setIsOpenWithdraw(true)}>برداشت</a>
+          <Link to="/dashboard/wallet/withdraw/crypto">برداشت</Link>
           <Button
             color="primary"
             outline
-            onClick={() => setIsOpenDeposit(true)}
+            onClick={() => navigate("/dashboard/wallet/deposit/crypto")}
           >
             واریز
           </Button>
@@ -59,40 +50,15 @@ export default function USDTWallet({
             color="primary"
             outline
             onClick={() =>
-              navigate("/dashboard/exchange", {
-                state: {
-                  source: { currency: "USDT" },
-                  destination: { currency: "IRR" },
-                },
-              })
+              navigate(
+                "/dashboard/exchange?sourceCurrency=USDT&destinationCurrency=IRR",
+              )
             }
           >
             معامله
           </Button>
         </div>
       </div>
-      <Dialog
-        isOpen={isOpenDeposit}
-        title="واریز تتر"
-        onClose={() => setIsOpenDeposit(false)}
-        hasCloseButton
-      >
-        <DepositCrypto
-          currency="USDT"
-          onClose={() => setIsOpenDeposit(false)}
-        />
-      </Dialog>
-      <Dialog
-        isOpen={isOpenWithdraw}
-        title="برداشت تتر"
-        onClose={() => setIsOpenWithdraw(false)}
-      >
-        <WithdrawCrypto
-          stock={Number(stock)}
-          currency="USDT"
-          onSuccessWithdraw={() => setIsOpenWithdraw(false)}
-        />
-      </Dialog>
       <Dialog
         title=""
         size="md"

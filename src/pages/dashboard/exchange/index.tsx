@@ -1,4 +1,3 @@
-import Dialog from "components/Dialog";
 import {
   CardTitle,
   Card,
@@ -11,17 +10,11 @@ import {
   AccordionHeader,
   AccordionItem,
 } from "reactstrap";
-
 import { useState } from "react";
-import DepositCrypto from "pages/dashboard/wallet/Crypto/Deposit";
-
 import ExchangeForm from "./ExchangeForm";
-import DepositFiat from "../wallet/Fiat/Deposit";
-import Deposit from "../wallet/Rial/Deposit";
-import { CurrencyCode } from "types/wallet";
+import { Link } from "react-router-dom";
 
 import exchange from "assets/scss/dashboard/exchange.module.scss";
-import { Link } from "react-router-dom";
 
 const accordionData = [
   {
@@ -62,11 +55,6 @@ const accordionData = [
   },
 ];
 export default function Exchange() {
-  const [configDialog, setConfigdialog] = useState<{
-    isOpen: boolean;
-    currency: CurrencyCode;
-  }>({ isOpen: false, currency: "IRR" });
-
   const [open, setOpen] = useState("");
   const toggle = (id) => {
     if (open === id) {
@@ -92,15 +80,12 @@ export default function Exchange() {
     </AccordionItem>
   ));
 
-  const initDialog = () => {
-    setConfigdialog({ isOpen: false, currency: "IRR" });
-  };
 
   return (
     <section className="page page-wallet">
       <Row className="g-4">
         <Col xs={12} xxl={8} className="h-100">
-          <ExchangeForm setIsOpenDialog={setConfigdialog} />
+          <ExchangeForm />
         </Col>
         <Col xs={12} xxl={4}>
           <Card className="h-100">
@@ -126,26 +111,6 @@ export default function Exchange() {
           </Card>
         </Col>
       </Row>
-      <Dialog
-        title={
-          configDialog.currency === "USDT"
-            ? "واریز تتر"
-            : configDialog.currency === "TRY"
-              ? "واریز لیر"
-              : "واریز تومان"
-        }
-        isOpen={configDialog.isOpen}
-        onClose={() => initDialog()}
-        hasCloseButton
-      >
-        {configDialog.currency === "USDT" ? (
-          <DepositCrypto onClose={() => initDialog()} currency="USDT" />
-        ) : configDialog.currency === "TRY" ? (
-          <DepositFiat onClose={() => initDialog()} />
-        ) : (
-          <Deposit />
-        )}
-      </Dialog>
     </section>
   );
 }
