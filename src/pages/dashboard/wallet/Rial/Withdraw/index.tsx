@@ -19,6 +19,7 @@ import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import button from "assets/scss/components/button.module.scss";
+import { AlertDanger, AlertInfo, AlertWarning } from "components/AlertWidget";
 
 type WithdrawType = {
   iban: string;
@@ -292,36 +293,29 @@ export default function IRTWithdraw({ stock }: Props) {
       </div>
       <div className={wallet.info}>
         {!secondTierVerified && (
-          <div className={`${wallet.info__box} ${wallet["info-box"]}`}>
-            برای افزایش میزان برداشت، احراز هویت سطح دو را تکمیل نمایید.
-          </div>
+          <AlertInfo
+            hasIcon
+            text="برای افزایش میزان برداشت، احراز هویت سطح دو را تکمیل نمایید."
+          />
         )}
-        {!hasAccount ? (
+        {hasAccount && (
           <>
-            <div
-              className={`${wallet.info__box} ${wallet["info-box"]}`}
-            >{`شما هیچ حسابی به پروفایل خود اضافه نکرده‌اید، ابتدا یک حساب به نام  ${firstName} ${lastName} به پروفایل خود اضافه کنید.`}</div>
-            <div className="mt-3 text-center">
-              <button
-                onClick={() => navigate("/dashboard/profile")}
-                type="button"
-                className={`${button["arsonex-btn"]} ${button["primary-outline"]} ${button["full-width"]} mb-2`}
-              >
-                افزودن حساب بانکی
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className={`${wallet.info__box} ${wallet["info-box"]}`}>
-              تسویه حساب با بانک‌های سامان، صادرات، کشاورزی، پارسیان، سپه، شهر،
-              ملی، اقتصادنوین، آینده، پاسارگارد، ملت و تجارت سریع‌تر انجام
-              می‌شود.
-            </div>
-            <div className={`${wallet.info__box} ${wallet["info-box"]}`}>
-              تمامی درخواست‌ها بعد از ثبت برداشت وارد چرخه پایا شده و در اولین
-              سیکل یا سیکل بعدی روز‌های کاری برای شما واریز می‌شود.
-            </div>
+            <AlertDanger
+              hasIcon
+              text="از واریز هرگونه وجه به حساب افراد ناشناس که از طریق آگهی‌های درآمدزایی و مشابه شما را پیدا کرده‌اند، خودداری نمایید. این روش کلاهبرداری است و در صورت وقوع جرم، مسئولیت آن بر عهده شما خواهد بود."
+            />
+            <AlertInfo
+              hasIcon
+              text="حداکثر مبلغ قابل برداشت روزانه از هر حساب ۱,۰۰۰,۰۰۰,۰۰۰ تومان می‌باشد."
+            />
+            <AlertInfo
+              hasIcon
+              text="سقف هر تراکنش برداشت 100,000,000 تومان می‌باشد."
+            />
+            <AlertWarning
+              hasIcon
+              text="در صورتی که امکان واریز حساب به حساب وجود داشته باشد واریزها به‌طور فوری انجام می‌شود؛ در غیر این صورت، طبق سیکل پایا و در روزهای کاری، واریزها در زمان‌های ۰۳:۴۵ صبح، ۱۰:۴۵ صبح، ۱۳:۴۵ عصر ،۱۸:۴۵ عصر انجام می‌گردد. درخواست‌هایی که در روزهای تعطیل ثبت شوند در اولین سیکل کاری پردازش خواهند شد."
+            />
           </>
         )}
       </div>

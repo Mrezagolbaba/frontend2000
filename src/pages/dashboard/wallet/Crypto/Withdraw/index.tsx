@@ -20,6 +20,7 @@ import WithdrawOTP from "components/WithdrawOTP";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import button from "assets/scss/components/button.module.scss";
+import { AlertDanger, AlertInfo, AlertWarning } from "components/AlertWidget";
 
 type CryptoFormType = {
   network: string;
@@ -308,13 +309,18 @@ const WithdrawCrypto = ({
         </div>
       </div>
       <div className={wallet.info}>
-        <div className={`${wallet.info__box} ${wallet["danger-box"]}`}>
-          در هنگام برداشت به آدرس وارد شده دقت نمایید در صورت برداشت اشتباه ارز
-          دیجیتال از دست خواهد رفت.
-        </div>
-        <div className={`${wallet.info__box} ${wallet["info-box"]}`}>
-          انتقال داخلی (آرسونیکس به آرسونیکس) هیچ کارمزدی ندارد.
-        </div>
+        <AlertDanger
+          hasIcon
+          text="از واریز هرگونه ارز دیجیتال به کیف پول افراد ناشناس که از طریق آگهی‌های درآمدزایی و مشابه شما را پیدا کرده‌اند، خودداری نمایید. این روش کلاهبرداری است و در صورت وقوع جرم، مسئولیت آن بر عهده شما خواهد بود."
+        />
+        <AlertWarning
+          hasIcon
+          text="درخواست‌ها ابتدا توسط آرسونیکس بررسی و تأیید می‌شود و سپس تایید می‌شود؛ بنابراین، ممکن است این فرآیند زمان‌بر باشد."
+        />
+        <AlertInfo
+          hasIcon
+          text="کارمزد برداشت مربوط به هزینه ثبت تراکنش در شبکه ارز است و آرسونیکس در این هزینه نقشی ندارد."
+        />
       </div>
     </>
   );
