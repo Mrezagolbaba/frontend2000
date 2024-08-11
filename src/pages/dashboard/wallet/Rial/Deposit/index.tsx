@@ -6,6 +6,7 @@ import { useAppSelector } from "store/hooks";
 import { useGetDebitAccountQuery } from "store/api/profile-management";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
+import { AlertDanger, AlertInfo, AlertWarning } from "components/AlertWidget";
 
 export default function IRTDeposit() {
   // ==============|| States ||================= //
@@ -76,36 +77,75 @@ export default function IRTDeposit() {
         <div className={wallet["form-wrapper"]}>{renderForm()}</div>
       </div>
       <div className={wallet.info}>
-        <div className={`${wallet.info__box} ${wallet["danger-box"]}`}>
-          لطفاً در صورت استفاده از فیلترشکن، آن را خاموش کنید.به دستور پلیس فتا،
-          برای واریز ریالی IP شما باید کشور ایران باشد.
-        </div>
         {activeTab === "1" && data && data.length > 0 && (
-          <div className={`${wallet.info__box} ${wallet["info-box"]}`}>
-            می توانید برای تغییر حساب انتخاب شده، از قابلیت قطع دسترسی به حساب و
-            تنظیم مجدد برداشت مستقیم استفاده کنید.
-          </div>
+          <AlertInfo
+            hasIcon
+            text="می توانید برای تغییر حساب انتخاب شده، از قابلیت قطع دسترسی به حساب و تنظیم مجدد برداشت مستقیم استفاده کنید."
+          />
+        )}
+        {activeTab === "1" && (
+          <>
+            <AlertWarning
+              hasIcon
+              text="لطفاً در صورت استفاده از فیلترشکن، آن را خاموش کنید.به دستور پلیس فتا، برای واریز ریالی IP شما باید کشور ایران باشد."
+            />
+            <AlertInfo
+              hasIcon
+              text="بعد از اتصال می‌توانید دسترسی به حساب را قطع یا حساب جدید دیگری را برای شارژ سریع اضافه کنید."
+            />
+          </>
         )}
         {activeTab === "1" && data && data.length <= 0 && (
-          <div className={`${wallet.info__box} ${wallet["info-box"]}`}>
-            شماره موبایلی که در حساب کاربری آرسونیکس خود وارد کرده اید؛ باید با
-            شماره موبایل حساب بانکی شما یکسان باشد.
-          </div>
+          <AlertInfo
+            hasIcon
+            text="
+            شماره موبایلی که در حساب کاربری آرسونیکس خود وارد کرده اید؛ باید با شماره موبایل حساب بانکی شما یکسان باشد."
+          />
+        )}
+        {activeTab === "2" && data && data.length <= 0 && (
+          <>
+            <AlertWarning
+              hasIcon
+              text="
+            اعلان نارنجی، کاربر گرامی؛ لطفاً با دقت به آدرس صفحه درگاه بانکی توجه فرمایید و تنها پس از اطمینان از ورود به سایت‌های سامانه شاپرک، اطلاعات کارت بانکی خود را وارد نمایید."
+            />
+            <AlertInfo
+              hasIcon
+              text="پیشنهاد آرسونیکس از استفاده از قابلیت شارژ سریع به جای درگاه پرداخت می‌باشد."
+            />
+          </>
+        )}
+
+        {activeTab === "3" && (
+          <AlertInfo
+            hasIcon
+            text="
+            از حساب‌هایی که در پروفایل خود وارد کرده‌اید امکان واریز وجود دارد."
+          />
         )}
         {activeTab === "3" && (
-          <div className={`${wallet.info__box} ${wallet["info-box"]}`}>
-            از حساب‌هایی که در پروفایل خود وارد کرده‌اید امکان واریز وجود دارد.
-          </div>
-        )}
-        {activeTab === "3" && (
-          <div className={`${wallet.info__box} ${wallet["info-box"]}`}>
-            شناسه واریز را در قسمت توضیحات یا شناسه واریز وارد نمایید.
-          </div>
-        )}
-        {activeTab === "3" && (
-          <div className={`${wallet.info__box} ${wallet["info-box"]}`}>
-            تمامی روش‌های پرداخت بجز روش پل مورد تایید می‌باشد.
-          </div>
+          <>
+            <AlertWarning
+              hasIcon
+              text="
+            واریز وجه تنها از طریق روش‌های پایا، ساتنا و حساب به حساب و صرفاً با استفاده از شماره شبای اعلام‌شده و مورد تأیید امکان‌پذیر است. لطفاً توجه داشته باشید که زمان دریافت وجه بسته به روش انتخابی متفاوت خواهد بود. همچنین، از روش‌هایی نظیر پل امکان واریز وجود ندارد."
+            />
+            <AlertWarning
+              hasIcon
+              text="
+لطفاً در هنگام واریز، شناسه واریز را در قسمت مربوطه در همراه بانک یا اینترنت بانک خود وارد نمایید. در غیر این صورت، تراکنش توسط آرسونیکس قابل پیگیری نخواهد بود و پس از گذشت ۷۲ ساعت کاری، مبلغ با کسر کارمزد به حساب شما مسترد خواهد شد."
+            />
+            <AlertInfo
+              hasIcon
+              text="
+            شناسه واریز را در قسمت توضیحات یا شناسه واریز وارد نمایید."
+            />
+            <AlertInfo
+              hasIcon
+              text="
+            تمامی روش‌های پرداخت بجز روش پل مورد تایید می‌باشد."
+            />
+          </>
         )}
       </div>
     </>

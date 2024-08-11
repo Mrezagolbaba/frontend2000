@@ -13,7 +13,7 @@ import {
 } from "store/api/profile-management";
 import BanksWrapper from "components/BanksWrapper";
 import CopyInput from "components/Input/CopyInput";
-import { AlertDanger } from "components/AlertWidget";
+import { AlertDanger, AlertInfo, AlertWarning } from "components/AlertWidget";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import profile from "assets/scss/dashboard/profile.module.scss";
@@ -238,18 +238,21 @@ export default function DepositFiat() {
       </div>
       <div className={wallet.info}>
         {firstNameEn && lastNameEn && (
-          <div className={`${wallet.info__box} ${wallet["danger-box"]}`}>
-            {`در صورت ارسال مبلغ از حسابی بجز ${
+          <AlertDanger
+            hasIcon
+            text={`در صورت ارسال مبلغ از حسابی بجز ${
               firstNameEn + " " + lastNameEn
             }   عودت مبلغ بعد از 72 ساعت با کسر کارمزد بانکی انجام می‌شود.`}
-          </div>
+          />
         )}
-        <div className={`${wallet.info__box} ${wallet["danger-box"]}`}>
-          در هنگام واریز حتما شناسه واریز را در بخش Description یا Aciklama به
-          طور دقیق وارد کنید، در صورت رعایت نکردن این مساله مبلغ به حساب کاربری
-          شما واریز نمی‌شود و بعد از ۷۲ ساعت کاری به حساب شما پس از کسر کارمزد
-          بانکی عودت داده می‌شود.
-        </div>
+        <AlertWarning
+          hasIcon
+          text="در هنگام واریز، حتماً شناسه واریز را به‌طور دقیق در بخش Description یا Aciklama وارد نمایید. در صورت عدم رعایت این نکته، مبلغ به حساب کاربری شما واریز نخواهد شد و پس از ۷۲ ساعت کاری، به حساب شما با کسر کارمزد بانکی مسترد خواهد شد."
+        />
+        <AlertInfo
+          hasIcon
+          text="هیچ محدودیتی از نظر یکسان بودن بانک مبدا و مقصد وجود ندارد؛ به عبارت دیگر، امکان انجام تراکنش‌ها بین حساب‌های بانکی از بانک‌های مختلف وجود دارد و نیازی به هماهنگ بودن بانک مبدا و مقصد نیست."
+        />
       </div>
     </>
     //   )}
