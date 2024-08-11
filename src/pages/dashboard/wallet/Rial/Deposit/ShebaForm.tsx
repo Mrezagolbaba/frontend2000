@@ -190,10 +190,10 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
                 render={() => (
                   <div className={wallet["form-group"]}>
                     <div className={wallet["form-group__label"]}>
-                      <label htmlFor="bank-name">شماره واریز</label>
+                      <label htmlFor="bank-name">شناسه واریز</label>
                     </div>
                     <CopyInput
-                      name="شماره واریز"
+                      name="شناسه واریز"
                       text={depResponse.refCode || ""}
                     />
                     <span className={wallet["form-group__hint"]}>
