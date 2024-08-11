@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAppSelector } from "store/hooks";
+import bankDefault from "assets/img/icons/bankDefault.svg";
 
 type Props = {
   logoPath: string;
@@ -10,7 +11,7 @@ type Props = {
 
 export default function RenderBankItem({ id, name, website, logoPath }: Props) {
   const { token } = useAppSelector((state) => state.auth);
-  const [src, setSrc] = useState("/images/banks/bankDefault.svg");
+  const [src, setSrc] = useState(bankDefault);
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {

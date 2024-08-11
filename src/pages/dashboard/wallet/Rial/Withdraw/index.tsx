@@ -107,8 +107,6 @@ export default function IRTWithdraw({ stock }: Props) {
   useEffect(() => {
     if (isSuccess) {
       const bankList = data.filter((bank) => bank.cardNumber !== null);
-
-      console.log(bankList, hasAccount);
       if (bankList.length <= 0) {
         setHasAccount(false);
       } else {
@@ -167,7 +165,7 @@ export default function IRTWithdraw({ stock }: Props) {
                   render={({ field: { name, value } }) => (
                     <div className={wallet["form-group"]}>
                       <div className={wallet["form-group__label"]}>
-                        <label htmlFor={name}>واریز به شبا</label>
+                        <label htmlFor={name}>شماره شبا</label>
                         <Link to="/dashboard/profile" target="blank">
                           افزودن حساب جدید
                         </Link>
@@ -283,9 +281,9 @@ export default function IRTWithdraw({ stock }: Props) {
                 <button
                   disabled={isLoading || !hasAccount}
                   type="submit"
-                  className={`${button["arsonex-btn"]} ${button["primary-outline"]} ${button["full-width"]} mb-2`}
+                  className={`${button["arsonex-btn"]} ${button["primary"]} ${button["full-width"]} mb-2`}
                 >
-                  برداشت
+                  درخواست برداشت
                 </button>
               </div>
             </div>

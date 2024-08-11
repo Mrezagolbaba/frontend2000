@@ -17,6 +17,7 @@ import BanksWrapper from "components/BanksWrapper";
 import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
+import button from "assets/scss/components/button.module.scss";
 
 type CreditCardForm = {
   accountNumber: string;
@@ -246,28 +247,26 @@ const CreditCardForm = () => {
             />
           </div>
         </div>
-        <div className="mt-5">
-          <div className="d-flex justify-content-evenly flex-row">
-            <Button
-              className="px-5 py-3"
-              color="primary"
-              outline
+        <div>
+          <div className="mt-3 text-center">
+            <button
+              disabled={isLoading}
               type="submit"
-              disabled={isLoading || isSubmitSuccess}
+              className={`${button["arsonex-btn"]} ${button["primary"]} ${button["full-width"]} mb-2`}
             >
-              {isLoading ? <Spinner /> : "انتقال به درگاه پرداخت"}
-            </Button>
+              انتقال به درگاه پرداخت
+            </button>
             {!secondTierVerified && (
-              <Button
-                className="px-5 py-3"
-                color="primary"
+              <button
+                disabled={isLoading}
                 type="button"
                 onClick={() => {
                   navigate("/dashboard/profile#kyc-section");
                 }}
+                className={`${button["arsonex-btn"]} ${button["primary"]} ${button["full-width"]} mb-2`}
               >
                 احراز هویت سطح دو
-              </Button>
+              </button>
             )}
           </div>
         </div>
