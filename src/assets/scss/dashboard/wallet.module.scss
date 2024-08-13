@@ -85,7 +85,6 @@
   margin: 0 auto;
   display: flex;
   flex-direction: row;
-  max-width: 64rem;
   .form-container,
   .info {
     width: 50%;
@@ -117,13 +116,14 @@
           padding: 1rem 1.25rem;
           & > span {
             position: absolute;
-            top: -0.5rem;
+            top: -0.75rem;
             right: 0;
-            font-size: 8px;
+            font-size: 9.5px;
+            font-weight: 600;
             text-align: center;
             color: #ffffff;
             border-radius: 8px;
-            background-color: #0ed039;
+            background-color: #099027;
             padding: 0.25rem 0.75rem;
           }
           & > input {

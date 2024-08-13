@@ -18,48 +18,48 @@
   width: 100%;
 }
 .primary {
-  border: 2px solid #0057ce;
-  background-color: #0057ce;
+  border: 2px solid #335FFC;
+  background-color: #335FFC;
   color: #ffffff;
   &:hover {
-    background-color: #4a71fc;
-    border-color: #4a71fc;
+    background-color: #4A71FC;
+    border-color: #4A71FC;
   }
   &:active {
-    background-color: #0333dd;
-    border-color: #0333dd;
+    background-color: #0333DD;
+    border-color: #0333DD;
   }
   &:disabled {
-    background-color: #d3d3d3;
-    border-color: #d3d3d3;
+    background-color: #D3D3D3;
+    border-color: #D3D3D3;
   }
 }
 
 .primary-light {
   border: 2px solid #dae2ff;
   background-color: #dae2ff;
-  color: #0057ce;
+  color: #335FFC;
   &:hover {
-    border-color: #0057ce;
-    background-color: #0057ce;
+    border-color: #335FFC;
+    background-color: #335FFC;
     color: #ffffff;
   }
 }
 
 .primary-outline {
   background-color: transparent;
-  border: 2px solid #0057ce;
-  color: #0057ce;
+  border: 2px solid #335FFC;
+  color: #335FFC;
   &:hover {
-    color: #4a71fc;
-    border-color: #4a71fc;
+    color: #4A71FC;
+    border-color: #4A71FC;
   }
   &:active {
-    color: #0333dd;
-    border-color: #0333dd;
+    color: #0333DD;
+    border-color: #0333DD;
   }
   &:disabled {
-    color: #d3d3d3;
-    border-color: #d3d3d3;
+    color: #D3D3D3;
+    border-color: #D3D3D3;
   }
 }

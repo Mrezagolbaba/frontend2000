@@ -10,7 +10,7 @@ import {
   useVerifyOtpWithdrawMutation,
   useWithdrawMutation,
 } from "store/api/wallet-management";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import DropdownInput from "components/Input/Dropdown";
 import tron from "assets/img/network/tron.svg";
 import { normalizeAmount, persianToEnglishNumbers } from "helpers";
 import Notify from "components/Notify";
@@ -20,6 +20,8 @@ import WithdrawOTP from "components/WithdrawOTP";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import button from "assets/scss/components/button.module.scss";
+import { AlertDanger, AlertInfo, AlertWarning } from "components/AlertWidget";
+import tetherIcon from "assets/img/coins/tether.svg";
 
 type CryptoFormType = {
   network: string;
@@ -73,27 +75,6 @@ const WithdrawCrypto = ({
     },
     resolver,
   });
-
-  // ==============|| constants ||================= //
-  const optionList: OptionType[] = [
-    {
-      content: (
-        <div className={wallet["items-credit"]}>
-          <span className={wallet["items-credit__icon"]}>
-            <img
-              width={20}
-              height={20}
-              alt="TRC20"
-              src={tron}
-              className="bank-svg"
-            />
-          </span>
-          <span>TRC20</span>
-        </div>
-      ),
-      value: "TRC20",
-    },
-  ];
 
   // ==============|| Handlers ||================= //
   const onSubmit = async (data: CryptoFormType) => {
@@ -160,29 +141,67 @@ const WithdrawCrypto = ({
           <form onSubmit={handleSubmit(onSubmit)}>
             <div>
               <div>
-                <Controller
-                  name="network"
-                  control={control}
-                  render={({ field: { name, value } }) => (
-                    <div className={wallet["form-group"]}>
-                      <div className={wallet["form-group__label"]}>
-                        <label htmlFor={name}>شبکه برداشت</label>
-                      </div>
-                      <DropdownInput
-                        id={name}
-                        value={value}
-                        onChange={(val) => setValue(name, val)}
-                        options={optionList}
-                        disabled={true}
-                      />
-                      {errors?.[name] && (
-                        <FormFeedback tooltip>
-                          {errors[name]?.message}
-                        </FormFeedback>
-                      )}
-                    </div>
-                  )}
-                />
+                <div className={wallet["form-group"]}>
+                  <div className={wallet["form-group__label"]}>
+                    <label htmlFor="tether">نام ارز</label>
+                  </div>
+                  <DropdownInput
+                    id="tether"
+                    value="USDT"
+                    options={[
+                      {
+                        value: "USDT",
+                        content: (
+                          <div className={wallet["items-credit"]}>
+                            <span className={wallet["items-credit__icon"]}>
+                              <img
+                                width={15}
+                                height={15}
+                                className="bank-svg"
+                                src={tetherIcon}
+                                alt="tether-flag"
+                              />
+                            </span>
+                            <span dir="ltr"> تتر - USDT</span>
+                          </div>
+                        ),
+                      },
+                    ]}
+                    disabled={true}
+                  />
+                </div>
+              </div>
+              <div>
+                <div className={wallet["form-group"]}>
+                  <div className={wallet["form-group__label"]}>
+                    <label htmlFor="network">شبکه ارز </label>
+                  </div>
+                  <DropdownInput
+                    id="network"
+                    value="TRC20"
+                    options={[
+                      {
+                        content: (
+                          <div className={wallet["items-credit"]}>
+                            <span className={wallet["items-credit__icon"]}>
+                              <img
+                                width={20}
+                                height={20}
+                                alt="TRC20"
+                                src={tron}
+                                className="bank-svg"
+                              />
+                            </span>
+                            <span>TRC20</span>
+                          </div>
+                        ),
+                        value: "TRC20",
+                      },
+                    ]}
+                    disabled={true}
+                    // hasError={Boolean(errors?.[name])}
+                  />
+                </div>
               </div>
               <div>
                 <Controller
@@ -279,9 +298,9 @@ const WithdrawCrypto = ({
               <div className="mt-3 text-center">
                 <button
                   type="submit"
-                  className={`${button["arsonex-btn"]} ${button["primary-outline"]} ${button["full-width"]} mb-2`}
+                  className={`${button["arsonex-btn"]} ${button["primary"]} ${button["full-width"]} mb-2`}
                 >
-                  برداشت
+                  درخواست برداشت
                 </button>
               </div>
             </div>
@@ -303,13 +322,18 @@ const WithdrawCrypto = ({
         </div>
       </div>
       <div className={wallet.info}>
-        <div className={`${wallet.info__box} ${wallet["danger-box"]}`}>
-          در هنگام برداشت به آدرس وارد شده دقت نمایید در صورت برداشت اشتباه ارز
-          دیجیتال از دست خواهد رفت.
-        </div>
-        <div className={`${wallet.info__box} ${wallet["info-box"]}`}>
-          انتقال داخلی (آرسونیکس به آرسونیکس) هیچ کارمزدی ندارد.
-        </div>
+        <AlertDanger
+          hasIcon
+          text="از واریز هرگونه ارز دیجیتال به کیف پول افراد ناشناس که از طریق آگهی‌های درآمدزایی و مشابه شما را پیدا کرده‌اند، خودداری نمایید. این روش کلاهبرداری است و در صورت وقوع جرم، مسئولیت آن بر عهده شما خواهد بود."
+        />
+        <AlertWarning
+          hasIcon
+          text="درخواست‌ها ابتدا توسط آرسونیکس بررسی و تأیید می‌شود و سپس تایید می‌شود؛ بنابراین، ممکن است این فرآیند زمان‌بر باشد."
+        />
+        <AlertInfo
+          hasIcon
+          text="کارمزد برداشت مربوط به هزینه ثبت تراکنش در شبکه ارز است و آرسونیکس در این هزینه نقشی ندارد."
+        />
       </div>
     </>
   );

@@ -126,7 +126,7 @@ export default function AddDebit() {
               <button
                 disabled={loadingDebit || isLoading}
                 type="submit"
-                className={`${button["arsonex-btn"]} ${button["primary-outline"]} ${button["full-width"]} mb-2`}
+                className={`${button["arsonex-btn"]} ${button["primary"]} ${button["full-width"]} mb-2`}
               >
                 ثبت و ادامه
               </button>

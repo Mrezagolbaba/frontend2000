@@ -13,7 +13,7 @@ import {
 } from "store/api/profile-management";
 import BanksWrapper from "components/BanksWrapper";
 import CopyInput from "components/Input/CopyInput";
-import { AlertDanger } from "components/AlertWidget";
+import { AlertDanger, AlertInfo, AlertWarning } from "components/AlertWidget";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import profile from "assets/scss/dashboard/profile.module.scss";
@@ -70,12 +70,6 @@ export default function DepositFiat() {
           },
           content: (
             <div className={wallet["items-credit"]}>
-              {/* <span className={wallet["items-credit__icon"]}>
-                <span
-                  className="mx-3"
-                  dangerouslySetInnerHTML={{ __html: bank.logo }}
-                />
-              </span> */}
               <BanksWrapper
                 value={item.iban}
                 type={"TRY"}
@@ -146,12 +140,42 @@ export default function DepositFiat() {
   const renderUI = () => {
     if (LoadingDeposit) {
       return (
-        <div className={wallet["input-loading"]}>
-          <div className={wallet["loader-wrapper"]}>
-            <div />
-            <div />
-            <div />
-            <div />
+        <div className="pt-3">
+          <div className="placeholder-glow">
+            <div
+              className="placeholder col-12 rounded"
+              style={{
+                height: "48px",
+                marginBottom: "1rem",
+              }}
+            />
+          </div>
+          <div className="placeholder-glow">
+            <div
+              className="placeholder col-12 rounded"
+              style={{
+                height: "48px",
+                marginBottom: "1rem",
+              }}
+            />
+          </div>
+          <div className="placeholder-glow">
+            <div
+              className="placeholder col-12 rounded"
+              style={{
+                height: "48px",
+                marginBottom: "1rem",
+              }}
+            />
+          </div>
+          <div className="placeholder-glow">
+            <div
+              className="placeholder col-12 rounded"
+              style={{
+                height: "48px",
+                marginBottom: "1rem",
+              }}
+            />
           </div>
         </div>
       );
@@ -183,7 +207,11 @@ export default function DepositFiat() {
                 <div className={wallet["form-group__label"]}>
                   <label> شماره IBAN </label>
                 </div>
-                <CopyInput text={selectedBank || ""} key="iban-account" />
+                <CopyInput
+                  name="IBAN"
+                  text={selectedBank || ""}
+                  key="iban-account"
+                />
               </div>
             </div>
             {depResponse && (
@@ -193,6 +221,7 @@ export default function DepositFiat() {
                     <label> شناسه واریز </label>
                   </div>
                   <CopyInput
+                    name="شناسه واریز"
                     text={depResponse.refCode || ""}
                     key="number-account"
                   />
@@ -205,6 +234,7 @@ export default function DepositFiat() {
                   <label> نام صاحب حساب </label>
                 </div>
                 <CopyInput
+                  name="نام صاحب حساب"
                   text={otherInfo.ownerName || ""}
                   key="owner-account"
                 />
@@ -232,18 +262,21 @@ export default function DepositFiat() {
       </div>
       <div className={wallet.info}>
         {firstNameEn && lastNameEn && (
-          <div className={`${wallet.info__box} ${wallet["danger-box"]}`}>
-            {`در صورت ارسال مبلغ از حسابی بجز ${
-              firstNameEn + " " + lastNameEn
+          <AlertDanger
+            hasIcon
+            text={`در صورت ارسال مبلغ از حسابی بجز ${
+              firstNameEn.toUpperCase() + " " + lastNameEn.toUpperCase()
             }   عودت مبلغ بعد از 72 ساعت با کسر کارمزد بانکی انجام می‌شود.`}
-          </div>
+          />
         )}
-        <div className={`${wallet.info__box} ${wallet["danger-box"]}`}>
-          در هنگام واریز حتما شناسه واریز را در بخش Description یا Aciklama به
-          طور دقیق وارد کنید، در صورت رعایت نکردن این مساله مبلغ به حساب کاربری
-          شما واریز نمی‌شود و بعد از ۷۲ ساعت کاری به حساب شما پس از کسر کارمزد
-          بانکی عودت داده می‌شود.
-        </div>
+        <AlertWarning
+          hasIcon
+          text="در هنگام واریز، حتماً شناسه واریز را به‌طور دقیق در بخش Description یا Aciklama وارد نمایید. در صورت عدم رعایت این نکته، مبلغ به حساب کاربری شما واریز نخواهد شد و پس از ۷۲ ساعت کاری، به حساب شما با کسر کارمزد بانکی مسترد خواهد شد."
+        />
+        <AlertInfo
+          hasIcon
+          text="هیچ محدودیتی از نظر یکسان بودن بانک مبدا و مقصد وجود ندارد؛ به عبارت دیگر، امکان انجام تراکنش‌ها بین حساب‌های بانکی از بانک‌های مختلف وجود دارد و نیازی به هماهنگ بودن بانک مبدا و مقصد نیست."
+        />
       </div>
     </>
     //   )}

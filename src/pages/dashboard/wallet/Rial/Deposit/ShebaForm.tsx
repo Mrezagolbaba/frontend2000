@@ -141,7 +141,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
             <Controller
               name="accountName"
               control={control}
-              render={({ field: { name, value, onChange, ref } }) => (
+              render={({ field: { name, onChange, ref } }) => (
                 <div className={wallet["form-group"]}>
                   <div className={wallet["form-group__label"]}>
                     <label htmlFor="bank-name"> نام صاحب حساب</label>
@@ -162,12 +162,12 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
               <Controller
                 name="shebaNumber"
                 control={control}
-                render={({ field: { name } }) => (
+                render={() => (
                   <div className={wallet["form-group"]}>
                     <div className={wallet["form-group__label"]}>
                       <label htmlFor="bank-name">شماره شبا</label>
                     </div>
-                    <CopyInput text={selectedBank || ""} />
+                    <CopyInput name="شماره شبا" text={selectedBank || ""} />
                     {fee && (
                       <span className={wallet["form-group__hint"]}>
                         {`حداقل مبلغ واریز: ${normalizeAmount(
@@ -187,12 +187,15 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
               <Controller
                 name="depositId"
                 control={control}
-                render={({ field: { name, value } }) => (
+                render={() => (
                   <div className={wallet["form-group"]}>
                     <div className={wallet["form-group__label"]}>
-                      <label htmlFor="bank-name">شماره واریز</label>
+                      <label htmlFor="bank-name">شناسه واریز</label>
                     </div>
-                    <CopyInput text={depResponse.refCode || ""} />
+                    <CopyInput
+                      name="شناسه واریز"
+                      text={depResponse.refCode || ""}
+                    />
                     <span className={wallet["form-group__hint"]}>
                       کارمزد انتقال: 0.02%
                     </span>

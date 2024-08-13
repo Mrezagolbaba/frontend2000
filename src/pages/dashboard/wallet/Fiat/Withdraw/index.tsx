@@ -24,6 +24,7 @@ import WithdrawOTP from "components/WithdrawOTP";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import button from "assets/scss/components/button.module.scss";
+import { AlertInfo, AlertWarning } from "components/AlertWidget";
 
 type Props = {
   onSuccessWithdraw: () => void;
@@ -199,7 +200,7 @@ export default function WithdrawFiat({ stock, onSuccessWithdraw }: Props) {
                   render={({ field: { name, value, onChange } }) => (
                     <div className={wallet["form-group"]}>
                       <div className={wallet["form-group__label"]}>
-                        <label htmlFor={name}>برداشت ارز</label>
+                        <label htmlFor={name}>فیات دیجیتال</label>
                       </div>
                       <DropdownInput
                         id={name}
@@ -226,72 +227,6 @@ export default function WithdrawFiat({ stock, onSuccessWithdraw }: Props) {
                         ]}
                         disabled={true}
                       />
-                    </div>
-                  )}
-                />
-              </div>
-              <div>
-                <Controller
-                  name="amount"
-                  control={control}
-                  render={({ field: { name, value } }) => (
-                    <div className={wallet["form-group"]}>
-                      <div className={wallet["form-group__label"]}>
-                        <label htmlFor={name}>مقدار برداشت</label>
-                        <span
-                          className={wallet["form-group__hint"]}
-                          role="button"
-                          onClick={() => setValue(name, stock.toString())}
-                        >
-                          {`موجودی شما: ${normalizeAmount(
-                            stock.toString(),
-                            "TRY",
-                            true,
-                          )}`}
-                        </span>
-                      </div>
-                      <CurrencyInput
-                        thousandSeparator=","
-                        name={name}
-                        value={value}
-                        onChange={(e: any) => {
-                          clearErrors(name);
-                          const amountTemp = e.target.value.replaceAll(",", "");
-                          setValue(name, persianToEnglishNumbers(amountTemp));
-                        }}
-                        // decimalsLimit={2}
-                        // hasError={Boolean(errors?.[name])}
-                      />
-                      {errors?.[name] && (
-                        <FormFeedback tooltip>
-                          {errors[name]?.message}
-                        </FormFeedback>
-                      )}
-                      <div className={wallet["form-group__hints"]}>
-                        {fee && (
-                          <span className={wallet["form-group__hint"]}>
-                            {`کارمزد برداشت: ${normalizeAmount(
-                              fee.withdrawFeeStatic,
-                              "TRY",
-                              true,
-                            )}`}
-                          </span>
-                        )}
-                        {value !== "" &&
-                          fee?.withdrawFeeStatic &&
-                          Number(value) - Number(fee?.withdrawFeeStatic) >
-                            0 && (
-                            <span className={wallet["form-group__hint"]}>
-                              {`خالص دریافتی: ${normalizeAmount(
-                                (
-                                  Number(value) - Number(fee.withdrawFeeStatic)
-                                ).toString(),
-                                "TRY",
-                                true,
-                              )}`}
-                            </span>
-                          )}
-                      </div>
                     </div>
                   )}
                 />
@@ -363,15 +298,81 @@ export default function WithdrawFiat({ stock, onSuccessWithdraw }: Props) {
                   )}
                 />
               </div>
+              <div>
+                <Controller
+                  name="amount"
+                  control={control}
+                  render={({ field: { name, value } }) => (
+                    <div className={wallet["form-group"]}>
+                      <div className={wallet["form-group__label"]}>
+                        <label htmlFor={name}>مبلغ برداشت</label>
+                        <span
+                          className={wallet["form-group__hint"]}
+                          role="button"
+                          onClick={() => setValue(name, stock.toString())}
+                        >
+                          {`موجودی شما: ${normalizeAmount(
+                            stock.toString(),
+                            "TRY",
+                            true,
+                          )}`}
+                        </span>
+                      </div>
+                      <CurrencyInput
+                        thousandSeparator=","
+                        name={name}
+                        value={value}
+                        onChange={(e: any) => {
+                          clearErrors(name);
+                          const amountTemp = e.target.value.replaceAll(",", "");
+                          setValue(name, persianToEnglishNumbers(amountTemp));
+                        }}
+                        // decimalsLimit={2}
+                        // hasError={Boolean(errors?.[name])}
+                      />
+                      {errors?.[name] && (
+                        <FormFeedback tooltip>
+                          {errors[name]?.message}
+                        </FormFeedback>
+                      )}
+                      <div className={wallet["form-group__hints"]}>
+                        {fee && (
+                          <span className={wallet["form-group__hint"]}>
+                            {`کارمزد برداشت: ${normalizeAmount(
+                              fee.withdrawFeeStatic,
+                              "TRY",
+                              true,
+                            )}`}
+                          </span>
+                        )}
+                        {value !== "" &&
+                          fee?.withdrawFeeStatic &&
+                          Number(value) - Number(fee?.withdrawFeeStatic) >
+                            0 && (
+                            <span className={wallet["form-group__hint"]}>
+                              {`خالص دریافتی: ${normalizeAmount(
+                                (
+                                  Number(value) - Number(fee.withdrawFeeStatic)
+                                ).toString(),
+                                "TRY",
+                                true,
+                              )}`}
+                            </span>
+                          )}
+                      </div>
+                    </div>
+                  )}
+                />
+              </div>
             </div>
             <div>
               <div className="mt-3 text-center">
                 <button
                   disabled={isLoading}
                   type="submit"
-                  className={`${button["arsonex-btn"]} ${button["primary-outline"]} ${button["full-width"]} mb-2`}
+                  className={`${button["arsonex-btn"]} ${button["primary"]} ${button["full-width"]} mb-2`}
                 >
-                  برداشت
+                  درخواست برداشت
                 </button>
               </div>
             </div>
@@ -392,10 +393,18 @@ export default function WithdrawFiat({ stock, onSuccessWithdraw }: Props) {
         </div>
       </div>
       <div className={wallet.info}>
-        <div className={`${wallet.info__box} ${wallet["danger-box"]}`}>
-          در هنگام برداشت به اطلاعات وارد شده دقت نمایید بعد از برداشت، دارایی
-          شما امکان بازگردانی ندارد.
-        </div>
+        <AlertWarning
+          hasIcon
+          text="در هنگام برداشت به اطلاعات وارد شده دقت نمایید بعد از برداشت، دارایی شما امکان بازگردانی ندارد."
+        />
+        <AlertWarning
+          hasIcon
+          text="در بازه های زمانی خاص امکان برداشت به برخی از کیف‌پول‌های الکترونیک ترکیه ( برای مثال Papara) وجود ندارد. در نظر داشته باشید کیف پول الکترونیک با بانک متفاوت است."
+        />
+        <AlertInfo
+          hasIcon
+          text="کارمزد برداشت مربوط به شبکه بانکی کشور فیات دیجیتال بوده و آرسونیکس در این هزینه نقشی ندارد."
+        />
       </div>
     </>
   );
