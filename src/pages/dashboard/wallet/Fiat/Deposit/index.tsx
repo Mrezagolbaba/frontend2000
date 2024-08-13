@@ -70,12 +70,6 @@ export default function DepositFiat() {
           },
           content: (
             <div className={wallet["items-credit"]}>
-              {/* <span className={wallet["items-credit__icon"]}>
-                <span
-                  className="mx-3"
-                  dangerouslySetInnerHTML={{ __html: bank.logo }}
-                />
-              </span> */}
               <BanksWrapper
                 value={item.iban}
                 type={"TRY"}
@@ -146,12 +140,42 @@ export default function DepositFiat() {
   const renderUI = () => {
     if (LoadingDeposit) {
       return (
-        <div className={wallet["input-loading"]}>
-          <div className={wallet["loader-wrapper"]}>
-            <div />
-            <div />
-            <div />
-            <div />
+        <div className="pt-3">
+          <div className="placeholder-glow">
+            <div
+              className="placeholder col-12 rounded"
+              style={{
+                height: "48px",
+                marginBottom: "1rem",
+              }}
+            />
+          </div>
+          <div className="placeholder-glow">
+            <div
+              className="placeholder col-12 rounded"
+              style={{
+                height: "48px",
+                marginBottom: "1rem",
+              }}
+            />
+          </div>
+          <div className="placeholder-glow">
+            <div
+              className="placeholder col-12 rounded"
+              style={{
+                height: "48px",
+                marginBottom: "1rem",
+              }}
+            />
+          </div>
+          <div className="placeholder-glow">
+            <div
+              className="placeholder col-12 rounded"
+              style={{
+                height: "48px",
+                marginBottom: "1rem",
+              }}
+            />
           </div>
         </div>
       );
@@ -241,7 +265,7 @@ export default function DepositFiat() {
           <AlertDanger
             hasIcon
             text={`در صورت ارسال مبلغ از حسابی بجز ${
-              firstNameEn + " " + lastNameEn
+              firstNameEn.toUpperCase() + " " + lastNameEn.toUpperCase()
             }   عودت مبلغ بعد از 72 ساعت با کسر کارمزد بانکی انجام می‌شود.`}
           />
         )}

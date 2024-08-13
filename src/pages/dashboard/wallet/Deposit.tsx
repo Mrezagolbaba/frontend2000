@@ -63,11 +63,11 @@ export default function Deposit() {
       <Card className="mt-3">
         <CardBody>
           {type === "fiat" ? (
-            <FiatDeposit limit={5} />
+            <FiatDeposit limit={8} />
           ) : type === "crypto" ? (
-            <USDTDeposit limit={5} />
+            <USDTDeposit limit={8} />
           ) : (
-            <IRRDeposit limit={5} />
+            <IRRDeposit limit={8} />
           )}
         </CardBody>
       </Card>
