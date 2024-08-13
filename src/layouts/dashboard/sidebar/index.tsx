@@ -40,13 +40,18 @@ export default function Sidebar() {
       icon: <WalletIcon fill="none" stroke="#03041b" />,
       children: [
         {
+          id: "wallet-redirect",
+          path: "/dashboard/wallet",
+          label: "دارایی",
+        },
+        {
           id: "deposit",
-          path: "/dashboard/wallet/deposit",
+          path: "/dashboard/wallet/deposit/irt",
           label: "واریز",
         },
         {
           id: "withdraw",
-          path: "/dashboard/wallet/withdraw",
+          path: "/dashboard/wallet/withdraw/irt",
           label: "برداشت",
         },
         {
@@ -174,7 +179,7 @@ export default function Sidebar() {
                     <NavItem
                       key={index}
                       className={` ${dashboard.sidebar__navbar__item} ${
-                        location.pathname.includes(sub.path)
+                        renderActiveClass(sub)
                           ? dashboard.active_sub
                           : ""
                       }`}

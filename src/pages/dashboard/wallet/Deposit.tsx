@@ -9,10 +9,20 @@ import button from "assets/scss/components/button.module.scss";
 import FiatDeposit from "../history/FiatDeposit";
 import USDTDeposit from "../history/USDTDeposit";
 import IRRDeposit from "../history/IRRDeposit";
+import { useAppSelector } from "store/hooks";
+import { useEffect } from "react";
 
 export default function Deposit() {
+  const { phoneNumber } = useAppSelector((state) => state.user);
   const { type } = useParams();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (type === "fiat" && phoneNumber.includes("+98")) {
+      navigate("/404");
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const renderDeposit = () => {
     switch (type) {
@@ -47,14 +57,16 @@ export default function Deposit() {
             >
               واریز ارز دیجیتال
             </button>
-            <button
-              className={`${button["arsonex-btn"]} ${type === "fiat" ? button["primary"] : button["primary-light"]}`}
-              onClick={() =>
-                type !== "fiat" && navigate("/dashboard/wallet/deposit/fiat")
-              }
-            >
-              واریز فیات دیجیتال
-            </button>
+            {!phoneNumber.includes("+98") && (
+              <button
+                className={`${button["arsonex-btn"]} ${type === "fiat" ? button["primary"] : button["primary-light"]}`}
+                onClick={() =>
+                  type !== "fiat" && navigate("/dashboard/wallet/deposit/fiat")
+                }
+              >
+                واریز فیات دیجیتال
+              </button>
+            )}
           </div>
           <div className={wallet["horizontal-divider"]} />
           <div className={wallet["content-section"]}>{renderDeposit()}</div>
