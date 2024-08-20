@@ -446,6 +446,74 @@
   padding: 0 60px !important;
   max-width: 262px;
 }
+// _-_-_-_-_ FAQ _-_-_-_-_
+.acc_holder {
+  display: flex;
+  gap: 24px;
+  margin-top: 200px;
+}
+.acc_holder_title_holder {
+  background-color: var(--advbg3);
+  color: var(--advbg3-text);
+  padding: 24px;
+  width: 35%;
+  border-radius: 24px;
+  background-image: url(/src/assets/img/icons/purple-question-mark2\ 1.png);
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: auto;
+  max-height: 448px;
+}
+.acc_container {
+  width: 65%;
+}
+.question_acc {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 24px;
+  &:hover {
+    background-color: var(--select);
+    border: 2px solid var(--dark-blue);
+  }
+}
+.find_answer {
+  text-align: center;
+  margin-top: 32px;
+  color: var(--advbg3-text);
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.find_answer .find_answer_title {
+  font-size: var(--font_16);
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.find_answer .find_answer_title::after {
+  content: "";
+  width: 32px;
+  height: 32px;
+  background-image: url(../../public/images/hand.png);
+  display: inline-flex;
+  margin-top: -12px;
+}
+
+.find_answer a {
+  font-size: var(--font_16);
+  font-weight: 500;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  transition: 0.3s;
+}
+
+.find_answer a:hover {
+  background-color: var(--select);
+}
 
 @media screen and (max-width: 1200px) {
   .spot-rate {
@@ -469,6 +537,19 @@
     .mobile-menu {
       display: flex;
     }
+  }
+  .acc_holder {
+    flex-direction: column;
+  }
+  .acc_holder_title_holder,
+  .acc_container {
+    width: 100%;
+  }
+
+  .acc_holder_title_holder {
+    background-size: contain;
+    background-position: 20px center;
+    padding: 40px 24px;
   }
 }
 @media (min-width: 600px) and (max-width: 992px) {
@@ -520,5 +601,21 @@
       padding: 24px;
       border-radius: 0;
     }
+  }
+  .acc_holder {
+    padding: 0 20px;
+  }
+  .acc_holder_title_holder {
+    background-image: unset;
+  }
+  .find_answer {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .find_answer .find_answer_title::after {
+    background-image: url(/src/assets/img/icons/hand2.png);
+    margin-top: 0;
   }
 }

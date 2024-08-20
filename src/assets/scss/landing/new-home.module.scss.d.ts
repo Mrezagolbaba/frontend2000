@@ -42,6 +42,12 @@ declare const classNames: {
   readonly "fiat-icon": "fiat-icon";
   readonly dollar: "dollar";
   readonly "no-content": "no-content";
+  readonly acc_holder: "acc_holder";
+  readonly acc_holder_title_holder: "acc_holder_title_holder";
+  readonly acc_container: "acc_container";
+  readonly question_acc: "question_acc";
+  readonly find_answer: "find_answer";
+  readonly find_answer_title: "find_answer_title";
   readonly large: "large";
 };
 export = classNames;

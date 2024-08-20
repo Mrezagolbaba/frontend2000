@@ -10,6 +10,9 @@ import home from "assets/scss/landing/new-home.module.scss";
 import { useContext } from "react";
 import ThemeContext from "contexts/ThemeContext";
 import { Link } from "react-router-dom";
+import Profitable from "./Portfolio";
+import Faq from "./FAQ";
+import Blogs from "./Blog/Blogs";
 
 export default function HomePage() {
   const { theme } = useContext(ThemeContext);
@@ -41,10 +44,9 @@ export default function HomePage() {
           </Link>
         </section>
         <Advantages dark={theme === "dark"} />
-
-        {/* <UserComments /> */}
-        {/* <LastBlogs /> */}
-        <BottomBanner />
+        <Profitable />
+        <Faq />
+        <Blogs />
       </main>
     </LandingLayout>
   );
