@@ -1,5 +1,5 @@
 import Dialog from "components/Dialog";
-import lirIcon from "assets/img/coins/try.svg";
+import lirIcon from "assets/img/coins/icon_try.svg";
 import { Button } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";

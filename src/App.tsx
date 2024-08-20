@@ -6,6 +6,7 @@ import AppRouter from "router/AppRouter";
 import ErrorBoundary from "utils/error";
 import { JWTProvider as AuthProvider } from "contexts/JWTContext";
 import InstallPWAPrompt from "components/InstallPWAPropmt";
+import { ThemeProvider } from "contexts/ThemeContext";
 
 const queryClient = new QueryClient();
 
@@ -21,12 +22,14 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary>
         <BrowserRouter>
-          <AuthProvider>
-            <>
-              <AppRouter />
-              <InstallPWAPrompt />
-            </>
-          </AuthProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <>
+                <AppRouter />
+                <InstallPWAPrompt />
+              </>
+            </AuthProvider>
+          </ThemeProvider>
         </BrowserRouter>
       </ErrorBoundary>
     </QueryClientProvider>

@@ -1,10 +1,10 @@
 import ATable from "components/ATable";
-import Turkey from "assets/img/coins/try.svg";
+import Turkey from "assets/img/coins/icon_try.svg";
 import USDT from "assets/img/coins/usdt.svg";
-import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
+import { Card, CardBody, CardHeader } from "reactstrap";
 import { Link } from "react-router-dom";
 import { convertTextSingle, extractLeftSide, normalizeAmount } from "helpers";
-import { useGetRatesQuery } from "store/api/publices";
+import { useGetRatesQuery } from "store/api/publics";
 import { useMemo } from "react";
 
 const Market = () => {

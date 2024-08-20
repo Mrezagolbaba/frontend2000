@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Logo from "assets/img/logo/light.png";
-import LogoPrimary from "assets/img/logo-primary.png";
-
-import home from "assets/scss/landing/home.module.scss";
-import { Container } from "reactstrap";
-import { IoIosCloseCircleOutline } from "react-icons/io";
-import { TbMenu } from "react-icons/tb";
 import { useAppSelector } from "store/hooks";
+import ThemeContext from "contexts/ThemeContext";
+import PhoneMenu from "./PhoneMenu";
+import MarketsIcon from "components/Icons/MarketsIcon";
+import darkPhoneBlog from "assets/icons/dark-phone-blog.svg";
+import darkPhoneCall from "assets/icons/dark-phone-call.svg";
+import darkPhoneLogo from "assets/icons/dark-phone-logo.svg";
+import phoneBlog from "assets/icons/phone-blog.svg";
+import phoneCall from "assets/icons/phone-call.svg";
+import phoneLogo from "assets/icons/phone-logo.svg";
+
+import home from "assets/scss/landing/new-home.module.scss";
 
 type Props = {
   disableBanner?: boolean;
@@ -17,193 +21,105 @@ const Header = ({
   disableBanner = false,
   HasRemoveAuthButton = false,
 }: Props) => {
-  const [openOverlayMenu, setOpenOverlayMenu] = useState<boolean>(false);
   const { id, firstTierVerified, firstName, lastName } = useAppSelector(
     (state) => state.user,
   );
-
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const { pathname } = useLocation();
 
+  const menuItems = [
+    {
+      title: "بازارها",
+      icon: <MarketsIcon stroke="#000" fill="none" />,
+      address: "/coinsList",
+      DarkIcon: <MarketsIcon stroke="#fff" fill="none" />,
+    },
+    {
+      title: "بلاگ",
+      icon: <img src={phoneBlog} alt="icon" />,
+      address: "#",
+      DarkIcon: <img src={darkPhoneBlog} alt="icon" />,
+    },
+    {
+      title: "درباره ما",
+      icon: <img src={phoneCall} alt="icon" />,
+      address: "/aboutUs",
+      DarkIcon: <img src={darkPhoneCall} alt="icon" />,
+    },
+    {
+      title: "تماس با ما",
+      icon: <img src={phoneLogo} alt="icon" />,
+      address: "/contactUs",
+      DarkIcon: <img src={darkPhoneLogo} alt="icon" />,
+    },
+  ];
+
+  const menuBtn = [
+    {
+      title: "ورود",
+      address: "https://dev.paydirham.me/login",
+      class: home.login,
+      phoneClass: home.mobile_login,
+    },
+    {
+      title: "ثبت نام",
+      address: "https://dev.paydirham.me/register",
+      class: home.register,
+      phoneClass: home.mobile_register,
+    },
+  ];
+
   return (
-    <>
-      <div
-        id="menuOverlay"
-        className={`${home["menu-overlay"]} ${
-          openOverlayMenu ? home.show : ""
-        }`}
-      />
-      <header
-        className={`${home.header} ${disableBanner ? home.withoutBg : ""}`}
-      >
-        <div className={home.header__top}>
-          <div className={home.header__logo}>
-            <Link to="/">
-              <img src={!disableBanner ? Logo : LogoPrimary} className="logo" />
-            </Link>
-          </div>
+    <header
+      className={`${home.container} ${home.header}  ${theme === "dark" ? "theme-dark" : ""}`}
+    >
+      <div className={home.header__logo}>
+        <PhoneMenu menuItems={menuItems} menuBtn={menuBtn} />
 
-          <nav>
-            <ul
-              className={`${home.navbar} ${disableBanner && home["navbar-light"]} navbar--light ${
-                openOverlayMenu ? home.expanded : ""
-              }`}
-              id="navbar"
-            >
-              <li>
-                <div className={home.header__auth}>
-                  {id && firstTierVerified ? (
-                    <div>
-                      <Link
-                        to="/dashboard/profile"
-                        color="landing-primary"
-                        className={`btn btn-landing-primary ${home["rounded-button"]}`}
-                      >
-                        {firstName + " " + lastName}
-                      </Link>
-                    </div>
-                  ) : (
-                    <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
-                      <li className={home.navbar__item}>
-                        <Link to="/login">ورود</Link>
-                      </li>
-                      <li className={home.header__auth__register}>
-                        <Link
-                          to="/register"
-                          className={`btn btn-primary ${home["rounded-button"]}`}
-                        >
-                          ثبت نام
-                        </Link>
-                      </li>
-                    </ul>
-                  )}
-                </div>
-              </li>
-              <li
-                className={`${home.navbar__item} ${
-                  pathname === "/" ? home.active : ""
-                }`}
-              >
-                <Link to="/">صفحه اصلی</Link>
-              </li>
-              <li
-                className={`${home.navbar__item} ${
-                  pathname === "/coins" ? home.active : ""
-                }`}
-              >
-                <Link to="/coins">قیمت لحظه ای</Link>
-              </li>
-              <li
-                className={`${home.navbar__item} ${
-                  pathname === "/dashboard" ? home.active : ""
-                }`}
-              >
-                <Link to="/dashboard">معامله سریع</Link>
-              </li>
-              <li className={`${home.navbar__item}`}>
-                <Link target="_blank" to="https://help.arsonex.com/">
-                  مرکز راهنمایی
-                </Link>
-              </li>
-              <li
-                className={`${home.navbar__item} ${
-                  pathname === "/about-us" ? home.active : ""
-                }`}
-              >
-                <Link to="/about-us">درباره ما</Link>
-              </li>
-              <li
-                className={`${home.navbar__item} ${
-                  pathname === "/contact-us" ? home.active : ""
-                }`}
-              >
-                <Link to="/contact-us">تماس با ما</Link>
-              </li>
-              <li>
-                <div className={home.navbar__close}>
-                  {/* <button type="button" onclick={()=>respMenu.dismiss()}> */}
-                  <button
-                    type="button"
-                    onClick={() => setOpenOverlayMenu(false)}
-                  >
-                    <span className="icon">
-                      <IoIosCloseCircleOutline />
-                    </span>
-                  </button>
-                </div>
-              </li>
-            </ul>
-          </nav>
-
-          {!HasRemoveAuthButton && (
-            <div className={home.header__auth}>
-              {id && firstTierVerified ? (
-                <div>
-                  <Link
-                    to="/dashboard/profile"
-                    className={`btn btn-landing-primary ${home["rounded-button"]}`}
-                  >
-                    {firstName + " " + lastName}
-                  </Link>
-                </div>
-              ) : (
-                <ul className={`${home.navbar} ${home["navbar--simple"]}`}>
-                  <li className={home.navbar__item}>
-                    <Link to="/login">ورود</Link>
-                  </li>
-                  <li className={home.header__auth__register}>
-                    <Link
-                      to="/register"
-                      className={`btn btn-landing-primary ${home["rounded-button"]}`}
-                    >
-                      ثبت نام
-                    </Link>
-                  </li>
-                </ul>
-              )}
-            </div>
-          )}
-          <div
-            className={`${home.header__hamburger} ${disableBanner && home["white-hamburger"]}`}
+        <Link to="/">
+          <h1
+            className={`${home.header__title} ${theme === "dark" && home["dark-header-title"]}}`}
           >
-            {/* <button type="button" onclick="respMenu.open()"> */}
-            <button type="button" onClick={() => setOpenOverlayMenu(true)}>
-              <span className="icon">
-                <TbMenu />
-              </span>
-            </button>
-          </div>
-        </div>
-        {!disableBanner && (
-          <Container>
-            <div className={`${home["img_bottom_right"]} position-absolute `}>
-              <div className={home.i_b_r_img}></div>
-            </div>
-            <div className={`${home["img_top_right"]} position-absolute `}>
-              <div className={home.i_t_r_img}></div>
-            </div>
-            <div className={home.header__intro}>
-              <h1>آرسونیکس، همراه ارز دیجیتال شما</h1>
-              <p>
-                ارز دیجیتال، تومان یا فیات دیجیتال؛ بدون محدودیت، به سرعت معامله
-                کنید
-              </p>
-              <Link
-                to={id && firstTierVerified ? "/dashboard" : "/register"}
-                className={`btn btn-landing-primary ${home["rounded-button"]}`}
-              >
-                با آرسونیکس شروع کنید
-              </Link>
-            </div>
-            <div className={`${home["img_top_left"]} position-absolute `}>
-              <div className={home.i_t_l_img}></div>
-            </div>
-            <div className={`${home["img_bottom_left"]} position-absolute `}>
-              <div className={home.i_b_l_img}></div>
-            </div>
-          </Container>
+            آرسونیکس
+          </h1>
+        </Link>
+      </div>
+
+      <nav className={home.menu}>
+        {menuItems.map((item, index) => (
+          <Link
+            key={index}
+            to={item.address}
+            className={pathname === item.address ? home["active-item"] : ""}
+          >
+            {item.title}
+          </Link>
+        ))}
+      </nav>
+
+      <div className={home["buttons-holder"]}>
+        <label className={`${home.header__switch__input} ${home.large}`}>
+          <input
+            type="checkbox"
+            checked={theme === "light"}
+            onChange={toggleTheme}
+          />
+          <span className={`${home.slider} ${home.round}`}></span>
+        </label>
+
+        {!id && !firstTierVerified ? (
+          menuBtn.map((item, index) => (
+            <Link key={index} className={item.class} to={item.address}>
+              {item.title}
+            </Link>
+          ))
+        ) : (
+          <Link to="https://dev.paydirham.me/dashboard">
+            {`${firstName} ${lastName}`}
+          </Link>
         )}
-      </header>
-    </>
+      </div>
+    </header>
   );
 };
 

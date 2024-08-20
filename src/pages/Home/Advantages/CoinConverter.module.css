@@ -1,0 +1,59 @@
+.input_holder {
+  width: 100%;
+  height: 48px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.input_holder:hover {
+  background-color: var(--select);
+}
+
+.input_holder input {
+  height: 100%;
+  border: none;
+  background-color: unset;
+  width: 100%;
+}
+
+.select_box {
+  height: 100%;
+  background-color: var(--select);
+  border-radius: 8px;
+  padding: 5px;
+  display: flex;
+  font-size: var(--font_12);
+  font-weight: 500;
+  color: var(--text-black);
+  gap: 4px;
+  align-items: center;
+  position: relative;
+}
+
+.change_to img {
+  display: block;
+  margin: 8px auto;
+  cursor: pointer;
+}
+
+.actions_button {
+  background-color: var(--dark-blue);
+  font-size: var(--font_16);
+  font-weight: 500;
+  color: var(--button-text);
+  width: 100%;
+  margin-top: 25px;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  transition: 0.3s;
+  position: relative;
+}
+
+.actions_button:hover {
+  background-color: var(--dark-blue-hover);
+}

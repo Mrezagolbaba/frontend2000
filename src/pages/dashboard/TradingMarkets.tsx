@@ -1,7 +1,7 @@
 import { Card, CardBody, CardHeader, CardTitle } from "reactstrap";
 import { Link } from "react-router-dom";
 import { convertTextSingle, extractLeftSide, normalizeAmount } from "helpers";
-import { useGetRatesQuery } from "store/api/publices";
+import { useGetRatesQuery } from "store/api/publics";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 

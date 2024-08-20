@@ -80,3 +80,66 @@
   src: url(../fonts/IRANYekanFaNum/eot/iranyekanwebextrablackfanum.eot);
   src: url(../fonts/IRANYekanFaNum/eot/iranyekanwebextrablackfanum.eot#iefix) format("embedded-opentype"),url(../fonts/IRANYekanFaNum/woff2/iranyekanwebextrablackfanum.woff2) format("woff2"),url(../fonts/IRANYekanFaNum/ttf/iranyekanwebextrablackfanum.ttf) format("truetype"),url(../fonts/IRANYekanFaNum/woff/iranyekanwebextrablackfanum.woff) format("woff")
 }
+
+
+/// NEW
+/// 
+/// 
+@font-face {
+  font-family: 'iransansFont';
+  src:
+    url('../fonts/IranSans/ttf/IRANSansXFaNum-Medium.ttf')
+      format('truetype'),
+    url('../fonts/IranSans/Otf/IRANSansXFaNum-Medium.otf') format('otf'),
+    url('../fonts/IranSans/Woff/IRANSansXFaNum-Medium.woff')
+      format('woff');
+}
+
+@font-face {
+  font-family: 'iransansFontLight';
+  src:
+    url('../fonts/IranSans/ttf/IRANSansXFaNum-Light.ttf')
+      format('truetype'),
+    url('../fonts/IranSans/Otf/IRANSansXFaNum-Light.otf') format('otf'),
+    url('../fonts/IranSans/Woff/IRANSansXFaNum-Light.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'iransansFontDemiBold';
+  src:
+    url('../fonts/IranSans/ttf/IRANSansXFaNum-DemiBold.ttf')
+      format('truetype'),
+    url('../fonts/IranSans/Otf/IRANSansXFaNum-DemiBold.otf') format('otf'),
+    url('../fonts/IranSans/Woff/IRANSansXFaNum-DemiBold.woff')
+      format('woff');
+}
+
+@font-face {
+  font-family: 'iransansFont_bold';
+  src:
+    url('../fonts/IranSans/ttf/IRANSansXFaNum-Bold.ttf')
+      format('truetype'),
+    url('../fonts/IranSans/Otf/IRANSansXFaNum-Bold.otf') format('otf'),
+    url('../fonts/IranSans/Woff/IRANSansXFaNum-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'yekan';
+  src:
+    url('../fonts/YekanBakh/TTF/YekanBakhFaNum-Regular.ttf')
+      format('truetype'),
+    url('../fonts/YekanBakh/OTF/YekanBakhFaNum-Regular.otf') format('otf'),
+    url('../fonts/YekanBakh/woff/YekanBakhFaNum-Regular.woff')
+      format('woff');
+}
+
+@font-face {
+  font-family: 'yekan_bold';
+  src:
+    url('../fonts/YekanBakh/TTF/YekanBakhFaNum-SemiBold.ttf')
+      format('truetype'),
+    url('../fonts/YekanBakh/OTF/YekanBakhFaNum-SemiBold.otf')
+      format('otf'),
+    url('../fonts/YekanBakh/woff/YekanBakhFaNum-SemiBold.woff')
+      format('woff');
+}
