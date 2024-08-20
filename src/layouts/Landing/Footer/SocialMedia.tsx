@@ -1,14 +1,13 @@
 import { useContext } from "react";
-import {
-  DarkTwitter,
-  Instagram,
-  LinkedIn,
-  Telegram,
-  Twitter,
-} from "components/Icons/landingIcons";
-import styles from "./SocialMedia.module.css";
+import darkTwitter from "assets/icons/dark-twitter.svg";
+import twitter from "assets/icons/twitter.svg";
+import instagram from "assets/icons/instagram.svg";
+import linkedin from "assets/icons/linkedin.svg";
+import telegram from "assets/icons/telegram.svg";
 import { Link } from "react-router-dom";
 import ThemeContext from "contexts/ThemeContext";
+
+import styles from "./SocialMedia.module.css";
 
 export default function SocialMedia() {
   const { theme } = useContext(ThemeContext);
@@ -16,20 +15,24 @@ export default function SocialMedia() {
   const socialMediaItems = [
     {
       address: "https://t.me/Arsonexchange",
-      icon: <Telegram />,
-      darkIcon: <Telegram />,
+      icon: <img src={telegram} alt="icon" />,
+      darkIcon: <img src={telegram} alt="icon" />,
     },
     {
       address: "https://twitter.com/Arsonexchange",
-      icon: <Twitter />,
-      darkIcon: <DarkTwitter />,
+      icon: <img src={twitter} alt="icon" />,
+      darkIcon: <img src={darkTwitter} alt="icon" />,
     },
     {
       address: "https://www.instagram.com/Arsonexchange/",
-      icon: <Instagram />,
-      darkIcon: <Instagram />,
+      icon: <img src={instagram} alt="icon" />,
+      darkIcon: <img src={instagram} alt="icon" />,
     },
-    { address: "#", icon: <LinkedIn />, darkIcon: <LinkedIn /> },
+    {
+      address: "#",
+      icon: <img src={linkedin} alt="icon" />,
+      darkIcon: <img src={linkedin} alt="icon" />,
+    },
   ];
 
   return (

@@ -13,12 +13,12 @@
   transition: max-height 0.7s;
 }
 
-.accordion_title svg {
+.accordion_title img {
   transform: rotate(0deg);
   transition: 0.4s;
 }
 
-.accordion_title .active_svg svg {
+.accordion_title .active_svg img {
   transform: rotate(180deg);
   transition: 0.4s;
 }

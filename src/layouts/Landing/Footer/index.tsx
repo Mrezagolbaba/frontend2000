@@ -2,14 +2,12 @@ import { useContext } from "react";
 import styles from "./Footer.module.css";
 import ThemeContext from "contexts/ThemeContext";
 import { Link } from "react-router-dom";
-import {
-  DarkEmail,
-  Email,
-  DarkPhoneCall,
-  PhoneCall,
-  DarkLocation,
-  Location,
-} from "components/Icons/landingIcons";
+import darkEmail from "assets/icons/dark-email.svg";
+import email from "assets/icons/email.svg";
+import darkPhoneCall from "assets/icons/dark-phone-call.svg";
+import phoneCall from "assets/icons/phone-call.svg";
+import darkLocation from "assets/icons/dark-location.svg";
+import location from "assets/icons/location.svg";
 import SocialMedia from "./SocialMedia";
 
 export default function Footer() {
@@ -88,16 +86,29 @@ export default function Footer() {
           <ul className={styles.contact_us}>
             <li className={styles.list_title}>با ما در ارتباط باشید</li>
             <li>
-              {theme === "dark" ? <DarkEmail /> : <Email />}support@arsonex.com
+              {theme === "dark" ? (
+                <img src={darkEmail} alt="icon" />
+              ) : (
+                <img src={email} alt="icon" />
+              )}
+              support@arsonex.com
             </li>
             <li>
-              {theme === "dark" ? <DarkPhoneCall /> : <PhoneCall />}{" "}
+              {theme === "dark" ? (
+                <img src={darkPhoneCall} alt="icon" />
+              ) : (
+                <img src={phoneCall} alt="icon" />
+              )}{" "}
               021-92004581
             </li>
             <li>
               {" "}
-              {theme === "dark" ? <DarkLocation /> : <Location />} خیابان ۱۵
-              خرداد بازار بین الحرمین کوچه شیخ رضا پلاک ۴۶
+              {theme === "dark" ? (
+                <img src={darkLocation} alt="icon" />
+              ) : (
+                <img src={location} alt="icon" />
+              )}{" "}
+              خیابان ۱۵ خرداد بازار بین الحرمین کوچه شیخ رضا پلاک ۴۶
             </li>
           </ul>
 

@@ -2,18 +2,16 @@ import { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAppSelector } from "store/hooks";
 import ThemeContext from "contexts/ThemeContext";
-import {
-  DarkPhoneBlog,
-  DarkPhoneCall,
-  DarkPhoneLogo,
-  PhoneBlog,
-  PhoneCall,
-  PhoneLogo,
-} from "components/Icons/landingIcons";
-
-import home from "assets/scss/landing/new-home.module.scss";
 import PhoneMenu from "./PhoneMenu";
 import MarketsIcon from "components/Icons/MarketsIcon";
+import darkPhoneBlog from "assets/icons/dark-phone-blog.svg";
+import darkPhoneCall from "assets/icons/dark-phone-call.svg";
+import darkPhoneLogo from "assets/icons/dark-phone-logo.svg";
+import phoneBlog from "assets/icons/phone-blog.svg";
+import phoneCall from "assets/icons/phone-call.svg";
+import phoneLogo from "assets/icons/phone-logo.svg";
+
+import home from "assets/scss/landing/new-home.module.scss";
 
 type Props = {
   disableBanner?: boolean;
@@ -38,21 +36,21 @@ const Header = ({
     },
     {
       title: "بلاگ",
-      icon: <PhoneBlog />,
+      icon: <img src={phoneBlog} alt="icon" />,
       address: "#",
-      DarkIcon: <DarkPhoneBlog />,
+      DarkIcon: <img src={darkPhoneBlog} alt="icon" />,
     },
     {
       title: "درباره ما",
-      icon: <PhoneLogo />,
+      icon: <img src={phoneCall} alt="icon" />,
       address: "/aboutUs",
-      DarkIcon: <DarkPhoneLogo />,
+      DarkIcon: <img src={darkPhoneCall} alt="icon" />,
     },
     {
       title: "تماس با ما",
-      icon: <PhoneCall />,
+      icon: <img src={phoneLogo} alt="icon" />,
       address: "/contactUs",
-      DarkIcon: <DarkPhoneCall />,
+      DarkIcon: <img src={darkPhoneLogo} alt="icon" />,
     },
   ];
 

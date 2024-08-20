@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import FullSelectBox from "./FullSelectBox";
 import styles from "./CoinConverter.module.css";
 import { formatNumber, unformatNumber } from "helpers/number";
-import { ChangeTo, DarkChangeTo } from "components/Icons/landingIcons";
+
+import changeTo from "assets/icons/change-to.svg";
+import darkChangeTo from "assets/icons/dark-change-to.svg";
 import { useGetRateListQuery } from "store/api/publics";
 import fiat from "data/fiat";
 
@@ -30,7 +32,7 @@ export function CoinConverter({ dark }) {
           fields.forEach(
             (field) =>
               (value = field.dest === "IRR" && {
-                rate: field.rate.c[0].toString(),
+                rate: field?.rate.toString(),
                 shortName: field.code,
                 icon: fiat.find((coin) => coin.shortName === field.code)?.icon,
                 name: fiat.find((coin) => coin.shortName === field.code)?.name,
@@ -152,7 +154,11 @@ export function CoinConverter({ dark }) {
             setDestination(newDestination);
           }}
         >
-          {dark ? <DarkChangeTo /> : <ChangeTo />}
+          {dark ? (
+            <img src={darkChangeTo} alt="icon" />
+          ) : (
+            <img src={changeTo} alt="icon" />
+          )}
         </span>
 
         <div className={styles.input_holder}>

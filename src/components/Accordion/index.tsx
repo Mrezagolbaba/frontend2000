@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./Accordion.module.css";
-import { Acc, DarkAcc } from "components/Icons/landingIcons";
+import acc from "assets/icons/acc.svg";
+import darkAcc from "assets/icons/dark-acc.svg";
 
 type Props = {
   item: any;
@@ -18,19 +19,23 @@ export default function Accordion({
 
   return (
     <article
-      className={`${styles.accordion_item} ${isActive ? styles.active : ""} ${className}`}
+      className={`${styles["accordion_item"]} ${isActive ? styles.active : ""} ${className}`}
     >
       <div
-        className={styles.accordion_title}
+        className={styles["accordion_title"]}
         onClick={() => setIsActive(!isActive)}
       >
         <div className={titleStyle}>{item.title}</div>
-        <span className={isActive ? styles.active_svg : ""}>
-          {dark ? <DarkAcc /> : <Acc />}
+        <span className={isActive ? styles["active_svg"] : ""}>
+          {dark ? (
+            <img src={darkAcc} alt="icon" />
+          ) : (
+            <img src={acc} alt="icon" />
+          )}
         </span>
       </div>
       <div
-        className={`${styles.accordion_content} ${isActive ? styles.accordion_content_active : ""}`.trim()}
+        className={`${styles["accordion_content"]} ${isActive ? "active" : ""}`.trim()}
       >
         <p>{item.description}</p>
       </div>

@@ -1,17 +1,15 @@
 import { useContext, useState } from "react";
 import ThemeContext from "contexts/ThemeContext";
 import { Link } from "react-router-dom";
-import {
-  CloseMenu,
-  DarkCloseMenu,
-  DarkPhoneMenuIcon,
-  DarkPhoneTheme,
-  PhoneMenuIcon,
-  PhoneTheme,
-} from "components/Icons/landingIcons";
+import closeMenu from "assets/icons/close-menu.svg";
+import darkCloseMenu from "assets/icons/dark-close-menu.svg";
+import phoneMenuIcon from "assets/icons/phone-menu-icon.svg";
+import darkPhoneMenuIcon from "assets/icons/dark-phone-menu-icon.svg";
+import phoneTheme from "assets/icons/phone-theme.svg";
+import darkPhoneTheme from "assets/icons/dark-phone-theme.svg";
+import { useAppSelector } from "store/hooks";
 
 import home from "assets/scss/landing/new-home.module.scss";
-import { useAppSelector } from "store/hooks";
 
 export default function PhoneMenu({ menuItems, menuBtn }) {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -27,7 +25,11 @@ export default function PhoneMenu({ menuItems, menuBtn }) {
         className={home["mobile-menu-button"]}
         onClick={() => setActiveMenu(true)}
       >
-        {theme === "dark" ? <DarkPhoneMenuIcon /> : <PhoneMenuIcon />}
+        {theme === "dark" ? (
+          <img src={darkPhoneMenuIcon} alt="icon" />
+        ) : (
+          <img src={phoneMenuIcon} alt="icon" />
+        )}
       </button>
       <div
         className={`${home["mobile-menu"]} ${activeMenu ? home["show-menu"] : ""}`}
@@ -43,7 +45,11 @@ export default function PhoneMenu({ menuItems, menuBtn }) {
             className={home["mobile-menu-button"]}
             onClick={() => setActiveMenu(false)}
           >
-            {theme === "dark" ? <DarkCloseMenu /> : <CloseMenu />}
+            {theme === "dark" ? (
+              <img src={darkCloseMenu} alt="icon" />
+            ) : (
+              <img src={closeMenu} alt="icon" />
+            )}
           </button>
         </div>
 
@@ -59,7 +65,11 @@ export default function PhoneMenu({ menuItems, menuBtn }) {
 
           <li className={home.header__switch}>
             <span className={home.header__switch__title}>
-              {theme === "dark" ? <DarkPhoneTheme /> : <PhoneTheme />}
+              {theme === "dark" ? (
+                <img src={darkPhoneTheme} alt="icon" />
+              ) : (
+                <img src={phoneTheme} alt="icon" />
+              )}
               تغییر تم
             </span>
 

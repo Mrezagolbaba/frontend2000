@@ -6,24 +6,21 @@ import MgIcon from "assets/img/flags/iran.png";
 import UeIcon from "assets/img/flags/usa.png";
 import { coins } from "data/coins";
 import CoinConverter from "./CoinConverter";
+import { useLazyGetRateListQuery } from "store/api/publics";
 
 export default function Advantages({ dark }) {
-  const countries = [
-    { value: "IRR", label: "تومان", icon: MgIcon },
-    { value: "TRY", label: "تتر", icon: UeIcon },
-  ];
-
   const subject = [
     { value: "subject1", label: "انتخاب موضوع" },
     { value: "subject2", label: "انتخاب موضوع2" },
   ];
 
+  const [getRate] = useLazyGetRateListQuery();
+
   const [bandsBtnCls, setBandsBtnCls] = useState(
     `${styles.actions_button} ${styles.actions_button_load}`,
   );
   const [cryptoData, setCryptoData] = useState(coins);
-  const [changeFrom, setChangeFrom] = useState(cryptoData[0].shortName);
-  const [changeTo, setChangeTo] = useState(cryptoData[1].shortName);
+
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const [change, setchange] = useState({
@@ -53,8 +50,8 @@ export default function Advantages({ dark }) {
           const coin = USD.pair.split("/")[0];
           let lastPrice = 0;
 
-          if (USD.rate.c.length === 2) {
-            lastPrice = USD.rate.c[0];
+          if (USD.rate) {
+            lastPrice = USD?.rate;
           } else if (USD.kline) {
             const firstSet = USD.kline[0];
 

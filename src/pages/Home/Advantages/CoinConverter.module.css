@@ -34,9 +34,10 @@
   position: relative;
 }
 
-.change_to svg {
+.change_to img {
   display: block;
   margin: 8px auto;
+  cursor: pointer;
 }
 
 .actions_button {

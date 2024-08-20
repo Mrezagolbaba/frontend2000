@@ -63,16 +63,10 @@ const SpotRate = () => {
   const findCorrectRate = (array) => {
     if (activeUnit === 0) {
       const rate = array.find((item) => item.dest === "IRR")?.rate;
-      const amount = rate?.c[1]
-        ? `${rate.c[0]}.${rate?.c[1]}`
-        : `${rate?.c[0]}`;
-      return normalizeAmount(amount, "IRR", false, false);
+      return normalizeAmount(rate, "IRR", false, false);
     } else {
       const rate = array.find((item) => item.dest === "USD")?.rate;
-      const amount = rate?.c[1]
-        ? `${rate?.c[0]}.${rate.c[1]}`
-        : `${rate?.c[0]}`;
-      return normalizeAmount(amount, "USDT", false, false);
+      return normalizeAmount(rate, "USDT", false, false);
     }
   };
 
