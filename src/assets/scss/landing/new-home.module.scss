@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  height: 100vh;
+  background-color: var(--body);
 }
 
 .container {
@@ -274,6 +274,7 @@
   font-weight: 500;
   font-family: "yekan_bold";
   font-size: var(--font_36);
+  color: var(--text-black);
 }
 // _-_-_-_-_ banner _-_-_-_-_
 .banner {
@@ -345,6 +346,7 @@
     align-items: center;
     width: 100%;
     gap: 20px;
+    color: var(--text-black);
   }
   &__table {
     width: 100%;
