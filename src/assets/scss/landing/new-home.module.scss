@@ -441,6 +441,11 @@
     }
   }
 }
+.chart {
+  height: 70px;
+  padding: 0 60px !important;
+  max-width: 262px;
+}
 
 @media screen and (max-width: 1200px) {
   .spot-rate {
@@ -449,6 +454,9 @@
         padding: 0 25px !important;
       }
     }
+  }
+  .chart {
+    padding: 0 25px !important;
   }
 }
 

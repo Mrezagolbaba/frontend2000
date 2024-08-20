@@ -1,7 +1,7 @@
-import { enhancedApi } from ".";
 import { RateResponse } from "types/exchange";
+import { enhancedApi } from ".";
 
-export const publicsApi = enhancedApi.injectEndpoints({
+export const publicApi = enhancedApi.injectEndpoints({
   endpoints: (builder) => ({
     getRate: builder.query<
       RateResponse,
@@ -14,7 +14,29 @@ export const publicsApi = enhancedApi.injectEndpoints({
         };
       },
     }),
+    getRates: builder.query<any, any>({
+      query(params) {
+        return {
+          method: "GET",
+          url: `/rates`,
+          params,
+        };
+      },
+    }),
+    getRateList: builder.query<any, any>({
+      query(list) {
+        return {
+          method: "GET",
+          url: `/rates/list/${list}`,
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetRateQuery, useLazyGetRateQuery } = publicsApi;
+export const {
+  useLazyGetRateQuery,
+  useGetRatesQuery,
+  useLazyGetRateListQuery,
+  useGetRateListQuery,
+} = publicApi;

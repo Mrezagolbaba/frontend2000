@@ -362,6 +362,7 @@ export const normalizeAmount = (
   amount: string,
   currency: CurrencyCode,
   isShowCurrency: boolean,
+  isFormat = true,
 ) => {
   if (!amount || isEmpty(amount)) return "0";
   const everChar = 3;
@@ -385,21 +386,28 @@ export const normalizeAmount = (
   switch (currency) {
     case "USDT":
     case "TRX": {
-      let decimalPart = amount.substring(indexDot, indexDot + 7);
+      let decimalPart = isFormat
+        ? amount.substring(indexDot, indexDot + 7)
+        : amount.substring(indexDot, amount.length);
       if (decimalPart === ".000000") decimalPart = "";
       if (isShowCurrency) return `${intPart + decimalPart} تتر`;
       else return intPart + decimalPart;
     }
     case "TRY": {
-      let decimalPart = amount.substring(indexDot, indexDot + 3);
+      let decimalPart = isFormat
+        ? amount.substring(indexDot, indexDot + 3)
+        : amount.substring(indexDot, amount.length);
       if (decimalPart === ".00") decimalPart = "";
       if (isShowCurrency) return `${intPart + decimalPart} لیر`;
       else return intPart + decimalPart;
     }
     case "IRR":
     default: {
-      if (isShowCurrency) return `${intPart} تومان`;
-      else return intPart;
+      const decimalPart = isFormat
+        ? ""
+        : `.${amount.substring(indexDot - 1, amount.length).replace(".", "")}`;
+      if (isShowCurrency) return `${intPart + decimalPart} تومان`;
+      else return intPart + decimalPart;
     }
   }
 };

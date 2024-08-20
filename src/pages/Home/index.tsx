@@ -40,7 +40,7 @@ export default function HomePage() {
             مشاهده همه ارزها
           </Link>
         </section>
-        <Advantages />
+        <Advantages dark={theme === "dark"} />
 
         {/* <UserComments /> */}
         {/* <LastBlogs /> */}

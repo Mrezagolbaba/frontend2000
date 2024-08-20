@@ -1,4 +1,4 @@
-import Lira from "assets/img/coins/try.svg";
+import Lira from "assets/img/coins/icon_try.svg";
 import toman from "assets/img/coins/Toman.svg";
 import tetter from "assets/img/coins/tether.svg";
 import { CurrencyCode } from "types/wallet";
