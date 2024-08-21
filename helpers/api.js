@@ -21,7 +21,7 @@ export function getChartData(coinData) {
 }
 
 export function getUnitPrice(coinData) {
-  return coinData.rate.c[0];
+  return coinData.rate;
 }
 
 export function getCoinsUnitPrice(coins) {

@@ -53,8 +53,8 @@ export default function Advantages({ dark }) {
           const coin = USD.pair.split('/')[0];
           let lastPrice = null;
 
-          if (USD.rate.c.length === 2) {
-            lastPrice = USD.rate.c[0];
+          if (USD.rate) {
+            lastPrice = USD.rate;
           } else if (USD.kline) {
             const firstSet = USD.kline[0];
 

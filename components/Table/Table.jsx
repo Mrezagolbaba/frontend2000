@@ -60,7 +60,7 @@ export default function Table({ currentTable, children }) {
             seriesData,
             lowVal,
             highVal,
-            lastPrice: USD.rate.c.length === 2 ? USD.rate.c[0] : '---',
+            lastPrice: USD.rate,
           };
         });
 
