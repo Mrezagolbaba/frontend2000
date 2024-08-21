@@ -1,7 +1,0 @@
-node_modules/
-dist/
-build/
-*.png
-*.jpg
-*.svg
-src/assets/vendor/*
