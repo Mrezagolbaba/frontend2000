@@ -87,6 +87,8 @@ export function getCoinChanges(coinData) {
 
   const randChange = _.random(-100, 100);
 
+  console.log(coinData);
+
   return randChange === 0 ? getCoinChanges(coinData) : randChange;
 }
 
