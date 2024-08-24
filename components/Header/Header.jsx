@@ -14,6 +14,7 @@ import {
   PhoneLogo,
   PhoneMenuIcon,
 } from '../svg';
+import { ADMIN_ADDRESS } from '@/data/config';
 
 export default function Header() {
   const [authenticated, setAuthenticated] = useState(null);
@@ -50,29 +51,17 @@ export default function Header() {
   const menuBtn = [
     {
       title: 'ورود',
-      address: 'https://dev.paydirham.me/login',
+      address: `${ADMIN_ADDRESS}/login`,
       class: styles.login,
       phoneClass: styles.phone_login,
     },
     {
       title: 'ثبت نام',
-      address: 'https://dev.paydirham.me/register',
+      address: `${ADMIN_ADDRESS}/register`,
       class: styles.signup,
       phoneClass: styles.phone_signup,
     },
   ];
-
-  useEffect(() => {
-    fetch('https://dev-api.paydirham.me/v1/users/me')
-      .then((response) => response.json())
-      .then((data) => {
-        if (data?.statusCode === 401) {
-          setAuthenticated(false);
-        } else {
-          setAuthenticated(data);
-        }
-      });
-  }, []);
 
   return (
     <header
@@ -127,18 +116,11 @@ export default function Header() {
           <span className={`${styles.slider} ${styles.round}`}></span>
         </label>
 
-        {!authenticated &&
-          menuBtn.map((item, index) => (
-            <Link key={index} className={item.class} href={item.address}>
-              {item.title}
-            </Link>
-          ))}
-
-        {authenticated && (
-          <Link href="https://dev.paydirham.me/dashboard">
-            {authenticated.firstName} {authenticated.lastName}
+        {menuBtn.map((item, index) => (
+          <Link key={index} className={item.class} href={item.address}>
+            {item.title}
           </Link>
-        )}
+        ))}
       </div>
     </header>
   );

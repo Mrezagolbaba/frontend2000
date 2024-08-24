@@ -2,6 +2,7 @@ import Link from 'next/link';
 import ApexChart from '../ApexChart';
 import styles from '../Profitable/Profitable.module.css';
 import React from 'react';
+import { formatNumber } from '@/helpers/number';
 
 export default function Box({ item, className }) {
   return (
@@ -32,15 +33,15 @@ export default function Box({ item, className }) {
       {item.type != 2 && (
         <ul className={styles.currency_price}>
           <li>
-            قیمت امروز<span>{item.today}</span>
+            قیمت امروز<span>{formatNumber(item.today)}</span>
           </li>
           {item.type == 1 && (
             <>
               <li>
-                پایین‌ترین قیمت<span>{item.low}</span>
+                پایین‌ترین قیمت<span>{formatNumber(item.low)}</span>
               </li>
               <li>
-                بالاترین قیمت<span>{item.high}</span>
+                بالاترین قیمت<span>{formatNumber(item.high)}</span>
               </li>
             </>
           )}

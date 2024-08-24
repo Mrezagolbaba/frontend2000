@@ -14,9 +14,11 @@ export default function Advantage({
       <article className={styles.options_description}>
         <h3 className="section_title">{title}</h3>
         <p className={styles.options_description_text}>{description}</p>
-        <Link className={styles.options_description_link} href={address}>
-          اطلاعات بیشتر
-        </Link>
+        {address && (
+          <Link className={styles.options_description_link} href={address}>
+            اطلاعات بیشتر
+          </Link>
+        )}
       </article>
 
       <section className={styles.left_section}>

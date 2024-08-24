@@ -64,7 +64,7 @@ export default function PhoneMenu({
             </Link>
           ))}
         {authenticated && (
-          <Link href="https://dev.paydirham.me/dashboard">
+          <Link href={`${ADMIN_ADDRESS}/dashboard`}>
             {authenticated.firstName} {authenticated.lastName}
           </Link>
         )}

@@ -7,8 +7,11 @@ import UeIcon from '../../public/images/usa.png';
 import CoinConverter from '../CoinConverter/CoinConverter';
 import { getAllCoins } from '@/helpers/api';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { ADMIN_ADDRESS } from '@/data/config';
 
 export default function Advantages({ dark }) {
+  const route = useRouter();
   const countries = [
     { value: 'IRR', label: 'تومان', icon: MgIcon.src },
     { value: 'TRY', label: 'تتر', icon: UeIcon.src },
@@ -64,9 +67,9 @@ export default function Advantages({ dark }) {
     <section className={styles.options_holder}>
       <Advantage
         className={styles.adv1}
-        title="به راحتی دلار، یورو، لیر و سایر ارزها را معامله کنید"
-        description="لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک چاپگرها و متون بلکه روزنامه و مجله در ستون سطر آنچنان که لازم است،"
-        address="#"
+        title="به راحتی بیش از ۳۰ واحد پول مختلف را با ارز دیجیتال معامله کنید"
+        description="در آرسونیکس، می‌توانید از سرویس‌های ویژه‌ای که برای تبدیل دارایی‌های خود در کشور محل اقامتتان فراهم کرده‌ایم، مانند معامله، واریز یا برداشت فیات دیجیتال، بهره‌مند شوید."
+        address="https://help.arsonex.com/trading-methods/"
         actionHolderCls={styles.adv1_holder}
       >
         <CoinConverter {...{ dark }} />
@@ -74,9 +77,8 @@ export default function Advantages({ dark }) {
 
       <Advantage
         className={styles.adv2}
-        title="24 ساعته پشتیبانی آرسونیکس پاسخگوی شما خواهد بود"
-        description="لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک چاپگرها و متون بلکه روزنامه و مجله در ستون سطر آنچنان که لازم است،"
-        address="#"
+        title="۲۴/۷ پاسخگوی شما هستیم"
+        description="شما می‌توانید به‌صورت ۲۴ ساعته و در تمام ایام هفته از خدمات پشتیبانی آرسونیکس بهره‌مند شوید. این خدمات از طریق چت آنلاین، تماس تلفنی و یا ارسال تیکت در دسترس شما قرار دارد تا در هر زمان که نیاز داشته باشید، پشتیبانی لازم را دریافت کنید."
       >
         <form>
           <SelectBox
@@ -96,7 +98,12 @@ export default function Advantages({ dark }) {
             />
           </div>
 
-          <button className={styles.actions_button}>درخواست پشتیبانی</button>
+          <button
+            className={styles.actions_button}
+            onCliCk={() => route.push(`${ADMIN_ADDRESS}/support`)}
+          >
+            درخواست پشتیبانی
+          </button>
         </form>
       </Advantage>
 
@@ -108,8 +115,8 @@ export default function Advantages({ dark }) {
             خرید و فروش کنید
           </>
         }
-        description="لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک چاپگرها و متون بلکه روزنامه و مجله در ستون سطر آنچنان که لازم است،"
-        address="#"
+        description="ارائه خدمات با کیفیت بالا و تأمین امنیت در یک پلتفرم معاملاتی ارز دیجیتال از مهم‌ترین ویژگی‌هایی است که باید مورد توجه قرار گیرد. آرسونیکس این ویژگی‌ها را با کارمزدی پایین فراهم کرده و تجربه‌ای لذت‌بخش را برای استفاده از این خدمات در اختیار شما قرار می‌دهد."
+        address="https://help.arsonex.com/fees/"
       >
         <div className={styles.commission}>
           <h6>نرخ کارمزد</h6>
@@ -130,17 +137,16 @@ export default function Advantages({ dark }) {
         className={styles.adv4}
         title={
           <>
-            با یک نرخ بفروشید <br /> و با همان نرخ بخرید
+            با یک نرخ بخرید <br /> و با همان نرخ بفروشید
           </>
         }
-        description="لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک چاپگرها و متون بلکه روزنامه و مجله در ستون سطر آنچنان که لازم است،"
-        address="#"
+        description="آیا همیشه نگران پر شدن سفارش خرید یا فروش خود هستید؟ آیا اختلاف نرخ بین خرید و فروش در معاملات سریع (OTC) باعث ضرر شما می‌شود؟ با استفاده از قابلیت معاملات تک نرخی خرید و فروش سریع آرسونیکس، می‌توانید از تجربه‌ای مطمئن و بدون دغدغه لذت ببرید."
       >
         <div className={styles.currency}>
           <Image
             width={36}
             height={36}
-            src={currentCrypto?.icon}
+            src={currentCrypto}
             className={styles.currency_img}
             alt="currency"
           />

@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { coins } from '../data/coins';
 import fiat from '@/data/fiat';
+import { BASE_URL } from '@/data/config';
 
 export function getAvailableCoins(dataType) {
   if (dataType === 'fiat') return fiat;
@@ -49,9 +50,7 @@ export function getMostProfitableCoins(type) {
 
   return Promise.all(
     randomCoins.map(({ shortName }) =>
-      fetch(
-        `https://dev-api.paydirham.me/v1/rates?selectedCurrency=${shortName}`,
-      ),
+      fetch(`${BASE_URL}rates?selectedCurrency=${shortName}`),
     ),
   ).then((response) => Promise.all(response.map((res) => res.json())));
 }
@@ -63,9 +62,7 @@ export function getMostLovedCoins(type) {
 
   return Promise.all(
     randomCoins.map(({ shortName }) =>
-      fetch(
-        `https://dev-api.paydirham.me/v1/rates?selectedCurrency=${shortName}`,
-      ),
+      fetch(`${BASE_URL}rates?selectedCurrency=${shortName}`),
     ),
   ).then((response) => Promise.all(response.map((res) => res.json())));
 }
@@ -77,9 +74,7 @@ export function getNewestCoins(type) {
 
   return Promise.all(
     randomCoins.map(({ shortName }) =>
-      fetch(
-        `https://dev-api.paydirham.me/v1/rates?selectedCurrency=${shortName}`,
-      ),
+      fetch(`${BASE_URL}rates?selectedCurrency=${shortName}`),
     ),
   ).then((response) => Promise.all(response.map((res) => res.json())));
 }
@@ -96,7 +91,7 @@ export async function getAllCoins(type) {
   const coinList = getAvailableCoins(type);
   const list = coinList.map((coin) => coin.shortName);
 
-  return await fetch(`https://dev-api.paydirham.me/v1/rates/list/${list}`)
+  return await fetch(`${BASE_URL}rates/list/${list}`)
     .then((response) => response.json())
     .then((data) => {
       return Object.entries(data).map(([currencyCode, info]) => ({
@@ -121,7 +116,7 @@ export function swapCurrency(
   { destinationCurrencyCode, sourceCurrencyCode, sourceAmount },
   token,
 ) {
-  return fetch('https://dev-api.paydirham.me/v1/currency-swaps?dry_run=true', {
+  return fetch('${BASE_URL}currency-swaps?dry_run=true', {
     method: 'POST',
     body: JSON.stringify({
       destinationCurrencyCode,

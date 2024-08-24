@@ -5,6 +5,7 @@ import ApexChart from '../ApexChart';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import IconTether from '../../public/images/icon_tether.svg';
+import { BASE_URL } from '@/data/config';
 
 export default function Table({ currentTable, children }) {
   const dataEntries = Object.fromEntries(
@@ -17,9 +18,7 @@ export default function Table({ currentTable, children }) {
   useEffect(() => {
     Promise.all(
       currentTable.map(({ shortName }) =>
-        fetch(
-          `https://dev-api.paydirham.me/v1/rates?selectedCurrency=${shortName}`,
-        ),
+        fetch(`${BASE_URL}rates?selectedCurrency=${shortName}`),
       ),
     )
       .then((response) => Promise.all(response.map((res) => res.json())))

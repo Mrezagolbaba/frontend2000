@@ -9,6 +9,8 @@ import Advantages from '../Advantage/Advantages';
 import Profitable from '../Profitable/Profitable';
 import ThemeContext from '../ThemeContext';
 import Blogs from '../Blog/Blogs';
+import Image from 'next/image';
+import { ADMIN_ADDRESS } from '@/data/config';
 
 // Dynamically import the ApexChart component
 // const ApexChart = dynamic(() => import('../ApexChart'), { ssr: false });
@@ -47,15 +49,17 @@ export default function Index() {
             معامله ارز دیجیتال و جابجایی بین‌المللی فیات
           </h2>
           <p className={styles.banner_description}>
-            در آرسونیکس، ارزهای دیجیتال یا ارزهای رایج مانند دلار، پوند، لیر و
-            ریال را سریع و امن معامله کنید و به‌راحتی ارزهای رایج را از یک کشور
-            به کشور دیگر منتقل کنید.
+            در آرسونیکس، ارزهای دیجیتال را با سرعت و امنیت بالا معامله کنید و در
+            صورت اقامت در خارج از ایران، از خدمات ویژه بین‌المللی آرسونیکس
+            بهره‌مند شوید.
           </p>
-          <Link href="#" className={styles.blue_btn}>
+          <Link href={`${ADMIN_ADDRESS}/login`} className={styles.blue_btn}>
             همین حالا امتحان کنید
           </Link>
         </div>
-        <img
+        <Image
+          width={100}
+          height={100}
           src={Dashboard.src}
           className={styles.dashboard_img}
           alt="Dashboard"
