@@ -1,183 +1,162 @@
 import { useState, useEffect } from 'react';
-import { ChangeTo, DarkChangeTo } from '../svg';
-import FullSelectBox from '../FullSelectBox/FullSelectBox';
-import {
-  getAllCoins,
-  getCoinCodeName,
-  getCoinDataByPair,
-  getCoinsUnitPrice,
-  swapCurrency,
-} from '@/helpers/api';
 import styles from './CoinConverter.module.css';
+import { ChangeTo, DarkChangeTo } from '../svg';
+import { getAllCoins } from '@/helpers/api';
+import FullSelectBox from '../FullSelectBox/FullSelectBox';
+import fiat from '@/data/fiat';
 import { formatNumber, unformatNumber } from '@/helpers/number';
 
 export function CoinConverter({ dark }) {
-  const defaultSelectedCoins = {
-    changeFrom: 0,
-    changeTo: 1,
-  };
-  const [coins, setCoins] = useState(0);
-  const [changeFromCN, setChangeFromCN] = useState();
-  const [changeFromValue, setChangeFromValue] = useState();
-  const [changeToCN, setChangeToCN] = useState();
-  const [changeToValue, setChangeToValue] = useState();
-  const [selectBoxItems, setSelectBoxItems] = useState();
-  const [search, setSearch] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [source, setSource] = useState({ amount: 0, code: 'IRR' });
+  const [destination, setDestination] = useState({
+    amount: 0,
+    code: 'TRY',
+  });
+  const [selectBoxItems, setSelectBoxItems] = useState([]);
 
   useEffect(() => {
-    if (!selectBoxItems) {
+    const interval = setInterval(() => {
       getAllCoins('fiat').then((data) => {
-        setCoins(data);
+        setIsLoading(false);
         setSelectBoxItems(data);
-        // let _coins = data.map((coin) => getCoinDataByPair(coin, 'IRR'));
-        // _coins = getCoinsUnitPrice(_coins);
-
-        // setChangeFromCN(_coins[defaultSelectedCoins.changeFrom]);
-        // setChangeToCN(_coins[defaultSelectedCoins.changeTo]);
-        // setSelectBoxItems(_coins);
-        // setCoins(_coins);
       });
-    }
+    }, 6000);
+
+    return () => clearInterval(interval);
   }, []);
 
-  const handleRequest = ({
-    destinationCurrencyCode,
-    sourceAmount,
-    sourceCurrencyCode,
-    onSuccess,
-  }) => {
-    setTimeout(() => {
-      swapCurrency(
-        {
-          destinationCurrencyCode,
-          sourceAmount,
-          sourceCurrencyCode,
-        },
-        process.env.NEXT_PUBLIC_JWT_TOKEN,
-      )
-        .then((response) => response.json())
-        .then(({ destinationAmount }) => onSuccess(destinationAmount));
-    }, 500);
-  };
-
-  const getSelectedCodeName = (value) =>
-    typeof value === 'string' ? value : getCoinCodeName(value);
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-
+  const handleInputChange = ({ target: { name, value } }) => {
     const newValue = unformatNumber(value) ?? 0;
-
-    if (name === 'changeFrom') {
-      setChangeFromValue(newValue);
-
-      handleRequest({
-        destinationCurrencyCode: getSelectedCodeName(changeToCN),
-        sourceAmount: newValue.toString(),
-        sourceCurrencyCode: getSelectedCodeName(changeFromCN),
-        onSuccess: setChangeToValue,
-      });
-    }
-
-    if (name === 'changeTo') {
-      setChangeToValue(newValue);
-
-      handleRequest({
-        destinationCurrencyCode: getSelectedCodeName(changeFromCN),
-        sourceAmount: newValue.toString(),
-        sourceCurrencyCode: getSelectedCodeName(changeToCN),
-        onSuccess: setChangeFromValue,
-      });
-    }
-  };
-
-  const handleSelectBoxChange = (codeName, callback, type) => {
-    callback(codeName);
-
-    if (type === 'changeFrom') {
-      handleRequest({
-        destinationCurrencyCode: changeToCN,
-        sourceAmount: changeFromValue,
-        sourceCurrencyCode: getSelectedCodeName(codeName),
-        onSuccess: setChangeToValue,
-      });
-    }
-
-    if (type === 'changeTo') {
-      handleRequest({
-        destinationCurrencyCode: changeFromCN,
-        sourceAmount: changeToValue,
-        sourceCurrencyCode: getSelectedCodeName(codeName),
-        onSuccess: setChangeFromValue,
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (search.trim().length > 0 && coins.length > 0) {
-      const filteredCoins = coins.filter((coin) =>
-        coin?.codeName?.includes(search),
-      );
-
-      setSelectBoxItems(filteredCoins);
+    if (source.code === 'IRR') {
+      if (name === 'source') {
+        setSource((oldVal) => ({
+          ...oldVal,
+          amount: newValue,
+        }));
+        setDestination((oldVal) => ({
+          ...oldVal,
+          amount: Number(
+            (source.code === 'IRR' ? newValue * 10 : newValue) /
+              selectBoxItems.find((item) => item?.codeName === oldVal.code)
+                ?.rate?.['IRR'],
+          ).toFixed(2),
+        }));
+      } else {
+        setDestination((oldVal) => ({
+          ...oldVal,
+          amount: newValue,
+        }));
+        setSource((oldVal) => ({
+          ...oldVal,
+          amount: Number(
+            (destination.code === 'IRR' ? newValue * 10 : newValue / 10) *
+              selectBoxItems.find((item) => item?.codeName === destination.code)
+                ?.rate?.['IRR'],
+          ).toFixed(2),
+        }));
+      }
     } else {
-      setSelectBoxItems(coins);
+      if (name === 'source') {
+        setSource((oldVal) => ({
+          ...oldVal,
+          amount: newValue,
+        }));
+        setDestination((oldVal) => ({
+          ...oldVal,
+          amount: Number(
+            (source.code === 'IRR' ? newValue * 10 : newValue) *
+              selectBoxItems.find((item) => item.codeName === source.code)
+                ?.rate?.['IRR'],
+          ).toFixed(2),
+        }));
+      } else {
+        setDestination((oldVal) => ({
+          ...oldVal,
+          amount: newValue,
+        }));
+        setSource((oldVal) => ({
+          ...oldVal,
+          amount: Number(
+            (destination.code === 'IRR' ? newValue * 10 : newValue / 10) /
+              selectBoxItems.find((item) => item.codeName === oldVal.code)
+                ?.rate?.['IRR'],
+          ).toFixed(2),
+        }));
+      }
     }
-  }, [search]);
+  };
+
+  // useEffect(() => {
+  //   if (search.trim().length > 0 && fiat.length > 0) {
+  //     const filteredCoins = fiat.filter((coin) => coin.name.includes(search));
+
+  //     setSelectBoxItems(filteredCoins);
+  //   } else {
+  //     setSelectBoxItems(fiat);
+  //   }
+  // }, [search]);
 
   const getPlaceHolder = () =>
-    `جستجو در ${formatNumber(coins.length)} ارز دیجیتال...`;
+    `جستجو در ${formatNumber(fiat.length)} فیات دیجیتال...`;
 
-  return (
-    coins.length > 0 && (
-      <form>
-        <div className={styles.input_holder}>
-          <input
-            type="text"
-            name="changeFrom"
-            value={formatNumber(changeFromValue)}
-            onInput={handleInputChange}
-          />
-          <FullSelectBox
-            className={styles.select_box}
-            setcurrentTable={(codeName) =>
-              handleSelectBoxChange(codeName, setChangeFromCN, 'changeFrom')
-            }
-            items={selectBoxItems}
-            defaultVal={changeFromCN}
-            placeholder={getPlaceHolder()}
-            onInput={(event) => setSearch(event.target.value)}
-            onClose={() => setSearch('')}
-          />
-        </div>
+  return isLoading ? (
+    'درحال بارگذاری...'
+  ) : (
+    <form>
+      <div className={styles.input_holder}>
+        <input
+          type="text"
+          name="source"
+          value={formatNumber(source.amount)}
+          onChange={handleInputChange}
+        />
+        <FullSelectBox
+          className={styles.select_box}
+          onChange={(code) =>
+            setSource((oldVal) => ({ ...oldVal, code: code }))
+          }
+          items={selectBoxItems}
+          value={source.code}
+          disabled={source.code === 'IRR'}
+          placeholder={getPlaceHolder()}
+        />
+      </div>
 
-        <span className={styles.change_to}>
-          {dark ? <DarkChangeTo /> : <ChangeTo />}
-        </span>
+      <span
+        className={styles.change_to}
+        onClick={() => {
+          const newSource = destination;
+          const newDestination = source;
 
-        <div className={styles.input_holder}>
-          <input
-            type="text"
-            name="changeTo"
-            value={formatNumber(changeToValue)}
-            onInput={handleInputChange}
-          />
-          <FullSelectBox
-            className={styles.select_box}
-            setcurrentTable={(codeName) =>
-              handleSelectBoxChange(codeName, setChangeToCN, 'changeTo')
-            }
-            items={selectBoxItems}
-            defaultVal={changeToCN}
-            placeholder={getPlaceHolder()}
-            onInput={(event) => setSearch(event.target.value)}
-            onClose={() => setSearch('')}
-          />
-        </div>
+          setSource(newSource);
+          setDestination(newDestination);
+        }}
+      >
+        {dark ? <DarkChangeTo /> : <ChangeTo />}
+      </span>
 
-        <button className={styles.actions_button}>خرید</button>
-      </form>
-    )
+      <div className={styles.input_holder}>
+        <input
+          type="text"
+          name="destination"
+          value={formatNumber(destination.amount)}
+          onChange={handleInputChange}
+        />
+        <FullSelectBox
+          className={styles.select_box}
+          onChange={(code) =>
+            setDestination((oldVal) => ({ ...oldVal, code: code }))
+          }
+          items={selectBoxItems}
+          value={destination.code}
+          disabled={destination.code === 'IRR'}
+          placeholder={getPlaceHolder()}
+        />
+      </div>
+
+      <button className={styles.actions_button}>خرید</button>
+    </form>
   );
 }
 

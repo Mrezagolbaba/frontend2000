@@ -126,6 +126,7 @@
 .search_box_close {
   position: absolute;
   left: 15px;
+  background-color: transparent !important;
 }
 
 .select_options_scroll {
@@ -157,6 +158,9 @@
 .icon {
   width: 20px;
   height: 20px;
+  object-fit: cover;
+  border-radius: 50%;
+  background-color: #cacaca;
 }
 
 .options_item_label {

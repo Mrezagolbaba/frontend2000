@@ -1,45 +1,79 @@
-import React, { useContext, useState, useEffect } from 'react';
-import ThemeContext from '../ThemeContext';
+import { useContext, useState, useEffect } from 'react';
+import fiat from '@/data/fiat';
+
 import styles from './FullSelectBox.module.css';
-import IconX from '../../public/images/x.svg';
+import ThemeContext from '../ThemeContext';
 import Image from 'next/image';
-import { formatNumber } from '@/helpers/number';
+import iran from '@/public/images/icon_toman.svg';
+import iconX from '@/public/images/x.svg';
+import { formatNumber, normalizeAmount } from '@/helpers/number';
 
 export function FullSelectBox({
   className,
   items,
-  defaultVal,
-  setcurrentTable,
-  onInput = () => {},
-  onClose = () => {},
-  placeholder = null,
+  value,
+  onChange,
+  disabled = false,
+  placeholder,
 }) {
-  const [selectedItem, setselectedItem] = useState({ ...defaultVal });
+  const [selectedItem, setSelectedItem] = useState({
+    icon:
+      value === 'IRR'
+        ? iran
+        : fiat.find((item) => item.shortName === value)?.icon,
+    name:
+      value === 'IRR'
+        ? 'تومان'
+        : fiat.find((item) => item.shortName === value)?.name,
+    codeName: value,
+    rate: [],
+  });
   const [isOpen, setIsOpen] = useState(false);
+  const [itemList, setItemList] = useState([]);
   const [search, setSearch] = useState('');
 
   const handleDropdownToggle = () => {
-    setIsOpen(!isOpen);
+    setIsOpen((oldVal) => !oldVal);
   };
 
   const handleOptionClick = (item) => {
-    setselectedItem(item);
+    setSelectedItem(item);
     setIsOpen(false);
-
-    setcurrentTable && setcurrentTable(item?.shortName);
+    onChange?.(item.codeName);
   };
 
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
-    setSearch('');
-    onClose();
+    if (isOpen) {
+      setSearch('');
+    }
   }, [isOpen]);
+
+  useEffect(() => {
+    setItemList(items);
+  }, [items]);
+
+  useEffect(() => {
+    const item = {
+      icon:
+        value === 'IRR'
+          ? iran
+          : fiat.find((item) => item.shortName === value)?.icon,
+      name:
+        value === 'IRR'
+          ? 'تومان'
+          : fiat.find((item) => item.shortName === value)?.name,
+      shortName: value,
+      rate: '',
+    };
+    setSelectedItem(item);
+  }, [value]);
 
   return (
     <>
       <div
-        onClick={handleDropdownToggle}
+        onClick={() => !disabled && handleDropdownToggle()}
         className={`${styles.select_box_holder} ${className}`}
       >
         <div
@@ -51,7 +85,7 @@ export function FullSelectBox({
             {selectedItem.icon ? (
               <Image
                 src={selectedItem.icon}
-                alt={selectedItem.shortName}
+                alt={selectedItem.codeName}
                 className={styles.icon}
               />
             ) : null}
@@ -65,27 +99,36 @@ export function FullSelectBox({
       >
         <div className={styles.search_box}>
           <Image
-            src={IconX}
+            src={iconX}
             alt="close"
             className={`${styles.icon} ${styles.search_box_close}`}
             onClick={() => setIsOpen(false)}
           />
           <input
             type="text"
-            {...{ placeholder, onInput }}
+            placeholder={placeholder}
             value={search}
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={({ target }) => {
+              setSearch(target.value.toUpperCase());
+              setItemList((oldVal) => {
+                if (target.value !== '')
+                  return oldVal.filter((item) => {
+                    return item.codeName?.includes(target.value.toUpperCase());
+                  });
+                else return items;
+              });
+            }}
           />
         </div>
         <div className={styles.select_options_scroll}>
-          {items.map((item, index) => (
+          {itemList.map((item, index) => (
             <div
               key={index}
               className={styles.options_item}
               onClick={() => handleOptionClick(item)}
             >
               <span>
-                {formatNumber(Number(item?.rate?.['IRR'], '').toFixed(2))} تومان
+                {normalizeAmount(item?.rate?.['IRR'], 'IRR', true, true)}
               </span>
               <div className={styles.options_item_label}>
                 <span>{item?.codeName}</span>
@@ -93,7 +136,7 @@ export function FullSelectBox({
                   <Image
                     className={styles.icon}
                     src={item?.icon}
-                    alt={item?.shortName}
+                    alt={item?.codeName}
                     style={{ marginRight: 10 }}
                   />
                 ) : null}

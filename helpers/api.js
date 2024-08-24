@@ -89,8 +89,6 @@ export function getCoinChanges(coinData) {
 
   const randChange = _.random(-100, 100);
 
-  console.log(coinData);
-
   return randChange === 0 ? getCoinChanges(coinData) : randChange;
 }
 
@@ -100,8 +98,8 @@ export async function getAllCoins(type) {
 
   return await fetch(`https://dev-api.paydirham.me/v1/rates/list/${list}`)
     .then((response) => response.json())
-    .then((data) =>
-      Object.entries(data).map(([currencyCode, info]) => ({
+    .then((data) => {
+      return Object.entries(data).map(([currencyCode, info]) => ({
         codeName: currencyCode,
         rate: {
           [info?.[0]?.dest]: info?.[0]?.rate,
@@ -111,8 +109,8 @@ export async function getAllCoins(type) {
         kline: info?.[0]?.kline,
         icon: coinList.find((coin) => coin.shortName === currencyCode).icon,
         name: coinList.find((coin) => coin.shortName === currencyCode).name,
-      })),
-    )
+      }));
+    })
     .catch((error) => {
       console.error(error.message);
       return [];
