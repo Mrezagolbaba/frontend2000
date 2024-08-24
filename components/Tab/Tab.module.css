@@ -6,6 +6,7 @@
   gap: 5px;
   border-radius: 16px;
   width: fit-content;
+  color: var(--text-black);
 }
 
 .switch_button {

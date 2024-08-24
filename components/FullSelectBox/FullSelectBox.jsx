@@ -26,7 +26,7 @@ export function FullSelectBox({
     setselectedItem(item);
     setIsOpen(false);
 
-    setcurrentTable && setcurrentTable(item.shortName);
+    setcurrentTable && setcurrentTable(item?.shortName);
   };
 
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -84,14 +84,16 @@ export function FullSelectBox({
               className={styles.options_item}
               onClick={() => handleOptionClick(item)}
             >
-              <span>{formatNumber(item.unitPrice)} تومان</span>
+              <span>
+                {formatNumber(Number(item?.rate?.['IRR'], '').toFixed(2))} تومان
+              </span>
               <div className={styles.options_item_label}>
-                <span>{item.shortName}</span>
-                {item.icon ? (
+                <span>{item?.codeName}</span>
+                {item?.icon ? (
                   <Image
                     className={styles.icon}
-                    src={item.icon}
-                    alt={item.shortName}
+                    src={item?.icon}
+                    alt={item?.shortName}
                     style={{ marginRight: 10 }}
                   />
                 ) : null}

@@ -16,30 +16,21 @@ import {
   getNewestCoins,
   getUnitPrice,
   getAvailableCoins,
+  getAllCoins,
 } from '../../helpers/api';
 import { formatNumber } from '../../helpers/number';
 
 export function TableT1() {
   const unitTab = [
     {
-      code: 0,
-      codeName: 'IRR',
-      title: (
-        <>
-          تومان
-          <Image src={IconToman} width={25} height={25} alt="toman" />
-        </>
-      ),
+      code: 'coin',
+      codeName: 'coin',
+      title: 'ارز دیجیتال',
     },
     {
-      code: 1,
-      codeName: 'USD',
-      title: (
-        <>
-          تتر
-          <Image src={IconTether} width={25} height={25} alt="tether" />
-        </>
-      ),
+      code: 'fiat',
+      codeName: 'fiat',
+      title: 'فیات دیجیتال',
     },
   ];
 
@@ -49,65 +40,68 @@ export function TableT1() {
     { code: 2, callback: getNewestCoins, title: 'جدید ترین' },
   ];
 
-  const getUnitIcon = (code) =>
-    unitTab.find((tab) => tab.code === code).codeName === 'IRR'
-      ? IconToman
-      : IconTether;
-
-  const getPriceChangesColor = (value) =>
-    value >= 0 ? 'var(--green)' : 'var(--red)';
+  const getPriceChangesColor = (value) => {
+    if (value > 0) return 'var(--green)';
+    else if (value < 0) return 'var(--red)';
+    else return 'var(--text-black)';
+  };
 
   const [fetchedData, setFetchedData] = useState({});
   const [activeUnit, setActiveUnit] = useState(unitTab[0].code);
   const [activeSort, setActiveSort] = useState(sortTab[0].code);
-  const [tableData, setTableData] = useState({});
+  const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
-    setTableData({});
-    const datakey = `${activeUnit}.${activeSort}`;
-
-    if (!fetchedData[datakey]) {
-      const callbackFn = sortTab.find(
-        (tab) => tab.code === activeSort,
-      ).callback;
-
-      callbackFn().then((response) => {
-        const states = response.map((data) => {
-          const pairCodeName = unitTab.find(
-            ({ code }) => code === activeUnit,
-          ).codeName;
-
-          const coinData = getCoinDataByPair(data, pairCodeName);
-          const codeName = getCoinCodeName(coinData);
-          const seriesData = getChartData(coinData);
-          const unitPrice = getUnitPrice(coinData);
-          const priceChange = getCoinChanges();
-
-          return {
-            codeName,
-            seriesData,
-            unitPrice,
-            priceChange,
-          };
-        });
-
-        const fetchedDataClone = { ...fetchedData };
-        fetchedDataClone[datakey] = {};
-
-        states.forEach(({ codeName, ...rest }) => {
-          const { shortName, ...coin } = getAvailableCoins().find(
-            (coin) => coin.shortName === codeName,
-          );
-          fetchedDataClone[datakey][codeName] = { ...rest, ...coin };
-        });
-
-        setFetchedData(fetchedDataClone);
-        setTableData(fetchedDataClone[datakey]);
+    const interval = setInterval(() => {
+      getAllCoins(activeUnit).then((data) => {
+        setTableData(data);
       });
-    } else {
-      setTableData(fetchedData[datakey]);
-    }
-  }, [activeUnit, activeSort]);
+    }, [6000]);
+
+    return () => clearInterval(interval);
+
+    // const datakey = `${activeUnit}.${activeSort}`;
+
+    // if (!fetchedData[datakey]) {
+    //   const callbackFn = sortTab.find(
+    //     (tab) => tab.code === activeSort,
+    //   ).callback;
+
+    //   callbackFn().then((response) => {
+    //     // const states = response.map((data) => {
+    //     //   const pairCodeName = unitTab.find(
+    //     //     ({ code }) => code === activeUnit,
+    //     //   ).codeName;
+
+    //     //   const coinData = getCoinDataByPair(data, pairCodeName);
+    //     //   const codeName = getCoinCodeName(coinData);
+    //     //   const seriesData = getChartData(coinData);
+    //     //   const unitPrice = getUnitPrice(coinData);
+    //     //   const priceChange = getCoinChanges();
+
+    //     //   return {
+    //     //     codeName,
+    //     //     seriesData,
+    //     //     unitPrice,
+    //     //     priceChange,
+    //     //   };
+    //     // });
+
+    //     const fetchedDataClone = { ...fetchedData };
+    //     fetchedDataClone[datakey] = {};
+
+    //     states.forEach(({ codeName, ...rest }) => {
+    //       const { shortName, ...coin } = getAvailableCoins().find(
+    //         (coin) => coin.shortName === codeName,
+    //       );
+    //       fetchedDataClone[datakey][codeName] = { ...rest, ...coin };
+    //     });
+
+    //     setFetchedData(fetchedDataClone);
+
+    //   });
+    // }
+  }, [activeUnit]);
 
   return (
     <div className={styles.current_rate_container}>
@@ -116,7 +110,6 @@ export function TableT1() {
           tabContent={unitTab}
           fcn={(unit) => setActiveUnit(unit)}
           activeTab={activeUnit}
-          label="قیمت واحد:"
         />
         <h3 className={`section_title ${styles.current_rate_header_title}`}>
           نرخ لحظه‌ای رمزارزها
@@ -125,6 +118,7 @@ export function TableT1() {
           tabContent={sortTab}
           fcn={(sort) => setActiveSort(sort)}
           activeTab={activeSort}
+          style={{ opacity: 0, visibility: 'hidden' }}
         />
       </header>
 
@@ -140,35 +134,48 @@ export function TableT1() {
             </tr>
           </thead>
           <tbody>
-            {Object.keys(tableData).length > 0 &&
-              Object.entries(tableData).map(([codeName, data], index) => (
+            {tableData.length > 0 &&
+              tableData.map((data, index) => (
                 <tr key={index}>
                   <td>
                     <div className={styles.currency}>
                       <Image
-                        src={data.icon}
-                        className={`${styles.currency_img} ${styles.fiat_icon}`}
-                        alt={codeName}
+                        src={data?.icon}
+                        className={`${styles.currency_img}`}
+                        alt={data?.codeName}
                       />
                       <ul className={styles.currency_name_holder}>
-                        <li className={styles.currency_name}>{data.name}</li>
+                        <li className={styles.currency_name}>{data?.name}</li>
                         <li className={styles.currency_short_name}>
-                          {codeName}
+                          {data?.codeName}
                         </li>
                       </ul>
                     </div>
                   </td>
 
                   <td className={styles.price}>
-                    <span className={styles.dollar}>
-                      {formatNumber(data.unitPrice)}
-                      <Image
-                        src={getUnitIcon(activeUnit)}
-                        width={25}
-                        height={25}
-                        alt="unit"
-                      />
-                    </span>
+                    {data?.rate?.['IRR'] && (
+                      <span className={styles.dollar}>
+                        {formatNumber(data?.rate?.['IRR'])}
+                        <Image
+                          src={IconToman}
+                          width={25}
+                          height={25}
+                          alt="unit"
+                        />
+                      </span>
+                    )}
+                    {activeUnit === 'coin' && data?.rate?.['USD'] && (
+                      <span className={styles.dollar}>
+                        {formatNumber(data?.rate?.['USD'])}
+                        <Image
+                          src={IconTether}
+                          width={25}
+                          height={25}
+                          alt="unit"
+                        />
+                      </span>
+                    )}
                   </td>
 
                   <td className={styles.price}>
@@ -176,18 +183,51 @@ export function TableT1() {
                       className={styles.dollar}
                       style={{
                         direction: 'ltr',
-                        color: getPriceChangesColor(data.priceChange),
+                        color: getPriceChangesColor(
+                          data?.ohlc?.dailyChangePercentage,
+                        ),
                       }}
                     >
-                      {data.priceChange}%
+                      {data?.ohlc?.dailyChangePercentage ? (
+                        (
+                          Number(data?.ohlc?.dailyChangePercentage) * 100
+                        ).toFixed(2) + '%'
+                      ) : (
+                        <span
+                          style={{
+                            direction: 'ltr',
+                            color: getPriceChangesColor(
+                              data?.ohlc?.dailyChangePercentage,
+                            ),
+                          }}
+                        >
+                          -
+                        </span>
+                      )}
                     </span>
                   </td>
 
                   <td className={styles.chart_holder}>
-                    <ApexChart
-                      data={data.seriesData}
-                      strokeColor={getPriceChangesColor(data.priceChange)}
-                    />
+                    {data?.ohlc?.dailyChangePercentage &&
+                    data?.kline?.length > 0 ? (
+                      <ApexChart
+                        data={getChartData(data)}
+                        strokeColor={getPriceChangesColor(
+                          data?.ohlc?.dailyChangePercentage,
+                        )}
+                      />
+                    ) : (
+                      <span
+                        style={{
+                          direction: 'ltr',
+                          color: getPriceChangesColor(
+                            data?.ohlc?.dailyChangePercentage,
+                          ),
+                        }}
+                      >
+                        -
+                      </span>
+                    )}
                   </td>
 
                   <td>
@@ -202,7 +242,7 @@ export function TableT1() {
               ))}
           </tbody>
         </table>
-        {Object.keys(tableData).length === 0 && (
+        {tableData.length === 0 && (
           <div className={styles.no_content}>در حال بارگذاری...</div>
         )}
       </div>

@@ -26,14 +26,16 @@ export function CoinConverter({ dark }) {
 
   useEffect(() => {
     if (!selectBoxItems) {
-      getAllCoins().then((data) => {
-        let _coins = data.map((coin) => getCoinDataByPair(coin, 'IRR'));
-        _coins = getCoinsUnitPrice(_coins);
+      getAllCoins('fiat').then((data) => {
+        setCoins(data);
+        setSelectBoxItems(data);
+        // let _coins = data.map((coin) => getCoinDataByPair(coin, 'IRR'));
+        // _coins = getCoinsUnitPrice(_coins);
 
-        setChangeFromCN(_coins[defaultSelectedCoins.changeFrom]);
-        setChangeToCN(_coins[defaultSelectedCoins.changeTo]);
-        setSelectBoxItems(_coins);
-        setCoins(_coins);
+        // setChangeFromCN(_coins[defaultSelectedCoins.changeFrom]);
+        // setChangeToCN(_coins[defaultSelectedCoins.changeTo]);
+        // setSelectBoxItems(_coins);
+        // setCoins(_coins);
       });
     }
   }, []);
@@ -113,9 +115,8 @@ export function CoinConverter({ dark }) {
 
   useEffect(() => {
     if (search.trim().length > 0 && coins.length > 0) {
-      const filteredCoins = coins.filter(
-        (coin) =>
-          coin.name.includes(search) || getCoinCodeName(coin).includes(search),
+      const filteredCoins = coins.filter((coin) =>
+        coin?.codeName?.includes(search),
       );
 
       setSelectBoxItems(filteredCoins);

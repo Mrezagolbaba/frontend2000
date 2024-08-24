@@ -5,11 +5,11 @@ export function formatNumber(number, locale = 'fa-IR') {
 
   numbro.setLanguage(locale);
 
-  return numbro(number).format({ thousandSeparated: true });
+  return numbro?.(number)?.format({ thousandSeparated: true });
 }
 
 export function unformatNumber(string, locale = 'fa-IR') {
   numbro.setLanguage(locale);
 
-  return numbro.unformat(string);
+  return numbro?.unformat(string);
 }

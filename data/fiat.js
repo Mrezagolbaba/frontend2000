@@ -1,7 +1,7 @@
-import IconTRY from '../public/images/icon_try.svg';
-import IconEUR from '../public/images/icon_eur.svg';
-import IconCAD from '../public/images/icon_cad.svg';
-import IconGBP from '../public/images/icon_gbp.svg';
+import IconTRY from '../public/images/lira.png';
+import IconEUR from '../public/images/euro.png';
+import IconCAD from '../public/images/cad.png';
+import IconGBP from '../public/images/gbp.jpg';
 
 export const fiat = [
   {

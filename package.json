@@ -13,7 +13,6 @@
     "pages:build-prod": "NODE_ENV=production npx @cloudflare/next-on-pages"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.52.0",
     "apexcharts": "^3.51.0",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.16",
@@ -28,7 +27,6 @@
   "devDependencies": {
     "@commitlint/cli": "latest",
     "@commitlint/config-conventional": "latest",
-    "@tanstack/eslint-plugin-query": "^5.52.0",
     "lint-staged": "latest",
     "prettier": "latest"
   },

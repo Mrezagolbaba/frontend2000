@@ -231,6 +231,7 @@ ul {
   font-weight: 500;
   font-family: 'yekan_bold';
   font-size: var(--font_36);
+  color: var(--text-black);
 }
 
 @media screen and (max-width: 904px) {

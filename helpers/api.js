@@ -1,8 +1,10 @@
 import _ from 'lodash';
 import { coins } from '../data/coins';
+import fiat from '@/data/fiat';
 
-export function getAvailableCoins() {
-  return coins;
+export function getAvailableCoins(dataType) {
+  if (dataType === 'fiat') return fiat;
+  else return coins;
 }
 
 export function getChartData(coinData) {
@@ -40,10 +42,10 @@ export function getCoinDataByPair(data, pairCodeName) {
   return data.filter((item) => item.pair.endsWith(`/${pairCodeName}`))[0];
 }
 
-export function getMostProfitableCoins() {
+export function getMostProfitableCoins(type) {
   // TODO: Implement this function
 
-  const randomCoins = _.take(getAvailableCoins(), 5);
+  const randomCoins = _.take(getAvailableCoins(type), 5);
 
   return Promise.all(
     randomCoins.map(({ shortName }) =>
@@ -54,10 +56,10 @@ export function getMostProfitableCoins() {
   ).then((response) => Promise.all(response.map((res) => res.json())));
 }
 
-export function getMostLovedCoins() {
+export function getMostLovedCoins(type) {
   // TODO: Implement this function
 
-  const randomCoins = _.take(getAvailableCoins(), 8);
+  const randomCoins = _.take(getAvailableCoins(type), 8);
 
   return Promise.all(
     randomCoins.map(({ shortName }) =>
@@ -68,10 +70,10 @@ export function getMostLovedCoins() {
   ).then((response) => Promise.all(response.map((res) => res.json())));
 }
 
-export function getNewestCoins() {
+export function getNewestCoins(type) {
   // TODO: Implement this function
 
-  const randomCoins = _.take(getAvailableCoins(), 9);
+  const randomCoins = _.take(getAvailableCoins(type), 9);
 
   return Promise.all(
     randomCoins.map(({ shortName }) =>
@@ -92,27 +94,29 @@ export function getCoinChanges(coinData) {
   return randChange === 0 ? getCoinChanges(coinData) : randChange;
 }
 
-export function getAllCoins() {
-  const coins = getAvailableCoins();
+export async function getAllCoins(type) {
+  const coinList = getAvailableCoins(type);
+  const list = coinList.map((coin) => coin.shortName);
 
-  return Promise.all(
-    coins.map(({ shortName }) =>
-      fetch(
-        `https://dev-api.paydirham.me/v1/rates?selectedCurrency=${shortName}`,
-      ),
-    ),
-  )
-    .then((response) => Promise.all(response.map((res) => res.json())))
+  return await fetch(`https://dev-api.paydirham.me/v1/rates/list/${list}`)
+    .then((response) => response.json())
     .then((data) =>
-      data.map((pairs) =>
-        pairs.map((pair) => {
-          const codeName = getCoinCodeName(pair);
-          const coin = coins.find((coin) => coin.shortName === codeName);
-
-          return { ...pair, ...coin };
-        }),
-      ),
-    );
+      Object.entries(data).map(([currencyCode, info]) => ({
+        codeName: currencyCode,
+        rate: {
+          [info?.[0]?.dest]: info?.[0]?.rate,
+          [info?.[1]?.dest]: info?.[1]?.rate,
+        },
+        ohlc: info?.[0]?.ohlc,
+        kline: info?.[0]?.kline,
+        icon: coinList.find((coin) => coin.shortName === currencyCode).icon,
+        name: coinList.find((coin) => coin.shortName === currencyCode).name,
+      })),
+    )
+    .catch((error) => {
+      console.error(error.message);
+      return [];
+    });
 }
 
 export function swapCurrency(
