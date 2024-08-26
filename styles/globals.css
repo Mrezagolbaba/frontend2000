@@ -233,6 +233,9 @@ ul {
   font-size: var(--font_36);
   color: var(--text-black);
 }
+.latin-font {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
 
 @media screen and (max-width: 904px) {
   :root {

@@ -98,11 +98,11 @@
 .footer_menu_list li a {
   transition: all 0.2s ease-in;
   padding: 5px;
+  border-bottom: 1px solid transparent;
 }
 
 .footer_menu_list li a:hover {
-  background-color: #ccc;
-  border-radius: 5px;
+  border-bottom-color: var(--dark-blue);
 }
 
 .footer_menu_list li.label:after {

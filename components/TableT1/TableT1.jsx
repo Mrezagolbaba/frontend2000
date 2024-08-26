@@ -166,7 +166,7 @@ export function TableT1() {
                       </span>
                     )}
                     {activeUnit === 'coin' && data?.rate?.['USD'] && (
-                      <span className={styles.dollar}>
+                      <span className={`${styles.dollar} latin-font`}>
                         {formatNumber(data?.rate?.['USD'])}
                         <Image
                           src={IconTether}

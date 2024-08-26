@@ -23,7 +23,7 @@ export default function SocialMedia() {
       icon: <Instagram />,
       darkIcon: <Instagram />,
     },
-    { address: '#', icon: <LinkedIn />, darkIcon: <LinkedIn /> },
+    // { address: '#', icon: <LinkedIn />, darkIcon: <LinkedIn /> },
   ];
 
   return (

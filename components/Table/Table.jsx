@@ -105,8 +105,10 @@ export default function Table({ currentTable, children }) {
                 <tr key={index}>
                   <td>
                     <div className={styles.currency}>
-                      <img
-                        src={item.icon.src}
+                      <Image
+                        width={36}
+                        height={36}
+                        src={item.icon}
                         className={`${styles.currency_img} ${styles.fiat_icon}`}
                         alt={item.shortName}
                       />
@@ -122,14 +124,24 @@ export default function Table({ currentTable, children }) {
                   <td className={styles.price}>
                     <span className={styles.dollar}>
                       {lastPrice[item.shortName]}
-                      <Image src={IconTether} width={25} height={25} />
+                      <Image
+                        src={IconTether}
+                        width={25}
+                        height={25}
+                        alt="tether"
+                      />
                     </span>
                   </td>
 
                   <td className={styles.price}>
                     <span className={styles.dollar}>
                       {lowHigh[item.shortName]?.lowVal ?? '---'}
-                      <Image src={IconTether} width={25} height={25} />
+                      <Image
+                        src={IconTether}
+                        width={25}
+                        height={25}
+                        alt="tether"
+                      />
                     </span>
                   </td>
 

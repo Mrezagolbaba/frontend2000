@@ -19,6 +19,10 @@
   justify-content: center;
   font-size: var(--font_18);
 }
+.currency .currency_name_holder {
+  align-items: center;
+  display: flex;
+}
 
 .options .currency .currency_name {
   color: var(--text-black);
@@ -114,7 +118,7 @@
   font-size: var(--font_18);
   font-weight: 400;
   line-height: 34.2px;
-  text-align: right;
+  text-align: justify;
   margin-top: 16px;
 }
 
@@ -287,13 +291,14 @@
 }
 
 .action_holder .price li span::after {
-  content: 'دلار';
+  content: 'تومان';
   color: var(--advbg3-text);
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 8px;
+  font-weight: 400;
+  align-items: center;
   background-color: var(--advbg3);
   display: inline-flex;
-  align-items: center;
+  justify-content: center;
   width: 24px;
   height: 24px;
   border-radius: 8px;

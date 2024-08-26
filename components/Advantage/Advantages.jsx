@@ -7,11 +7,14 @@ import UeIcon from '../../public/images/usa.png';
 import CoinConverter from '../CoinConverter/CoinConverter';
 import { getAllCoins } from '@/helpers/api';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+
 import { ADMIN_ADDRESS } from '@/data/config';
+import { formatNumber, normalizeAmount } from '@/helpers/number';
 
 export default function Advantages({ dark }) {
-  const route = useRouter();
+  const router = useRouter();
   const countries = [
     { value: 'IRR', label: 'تومان', icon: MgIcon.src },
     { value: 'TRY', label: 'تتر', icon: UeIcon.src },
@@ -48,7 +51,7 @@ export default function Advantages({ dark }) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((currentIndex + 1) % cryptoData.length);
+      setCurrentIndex((Number(currentIndex) + 1) % cryptoData.length);
 
       setBandsBtnCls(styles.actions_button);
       setTimeout(() => {
@@ -56,12 +59,18 @@ export default function Advantages({ dark }) {
           `${styles.actions_button} ${styles.actions_button_load}`,
         );
       }, 10);
-    }, 1500);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [cryptoData, currentIndex]);
 
   const currentCrypto = cryptoData?.[currentIndex];
+
+  const handleRoute = (e) => {
+    e.preventDefault();
+    router.push(`${ADMIN_ADDRESS}/support`);
+    // window.location.replace(`${ADMIN_ADDRESS}/support`)
+  };
 
   return (
     <section className={styles.options_holder}>
@@ -81,12 +90,12 @@ export default function Advantages({ dark }) {
         description="شما می‌توانید به‌صورت ۲۴ ساعته و در تمام ایام هفته از خدمات پشتیبانی آرسونیکس بهره‌مند شوید. این خدمات از طریق چت آنلاین، تماس تلفنی و یا ارسال تیکت در دسترس شما قرار دارد تا در هر زمان که نیاز داشته باشید، پشتیبانی لازم را دریافت کنید."
       >
         <form>
-          <SelectBox
+          {/* <SelectBox
             key="3"
             className={styles.select_subject}
             subject={subject}
             defaultVal={subject[0]}
-          />
+          /> */}
 
           <div className={`${styles.input_holder} ${styles.mt_25}`}>
             <input
@@ -99,8 +108,9 @@ export default function Advantages({ dark }) {
           </div>
 
           <button
+            // href={`${ADMIN_ADDRESS}/support`}
             className={styles.actions_button}
-            onCliCk={() => route.push(`${ADMIN_ADDRESS}/support`)}
+            onClick={handleRoute}
           >
             درخواست پشتیبانی
           </button>
@@ -146,7 +156,7 @@ export default function Advantages({ dark }) {
           <Image
             width={36}
             height={36}
-            src={currentCrypto}
+            src={currentCrypto?.icon}
             className={styles.currency_img}
             alt="currency"
           />
@@ -162,11 +172,25 @@ export default function Advantages({ dark }) {
         <ul className={styles.price}>
           <li>
             قیمت خرید{' '}
-            <span>{Number(currentCrypto?.rate?.['USD']).toFixed(6)}</span>
+            <span>
+              {normalizeAmount(
+                currentCrypto?.rate?.['IRR'],
+                'IRR',
+                false,
+                false,
+              )}
+            </span>
           </li>
           <li>
             قیمت فروش{' '}
-            <span>{Number(currentCrypto?.rate?.['USD']).toFixed(6)}</span>
+            <span>
+              {normalizeAmount(
+                currentCrypto?.rate?.['IRR'],
+                'IRR',
+                false,
+                false,
+              )}
+            </span>
           </li>
         </ul>
 
