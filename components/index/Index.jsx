@@ -53,7 +53,7 @@ export default function Index() {
             صورت اقامت در خارج از ایران، از خدمات ویژه بین‌المللی آرسونیکس
             بهره‌مند شوید.
           </p>
-          <Link href={`${ADMIN_ADDRESS}/login`} className={styles.blue_btn}>
+          <Link href={`${ADMIN_ADDRESS}/register`} className={styles.blue_btn}>
             همین حالا امتحان کنید
           </Link>
         </div>

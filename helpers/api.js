@@ -92,7 +92,10 @@ export async function getAllCoins(type) {
   const list = coinList.map((coin) => coin.shortName);
 
   return await fetch(`${BASE_URL}rates/list/${list}`)
-    .then((response) => response.json())
+    .then((response) => {
+      localStorage.setItem('ip', response.headers.get('cf-ipcountry'));
+      return response.json();
+    })
     .then((data) => {
       return Object.entries(data).map(([currencyCode, info]) => ({
         codeName: currencyCode,

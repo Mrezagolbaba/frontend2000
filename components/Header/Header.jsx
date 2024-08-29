@@ -15,6 +15,10 @@ import {
   PhoneMenuIcon,
 } from '../svg';
 import { ADMIN_ADDRESS } from '@/data/config';
+import Image from 'next/image';
+
+import PersianLight from '@/public/images/logo/PersianLight.svg';
+import PersianDark from '@/public/images/logo/PersianDark.svg';
 
 export default function Header() {
   const [authenticated, setAuthenticated] = useState(null);
@@ -23,27 +27,27 @@ export default function Header() {
   const [activeMenu, setactiveMenu] = useState(false);
   const menuItems = [
     {
-      title: 'بازارها',
+      title: 'قیمت لحظه ای',
       icon: <PhoneCall />,
-      address: '/coinsList',
+      address: '/coins',
       DarkIcon: <DarkPhoneCall />,
     },
     {
-      title: 'بلاگ',
+      title: 'خرید سریع',
       icon: <PhoneBlog />,
-      address: '#',
+      address: `${ADMIN_ADDRESS}/exchange`,
       DarkIcon: <DarkPhoneBlog />,
     },
     {
-      title: 'درباره ما',
+      title: 'مرکز راهنمایی',
       icon: <PhoneLogo />,
-      address: '/aboutUs',
+      address: 'https://help.arsonex.com/',
       DarkIcon: <DarkPhoneLogo />,
     },
     {
-      title: 'تماس با ما',
+      title: 'وبلاگ',
       icon: <PhoneCall />,
-      address: '/contactUs',
+      address: 'https://arsonex.com/blog',
       DarkIcon: <DarkPhoneCall />,
     },
   ];
@@ -82,11 +86,11 @@ export default function Header() {
         )}
 
         <Link href="/">
-          <h1
-            className={`${styles.header_title} ${theme === 'dark' && styles.dark_header_title}`}
-          >
-            آرسونیکس
-          </h1>
+          <Image
+            className={styles.header_title}
+            src={theme === 'dark' ? PersianDark : PersianLight}
+            alt="Arsonex-logo"
+          />
         </Link>
       </div>
 

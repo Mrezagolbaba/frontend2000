@@ -18,7 +18,7 @@ import {
   getAvailableCoins,
   getAllCoins,
 } from '../../helpers/api';
-import { formatNumber } from '../../helpers/number';
+import { formatNumber, normalizeAmount } from '../../helpers/number';
 
 export function TableT1() {
   const unitTab = [
@@ -110,7 +110,13 @@ export function TableT1() {
           tabContent={unitTab}
           fcn={(unit) => setActiveUnit(unit)}
           activeTab={activeUnit}
+          style={{
+            opacity: localStorage.getItem('ip') === 'IR' ? 0 : 1,
+            visibility:
+              localStorage.getItem('ip') === 'IR' ? 'hidden' : 'visible',
+          }}
         />
+
         <h3 className={`section_title ${styles.current_rate_header_title}`}>
           نرخ لحظه‌ای رمزارزها
         </h3>
@@ -156,7 +162,12 @@ export function TableT1() {
                   <td className={styles.price}>
                     {data?.rate?.['IRR'] && (
                       <span className={styles.dollar}>
-                        {formatNumber(data?.rate?.['IRR'])}
+                        {normalizeAmount(
+                          data?.rate?.['IRR'],
+                          'IRR',
+                          false,
+                          true,
+                        )}
                         <Image
                           src={IconToman}
                           width={25}

@@ -3,6 +3,9 @@ import React, { useContext } from 'react';
 import styles from './Header.module.css';
 import ThemeContext from '../ThemeContext';
 import { CloseMenu, DarkCloseMenu, DarkPhoneTheme, PhoneTheme } from '../svg';
+import PersianLight from '@/public/images/logo/PersianLight.svg';
+import PersianDark from '@/public/images/logo/PersianDark.svg';
+import Image from 'next/image';
 
 export default function PhoneMenu({
   setactiveMenu,
@@ -15,11 +18,13 @@ export default function PhoneMenu({
   return (
     <div className={styles.phone_menu_holder}>
       <header className={styles.phone_menu_holder_header}>
-        <h2
-          className={`${styles.header_title} ${theme === 'dark' && styles.dark_header_title}`}
-        >
-          آرسیونیکس
-        </h2>
+        <Link href="/">
+          <Image
+            className={styles.header_title}
+            src={theme === 'dark' ? PersianDark : PersianLight}
+            alt="Arsonex-logo"
+          />
+        </Link>
 
         <button
           className={styles.phone_menu_btn}
