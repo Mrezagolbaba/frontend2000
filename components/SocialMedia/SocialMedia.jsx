@@ -5,7 +5,7 @@ import styles from './SocialMedia.module.css';
 import ThemeContext from '../ThemeContext';
 
 export default function SocialMedia() {
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
   const socialMediaItems = [
     {

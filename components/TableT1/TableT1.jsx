@@ -21,6 +21,9 @@ import {
 import { formatNumber, normalizeAmount } from '../../helpers/number';
 
 export function TableT1() {
+  const ip =
+    typeof window === 'undefined' ? '' : window.localStorage.getItem('ip');
+
   const unitTab = [
     {
       code: 'coin',
@@ -45,8 +48,6 @@ export function TableT1() {
     else if (value < 0) return 'var(--red)';
     else return 'var(--text-black)';
   };
-
-  const [fetchedData, setFetchedData] = useState({});
   const [activeUnit, setActiveUnit] = useState(unitTab[0].code);
   const [activeSort, setActiveSort] = useState(sortTab[0].code);
   const [tableData, setTableData] = useState([]);
@@ -57,50 +58,7 @@ export function TableT1() {
         setTableData(data);
       });
     }, [6000]);
-
     return () => clearInterval(interval);
-
-    // const datakey = `${activeUnit}.${activeSort}`;
-
-    // if (!fetchedData[datakey]) {
-    //   const callbackFn = sortTab.find(
-    //     (tab) => tab.code === activeSort,
-    //   ).callback;
-
-    //   callbackFn().then((response) => {
-    //     // const states = response.map((data) => {
-    //     //   const pairCodeName = unitTab.find(
-    //     //     ({ code }) => code === activeUnit,
-    //     //   ).codeName;
-
-    //     //   const coinData = getCoinDataByPair(data, pairCodeName);
-    //     //   const codeName = getCoinCodeName(coinData);
-    //     //   const seriesData = getChartData(coinData);
-    //     //   const unitPrice = getUnitPrice(coinData);
-    //     //   const priceChange = getCoinChanges();
-
-    //     //   return {
-    //     //     codeName,
-    //     //     seriesData,
-    //     //     unitPrice,
-    //     //     priceChange,
-    //     //   };
-    //     // });
-
-    //     const fetchedDataClone = { ...fetchedData };
-    //     fetchedDataClone[datakey] = {};
-
-    //     states.forEach(({ codeName, ...rest }) => {
-    //       const { shortName, ...coin } = getAvailableCoins().find(
-    //         (coin) => coin.shortName === codeName,
-    //       );
-    //       fetchedDataClone[datakey][codeName] = { ...rest, ...coin };
-    //     });
-
-    //     setFetchedData(fetchedDataClone);
-
-    //   });
-    // }
   }, [activeUnit]);
 
   return (
@@ -110,21 +68,17 @@ export function TableT1() {
           tabContent={unitTab}
           fcn={(unit) => setActiveUnit(unit)}
           activeTab={activeUnit}
-          style={{
-            opacity: localStorage.getItem('ip') === 'IR' ? 0 : 1,
-            visibility:
-              localStorage.getItem('ip') === 'IR' ? 'hidden' : 'visible',
-          }}
+          hidden={ip === 'IR'}
         />
 
         <h3 className={`section_title ${styles.current_rate_header_title}`}>
           نرخ لحظه‌ای رمزارزها
         </h3>
         <Tab
+          hidden={true}
           tabContent={sortTab}
           fcn={(sort) => setActiveSort(sort)}
           activeTab={activeSort}
-          style={{ opacity: 0, visibility: 'hidden' }}
         />
       </header>
 
@@ -166,7 +120,7 @@ export function TableT1() {
                           data?.rate?.['IRR'],
                           'IRR',
                           false,
-                          true,
+                          false,
                         )}
                         <Image
                           src={IconToman}

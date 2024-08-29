@@ -8,6 +8,10 @@
   width: fit-content;
   color: var(--text-black);
 }
+.switch_box.hidden_switch {
+  opacity: 0;
+  visibility: visible;
+}
 
 .switch_button {
   font-size: var(--font_14);

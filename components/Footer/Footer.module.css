@@ -153,6 +153,9 @@
   margin-bottom: 20px;
   font-family: 'iransansFontDemiBold';
 }
+.showMobile {
+  display: none;
+}
 
 @media (min-width: 767px) and (max-width: 1200px) {
   .footer_menu_list {
@@ -173,6 +176,15 @@
 
   .footer_about {
     width: 100%;
+  }
+  .footer_info {
+    width: 100%;
+  }
+  .showMobile {
+    display: block;
+  }
+  .hiddenMobile {
+    display: none;
   }
 }
 

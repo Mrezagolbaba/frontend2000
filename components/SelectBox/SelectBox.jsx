@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import ThemeContext from '../ThemeContext';
 import styles from '../SelectBox/SelectBox.module.css';
+import Image from 'next/image';
 
 export default function SelectBox({
   className,
@@ -33,7 +34,7 @@ export default function SelectBox({
         className={`${styles.select_box}  ${`${theme === 'dark' && styles.dark_select}`}`}
       >
         {selectedItem.icon ? (
-          <img src={selectedItem.icon} alt={selectedItem.label} />
+          <Image src={selectedItem.icon} alt={selectedItem.label} />
         ) : null}
         {selectedItem.label}
       </div>
@@ -46,7 +47,7 @@ export default function SelectBox({
               onClick={() => handleOptionClick(item)}
             >
               {item.icon ? (
-                <img
+                <Image
                   src={item.icon}
                   alt={item.label}
                   style={{ width: 20, height: 20, marginRight: 10 }}

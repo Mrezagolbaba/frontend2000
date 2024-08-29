@@ -8,21 +8,30 @@ import CoinConverter from '../CoinConverter/CoinConverter';
 import { getAllCoins } from '@/helpers/api';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 
 import { ADMIN_ADDRESS } from '@/data/config';
-import { formatNumber, normalizeAmount } from '@/helpers/number';
+import { normalizeAmount } from '@/helpers/number';
 
 export default function Advantages({ dark }) {
+  const [ip, setIp] = useState('');
   const router = useRouter();
   const countries = [
     { value: 'IRR', label: 'تومان', icon: MgIcon.src },
     { value: 'TRY', label: 'تتر', icon: UeIcon.src },
   ];
 
-  const subject = [
-    { value: 'subject1', label: 'انتخاب موضوع' },
-    { value: 'subject2', label: 'انتخاب موضوع2' },
+  const categoryData = [
+    {
+      value: 'USER_PROFILE_AND_VERIFICATION',
+      label: 'اطلاعات هویتی و احراز',
+    },
+    { value: 'TICKET_DEPOSIT_WITHDRAW', label: 'واریز و برداشت' },
+    { value: 'TICKET_TECHNICAL_ISSUES', label: 'مشکلات فنی' },
+    { value: 'TICKET_TO_ADMIN', label: 'مدیریت' },
+    {
+      value: 'TICKETـCRITICSـAND_SUGGESSTIONS',
+      label: 'انتقادات و پیشنهادات',
+    },
   ];
 
   const [bandsBtnCls, setBandsBtnCls] = useState(
@@ -72,17 +81,23 @@ export default function Advantages({ dark }) {
     // window.location.replace(`${ADMIN_ADDRESS}/support`)
   };
 
+  useEffect(() => {
+    setIp(localStorage.getItem('ip'));
+  }, []);
+
   return (
     <section className={styles.options_holder}>
-      <Advantage
-        className={styles.adv1}
-        title="به راحتی بیش از ۳۰ واحد پول مختلف را با ارز دیجیتال معامله کنید"
-        description="در آرسونیکس، می‌توانید از سرویس‌های ویژه‌ای که برای تبدیل دارایی‌های خود در کشور محل اقامتتان فراهم کرده‌ایم، مانند معامله، واریز یا برداشت فیات دیجیتال، بهره‌مند شوید."
-        address="https://help.arsonex.com/trading-methods/"
-        actionHolderCls={styles.adv1_holder}
-      >
-        <CoinConverter {...{ dark }} />
-      </Advantage>
+      {ip !== 'IR' && (
+        <Advantage
+          className={styles.adv1}
+          title="به راحتی بیش از ۳۰ واحد پول مختلف را با ارز دیجیتال معامله کنید"
+          description="در آرسونیکس، می‌توانید از سرویس‌های ویژه‌ای که برای تبدیل دارایی‌های خود در کشور محل اقامتتان فراهم کرده‌ایم، مانند معامله، واریز یا برداشت فیات دیجیتال، بهره‌مند شوید."
+          address="https://help.arsonex.com/trading-methods/"
+          actionHolderCls={styles.adv1_holder}
+        >
+          <CoinConverter {...{ dark }} />
+        </Advantage>
+      )}
 
       <Advantage
         className={styles.adv2}
@@ -90,12 +105,12 @@ export default function Advantages({ dark }) {
         description="شما می‌توانید به‌صورت ۲۴ ساعته و در تمام ایام هفته از خدمات پشتیبانی آرسونیکس بهره‌مند شوید. این خدمات از طریق چت آنلاین، تماس تلفنی و یا ارسال تیکت در دسترس شما قرار دارد تا در هر زمان که نیاز داشته باشید، پشتیبانی لازم را دریافت کنید."
       >
         <form>
-          {/* <SelectBox
+          <SelectBox
             key="3"
             className={styles.select_subject}
-            subject={subject}
-            defaultVal={subject[0]}
-          /> */}
+            subject={categoryData}
+            defaultVal={categoryData[0]}
+          />
 
           <div className={`${styles.input_holder} ${styles.mt_25}`}>
             <input

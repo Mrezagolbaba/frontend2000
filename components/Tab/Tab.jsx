@@ -1,9 +1,18 @@
 import React from 'react';
 import styles from '../Tab/Tab.module.css';
+import { useEffect, useState } from 'react';
 
-export default function Tab({ tabContent, fcn, activeTab, style, label }) {
+export default function Tab({ tabContent, fcn, activeTab, hidden, label }) {
+  const [classProperty, setClassProperty] = useState('');
+
+  useEffect(() => {
+    setClassProperty(
+      `${styles.switch_box} ${hidden ? styles.hidden_switch : ''}`,
+    );
+  }, []);
+
   return (
-    <div className={styles.switch_box} style={style}>
+    <div className={classProperty}>
       <span>{label}</span>
       {tabContent.map((item, index) => (
         <button

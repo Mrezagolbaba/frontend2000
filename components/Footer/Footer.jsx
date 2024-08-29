@@ -45,7 +45,7 @@ export default function Footer() {
     },
   ];
 
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
   return (
     <footer className={`${styles.footer_holder} container`}>
@@ -68,6 +68,20 @@ export default function Footer() {
           </p>
         </article>
 
+        <ul className={`${styles.contact_us} ${styles.showMobile}`}>
+          <li className={styles.list_title}>با ما در ارتباط باشید</li>
+          <li>
+            {theme === 'dark' ? <DarkEmail /> : <Email />}support@arsonex.com
+          </li>
+          <li>
+            {theme === 'dark' ? <DarkPhoneCall /> : <PhoneCall />} 021-92004581
+          </li>
+          <li>
+            {' '}
+            {theme === 'dark' ? <DarkLocation /> : <Location />} خیابان ۱۵ خرداد
+            بازار بین الحرمین کوچه شیخ رضا پلاک ۴۶
+          </li>
+        </ul>
         <nav className={styles.footer_menu_list}>
           {footerMenu.map((category, index) => (
             <ul key={index}>
@@ -86,7 +100,7 @@ export default function Footer() {
         </nav>
 
         <div className={styles.footer_info}>
-          <ul className={styles.contact_us}>
+          <ul className={`${styles.contact_us} ${styles.hiddenMobile}`}>
             <li className={styles.list_title}>با ما در ارتباط باشید</li>
             <li>
               {theme === 'dark' ? <DarkEmail /> : <Email />}support@arsonex.com
