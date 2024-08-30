@@ -147,6 +147,7 @@ export function TableT1() {
                     <span
                       className={styles.dollar}
                       style={{
+                        justifyContent: 'center',
                         direction: 'ltr',
                         color: getPriceChangesColor(
                           data?.ohlc?.dailyChangePercentage,
