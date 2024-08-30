@@ -11,14 +11,15 @@ import {
 } from '../svg';
 import ThemeContext from '../ThemeContext';
 import SocialMedia from '../SocialMedia/SocialMedia';
+import { ADMIN_ADDRESS } from '@/data/config';
 
 export default function Footer() {
   const footerMenu = [
     {
       title: 'آرسونیکس',
       menuItems: [
-        { label: 'درباره ما', address: '#' },
-        { label: 'تماس با ما', address: '#' },
+        { label: 'درباره ما', address: '/aboutUs' },
+        { label: 'تماس با ما', address: 'contactUs' },
         { label: 'کارمزدها', address: '#' },
         { label: 'قوانین و مقررات', address: '/terms' },
         { label: 'بروزرسانی‌ها', address: '/updates' },
@@ -27,20 +28,27 @@ export default function Footer() {
     {
       title: 'راهنمای استفاده',
       menuItems: [
-        { label: 'مرکز راهنمایی', address: '#' },
-        { label: 'معامله ارز دیجیتال', address: '#' },
-        { label: 'معامله فیات دیجیتال', address: '#' },
-        { label: 'احراز هویت فوری', address: '#' },
-        { label: 'درباره ما', address: '#' },
+        { label: 'مرکز راهنمایی', address: 'https://help.arsonex.com/' },
+        { label: 'معامله ارز دیجیتال', address: `${ADMIN_ADDRESS}/exchange` },
+        { label: 'معامله فیات دیجیتال', address: `${ADMIN_ADDRESS}/exchange` },
+        { label: 'احراز هویت فوری', address: `${ADMIN_ADDRESS}/profile` },
+        { label: 'درباره ما', address: '/aboutUs' },
       ],
     },
     {
       title: 'امکانات',
       menuItems: [
-        { label: 'معامله سریع تک نرخی', address: '#' },
-        { label: 'واریز و برداشت بین‌المللی', address: '#' },
-        { label: 'آروسونیکس کارت', address: '#', dataLabel: 'بزودی' },
-        { label: 'کسب درآمد', address: '#', dataLabel: 'تا سقف %30' },
+        { label: 'معامله سریع تک نرخی', address: '${ADMIN_ADDRESS}/exchange' },
+        {
+          label: 'واریز و برداشت بین‌المللی',
+          address: '${ADMIN_ADDRESS}/wallet',
+        },
+        { label: 'آروسونیکس کارت', address: '', dataLabel: 'بزودی' },
+        {
+          label: 'کسب درآمد',
+          address: 'https://help.arsonex.com/invite-friends/',
+          dataLabel: 'تا سقف %30',
+        },
       ],
     },
   ];
