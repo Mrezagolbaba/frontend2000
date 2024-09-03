@@ -59,3 +59,4 @@ In addition to the commands mentioned above, you can use the following scripts:
 - `yarn run format`: Formats the codebase using Prettier.
 
 Feel free to modify and extend this project according to your needs. Happy coding!
+# Minor change to create a new commit
