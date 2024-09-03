@@ -1,0 +1,25 @@
+.social_media {
+  display: flex;
+  gap: 6px;
+  margin-top: 20px;
+}
+
+.social_media a {
+  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  transition: 0.3s;
+  padding: 10px;
+}
+
+.social_media a:hover {
+  background-color: var(--select);
+}
+
+@media screen and (max-width: 767px) {
+  .social_media {
+    justify-content: center;
+  }
+}

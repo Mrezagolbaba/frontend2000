@@ -1,7 +1,4 @@
-node_modules/
-dist/
-build/
-*.png
-*.jpg
-*.svg
-src/assets/vendor/*
+# Add files here to ignore them from prettier formatting
+
+/dist
+/coverage
