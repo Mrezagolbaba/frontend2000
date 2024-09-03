@@ -1,13 +1,14 @@
+
+import { useGetDebitAccountQuery } from "store/api/profile-management";
 import AddDebit from "./AddDebit";
 import DepositDebit from "./DepositDebit";
 import { Col, Row } from "reactstrap";
-import { useGetDebitAccountQuery } from "store/api/profile-management";
 
 export default function DirectDebit({ onClose }: { onClose: () => void }) {
   // ==============|| Hooks ||================= //
   const { data, isLoading } = useGetDebitAccountQuery({});
 
-   // ==============|| Render ||================= //
+  // ==============|| Render ||================= //
   return isLoading ? (
     <Row className="placeholder-glow">
       <Col xs={12} className="px-2 my-3">

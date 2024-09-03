@@ -1,32 +1,25 @@
-import {
-  Button,
-  Col,
-  FormFeedback,
-  FormGroup,
-  FormText,
-  Label,
-  Row,
-} from "reactstrap";
+import { FormFeedback } from "reactstrap";
+import * as Yup from "yup";
+import { Controller, useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppSelector } from "store/hooks";
+import { useBankAccountsQuery } from "store/api/profile-management";
 import {
   useTransactionDynamicFeeMutation,
   useTransactionFeeQuery,
   useWithdrawMutation,
 } from "store/api/wallet-management";
-import * as Yup from "yup";
+import { normalizeAmount, persianToEnglishNumbers } from "helpers";
 import BanksWrapper from "components/BanksWrapper";
-import Currency from "components/Input/CurrencyInput";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import Notify from "components/Notify";
-import { AlertInfo } from "components/AlertWidget";
-import { Controller, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import { normalizeAmount } from "helpers";
-import { useAppSelector } from "store/hooks";
-import { useBankAccountsQuery } from "store/api/profile-management";
-import { useEffect, useState } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
+import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
+import button from "assets/scss/components/button.module.scss";
+import { AlertDanger, AlertInfo, AlertWarning } from "components/AlertWidget";
 
 type WithdrawType = {
   iban: string;
@@ -35,11 +28,10 @@ type WithdrawType = {
 };
 
 type Props = {
-  onClose?: () => void;
   stock: string | number;
 };
 
-export default function Withdraw({ onClose, stock }: Props) {
+export default function IRTWithdraw({ stock }: Props) {
   // ==============|| States ||================= //
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
   const [hasAccount, setHasAccount] = useState<boolean>(true);
@@ -52,7 +44,7 @@ export default function Withdraw({ onClose, stock }: Props) {
   const { data, isSuccess } = useBankAccountsQuery({});
   const { data: fee } = useTransactionFeeQuery("IRR");
   const [getFees, { data: fees }] = useTransactionDynamicFeeMutation();
-  const [withdrawRequest, { isSuccess: isSuccessWithdraw }] =
+  const [withdrawRequest, { isLoading, isSuccess: isSuccessWithdraw }] =
     useWithdrawMutation();
   const resolver = yupResolver(
     Yup.object().shape({
@@ -81,20 +73,30 @@ export default function Withdraw({ onClose, stock }: Props) {
 
   // ==============|| Handlers ||================= //
   const onSubmit = async (data: WithdrawType) => {
+    console.log(Number(stock) / 10);
+
     if (Number(data.amount) < fee?.withdrawMinAmount / 10)
-      setError("amount", {
-        type: "manual",
-        message: `مبلغ وارد شده نمی تواند کمتر از ${normalizeAmount(fee?.withdrawMinAmount, "IRR", true)} باشد.`,
+      Notify({
+        type: "error",
+        text: `مبلغ وارد شده نمی تواند کمتر از ${normalizeAmount(
+          fee?.withdrawMinAmount,
+          "IRR",
+          true,
+        )} باشد.`,
       });
     else if (Number(data.amount) > fee?.withdrawMaxAmount / 10)
-      setError("amount", {
-        type: "manual",
-        message: `مبلغ وارد شده نمی تواند بیشتر از ${normalizeAmount(fee?.withdrawMaxAmount, "IRR", true)} باشد.`,
+      Notify({
+        type: "error",
+        text: `مبلغ وارد شده نمی تواند بیشتر از ${normalizeAmount(
+          fee?.withdrawMaxAmount,
+          "IRR",
+          true,
+        )} باشد.`,
       });
     else if (Number(data.amount) > Number(stock) / 10)
-      setError("amount", {
-        type: "manual",
-        message: "موجودی کیف پول شما کافی نیست.",
+      Notify({
+        type: "error",
+        text: "موجودی کیف پول شما کافی نیست.",
       });
     else
       withdrawRequest({
@@ -107,15 +109,13 @@ export default function Withdraw({ onClose, stock }: Props) {
   // ==============|| Life Cycle ||================= //
   useEffect(() => {
     if (isSuccess) {
-      if (data.length <= 0) {
+      const bankList = data.filter((bank) => bank.cardNumber !== null);
+      if (bankList.length <= 0) {
         setHasAccount(false);
       } else {
-        const accounts = data.filter((account) => {
-          if (account.cardNumber !== null) return account;
-        });
         setHasAccount(true);
         setOptionList(
-          accounts.map((account) => {
+          bankList.map((account) => {
             return {
               content: (
                 <div className={wallet["items-credit"]}>
@@ -135,8 +135,8 @@ export default function Withdraw({ onClose, stock }: Props) {
           }),
         );
         reset({
-          iban: accounts[0]?.iban,
-          accountId: accounts[0]?.id,
+          iban: bankList[0]?.iban,
+          accountId: bankList[0]?.id,
           amount: "",
         });
       }
@@ -149,158 +149,180 @@ export default function Withdraw({ onClose, stock }: Props) {
         type: "success",
         text: "درخواست برداشت با موفقیت ثبت شد.",
       });
-      onClose?.();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccessWithdraw]);
 
   // ==============|| Render ||================= //
-  return hasAccount ? (
-    <form className="px-3" onSubmit={handleSubmit(onSubmit)}>
-      <Row>
+  return (
+    <>
+      <div className={wallet["form-container"]}>
+        <div className={wallet["form-wrapper"]}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div>
+              <div>
+                <Controller
+                  name="iban"
+                  control={control}
+                  render={({ field: { name, value } }) => (
+                    <div className={wallet["form-group"]}>
+                      <div className={wallet["form-group__label"]}>
+                        <label htmlFor={name}>شماره شبا</label>
+                        <Link to="/dashboard/profile" target="blank">
+                          افزودن حساب جدید
+                        </Link>
+                      </div>
+                      <DropdownInput
+                        disabled={!hasAccount}
+                        id={name}
+                        value={value}
+                        onChange={(val, otherOption) => {
+                          setValue("accountId", otherOption.accountId);
+                          setValue(name, val);
+                        }}
+                        options={optionList}
+                        hasError={Boolean(errors?.[name])}
+                      />
+                      {errors?.[name] && (
+                        <FormFeedback tooltip>
+                          {errors[name]?.message}
+                        </FormFeedback>
+                      )}
+                      {fee?.withdrawMaxAmount && (
+                        <span
+                          className={wallet["form-group__hint"]}
+                        >{`سقف باقیمانده برداشت روزانه: ${normalizeAmount(
+                          fee?.withdrawMaxAmount,
+                          "IRR",
+                          true,
+                        )}`}</span>
+                      )}
+                    </div>
+                  )}
+                />
+              </div>
+              <div>
+                <Controller
+                  name="amount"
+                  control={control}
+                  render={({ field: { name, value } }) => (
+                    <div className={wallet["form-group"]}>
+                      <div className={wallet["form-group__label"]}>
+                        <label htmlFor={name}>مبلغ برداشت</label>
+                        <span
+                          className={wallet["form-group__hint"]}
+                          role="button"
+                          onClick={() => {
+                            const val = (Number(stock) / 10).toString();
+
+                            setValue(name, parseInt(val).toString());
+                          }}
+                        >{`موجودی شما: ${normalizeAmount(
+                          stock.toString(),
+                          "IRR",
+                          true,
+                        )}`}</span>
+                      </div>
+                      <CurrencyInput
+                        thousandSeparator=","
+                        name={name}
+                        value={value}
+                        disabled={!hasAccount}
+                        onChange={(e: any) => {
+                          const amountTemp = persianToEnglishNumbers(
+                            e.target.value.replaceAll(",", ""),
+                          );
+                          e.target.value &&
+                            getFees({
+                              currencyCode: "IRR",
+                              amount: (Number(amountTemp) * 10).toString(),
+                              tranasctionType: "WITHDRAW",
+                            });
+                          clearErrors("amount");
+                          setValue(name, amountTemp);
+                        }}
+                        placeholder="تومان"
+                        // hasError={Boolean(errors?.[name])}
+                      />
+                      {errors?.[name] && (
+                        <FormFeedback tooltip>
+                          {errors[name]?.message}
+                        </FormFeedback>
+                      )}
+                      <div className={wallet["form-group__hints"]}>
+                        {fees && (
+                          <span className={wallet["form-group__hint"]}>
+                            {`کارمزد برداشت: ${normalizeAmount(
+                              fees.feeAmount,
+                              "IRR",
+                              true,
+                            )}`}
+                          </span>
+                        )}
+
+                        {value !== "" &&
+                          fees?.feeAmount &&
+                          Number(value) - Number(fees?.feeAmount) > 0 && (
+                            <span className={wallet["form-group__hint"]}>
+                              {`خالص دریافتی: ${normalizeAmount(
+                                (
+                                  Number(value) * 10 -
+                                  Number(fees?.feeAmount)
+                                ).toString(),
+                                "IRR",
+                                true,
+                              )}`}
+                            </span>
+                          )}
+                      </div>
+                    </div>
+                  )}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="mt-3 text-center">
+                <button
+                  disabled={isLoading || !hasAccount}
+                  type="submit"
+                  className={`${button["arsonex-btn"]} ${button["primary"]} ${button["full-width"]} mb-2`}
+                >
+                  درخواست برداشت
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div className={wallet.info}>
         {!secondTierVerified && (
           <AlertInfo
             hasIcon
             text="برای افزایش میزان برداشت، احراز هویت سطح دو را تکمیل نمایید."
           />
         )}
-        <AlertInfo
-          hasIcon
-          text="تسویه حساب با بانک‌های سامان، صادرات، کشاورزی، پارسیان، سپه، شهر، ملی، اقتصادنوین، آینده، پاسارگارد، ملت و تجارت سریع‌تر انجام می‌شود."
-        />
-        <AlertInfo
-          hasIcon
-          text="تمامی درخواست‌ها بعد از ثبت برداشت وارد چرخه پایا شده و در اولین سیکل یا سیکل بعدی روز‌های کاری برای شما واریز می‌شود."
-        />
-      </Row>
-      <Row>
-        <Col xs={12} lg={6}>
-          <Controller
-            name="iban"
-            control={control}
-            render={({ field: { name, value } }) => (
-              <FormGroup className="position-relative">
-                <div className="d-flex flex-row justify-content-between">
-                  <Label htmlFor={name}> واریز به شبا: </Label>
-                  <Link to="/dashboard/profile" target="blank">
-                    <span className={wallet?.["little-label"]}>
-                      افزودن حساب جدید
-                    </span>
-                  </Link>
-                </div>
-                <DropdownInput
-                  id={name}
-                  value={value}
-                  onChange={(val, otherOption) => {
-                    setValue("accountId", otherOption.accountId);
-                    setValue(name, val);
-                  }}
-                  options={optionList}
-                  hasError={Boolean(errors?.[name])}
-                />
-                {errors?.[name] && (
-                  <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
-                )}
-                {fee?.withdrawMaxAmount && (
-                  <FormText>{`سقف باقیمانده برداشت روزانه: ${normalizeAmount(fee?.withdrawMaxAmount, "IRR", true)}`}</FormText>
-                )}
-              </FormGroup>
-            )}
-          />
-        </Col>
-        <Col xs={12} lg={6}>
-          <Controller
-            name="amount"
-            control={control}
-            render={({ field: { name, value } }) => (
-              <FormGroup className="position-relative">
-                <div className="d-flex flex-row justify-content-between">
-                  <Label htmlFor={name}>مبلغ برداشت: </Label>
-                  <span className="d-flex flex-row justify-content-between">
-                    <FormText
-                      role="button"
-                      onClick={() => {
-                        const val = (Number(stock) / 10).toString();
-
-                        setValue(name, parseInt(val).toString());
-                      }}
-                    >{`موجودی شما: ${normalizeAmount(stock.toString(), "IRR", true)}`}</FormText>
-                  </span>
-                </div>
-                <Currency
-                  name={name}
-                  value={value}
-                  onChange={(val) => {
-                    val &&
-                      getFees({
-                        currencyCode: "IRR",
-                        amount: (Number(val) * 10).toString(),
-                        tranasctionType: "WITHDRAW",
-                      });
-                    clearErrors("amount");
-                    setValue(name, val);
-                  }}
-                  placeholder="مبلغ را به تومان وارد کنید"
-                  hasError={Boolean(errors?.[name])}
-                />
-                {errors?.[name] && (
-                  <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
-                )}
-                <div className="d-flex flex-column">
-                  <FormText>
-                    {fees && (
-                      <FormText>
-                        {`کارمزد برداشت: ${normalizeAmount(fees.feeAmount, "IRR", true)}`}
-                      </FormText>
-                    )}
-                  </FormText>
-
-                  {value !== "" &&
-                    fees?.feeAmount &&
-                    Number(value) - Number(fees?.feeAmount) > 0 && (
-                      <FormText>
-                        {`خالص دریافتی: ${normalizeAmount(
-                          (
-                            Number(value) * 10 -
-                            Number(fees?.feeAmount)
-                          ).toString(),
-                          "IRR",
-                          true,
-                        )}`}
-                      </FormText>
-                    )}
-                </div>
-              </FormGroup>
-            )}
-          />
-        </Col>
-      </Row>
-      <Row className="mt-5">
-        <div className="text-center">
-          <Button className="px-5 py-3" color="primary" outline type="submit">
-            ثبت درخواست برداشت
-          </Button>
-        </div>
-      </Row>
-    </form>
-  ) : (
-    <Row>
-      <AlertInfo
-        text={`شما هیچ حسابی به پروفایل خود اضافه نکرده‌اید، ابتدا یک حساب به نام  ${firstName} ${lastName} به پروفایل خود اضافه کنید.`}
-        hasIcon={true}
-      />
-      <div className="text-center mt-3">
-        <Button
-          color="primary"
-          type="button"
-          className="px-5 py-3"
-          onClick={() => navigate("/dashboard/profile")}
-          outline
-        >
-          افزودن حساب بانکی
-        </Button>
+        {hasAccount && (
+          <>
+            <AlertDanger
+              hasIcon
+              text="از واریز هرگونه وجه به حساب افراد ناشناس که از طریق آگهی‌های درآمدزایی و مشابه شما را پیدا کرده‌اند، خودداری نمایید. این روش کلاهبرداری است و در صورت وقوع جرم، مسئولیت آن بر عهده شما خواهد بود."
+            />
+            <AlertInfo
+              hasIcon
+              text="حداکثر مبلغ قابل برداشت روزانه از هر حساب ۱,۰۰۰,۰۰۰,۰۰۰ تومان می‌باشد."
+            />
+            <AlertInfo
+              hasIcon
+              text="سقف هر تراکنش برداشت 100,000,000 تومان می‌باشد."
+            />
+            <AlertWarning
+              hasIcon
+              text="در صورتی که امکان واریز حساب به حساب وجود داشته باشد واریزها به‌طور فوری انجام می‌شود؛ در غیر این صورت، طبق سیکل پایا و در روزهای کاری، واریزها در زمان‌های ۰۳:۴۵ صبح، ۱۰:۴۵ صبح، ۱۳:۴۵ عصر ،۱۸:۴۵ عصر انجام می‌گردد. درخواست‌هایی که در روزهای تعطیل ثبت شوند در اولین سیکل کاری پردازش خواهند شد."
+            />
+          </>
+        )}
       </div>
-    </Row>
+    </>
   );
 }

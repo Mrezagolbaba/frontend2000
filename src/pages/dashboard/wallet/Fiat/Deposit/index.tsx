@@ -1,23 +1,22 @@
-import { AlertDanger, AlertInfo, AlertWarning } from "components/AlertWidget";
-import CopyInput from "components/Input/CopyInput";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import { useEffect, useState } from "react";
-import { Button, Col, Form, FormGroup, Label, List, Row } from "reactstrap";
+import { Row } from "reactstrap";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import { useAppSelector } from "store/hooks";
+import { useNavigate } from "react-router-dom";
 import {
   useDepositInfoQuery,
   useRefCodeMutation,
 } from "store/api/wallet-management";
-import { useAppSelector } from "store/hooks";
-import { useBankAccountsQuery } from "store/api/profile-management";
-import { isEmpty } from "lodash";
-import Dialog from "components/Dialog";
-import InternationalVerification from "pages/dashboard/profile/InternationalVerification";
+import {
+  useBankAccountsQuery,
+  useGetVerificationsQuery,
+} from "store/api/profile-management";
 import BanksWrapper from "components/BanksWrapper";
-import { useCheckVerificationsQuery } from "store/api/user";
+import CopyInput from "components/Input/CopyInput";
+import { AlertDanger, AlertInfo, AlertWarning } from "components/AlertWidget";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import profile from "assets/scss/dashboard/profile.module.scss";
-import { useNavigate } from "react-router-dom";
 
 export enum REJECTION_REASON {
   INVALID_RESIDENCE_PERMIT = "INVALID_RESIDENCE_PERMIT",
@@ -27,14 +26,11 @@ export enum REJECTION_REASON {
   NAME_IS_DIFFERENT_IN_RESIDENCE_PERMIT = "NAME_IS_DIFFERENT_IN_RESIDENCE_PERMIT",
 }
 
-const DepositFiat = ({ onClose }: { onClose: () => void }) => {
-  const { firstNameEn, lastNameEn, secondTierVerified } = useAppSelector(
-    (state) => state.user,
-  );
-  const navigate = useNavigate();
+export default function DepositFiat() {
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
   const [selectedBank, setSelectedBank] = useState<string>("");
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
+  const [internationalVerify, setInternationalVerify] = useState<any>();
   const [otherInfo, setOtherInfo] = useState<{
     ownerName?: string;
     code?: string;
@@ -42,20 +38,22 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
     ownerName: "",
     code: "",
   });
+
+  const { firstNameEn, lastNameEn, secondTierVerified } = useAppSelector(
+    (state) => state.user,
+  );
+  const navigate = useNavigate();
   const { data, isSuccess } = useDepositInfoQuery("TRY");
   const { data: accounts, isSuccess: getSuccessAccounts } =
     useBankAccountsQuery({
       filter: "currencyCode||$eq||TRY",
     });
-
   const [
     initRefCode,
     { data: depResponse, isLoading: LoadingDeposit, isSuccess: depositSuccess },
   ] = useRefCodeMutation();
-
   const { data: verifications, isSuccess: internationalSuccess } =
-    useCheckVerificationsQuery();
-  const [internationalVerify, setInternationalVerify] = useState<any>();
+    useGetVerificationsQuery();
 
   useEffect(() => {
     let list = [] as OptionType[] | [];
@@ -72,12 +70,6 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
           },
           content: (
             <div className={wallet["items-credit"]}>
-              {/* <span className={wallet["items-credit__icon"]}>
-                <span
-                  className="mx-3"
-                  dangerouslySetInnerHTML={{ __html: bank.logo }}
-                />
-              </span> */}
               <BanksWrapper
                 value={item.iban}
                 type={"TRY"}
@@ -109,7 +101,7 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
       );
   }, [internationalSuccess, verifications]);
 
-  const generateErrorReason = (reason, index) => {
+  const generateErrorReason = (reason: string, index: number) => {
     switch (reason) {
       case REJECTION_REASON.INVALID_RESIDENCE_PERMIT:
         return (
@@ -148,40 +140,54 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
   const renderUI = () => {
     if (LoadingDeposit) {
       return (
-        <Row className="placeholder-glow">
-          <Col xs={12} lg={6}>
+        <div className="pt-3">
+          <div className="placeholder-glow">
             <div
-              className="placeholder rounded mt-3 py-2 w-100"
-              style={{ height: "30px" }}
+              className="placeholder col-12 rounded"
+              style={{
+                height: "48px",
+                marginBottom: "1rem",
+              }}
             />
-          </Col>
-          <Col xs={12} lg={6}>
+          </div>
+          <div className="placeholder-glow">
             <div
-              className="placeholder rounded mt-3 py-2 w-100"
-              style={{ height: "30px" }}
+              className="placeholder col-12 rounded"
+              style={{
+                height: "48px",
+                marginBottom: "1rem",
+              }}
             />
-          </Col>
-          <Col xs={12} lg={4}>
+          </div>
+          <div className="placeholder-glow">
             <div
-              className="placeholder rounded mt-3 py-2 w-100"
-              style={{ height: "30px" }}
+              className="placeholder col-12 rounded"
+              style={{
+                height: "48px",
+                marginBottom: "1rem",
+              }}
             />
-          </Col>
-          <Col xs={12} lg={8}>
+          </div>
+          <div className="placeholder-glow">
             <div
-              className="placeholder rounded mt-3 py-2 w-100"
-              style={{ height: "30px" }}
+              className="placeholder col-12 rounded"
+              style={{
+                height: "48px",
+                marginBottom: "1rem",
+              }}
             />
-          </Col>
-        </Row>
+          </div>
+        </div>
       );
     } else {
       if (depositSuccess) {
         return (
-          <Row>
-            <Col xs={12} md={6}>
-              <FormGroup>
-                <Label htmlFor="bank-name"> بانک مقصد:</Label>
+          <div>
+            <div>
+              <div className={wallet["form-group"]}>
+                <div className={wallet["form-group__label"]}>
+                  <label htmlFor="bank-name"> بانک مقصد </label>
+                </div>
                 <DropdownInput
                   id="bank-name"
                   value={selectedBank}
@@ -194,36 +200,47 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
                   options={optionList}
                   // hasError={Boolean(errors?.[name])}
                 />
-              </FormGroup>
-            </Col>
-            <Col xs={12} md={6}>
-              <FormGroup>
-                <Label htmlFor="iban"> شماره IBAN:</Label>
-
-                <CopyInput text={selectedBank || ""} key="iban-account" />
-              </FormGroup>
-            </Col>
+              </div>
+            </div>
+            <div>
+              <div className={wallet["form-group"]}>
+                <div className={wallet["form-group__label"]}>
+                  <label> شماره IBAN </label>
+                </div>
+                <CopyInput
+                  name="IBAN"
+                  text={selectedBank || ""}
+                  key="iban-account"
+                />
+              </div>
+            </div>
             {depResponse && (
-              <Col xs={12} md={4}>
-                <FormGroup>
-                  <Label htmlFor="ownerAccount"> شناسه واریز :</Label>
+              <div>
+                <div className={wallet["form-group"]}>
+                  <div className={wallet["form-group__label"]}>
+                    <label> شناسه واریز </label>
+                  </div>
                   <CopyInput
+                    name="شناسه واریز"
                     text={depResponse.refCode || ""}
                     key="number-account"
                   />
-                </FormGroup>
-              </Col>
+                </div>
+              </div>
             )}
-            <Col xs={12} md={8}>
-              <FormGroup>
-                <Label htmlFor="ownerAccount">نام صاحب حساب:</Label>
+            <div>
+              <div className={wallet["form-group"]}>
+                <div className={wallet["form-group__label"]}>
+                  <label> نام صاحب حساب </label>
+                </div>
                 <CopyInput
+                  name="نام صاحب حساب"
                   text={otherInfo.ownerName || ""}
                   key="owner-account"
                 />
-              </FormGroup>
-            </Col>
-          </Row>
+              </div>
+            </div>
+          </div>
         );
       } else {
         return (
@@ -239,104 +256,41 @@ const DepositFiat = ({ onClose }: { onClose: () => void }) => {
   };
 
   return (
-    <div className="px-2">
-      {!secondTierVerified ? (
-        <>
-          <AlertInfo
+    <>
+      <div className={wallet["form-container"]}>
+        <div className={wallet["form-wrapper"]}>{renderUI()}</div>
+      </div>
+      <div className={wallet.info}>
+        {firstNameEn && lastNameEn && (
+          <AlertDanger
             hasIcon
-            text="لطفا ابتدا احراز هویت سطح دو خود را تکمیل کنید."
-            key="passport-alert"
+            text={`در صورت ارسال مبلغ از حسابی بجز ${
+              firstNameEn.toUpperCase() + " " + lastNameEn.toUpperCase()
+            }   عودت مبلغ بعد از 72 ساعت با کسر کارمزد بانکی انجام می‌شود.`}
           />
-          <Row>
-            <Col className="text-center">
-              <Button
-                className="px-5 py-3"
-                color="primary"
-                outline
-                onClick={() => navigate("/dashboard/profile#kyc-section")}
-              >
-                احراز هویت سطح دو
-              </Button>
-            </Col>
-          </Row>
-        </>
-      ) : internationalVerify?.status === "DRAFT" ? (
-        <>
-          <AlertInfo
-            hasIcon
-            text="برای استفاده از خدمات لیر ترکیه، باید کارت اقامت ترکیه خود را ارسال نمایید."
-            key="passport-alert"
-          />
-          <Row>
-            <Col className="text-center">
-              <Button
-                className="px-5 py-3"
-                color="primary"
-                outline
-                onClick={() => setIsOpenDialog(true)}
-              >
-                ارسال کارت اقامت
-              </Button>
-            </Col>
-          </Row>
-        </>
-      ) : internationalVerify?.status === "INITIATED" ? (
+        )}
+        <AlertWarning
+          hasIcon
+          text="در هنگام واریز، حتماً شناسه واریز را به‌طور دقیق در بخش Description یا Aciklama وارد نمایید. در صورت عدم رعایت این نکته، مبلغ به حساب کاربری شما واریز نخواهد شد و پس از ۷۲ ساعت کاری، به حساب شما با کسر کارمزد بانکی مسترد خواهد شد."
+        />
         <AlertInfo
           hasIcon
-          text="درخواست فعال سازی خدمات بین المللی شما در حال بررسی توسط پشتیبانی آرسونیکس می باشد."
-          key="passport-alert"
+          text="هیچ محدودیتی از نظر یکسان بودن بانک مبدا و مقصد وجود ندارد؛ به عبارت دیگر، امکان انجام تراکنش‌ها بین حساب‌های بانکی از بانک‌های مختلف وجود دارد و نیازی به هماهنگ بودن بانک مبدا و مقصد نیست."
         />
-      ) : internationalVerify?.status === "REJECTED" ? (
-        <AlertDanger
-          text={
-            <>
-              <h6>درخواست شما به دلایل زیر رد شده است:</h6>
-              <List className="py-3">
-                {internationalVerify?.rejectReasons.map((reason, index) =>
-                  generateErrorReason(reason, index),
-                )}
-                <Button
-                  className="mt-3 px-3 py-2"
-                  onClick={() => setIsOpenDialog(true)}
-                  color="warning"
-                >
-                  اصلاح درخواست
-                </Button>
-              </List>
-            </>
-          }
-          hasIcon={false}
-        />
-      ) : (
-        <Form>
-          {!isEmpty(firstNameEn) && !isEmpty(lastNameEn) && (
-            <AlertWarning
-              hasIcon
-              text={`در صورت ارسال مبلغ از حسابی بجز ${
-                firstNameEn + " " + lastNameEn
-              }   عودت مبلغ بعد از 72 ساعت با کسر کارمزد بانکی انجام می‌شود.`}
-            />
-          )}
-          <AlertWarning
-            hasIcon
-            text="در هنگام واریز حتما شناسه واریز را  در بخش Description یا Aciklama به طور دقیق وارد کنید، در صورت رعایت نکردن این مساله مبلغ به حساب کاربری شما واریز نمی‌شود و بعد از ۷۲ ساعت کاری به حساب شما پس از کسر کارمزد بانکی عودت داده می‌شود."
-          />
-          {renderUI()}
-        </Form>
-      )}
-      <Dialog
-        title="ارسال کارت اقامت"
-        isOpen={isOpenDialog}
-        hasCloseButton={true}
-        onClose={() => {
-          onClose?.();
-          setIsOpenDialog(false);
-        }}
-      >
-        <InternationalVerification />
-      </Dialog>
-    </div>
+      </div>
+    </>
+    //   )}
+    //   <Dialog
+    //     title="ارسال کارت اقامت"
+    //     isOpen={isOpenDialog}
+    //     hasCloseButton={true}
+    //     onClose={() => {
+    //       onClose?.();
+    //       setIsOpenDialog(false);
+    //     }}
+    //   >
+    //     <InternationalVerification />
+    //   </Dialog>
+    // </div>
   );
-};
-
-export default DepositFiat;
+}
