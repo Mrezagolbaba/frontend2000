@@ -39,7 +39,7 @@ type Props = {
   stock: string | number;
 };
 
-export default function Withdraw({ onClose, stock }: Props) {
+export default function IRTWithdraw({ onClose, stock }: Props) {
   // ==============|| States ||================= //
   const [optionList, setOptionList] = useState<OptionType[] | []>([]);
   const [hasAccount, setHasAccount] = useState<boolean>(true);

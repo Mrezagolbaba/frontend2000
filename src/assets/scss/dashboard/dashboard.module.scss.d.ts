@@ -26,8 +26,10 @@ declare const classNames: {
   readonly "sidebar-wrapper": "sidebar-wrapper";
   readonly sidebar__navbar: "sidebar__navbar";
   readonly sidebar__navbar__item: "sidebar__navbar__item";
+  readonly "active-sub": "active-sub";
   readonly "item-logout": "item-logout";
   readonly icon: "icon";
+  readonly submenu: "submenu";
   readonly "short-navbar": "short-navbar";
   readonly "mobile-menu": "mobile-menu";
   readonly "sub-item": "sub-item";
