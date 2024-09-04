@@ -21,11 +21,10 @@ type CryptoFormType = {
 };
 
 type Props = {
-  onClose: () => void;
   currency: any;
 };
 
-const DepositCrypto = ({ onClose, currency }: Props) => {
+const DepositCrypto = ({ currency }: Props) => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [result, setResult] = useState({
     networkName: "",
@@ -107,7 +106,6 @@ const DepositCrypto = ({ onClose, currency }: Props) => {
     data && cancelTransaction(data?.id);
     localStorage.removeItem("cryptoWalletId");
     localStorage.removeItem("cryptoWalletExpiredTime");
-    onClose?.();
   };
 
   useEffect(() => {

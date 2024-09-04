@@ -14,9 +14,9 @@ export default function Deposit() {
   const renderDeposit = () => {
     switch (type) {
       case "crypto":
-        return <DepositCrypto currency="USDT" onClose={() => {}} />;
+        return <DepositCrypto currency="USDT" />;
       case "fiat":
-        return <DepositFiat onClose={() => {}} />;
+        return <DepositFiat />;
       case "irt":
       default:
         return <IRTDeposit />;
