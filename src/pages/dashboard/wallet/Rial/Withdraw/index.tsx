@@ -12,7 +12,7 @@ import {
   useTransactionFeeQuery,
   useWithdrawMutation,
 } from "store/api/wallet-management";
-import { normalizeAmount } from "helpers";
+import { normalizeAmount, persianToEnglishNumbers } from "helpers";
 import BanksWrapper from "components/BanksWrapper";
 import Notify from "components/Notify";
 import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
@@ -228,15 +228,16 @@ export default function IRTWithdraw({ stock }: Props) {
                         name={name}
                         value={value}
                         disabled={!hasAccount}
-                        onChange={({ target }) => {
-                          target.value &&
+                        onChange={(e: any) => {
+                          const amountTemp = e.target.value.replaceAll(",", "");
+                          e.target.value &&
                             getFees({
                               currencyCode: "IRR",
-                              amount: (Number(target.value) * 10).toString(),
+                              amount: (Number(amountTemp) * 10).toString(),
                               tranasctionType: "WITHDRAW",
                             });
                           clearErrors("amount");
-                          setValue(name, target.value);
+                          setValue(name, persianToEnglishNumbers(amountTemp));
                         }}
                         placeholder="تومان"
                         // hasError={Boolean(errors?.[name])}

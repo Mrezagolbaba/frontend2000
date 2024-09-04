@@ -16,6 +16,7 @@ import { useAppSelector } from "store/hooks";
 import { useDisconnectDebitMutation } from "store/api/profile-management";
 import Notify from "components/Notify";
 import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
+import { persianToEnglishNumbers } from "helpers";
 
 export default function DepositDebit({
   data,
@@ -169,7 +170,7 @@ export default function DepositDebit({
           <Controller
             name="amount"
             control={control}
-            render={({ field: { name, value, onChange } }) => (
+            render={({ field: { name, value } }) => (
               <div className={wallet["form-group"]}>
                 <div className={wallet["form-group__label"]}>
                   <label htmlFor={name}>مقدار واریز </label>
@@ -178,7 +179,10 @@ export default function DepositDebit({
                   thousandSeparator=","
                   name={name}
                   value={value}
-                  onChange={onChange}
+                  onChange={(e: any) => {
+                    const amountTemp = e.target.value.replaceAll(",", "");
+                    setValue(name, persianToEnglishNumbers(amountTemp));
+                  }}
                   placeholder="تومان"
                   // hasError={Boolean(errors?.[name])}
                 />

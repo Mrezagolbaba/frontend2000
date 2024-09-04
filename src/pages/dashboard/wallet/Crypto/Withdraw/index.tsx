@@ -206,9 +206,10 @@ const WithdrawCrypto = ({
                         thousandSeparator=","
                         name={name}
                         value={value}
-                        onChange={({ target }) => {
+                        onChange={(e: any) => {
                           clearErrors(name);
-                          setValue(name, target.value);
+                          const amountTemp = e.target.value.replaceAll(",", "");
+                          setValue(name, persianToEnglishNumbers(amountTemp));
                         }}
                       />
                       {errors?.[name] && (
