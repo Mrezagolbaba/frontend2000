@@ -1,23 +1,31 @@
-import { Button, FormFeedback, Spinner } from "reactstrap";
-import * as Yup from "yup";
-import { Controller, useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
-import { useAppSelector } from "store/hooks";
+import {
+  Button,
+  Col,
+  FormFeedback,
+  FormGroup,
+  FormText,
+  Label,
+  Row,
+  Spinner,
+} from "reactstrap";
 import {
   useDepositMutation,
   useTransactionFeeQuery,
 } from "store/api/wallet-management";
-import { Link, useNavigate } from "react-router-dom";
-import { useBankAccountsQuery } from "store/api/profile-management";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { normalizeAmount, persianToEnglishNumbers } from "helpers";
-import { IBankAccounts } from "types/banks";
+import * as Yup from "yup";
 import BanksWrapper from "components/BanksWrapper";
-import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
+import Currency from "components/Input/CurrencyInput";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import { AlertInfo } from "components/AlertWidget";
+import { Controller, useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { normalizeAmount } from "helpers";
+import { useAppSelector } from "store/hooks";
+import { useBankAccountsQuery } from "store/api/profile-management";
+import { useEffect, useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
-import button from "assets/scss/components/button.module.scss";
 
 type CreditCardForm = {
   accountNumber: string;
@@ -71,20 +79,12 @@ const CreditCardForm = () => {
     if (Number(data.amount) < fee?.depositMinAmount / 10)
       setError("amount", {
         type: "manual",
-        message: `مبلغ وارد شده نمی تواند کمتر از ${normalizeAmount(
-          fee?.depositMinAmount,
-          "IRR",
-          true,
-        )} باشد.`,
+        message: `مبلغ وارد شده نمی تواند کمتر از ${normalizeAmount(fee?.depositMinAmount, "IRR", true)} باشد.`,
       });
     else if (Number(data.amount) >= fee?.depositMaxAmount)
       setError("amount", {
         type: "manual",
-        message: `مبلغ وارد شده نمی تواند بیشتر از ${normalizeAmount(
-          fee.depositMaxAmount,
-          "IRR",
-          true,
-        )} باشد.`,
+        message: `مبلغ وارد شده نمی تواند بیشتر از ${normalizeAmount(fee.depositMaxAmount, "IRR", true)} باشد.`,
       });
     else
       depositRequest({
@@ -101,7 +101,7 @@ const CreditCardForm = () => {
       if (data.length <= 0) {
         setHasAccount(false);
       } else {
-        const accounts = data.filter((account: IBankAccounts) => {
+        const accounts = data.filter((account) => {
           if (account.cardNumber !== null) return account;
         });
 
@@ -145,8 +145,7 @@ const CreditCardForm = () => {
   }, [isSubmitSuccess, response]);
 
   // ==============|| Render ||================= //
-  // return hasAccount ? (
-  return (
+  return hasAccount ? (
     <>
       {isRedirect && (
         <div className="overlay-redirect">
@@ -155,20 +154,22 @@ const CreditCardForm = () => {
         </div>
       )}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <div>
+        <Row>
+          <Col xs={12} lg={6}>
             <Controller
               name="accountNumber"
               control={control}
               render={({ field: { name, value } }) => (
-                <div className={wallet["form-group"]}>
-                  <div className={wallet["form-group__label"]}>
-                    <label htmlFor={name}>شماره کارت</label>
+                <FormGroup className="position-relative">
+                  <div className="d-flex flex-row justify-content-between">
+                    <Label htmlFor={name}>کارت واریزی: </Label>
                     <Link
                       to="/dashboard/profile#iranian-accounts"
                       target="_blank"
                     >
-                      افزودن حساب جدید
+                      <span className={wallet?.["little-label"]}>
+                        افزودن حساب جدید
+                      </span>
                     </Link>
                   </div>
                   <DropdownInput
@@ -185,52 +186,40 @@ const CreditCardForm = () => {
                     <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                   )}
                   {fee && (
-                    <span className={wallet["form-group__hint"]}>
-                      {`سقف واریز 24 ساعته ${normalizeAmount(
-                        fee?.depositMaxAmount,
-                        "IRR",
-                        true,
-                      )}`}
-                    </span>
+                    <FormText>
+                      {`سقف واریز: ${normalizeAmount(fee?.depositMaxAmount, "IRR", true)}`}
+                    </FormText>
                   )}
-                </div>
+                </FormGroup>
               )}
             />
-          </div>
-          <div>
+          </Col>
+          <Col xs={12} lg={6}>
             <Controller
               name="amount"
               control={control}
               render={({ field: { name, value } }) => (
-                <div className={wallet["form-group"]}>
-                  <div className={wallet["form-group__label"]}>
-                    <label htmlFor={name}>مقدار واریز </label>
+                <FormGroup className="position-relative">
+                  <div className="d-flex flex-row justify-content-between">
+                    <Label htmlFor={name}>مبلغ واریز: </Label>
                   </div>
-                  <CurrencyInput
-                    thousandSeparator=","
+                  <Currency
                     name={name}
                     value={value}
-                    onChange={(e: any) => {
-                      const amountTemp = e.target.value.replaceAll(",", "");
-                      setValue(name, persianToEnglishNumbers(amountTemp));
-                    }}
-                    placeholder="تومان"
-                    // hasError={Boolean(errors?.[name])}
+                    onChange={(val) => setValue(name, val)}
+                    placeholder="مبلغ را به تومان وارد کنید"
+                    hasError={Boolean(errors?.[name])}
                   />
                   {errors?.[name] && (
                     <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                   )}
                   <div className="d-flex flex-column">
                     {fee && (
-                      <span className={wallet["form-group__hint"]}>
-                        {`کارمزد شاپرک: ${normalizeAmount(
-                          fee?.depositFeeStatic,
-                          "IRR",
-                          true,
-                        )}`}
-                      </span>
+                      <FormText>
+                        {`کارمزد شاپرک: ${normalizeAmount(fee?.depositFeeStatic, "IRR", true)}`}
+                      </FormText>
                     )}
-                    <span className={wallet["form-group__hint"]}>
+                    <FormText>
                       {Number(value) - Number(fee?.depositFeeStatic) / 10 > 0 &&
                         `مبلغ واریز به کیف پول: ${normalizeAmount(
                           (
@@ -240,58 +229,59 @@ const CreditCardForm = () => {
                           "IRR",
                           true,
                         )}`}
-                    </span>
+                    </FormText>
                   </div>
-                </div>
+                </FormGroup>
               )}
             />
-          </div>
-        </div>
-        <div>
-          <div className="mt-3 text-center">
-            <button
-              disabled={isLoading}
+          </Col>
+        </Row>
+        <Row className="mt-5">
+          <div className="d-flex flex-row justify-content-evenly">
+            <Button
+              className="px-5 py-3"
+              color="primary"
+              outline
               type="submit"
-              className={`${button["arsonex-btn"]} ${button["primary"]} ${button["full-width"]} mb-2`}
+              disabled={isLoading || isSubmitSuccess}
             >
-              انتقال به درگاه پرداخت
-            </button>
+              {isLoading ? <Spinner /> : "انتقال به درگاه پرداخت"}
+            </Button>
             {!secondTierVerified && (
-              <button
-                disabled={isLoading}
+              <Button
+                className="px-5 py-3"
+                color="primary"
                 type="button"
                 onClick={() => {
                   navigate("/dashboard/profile#kyc-section");
                 }}
-                className={`${button["arsonex-btn"]} ${button["primary"]} ${button["full-width"]} mb-2`}
               >
                 احراز هویت سطح دو
-              </button>
+              </Button>
             )}
           </div>
-        </div>
+        </Row>
       </form>
     </>
+  ) : (
+    <Row>
+      <AlertInfo
+        text={`شما هیچ حسابی به پروفایل خود اضافه نکرده‌اید، ابتدا یک حساب به نام  ${firstName} ${lastName} به پروفایل خود اضافه کنید.`}
+        hasIcon={true}
+      />
+      <div className="text-center mt-3">
+        <Button
+          color="primary"
+          type="button"
+          className="px-5 py-3"
+          onClick={() => navigate("/dashboard/profile")}
+          outline
+        >
+          افزودن حساب بانکی
+        </Button>
+      </div>
+    </Row>
   );
-  // ) : (
-  //   <Row>
-  //     <AlertInfo
-  //       text={`شما هیچ حسابی به پروفایل خود اضافه نکرده‌اید، ابتدا یک حساب به نام  ${firstName} ${lastName} به پروفایل خود اضافه کنید.`}
-  //       hasIcon={true}
-  //     />
-  //     <div className="mt-3 text-center">
-  //       <Button
-  //         color="primary"
-  //         type="button"
-  //         className="px-5 py-3"
-  //         onClick={() => router.push("/dashboard/profile")}
-  //         outline
-  //       >
-  //         افزودن حساب بانکی
-  //       </Button>
-  //     </div>
-  //   </Row>
-  // );
 };
 
 export default CreditCardForm;

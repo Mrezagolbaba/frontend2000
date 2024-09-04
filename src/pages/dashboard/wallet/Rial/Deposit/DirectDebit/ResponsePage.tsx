@@ -1,7 +1,7 @@
 import Layout from "layouts/dashboard";
 import useQueryParams from "hooks/useQueryParams";
-import { useNavigate } from "react-router-dom";
 import { Button, Card, CardBody, Col, Container, Row } from "reactstrap";
+import { useNavigate } from "react-router-dom";
 
 export default function ResponsePage() {
   // ==============|| Hooks ||================= //

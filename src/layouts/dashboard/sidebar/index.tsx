@@ -1,21 +1,28 @@
 import LogoArsonex from "assets/img/logo-arsonex.png";
+import Market from "assets/img/icons/chart-simple.svg";
 import useAuth from "hooks/useAuth";
-import { Button, Collapse, Nav, NavItem } from "reactstrap";
+import { Button, Nav, NavItem } from "reactstrap";
 import { CiEdit } from "react-icons/ci";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { TbPower } from "react-icons/tb";
 import { useAppSelector } from "store/hooks";
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import WalletIcon from "components/Icons/WalletIcon";
-import HomeIcon from "components/Icons/HomeIcon";
-import MarketsIcon from "components/Icons/MarketsIcon";
-import InviteFriendsIcon from "components/Icons/InviteFriendsIcon";
-import TradeIcon from "components/Icons/TradeIcon";
-import ArrowIcon from "components/Icons/ArrowIcon";
 
 import dashboard from "assets/scss/dashboard/dashboard.module.scss";
+import WalletIcon from "components/Icons/WalletIcon";
+import HomeIcon from "components/Icons/HomeIcon";
+import Exchange from "pages/dashboard/exchange";
+import MarketsIcon from "components/Icons/MarketsIcon";
+import ExchangeIcon from "components/Icons/ExchangeIcon";
+import InviteFriendsIcon from "components/Icons/InviteFriendsIcon";
+import TradeIcon from "components/Icons/TradeIcon";
 
-export default function Sidebar() {
+type Props = {
+  isOpen: boolean;
+  setIsSidebarOpen: Dispatch<SetStateAction<boolean>>;
+};
+
+export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
   // ==============|| Hooks ||================= //
   const { firstName, lastName } = useAppSelector((state) => state.user);
   const location = useLocation();
@@ -23,7 +30,7 @@ export default function Sidebar() {
   const navigate = useNavigate();
 
   // ==============|| States ||================= //
-  const [isOpenCollapse, setIsOpenCollapse] = useState(-1);
+  const [activeItem, setActiveItem] = useState("");
 
   // ==============|| Variables ||================= //
   const items = [
@@ -38,28 +45,6 @@ export default function Sidebar() {
       path: "/dashboard/wallet",
       label: "کیف پول",
       icon: <WalletIcon fill="none" stroke="#03041b" />,
-      children: [
-        {
-          id: "wallet-redirect",
-          path: "/dashboard/wallet",
-          label: "دارایی",
-        },
-        {
-          id: "deposit",
-          path: "/dashboard/wallet/deposit/irt",
-          label: "واریز",
-        },
-        {
-          id: "withdraw",
-          path: "/dashboard/wallet/withdraw/irt",
-          label: "برداشت",
-        },
-        {
-          id: "bank-accounts",
-          path: "/dashboard/profile",
-          label: "حساب های بانکی",
-        },
-      ],
     },
     {
       id: "exchange",
@@ -82,19 +67,19 @@ export default function Sidebar() {
   ];
 
   // ==============|| Handlers ||================= //
+  const handleClick = (key: string) => {
+    setActiveItem(key);
+  };
   const handleLogout = async () =>
     await logout().then(() => navigate("/login"));
 
-  const renderActiveClass = (item) => {
-    if (
-      item.children &&
-      item.children.length > 0 &&
-      location.pathname.includes(item.path)
-    )
-      return true;
-    else if (!item.children && location.pathname === item.path) return true;
-    else return false;
-  };
+  // ==============|| Life Cycle ||================= //
+  useEffect(() => {
+    const path = location.pathname;
+    setActiveItem(path);
+    setIsSidebarOpen(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
 
   // ==============|| Render ||================= //
   return (
@@ -133,70 +118,18 @@ export default function Sidebar() {
           }`}
           vertical
         >
-          {items.map((item, key) => (
+          {items.map((item) => (
             <NavItem
-              key={key}
-              className={`${dashboard.sidebar__navbar__item} ${
-                renderActiveClass(item) ? dashboard.active : ""
+              key={item.path}
+              className={` ${dashboard.sidebar__navbar__item} ${
+                activeItem === item.path ? dashboard.active : ""
               }`}
+              onClick={() => handleClick(item.path)}
             >
-              <a
-                onClick={() => {
-                  navigate(item.path);
-                  setIsOpenCollapse(key);
-                }}
-              >
+              <Link to={item.path}>
                 <span className="icon">{item.icon}</span>
-                <span
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate(item.path);
-                  }}
-                >
-                  {item.label}
-                </span>
-              </a>
-              {item.children && item.children.length > 0 && (
-                <span
-                  className={`${dashboard["arrow-icon"]} ${
-                    isOpenCollapse === key ? dashboard["active-sub"] : ""
-                  }`}
-                  onClick={() =>
-                    isOpenCollapse !== key
-                      ? setIsOpenCollapse(key)
-                      : setIsOpenCollapse(-1)
-                  }
-                >
-                  <ArrowIcon />
-                </span>
-              )}
-              {item.children && item.children.length > 0 && (
-                <Collapse
-                  className={dashboard.submenu}
-                  isOpen={isOpenCollapse === key}
-                >
-                  {item.children.map((sub, index) => (
-                    <NavItem
-                      key={index}
-                      className={` ${dashboard.sidebar__navbar__item} ${
-                        renderActiveClass(sub)
-                          ? dashboard.active_sub
-                          : ""
-                      }`}
-                    >
-                      <Link
-                        to={
-                          sub.path === "/dashboard/profile"
-                            ? "/dashboard/profile#iranian-accounts"
-                            : sub.path
-                        }
-                      >
-                        {sub.label}
-                      </Link>
-                    </NavItem>
-                  ))}
-                </Collapse>
-              )}
+                <span>{item.label}</span>
+              </Link>
             </NavItem>
           ))}
           <NavItem

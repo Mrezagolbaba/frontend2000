@@ -1,17 +1,24 @@
-import { FormFeedback, Spinner } from "reactstrap";
-import * as Yup from "yup";
-import RenderBankItem from "./RenderBankItem";
-import { Controller, useForm } from "react-hook-form";
-import { useCallback, useEffect, useState } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import {
+  Button,
+  Col,
+  Form,
+  FormFeedback,
+  FormGroup,
+  Label,
+  Row,
+  Spinner,
+} from "reactstrap";
 import {
   useBanksQuery,
   useDebitSubscriptionMutation,
 } from "store/api/profile-management";
-
-import wallet from "assets/scss/dashboard/wallet.module.scss";
-import button from "assets/scss/components/button.module.scss";
+import * as Yup from "yup";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import RenderBankItem from "./RenderBankItem";
+import { AlertInfo } from "components/AlertWidget";
+import { Controller, useForm } from "react-hook-form";
+import { useCallback, useEffect, useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export default function AddDebit() {
   // ==============|| States ||================= //
@@ -48,7 +55,7 @@ export default function AddDebit() {
   });
 
   // ==============|| Handlers ||================= //
-  const onSubmit = (data: { bankId: string }) => {
+  const onSubmit = (data) => {
     debitRequest(data.bankId);
   };
   const handleList = useCallback(() => {
@@ -94,16 +101,24 @@ export default function AddDebit() {
           <span>درحال انتقال به صفحه مورد نظر ...</span>
         </div>
       )}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <div>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <AlertInfo
+          hasIcon
+          text="شماره موبایلی که در حساب کاربری آرسونیکس خود وارد کرده اید؛ باید با شماره موبایل حساب بانکی شما یکسان باشد."
+        />
+        <AlertInfo
+          hasIcon
+          text="کاربر گرامی، امکان فعالسازی این سرویس فقط با IP ایران میسر می‌باشد، لطفا در صورت استفاده از فیلترشکن آن را خاموش نمایید."
+        />
+        <Row>
+          <Col xs={12} lg={6}>
             <Controller
               name="bankId"
               control={control}
               render={({ field: { name, value } }) => (
-                <div className={wallet["form-group"]}>
-                  <div className={wallet["form-group__label"]}>
-                    <label htmlFor={name}> بانک مبدا </label>
+                <FormGroup className="position-relative">
+                  <div className="d-flex flex-row justify-content-between">
+                    <Label htmlFor={name}> بانک مبدا: </Label>
                   </div>
                   <DropdownInput
                     id={name}
@@ -117,23 +132,25 @@ export default function AddDebit() {
                   {errors?.[name] && (
                     <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                   )}
-                </div>
+                </FormGroup>
               )}
             />
-          </div>
-          <div>
-            <div className="mt-3 text-center">
-              <button
+          </Col>
+          <Col xs={12}>
+            <div className="text-center mt-3">
+              <Button
                 disabled={loadingDebit || isLoading}
+                color="primary"
+                outline
                 type="submit"
-                className={`${button["arsonex-btn"]} ${button["primary"]} ${button["full-width"]} mb-2`}
+                className="px-5 py-3"
               >
-                ثبت و ادامه
-              </button>
+                {loadingDebit || isLoading ? <Spinner /> : "ثبت و ادامه"}
+              </Button>
             </div>
-          </div>
-        </div>
-      </form>
+          </Col>
+        </Row>
+      </Form>
     </>
   );
 }

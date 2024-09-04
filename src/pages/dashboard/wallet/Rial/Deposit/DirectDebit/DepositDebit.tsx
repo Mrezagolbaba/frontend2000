@@ -1,22 +1,29 @@
-import { FormFeedback } from "reactstrap";
-
-import * as Yup from "yup";
-import { Controller, useForm } from "react-hook-form";
-import { useCallback, useEffect, useState } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
-
-import button from "assets/scss/components/button.module.scss";
-import wallet from "assets/scss/dashboard/wallet.module.scss";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import {
+  Button,
+  Col,
+  Form,
+  FormFeedback,
+  FormGroup,
+  Label,
+  Row,
+  Spinner,
+} from "reactstrap";
 import {
   useDepositMutation,
   useLazyWalletsQuery,
 } from "store/api/wallet-management";
-import { useAppSelector } from "store/hooks";
-import { useDisconnectDebitMutation } from "store/api/profile-management";
+import * as Yup from "yup";
+import Currency from "components/Input/CurrencyInput";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import Notify from "components/Notify";
-import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
-import { persianToEnglishNumbers } from "helpers";
+import { AlertInfo } from "components/AlertWidget";
+import { Controller, useForm } from "react-hook-form";
+import { iranianBankIcons } from "helpers/filesManagement/banksList";
+import { isEmpty } from "lodash";
+import { useAppSelector } from "store/hooks";
+import { useCallback, useEffect, useState } from "react";
+import { useDisconnectDebitMutation } from "store/api/profile-management";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export default function DepositDebit({
   data,
@@ -41,7 +48,7 @@ export default function DepositDebit({
 
   // ==============|| Hooks ||================= //
   const [getWallet] = useLazyWalletsQuery();
-  const { token } = useAppSelector((state: any) => state.auth);
+  const { token } = useAppSelector((state) => state.auth);
   const [depositRequest, { isLoading: loadingDeposit, isSuccess }] =
     useDepositMutation();
   const [
@@ -64,7 +71,7 @@ export default function DepositDebit({
   });
 
   // ==============|| Handlers ||================= //
-  const onSubmit = (data: { bankId: string; amount: string }) =>
+  const onSubmit = (data) =>
     depositRequest({
       currencyCode: "IRR",
       amount: (Number(data.amount) * 10).toString(),
@@ -77,12 +84,12 @@ export default function DepositDebit({
       setHasAccount(false);
     } else {
       setOptions(
-        data.map((bank: any) => {
+        data.map((bank) => {
           let result = "";
           try {
             // Fetch the image data from your API
             const response: any = fetch(
-              `${"https://dev-api.paydirham.me/v1/"}admin/banks/logo/${bank.id}`,
+              `${import.meta.env.VITE_BASE_URL}admin/banks/logo/${bank.id}`,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -97,11 +104,10 @@ export default function DepositDebit({
 
           return {
             content: (
-              <div className="flex">
+              <div>
                 <img
-                  width="20"
-                  height="20"
-                  src={result ? result : "/images/banks/bankDefault.svg"}
+                  width="28"
+                  src={!isEmpty(result) ? result : iranianBankIcons[0].src}
                   alt={bank?.bank.name}
                 />
                 <span className="mx-2">{bank?.bank.website}</span>
@@ -139,16 +145,21 @@ export default function DepositDebit({
 
   // ==============|| Render ||================= //
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <div>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <AlertInfo
+        hasIcon
+        text="می توانید برای تغییر حساب انتخاب شده، از قابلیت قطع دسترسی به حساب و تنظیم مجدد برداشت مستقیم استفاده کنید."
+      />
+
+      <Row>
+        <Col xs={12} lg={6}>
           <Controller
             name="bankId"
             control={control}
             render={({ field: { name, value } }) => (
-              <div className={wallet["form-group"]}>
-                <div className={wallet["form-group__label"]}>
-                  <label htmlFor={name}> بانک مبدا </label>
+              <FormGroup className="position-relative">
+                <div className="d-flex flex-row justify-content-between">
+                  <Label htmlFor={name}> بانک مبدا: </Label>
                 </div>
                 <DropdownInput
                   id={name}
@@ -162,58 +173,62 @@ export default function DepositDebit({
                 {errors?.[name] && (
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
-              </div>
+              </FormGroup>
             )}
           />
-        </div>
-        <div>
+        </Col>
+        <Col xs={12} lg={6}>
           <Controller
             name="amount"
             control={control}
-            render={({ field: { name, value } }) => (
-              <div className={wallet["form-group"]}>
-                <div className={wallet["form-group__label"]}>
-                  <label htmlFor={name}>مقدار واریز </label>
+            render={({ field: { name, value, onChange } }) => (
+              <FormGroup className="position-relative">
+                <div className="d-flex flex-row justify-content-between">
+                  <Label htmlFor={name}>مبلغ واریز: </Label>
                 </div>
-                <CurrencyInput
-                  thousandSeparator=","
+                <Currency
                   name={name}
                   value={value}
-                  onChange={(e: any) => {
-                    const amountTemp = e.target.value.replaceAll(",", "");
-                    setValue(name, persianToEnglishNumbers(amountTemp));
-                  }}
-                  placeholder="تومان"
-                  // hasError={Boolean(errors?.[name])}
+                  onChange={onChange}
+                  placeholder="مبلغ را به تومان وارد کنید"
+                  hasError={Boolean(errors?.[name])}
                 />
                 {errors?.[name] && (
                   <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                 )}
-              </div>
+              </FormGroup>
             )}
           />
-        </div>
-        <div>
-          <div className="mt-3 text-center">
-            <button
-              className={`${button["arsonex-btn"]} ${button["primary"]} ${button["full-width"]} mb-2`}
+        </Col>
+        <Col xs={12}>
+          <div className="text-center mt-3">
+            <Button
               disabled={isLoading || loadingDeposit || loadingDisconnect}
+              color="primary"
+              outline
               type="submit"
+              className="px-5 py-3 mx-2"
             >
-              پرداخت از طریق شارژ سریع
-            </button>
-            <button
+              {loadingDeposit || isLoading ? <Spinner /> : "تایید برداشت سریع"}
+            </Button>
+            <Button
               disabled={loadingDisconnect || isLoading || loadingDeposit}
-              className={`${button["arsonex-btn"]} ${button["primary-outline"]} ${button["full-width"]} mb-2`}
+              color="primary"
+              type="button"
+              className="px-5 py-3 mx-2"
               onClick={() => {
                 !isLoading && data && disconnect(data[0]?.id);
               }}
             >
-              قطع دسترسی به حساب
-            </button>
+              {loadingDisconnect || isLoading ? (
+                <Spinner />
+              ) : (
+                "قطع دسترسی به حساب"
+              )}
+            </Button>
           </div>
-        </div>
-      </div>
-    </form>
+        </Col>
+      </Row>
+    </Form>
   );
 }

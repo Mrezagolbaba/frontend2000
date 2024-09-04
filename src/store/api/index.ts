@@ -5,6 +5,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
 import { clearUser } from "store/reducers/features/user/userSlice";
 import { getRefToken } from "helpers";
+import { isEmpty } from "lodash";
 import { setLogin, setLogout } from "store/reducers/jwtAuth";
 import { setSession } from "contexts/JWTContext";
 
@@ -58,12 +59,7 @@ const axiosBaseQuery =
     } catch (error: any) {
       const response = error.response;
       const status = response.status;
-
-      const isPrivate = !(
-        response.config.url === "/auth/logout" ||
-        response.config.url === "/auth/login" ||
-        response.config.url === "/auth/register"
-      );
+      const isPrivate = !isEmpty(response?.config?.headers?.Authorization);
 
       if (status === 500 || status > 500)
         Notify({
@@ -87,11 +83,6 @@ const axiosBaseQuery =
           window.location.assign("/login");
         }
         return axiosBaseQuery()(args, api, extraOptions);
-      } else if (status === 401 && response.config.url === "/auth/logout") {
-        setSession(null);
-        localStorage.setItem("isInitialized", "false");
-        api.dispatch(clearUser());
-        window.location.assign("/login");
       } else if (response?.data?.translatedMessage)
         Notify({
           type: "error",
@@ -119,7 +110,7 @@ export const api = createApi({
     "reply-ticket",
     "debit-accounts",
     "verifications",
-    "otp",
+    "otp"
   ],
   keepUnusedDataFor: 30,
   refetchOnMountOrArgChange: 30,

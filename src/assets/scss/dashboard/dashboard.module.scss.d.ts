@@ -26,12 +26,8 @@ declare const classNames: {
   readonly "sidebar-wrapper": "sidebar-wrapper";
   readonly sidebar__navbar: "sidebar__navbar";
   readonly sidebar__navbar__item: "sidebar__navbar__item";
-  readonly "arrow-icon": "arrow-icon";
   readonly "item-logout": "item-logout";
   readonly icon: "icon";
-  readonly "active-sub": "active-sub";
-  readonly submenu: "submenu";
-  readonly active_sub: "active_sub";
   readonly "short-navbar": "short-navbar";
   readonly "mobile-menu": "mobile-menu";
   readonly "sub-item": "sub-item";

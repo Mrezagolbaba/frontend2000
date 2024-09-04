@@ -1,7 +1,9 @@
+import DepositFiat from "./Deposit";
 import Dialog from "components/Dialog";
+import WithdrawFiat from "./Withdraw";
 import lirIcon from "assets/img/coins/try.svg";
 import { Button } from "reactstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
@@ -10,10 +12,13 @@ import { AlertSuccess } from "components/AlertWidget";
 interface Props {
   balance: string;
   availableBalance: string;
+  stock: string;
 }
 
-export default function TRYWallet({ balance, availableBalance }: Props) {
+export default function TRYWallet({ balance, stock, availableBalance }: Props) {
   // ==============|| States ||================= //
+  const [isOpenDeposit, setIsOpenDeposit] = useState(false);
+  const [isOpenWithdraw, setIsOpenWithdraw] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
   // ==============|| Hooks ||================= //
@@ -39,11 +44,11 @@ export default function TRYWallet({ balance, availableBalance }: Props) {
           )}
         </div>
         <div className={wallet.wallet__item__actions}>
-          <Link to="/dashborad/wallet/withdraw/fiat">برداشت</Link>
+          <a onClick={() => setIsOpenWithdraw(true)}>برداشت</a>
           <Button
             color="primary"
             outline
-            onClick={() => navigate("/dashboard/wallet/deposit/fiat")}
+            onClick={() => setIsOpenDeposit(true)}
           >
             واریز
           </Button>
@@ -51,15 +56,41 @@ export default function TRYWallet({ balance, availableBalance }: Props) {
             color="primary"
             outline
             onClick={() =>
-              navigate(
-                "/dashboard/exchange?sourceCurrency=TRY&destinationCurrency=IRR",
-              )
+              navigate("/dashboard/exchange", {
+                state: {
+                  source: { currency: "TRY" },
+                  destination: { currency: "IRR" },
+                },
+              })
             }
           >
             معامله
           </Button>
         </div>
       </div>
+
+      <Dialog
+        title="واریز لیر"
+        isOpen={isOpenDeposit}
+        onClose={() => setIsOpenDeposit(false)}
+      >
+        <DepositFiat onClose={() => setIsOpenDeposit(false)} />
+      </Dialog>
+
+      <Dialog
+        title="برداشت لیر"
+        isOpen={isOpenWithdraw}
+        onClose={() => setIsOpenWithdraw(false)}
+      >
+        <WithdrawFiat
+          stock={Number(stock)}
+          onSuccessWithdraw={() => {
+            setIsOpenWithdraw(false);
+            setShowSuccess(true);
+          }}
+        />
+      </Dialog>
+
       <Dialog
         title=""
         size="md"

@@ -16,7 +16,7 @@ import {
 import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
 import Notify from "components/Notify";
 import RatePlace from "./RatePlace";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import SelectCurrency from "components/Input/CurrencyInput/SelectCurrency";
 import WageTable from "./WageTable";
 import { CurrencyCode } from "types/wallet";
@@ -31,7 +31,16 @@ import ExchangeIcon from "components/Icons/ExchangeIcon";
 import exchange from "assets/scss/dashboard/exchange.module.scss";
 import buy from "assets/scss/dashboard/buy-sell.module.scss";
 
-export default function ExchangeForm() {
+type Props = {
+  setIsOpenDialog: React.Dispatch<
+    React.SetStateAction<{
+      isOpen: boolean;
+      currency: CurrencyCode;
+    }>
+  >;
+};
+
+export default function ExchangeForm({ setIsOpenDialog }: Props) {
   // ==============|| States ||================= //
   const [sourceStock, setSourceStock] = useState("0");
   // ==============|| Hooks ||================= //
@@ -266,9 +275,10 @@ export default function ExchangeForm() {
               className="px-4 "
               size="sm"
               onClick={() =>
-                navigate(
-                  `/dashboard/wallet/deposit/${source.currency === "IRR" ? "irt" : source.currency === "USDT" ? "crypto" : "fiat"}`,
-                )
+                setIsOpenDialog({
+                  isOpen: true,
+                  currency: source.currency,
+                })
               }
             >
               واریز {convertText(source.currency, "enToFa")}

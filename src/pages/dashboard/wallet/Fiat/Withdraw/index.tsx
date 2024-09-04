@@ -1,30 +1,39 @@
-import { FormFeedback } from "reactstrap";
-import * as Yup from "yup";
-import { Controller, useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
-import { useAppSelector } from "store/hooks";
+import {
+  Button,
+  Col,
+  Form,
+  FormFeedback,
+  FormGroup,
+  FormText,
+  Label,
+  Row,
+  Spinner,
+} from "reactstrap";
 import {
   useResendOtpWithdrawMutation,
   useTransactionFeeQuery,
   useVerifyOtpWithdrawMutation,
   useWithdrawMutation,
 } from "store/api/wallet-management";
-import { useBankAccountsQuery } from "store/api/profile-management";
-import Notify from "components/Notify";
-import { ibanMAsk, normalizeAmount, persianToEnglishNumbers } from "helpers";
+import * as Yup from "yup";
 import BanksWrapper from "components/BanksWrapper";
+import Currency from "components/Input/CurrencyInput";
+import Dialog from "components/Dialog";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import Notify from "components/Notify";
+import WithdrawOTP from "components/WithdrawOTP";
 import lirFlag from "assets/img/coins/lira.png";
 import turkeyFlag from "assets/img/icons/flag-turkey.png";
-import CurrencyInput from "components/Input/CurrencyInput/newCurrencyInput";
+import { AlertWarning } from "components/AlertWidget";
+import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import Dialog from "components/Dialog";
-import WithdrawOTP from "components/WithdrawOTP";
+import { ibanMAsk, normalizeAmount } from "helpers";
+import { useAppSelector } from "store/hooks";
+import { useBankAccountsQuery } from "store/api/profile-management";
+import { useEffect, useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
-import button from "assets/scss/components/button.module.scss";
-import { AlertInfo, AlertWarning } from "components/AlertWidget";
 
 type Props = {
   onSuccessWithdraw: () => void;
@@ -104,20 +113,12 @@ export default function WithdrawFiat({ stock, onSuccessWithdraw }: Props) {
     if (Number(data.amount) < Number(fee?.withdrawMinAmount)) {
       setError("amount", {
         type: "manual",
-        message: `مبلغ وارد شده نمی تواند کمتر از ${normalizeAmount(
-          fee?.withdrawMinAmount,
-          "TRY",
-          true,
-        )} باشد.`,
+        message: `مبلغ وارد شده نمی تواند کمتر از ${normalizeAmount(fee?.withdrawMinAmount, "TRY", true)} باشد.`,
       });
     } else if (Number(data.amount) > Number(fee?.withdrawMaxAmount)) {
       setError("amount", {
         type: "manual",
-        message: `مبلغ وارد شده نمی تواند بیش تر از ${normalizeAmount(
-          fee.withdrawMaxAmount,
-          "TRY",
-          true,
-        )} باشد.`,
+        message: `مبلغ وارد شده نمی تواند بیش تر از ${normalizeAmount(fee.withdrawMaxAmount, "TRY", true)} باشد.`,
       });
     } else if (Number(data.amount) > stock)
       setError("amount", {
@@ -188,224 +189,191 @@ export default function WithdrawFiat({ stock, onSuccessWithdraw }: Props) {
 
   // ==============|| Render ||================= //
   return (
-    <>
-      <div className={wallet["form-container"]}>
-        <div className={wallet["form-wrapper"]}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div>
-              <div>
-                <Controller
-                  name="network"
-                  control={control}
-                  render={({ field: { name, value, onChange } }) => (
-                    <div className={wallet["form-group"]}>
-                      <div className={wallet["form-group__label"]}>
-                        <label htmlFor={name}>فیات دیجیتال</label>
-                      </div>
-                      <DropdownInput
-                        id={name}
-                        value={value}
-                        onChange={onChange}
-                        options={[
-                          {
-                            value: "TRY",
-                            content: (
-                              <div className={wallet["items-credit"]}>
-                                <span className={wallet["items-credit__icon"]}>
-                                  <img
-                                    width={20}
-                                    height={20}
-                                    className={wallet["lir-icon"]}
-                                    src={lirFlag}
-                                    alt="lir"
-                                  />
-                                </span>
-                                <span dir="ltr"> لیر ترکیه - TL</span>
-                              </div>
-                            ),
-                          },
-                        ]}
-                        disabled={true}
-                      />
-                    </div>
+    <div className="px-2">
+      <AlertWarning
+        hasIcon
+        text="در هنگام برداشت به اطلاعات وارد شده دقت نمایید بعد از برداشت، دارایی شما امکان بازگردانی ندارد."
+        key="withdraw-alert"
+      />
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Row>
+          <Col xs={12} md={6}>
+            <Controller
+              name="network"
+              control={control}
+              render={({ field: { name, value, onChange } }) => (
+                <FormGroup className="position-relative">
+                  <Label htmlFor={name}> برداشت ارز:</Label>
+                  <DropdownInput
+                    id={name}
+                    value={value}
+                    onChange={onChange}
+                    options={[
+                      {
+                        value: "TRY",
+                        content: (
+                          <div className={wallet["items-credit"]}>
+                            <span className={wallet["items-credit__icon"]}>
+                              <img
+                                className={wallet["lir-icon"]}
+                                src={lirFlag}
+                                alt="lir"
+                              />
+                            </span>
+                            <span dir="ltr"> لیر ترکیه - TL</span>
+                          </div>
+                        ),
+                      },
+                    ]}
+                    disabled={true}
+                  />
+                </FormGroup>
+              )}
+            />
+          </Col>
+          <Col xs={12} lg={6}>
+            <Controller
+              name="amount"
+              control={control}
+              render={({ field: { name, value } }) => (
+                <FormGroup className="position-relative">
+                  <div className="d-flex flex-row justify-content-between">
+                    <Label htmlFor={name}>مبلغ برداشت: </Label>
+                    <span className="d-flex flex-row justify-content-between">
+                      <FormText
+                        role="button"
+                        onClick={() => setValue(name, stock.toString())}
+                      >{`موجودی شما: ${normalizeAmount(stock.toString(), "TRY", true)}`}</FormText>
+                    </span>
+                  </div>
+                  <Currency
+                    name={name}
+                    value={value}
+                    onChange={(val) => {
+                      clearErrors(name);
+                      setValue(name, val);
+                    }}
+                    decimalsLimit={2}
+                    hasError={Boolean(errors?.[name])}
+                  />
+                  {errors?.[name] && (
+                    <FormFeedback tooltip>{errors[name]?.message}</FormFeedback>
                   )}
-                />
-              </div>
-              <div>
-                <Controller
-                  name="destinationCountry"
-                  control={control}
-                  render={({ field: { name, value, onChange } }) => (
-                    <div className={wallet["form-group"]}>
-                      <div className={wallet["form-group__label"]}>
-                        <label htmlFor={name}> انتقال به کشور</label>
-                      </div>
-                      <DropdownInput
-                        id={name}
-                        value={value}
-                        onChange={onChange}
-                        options={[
-                          {
-                            value: "TRY",
-                            content: (
-                              <div className={wallet["items-credit"]}>
-                                <span className={wallet["items-credit__icon"]}>
-                                  <img
-                                    width={20}
-                                    height={20}
-                                    className={wallet["lir-icon"]}
-                                    src={turkeyFlag}
-                                    alt="turkey-flag"
-                                  />
-                                </span>
-                                <span dir="ltr"> ترکیه</span>
-                              </div>
-                            ),
-                          },
-                        ]}
-                        disabled={true}
-                      />
-                    </div>
-                  )}
-                />
-              </div>
-              <div>
-                <Controller
-                  name="iban"
-                  control={control}
-                  render={({ field: { name, value } }) => (
-                    <div className={wallet["form-group"]}>
-                      <div className={wallet["form-group__label"]}>
-                        <label htmlFor={name}>واریز به حساب</label>
-                        <Link
-                          to="/dashboard/profile#international-accounts"
-                          target="blank"
-                        >
-                          افزودن حساب جدید
-                        </Link>
-                      </div>
-                      <DropdownInput
-                        id={name}
-                        value={value}
-                        className={`${wallet["english-number"]} ${wallet["font-small"]}`}
-                        onChange={(val, otherOption) => {
-                          setValue(name, val);
-                          setValue("destination", otherOption.accountId);
-                        }}
-                        options={accountOptions}
-                      />
-                    </div>
-                  )}
-                />
-              </div>
-              <div>
-                <Controller
-                  name="amount"
-                  control={control}
-                  render={({ field: { name, value } }) => (
-                    <div className={wallet["form-group"]}>
-                      <div className={wallet["form-group__label"]}>
-                        <label htmlFor={name}>مبلغ برداشت</label>
-                        <span
-                          className={wallet["form-group__hint"]}
-                          role="button"
-                          onClick={() => setValue(name, stock.toString())}
-                        >
-                          {`موجودی شما: ${normalizeAmount(
-                            stock.toString(),
+                  <div className="d-flex flex-column">
+                    {fee && (
+                      <FormText>
+                        {`کارمزد برداشت: ${normalizeAmount(fee.withdrawFeeStatic, "TRY", true)}`}
+                      </FormText>
+                    )}
+                    {value !== "" &&
+                      fee?.withdrawFeeStatic &&
+                      Number(value) - Number(fee?.withdrawFeeStatic) > 0 && (
+                        <FormText>
+                          {`خالص دریافتی: ${normalizeAmount(
+                            (
+                              Number(value) - Number(fee.withdrawFeeStatic)
+                            ).toString(),
                             "TRY",
                             true,
                           )}`}
-                        </span>
-                      </div>
-                      <CurrencyInput
-                        thousandSeparator=","
-                        name={name}
-                        value={value}
-                        onChange={(e: any) => {
-                          clearErrors(name);
-                          const amountTemp = e.target.value.replaceAll(",", "");
-                          setValue(name, persianToEnglishNumbers(amountTemp));
-                        }}
-                        // decimalsLimit={2}
-                        // hasError={Boolean(errors?.[name])}
-                      />
-                      {errors?.[name] && (
-                        <FormFeedback tooltip>
-                          {errors[name]?.message}
-                        </FormFeedback>
+                        </FormText>
                       )}
-                      <div className={wallet["form-group__hints"]}>
-                        {fee && (
-                          <span className={wallet["form-group__hint"]}>
-                            {`کارمزد برداشت: ${normalizeAmount(
-                              fee.withdrawFeeStatic,
-                              "TRY",
-                              true,
-                            )}`}
-                          </span>
-                        )}
-                        {value !== "" &&
-                          fee?.withdrawFeeStatic &&
-                          Number(value) - Number(fee?.withdrawFeeStatic) >
-                            0 && (
-                            <span className={wallet["form-group__hint"]}>
-                              {`خالص دریافتی: ${normalizeAmount(
-                                (
-                                  Number(value) - Number(fee.withdrawFeeStatic)
-                                ).toString(),
-                                "TRY",
-                                true,
-                              )}`}
-                            </span>
-                          )}
-                      </div>
-                    </div>
-                  )}
-                />
-              </div>
-            </div>
-            <div>
-              <div className="mt-3 text-center">
-                <button
-                  disabled={isLoading}
-                  type="submit"
-                  className={`${button["arsonex-btn"]} ${button["primary"]} ${button["full-width"]} mb-2`}
-                >
-                  درخواست برداشت
-                </button>
-              </div>
-            </div>
-          </form>
-          <Dialog
-            title="تایید برداشت"
-            isOpen={isOpenOTP}
-            size="md"
-            onClose={() => setIsOpenOTP(false)}
-          >
-            <WithdrawOTP
-              onClose={() => setIsOpenOTP(false)}
-              securitySelection={otpMethod}
-              handleResend={handleReSendOtp}
-              handleGetCode={handleSendOtp}
+                  </div>
+                </FormGroup>
+              )}
             />
-          </Dialog>
-        </div>
-      </div>
-      <div className={wallet.info}>
-        <AlertWarning
-          hasIcon
-          text="در هنگام برداشت به اطلاعات وارد شده دقت نمایید بعد از برداشت، دارایی شما امکان بازگردانی ندارد."
+          </Col>
+          <Col xs={12} md={6} className="mt-4">
+            <Controller
+              name="destinationCountry"
+              control={control}
+              render={({ field: { name, value, onChange } }) => (
+                <FormGroup>
+                  <Label htmlFor={name}> انتقال به کشور:</Label>
+                  <DropdownInput
+                    id={name}
+                    value={value}
+                    onChange={onChange}
+                    options={[
+                      {
+                        value: "TRY",
+                        content: (
+                          <div className={wallet["items-credit"]}>
+                            <span className={wallet["items-credit__icon"]}>
+                              <img
+                                className={wallet["lir-icon"]}
+                                src={turkeyFlag}
+                                alt="lir"
+                              />
+                            </span>
+                            <span dir="ltr"> ترکیه</span>
+                          </div>
+                        ),
+                      },
+                    ]}
+                    disabled={true}
+                  />
+                </FormGroup>
+              )}
+            />
+          </Col>
+          <Col xs={12} md={6} className="mt-4">
+            <Controller
+              name="iban"
+              control={control}
+              render={({ field: { name, value } }) => (
+                <FormGroup>
+                  <div className="d-flex flex-row justify-content-between">
+                    <Label htmlFor={name}> واریز به حساب:</Label>
+                    <Link
+                      to="/dashboard/profile#international-accounts"
+                      target="blank"
+                    >
+                      <span className={wallet?.["little-label"]}>
+                        افزودن حساب جدید
+                      </span>
+                    </Link>
+                  </div>
+                  <DropdownInput
+                    id={name}
+                    value={value}
+                    className={`${wallet["english-number"]} ${wallet["font-small"]}`}
+                    onChange={(val, otherOption) => {
+                      setValue(name, val);
+                      setValue("destination", otherOption.accountId);
+                    }}
+                    options={accountOptions}
+                  />
+                </FormGroup>
+              )}
+            />
+          </Col>
+        </Row>
+        <Row className="mt-4">
+          <div className="text-center">
+            <Button className="px-5 py-3" color="primary" outline type="submit">
+              {isLoading ? (
+                <Spinner style={{ color: "white" }} />
+              ) : (
+                "  ثبت درخواست برداشت"
+              )}
+            </Button>
+          </div>
+        </Row>
+      </Form>
+      <Dialog
+        title="تایید برداشت"
+        isOpen={isOpenOTP}
+        size="md"
+        onClose={() => setIsOpenOTP(false)}
+      >
+        <WithdrawOTP
+          onClose={() => setIsOpenOTP(false)}
+          securitySelection={otpMethod}
+          handleResend={handleReSendOtp}
+          handleGetCode={handleSendOtp}
         />
-        <AlertWarning
-          hasIcon
-          text="در بازه های زمانی خاص امکان برداشت به برخی از کیف‌پول‌های الکترونیک ترکیه ( برای مثال Papara) وجود ندارد. در نظر داشته باشید کیف پول الکترونیک با بانک متفاوت است."
-        />
-        <AlertInfo
-          hasIcon
-          text="کارمزد برداشت مربوط به شبکه بانکی کشور فیات دیجیتال بوده و آرسونیکس در این هزینه نقشی ندارد."
-        />
-      </div>
-    </>
+      </Dialog>
+    </div>
   );
 }

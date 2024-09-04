@@ -55,11 +55,19 @@ export default function Wallet() {
                         "IRR",
                         "availableBalance",
                       )}
+                      stock={
+                        data.find((w) => w.currencyCode === "IRR")
+                          ?.availableBalance || "0"
+                      }
                     />
                   </Col>
                   <Col xs={12} md={6}>
                     <USDTWallet
                       balance={renderBalance("USDT", "balance")}
+                      stock={
+                        data.find((w) => w.currencyCode === "USDT")
+                          ?.availableBalance || "0"
+                      }
                       availableBalance={renderBalance(
                         "USDT",
                         "availableBalance",
@@ -73,6 +81,10 @@ export default function Wallet() {
                         "TRY",
                         "availableBalance",
                       )}
+                      stock={
+                        data.find((w) => w.currencyCode === "TRY")
+                          ?.availableBalance || "0"
+                      }
                     />
                   </Col>
                 </>

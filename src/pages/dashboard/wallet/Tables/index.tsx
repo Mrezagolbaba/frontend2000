@@ -18,10 +18,8 @@ import IRRWithdraw from "pages/dashboard/history/IRRWithdraw";
 import USDTDeposit from "pages/dashboard/history/USDTDeposit";
 import USDTWithdraw from "pages/dashboard/history/USDTWithdraw";
 import FiatWithdraw from "pages/dashboard/history/FiatWithdraw";
-import { useAppSelector } from "store/hooks";
 
 export default function Tables() {
-  const { phoneNumber } = useAppSelector((state) => state.user);
   const [activeTab, setActiveTab] = useState<"1" | "2" | "3" | "4" | "5" | "6">(
     "1",
   );
@@ -87,38 +85,34 @@ export default function Tables() {
                 برداشت ارز دیجیتال
               </NavLink>
             </NavItem>
-            {!phoneNumber.includes("+98") && (
-              <>
-                <NavItem>
-                  <NavLink
-                    className={`${wallet.tabs__item} ${
-                      activeTab === "5" ? wallet.active : ""
-                    }`}
-                    id="tab2"
-                    tag="button"
-                    onClick={() => {
-                      setActiveTab("5");
-                    }}
-                  >
-                    واریز فیات دیجیتال
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    className={`${wallet.tabs__item} ${
-                      activeTab === "6" ? wallet.active : ""
-                    }`}
-                    id="tab4"
-                    tag="button"
-                    onClick={() => {
-                      setActiveTab("6");
-                    }}
-                  >
-                    برداشت فیات دیجیتال
-                  </NavLink>
-                </NavItem>
-              </>
-            )}
+            <NavItem>
+              <NavLink
+                className={`${wallet.tabs__item} ${
+                  activeTab === "5" ? wallet.active : ""
+                }`}
+                id="tab2"
+                tag="button"
+                onClick={() => {
+                  setActiveTab("5");
+                }}
+              >
+                واریز فیات دیجیتال
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={`${wallet.tabs__item} ${
+                  activeTab === "6" ? wallet.active : ""
+                }`}
+                id="tab4"
+                tag="button"
+                onClick={() => {
+                  setActiveTab("6");
+                }}
+              >
+                برداشت فیات دیجیتال
+              </NavLink>
+            </NavItem>
           </Nav>
         </div>
         <TabContent activeTab={activeTab} className="mt-3">
@@ -134,16 +128,12 @@ export default function Tables() {
           <TabPane tabId="4">
             <USDTWithdraw limit={5} />
           </TabPane>
-          {!phoneNumber.includes("+98") && (
-            <>
-              <TabPane tabId="5">
-                <FiatDeposit limit={5} />
-              </TabPane>
-              <TabPane tabId="6">
-                <FiatWithdraw limit={5} />
-              </TabPane>
-            </>
-          )}
+          <TabPane tabId="5">
+            <FiatDeposit limit={5} />
+          </TabPane>
+          <TabPane tabId="6">
+            <FiatWithdraw limit={5} />
+          </TabPane>
         </TabContent>
       </CardBody>
     </Card>
