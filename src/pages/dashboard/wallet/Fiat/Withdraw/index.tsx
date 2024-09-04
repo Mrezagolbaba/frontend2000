@@ -24,6 +24,7 @@ import WithdrawOTP from "components/WithdrawOTP";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import button from "assets/scss/components/button.module.scss";
+import { AlertInfo, AlertWarning } from "components/AlertWidget";
 
 type Props = {
   onSuccessWithdraw: () => void;
@@ -392,10 +393,18 @@ export default function WithdrawFiat({ stock, onSuccessWithdraw }: Props) {
         </div>
       </div>
       <div className={wallet.info}>
-        <div className={`${wallet.info__box} ${wallet["danger-box"]}`}>
-          در هنگام برداشت به اطلاعات وارد شده دقت نمایید بعد از برداشت، دارایی
-          شما امکان بازگردانی ندارد.
-        </div>
+        <AlertWarning
+          hasIcon
+          text="در هنگام برداشت به اطلاعات وارد شده دقت نمایید بعد از برداشت، دارایی شما امکان بازگردانی ندارد."
+        />
+        <AlertWarning
+          hasIcon
+          text="در بازه های زمانی خاص امکان برداشت به برخی از کیف‌پول‌های الکترونیک ترکیه ( برای مثال Papara) وجود ندارد. در نظر داشته باشید کیف پول الکترونیک با بانک متفاوت است."
+        />
+        <AlertInfo
+          hasIcon
+          text="کارمزد برداشت مربوط به شبکه بانکی کشور فیات دیجیتال بوده و آرسونیکس در این هزینه نقشی ندارد."
+        />
       </div>
     </>
   );
