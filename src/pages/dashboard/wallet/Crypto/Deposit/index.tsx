@@ -119,7 +119,7 @@ const DepositCrypto = ({ currency }: Props) => {
 
   useEffect(() => {
     if (successGetTransaction && transaction) {
-      if (new Date(transaction.expiresAt as string) > new Date()) {
+      if (new Date(transaction.expiresAt as string) < new Date()) {
         setShowResult(false);
       } else {
         setShowResult(true);
@@ -157,7 +157,22 @@ const DepositCrypto = ({ currency }: Props) => {
                 <div>
                   <div className={wallet["form-group"]}>
                     <div className={wallet["form-group__label"]}>
-                      <label htmlFor="networkName">شبکه انتخابی </label>
+                      <label htmlFor="currencyName"> نام ارز </label>
+                    </div>
+                    <Input
+                      disabled
+                      type="text"
+                      name="currencyName"
+                      id="currencyName"
+                      value="USDT"
+                      className="latin-font"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <div className={wallet["form-group"]}>
+                    <div className={wallet["form-group__label"]}>
+                      <label htmlFor="networkName">شبکه ارز </label>
                     </div>
                     <Input
                       disabled
@@ -180,9 +195,12 @@ const DepositCrypto = ({ currency }: Props) => {
                 <div>
                   <div className={wallet["form-group"]}>
                     <div className={wallet["form-group__label"]}>
-                      <label htmlFor="walletAddress"> آدرس کیف پول </label>
+                      <label htmlFor="walletAddress"> نمایش کیف پول </label>
                     </div>
-                    <CopyInput text={result.walletAddress} />
+                    <CopyInput
+                      name="آدرس کیف پول"
+                      text={result.walletAddress}
+                    />
                   </div>
                 </div>
               </div>
@@ -233,7 +251,7 @@ const DepositCrypto = ({ currency }: Props) => {
                   <button
                     disabled={isLoading}
                     type="submit"
-                    className={`${button["arsonex-btn"]} ${button["primary-outline"]} ${button["full-width"]} mb-2`}
+                    className={`${button["arsonex-btn"]} ${button["primary"]} ${button["full-width"]} mb-2`}
                   >
                     ساخت کیف پول
                   </button>

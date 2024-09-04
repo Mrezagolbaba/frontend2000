@@ -6,6 +6,9 @@ import IRTDeposit from "./Rial/Deposit";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import button from "assets/scss/components/button.module.scss";
+import FiatDeposit from "../history/FiatDeposit";
+import USDTDeposit from "../history/USDTDeposit";
+import IRRDeposit from "../history/IRRDeposit";
 
 export default function Deposit() {
   const { type } = useParams();
@@ -23,37 +26,51 @@ export default function Deposit() {
     }
   };
   return (
-    <Card>
-      <CardBody>
-        <div className={wallet["button-section"]}>
-          <button
-            className={`${button["arsonex-btn"]} ${type === "irt" ? button["primary"] : button["primary-light"]}`}
-            onClick={() =>
-              type !== "irt" && navigate("/dashboard/wallet/deposit/irt")
-            }
-          >
-            واریز تومان
-          </button>
-          <button
-            className={`${button["arsonex-btn"]} ${type === "crypto" ? button["primary"] : button["primary-light"]}`}
-            onClick={() =>
-              type !== "crypto" && navigate("/dashboard/wallet/deposit/crypto")
-            }
-          >
-            واریز کوین
-          </button>
-          <button
-            className={`${button["arsonex-btn"]} ${type === "fiat" ? button["primary"] : button["primary-light"]}`}
-            onClick={() =>
-              type !== "fiat" && navigate("/dashboard/wallet/deposit/fiat")
-            }
-          >
-            واریز فیات دیجیتال
-          </button>
-        </div>
-        <div className={wallet["horizontal-divider"]} />
-        <div className={wallet["content-section"]}>{renderDeposit()}</div>
-      </CardBody>
-    </Card>
+    <>
+      <Card>
+        <CardBody>
+          <div className={wallet["button-section"]}>
+            <button
+              className={`${button["arsonex-btn"]} ${type === "irt" ? button["primary"] : button["primary-light"]}`}
+              onClick={() =>
+                type !== "irt" && navigate("/dashboard/wallet/deposit/irt")
+              }
+            >
+              واریز تومان
+            </button>
+            <button
+              className={`${button["arsonex-btn"]} ${type === "crypto" ? button["primary"] : button["primary-light"]}`}
+              onClick={() =>
+                type !== "crypto" &&
+                navigate("/dashboard/wallet/deposit/crypto")
+              }
+            >
+              واریز ارز دیجیتال
+            </button>
+            <button
+              className={`${button["arsonex-btn"]} ${type === "fiat" ? button["primary"] : button["primary-light"]}`}
+              onClick={() =>
+                type !== "fiat" && navigate("/dashboard/wallet/deposit/fiat")
+              }
+            >
+              واریز فیات دیجیتال
+            </button>
+          </div>
+          <div className={wallet["horizontal-divider"]} />
+          <div className={wallet["content-section"]}>{renderDeposit()}</div>
+        </CardBody>
+      </Card>
+      <Card className="mt-3">
+        <CardBody>
+          {type === "fiat" ? (
+            <FiatDeposit limit={5} />
+          ) : type === "crypto" ? (
+            <USDTDeposit limit={5} />
+          ) : (
+            <IRRDeposit limit={5} />
+          )}
+        </CardBody>
+      </Card>
+    </>
   );
 }

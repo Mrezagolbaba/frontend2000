@@ -183,7 +183,11 @@ export default function DepositFiat() {
                 <div className={wallet["form-group__label"]}>
                   <label> شماره IBAN </label>
                 </div>
-                <CopyInput text={selectedBank || ""} key="iban-account" />
+                <CopyInput
+                  name="IBAN"
+                  text={selectedBank || ""}
+                  key="iban-account"
+                />
               </div>
             </div>
             {depResponse && (
@@ -193,6 +197,7 @@ export default function DepositFiat() {
                     <label> شناسه واریز </label>
                   </div>
                   <CopyInput
+                    name="شناسه واریز"
                     text={depResponse.refCode || ""}
                     key="number-account"
                   />
@@ -205,6 +210,7 @@ export default function DepositFiat() {
                   <label> نام صاحب حساب </label>
                 </div>
                 <CopyInput
+                  name="نام صاحب حساب"
                   text={otherInfo.ownerName || ""}
                   key="owner-account"
                 />

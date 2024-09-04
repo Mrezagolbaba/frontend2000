@@ -1,5 +1,4 @@
 import LogoArsonex from "assets/img/logo-arsonex.png";
-import Market from "assets/img/icons/chart-simple.svg";
 import useAuth from "hooks/useAuth";
 import { Button, Collapse, Nav, NavItem } from "reactstrap";
 import { CiEdit } from "react-icons/ci";
@@ -7,23 +6,16 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { TbPower } from "react-icons/tb";
 import { useAppSelector } from "store/hooks";
 import { useLocation, Link, useNavigate } from "react-router-dom";
-
-import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 import WalletIcon from "components/Icons/WalletIcon";
 import HomeIcon from "components/Icons/HomeIcon";
-import Exchange from "pages/dashboard/exchange";
 import MarketsIcon from "components/Icons/MarketsIcon";
-import ExchangeIcon from "components/Icons/ExchangeIcon";
 import InviteFriendsIcon from "components/Icons/InviteFriendsIcon";
 import TradeIcon from "components/Icons/TradeIcon";
 import ArrowIcon from "components/Icons/ArrowIcon";
 
-type Props = {
-  isOpen: boolean;
-  setIsSidebarOpen: Dispatch<SetStateAction<boolean>>;
-};
+import dashboard from "assets/scss/dashboard/dashboard.module.scss";
 
-export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
+export default function Sidebar() {
   // ==============|| Hooks ||================= //
   const { firstName, lastName } = useAppSelector((state) => state.user);
   const location = useLocation();
@@ -31,7 +23,6 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
   const navigate = useNavigate();
 
   // ==============|| States ||================= //
-  const [activeItem, setActiveItem] = useState("");
   const [isOpenCollapse, setIsOpenCollapse] = useState(-1);
 
   // ==============|| Variables ||================= //
@@ -86,19 +77,19 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
   ];
 
   // ==============|| Handlers ||================= //
-  const handleClick = (key: string) => {
-    setActiveItem(key);
-  };
   const handleLogout = async () =>
     await logout().then(() => navigate("/login"));
 
-  // ==============|| Life Cycle ||================= //
-  useEffect(() => {
-    const path = location.pathname;
-    setActiveItem(path);
-    setIsSidebarOpen(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location]);
+  const renderActiveClass = (item) => {
+    if (
+      item.children &&
+      item.children.length > 0 &&
+      location.pathname.includes(item.path)
+    )
+      return true;
+    else if (!item.children && location.pathname === item.path) return true;
+    else return false;
+  };
 
   // ==============|| Render ||================= //
   return (
@@ -140,48 +131,66 @@ export default function Sidebar({ isOpen, setIsSidebarOpen }: Props) {
           {items.map((item, key) => (
             <NavItem
               key={key}
-              className={` ${dashboard.sidebar__navbar__item} ${
-                activeItem === item.path ? dashboard.active : ""
+              className={`${dashboard.sidebar__navbar__item} ${
+                renderActiveClass(item) ? dashboard.active : ""
               }`}
-              onClick={() => handleClick(item.path)}
             >
-              <Link to={item.path}>
+              <a
+                onClick={() => {
+                  navigate(item.path);
+                  setIsOpenCollapse(key);
+                }}
+              >
                 <span className="icon">{item.icon}</span>
-                <span>{item.label}</span>
-              </Link>
+                <span
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate(item.path);
+                  }}
+                >
+                  {item.label}
+                </span>
+              </a>
               {item.children && item.children.length > 0 && (
-                <>
-                  <span
-                    className={`icon ${
-                      isOpenCollapse === key ? dashboard["active-sub"] : ""
-                    }`}
-                    onClick={() =>
-                      isOpenCollapse !== key
-                        ? setIsOpenCollapse(key)
-                        : setIsOpenCollapse(-1)
-                    }
-                  >
-                    <ArrowIcon />
-                  </span>
-                  <Collapse
-                    className={dashboard.submenu}
-                    isOpen={isOpenCollapse === key}
-                  >
-                    {item.children.map((sub, index) => (
-                      <NavItem
-                        key={index}
-                        className={` ${dashboard.sidebar__navbar__item} ${
-                          activeItem === sub.path ? dashboard.active : ""
-                        }`}
-                        onClick={() => handleClick(sub.path)}
+                <span
+                  className={`${dashboard["arrow-icon"]} ${
+                    isOpenCollapse === key ? dashboard["active-sub"] : ""
+                  }`}
+                  onClick={() =>
+                    isOpenCollapse !== key
+                      ? setIsOpenCollapse(key)
+                      : setIsOpenCollapse(-1)
+                  }
+                >
+                  <ArrowIcon />
+                </span>
+              )}
+              {item.children && item.children.length > 0 && (
+                <Collapse
+                  className={dashboard.submenu}
+                  isOpen={isOpenCollapse === key}
+                >
+                  {item.children.map((sub, index) => (
+                    <NavItem
+                      key={index}
+                      className={` ${dashboard.sidebar__navbar__item} ${
+                        location.pathname.includes(sub.path)
+                          ? dashboard.active_sub
+                          : ""
+                      }`}
+                    >
+                      <Link
+                        to={
+                          sub.path === "/dashboard/profile"
+                            ? "/dashboard/profile#iranian-accounts"
+                            : sub.path
+                        }
                       >
-                        <Link to={sub.path}>
-                          <span>{sub.label}</span>
-                        </Link>
-                      </NavItem>
-                    ))}
-                  </Collapse>
-                </>
+                        <span>{sub.label}</span>
+                      </Link>
+                    </NavItem>
+                  ))}
+                </Collapse>
               )}
             </NavItem>
           ))}

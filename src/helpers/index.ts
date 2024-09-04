@@ -275,6 +275,27 @@ export function getTitlePage(path: string) {
     { path: "/dashboard/profile", name: "پروفایل کاربری - آرسونیکس" },
     { path: "/dashboard/exchange", name: "معامله سریع - آرسونیکس" },
     { path: "/dashboard/wallet", name: "کیف پول - آرسونیکس" },
+    { path: "/dashboard/wallet/deposit/irt", name: " واریز تومان - آرسونیکس" },
+    {
+      path: "/dashboard/wallet/deposit/crypto",
+      name: " واریز ارز دیجیتال - آرسونیکس",
+    },
+    {
+      path: "/dashboard/wallet/deposit/fiat",
+      name: " واریز فیات دیجیتال - آرسونیکس",
+    },
+    {
+      path: "/dashboard/wallet/withdraw/irt",
+      name: " برداشت تومان - آرسونیکس",
+    },
+    {
+      path: "/dashboard/wallet/withdraw/crypto",
+      name: " برداشت تومان - آرسونیکس",
+    },
+    {
+      path: "/dashboard/wallet/withdraw/fiat",
+      name: " برداشت تومان - آرسونیکس",
+    },
     { path: "/dashboard/setting", name: "تنظیمات - آرسونیکس" },
     { path: "/dashboard/market", name: "بازارها - آرسونیکس" },
     { path: "/dashboard/orders", name: "سفارشات - آرسونیکس" },

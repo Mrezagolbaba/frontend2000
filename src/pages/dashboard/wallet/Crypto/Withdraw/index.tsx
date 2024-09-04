@@ -160,29 +160,34 @@ const WithdrawCrypto = ({
           <form onSubmit={handleSubmit(onSubmit)}>
             <div>
               <div>
-                <Controller
-                  name="network"
-                  control={control}
-                  render={({ field: { name, value } }) => (
-                    <div className={wallet["form-group"]}>
-                      <div className={wallet["form-group__label"]}>
-                        <label htmlFor={name}>شبکه برداشت</label>
-                      </div>
-                      <DropdownInput
-                        id={name}
-                        value={value}
-                        onChange={(val) => setValue(name, val)}
-                        options={optionList}
-                        disabled={true}
-                      />
-                      {errors?.[name] && (
-                        <FormFeedback tooltip>
-                          {errors[name]?.message}
-                        </FormFeedback>
-                      )}
-                    </div>
-                  )}
-                />
+                <div className={wallet["form-group"]}>
+                  <div className={wallet["form-group__label"]}>
+                    <label htmlFor="currencyName"> نام ارز </label>
+                  </div>
+                  <Input
+                    disabled
+                    type="text"
+                    name="currencyName"
+                    id="currencyName"
+                    value="USDT"
+                    className="latin-font"
+                  />
+                </div>
+              </div>
+              <div>
+                <div className={wallet["form-group"]}>
+                  <div className={wallet["form-group__label"]}>
+                    <label htmlFor="networkName">شبکه ارز </label>
+                  </div>
+                  <Input
+                    disabled
+                    type="text"
+                    name="networkName"
+                    id="networkName"
+                    value="TRC20"
+                    className="latin-font"
+                  />
+                </div>
               </div>
               <div>
                 <Controller
@@ -279,9 +284,9 @@ const WithdrawCrypto = ({
               <div className="mt-3 text-center">
                 <button
                   type="submit"
-                  className={`${button["arsonex-btn"]} ${button["primary-outline"]} ${button["full-width"]} mb-2`}
+                  className={`${button["arsonex-btn"]} ${button["primary"]} ${button["full-width"]} mb-2`}
                 >
-                  برداشت
+                  درخواست برداشت
                 </button>
               </div>
             </div>
