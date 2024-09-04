@@ -73,28 +73,30 @@ export default function IRTWithdraw({ stock }: Props) {
 
   // ==============|| Handlers ||================= //
   const onSubmit = async (data: WithdrawType) => {
+    console.log(Number(stock) / 10);
+
     if (Number(data.amount) < fee?.withdrawMinAmount / 10)
-      setError("amount", {
-        type: "manual",
-        message: `مبلغ وارد شده نمی تواند کمتر از ${normalizeAmount(
+      Notify({
+        type: "error",
+        text: `مبلغ وارد شده نمی تواند کمتر از ${normalizeAmount(
           fee?.withdrawMinAmount,
           "IRR",
           true,
         )} باشد.`,
       });
     else if (Number(data.amount) > fee?.withdrawMaxAmount / 10)
-      setError("amount", {
-        type: "manual",
-        message: `مبلغ وارد شده نمی تواند بیشتر از ${normalizeAmount(
+      Notify({
+        type: "error",
+        text: `مبلغ وارد شده نمی تواند بیشتر از ${normalizeAmount(
           fee?.withdrawMaxAmount,
           "IRR",
           true,
         )} باشد.`,
       });
     else if (Number(data.amount) > Number(stock) / 10)
-      setError("amount", {
-        type: "manual",
-        message: "موجودی کیف پول شما کافی نیست.",
+      Notify({
+        type: "error",
+        text: "موجودی کیف پول شما کافی نیست.",
       });
     else
       withdrawRequest({
@@ -228,7 +230,9 @@ export default function IRTWithdraw({ stock }: Props) {
                         value={value}
                         disabled={!hasAccount}
                         onChange={(e: any) => {
-                          const amountTemp = e.target.value.replaceAll(",", "");
+                          const amountTemp = persianToEnglishNumbers(
+                            e.target.value.replaceAll(",", ""),
+                          );
                           e.target.value &&
                             getFees({
                               currencyCode: "IRR",
@@ -236,7 +240,7 @@ export default function IRTWithdraw({ stock }: Props) {
                               tranasctionType: "WITHDRAW",
                             });
                           clearErrors("amount");
-                          setValue(name, persianToEnglishNumbers(amountTemp));
+                          setValue(name, amountTemp);
                         }}
                         placeholder="تومان"
                         // hasError={Boolean(errors?.[name])}
