@@ -4,7 +4,7 @@ import { Container } from "reactstrap";
 
 //third-party
 import PreviewStream from "./PreviewStream";
-import FinalView from "./ FinalView";
+import FinalView from "./FinalView";
 import { AuthenticationLevel2Props } from "../types";
 
 export default function VideoRecorder({
