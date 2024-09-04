@@ -1,6 +1,6 @@
+import { iranianBankIcons } from "helpers/filesManagement/banksList";
 import { useEffect, useMemo, useState } from "react";
 import { useAppSelector } from "store/hooks";
-import bankDefault from "assets/img/icons/bankDefault.svg";
 
 type Props = {
   logoPath: string;
@@ -11,7 +11,7 @@ type Props = {
 
 export default function RenderBankItem({ id, name, website, logoPath }: Props) {
   const { token } = useAppSelector((state) => state.auth);
-  const [src, setSrc] = useState(bankDefault);
+  const [src, setSrc] = useState(iranianBankIcons[0].src);
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function RenderBankItem({ id, name, website, logoPath }: Props) {
         setIsFetching(false);
         // Fetch the image data from your API
         const response = await fetch(
-          `${"https://dev-api.paydirham.me/v1/"}banks/logo/${id}`,
+          `${import.meta.env.VITE_BASE_URL}banks/logo/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -42,25 +42,17 @@ export default function RenderBankItem({ id, name, website, logoPath }: Props) {
 
   return useMemo(
     () => (
-      <div className="flex">
+      <div>
         {isFetching ? (
           <div className="placeholder-glow">
             <div
-              className="placeholder w-100 mt-3 rounded py-2"
+              className="placeholder rounded mt-3 py-2 w-100"
               style={{ height: "30px" }}
             />
           </div>
         ) : (
           <>
-            <img
-              width="20"
-              height="20"
-              src={src}
-              alt={name}
-              style={{
-                objectFit: "contain",
-              }}
-            />
+            <img width="25px" src={src} alt={name} />
             <span className="mx-2">{website}</span>
           </>
         )}

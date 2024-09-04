@@ -1,23 +1,31 @@
-import { Button, Input, Row } from "reactstrap";
 import * as Yup from "yup";
 import { useEffect, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
-import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "store/hooks";
+import {
+  Button,
+  Col,
+  FormGroup,
+  FormText,
+  Input,
+  Label,
+  Row,
+} from "reactstrap";
+import CopyInput from "components/Input/CopyInput";
+import { AlertInfo } from "components/AlertWidget";
+
+import wallet from "assets/scss/dashboard/wallet.module.scss";
 import {
   useDepositInfoQuery,
   useRefCodeMutation,
   useTransactionFeeQuery,
 } from "store/api/wallet-management";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import { useBankAccountsQuery } from "store/api/profile-management";
 import BanksWrapper from "components/BanksWrapper";
-import CopyInput from "components/Input/CopyInput";
 import { normalizeAmount } from "helpers";
-import { AlertInfo } from "components/AlertWidget";
-
-import wallet from "assets/scss/dashboard/wallet.module.scss";
+import { useAppSelector } from "store/hooks";
+import { useNavigate } from "react-router-dom";
 
 type ShebaFormType = {
   accountName: string;
@@ -117,13 +125,23 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
   // ==============|| Render ||================= //
   return secondTierVerified ? (
     <>
+      <AlertInfo
+        hasIcon
+        text=" از حساب‌هایی که در پروفایل خود وارد کرده‌اید امکان واریز وجود دارد."
+      />
+      <AlertInfo
+        hasIcon
+        text=" شناسه واریز را در قسمت توضیحات یا شناسه واریز وارد نمایید."
+      />
+      <AlertInfo
+        hasIcon
+        text=" تمامی روش‌های پرداخت بجز روش پل مورد تایید می‌باشد."
+      />
       <form>
-        <div>
-          <div>
-            <div className={wallet["form-group"]}>
-              <div className={wallet["form-group__label"]}>
-                <label htmlFor="bank-name"> بانک مقصد</label>
-              </div>
+        <Row>
+          <Col xs={12} lg={6}>
+            <FormGroup>
+              <Label htmlFor="bank-name"> بانک مقصد:</Label>
               <DropdownInput
                 id="bank-name"
                 value={selectedBank}
@@ -135,76 +153,62 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
                 }}
                 options={optionList}
               />
-            </div>
-          </div>
-          <div>
+            </FormGroup>
+          </Col>
+          <Col xs={12} lg={6}>
             <Controller
               name="accountName"
               control={control}
-              render={({ field: { name, onChange, ref } }) => (
-                <div className={wallet["form-group"]}>
-                  <div className={wallet["form-group__label"]}>
-                    <label htmlFor="bank-name"> نام صاحب حساب</label>
-                  </div>
+              render={({ field: { name, value, onChange, ref } }) => (
+                <FormGroup>
+                  <Label htmlFor={name}>نام صاحب حساب:</Label>
                   <Input
                     disabled
+                    type="text"
                     name={name}
                     value={otherInfo?.ownerName}
                     onChange={onChange}
                     ref={ref}
                   />
-                </div>
+                </FormGroup>
               )}
             />
-          </div>
+          </Col>
           {data && data.length > 0 && depResponse && (
-            <div>
+            <Col xs={12} lg={6}>
               <Controller
                 name="shebaNumber"
                 control={control}
-                render={() => (
-                  <div className={wallet["form-group"]}>
-                    <div className={wallet["form-group__label"]}>
-                      <label htmlFor="bank-name">شماره شبا</label>
-                    </div>
-                    <CopyInput name="شماره شبا" text={selectedBank || ""} />
+                render={({ field: { name } }) => (
+                  <FormGroup>
+                    <Label htmlFor={name}> شماره شبا:</Label>
+                    <CopyInput text={selectedBank || ""} />
                     {fee && (
-                      <span className={wallet["form-group__hint"]}>
-                        {`حداقل مبلغ واریز: ${normalizeAmount(
-                          fee?.depositMinAmount,
-                          "IRR",
-                          true,
-                        )}`}
-                      </span>
+                      <FormText>
+                        {`حداقل مبلغ واریز: ${normalizeAmount(fee?.depositMinAmount, "IRR", true)}`}
+                      </FormText>
                     )}
-                  </div>
+                  </FormGroup>
                 )}
               />
-            </div>
+            </Col>
           )}
           {depResponse && !isLoading && (
-            <div>
+            <Col xs={12} lg={6}>
               <Controller
                 name="depositId"
                 control={control}
-                render={() => (
-                  <div className={wallet["form-group"]}>
-                    <div className={wallet["form-group__label"]}>
-                      <label htmlFor="bank-name">شناسه واریز</label>
-                    </div>
-                    <CopyInput
-                      name="شناسه واریز"
-                      text={depResponse.refCode || ""}
-                    />
-                    <span className={wallet["form-group__hint"]}>
-                      کارمزد انتقال: 0.02%
-                    </span>
-                  </div>
+                render={({ field: { name, value } }) => (
+                  <FormGroup>
+                    <Label htmlFor={name}> شناسه واریز:</Label>
+                    <CopyInput text={depResponse.refCode || ""} />
+                    <FormText>کارمزد انتقال: 0.02%</FormText>
+                  </FormGroup>
                 )}
               />
-            </div>
+            </Col>
           )}
-        </div>
+        </Row>
       </form>
     </>
   ) : (
@@ -213,7 +217,7 @@ const ShebaForm = ({ activeTab }: { activeTab: "1" | "2" | "3" }) => {
         text="واریز بین بانکی در صورتی برای شما فعال می‌شود که به سطح دو کاربری ارتقا پیدا کنید."
         hasIcon={true}
       />
-      <div className="mt-3 text-center">
+      <div className="text-center mt-3">
         <Button
           className="px-5 py-3"
           color="primary"

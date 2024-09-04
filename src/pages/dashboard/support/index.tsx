@@ -1,10 +1,19 @@
 import ATable from "components/ATable";
 import TicketModal from "./AddModal";
 import moment from "jalali-moment";
-import { Button, Card, CardBody, CardHeader, CardTitle } from "reactstrap";
+import {
+  Badge,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+} from "reactstrap";
 import { Link } from "react-router-dom";
 import { useGetTicketsQuery } from "store/api/ticket";
 import { useMemo, useState } from "react";
+
+import ticket from "assets/scss/dashboard/ticket.module.scss";
 
 const Support = () => {
   // ==============|| States ||================= //
@@ -13,6 +22,21 @@ const Support = () => {
   // ==============|| Hooks ||================= //
   const { data, isLoading, isSuccess, isFetching } = useGetTicketsQuery();
 
+  const categoryRender = (value) => {
+    switch (value) {
+      case "USER_PROFILE_AND_VERIFICATION":
+        return "اطلاعات هویتی و احراز";
+      case "TICKET_DEPOSIT_WITHDRAW":
+        return "واریز و برداشت";
+      case "TICKET_TECHNICAL_ISSUES":
+        return "مشکلات فنی";
+      case "TICKET_TO_ADMIN":
+        return "مدیریت";
+      case "TICKETـCRITICSـAND_SUGGESSTIONS":
+      default:
+        return "انتقادات و پیشنهادات";
+    }
+  };
   // ==============|| Constants ||================= //
   const columns = useMemo(
     () => [
@@ -88,6 +112,48 @@ const Support = () => {
             data={isSuccess ? data : []}
             isLoading={isLoading || isFetching}
             columns={columns}
+            noDataText="اولین تیکت خود را به پشتیبانی آرسونیکس ارسال کنید."
+            mobileView={(row) => (
+              <div className={ticket["mobile-view"]}>
+                <div className={ticket.counter}>{Number(row.id) + 1}</div>
+                <div className={ticket["mobile-view__body"]}>
+                  <div className={ticket["mobile-view__title"]}>
+                    <h5>{row.original.subject}</h5>
+                    <div>
+                      <span>
+                        {row?.original?.status === "OPEN" ? (
+                          <Badge color="success">باز</Badge>
+                        ) : row?.original?.status === "CLOSE" ? (
+                          <Badge color="danger">بسته</Badge>
+                        ) : (
+                          <Badge color="info">در حال بررسی</Badge>
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <span>آخرین بروزرسانی: </span>
+                    <span>
+                      {moment(row.original.updatedAt)
+                        .locale("fa")
+                        .format("hh:mm YYYY/MM/DD")}
+                    </span>
+                  </div>
+                  <div>
+                    <span>دسته بندی: </span>
+                    <span>{categoryRender(row.original.category)}</span>
+                  </div>
+                  <div className={ticket["mobile-view__button"]}>
+                    <Link
+                      to={`details/${row?.original?.id}`}
+                      className="btn btn-outline-primary"
+                    >
+                      نمایش جزپیات
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            )}
           />
         </CardBody>
       </Card>

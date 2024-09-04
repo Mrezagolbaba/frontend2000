@@ -9,19 +9,17 @@ type Props = {
   text: string;
   hasBox?: boolean;
   maxCharacter?: number;
-  name?:string
 };
 
 export default function CopyInput({
   text,
   hasBox = true,
   maxCharacter,
-  name
 }: Props) {
   return text ? (
     <CopyToClipboard
       text={text}
-      onCopy={() => Notify({ type: "success", text: `${name} کپی شد.` })}
+      onCopy={() => Notify({ type: "success", text: "کپی شد." })}
     >
       <button
         type="button"

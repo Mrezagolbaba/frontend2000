@@ -1,32 +1,40 @@
-import { FormFeedback, Input, Spinner } from "reactstrap";
-import * as Yup from "yup";
-import { Controller, useForm as useRHF } from "react-hook-form";
-import { useEffect, useState } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  Button,
+  Col,
+  FormFeedback,
+  FormGroup,
+  Input,
+  Label,
+  Row,
+  Spinner,
+} from "reactstrap";
 import {
   useCancelTransactionMutation,
   useDepositMutation,
   useLazyTransactionQuery,
 } from "store/api/wallet-management";
-import DropdownInput from "components/Input/Dropdown";
-import CountdownTimer from "components/Input/CountDownInput";
+import * as Yup from "yup";
 import CopyInput from "components/Input/CopyInput";
+import CountdownTimer from "components/Input/CountDownInput";
+import DropdownInput, { OptionType } from "components/Input/Dropdown";
 import tron from "assets/img/network/tron.svg";
+import { AlertInfo, AlertWarning } from "components/AlertWidget";
+import { Controller, useForm as useRHF } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
-import button from "assets/scss/components/button.module.scss";
-import { AlertInfo, AlertWarning } from "components/AlertWidget";
-import tetherIcon from "assets/img/coins/tether.svg";
 
 type CryptoFormType = {
   network: string;
 };
 
 type Props = {
+  onClose: () => void;
   currency: any;
 };
 
-const DepositCrypto = ({ currency }: Props) => {
+const DepositCrypto = ({ onClose, currency }: Props) => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [result, setResult] = useState({
     networkName: "",
@@ -42,11 +50,24 @@ const DepositCrypto = ({ currency }: Props) => {
     {
       data: transaction,
       isLoading: loadingTransaction,
-      isFetching: FetchingTransaction,
       isSuccess: successGetTransaction,
     },
   ] = useLazyTransactionQuery();
   const [cancelTransaction] = useCancelTransactionMutation();
+
+  const optionList: OptionType[] = [
+    {
+      content: (
+        <div className={wallet["items-credit"]}>
+          <span className={wallet["items-credit__icon"]}>
+            <img alt="TRC20" src={tron} className="bank-svg" />
+          </span>
+          <span>TRC20</span>
+        </div>
+      ),
+      value: "TRC20",
+    },
+  ];
 
   const resolver = yupResolver(
     Yup.object().shape({
@@ -89,6 +110,7 @@ const DepositCrypto = ({ currency }: Props) => {
     data && cancelTransaction(data?.id);
     localStorage.removeItem("cryptoWalletId");
     localStorage.removeItem("cryptoWalletExpiredTime");
+    onClose?.();
   };
 
   useEffect(() => {
@@ -102,7 +124,7 @@ const DepositCrypto = ({ currency }: Props) => {
 
   useEffect(() => {
     if (successGetTransaction && transaction) {
-      if (new Date(transaction.expiresAt as string) < new Date()) {
+      if (new Date(transaction.expiresAt as string) > new Date()) {
         setShowResult(false);
       } else {
         setShowResult(true);
@@ -130,260 +152,134 @@ const DepositCrypto = ({ currency }: Props) => {
     }
   }, [data, isSuccess]);
 
-  return (
-    <>
-      <div className={wallet["form-container"]}>
-        {loadingTransaction || FetchingTransaction ? (
-          <div className={`${wallet["form-wrapper"]} pt-3`}>
-            <div className="placeholder-glow">
-              <div
-                className="placeholder col-12 rounded"
-                style={{
-                  height: "48px",
-                  marginBottom: "1rem",
-                }}
-              />
-            </div>
-            <div className="placeholder-glow">
-              <div
-                className="placeholder col-12 rounded"
-                style={{
-                  height: "48px",
-                  marginBottom: "1rem",
-                }}
-              />
-            </div>
-            <div className="placeholder-glow">
-              <div
-                className="placeholder col-12 rounded"
-                style={{
-                  height: "48px",
-                  marginBottom: "1rem",
-                }}
-              />
-            </div>
-            <div className="placeholder-glow">
-              <div
-                className="placeholder col-12 rounded"
-                style={{
-                  height: "48px",
-                  marginBottom: "1rem",
-                }}
-              />
-            </div>
-          </div>
-        ) : (
-          <div className={wallet["form-wrapper"]}>
-            {showResult ? (
-              <>
-                <div>
-                  <div>
-                    <div className={wallet["form-group"]}>
-                      <div className={wallet["form-group__label"]}>
-                        <label htmlFor="tether">نام ارز</label>
-                      </div>
+  const renderUI = () => {
+    if (loadingTransaction || isLoading) {
+      return (
+        <Row className="placeholder-glow">
+          <Col xs={12} lg={6}>
+            <div className="placeholder rounded mt-3 py-2 w-100" />
+          </Col>
+          <Col xs={12} lg={6}>
+            <div className="placeholder rounded mt-3 py-2 w-100" />
+          </Col>
+          <Col xs={12} lg={6}>
+            <div className="placeholder rounded mt-3 py-2 w-100" />
+          </Col>
+          <Col xs={12} lg={6}>
+            <div className="placeholder rounded mt-3 py-2 w-100" />
+          </Col>
+        </Row>
+      );
+    } else {
+      if (showResult) {
+        return (
+          <>
+            <Row className="mt-4">
+              <Col xs={12} lg={6}>
+                <FormGroup className="position-relative">
+                  <Label htmlFor="networkName">شبکه انتخابی:</Label>
+                  <Input
+                    disabled
+                    type="text"
+                    name="networkName"
+                    id="networkName"
+                    value="TRC20"
+                    className="latin-font"
+                  />
+                </FormGroup>
+              </Col>
+              <Col xs={12} lg={6}>
+                <FormGroup className="position-relative">
+                  <Label htmlFor="endTime"> زمان اتمام تراکنش:</Label>
+                  <CountdownTimer targetDate={result.endTime} />
+                </FormGroup>
+              </Col>
+              <Col xs={12} lg={6}>
+                <FormGroup>
+                  <Label htmlFor="walletAddress"> آدرس کیف پول:</Label>
+                  <CopyInput text={result.walletAddress} />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row className="mt-4">
+              <div className="d-flex flex-row justify-content-evenly">
+                <Button
+                  className="px-5 py-3"
+                  color="danger"
+                  outline
+                  onClick={handleClose}
+                >
+                  لغو تراکنش
+                </Button>
+              </div>
+            </Row>
+          </>
+        );
+      } else {
+        return (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Row>
+              <Col xs={12} lg={6}>
+                <Controller
+                  name="network"
+                  control={control}
+                  render={({ field: { name, value } }) => (
+                    <FormGroup className="position-relative">
+                      <Label htmlFor={name}> شبکه دریافت: </Label>
+
                       <DropdownInput
-                        id="tether"
-                        value="USDT"
-                        options={[
-                          {
-                            value: "USDT",
-                            content: (
-                              <div className={wallet["items-credit"]}>
-                                <span className={wallet["items-credit__icon"]}>
-                                  <img
-                                    width={15}
-                                    height={15}
-                                    className="bank-svg"
-                                    src={tetherIcon}
-                                    alt="tether-flag"
-                                  />
-                                </span>
-                                <span dir="ltr"> تتر - USDT</span>
-                              </div>
-                            ),
-                          },
-                        ]}
-                        disabled={true}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div className={wallet["form-group"]}>
-                      <div className={wallet["form-group__label"]}>
-                        <label htmlFor="network">شبکه ارز </label>
-                      </div>
-                      <DropdownInput
-                        id="network"
-                        value="TRC20"
-                        options={[
-                          {
-                            content: (
-                              <div className={wallet["items-credit"]}>
-                                <span className={wallet["items-credit__icon"]}>
-                                  <img
-                                    width={20}
-                                    height={20}
-                                    alt="TRC20"
-                                    src={tron}
-                                    className="bank-svg"
-                                  />
-                                </span>
-                                <span>TRC20</span>
-                              </div>
-                            ),
-                            value: "TRC20",
-                          },
-                        ]}
+                        id={name}
+                        value={value}
+                        onChange={(val) => setValue(name, val)}
+                        options={optionList}
                         disabled={true}
                         // hasError={Boolean(errors?.[name])}
                       />
-                    </div>
-                  </div>
-                  <div>
-                    <div className={wallet["form-group"]}>
-                      <div className={wallet["form-group__label"]}>
-                        <label> زمان اتمام تراکنش </label>
-                      </div>
-                      <CountdownTimer targetDate={result.endTime} />
-                    </div>
-                  </div>
-                  <div>
-                    <div className={wallet["form-group"]}>
-                      <div className={wallet["form-group__label"]}>
-                        <label htmlFor="walletAddress"> نمایش کیف پول </label>
-                      </div>
-                      <CopyInput
-                        name="آدرس کیف پول"
-                        text={result.walletAddress}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div className="mt-3 text-center">
-                    <button
-                      disabled={isLoading}
-                      className={`${button["arsonex-btn"]} ${button["primary-outline"]} ${button["full-width"]} mb-2`}
-                      onClick={handleClose}
-                    >
-                      لغو تراکنش
-                    </button>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div>
-                  <div>
-                    <div className={wallet["form-group"]}>
-                      <div className={wallet["form-group__label"]}>
-                        <label htmlFor="tether">نام ارز</label>
-                      </div>
-                      <DropdownInput
-                        id="tether"
-                        value="USDT"
-                        options={[
-                          {
-                            value: "USDT",
-                            content: (
-                              <div className={wallet["items-credit"]}>
-                                <span className={wallet["items-credit__icon"]}>
-                                  <img
-                                    width={15}
-                                    height={15}
-                                    className="bank-svg"
-                                    src={tetherIcon}
-                                    alt="tether-flag"
-                                  />
-                                </span>
-                                <span dir="ltr"> تتر - USDT</span>
-                              </div>
-                            ),
-                          },
-                        ]}
-                        disabled={true}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <Controller
-                      name="network"
-                      control={control}
-                      render={({ field: { name, value } }) => (
-                        <div className={wallet["form-group"]}>
-                          <div className={wallet["form-group__label"]}>
-                            <label htmlFor={name}>شبکه ارز </label>
-                          </div>
-                          <DropdownInput
-                            id={name}
-                            value={value}
-                            onChange={(val) => setValue(name, val)}
-                            options={[
-                              {
-                                content: (
-                                  <div className={wallet["items-credit"]}>
-                                    <span
-                                      className={wallet["items-credit__icon"]}
-                                    >
-                                      <img
-                                        width={20}
-                                        height={20}
-                                        alt="TRC20"
-                                        src={tron}
-                                        className="bank-svg"
-                                      />
-                                    </span>
-                                    <span>TRC20</span>
-                                  </div>
-                                ),
-                                value: "TRC20",
-                              },
-                            ]}
-                            disabled={true}
-                            // hasError={Boolean(errors?.[name])}
-                          />
-                          {errors?.[name] && (
-                            <FormFeedback tooltip>
-                              {errors[name]?.message}
-                            </FormFeedback>
-                          )}
-                        </div>
+                      {errors?.[name] && (
+                        <FormFeedback tooltip>
+                          {errors[name]?.message}
+                        </FormFeedback>
                       )}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="mt-3 text-center">
-                    <button
-                      disabled={isLoading}
-                      type="submit"
-                      className={`${button["arsonex-btn"]} ${button["primary"]} ${button["full-width"]} mb-2`}
-                    >
-                      {isLoading ? <Spinner /> : "ساخت کیف پول"}
-                    </button>
-                  </div>
-                </div>
-              </form>
-            )}
-          </div>
-        )}
-      </div>
-      <div className={wallet.info}>
-        <AlertWarning
-          hasIcon
-          text="از واریز قرارداد هوشمند و یا توکن‌های غیرواقعی خودداری کنید."
-        />
-        <AlertWarning
-          hasIcon
-          text="در هنگام واریز، لطفاً اطمینان حاصل کنید که آدرس واریز با آدرس نمایش داده‌شده مطابقت داشته باشد؛ در غیر این صورت، ممکن است دارایی شما از بین برود."
-        />
-        <AlertInfo
-          hasIcon
-          text="برای حفظ امنیت شما در برابر تهدیدات بین‌المللی (تحریم شهروندان ایرانی)، آرسونیکس در هر بار درخواست واریز کیف پول جدیدی را به شما ارائه می‌کند."
-        />
-      </div>
-    </>
+                    </FormGroup>
+                  )}
+                />
+              </Col>
+            </Row>
+            <Row className="mt-4">
+              <div className="d-flex flex-row justify-content-evenly">
+                <Button
+                  color="primary"
+                  outline
+                  type="submit"
+                  disabled={isLoading}
+                  className="px-5 py-3"
+                >
+                  {isLoading ? <Spinner /> : "ساخت کیف پول"}
+                </Button>
+              </div>
+            </Row>
+          </form>
+        );
+      }
+    }
+  };
+
+  return (
+    <div className="px-2">
+      <AlertWarning
+        hasIcon
+        text="در هنگام واریز به شبکه انتخابی دقت فرمایید در صورت واریز به شبکه
+          اشتباه دارایی شما از دست خواهد رفت ، همچنین از واریز قرارداد هوشمند
+          خودداری فرمایید."
+      />
+      <AlertInfo
+        hasIcon
+        text=" برای امنیت شما در مقابل تهدید های (تحریم شهروندان ایرانی)
+          بین المللی، آرسونیکس در هر واریز کیف پول کابران را به طور کامل
+          تغییر می دهد."
+      />
+      {renderUI()}
+    </div>
   );
 };
 

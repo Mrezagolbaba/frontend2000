@@ -13,9 +13,6 @@ import History from "pages/dashboard/history";
 import PaymentRecept from "pages/dashboard/paymentReceipt";
 import SupportDetails from "pages/dashboard/support/detail";
 import AddFriends from "pages/dashboard/add-friends";
-import Deposit from "pages/dashboard/wallet/Deposit";
-import Withdraw from "pages/dashboard/wallet/Withdraw";
-import { Navigate } from "react-router-dom";
 
 const DashboardRouter = {
   path: "dashboard",
@@ -31,28 +28,7 @@ const DashboardRouter = {
     },
     {
       path: "wallet",
-      children: [
-        {
-          path: "",
-          element: <ProtectedRoute children={<Wallet />} />,
-        },
-        {
-          path: "deposit/:type",
-          element: <ProtectedRoute children={<Deposit />} />,
-        },
-        {
-          path: "withdraw/:type",
-          element: <ProtectedRoute children={<Withdraw />} />,
-        },
-        {
-          path: "deposit",
-          element: <Navigate to="/dashboard/wallet/deposit/irt" />,
-        },
-        {
-          path: "withdraw",
-          element: <Navigate to="/dashboard/wallet/withdraw/irt" />,
-        },
-      ],
+      element: <ProtectedRoute children={<Wallet />} />,
     },
     {
       path: "setting",
