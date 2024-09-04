@@ -15,6 +15,7 @@ import tron from "assets/img/network/tron.svg";
 
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import button from "assets/scss/components/button.module.scss";
+import { AlertInfo, AlertWarning } from "components/AlertWidget";
 
 type CryptoFormType = {
   network: string;
@@ -262,15 +263,18 @@ const DepositCrypto = ({ currency }: Props) => {
         </div>
       </div>
       <div className={wallet.info}>
-        <div className={`${wallet.info__box} ${wallet["danger-box"]}`}>
-          در هنگام واریز به شبکه انتخابی دقت فرمایید در صورت واریز به شبکه
-          اشتباه دارایی شما از دست خواهد رفت ، همچنین از واریز قرارداد هوشمند
-          خودداری فرمایید.
-        </div>
-        <div className={`${wallet.info__box} ${wallet["info-box"]}`}>
-          برای امنیت شما در مقابل تهدید های (تحریم شهروندان ایرانی) بین المللی،
-          آرسونیکس در هر واریز کیف پول کابران را به طور کامل تغییر می دهد.
-        </div>
+        <AlertWarning
+          hasIcon
+          text="ز واریز قرارداد هوشمند و یا توکن‌های غیرواقعی خودداری کنید."
+        />
+        <AlertWarning
+          hasIcon
+          text="در هنگام واریز، لطفاً اطمینان حاصل کنید که آدرس واریز با آدرس نمایش داده‌شده مطابقت داشته باشد؛ در غیر این صورت، ممکن است دارایی شما از بین برود."
+        />
+        <AlertInfo
+          hasIcon
+          text="برای حفظ امنیت شما در برابر تهدیدات بین‌المللی (تحریم شهروندان ایرانی)، آرسونیکس در هر بار درخواست واریز کیف پول جدیدی را به شما ارائه می‌کند."
+        />
       </div>
     </>
   );
