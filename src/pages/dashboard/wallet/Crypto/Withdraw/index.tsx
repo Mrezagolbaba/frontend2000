@@ -10,7 +10,7 @@ import {
   useVerifyOtpWithdrawMutation,
   useWithdrawMutation,
 } from "store/api/wallet-management";
-import DropdownInput, { OptionType } from "components/Input/Dropdown";
+import DropdownInput from "components/Input/Dropdown";
 import tron from "assets/img/network/tron.svg";
 import { normalizeAmount, persianToEnglishNumbers } from "helpers";
 import Notify from "components/Notify";
@@ -21,6 +21,7 @@ import WithdrawOTP from "components/WithdrawOTP";
 import wallet from "assets/scss/dashboard/wallet.module.scss";
 import button from "assets/scss/components/button.module.scss";
 import { AlertDanger, AlertInfo, AlertWarning } from "components/AlertWidget";
+import tetherIcon from "assets/img/coins/tether.svg";
 
 type CryptoFormType = {
   network: string;
@@ -74,27 +75,6 @@ const WithdrawCrypto = ({
     },
     resolver,
   });
-
-  // ==============|| constants ||================= //
-  const optionList: OptionType[] = [
-    {
-      content: (
-        <div className={wallet["items-credit"]}>
-          <span className={wallet["items-credit__icon"]}>
-            <img
-              width={20}
-              height={20}
-              alt="TRC20"
-              src={tron}
-              className="bank-svg"
-            />
-          </span>
-          <span>TRC20</span>
-        </div>
-      ),
-      value: "TRC20",
-    },
-  ];
 
   // ==============|| Handlers ||================= //
   const onSubmit = async (data: CryptoFormType) => {
@@ -163,30 +143,63 @@ const WithdrawCrypto = ({
               <div>
                 <div className={wallet["form-group"]}>
                   <div className={wallet["form-group__label"]}>
-                    <label htmlFor="currencyName"> نام ارز </label>
+                    <label htmlFor="tether">نام ارز</label>
                   </div>
-                  <Input
-                    disabled
-                    type="text"
-                    name="currencyName"
-                    id="currencyName"
+                  <DropdownInput
+                    id="tether"
                     value="USDT"
-                    className="latin-font"
+                    options={[
+                      {
+                        value: "USDT",
+                        content: (
+                          <div className={wallet["items-credit"]}>
+                            <span className={wallet["items-credit__icon"]}>
+                              <img
+                                width={15}
+                                height={15}
+                                className="bank-svg"
+                                src={tetherIcon}
+                                alt="tether-flag"
+                              />
+                            </span>
+                            <span dir="ltr"> تتر - USDT</span>
+                          </div>
+                        ),
+                      },
+                    ]}
+                    disabled={true}
                   />
                 </div>
               </div>
               <div>
                 <div className={wallet["form-group"]}>
                   <div className={wallet["form-group__label"]}>
-                    <label htmlFor="networkName">شبکه ارز </label>
+                    <label htmlFor="network">شبکه ارز </label>
                   </div>
-                  <Input
-                    disabled
-                    type="text"
-                    name="networkName"
-                    id="networkName"
+                  <DropdownInput
+                    id="network"
                     value="TRC20"
-                    className="latin-font"
+                    options={[
+                      {
+                        content: (
+                          <div className={wallet["items-credit"]}>
+                            <span className={wallet["items-credit__icon"]}>
+                              <img
+                                width={20}
+                                height={20}
+                                alt="TRC20"
+                                src={tron}
+                                className="bank-svg"
+                              />
+                            </span>
+                            <span>TRC20</span>
+                          </div>
+                        ),
+                        value: "TRC20",
+                      },
+                    ]}
+                    disabled={true}
+                    // hasError={Boolean(errors?.[name])}
                   />
                 </div>
               </div>

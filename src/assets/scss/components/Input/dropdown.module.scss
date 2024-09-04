@@ -35,6 +35,9 @@
       box-shadow 0.15s ease-in-out;
     &.disabled {
       background-image: none;
+      cursor: not-allowed;
+      color: #d3d3d3;
+      filter: grayscale(60%);
     }
     &:after {
       content: none;

@@ -186,7 +186,7 @@ export default function Sidebar() {
                             : sub.path
                         }
                       >
-                        <span>{sub.label}</span>
+                        {sub.label}
                       </Link>
                     </NavItem>
                   ))}

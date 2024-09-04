@@ -102,11 +102,11 @@ export default function Withdraw() {
       <Card className="mt-3">
         <CardBody>
           {type === "fiat" ? (
-            <FiatWithdraw limit={5} />
+            <FiatWithdraw limit={8} />
           ) : type === "crypto" ? (
-            <USDTWithdraw limit={5} />
+            <USDTWithdraw limit={8} />
           ) : (
-            <IRRWithdraw limit={5}/>
+            <IRRWithdraw limit={8}/>
           )}
         </CardBody>
       </Card>
