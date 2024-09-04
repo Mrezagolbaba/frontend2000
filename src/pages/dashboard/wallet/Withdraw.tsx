@@ -10,11 +10,21 @@ import button from "assets/scss/components/button.module.scss";
 import FiatWithdraw from "../history/FiatWithdraw";
 import USDTWithdraw from "../history/USDTWithdraw";
 import IRRWithdraw from "../history/IRRWithdraw";
+import { useAppSelector } from "store/hooks";
+import { useEffect } from "react";
 
 export default function Withdraw() {
   const { type } = useParams();
   const navigate = useNavigate();
-  const { data, isLoading, isFetching } = useWalletsQuery();
+  const { phoneNumber } = useAppSelector((state) => state.user);
+  const { data } = useWalletsQuery();
+
+  useEffect(() => {
+    if (type === "fiat" && phoneNumber.includes("+98")) {
+      navigate("/404");
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const renderWithdraw = () => {
     switch (type) {
@@ -86,14 +96,16 @@ export default function Withdraw() {
             >
               برداشت ارز دیجیتال
             </button>
-            <button
-              className={`${button["arsonex-btn"]} ${type === "fiat" ? button["primary"] : button["primary-light"]}`}
-              onClick={() =>
-                type !== "fiat" && navigate("/dashboard/wallet/withdraw/fiat")
-              }
-            >
-              برداشت فیات دیجیتال
-            </button>
+            {!phoneNumber.includes("+98") && (
+              <button
+                className={`${button["arsonex-btn"]} ${type === "fiat" ? button["primary"] : button["primary-light"]}`}
+                onClick={() =>
+                  type !== "fiat" && navigate("/dashboard/wallet/withdraw/fiat")
+                }
+              >
+                برداشت فیات دیجیتال
+              </button>
+            )}
           </div>
           <div className={wallet["horizontal-divider"]} />
           <div className={wallet["content-section"]}>{renderWithdraw()}</div>
@@ -106,7 +118,7 @@ export default function Withdraw() {
           ) : type === "crypto" ? (
             <USDTWithdraw limit={8} />
           ) : (
-            <IRRWithdraw limit={8}/>
+            <IRRWithdraw limit={8} />
           )}
         </CardBody>
       </Card>
