@@ -5,6 +5,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   output: 'standalone',
+  distDir: './dist', 
 };
 
 module.exports = nextConfig;
